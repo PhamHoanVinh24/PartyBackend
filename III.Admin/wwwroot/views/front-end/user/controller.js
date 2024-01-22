@@ -68,18 +68,19 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 body: formdata,
                 redirect: 'follow'
             };
-
             var resultImp = await fetch("/UserProfile/Import", requestOptions);
             var txt = await resultImp.text();
             $scope.defaultRTE
-            console.log($scope.defaultRTE)
-            handleTextUpload(txt)
+           // console.log($scope.defaultRTE)
+            $scope.JSONobjj = handleTextUpload(txt)
+            console.log($scope.JSONobj);
         }
     };
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
-      
+        
         $scope.infUser = {
+            
             LevelEducation: {
                 Undergraduate: [],
                 PoliticalTheory: [],
@@ -90,6 +91,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
         
         setTimeout(function () {
+            var today = new Date();
+            var resumeNumber = today.getFullYear()+''+(today.getMonth()+1)+''+today.getDate();
+            console.log(resumeNumber);
             var listPage = document.querySelectorAll(".Section0 > div > table");
             console.log(listPage)
             //Page2 Lịch sử bản thân
@@ -100,7 +104,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 return textContent.length > 0 && /\+/.test(textContent);
             });
 
-            var PersonalHistory = [];//đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
+            $scope.PersonalHistory = [];//đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -110,9 +114,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 };
                 // Sửa lỗi ở đây, sử dụng split(':') để tách thời gian và thông tin
                 PersonHis['infor'] = objPage1[i].innerText.split(':')[1];
-                PersonalHistory.push(PersonHis);
+                $scope.PersonalHistory.push(PersonHis);
             }
-            console.log('PersonalHistory', PersonalHistory)
+            console.log('PersonalHistory', $scope.PersonalHistory)
             //Page3 Những nơi công tác và chức vụ đã qua
 
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
@@ -133,7 +137,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });;
                 pElementP2s.push(pInTr);
             })
-            var BusinessNDuty = [];
+            $scope.BusinessNDuty = [];
             for (let i = 0; i < pElementP2s.length; i++) {
                 var begin = pElementP2s[i][0].substr(pElementP2s[i][0].indexOf('-') - 2, 7);
                 var end = pElementP2s[i][0].substr(pElementP2s[i][0].lastIndexOf('-') - 2, 7);
@@ -145,9 +149,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     business: pElementP2s[i][1],
                     duty: pElementP2s[i][2]
                 };
-                BusinessNDuty.push(BusinessNDutyObj);
+                $scope.BusinessNDuty.push(BusinessNDutyObj);
             }
-            console.log('BusinessNDuty', BusinessNDuty)
+            console.log('BusinessNDuty', $scope.BusinessNDuty)
 
             //pag4: những lớp đào tạo bồi dưỡng đã qa
             var datapage4 = Array.from(listPage[4].querySelectorAll('tr:nth-child(n+2)'));
@@ -162,7 +166,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             console.log(pElementP4s)
-            var PassedTrainingClasses = [];
+            $scope.PassedTrainingClasses = [];
             for (let i = 0; i < pElementP4s.length; i++) {
                 var obj = {
                     school: pElementP4s[i][0],
@@ -173,9 +177,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     },
                     business: pElementP4s[i][1]
                 };
-                PassedTrainingClasses.push(obj);
+                $scope.PassedTrainingClasses.push(obj);
             }
-            console.log('PassedTrainingClasses', PassedTrainingClasses)
+            console.log('PassedTrainingClasses', $scope.PassedTrainingClasses)
 
             // console.log(data)
             //
@@ -237,7 +241,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP6s.push(pInTr);
             })
-            var Laudatory = [];
+            $scope.Laudatory = [];
             for (let i = 0; i < pElementP6s.length; i++) {
 
                 var obj = {
@@ -245,9 +249,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     officialReason: pElementP6s[i][1],
                     grantDecision: pElementP6s[i][2]
                 };
-                Laudatory.push(Laudatory);
+                $scope.Laudatory.push(obj);
             }
-            console.log('Laudatory', Laudatory)
+            console.log('Laudatory', $scope.Laudatory)
             //Page7 ki luat
             //phan van giua 2 truong hop: neu bi ki luat thi lay binh thuonng con neeu ko bij thi se de trong
             var datapage7 = Array.from(listPage[7].querySelectorAll("tr:nth-child(n+2)"));
@@ -260,16 +264,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP7s.push(pInTr);
             })
-            var Disciplined = [];
+            $scope.Disciplined = [];
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
                     time: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
                     officialReason: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][1] : "None",
                     grantDecision: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][2] : "None",
                 };
-                Disciplined.push(DisciplinedObj);
+                $scope.Disciplined.push(DisciplinedObj);
             }
-            console.log('Disciplined', Disciplined)
+            console.log('Disciplined', $scope.Disciplined)
             //Page8 Hoan canh gia dinh
             var datapage8 = Array.from(listPage[8].querySelectorAll("tr:first-child>td"));
             var pE8 = [];
@@ -440,7 +444,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }).map(function (element) {
                 return element.innerText.trim();
             });
-            var PlaceCreatedTime = {
+            $scope.PlaceCreatedTime = {
                 place: datapage9[0].substring(0, datapage9[0].indexOf(',')),
                 createdTime: datapage9[0].substring(datapage9[0].indexOf('ngày') + 4, datapage9[0].indexOf('tháng')).trim() + '-'
                     + datapage9[0].substring(datapage9[0].indexOf('tháng') + 5, datapage9[0].indexOf('năm')).trim() + '-'
@@ -456,7 +460,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 .find('table > tbody > tr:nth-child(1) > td > p:nth-child(27) > span:last-child').text();
 
             $scope.listDetail1 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+12)').toArray()
+                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+15)').toArray()
                 .map(t => $(t).find('> span:last-child').text());
 
             $scope.listDetail2 = $($scope.listPage[0])
@@ -483,12 +487,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.listDetail9 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(1) > td > p:nth-child(29) > span:last-child').text();
 
+            $scope.infUser.ResumeNumber = resumeNumber;
             $scope.infUser.FirstName = $scope.listDetail1[0];
             $scope.infUser.Sex = $scope.listDetail1[1];
             $scope.infUser.LastName = $scope.listDetail1[2];
             $scope.infUser.DateofBird = $scope.listDetail1[3];
             $scope.infUser.HomeTown = $scope.listDetail1[5];
             $scope.infUser.PlaceofBirth = $scope.listDetail1[4];
+            $scope.infUser.Residence = $scope.listDetail1[7];
+            $scope.infUser.TemporaryAddress = $scope.listDetail1[8];
 
             $scope.infUser.Nation = $scope.listDetail2[0];
             $scope.infUser.Religion = $scope.listDetail2[1];
@@ -504,24 +511,30 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.DateRecognize = $scope.listDetail7[0].split(',')[1].match(/\d+/g).join('-');
             $scope.infUser.Presenter = $scope.listDetail5[2];
 
+            $scope.infUser.Phone = $scope.listDetail8;
+            $scope.infUser.PhoneContact = $scope.listDetail9.trim();
+
             $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0];
             $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1];
             $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].split(',');
             $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3];
             $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].split(',');
 
+            $scope.infUser.Phone = $scope.listDetail8;
+            $scope.infUser.PhoneContact = $scope.listDetail9.trim();
+
             var JSONobj = {
                 InformationUser:$scope.infUser,
-                Create: PlaceCreatedTime,
-                PersonalHistory: PersonalHistory,
-                BusinessNDuty: BusinessNDuty,
-                PassedTrainingClasses: PassedTrainingClasses,
-                GoAboard: GoAboard,
-                Disciplined: Disciplined,
-                SelfComment: SelfComment,
+                Create: $scope.PlaceCreatedTime,
+                PersonalHistory: $scope.PersonalHistory,
+                BusinessNDuty: $scope.BusinessNDuty,
+                PassedTrainingClasses: $scope.PassedTrainingClasses,
+                GoAboard: $scope.GoAboard,
+                Disciplined: $scope.Disciplined,
+                SelfComment: $scope.SelfComment,
                 Relationship: $scope.Relationship
             }
-            console.log(JSON.stringify(JSONobj))
+           // console.log(JSON.stringify(JSONobj))
             setTimeout(function () {
                 $scope.$apply();
             },100);

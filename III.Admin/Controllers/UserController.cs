@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using Syncfusion.EJ2.DocumentEditor;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -943,5 +944,231 @@ namespace III.Admin.Controllers
                     throw new System.NotSupportedException("EJ2 DocumentEditor does not support this file format.");
             }
         }
+        #region Model
+        public class AwardModel
+        {
+            public string MonthYear { get; set; }
+            public string Reason { get; set; }
+            public string GrantOfDecision { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class FamilyModel
+        {
+            public string PoliticalAttitude { get; set; }
+            public string Relation { get; set; }
+            public string ClassComposition { get; set; }
+            public bool? PartyMember { get; set; }
+            public string BirthYear { get; set; }
+            public string DeathYear { get; set; }
+            public string DeathReason { get; set; }
+            public string HomeTown { get; set; }
+            public string Residence { get; set; }
+            public string Job { get; set; }
+            public string WorkingProgress { get; set; }
+            public string Name { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class HistorySpecialistModel
+        {
+            public DateTime? MonthYear { get; set; }
+            public string Reason { get; set; }
+            public string GrantOfDecision { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class PersonalHistoryModel
+        {
+            public DateTime? Begin { get; set; }
+            public DateTime? End { get; set; }
+            public string Content { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class TrainingCertificatedPassModel
+        {
+            public string SchoolName { get; set; }
+            public string Major { get; set; }
+            public string Class { get; set; }
+            public DateTime? From { get; set; }
+            public DateTime? To { get; set; }
+            public string Certificate { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class GoAboardModel
+        {
+            public DateTime? From { get; set; }
+            public DateTime? To { get; set; }
+            public string Contact { get; set; }
+            public string Country { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class IntroducerOfPartyModel
+        {
+            public string PersonIntroduced { get; set; }
+            public string PlaceNTimeJoinUnion { get; set; }
+            public string PlaceNTimeJoinParty1st { get; set; }
+            public string PlaceNTimeRecognize1st { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class WorkingTrackingModel
+        {
+            public int ID { get; set; }
+            public DateTime? From { get; set; }
+            public DateTime? To { get; set; }
+            public string Work { get; set; }
+            public string Role { get; set; }
+            public string ProfileCode { get; set; }
+            public bool? IsDeleted { get; set; }
+        }
+        public class WarningDisciplinedModel
+        {
+            public DateTime? MonthYear { get; set; }
+            public string Reason { get; set; }
+            public string GrantOfDecision { get; set; }
+            public string ProfileCode { get; set; }
+        }
+        public class PartyAdmissionProfileModel
+        {
+            public string CurrentName { get; set; }
+            public string BirthName { get; set; }
+            public int? Gender { get; set; }
+            public string Nation { get; set; }
+            public string Religion { get; set; }
+            public DateTime? Birthday { get; set; }
+            public string PermanentResidence { get; set; }
+            public string Phone { get; set; }
+            public string Picture { get; set; }
+            public string HomeTown { get; set; }
+            public string PlaceBirth { get; set; }
+            public string Job { get; set; }
+            public string TemporaryAddress { get; set; }
+            public string GeneralEducation { get; set; }
+            public string JobEducation { get; set; }
+            public string UnderNPostGraduateEducation { get; set; }
+            public string Degree { get; set; }
+            public string PoliticalTheory { get; set; }
+            public string ForeignLanguage { get; set; }
+            public string ITDegree { get; set; }
+            public string MinorityLanguages { get; set; }
+            public string PhoneContact { get; set; }
+            public string SelfComment { get; set; }
+            public string CreatedPlace { get; set; }
+            public string ResumeNumber { get; set; }
+            public string UserCode { get; set; }
+        }
+
+        #endregion
+        #region object parse from json
+        public class TimePeriodObj
+        {
+            public string Begin { get; set; }
+            public string End { get; set; }
+        }
+
+        public class RelationshipObj
+        {
+            public string Relation { get; set; }
+            public string ClassComposition { get; set; }
+            public bool PartyMember { get; set; }
+            public string Name { get; set; }
+            public TimePeriodObj Year { get; set; }
+            public string HomeTown { get; set; }
+            public string Residence { get; set; }
+            public string Job { get; set; }
+            public List<string> WorkingProcess { get; set; }
+            public List<string> PoliticalAttitude { get; set; }
+        }
+
+        public class GoAboardObj
+        {
+            public string Purpose { get; set; }
+            public string Country { get; set; }
+        }
+
+        public class DisciplinedObj
+        {
+            public string Time { get; set; }
+            public string OfficialReason { get; set; }
+            public string GrantDecision { get; set; }
+        }
+
+        public class PersonalHistoryObj
+        {
+            public TimePeriodObj Time { get; set; }
+            public string Infor { get; set; }
+        }
+
+        public class CreateObj
+        {
+            public string Place { get; set; }
+            public string CreatedTime { get; set; }
+        }
+
+        public class SelfCommentObj
+        {
+            public string Context { get; set; }
+        }
+
+        public class InformationUserObj
+        {
+            public class LevelEducationObj
+            {
+                public List<string> Undergraduate { get; set; }
+                public List<string> PoliticalTheory { get; set; }
+                public List<string> ForeignLanguage { get; set; }
+                public List<string> It { get; set; }
+                public List<string> MinorityLanguage { get; set; }
+                public string GeneralEducation { get; set; }
+                public string VocationalTraining { get; set; }
+                public string RankAcademic { get; set; }
+            }
+
+            public LevelEducationObj Education { get; set; }
+            public string FistName { get; set; }
+            public string Sex { get; set; }
+            public string LastName { get; set; }
+            public string DateofBird { get; set; }
+            public string HomeTown { get; set; }
+            public string PlaceofBirth { get; set; }
+            public string Nation { get; set; }
+            public string Religion { get; set; }
+            public string NowEmployee { get; set; }
+            public string PlaceinGroup { get; set; }
+            public string DateInGroup { get; set; }
+            public string PlaceInParty { get; set; }
+            public string DateInParty { get; set; }
+            public string PlaceRecognize { get; set; }
+            public string DateRecognize { get; set; }
+            public string Presenter { get; set; }
+            public string Phone { get; set; }
+            public string PhoneLL { get; set; }
+        }
+
+        public class BusinessNDutyObj
+        {
+            public TimePeriodObj Time { get; set; }
+            public string Business { get; set; }
+            public string Duty { get; set; }
+        }
+
+        public class MyDataModel
+        {
+            public InformationUserObj InformationUser { get; set; }
+            public CreateObj Create { get; set; }
+            public List<PersonalHistory> PersonalHistory { get; set; }
+            public List<BusinessNDutyObj> BusinessNDuty { get; set; }
+            public List<PassedTrainingClassObj> PassedTrainingClasses { get; set; }
+            public List<GoAboardObj> GoAboard { get; set; }
+            public List<DisciplinedObj> Disciplined { get; set; }
+            public SelfCommentObj SelfComment { get; set; }
+            public List<RelationshipObj> Relationship { get; set; }
+        }
+
+        public class PassedTrainingClassObj
+        {
+            public string School { get; set; }
+            public string Class { get; set; }
+            public TimePeriodObj Time { get; set; }
+            public string Business { get; set; }
+        }
+        #endregion
     }
 }
