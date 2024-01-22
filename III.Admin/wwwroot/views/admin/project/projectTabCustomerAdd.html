@@ -1,0 +1,45 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert"></i>
+    <span class="modal-title  " id="modal-title"> {{'PROJECT_CURD_TAB_CUSTOMER_TITLE_ADD_CUSTOMER' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsmore">
+            <div class="form-body">
+                <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                    <div class="col-md-4">
+                        <i class="fa fa-user"></i>
+                        <label class="control-label require">{{'PROJECT_CURD_TAB_CUSTOMER_CURD_LBL_CUSCODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CusCode" theme="bootstrap" on-select="changleSelect('CusCode')">
+                                <ui-select-match placeholder="{{'PROJECT_CURD_TAB_CUSTOMER_CURD_COMBO_CUSCODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in Customers | filter: $select.search">
+                                    {{x.Code}} - {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CusCode=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorCusCode" class="label-color validation-message">
+                            {{'PROJECT_CURD_TAB_CUSTOMER_CURD_VALIDATE_CUSCODE' | translate}}!
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn mr5 btn-green">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>
+</div>

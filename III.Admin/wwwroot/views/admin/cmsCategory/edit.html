@@ -1,0 +1,311 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    /*@media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }*/
+
+    @media (max-width:1000px) {
+        .custom-width .modal-dialog {
+            min-width: 90%;
+        }
+    }
+
+    @media (min-width:1000px) {
+        .custom-width .modal-dialog {
+            min-width: 1000px;
+        }
+    }
+
+    .modal-content {
+        width: 106%;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        /*border-top: none;*/
+        padding: 15px;
+    }
+
+    .table-custom {
+        /*border-top: none !important;*/
+        border-left: #e8e2e2 1px solid !important;
+        border-right: #e8e2e2 1px solid !important;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title">{{'CMS_CAT_LBL_UPDATECATEGORY' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="" method="post" ng-validate="validationOptionsCmsCat">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="form-group col-lg-6 col-md-12 pl-0 mt10" ng-if="model.language === 'CMS_LANGUAGE20211027001'">
+                        <label class="control-label fw600 require">{{'CMS_CAT_LBL_CATEGORYNAME' | translate}}</label>
+                        <input class="form-control br24 bold" name="Name" ng-model="model.name" type="text" ng-change="ConvertToAlias(model.name)" placeholder1="{{'CMS_CAT_TXT_ADDCATEGORY' | translate}}..." />
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12 pl-0 mt10" ng-if="model.language !== 'CMS_LANGUAGE20211027001'">
+                        <label class="control-label fw600 require">{{'CMS_CAT_LBL_CATEGORYNAME' | translate}}</label>
+                        <input class="form-control br24 bold" name="Name" ng-model="modelJson.title" type="text" ng-change="ConvertToAlias(model.name)" placeholder1="{{'CMS_CAT_TXT_ADDCATEGORY' | translate}}..." />
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12 pl-0 mt10">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_PARENT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.parent" theme="bootstrap">
+                                <ui-select-match placeholder1="{{'CMS_CAT_TXT_PARENT' | translate}}..."><div class="bold">{{$select.selected.Title}}</div></ui-select-match>
+                                <ui-select-choices repeat="x.Id as x  in listParenCat | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.parent=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorparent" class="label-color validation-message">
+                            {{'CATEGORY_VALIDATE_DAD' | translate}}
+                        </span>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12 pl-0">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_CHOOSETEMPLATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.template" theme="bootstrap" on-select="changleSelect('PrjType')">
+                                <ui-select-match placeholder1="{{'CMS_CAT_LBL_CHOOSETEMPLATE' | translate}}..."><div class="bold">{{$select.selected.Name}}</div></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listTemplate | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.template=''" class="btn no-shadow btn-default" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errortemplate" class="label-color validation-message">
+                            {{'CATEGOTY_VALIDATE_SAMPLE' | translate}}
+                        </span>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12 pl-0">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_EXTRA_GROUP' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.extra_fields_group" theme="bootstrap" on-select="changleSelect('CaseWorker')" ng-disabled="isGroupLocked">
+                                <ui-select-match placeholder1="{{'Nhóm' | translate}}..."><div class="bold">{{$select.selected.Name}}</div></ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listExtraFiled | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.extra_fields_group='';" class="btn btn-default no-shadow" ng-disabled="isGroupLocked">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorextra_fields_group" class="label-color validation-message">
+                            {{'CATEGORY_VALIDATE_GROUP' | translate}}
+                        </span>
+                    </div>
+                    <div class="form-group col-xl-6 pl-0 mt10">
+                        <label class="control-label fw600 require">{{'CMS_CAT_LBL_ALIAS' | translate}}</label>
+                        <input class="form-control br24 bold" name="Alias" ng-model="model.alias" type="text" placeholder1="{{'CMS_CAT_TXT_ALIAS' | translate}}..." />
+                    </div>
+                    <div class="form-group col-xl-1 pl-0 mt10">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_ODERING' | translate}}</label>
+                        <input class="form-control br24 bold remove-zero" name="Ordering" ng-model="model.ordering" type="text" placeholder1="{{'CMS_CAT_TXT_ODERING' | translate}}..." num-thousand='true' awnum num-int='21' />
+                    </div>
+                    <div class="form-group col-xl-4 pl-0 mt10">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_LANGUAGE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.language" theme="bootstrap" ng-change="changeLanguage(model.language)">
+                                <ui-select-match placeholder1="{{'CMS_CAT_TXT_LANGUAGE' | translate}}..."><div class="bold">{{$select.selected.Name}}</div></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listLanguage | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.language='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorlanguage" class="label-color validation-message">
+                            {{'CATEGORY_VALIDATE_GROUP' | translate}}
+                        </span>
+                    </div>
+                    <div class="form-group col-xl-1 pl-0 mt10">
+                        <label class="control-label fw600">{{'CMS_CAT_LBL_PUBLISH' | translate}}</label>
+                        <div class="d-flex pl15">
+                            <label class="mt-checkbox mt-checkbox-outline ng-binding pl-0 mt10">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.published != true"
+                                   ng-click="model.published = true"></i>
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.published == true"
+                                   ng-click="model.published = false"></i>
+                                <!--<input type="checkbox" name="DefaultPayment" ng-model="model.published" ng-checked="model.published" class="ng-pristine ng-untouched ng-valid ng-empty">
+    <span></span>-->
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row h-450">
+        <div class="col-md-12">
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <div href="#Description" aria-controls="home" role="button" data-toggle="tab">{{'CMS_CAT_LBL_DESCRIPTION' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Image" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'CMS_CAT_LBL_IMAGE' | translate}}
+                        </div>
+                    </li>
+                    <div class="btn-group actions pull-right mr15">
+                        <div class="text-center pull-right pr-1" ng-click="delete(model.id)" style1="margin-top: -15px">
+                            <i class="fas fa-trash-alt" style="color:red; font-size: 30px; cursor: pointer"></i>
+                            <!--<div class="btn btn-icon-only btn-circle btn-outline red-custom">
+        <span><i class="fa fa-trash"></i></span>
+    </div>-->
+                            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_DELETE' | translate}}</p>
+                        </div>
+                        <div class="text-center pull-right pr-3" style1="margin-top: -15px" ng-click="submit()">
+                            <i class="fa-solid fa-plus" style="color: cornflowerblue; font-size: 30px; cursor: pointer"></i>
+                            <!--<div class="btn btn-icon-only btn-circle btn-outline green-custom">
+        <span><i class="fa fa-save"></i></span>
+    </div>-->
+                            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="Description">
+                        <textarea ng-model="model.description" id="ckEditorItemCategory"></textarea>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Image">
+                        <div id="tab_image" class="tab-pane admin-form">
+                            <div class="form-group">
+                                <div class="fileupload fileupload-new mh15" data-provides="fileupload" id="block-upload-image" style="width: 600px; height: 350px; margin: 0 auto !important;">
+                                    <div class="form-group">
+                                        <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none;">
+                                            <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" ng-src="{{model.img}}" style="display:none" />
+                                            <!--<img id="imageId" ng-click="loadImage()" style="height: 200px; width: 200px;cursor: pointer" ng-src="{{model.img}}" onerror="this.src='../../../images/default/uploadimg.png'" alt="CMS_CAT_LBL_IMAGE" />-->
+                                            <img id="imageId" ng-click="loadImage()" class="h-300 w-450 br-n" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.image == null ? '../../../images/default/uploadimg.png' : model.image}}" role="button" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-3 ">
+                                            <input class="btn btn-system btn-block" type="button" id="browseButton" value="Thêm ảnh từ máy" ng-click="loadImage()">
+                                        </div>
+                                        <div class="col-xs-3 hidden">
+                                            <input id="ImageServer" name="ImageServer" type="hidden" value="" />
+                                            <a href="javascript:void(0);"
+                                               data-href="#modal-panel-frame"
+                                               class="btn btn-system btn-block"
+                                               data-event="popup-modal"
+                                               data-iframe-href="/assets/vendor/filemanager/dialog.php?type=1&amp;field_id=ImageServer"
+                                               data-iframe-title="Responsive Filemanager"
+                                               data-iframe-height="500">
+                                                Browse server...
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

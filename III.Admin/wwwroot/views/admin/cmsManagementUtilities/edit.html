@@ -1,0 +1,194 @@
+﻿<link href="banner.css" rel="stylesheet" />
+<style type="text/css">
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .list-user input {
+        border: 0 !important;
+    }
+     .btn-system {
+        background-color: #37bc9b;
+        color: #ffffff;
+        font-family: Arial;
+        font-weight: bold;
+    }
+
+        .btn-system:hover {
+            color: #428bca;
+        }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">{{'CMSMGUL_MSG_FIX_BANNER' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_TITLE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <input class="form-control pTip-top-left-alt" data-val="true" data-val-required="{{'CMSMGUL_MSG_TXT_NOT_EMPTY' | translate}}" id="Title" name="Title" placeholder="{{'CMSMGUL_MSG_LBL_TITLE' | translate}}..." type="text">
+
+                            <!--<ui-select tagging ng-model="model.AssetCode" theme="bootstrap">
+                    <ui-select-match placeholder="{{'AA_CURD_COMBO_AA_ASSETCODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listAsset | filter: $select.search">
+                        {{x.Code}} - {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>-->
+                            <!--<span class="input-group-btn">
+                    <button type="button" ng-click="model.AssetCode='';" class="btn btn-default no-shadow end-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>-->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_LINK' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <textarea type="text" class="form-control" ng-model="model.ActNote" rows="4" name="{{'CMSMGUL_MSG_LBL_LINK' | translate}}" placeholder="{{'CMSMGUL_MSG_LBL_NHAPLINK' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_MOTA' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <textarea type="text" class="form-control" ng-model="model.ActNote" rows="4" name="{{'CMSMGUL_MSG_LBL_MOTA' | translate}}" placeholder="{{'CMSMGUL_MSG_LBL_NHAPMOTA' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label">{{'CMSMGUL_MSG_LBL_CHOOSE_IMAGE_CREDITS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <div class="col-xs-6">
+                                <input data-val="true" data-val-required="Upload không được để trống" id="FileUpload" name="FileUpload" type="file" value="" style="position:absolute;visibility:hidden;" />
+                                <input class="btn btn-system btn-block" type="button" id="browseButton" value="Thêm ảnh từ máy" onclick="FileUpload.click()">
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="javascript:void(0);"
+                                   data-href="#modal-panel-frame"
+                                   class="btn btn-system btn-block"
+                                   data-event="popup-modal"
+                                   data-iframe-href="/assets/vendor/filemanager/dialog.php?type=1"
+                                   data-iframe-title="Responsive Filemanager"
+                                   data-iframe-height="500">
+                                    Browse server...
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="fileupload-preview thumbnail mb20">
+                            <img data-src="holder.js/100%x200" style="text-align:center;height:auto" alt="holder">
+                        </div>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="FileUpload" data-valmsg-replace="true"></span>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_SORT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <input type="text" class="form-control" ng-model="model.ActNote" rows="4" name="{{'CMSMGUL_MSG_LBL_SORT' | translate}}" placeholder="Ordering..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_CHOOSE_VIEWS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <select class="form-control select2-single" id="Block" name="Block">
+                                <option value="">{{'CMSMGUL_MSG_LBL_CHOOSE_BLOCK_DISPLAY' | translate}}</option>
+                                <option value="1">
+                                    {{'CMSMGUL_MSG_LBL_BETWEEN_HOME' | translate}}
+                                </option>
+                                <option value="2">
+                                   {{'CMSMGUL_MSG_LBL_BOTTOM_RIGHT_HOME' | translate}}
+                                </option>
+                                <option value="3">
+                                    {{'CMSMGUL_MSG_LBL_BETWEEN_FOOTER' | translate}}
+                                </option>
+                                <option value="4">
+                                    {{'CMSMGUL_MSG_LBL_BOTTOM_SIDEBAR' | translate}}
+                                </option>
+                                <option value="5">
+                                   {{'CMSMGUL_MSG_LBL_BETWEEN_SIDEBAR' | translate}}
+                                </option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label class="control-label require">{{'CMSMGUL_MSG_LBL_SHOWS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <div class="bs-component">
+                                <div class="radio-custom mb5 radio-inline">
+                                    <input id="PublishedYes" name="Published" type="radio" value="True" />
+                                    <label for="PublishedYes">Yes</label>
+                                </div>
+                                <div class="radio-custom mb5 radio-inline">
+                                    <input id="PublishedNo" name="Published" type="radio" value="False" />
+                                    <label for="PublishedNo">No</label>
+                                </div>
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Published" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>           
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>-->
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,352 @@
+﻿<style>
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    @media(min-width:992px)and (max-width:1200px) {
+        .modal-65 {
+            width: 85% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-65 {
+            width: 70% !important;
+        }
+    }
+
+    @media(min-width:1500px) {
+        .modal-65 {
+            width: 55% !important;
+        }
+    }
+
+    .formAddDefault {
+        padding-bottom: 5px !important;
+        border: 1px solid #c2cad869 !important;
+        border-radius: 4px;
+        background: #fffef66b;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .color-white {
+        color: white;
+    }
+
+    .progress {
+        height: 20px
+    }
+
+    .progress-bar {
+        background-color: #4868aa;
+    }
+
+    #payment:after {
+        height: 0px;
+    }
+
+    .border-black {
+        border: 1px solid #000;
+    }
+
+    .name {
+        top: 12%;
+        margin-left: 55px;
+        font-size: 10px;
+        position: absolute;
+    }
+
+    .dateapr {
+        position: absolute;
+        margin-left: 55px;
+        top: 32%;
+        font-size: 10px;
+    }
+    .mt-checkbox > span {
+    border: 1px solid transparent;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background:#337ab7;
+    margin-top: 7px;
+    }
+
+    .mt-checkbox > span:after {
+    left: 6px;
+    top: 0px;
+    width: 10px;
+    height: 20px;
+    border:2px solid white;
+    border-width: 0 5px 6px 0;
+    transform: rotate(45deg);
+    }
+
+    .mt-checkbox:hover > input:not([disabled]):checked ~ span, .mt-checkbox > input:checked ~ span, .mt-radio:hover > input:not([disabled]):checked ~ span, .mt-radio > input:checked ~ span {
+    webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    background: #337ab7;
+}
+
+
+
+    .mt-checkbox:hover > input:not([disabled]) ~ span, .mt-checkbox > input:focus ~ span, .mt-radio:hover > input:not([disabled]) ~ span, .mt-radio > input:focus ~ span {
+    background: #337ab7;
+    webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+}
+</style>
+    <!-- #defaultRTE_toolbar {
+        position: inherit !important;
+    }
+    /* .Conclusion{
+        color: red;
+    } */ -->
+
+<link rel="stylesheet" href="../../../css/admin/workflowActivity/workflow-ticket.css" />
+<div class="portlet-body form">
+    <form name="addform" method="post" ng-validate="validationOptions" class="form-horizontal pr15">
+        <div class="form-body" style="padding: 0px !important;">
+            <div class="row pt5">
+                <div class="col-lg-11">
+                    <!--Theo dõi blog-->
+                    <div class="form-group">
+                        
+                        
+                        <div class="col-md-10 pl-0 pr-0 d-flex">
+                            <div class="col-md-4 pl-0 ml-2" ng-class="{ 'has-error': errorProductCode}">
+                                <label class="fw600 text-underline require">{{'MIS_CURD_LBL_CATALOGUE_PRODUCT' | translate}} <span class="text-danger" ng-if="modelList.ImpType!=''"> {{'MIS_LBL_PACK' | translate}} ({{modelList.ImpType}})</span></label>
+                                <div class="d-flex flex-column">
+                                    <div class="input-group br24-nobtn">
+                                        <ui-select tagging ng-model="modelSave.ProductCode" theme="bootstrap" ng-change="changeProduct()">
+                                            <ui-select-match placeholder="{{'MIS_CURD_LBL_PRODUCT' | translate}}...">
+                                                {{$select.selected.Name}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x  in listProduct | filter: $select.search" refresh="reloadProductCategory($select.search)">
+                                                <span>{{x.Name}}</span>
+                                                <div class="row mt15" ng-if="$last">
+                                                    <button class="btn btn-xs btn-success"
+                                                            style="width: 100%;"
+                                                            ng-click="loadMoreCategory($select, $event);"
+                                                            ng-disabled="loading">
+                                                        Load more...
+                                                    </button>
+                                                </div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span ng-show="errorProductCode" class="label-color validation-message">
+                                            {{'MIS_VALIDATE_CHOOSE_PRODUCT' | translate}}
+                                        </span>
+                                    </div>
+                                    <span class="ml15 flex-basis-20">
+                                        <a class="pr10 green pull-right" ng-click="attrValue()">
+                                            <span>{{'MIS_LBL_SIZE_PROD' | translate}}: </span>
+                                            <span class="text-danger">[{{long}} x {{wide}} x {{high}}], </span>
+
+                                            <span>{{'MIS_LBL_PACKING' | translate}}: </span>
+                                            <span class="text-danger">{{packing}}, </span>
+
+                                            <span>{{'MIS_LBL_WEIGHT' | translate}}: </span>
+                                            <span class="text-danger">{{weight}} {{unitWeight}}</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-0 pr-0">
+                                <div class="col-md-3">
+                                    <div class="form-group" ng-class="{'has-error' : errorQuantityImp}">
+                                        <label class="fw600 text-underline require">Số lượng nhỏ nhất</label>
+                                        <div class='mr5'>
+                                            <input ng-change="change('quantityImp')" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24" ng-model="modelSave.MinValue" placeholder="{{'MIS_LBL_CD_QUANTITY' | translate}}..." num-thousand='true' awnum num-int='21' onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                            <span ng-show="errorQuantityImp" class="label-color validation-message">
+                                                Số lượng nhỏ nhất
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pr-0" ng-class="{'has-error' : errorUnit}">
+                                    <div class="form-group" ng-class="{'has-error' : errorQuantityImp}">
+                                        <label class="fw600 text-underline require">Số lượng lớn nhất</label>
+                                        <div class='mr5'>
+                                            <input ng-change="change('quantityImp')" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24" ng-model="modelSave.MaxValue" placeholder="{{'MIS_LBL_CD_QUANTITY' | translate}}..." num-thousand='true' awnum num-int='21' onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                            <span ng-show="errorQuantityImp" class="label-color validation-message">
+                                                Số lượng lớn nhất
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-custom-lg-2">
+                                    <label class="fw600 text-underline">{{'MIS_CURD_LBL_START_DATE' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <input ng-model="modelSave.FromDate" class="form-control" type="text" placeholder="{{'MIS_CURD_LBL_START_DATE' | translate}}..." id='FromTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelSave.FromDate=''" class="btn btn-default no-shadow start-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-custom-lg-2">
+                                    <label class="fw600 text-underline">{{'MIS_CURD_LBL_END_DATE' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <input ng-model="modelSave.ToDate" class="form-control" type="text" placeholder="{{'MIS_CURD_LBL_END_DATE' | translate}}..." id='DateTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelSave.ToDate=''" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md- pt25">
+                            <div class="text-center pull-right pl-2 pr10" ng-click="read()">
+                                <!--<a class="">
+                                    <span><i class="fa-solid fa-plus pt15 fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">
+                                    {{'COM_BTN_SAVE' | translate}}
+                                </p>-->
+                                <input class="btn btn-success" type="button" value="Cập nhật">
+                            </div> 
+                            <div class="text-center pull-right pl-2 pr10" ng-click="loadDate()">
+                                <!--<a class="">
+                                    <span><i class="fa-solid fa-plus pt15 fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">
+                                    {{'COM_BTN_SAVE' | translate}}
+                                </p>-->
+                                <input class="btn btn-primary" type="reset" value="Reset" ng-click="resetId()">
+                                                </div>
+                                                                  
+                        </div>
+
+                        <div class="col-md-12 pl-0 pr-0 d-flex">
+
+                            <div class="col-lg-4 col-md-6 col-custom-lg-2" style="width: 60%;">
+                                <div class="col-md-12 flex-grow-full">
+                                    <div class="form-group">
+                                        <label class="fw600 text-underline">Loại cảnh báo</label>
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="modelSave.WarningType" theme="bootstrap" ng-change="changeTicket()">
+                                                <ui-select-match placeholder="Loại cảnh báo...">{{$select.selected.Value}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listTicketCode | filter: $select.search">
+                                                    {{x.Value}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.TicketCode='';" class="btn btn-default no-shadow" style="">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-md-12 pl-0 pr-0">
+                                    <label class="control-label"> </label>
+                                    <div class="mt-checkbox-list pb0">
+                                        <label class="mt-checkbox pr2" style="margin-bottom: 0; height: 30px; width: 80px; display: inline; font-size: 20px;">
+                                            <input type="checkbox" class="fw600 " ng-model="model.Active" ng-checked="model.Active" style="height: 20px; width: 20px;">
+                                            <label class="fw600 text-underline mt10" style="font-size: 13px; vertical-align: middle;">Kích hoạt</label>
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="text-center pull-right pl-2 pr10" ng-click="add()">
+                                    <a class="">
+                                        <span><i class="fa-solid fa-plus pt15 fs30"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">
+                                        {{'COM_BTN_SAVE' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row pr30 mt-1">
+        <div class="col-lg-12">
+            <div class="tab-content">
+                <div class="tab-pane active">
+                    <div class="table-responsive">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblData"></table>
+
+                        <!--<table class="table table-bordered" id="tblListProduct">
+                            <thead>
+                                <tr>
+                                    <th class="text-center fw600 text-underline" style="width: 5%;">STT</th>
+                                    <th class="text-center fw600 text-underline" style="width: 55%;">Tên thiết bị vật tư</th>
+                                    <th class="text-center fw600 text-underline" style="width: 10%;">Số lượng hiện tại</th>
+                                    <th class="text-center fw600 text-underline" style="width: 10%;">Số lượng nhỏ nhất</th>
+                                    <th class="text-center fw600 text-underline" style="width: 10%;">Số lượng lớn nhất</th>
+                                    <th class="text-center fw600 text-underline" style="width: 5%;">Sửa</th>
+                                    <th class="text-center fw600 text-underline" style="width: 5%;">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="x in listProdDetail">
+                                <tr>
+                                    <td class="text-center"><img src='data:image/png;base64,{{x.QrCode}}' ng-click="viewQrCode(x.sProductQrCode)" height="40" width="40" /></td>
+                                    <td class="text-brown bold">
+                                        {{x.ProductName}} ({{x.ProductCode}})
+                                        <br /><span class="text-primary fs10">- {{'MIS_CURD_TAB_SPECFICATION' | translate}}: {{x.PackType}}</span>
+                                        <br /><span class="text-primary fs10">- {{'Id' | translate}}: {{x.Id}}</span>
+                                    </td>
+                                    <td class="text-center text-danger bold">{{x.SalePrice | currency:"":0}}</td>
+                                    <td class="text-center">{{x.Quantity}}</td>
+                                    <td class="text-center">{{x.Unit}}</td>
+                                    <td class="text-center">{{x.Currency}}</td>
+                                    <td class="text-center">{{x.ProductStatus}}</td>-->
+                                    <!--<td class="text-center">{{x.QuantityIsSet}}</td>-->
+                                    <!--<td class="text-center">-->
+                                        <!--<button title="Xem tùy chỉnh" ng-if="x.IsCustomized" ng-click="viewProdCustom($index)" style="width: 25px; height: 25px; padding-right: 5px;" class=""><i class="fas fs25 fa-gear cursor color-dark"></i></button>-->
+                                        <!--<button title="Xếp kho" ng-click="orderProductVatCo($index)" ng-if="x.ImpType !== 'RETURN'"
+                                                style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)" class="btn btn-icon-only btn-circle btn-outline blue">
+                                            <img src="../../../images/wareHouse/orderStore.png" height="25" width="25" />
+                                        </button>
+                                        <a ng-show="!IsEnabledImportLot" title="Xóa" ng-click="deleteDetail(x.Id)" style="width: 25px; height: 25px; padding: 0px">
+                                            <i class="fas fa-trash-alt fs25 mt10" style="color:red"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

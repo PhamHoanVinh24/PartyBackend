@@ -1,0 +1,162 @@
+﻿<style>
+    .form-group {
+        margin-bottom: 10px !important
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'MPT_TITLE_EDIT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_PAY_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.PayCode" name="PayCode" placeholder="{{'MPT_CURD_TXT_MPT_PAY_CODE' | translate}}" readonly />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_PAY_TITLE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="model.PayTitle" name="PayTitle" placeholder="{{'MPT_CURD_TXT_MPT_PAY_TITLE' | translate}}" />
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorPayType}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_PAY_TYPE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.PayType" theme="bootstrap" on-select="changleSelect('PayType')">
+                            <ui-select-match placeholder="{{'MPT_CURD_COMBO_MPT_PAY_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Value as x in PaymentType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorPayType" class="label-color validation-message">
+                            {{'MPT_CURD_VALIDATE_MPT_PAY_TITLE' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorPayObjType}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_PAY_OBJTYPE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.PayObjType" theme="bootstrap" ng-change="selectObj(model.PayObjType)" on-select="changleSelect('PayObjType')">
+                            <ui-select-match placeholder="{{'MPT_CURD_COMBO_MPT_PAY_OBJTYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in PaymentObjType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorPayObjType" class="label-color validation-message">
+                            {{'MPT_CURD_VALIDATE_MPT_PAY_OBJTYPE' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorPayObjId}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_PAY_OBJID' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.PayObjId" theme="bootstrap" ng-change="selectObjName(model.PayObjId)" on-select="changleSelect('PayObjId')">
+                            <ui-select-match placeholder="{{'MPT_CURD_COMBO_MPT_PAY_OBJID' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ObjectName | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorPayObjId" class="label-color validation-message">
+                            {{'MPT_CURD_VALIDATE_MPT_PAY_OBJID' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="model1.Total!=''">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_TOTAL' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="model1.Total" placeholder="{{'MPT_CURD_TXT_MPT_TOTAL' | translate}}" num-thousand='true' awnum num-int='21' disabled />
+                    </div>
+                </div>
+                <div class="form-group" ng-show="model1.Paid">
+                    <div class="col-md-offset-4 col-md-8">
+                        <div class="checkbox-default pl5 pb10">
+                            <input id="checkbox5" type="checkbox" ng-model="model1.PaymentCompleted" disabled>
+                            <label class="bold" style="color:#02be45" for="checkbox5">
+                                {{'MPT_CURD_TITLE_ADD_MPT' | translate}}Đã thanh toán hết
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 form-group mr-0 ml-0">
+                        <i class="fa-solid fa-money-bill" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPT_CURD_LBL_MPT_MONEY_TOTAL' | translate}} </label>
+                    </div>
+                    <div class="col-md-3 pr-0 form-group mr-0 ml-0">
+                        <input type="text" class="form-control" ng-model="model.MoneyTotal" name="MoneyTotal" id="MoneyTotal" placeholder="{{'MPT_CURD_TXT_MPT_MONEY_TOTAL' | translate}}" num-thousand='true' awnum num-int='21' />
+                    </div>
+                    <div class="col-md-2 form-group mr-0 ml-0">
+                        <label class="control-label ">{{'MPT_CURD_LBL_MPT_CURRENCY' | translate}}</label>
+                    </div>
+                    <div class="col-md-3 pl-0 form-group mr-0 ml-0" ng-class="{ 'has-error': errorCurrency}">
+                        <ui-select tagging ng-model="model.Currency" theme="bootstrap" on-select="changleSelect('Currency')">
+                            <ui-select-match placeholder="{{'MPT_CURD_COMBO_MPT_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in UnitData | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorCurrency" class="label-color validation-message">
+                            {{'MPT_CURD_VALIDATE_MPT_CURRENCY' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'MPT_CURD_LBL_MPT_PAY_NOTE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea rows="3" class="form-control " ng-model="model.PayNote" type="text" placeholder="{{'MPT_CURD_TXT_MPT_PAY_NOTE' | translate}}..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="background-color:transparent">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>-->
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="text-center ">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+        </div>
+        <div class="text-center pl20">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+
+    </div>
+</div>
+

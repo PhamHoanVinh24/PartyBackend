@@ -1,0 +1,141 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="bold mb-0">Danh sách NPP/Đầu mối/Cửa hàng</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin/VCChart">Trang Chủ</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div>Danh sách NPP/Đầu mối/Cửa hàng</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 text-right">
+            <a class="btn btn-accent btnSearch">
+                <i class="fa fa-search"></i>Tìm kiếm
+            </a>
+            <a ng-click="add()" class="btn br4 btn-green">
+                <span class=""><i class="fa fa-plus"></i> Thêm mới</span>
+            </a>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 hidden">
+        <div class="portlet-body">
+            <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">NPP/Đầu mối/Cửa hàng</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CustomerCode" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="NPP/Đại lý/Cửa hàng...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listCustomer | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerCode=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Số điện thoại</label>
+                    <div class="input-group">
+                        <input ng-model="model.CustomerPhone" class="form-control" type="text" placeholder="Số điện thoại..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerPhone='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Thư điện tử</label>
+                    <div class="input-group">
+                        <input ng-model="model.CustomerEmail" class="form-control" type="text" placeholder="Thư điện tử..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerEmail='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Khu vực</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Area" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="Tất cả khu vực">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in Areas | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Area='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Vai trò</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CustomerRole" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="Tất cả vai trò">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in CustomerRoles | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerRole='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Trạng thái</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CustomerActivityStatus" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="Tất cả trạng thái">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerActivityStatus='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Địa chỉ</label>
+                    <div class="input-group">
+                        <input ng-model="model.Address" id="Address" class="form-control" type="text" placeholder="Địa chỉ..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Address='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 pt25">
+                    <button ng-click="search()" class="btn btn-accent">
+                        <i class="fa fa-search"></i>
+                        Tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataIndex"></table>

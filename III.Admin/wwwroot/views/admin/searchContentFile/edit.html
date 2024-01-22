@@ -1,0 +1,239 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .text-box-important {
+        background-color: #27ae60 !important;
+        color: #fcfdfd !important;
+        font-weight: bold;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'AA_CURD_TITLE_EDIT_AA' | translate}}</span>
+</div>
+<div class="modal-body userFormAreaHeader" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-12 col-md-8">
+
+                        <div class="row">
+                            <!--Mã HĐ-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'AA_CURD_LBL_AA_ACTCODE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control text-box-asset" ng-model="model.ActCode" name="ActCode" placeholder="{{'AA_CURD_TXT_AA_ACTCODE' | translate}}..." ng-readonly="true" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Tài sản-->
+                            <div class="col-md-6">
+                                <div class="form-group" ng-class="{ 'has-error': errorAssetCode}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        <label class="control-label require">{{'AA_CURD_LBL_AA_ASSETCODE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class='input-group'>
+                                            <ui-select tagging ng-model="model.AssetCode" theme="bootstrap" on-select="changeSelect('AssetCode')">
+                                                <ui-select-match placeholder="{{'AA_CURD_COMBO_AA_ASSETCODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listAsset | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.AssetCode='';" class="btn btn-default no-shadow end-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorAssetCode" class="label-color validation-message">
+                                            {{'AA_CURD_TXT_AA_ERROR' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <!--Tiêu đề-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12 ">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        <label class="control-label require">{{'AA_CURD_LBL_AA_ACTTITLE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control text-box-asset" ng-model="model.ActTitle" name="ActTitle" placeholder="{{'AA_CURD_TXT_AA_ACTTITLE' | translate}}..." />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--Kiểu HĐ-->
+                            <div class="col-md-6">
+                                <div class="form-group" ng-class="{ 'has-error': errorActType}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        <label class="control-label require">{{'AA_CURD_LBL_AA_ACTTYPE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class='input-group'>
+                                            <ui-select tagging ng-model="model.ActType" theme="bootstrap" on-select="changeSelect('ActType')">
+                                                <ui-select-match placeholder="{{'AA_CURD_COMBO_AA_ACTTYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in ActivityType | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.ActType='';" class="btn btn-default no-shadow end-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorActType" class="label-color validation-message">
+                                            {{'AA_CURD_TXT_AA_ERROR' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--Thanh vien-->
+                            <div class="col-md-12">
+                                <div class="form-group" ng-class="{ 'has-error': errorMember}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        <label class="control-label">{{'AA_CURD_LBL_AA_ACTMEMBER' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <ui-select class="list-user" ng-model="model1.listMember" multiple theme="bootstrap" style="width: 100%;" >
+                                            <ui-select-match placeholder="{{'AA_CURD_COMBO_AA_ACTMEMBER' | translate}}...">{{$item.GivenName}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Id as x in listUser | filter:$select.search">
+                                                {{x.GivenName}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span ng-show="errorMember" class="label-color validation-message">
+                                            {{'AA_CURD_TXT_AA_ERROR' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--Mô tả-->
+
+                            <div class="col-md-12">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label">{{'AA_CURD_LBL_AA_ACTNOTE' | translate}}</label>
+                                <textarea type="text" class="form-control" ng-model="model.ActNote" rows="2" name="Mô tả" placeholder="{{'AA_CURD_TXT_AA_ACTNOTE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <!---------------->
+    <div class="modal-footer pl-0 pr-0 ml-0 mr-0">
+        <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+            {{'COM_BTN_CANCEL' | translate}}
+        </a>
+        <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+            {{'COM_BTN_EDIT' | translate}}
+        </button>
+    </div>
+</div>

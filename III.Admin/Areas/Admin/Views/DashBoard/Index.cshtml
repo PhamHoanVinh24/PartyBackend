@@ -1,0 +1,163 @@
+﻿@using ESEIM.Utils
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Builder
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ILanguageService LanguageService
+@inject IParameterService ParameterService
+@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+
+    //Box fund
+    bool hasPermissionViewChartFund = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Fund);
+    bool hasPermissionViewActionFund = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Fund);
+    bool hasPermissionViewCountFund = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Fund);
+
+    //Box file edms
+    bool hasPermissionViewCountFile = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_FileEdms);
+    bool hasPermissionViewChartFile = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_FileEdms);
+    bool hasPermissionViewActionFile = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_FileEdms);
+
+    //Box Asset
+    bool hasPermissionViewCountAsset = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Asset);
+    bool hasPermissionViewChartAsset = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Asset);
+
+    //Box employee
+    bool hasPermissionViewActionEmp = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Employ);
+    bool hasPermissionViewDiagramGroupDepartment = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Diagram_Group_Department);
+
+    //Box cms
+    bool hasPermissionViewCMS = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_CMS);
+
+    //Box group
+    bool hasPermissionViewActionGroup = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Group);
+
+    //Box project
+    bool hasPermissionViewCountProj = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Proj);
+    bool hasPermissionViewChartProj = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Proj);
+
+    //Box card
+    bool hasPermissionViewActionCard = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Card);
+    bool hasPermissionViewCountCard = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Card);
+    bool hasPermissionViewChartCard = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Card);
+
+    //Box customer
+    bool hasPermissionViewActionCus = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Cus);
+    bool hasPermissionViewCountCus = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Cus);
+    bool hasPermissionViewChartCus = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Cus);
+
+    //Box supplier
+    bool hasPermissionViewActionSupp = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Action_Supp);
+    bool hasPermissionViewCountSupp = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Supp);
+    bool hasPermissionViewChartSupp = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Supp);
+
+    //Box buyer contract
+    bool hasPermissionViewCountBuyer = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Buyer);
+    bool hasPermissionViewChartBuyer = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Buyer);
+
+    //Box sale contract
+    bool hasPermissionViewChartSale = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Sale);
+    bool hasPermissionViewCountSale = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Sale);
+
+    //Box workflow
+    bool hasPermissionViewChartWf = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Chart_Wf);
+    bool hasPermissionViewCountWf = session.HasPermission(CommonUtil.Controller_DashBoard, CommonUtil.Box_Count_Wf);
+}
+@section plugin_style{
+    <link href="~/css/admin/workflowActivity/plugin-dashboard.css" rel="stylesheet" tppabs="" />
+    <link type="text/css" rel="stylesheet" href="~/css/admin/workflowActivity/example.css" />
+}
+@section plugin_script {
+    <script src="~/js/admin/draw2d.js" type="text/javascript"></script>
+    <script src="~/lib/workflowActivity/LabeledEnd.js"></script>
+
+    <script src="~/lib/assets/global/scripts/app.min.js" type="text/javascript"></script>
+    <script src="~/js/admin/d3.v3.min.js"></script>
+
+    <script src="~/js/admin/c3.min.js"></script>
+    <script src="~/js/admin/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js" integrity="sha512-1+czAStluVmzKLZD98uvRGNVbc+r9zLKV4KeAJmvikygfO71u3dtgo2G8+uB1JjCh2GVln0ofOpz9ZTxqJQX/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @*<script src="https://az416426.vo.msecnd.net/scripts/b/ai.2.gbl.min.js" type="text/javascript"></script>
+        <script src="~/lib/assets/global/plugins/ckeditor/ckeditor.js"></script>*@
+
+    @*<script src="~/lib/iot/js/plot.js"></script>
+        <script src="~/lib/iot/js/main.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/jquery.canvasjs.min.js" integrity="sha512-xeQFOWENzkyJSDlwwlX5lsFHfFL3Y3idnpBZYF/SCRxZz03HW/fpd5Lpd78SzjAzp/iBeWJ4PQRKlxWeYqQlHA==" crossorigin="anonymous"></script>
+
+    <script src="~/lib/inOut/js/main.js"></script>
+}
+<div id="contentMain" ng-app="App_ESEIM_DASHBOARD" ng-controller="Ctrl_ESEIM_DASHBOARD">
+    <div ng-view></div>
+</div>
+<script>
+    var PERMISSION_FUND= {
+        viewChart: @(hasPermissionViewChartFund ? "true" : "false"),
+        viewActionFund : @(hasPermissionViewActionFund ? "true" : "false"),
+        viewCountFund: @(hasPermissionViewCountFund ? "true" : "false"),
+    };
+
+    var PERMISSION_FILE = {
+        viewCountFile: @(hasPermissionViewCountFile ? "true" : "false"),
+        viewChartFile: @(hasPermissionViewChartFile ? "true" : "false"),
+        viewActionFile: @(hasPermissionViewActionFile ? "true" : "false"),
+    }
+
+    var PERMISSION_ASSET = {
+         viewCountAsset: @(hasPermissionViewCountAsset ? "true" : "false"),
+        viewChartAsset: @(hasPermissionViewChartAsset ? "true" : "false"),
+    }
+
+    var PERMISSION_EMPLOYEE = {
+        viewActionEmployee: @(hasPermissionViewActionEmp ? "true" : "false"),
+        viewDiagram: @(hasPermissionViewDiagramGroupDepartment ? "true" : "false"),
+    }
+
+    var PERMISSION_CMS = {
+        viewCMS: @(hasPermissionViewCMS ? "true" : "false"),
+    }
+
+    var PERMISSION_GROUP = {
+        viewActionGroup: @(hasPermissionViewActionGroup ? "true" : "false"),
+    }
+
+    var PERMISSION_PROJECT = {
+        viewCountProj: @(hasPermissionViewCountProj ? "true" : "false"),
+        viewChartProj: @(hasPermissionViewChartProj ? "true" : "false"),
+    }
+
+    var PERMISSION_CARD = {
+        viewActionCard: @(hasPermissionViewActionCard ? "true" : "false"),
+        viewCountCard: @(hasPermissionViewCountCard ? "true" : "false"),
+        viewChartCard: @(hasPermissionViewChartCard ? "true" : "false"),
+    }
+
+    var PERMISSION_CUS = {
+        viewActionCus: @(hasPermissionViewActionCus ? "true" : "false"),
+        viewCountCus: @(hasPermissionViewCountCus ? "true" : "false"),
+        viewChartCus: @(hasPermissionViewChartCus ? "true" : "false"),
+    }
+
+    var PERMISSION_SUPP = {
+        viewActionSupp: @(hasPermissionViewActionSupp ? "true" : "false"),
+        viewCountSupp: @(hasPermissionViewCountSupp ? "true" : "false"),
+        viewChartSupp: @(hasPermissionViewChartSupp ? "true" : "false"),
+    }
+
+    var PERMISSION_BUYER = {
+        viewCountBuyer: @(hasPermissionViewCountBuyer ? "true" : "false"),
+        viewChartBuyer: @(hasPermissionViewChartBuyer ? "true" : "false"),
+    }
+
+    var PERMISSION_SALE = {
+        viewChartSale: @(hasPermissionViewChartSale ? "true" : "false"),
+        viewCountSale: @(hasPermissionViewCountSale ? "true" : "false"),
+    }
+
+    var PERMISSION_WORKFLOW = {
+        viewChartWF: @(hasPermissionViewChartWf ? "true" : "false"),
+        viewCountWF: @(hasPermissionViewCountWf ? "true" : "false"),
+    }
+</script>
+@*<script src="~/views/admin/dashBoard/controller.js" type="text/javascript"></script>*@

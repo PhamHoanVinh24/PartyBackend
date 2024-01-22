@@ -1,0 +1,92 @@
+﻿<link href="../../css/message-box/style.css" rel="stylesheet" />
+<style>
+    .titleTable {
+        height: 35px;
+        text-align: center;
+        border: 1px solid #d2d2d2;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .cssContent {
+        height: 35px;
+        text-align: center;
+        border: 1px solid #d2d2d2;
+        font-size: 12px;
+    }
+
+    .my-custom-scrollbar {
+        position: relative;
+        height: 200px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-list" style="padding-top:8px"></i>
+    <span class="modal-title" id="modal-title"> {{'CJ_LIST_COL_LIST_LINK_CARD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pt5">
+                <div class="form-group" ng-class="{ 'has-error': errorCardLink}">
+                    <div class="col-md-10" style="padding-left: 0px;">
+                        <label class="text-underline">{{'CJ_LBL_CARD_FIRST' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CardLink" theme="bootstrap" on-select="changeSelect('CardLink')">
+                                <ui-select-match placeholder="{{'CJ_TXT_CARD_FIRST' | translate}}...">#{{$select.selected.CardCode}}: {{$select.selected.CardName}}</ui-select-match>
+                                <ui-select-choices repeat="x.CardCode as x in listCardJob | filter: $select.search">
+                                    #{{x.CardCode}}: {{x.CardName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorCardLink" class="label-color validation-message">
+                                {{'CJ_VALIDATE_CARD_LINK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt20">
+                        <div class="btn-group actions d-flex">
+                            <div class="text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="color:darkred">#{{cardJob.cardCode}}: {{cardJob.cardName}}</div>
+                <div class="form-group">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                        <table class="table table-bordered table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="titleTable col-md-2">{{'CJ_LIST_COL_STT' | translate}}</th>
+                                    <th class="titleTable col-md-8">{{'CJ_LBL_TITLE' | translate}}</th>
+                                    <th class="titleTable col-md-2" {{'COM_LIST_COL_ACTION' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listCardJobLink">
+                                    <td class="cssContent col-md-2">{{$index + 1}}</td>
+                                    <td class="cssContent col-md-8">{{x.CardName}}</td>
+                                    <td class="titleTable col-md-2">
+                                        <div class="text-center"><button title="Xoá" ng-click="delete(x.Id)" style="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: ##e7505a;" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash white fs10"></i></button></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

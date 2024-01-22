@@ -1,0 +1,209 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .text-box-important {
+        background-color: #27ae60 !important;
+        color: #fcfdfd !important;
+        font-weight: bold;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color">
+    <!--<img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert black"></i>
+    <span class="modal-title custom-title fs14 black" id="modal-title">{{'ACT_TITLE_ADD_WF'|translate}}</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptionsWF">
+            <div class="form-body pt5 pl-0 pr-0">
+                <div class="col-md-12">
+                    <div class="col-md-11" style="">
+                        <div class="form-group" ng-class="{'has-error' : errorObjectType}">
+                            <label class="control-label fw600">{{'ACT_CRUD_FLOW_ADMIN' | translate}}:</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ObjectType" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ACT_CRUD_FLOW_ADMIN' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listObjType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorObjectType" class="label-color validation-message">
+                                    {{'ACT_CRUD_FLOW_ADMIN_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pr-0" style="padding-top: 23px;">
+                        <div class="text-center mt10">
+                            <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus fs25"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <!--<button class="btn green-custom" ng-click="submit()">
+                    <i class="fa fa-file-text-o"></i>
+                    {{'COM_BTN_SAVE' | translate}}
+                </button>-->
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold"><i class="fa fa-barcode"></i> {{'ACT_CRUD_WF_CODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" name="WfCode" class="form-control br24 text-box-asset" data-ng-model="model.WfCode" placeholder="{{'ACT_CRUD_WF_CODE'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 pl-0 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require bold">{{'ACT_CRUD_WF_NAME'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 text-box-asset" ng-model="model.WfName" name="WfName" placeholder="{{'ACT_CRUD_WF_NAME'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-lg-5 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group br24-nobtn" ng-class="{'has-error' : errorWfGroup}">
+                                <label class="control-label require">{{'ACT_CRUD_GROUP_WF' | translate}}:</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfGroup" theme="bootstrap" ng-change="changeSelect('WfGroup')">
+                                    <ui-select-match placeholder="{{'ACT_CRUD_GROUP_WF' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstWfGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWfGroup" class="label-color validation-message">
+                                    {{'ACT_VALIDATE_GROUP_WF' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group br24-nobtn" ng-class="{'has-error' : errorWfType}">
+                                <label class="control-label require">{{'ACT_CRUD_TYPE_WF' | translate}}:</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfType" theme="bootstrap" ng-change="changeSelect('WfType')">
+                                    <ui-select-match placeholder="{{'ACT_CRUD_TYPE_WF' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstWfType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWfType" class="label-color validation-message">
+                                    {{'ACT_VALIDATE_WF_TYPE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label">{{'ACT_CRUD_DES'|translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0 pr-0">
+                                <textarea name="WfNote" rows="5" class="form-control br12" ng-model="model.WfNote" type="text" placeholder="{{'ACT_CRUD_DES'|translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="padding-bottom: 30px !important;">
+</div>

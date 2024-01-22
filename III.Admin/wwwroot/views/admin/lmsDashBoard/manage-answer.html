@@ -1,0 +1,472 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166, 0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .btnZoom {
+        float: left;
+        width: 25px;
+        height: 25px;
+    }
+
+    .btnDelete {
+        float: right;
+    }
+    /*drag - drop*/
+    .answer-choose {
+        margin-top: 32px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .option-choose {
+        margin-top: 32px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        /*padding: 0 10px;*/
+        flex-wrap: wrap;
+    }
+
+    .answer-list {
+        min-height: 50px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .quesion-flex-el {
+        display: flex;
+        align-items: center;
+        padding-left: 2%;
+        width: 96%;
+    }
+
+    .answer-drag-area {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        /*padding-left: 2%;
+           width: 96%;*/
+        height: 50%;
+    }
+
+        .answer-drag-area .line:first-child {
+            border-top: none;
+        }
+
+    .question-drag-txt {
+        padding: 12px;
+        font-size: 20px;
+        border-radius: 10px;
+        margin-top: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .question-img {
+        width: 75px;
+    }
+
+    .speaker {
+        width: 40px;
+    }
+
+    .line {
+        width: 100%;
+        border-top: 2px solid #e5e5e5;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-drag {
+        border-radius: 10px;
+        height: 35px;
+        line-height: 35px;
+        background-color: white;
+        text-align: center;
+        border: 1px solid #e5e5e5;
+        margin: 0 4px;
+        padding: 0 12px;
+        box-shadow: 1px 4px #e5e5e5;
+        /*min-width: 50px;*/
+    }
+
+    .btn-dis {
+        background-color: #d9d9d9;
+        box-shadow: none;
+    }
+
+    .moved {
+        background-color: #e5e5e5;
+    }
+
+        .moved span,
+        .moved img {
+            display: none;
+        }
+    /*Drag drop*/
+    /**
+    * The dndDraggingSource class will be applied to
+    * the source element of a drag operation. It makes
+    * sense to hide it to give the user the feeling
+    * that he's actually moving it.
+    */
+    .answer-list[dnd-list] .dndDraggingSource {
+        display: none;
+    }
+
+    /**
+    * An element with .dndPlaceholder class will be
+    * added to the dnd-list while the user is dragging
+    * over it.
+    */
+    .answer-choose[dnd-list] .dndPlaceholder {
+        background-color: #ddd;
+        border-radius: 10px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        border: 1px solid #e5e5e5;
+        margin: 0 4px;
+        padding: 0 12px;
+        box-shadow: 1px 4px #e5e5e5;
+    }
+
+    .option-choose[dnd-list] .dndPlaceholder {
+        display: none;
+    }
+</style>
+<div ng-class="{'cursor-not-allowed': idQuiz == null || idQuiz == '' || idQuiz == -1}">
+    <div ng-controller="manageAnswer" ng-class="{'disabled-element': idQuiz == null || idQuiz == '' || idQuiz == -1}" style="height: 400px">
+        <div class="portlet-body form mb10" ng-show="!isCreateAnswer">
+            <form name="addCSCform" class="form-horizontal " method="post" ng-validate="validationOptionsCSC">
+                <div class="form-body pt-0 pl-0 pr-0">
+                    <div class="row ">
+                        <div class="col-md-12 mt10" ng-show="modelAnswer.Type == 'TEXT' && model.Type != 'QUIZ_GAME'">
+                            <label class="col-md-12 pl-0 fw400 text-underline require">
+                                {{
+                        'LMS_ANSWER_CONTENT' |
+                        translate
+                                }}
+                            </label>
+                            <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorType}">
+                                <textarea ng-model="modelAnswer.Answer" id="ckEditorItemAnswer"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-ct">
+                            <div class="width-30-per d-flex justify-content-sa pr-0 mt10" ng-if="model.Type != 'QUIZ_GAME'">
+                                <!--<label class="col-md-12 pl-0 fw400 text-underline require">{{'Media đi kèm' | translate}}</label>-->
+                                <div class="wpercent25" ng-repeat="x in listMediaTypeAnswer">
+                                    <div class="border-media bg-white" style="position: relative"
+                                         ng-class="{'disabled-element' : x.Check == false && mediaCheckedAnswer == true }">
+                                        <button type="button" class="close-modal-mini" data-dismiss="modal" aria-hidden="true" ng-click="deleteMediaAnswer(x)" ng-if="x.Check">
+                                        </button>
+                                        <!--<button ng-click="deleteMediaAnswer(x)" class="top-corner" ng-if="x.Check">
+                                            <span><i class="fa fa-times black fs8"></i></span>
+                                        </button>-->
+                                        <div class="text-center h-100 d-flex"
+                                             style="flex-direction: column; justify-content: center; align-content: center;">
+                                            <a class="fs50" ng-click="addMediaAnswer($index)"
+                                               onclick="$(this).parent().find('input[type=file]').click();" ng-if="!x.Check">
+                                                <span><i class="fas fa-{{x.Icon}}"></i></span>
+                                            </a>
+                                            <a class="fs50" ng-click="viewFile(x.Url, x.Code)" ng-if="x.Check">
+                                                <span><i class="fas fa-{{x.Icon}}"></i></span>
+                                            </a>
+                                            <input class="form-control" custom-on-change-lms="loadFileAnswer"
+                                                   style="display: none;" type="file" />
+                                            <p class="text-underline mb5 pt3 ng-binding" ng-if="!x.Check">{{x.Name}}</p>
+                                            <p class="text-underline fs8 mb5 pt3 ng-binding" ng-if="x.Check">{{x.Url.length > 20 ? x.Url.slice(-20) : x.Url}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="width-10-per h-70 text-center"
+                                     ng-if="model.Type == 'QUIZ_PAIRS_ELEMENT' || model.Type == 'QUIZ_SORT_ARRANGE'">
+                            <label class="col-md-12 pl-0 fw400 pb10 text-underline pr-0">-->
+                            <!--{{'CMS_ITEM_NOTE' | translate}}-->
+                            <!--{{'LMS_CREATED_ANSWER' | translate}}
+                            </label>
+                            <a ng-click="createAnswer()" class="mt10">
+                                <i class="fas fa-bullseye-arrow fs35 color-dark"></i>
+                            </a>
+                            </div>-->
+                            <div class="width-10-per h-70 text-center"
+                                 ng-if="model.Type != 'QUIZ_PAIRS_ELEMENT' && model.Type != 'QUIZ_SORT_ARRANGE' && model.Type != 'QUIZ_GAME'">
+                                <label class="col-md-12 pl-0 fw400 pb10 mt20 text-underline pr-0">
+                                    <!--{{'CMS_ITEM_NOTE' | translate}}-->{{'LMS_CORRECT_ANSWER' | translate}}
+                                </label>
+                                <a ng-show="modelAnswer.IsAnswer" ng-click="correctAnswer()"
+                                   style1="width: 25px; height: 25px; padding: 0px" class="mt10"
+                                   class1="btn btn-icon-only btn-circle btn-outline green-custom mt5">
+                                    <i class="fas fa-check-square fs25"></i>
+                                </a>
+                                <a ng-show="!modelAnswer.IsAnswer" ng-click="correctAnswer()"
+                                   style1="width: 25px; height: 25px; padding: 0px" class="mt10"
+                                   class1="btn btn-icon-only btn-circle btn-outline red-custom mt5">
+                                    <i class="fas fa-square fs25"></i>
+                                </a>
+                            </div>
+                            <div class="wpercent12" ng-if="model.Type == 'QUIZ_PAIRS_ELEMENT' || model.Type == 'QUIZ_SORT_ARRANGE'">
+                                <!--<label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_COL' | translate}}</label>-->
+                                <!--LMS_QUIZ_PAIR_COLUMN-->
+                                <div class="col-md-12 input-group br24 mt20 search-group" ng-if="model.Type == 'QUIZ_PAIRS_ELEMENT'">
+                                    <input class="form-control text-important" name="Column" ng-model="modelAnswer.Column"
+                                           type="text" placeholder="{{'LMS_COL' | translate}}..." />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelAnswer.Column='';"
+                                                class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="col-md-12 mt20">
+                                    <a ng-click="createAnswer()">
+                                        <i class="fas fa-bullseye-arrow fs25 color-dark pr10"></i>
+                                        {{'LMS_CREATED_ANSWER' | translate}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="h-70" style="width: 8%" ng-if="model.Type != 'QUIZ_GAME'">
+                                <div class="text-center mt50">
+                                    <a ng-click="submit()" class="">
+                                        <i class="fa-solid fa-plus fs35"></i>
+                                        <!--<img style="width:100%; height:100%;"
+                                                 src="/images/default/save-button-icon_340535.png">-->
+                                    </a>
+                                    <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12 mb15" ng-show="!isCreateAnswer">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center wpercent5" style="width: 5%;">{{'LMS_NO' | translate}}</th>
+                            <th class="text-center width-80-per nowrap">{{'LMS_ANSWER' | translate}}</th>
+                            <th class="text-center wpercent5 nowrap">{{'LMS_QUIZ_RESULT' | translate}}</th>
+                            <th class="text-center wpercent5 nowrap" ng-if="model.Type == 'QUIZ_PAIRS_ELEMENT'">
+                                {{
+                    'LMS_COL' |
+                    translate
+                                }}
+                            </th>
+                            <th class="text-center wpercent5 nowrap">{{'LMS_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in listAnswer track by x.Code">
+                            <td class="text-center pt15 bold">{{$index+1}}</td>
+                            <td class="pl20">
+                                <span class="fs16 fw600 pull-left">{{x.ContentDecode}}</span>
+                                <a class="pull-right"><i ng-click="viewFile(x.ContentDecode, x.Type)" ng-if="x.Type == 'VIDEO' || x.Type == 'IMAGE' || x.Type == 'VOICE'" class="fas fa-{{x.Icon}} fs25 pl20 color-dark"></i></a>
+                            </td>
+                            <td class="text-center">
+                                <a ng-show="x.IsAnswer" ng-click="updateAnswer(x.Code)" ng-disabled="model.Type != 'QUIZ_MUL_CH' && model.Type != 'QUIZ_SING_CH'"
+                                   style1="width: 25px; height: 25px; padding: 0px"
+                                   class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <i class="fas fa-check-square fs25"></i>
+                                </a>
+                                <a ng-show="!x.IsAnswer" ng-click="updateAnswer(x.Code)" ng-disabled="model.Type != 'QUIZ_MUL_CH' && model.Type != 'QUIZ_SING_CH'"
+                                   style1="width: 25px; height: 25px; padding: 0px"
+                                   class1="btn btn-icon-only btn-circle btn-outline red-custom">
+                                    <i class="fas fa-square fs25"></i>
+                                </a>
+                            </td>
+                            <td class="text-left pl20"><span class1="fs20">{{x.Column}}</span></td>
+                            <td class="text-center nowrap">
+                                <a title="Xóa" ng-click="deleteAnswer(x)"
+                                   style1="width: 25px; height: 25px; padding: 0px"
+                                   class1="btn btn-icon-only btn-circle btn-outline red">
+                                    <i class="fas fa-trash-alt fs25 text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div ng-if="model.Type == 'QUIZ_PAIRS_ELEMENT' && isCreateAnswer">
+            <div style="margin-left: 15px; height: 35px; width: calc(100% - 30px)">
+                <a id="zoomIn" class="btnZoom mt5" style="margin-right: 25px" ng-click="zoomIn()">
+                    <i style="font-size: 20px;" class="fas fa-plus"></i>
+                </a>
+                <a id="zoomOut" class="btnZoom mt5" style="margin-right: 25px" ng-click="zoomOut()">
+                    <i style="font-size: 20px;" class="fas fa-minus"></i>
+                </a>
+                <a id="redrawCanvas" class="btnZoom mt5" ng-click="redrawCanvas()">
+                    <i style="font-size: 20px;" class="fas fa-arrows-alt"></i>
+                </a>
+                <a id="quitCanvas" class="btnDelete mt10" ng-click="closeCanvas()">
+                    <i style="font-size: 20px;" class="fa fa-times color-dark"></i>
+                </a>
+                <a id="saveCanvas" class="btnDelete mt10" ng-click="saveCanvas()">
+                    <i style="font-size: 20px; padding-right: 25px;" class="fa-solid fa-plus"></i>
+                </a>
+                <a id="deleteCanvasObj" class="btnDelete mt10" ng-disabled="isLineChoosen" ng-click="deleteLine()">
+                    <i style="font-size: 20px; padding-right: 25px; color: red" class="fas fa-trash-alt"></i>
+                </a>
+            </div>
+            <div fabric-canvas="listAnswer" ng-model="modelFabric"><canvas>You have a very old browser... (It does not support HTML5 canvas)</canvas></div>
+        </div>
+        <div ng-if="model.Type == 'QUIZ_SORT_ARRANGE' && isCreateAnswer">
+            <div style="margin-left: 15px; height: 35px; width: calc(100% - 30px)">
+                <a id="quitCanvas" class="btnDelete mt10" ng-click="closeCanvas()">
+                    <i style="font-size: 20px;" class="fa fa-times color-dark"></i>
+                </a>
+                <a id="saveCanvas" class="btnDelete mt10" ng-click="saveDragNDrop()">
+                    <i style="font-size: 20px; padding-right: 25px;" class="fa-solid fa-plus"></i>
+                </a>
+            </div>
+            <div class="answer-drag-area">
+                <div class="line">
+                    <div class="answer-choose answer-list" dnd-list="listOne">
+                        <button #choice_1 class="btn-drag btn-answer" ng-style="{'min-width': item1.minW}" ng-repeat="item1 in listOne"
+                                dnd-draggable="item1"
+                                dnd-moved="listOne.splice($index, 1)"
+                                dnd-effect-allowed="move"
+                                dnd-type="listOneType">
+                            <!--<span class="objFabric?-code" style="display: none;">{{item1.Code}}</span>-->
+                            <span ng-if="item1.Type == 'TEXT'">{{item1.ContentDecode}}</span>
+                            <img ng-if="item1.Type == 'IMAGE'" style="width: 22px;" src="{{item1.Url}}" alt="">
+                        </button>
+                        <button class="dndPlaceholder" ng-style="{'min-width': placeHolderMinW}">
+                        </button>
+                    </div>
+                </div>
+                <!-- <div class="line"></div> -->
+                <div class="line" style="height: 0;"></div>
+            </div>
+            <div class="option-choose answer-list" dnd-list="listTwo" dnd-allowed-types="listTwoAllowedTypes"
+                 dnd-drop="dropCallback(index, item, external, type)">
+                <button #choice_2 class="btn-drag btn-option" ng-style="{'min-width': item2.minW}" ng-repeat="item2 in listTwo" ng-class="{'moved': item2.Moved}"
+                        dnd-draggable="item2"
+                        dnd-moved="listTwo[$index].Moved = true"
+                        dnd-effect-allowed="move"
+                        dnd-type="listTwoType">
+                    <!--<span class="objFabric?-code" style="display: none;">{{item2.Code}}</span>-->
+                    <span ng-if="item2.Type == 'TEXT'">{{item2.ContentDecode}}</span>
+                    <img ng-if="item2.Type == 'IMAGE'" style="width: 22px;" src="{{item2.Url}}" alt="">
+                </button>
+            </div>
+        </div>
+        <!--<div ng-if="model.Type == 'QUIZ_GAME' && isCreateAnswer" fullscreen1="isFullScreen" ng-show1="isFullScreen" style="background: white; height: 100%;" load-url1="isFullScreen">
+        <iframe src="/Admin/LmsDashBoard/ComposeEdu" style="width: 100%; height: 100%"></iframe>-->
+        <!--<div id="#eduComposeEngine"></div>-->
+        <!--</div>-->
+    </div>
+</div>
+<script>
+    function HandleCanvasJson(result) {
+        //alert("result of popup is: " + result);
+        window.canvasJson = result;
+        window.setTimeout(function () {
+            angular.element('#ckEditorItem').scope().$apply();
+        },
+            100);
+    }
+    function HandleCorrectAnswer(result) {
+        //alert("result of popup is: " + result);
+        window.correctAnswerGame = result;
+        window.setTimeout(function () {
+            angular.element('#ckEditorItemAnswer').scope().$apply();
+        },
+            100);
+    }
+</script>

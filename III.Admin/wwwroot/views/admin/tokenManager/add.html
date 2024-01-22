@@ -1,0 +1,321 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-60 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-60 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-60 {
+            width: 65%;
+        }
+    }
+    .text-important1 {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+    .close-modal {
+        z-index: 9999;
+        position: absolute;
+        padding: 0px;
+        border-radius: 50px;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        display: block;
+        width: 50px;
+        height: 50px;
+        text-indent: -9999px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border-color: #ff5ca1;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/XKHq6urW1tb////w8PDV1dXp6elDeZ9WAAAAEHRSTlMACkZ5FnA+QUAZSXMHFT8XTiEbVAAAAAFiS0dEEwy7XJYAAAAHdElNRQflDAEGMgLw4uMaAAAAAW9yTlQBz6J3mgAAATNJREFUSMe1l9tygzAMRM21kAtdMO3/f2ohTDpQJFn1Jvtmxmdk2UZehSCqKCv8qiqL4Fbd4KSmdqEtFLVJ9AOGOhPtkVCvs5cUC1w09ppmgauI3jzoqtuZvXtZ4J4dV4r9HxbI2Ctl1xxndNTuxJJ346w+M+Fj2l0O3BGBn6GHPHggAm+h61x4rS1CzcE4HcfTKExq5FWPMc778RyjRC91Uvg6xQO9sHESphWhlNKZ9/Qc/yzkqTJUSNAqiyoANq2zS9KwaYvV4Q0zWQN+0CZrwRttsG+DmWUzG8Ycle+SUNeT+jGcv+SXMK3wFoNvKWWyDFEFMOTCtvGy1fLPjW3cNHWveGK5x52yFZyh4awUZ+Io+8gZV84y+05MNetcm5AydHaDYtqyIYmu+sxvyh7ytYM/qPe1AtpYDhcAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMTItMDFUMDY6NTA6MDIrMDA6MDDiIsyiAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTEyLTAxVDA2OjUwOjAyKzAwOjAwk390HgAAAABJRU5ErkJggg==);
+        /*background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==);*/
+    }
+</style>
+<button type="button" class="close-modal ng-scope" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color h-40">
+    <i class="fas fa-plus-circle black icon-insert" style="line-height: 30px"></i>
+    <span class="modal-title pt15 black" id="modal-title">Thêm mới cấu hình dịch vụ hệ thống</span><!--{{'TOKEN_MANAGER_ADD_TOKEN_TITLE' | translate}}-->
+</div>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div>
+                <div class="row mt15">
+                    <div class="col-lg-12">
+                        <div class="form-group" ng-class="{ 'has-error': errorServiceType}">
+                            <div class="col-md-12">
+                                <i class="fas fa-font"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_SERVICE_TYPE' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.ServiceType" theme="bootstrap" ng-change="changleSelect('ServiceType')">
+                                        <ui-select-match placeholder="{{'TOKEN_MANAGER_SELECT_SERVICE_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listService | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ServiceType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorServiceType" class="label-color validation-message">
+                                    {{'TOKEN_MANAGER_VALIDATE_SERVICE_TYPE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md" ng-if="model.ServiceType =='AUTO_MEETING' || model.ServiceType =='MAKE_SHIFT_AUTO'">
+                        <!--<div class="col-md-12">
+                            <div class="btn-group actions d-flex justify-content-ct" style="margin-top: 20px;">
+                                <div class="text-center" ng-click="addNewAttr()">
+                                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa-solid fa-plus fs25"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD_ATTR' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="col-md-12 h-250" style="overflow-y: auto">
+                            <div class="col-md-12 pt20" ng-repeat="x in listNewAttr">
+                                <div class="col-md-4 pr30 pl-0">
+                                    <div class="form-group">
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <label class="control-label fw600">{{'COM_CRUMB_WF_PROPER' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <input type="text" class="form-control bold br24" ng-model="x.AttrName" name="AttrName" placeholder="{{'COM_CRUMB_WF_PROPER_NAME' | translate}}..." disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 pr30">
+                                    <div class="form-group">
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <label class="control-label fw600">{{'COM_CRUMB_WF_VALUE' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0" ng-if="x.AttrName !='STARTDAY' && x.AttrName !='ENDDAY'&& x.AttrName !='STATUS'">
+                                            <input type="text" class="form-control bold br24" ng-model="x.Value" name="Value" placeholder="{{'COM_CRUMB_WF_VALUE' | translate}}..." />
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0" ng-if="x.AttrName =='STARTDAY'">
+                                            <div class='input-group date br24' id='FromDate'>
+                                                <input type='text' name="FromDate" class="form-control input-date" ng-model="x.Value" placeholder="{{'' | translate}}" />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0" ng-if="x.AttrName =='ENDDAY'">
+                                            <div class='input-group date br24' id='ToDate'>
+                                                <input type='text' name="ToDate" class="form-control input-date" ng-model="x.Value" placeholder="{{'' | translate}}" />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0" ng-if="x.AttrName =='STATUS'">
+                                            <div class="input-group br24-nobtn">
+                                                <ui-select tagging ng-model="x.Value" theme="bootstrap" >
+                                                    <ui-select-match placeholder="{{'' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pt30 text-center pr-0">
+                                    <a title="Xoá" ng-click="deleteNewAtt(x.Id)" style1="width: 25px; height: 25px; padding: 0px"
+                                       class1="btn mt25 pull-right btn-icon-only btn-circle btn-outline red">
+                                        <i class="fas fa-trash-alt fs25 text-danger"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType !='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-barcode"></i>
+                                <label class="control-label text-important1">{{'TOKEN_MANAGER_ACCOUNT_CODE' | translate}}</label>
+                                <input class="form-control br24 text-important1" ng-model="model.AccountCode" type="text" placeholder="{{'TOKEN_MANAGER_ACCOUNT_CODE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType !='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-users-medical"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_ACCOUNT_NAME' | translate}}</label>
+                                <input class="form-control br24 text-important1" name="AccountName" ng-model="model.AccountName" type="text" placeholder="{{'TOKEN_MANAGER_ACCOUNT_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType !='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-envelope"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_EMAIL' | translate}}</label>
+                                <input class="form-control br24 text-important1" name="Email" ng-model="model.Email" type="text" placeholder="{{'TOKEN_MANAGER_EMAIL' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType !='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'" ">
+                        <div class="form-group" ng-class="{ 'has-error': errorType}">
+                            <div class="col-md-12">
+                                <i class="fas fa-font-case"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_TYPE' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changleSelect('Type')">
+                                        <ui-select-match placeholder="{{'TOKEN_MANAGER_SELECT_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorType" class="label-color validation-message">
+                                    {{'TOKEN_MANAGER_VALIDATE_TYPE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT' || model.ServiceType=='MATHPIX_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_ACCOUNT_NUMBER' | translate}}</label>
+                                <input class="form-control br24" name="AccountNumber" ng-model="model.AccountNumber" type="text" placeholder="{{'TOKEN_MANAGER_ACCOUNT_NUMBER' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-key"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_SDK_KEY' | translate}}</label>
+                                <input class="form-control br24 bold" name="SdkKey" ng-model="model.SdkKey" type="text" placeholder="{{'TOKEN_MANAGER_SDK_KEY' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-user-secret"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_SDK_SECRET' | translate}}</label>
+                                <input class="form-control br24 bold" name="SdkSecret" ng-model="model.SdkSecret" type="text" placeholder="{{'TOKEN_MANAGER_SDK_SECRET' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT' || model.ServiceType=='MATHPIX_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-key"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_WEB_KEY' | translate}}</label>
+                                <input class="form-control br24 bold" name="Key" ng-model="model.Key" type="text" placeholder="{{'TOKEN_MANAGER_WEB_KEY' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-user-secret"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_WEB_SECRET' | translate}}</label>
+                                <input class="form-control br24 bold" name="ApiSecret" ng-model="model.ApiSecret" type="text" placeholder="{{'TOKEN_MANAGER_WEB_SECRET' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt10" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-user-secret"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_HOST_KEY' | translate}}</label>
+                                <input class="form-control br24 bold" name="ApiSecret" ng-model="model.HostClaimCode" type="text" placeholder="{{'TOKEN_MANAGER_HOST_KEY' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt10" ng-if="model.ServiceType!='ZOOM_ACCOUNT' && model.ServiceType!='MATHPIX_ACCOUNT'&& model.ServiceType!='AUTO_MEETING'&& model.ServiceType!='MAKE_SHIFT_AUTO'">
+                        <div class="form-group">
+                            <div class="col-md-11">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_CREDENTIAL_JSON' | translate}}</label>
+                                <textarea rows="3" class="form-control br12 bold" name="Credentials" ng-model="model.CredentialsJson" type="text" placeholder="{{'TOKEN_MANAGER_CREDENTIAL_JSON' | translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt10 pb15">
+                        <div class="form-group">
+                            <div class="col-md-12" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                                <i class="fas fa-barcode-scan"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_WEB_TOKEN' | translate}}</label>
+                                <textarea rows="3" class="form-control br12 bold" name="Token" ng-model="model.Token" type="text" placeholder="{{'TOKEN_MANAGER_WEB_TOKEN' | translate}}..." disabled></textarea>
+                            </div>
+                            <div class="col-md-11" ng-if="model.ServiceType!='MATHPIX_ACCOUNT' && model.ServiceType!='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'">
+                                <i class="fas fa-barcode-alt"></i>
+                                <label class="control-label require text-important1">{{'TOKEN_MANAGER_REFRESH_TOKEN' | translate}}</label>
+                                <textarea rows="3" class="form-control br12 bold" name="RefreshToken" ng-model="model.RefreshToken" type="text" placeholder="{{'TOKEN_MANAGER_REFRESH_TOKEN' | translate}}..." disabled></textarea>
+                            </div>
+                            <div class="col-md-1 pl-0 pr-0 pt50 pull-right">
+                                <div class="btn-group actions d-flex justify-content-ct">
+                                    <div class="text-center" ng-click="submit()" ng-if="model.ServiceType!='GOOGLE_ACCOUNT' && model.ServiceType!='ZOOM_ACCOUNT'&& model.ServiceType!='AUTO_MEETING' && model.ServiceType !='MAKE_SHIFT_AUTO'">
+                                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                                        </a>
+                                        <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                    <div class="text-center" ng-click="saveGoogle()" ng-if="model.ServiceType=='GOOGLE_ACCOUNT'">
+                                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                                        </a>
+                                        <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                    <div class="text-center" ng-click="saveZoom()" ng-if="model.ServiceType=='ZOOM_ACCOUNT'">
+                                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                                        </a>
+                                        <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center pull-right" ng-click="addautoMeeting()" ng-if="model.ServiceType=='AUTO_MEETING'">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa-solid fa-plus fs25 color-blue"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                            <div class="text-center pull-right" ng-click="addShiftAuto()" ng-if="model.ServiceType=='MAKE_SHIFT_AUTO'">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa-solid fa-plus fs25 color-blue"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,219 @@
+﻿<style>
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: white !important;
+        font-weight: 700;
+        background: #FF8000;
+        font-size: 12px;
+    }
+
+    .nav-tabs .nav-link, .nav-tabs a {
+        background: #428bca;
+        transition: 0.5s;
+        background-size: 200% auto;
+        border-top-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+        font-size: 12px;
+        color: white;
+        padding: 6px;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .tb-body {
+        /*background: aliceblue;*/
+    }
+
+    .tb-header {
+        background: #eef1f5;
+    }
+
+    .mt-checkbox > span:after {
+        left: 9px;
+        top: 5px;
+        width: 7px;
+        height: 12px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 50px;
+        top: 10px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right actions pt5 pb-1 d-flex" style="margin-top: -50px;">
+    <div class="text-center mt10 pr30">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center mt10 pr20">
+        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="export()">
+            <span><i class="fas fa-file-excel fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3 nowrap">{{'COM_BTN_EXCEL' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-12 pt5 mb5">
+                        <div class="col-md-12 pl-0">
+                            <div class="col-lg-3">
+                                <label class="fw600 text-underline">{{'REP_ACT_LBL_GROUP_DATA' | translate}}</label>
+                                <div class="input-group br24 search-group">
+                                    <ui-select ng-model="model.Group" theme="bootstrap" ng-change="changeGroup()">
+                                        <ui-select-match placeholder="{{'REP_ACT_LBL_GROUP_DATA' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listDataLogger | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <label class="fw600 text-underline">{{'REP_ACT_LBL_FROM_DATE' | translate}}</label>
+                                <div class="input-group br24">
+                                    <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'REP_ACT_TXT_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="FromDate" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <label class="fw600 text-underline">{{'REP_ACT_LBL_TO_DATE' | translate}}</label>
+                                <div class="input-group br24">
+                                    <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'REP_ACT_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="ToDate" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 pl-0">
+                                <label class="fw600 text-underline">{{'REP_ACT_LBL_THE_REPORTER' | translate}}</label>
+                                <div class="input-group br24 search-group">
+                                    <ui-select ng-model="model.UserReport" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'REP_ACT_LBL_THE_REPORTER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listUser | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.UserReport=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 w-14-percent mt20 d-flex">
+                                <div class="text-center pr30 mt10" style="margin-top:4px;">
+                                    <label class="mt-checkbox mt-checkbox-outline fs12 mr20 pl10" style="margin: 6px 0 0 0px !important;display:inline;">
+                                        <!--<input type="checkbox" ng-model="IsSum" ng-change="sum(IsSum)"> <br>
+                <span style="background-color: white; padding:12px;"></span>-->
+                                        <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="IsSum != true" ng-click="sum(true)"></i>
+
+                                        <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="IsSum == true" ng-click="sum(false)"></i>
+                                    </label>
+                                    <p class="text-underline fs9 mb5 nowrap">{{'REP_ACT_TXT_TOTAL' | translate}}</p>
+                                </div>
+                                <div class="text-center mt10 pr-0">
+                                    <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                        <span><i class="fas fa-search color-dark fs30"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-toolbar" ng-show="IsTranslate">
+    <!--<div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:black;"></i>
+                    <a class=" bold text-underline" style="color:black;" href="#">{{'Điều hành việc' | translate}}</a>
+                    <span class="" style="color:black;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:black;" href="/Admin/ReportCardJob">{{'Báo cáo kết quả hoạt động' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>-->
+    <div class="col-md-12 mt10">
+        <div class="row pl-0">
+            <table class="table table-bordered">
+                <thead class="tb-header">
+                    <tr>
+                        <th class="col-md-6 text-center">{{'REP_ACT_LBL_GROUP_DATA' | translate}}</th>
+                        <th class="col-md-2 text-center">{{'REP_ACT_LBL_SUM' | translate}}</th>
+                        <th class="col-md-2 text-center">{{'REP_ACT_LBL_UNIT' | translate}}</th>
+                        <th class="col-md-2 text-center">{{'REP_ACT_LBL_PERSON_PERFORMING' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody class="tb-body">
+                    <tr ng-repeat="x in listReport" style="background:{{x.Color}}">
+                        <td class="col-md-6">
+                            <span class="bold">{{x.AttrGroupName}} <br /></span>
+                            <i class="text-green pl5">- {{x.AttrName}} <br /></i>
+                        </td>
+                        <td class="col-md-2 text-center bold text-danger">{{x.Sum | number}}</td>
+                        <td class="col-md-2 text-center">{{x.Unit}}</td>
+                        <td class="col-md-2 text-center">
+                            {{x.CreatedBy}}<br />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

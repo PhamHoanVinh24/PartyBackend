@@ -1,0 +1,179 @@
+﻿<style>
+     @media(max-width:992px)
+    {
+        .modal-60{
+            width:75%!important;
+        }
+    }
+     @media (min-width:992px) and (max-width:1200px)
+    {
+        .modal-60{
+            width:70%!important;
+        }
+    }
+      @media(min-width:1201px) and (max-width:1500px)
+    {
+        .modal-60{
+            width:60%!important;
+        }
+    }
+       @media(min-width:1501px)
+    {
+        .modal-60{
+            width:50%!important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">{{'VCMM_TITLE_APPROVE_OR_REFUSE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_CODE_PLAN' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.WpCode" name="WpCode" placeholder="Mã kế hoạch..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_WEEK' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.WeekNo" name="WeekNo" placeholder="Tuần thứ..." readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_FROM_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="Ngày bắt đầu..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_TO_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="Ngày kết thúc..." readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 mt20">
+                        <label class="control-label uppercase bold">{{'VCMM_CURD_LBL_LIST_STORE_IN_PLAN' | translate}}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered table-striped ">
+                            <thead class="title" style="background-color:#b0bed9">
+                                <tr class="bold">
+                                    <th class="text-center col-md-2">{{'VCMM_TH_STORE_CODE' | translate}}</th>
+                                    <th class="text-center col-md-3">{{'VCMM_TH_STORE_NAME' | translate}}</th>
+                                    <th class="text-center col-md-8">{{'VCMM_TH_STORE_ADDRES' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in model.list_detail">
+                                    <td class="text-center">
+                                        <label>{{x.sltNode}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label>{{x.NameNode}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label>{{x.Address}}</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label class="control-label uppercase bold">{{'VCMM_CURD_LBL_DECISION_APPROVER' | translate}}</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'VCMM_CURD_LBL_CHOOSE_DECISION' | translate}}</label>
+                    </div>
+                    <!--<div class="col-md-8">
+                        <ui-select tagging ng-model="model.CurrentStatus" theme="bootstrap">
+                            <ui-select-match placeholder="Chọn quyết định">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListCurrentStatus | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>-->
+                    <div class="col-md-8">
+                        <label class="radio-inline">
+                            <input type="radio" ng-model="model.CurrentStatus" ng-checked="true" value="WP_APPROVED"> {{'VCMM_CURD_LBL_APPROVE' | translate}}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" ng-model="model.CurrentStatus" value="WP_REJECT">{{'VCMM_CURD_LBL_REFUSE_APPREOVE' | translate}}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" ng-model="model.CurrentStatus" value="WP_WAITING">{{'VCMM_CURD_LBL_WAITING_APPROVAL' | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'VCMM_CURD_LBL_LEADER_IDEA' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control" ng-model="model.LeaderIdea" rows="3" placeholder="{{'VCMM_CURD_TXT_LEADER_IDEA' | translate}}..." name="LeaderIdea"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="background-color:transparent">
+    <!--<button ng-click="cancel()" class="btn btn-default" style="margin-top: -35px; margin-right: 26px" href="javascript:;">
+        Đóng
+    </button>-->
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Lưu lại
+    </button>-->
+    <div class="btn-group pull-right actions d-flex">
+        <div class="pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center pr30">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

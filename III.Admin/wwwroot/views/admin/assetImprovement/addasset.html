@@ -1,0 +1,278 @@
+﻿<style>
+
+	.dataTables_wrapper .table-scrollable {
+		border: 1px solid #e7ecf1 !important;
+	}
+
+	.h-60 {
+		height: 60px;
+	}
+
+	.pl0 {
+		padding-left: 10px;
+	}
+
+	.p25 {
+		padding-left: 25px;
+	}
+
+	.pt5 {
+		padding-top: 5px;
+	}
+
+	.pr15 {
+		padding-right: 10px;
+	}
+
+	.pr15 {
+		padding-right: 15px;
+	}
+
+	.pr20 {
+		padding-right: 20px;
+	}
+
+	.pr5 {
+		padding-right: 5px;
+	}
+
+	.mt5 {
+		margin-top: 5px;
+	}
+
+	.mt15 {
+		margin-top: 15px;
+	}
+
+	.ml15 {
+		margin-left: 15px;
+	}
+
+	.mt23 {
+		margin-right: 60px;
+	}
+
+	.mt25 {
+		margin-top: 25px;
+	}
+
+	.w-100-percent {
+		width: 100%;
+	}
+
+	.w-30-percent {
+		width: 30%;
+	}
+
+	.bgWhite {
+		background: #FFF;
+	}
+
+	.labelbodergroup {
+		margin-left: 24px;
+		margin-top: -12px;
+		position: absolute;
+		background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+		border: 1px solid #e9dada;
+		border-radius: 4px;
+		font-size: 11px;
+		padding: 3px 10px !important;
+	}
+
+	.table_body {
+		background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+		border-radius: 4px !important;
+		border: 1px solid #e9dada;
+		padding-top: 15px;
+		box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+		padding-bottom: 15px;
+	}
+</style>
+<div ng-controller="tableasset">
+    <div class="table-toolbar">
+        <form name="assetform" class="form-horizontal" method="post" ng-validate="validationOptionsAsset">
+            <div class="form-group" style="margin-top: -10px;">
+                <div class="col-md-5" style="width: 38%;">
+                    <div class="form-group" ng-class="{ 'has-error': errorAssetCode}">
+                        <div class="col-md-12 ">
+                            <i class="fab fa-accusoft" aria-hidden="true"></i>
+                            <label class="control-label require">&nbsp;{{'ASSETIMPRO_CURD_LBL_ASSET' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select ng-model="modelAsset.AssetCode" theme="bootstrap" on-select="changleSelect('AssetCode')">
+                                    <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_ASSET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listAsset | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorAssetCode" class="label-color validation-message">
+                                {{'ASSETIMPRO_MSG_ERR_ASSET_NULL' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0 pl-0" style="width: 12%;">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fas fa-list-ol"></i>
+                            <label class="control-label require">{{'ASSETIMPRO_CURD_LBL_QUANTITY' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class1="br24">
+                                <input type="number" class="form-control br24" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class1="form-control" ng-model="modelAsset.AssetQuantity" name="Quantity" placeholder="{{'ASSETIMPRO_CURD_LBL_QUANTITY' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorStatusAsset}">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <label class="control-label require">&nbsp;{{'ASSETIMPRO_CURD_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select ng-model="modelAsset.StatusAsset" theme="bootstrap" on-select="changleSelect('StatusAsset')">
+                                    <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStatusAsset | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorStatusAsset" class="label-color validation-message">
+                                {{'ASSETIMPRO_MSG_ERR_STATUS_NULL' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label bold">{{'ASSETIMPRO_CURD_LBL_NOTE_ASSET' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <input type="text" class="form-control br24" ng-model="modelAsset.Note" name="Note" placeholder="{{'ASSETIMPRO_CURD_TXT_NOTE_ASSET' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt5">
+                    <div class="btn-group pull-right actions d-flex mt15">
+                        <div class="text-center ">
+                            <a class=" fs30 p-0" ng-click="addAsset()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3" ng-click="addAsset()" style="font-size: 12px !important;color: #428bca;"> {{'Thêm' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataAssetImprove"></table>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div ng-controller="tableasset">
+	<div class="table-toolbar">
+		<form name="assetform" class="form-horizontal " method="post" ng-validate="validationOptionsAsset">
+			<div class="col-md-12">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group" ng-class="{ 'has-error': errorAssetCode}">
+                                <div class="col-md-12 ">
+                                    <i class="fab fa-accusoft" aria-hidden="true"></i>
+                                    <label class="control-label require">&nbsp;{{'ASSETIMPRO_CURD_LBL_ASSET' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <ui-select ng-model="modelAsset.AssetCode" theme="bootstrap" on-select="changleSelect('AssetCode')">
+                                            <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_ASSET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listAsset | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorAssetCode" class="label-color validation-message">
+                                        {{'ASSETIMPRO_MSG_ERR_ASSET_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" ng-class="{ 'has-error': errorStatusAsset}">
+                                <div class="col-md-12 ">
+                                    <i class="fa fa-flag" aria-hidden="true"></i>
+                                    <label class="control-label require">&nbsp;{{'ASSETIMPRO_CURD_LBL_STATUS' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <ui-select ng-model="modelAsset.StatusAsset" theme="bootstrap" on-select="changleSelect('StatusAsset')">
+                                            <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listStatusAsset | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorStatusAsset" class="label-color validation-message">
+                                        {{'ASSETIMPRO_MSG_ERR_STATUS_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fas fa-list-ol"></i>
+                                    <label class="control-label require">{{'ASSETIMPRO_CURD_LBL_QUANTITY' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" ng-model="modelAsset.AssetQuantity" name="Quantity" placeholder="{{'ASSETIMPRO_CURD_LBL_QUANTITY' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fa fa-comment" aria-hidden="true"></i>
+                                    <label class="control-label bold">{{'ASSETIMPRO_CURD_LBL_NOTE_ASSET' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" ng-model="modelAsset.Note" name="Note" placeholder="{{'ASSETIMPRO_CURD_TXT_NOTE_ASSET' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+				<div class="col-md-2 pl-0 pt20 mb5">
+					<div class="text-center">
+						<a ng-click="addAsset()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+							<span><i class="fa fa-plus"></i></span>
+						</a>
+						<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+					</div>
+				</div>
+			</div>  
+		</form>
+	</div>
+	<table class="table dataTable table-hover table-striped"
+		   datatable
+		   dt-options="dtOptions"
+		   dt-columns="dtColumns"
+		   dt-instance="dtInstance"
+		   id="tblData"></table>
+</div>-->

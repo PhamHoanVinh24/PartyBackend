@@ -1,0 +1,166 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title " id="modal-title">{{'A' | translate}}</div>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require custom-title-code-bold">{{'MATERIAL_STORE_CURD_LBL_STORE_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.StoreCode" name="StoreCode" placeholder="{{'MATERIAL_STORE_CURD_TXT_STORE_CODE' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label require custom-title-code-bold">{{'MATERIAL_STORE_CURD_LBL_STORE_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.StoreName" name="StoreName" placeholder="{{'MATERIAL_STORE_CURD_TXT_STORE_NAME' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label require">{{'MATERIAL_STORE_CURD_LBL_NUMBER_FLOOR' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" min="1"  class="form-control" ng-model="model.CountFloor" name="StoreName" placeholder="{{'MATERIAL_STORE_CURD_TXT_NUMBER_FLOOR' | translate}}" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" ng-class="{ 'has-error': errorCusGroup}">
+                        <div class="col-lg-4 custom-lg-4">
+                            <i class="fa fa-users"></i>
+                            <label class="control-label ">{{'MATERIAL_STORE_CURD_LBL_AREA' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 custom-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Area" theme="bootstrap" on-select="changleSelect('CusGroup')">
+                                    <ui-select-match placeholder="{{'MATERIAL_STORE_CURD_COMBO_AREA' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in StoreAreas | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Area=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCusGroup" class="label-color validation-message">
+                                {{'MATERIAL_STORE_CURD_VALIDATE_CLIENT' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <label class="control-label">{{'MATERIAL_STORE_CURD_LBL_LOCATION' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.Location" placeholder="{{'MATERIAL_STORE_CURD_TXT_LOCATION' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fas fa-bezier-curve" aria-hidden="true"></i>
+                            <label class="control-label">{{'MATERIAL_STORE_CURD_LBL_BRANCH' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <ui-select tagging ng-model="model.BranchId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MATERIAL_STORE_CURD_TXT_BRANCH' | translate}}">{{$select.selected.OrgName}}</ui-select-match>
+                                <ui-select-choices repeat="x.OrgId as x in Organizations | filter: $select.search">
+                                    {{x.OrgName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <label class="control-label">{{'MATERIAL_STORE_CURD_LBL_USER_ID' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <ui-select tagging ng-model="model.UserId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MATERIAL_STORE_CURD_COMBO_USER_ID' | translate}}">{{$select.selected.UserName}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Id as x in Managers | filter: $select.search">
+                                    {{x.UserName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fas fa-comment" aria-hidden="true"></i>
+                            <label class="control-label">{{'MATERIAL_STORE_CURD_LBL_DESCRIPTION' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea rows="3" class="form-control" name="Description" ng-model="model.Description" placeholder="{{'MATERIAL_STORE_CURD_TXT_DESCRIPTION' | translate}}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                        <div class="col-lg-4 custom-lg-4">
+                            <i class="fa fa-flag"></i>
+                            <label class="control-label ">{{'MATERIAL_STORE_CURD_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 custom-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status')">
+                                    <ui-select-match placeholder="{{'MATERIAL_STORE_CURD_COMBO_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in StoreStatuss | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorStatus" class="label-color validation-message">
+                                {{'MATERIAL_STORE_VALIDATE_STATUS' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                        <div class="col-lg-4 custom-lg-4">
+                            <i class="fa fa-flag"></i>
+                            <label class="control-label ">{{'MATERIAL_STORE_CURD_LBL_EXTEN' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 custom-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Extend" theme="bootstrap" on-select="changleSelect('Status')">
+                                    <ui-select-match placeholder="{{'MATERIAL_STORE_CURD_COMBO_EXTEN' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in StoreExtends | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Extend=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" >
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green  mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>

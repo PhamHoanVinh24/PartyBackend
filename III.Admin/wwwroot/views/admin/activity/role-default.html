@@ -1,0 +1,60 @@
+﻿<div ng-controller="role-default">
+    <div class="row mb5">
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="col-md-12 pl-0 pr-0">
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.RoleDefault" theme="bootstrap" ng-disabled="noPermission">
+                            <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat=" x.Code as x in listRole | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addCommonRoleDefault()" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 pl-0">
+            <a class1="btn green-custom pull-left" ng-class="{'disabled-element' : noPermission}" ng-click="addRoleDefault()">
+                <span><i class="fa-solid fa-plus pt10 fs25"></i></span>
+                <!--{{'Thêm mới' | translate}}-->
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="portlet-body todo-project-list-content pl15">
+            <div class="scrollbar-sm">
+                <div class="table-responsive" style="height: 260px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="pl25" style="width: 5%;">{{'STT' | translate}}</th>
+                                <th class="text-center" style="width: 90%;">{{'Vai trò' | translate}}</th>
+                                <th class="text-center" style="width: 5%;">{{'COM_BTN_DELETE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listRoleDefault" ng-if="!noPermission">
+                                <td class="text-center">{{$index + 1}}</td>
+                                <td>
+                                    <span class="fw600">{{x.RoleCode}} - {{x.RoleName}}</span><br />
+                                </td>
+                                <td class="text-center"><i role="button" class="fas fa-trash-alt pt10 fs25 text-danger ng-scope" ng-click="delete(x.RoleCode)" title="{{'COM_BTN_DELETE' | translate}}" style1="color:red !important;font-size: 25px"></i></td>
+                            </tr>
+                            <tr ng-repeat="x in listRoleDefault" ng-if="noPermission">
+                                <td colspan="3">
+                                    <span class="fw600">{{x.RoleName}}</span><br />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

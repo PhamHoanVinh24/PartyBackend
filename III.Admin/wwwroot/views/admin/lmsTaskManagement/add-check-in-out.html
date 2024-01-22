@@ -1,0 +1,105 @@
+﻿<div class="modal-header" style="background-color: white">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit black fs16"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_MODAL_TITLE_WORK_SHIFT' | translate}} </span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addCheckInOut" class="form-horizontal" method="post" ng-validate="validationOptionsShiftLog">
+            <div class="form-body pt-0 pb-0">
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-md-8 pl-0">
+                            <label class="control-label">{{'CJ_LBL_WORK_SHIFT' | translate}}:</label>
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ShiftCode" on-select="changeShift('ShiftCode')" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CJ_TXT_WORK_SHIFT' | translate}}..."><b class="fs13 black">[{{$select.selected.DateIn}} - {{$select.selected.DateOut}}]</b></ui-select-match>
+                                <ui-select-choices repeat="x.ShiftCode as x in listShiftFormat | filter: $select.search">
+                                    {{x.DateIn}} - {{x.DateOut}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-2 pr-0 pt30">
+                            <a class="text-underline" ng-click="editCheckInOut()">{{'CJ_BTN_MODIFY' | translate}}...</a>
+                        </div>
+                        <div class="col-md-2 pr-0 pt30">
+                            <a class="text-underline" ng-click="add()">{{'COM_BTN_ADD' | translate}}...</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <div class="col-md-6 pl-0">
+                                    <label class="control-label mt5 require">{{'CJ_LBL_TIME_CHECK_IN' | translate}}</label>
+                                    <div class="input-group date" id="chkinTime">
+                                        <input ng-model="model.ChkinTime" class="form-control fs13 black bold" name="ChkinTime" type="text" placeholder="{{'CJ_TXT_TIME_CHECK_IN' | translate}}..." />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <label class="control-label mt5 require">{{'CJ_LBL_LOC_CHECK_IN' | translate}}</label>
+                                <div class="input-group">
+                                    <input ng-model="model.ChkinLocationTxt" class="form-control br4 fs13 black bold" name="ChkinLocationTxt" type="text" placeholder="{{'CJ_TXT_LOC_CHECK_IN' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <div class="col-md-6 pl-0">
+                                    <label class="control-label mt5 require">{{'CJ_LBL_TIME_CHECK_OUT' | translate}}</label>
+                                    <div class="input-group date" id="chkoutTime">
+                                        <input ng-model="model.ChkoutTime" class="form-control fs13 black bold" name="ChkoutTime" type="text" placeholder="{{'CJ_TXT_TIME_CHECK_OUT' | translate}}..." />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <label class="control-label mt5 require">{{'CJ_LBL_LOC_CHECK_OUT' | translate}}</label>
+                                <div class="input-group">
+                                    <input ng-model="model.ChkoutLocationTxt" class="form-control br4 fs13 black bold" name="ChkoutLocationTxt" type="text" placeholder="{{'CJ_TXT_LOC_CHECK_OUT' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 pr-0">
+                    <div class="row pt-2 text-center">
+                        <label class="col-md-12 pb5">{{'CJ_IMG_CHECK_IN' | translate}}:</label>
+                        <input id="FileChkIn" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                        <img id="imageIn" ng-click="loadImageCheckIn()" role="button" style="cursor: pointer; width:140px; height:120px;" onerror="this.src='/images/default/uploadimg.png'" ng-src="{{model.ChkinPicRealtime == null ? '/images/default/uploadimg.png' : model.ChkinPicRealtime}}" alt="Hình ảnh" />
+                    </div>
+                    <div class="row text-center pb5 pt-1">
+                        <label class="col-md-12 pb-1">{{'CJ_IMG_CHECK_OUT' | translate}}:</label>
+                        <input id="FileChkOut" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                        <img id="imageOut" ng-click="loadImageCheckOut()" role="button" style="cursor: pointer; width:140px; height:120px;" onerror="this.src='/images/default/uploadimg.png'" ng-src="{{model.ChkoutPicRealtime== null ? '/images/default/uploadimg.png' : model.ChkoutPicRealtime}}" alt="Hình ảnh" />
+                    </div>
+                </div>
+                <div class="col-lg-12 pl-0 pb-1">
+                    <label class="control-label">{{'CJ_TXT_NOTE' | translate}}</label>
+                    <textarea class="form-control br4" placeholder="{{'CJ_TXT_NOTE' | translate}}" ng-model="model.Note" style="height:75px" />
+                </div>
+            </div>
+            <!--<div class="btn-group actions d-flex pr-3 pull-right pt-1">
+                <div class="text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()" href="javascript:;">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+            </div>-->
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+
+</div>

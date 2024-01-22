@@ -1,0 +1,212 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 50px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <div class="text-center mt10 pr30" ng-show1="!isSearch">
+        <a class1="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fas fa-search fs25"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center mt10 pr-2">
+        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa-solid fa-plus fs25"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body pb5">
+                <div class="row pb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pr-0">
+                        <label class="fw600 text-underline">{{'ADM_USER_CURD_LBL_NAME' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.GivenName" class="form-control" type="text" placeholder="{{'ADM_USER_CURD_TXT_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.GivenName=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pr-0">
+                        <label class="fw600 text-underline">{{'ADM_USER_CURD_LBL_ACCOUNT_NAME' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.UserName" class="form-control" type="text" placeholder="{{'ADM_USER_CURD_TXT_ACCOUNT_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.UserName=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pr-0" style1="width: 14%;">
+                        <label class="fw600 text-underline">{{'ADM_USER_CURD_LBL_EMAIL' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Email" class="form-control" type="text" placeholder="{{'ADM_USER_CURD_TXT_EMAIL' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Email=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pr-0" style1="width: 14%;">
+                        <label class="fw600 text-underline">{{'ADM_USER_CURD_LBL_STATUS' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Value as x in StatusData | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-11 col-md-12 pl-0">
+                        <div class="col-lg-4 col-md-12 pr-0">
+                            <label class="fw600 text-underline">{{'ADM_LBL_ORGANIZATION' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select tagging ng-model="model.BranchId" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ADM_TXT_ORGANIZATION' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listBranch | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.BranchId='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 pr-0">
+                            <label class="fw600 text-underline">{{'ADM_USER_CURD_TXT_USER_GROUP' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select tagging ng-model="model.GroupUser" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_TXT_USER_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in groupUserList | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.GroupUser='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 pr-0">
+                            <label class="fw600 text-underline">{{'ADM_USER_CURD_LBL_DEPARTMENT' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select ng-model="model.DepartmentCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_DEPARTMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in departmentList | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.DepartmentCode=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-12" style1="width: 5%;">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center mt10">
+                                <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                    <span><i class="fas fa-search fs25 color-dark"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'ADM_USER_TIP_EDIT_RECORD' | translate}}</label></div>
+    <div class="col-md-12" style1="width: 80% !important ; font-family: Open Sans !important ; font-size: 11px">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

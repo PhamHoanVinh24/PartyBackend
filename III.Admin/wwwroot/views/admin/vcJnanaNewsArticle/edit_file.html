@@ -1,0 +1,77 @@
+﻿<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onloadend = function (e) {
+                $('#Image')
+                    .attr('value', input.files[0].name);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">Cập nhật tệp tin</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editformFILE" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions1">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left require"><i class="glyphicon glyphicon-file"></i> Mã file</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.file_code" name="file_code" placeholder="Nhập mã file" readonly/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left require"><i class="glyphicon glyphicon-file"></i> Tên file</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.file_name" name="file_name" placeholder="Nhập tên file"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-tint"></i> Tiêu đề</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control"  ng-model="model.file_title" name="file_title" placeholder="Nhập tiêu đề" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-warning-sign"></i> Ghi chú</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control"  ng-model="model.file_note" name="file_note" placeholder="Nhập ghi chú"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> Nhóm tệp tin</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control"  ng-model="model.file_cat_code" name="file_cat_code" placeholder="Nhập nhóm tệp tin" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4 text-left require"><i class="glyphicon glyphicon-floppy-open"></i> Tải lên</label>
+                    <div class="col-md-8" ng-class="{ 'has-error': errorFile}">
+                        <div class="input-group input-file">
+                            <a href='javascript:;' style="height: 100px;width: 100px;">
+                                <input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .bmp, .docx, .pdf, .xlsk" files-input ng-model="model.file_path" name="file_path" onchange="readURL(this);">
+                            </a>
+                        </div>
+                        <span ng-show="errorFile" class="label-color validation-message">
+                            Vui lòng chọn tệp tin để đẩy lên !
+                        </span>
+                        <input id="Image" type="text" disabled class="form-control" value="{{model.file_path}}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Đóng
+    </a>
+    <button ng-click="submitfile()" class="btn btn-green mr5" href="javascript:;">
+        Lưu lại
+    </button>
+</div>

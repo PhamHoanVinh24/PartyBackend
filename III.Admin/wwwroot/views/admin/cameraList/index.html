@@ -1,0 +1,132 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="table-toolbar">
+    <!--<ul class="breadcrumb-title">
+        <li>
+            <i class="fa fa-home " style="color:black;"></i>
+            <a class="bold text text-underline" style="color:black;" href="/Admin/cdvtHome">{{'Cơ điện vận tải' | translate}}</a>
+            <span class="" style="color:black;">&gt;</span>
+        </li>
+        <li>
+            <a class="bold text-underline" style="color:black;" href="#/student">{{'Danh sách camera' | translate}}</a>
+        </li>
+    </ul>-->
+    <div class="btn-group actions pt5 pb-1 pull-right d-flex" style="margin-top: -50px;">
+        <div class="text-center pr-2" ng-show="!isSearch">
+            <a class="btn btn-icon-only btn-noboder btn-outline" ng-click="showSearch()">
+                <span><i class="fa fa-search"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+        </div>
+        <div class="text-center pr-2">
+            <a class="btn btn-icon-only btn-noboder btn-outline" ng-click="add()">
+                <span><i class="fa fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 pt10" ng-show="isSearch">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-2 pr-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="control-label bold text-underline">{{'Vị trí hệ thống' | translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <div class="input-group ">
+                            <input name="DetailLocation" class="form-control" ng-model="model.RoomName" type="text" placeholder="{{'Vị trí hệ thống' | translate}}...">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.RoomName=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12 pl-0">
+                            <label class="control-label bold text-underline">{{'Thuộc phòng ban' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.DepartmentCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Thuộc phòng ban' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in Departmentdata | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.DepartmentCode=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="control-label bold text-underline">{{'Trạng thái ổ cứng' | translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <div class="input-group ">
+                            <input name="DetailLocation" class="form-control" ng-model="model.DiskStatus" type="text" placeholder="{{'Trạng thái ổ cứng' | translate}}...">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.DiskStatus=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="control-label bold text-underline">{{'Lý do mất tín hiệu' | translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <div class="input-group ">
+                            <input type="text" class="form-control" ng-model="model.Reason" placeholder="{{'Lý do mất tín hiệu' | translate}}">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Reason=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pull-right pr-0 pl-0">
+                    <div class="btn-group actions " style="margin-top:15px;">
+                        <div class="text-center pr10">
+                            <a ng-click="search()" class=" btn btn-icon-only btn-noboder btn-outline">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                    <i ng-click="showSearch()" class="fas fa-angle-up d-flex pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

@@ -1,0 +1,164 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .fc-icon-left-double-arrow:after {
+        top: -17% !important;
+    }
+
+    .fc-icon-right-single-arrow:after {
+        top: -17% !important;
+    }
+
+    .fc button {
+        padding: 0px 20px !important;
+    }
+
+    /*.fc-state-active {
+        background-color: green !important;
+    }*/
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<style>
+    .fc-more-popover {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    @media only screen and (min-width: 992px) and (max-width: 1200px) {
+        .cus-col-3 {
+            width: 45% !important;
+        }
+    }
+
+    @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+        .cus-col-3 {
+            width: 42% !important;
+        }
+    }
+
+    @media only screen and (min-width: 1400px) and (max-width: 1500px) {
+        .cus-col-3 {
+            width: 45% !important;
+        }
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 actions d-flex pull-right" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center">
+        <a class="fs30" ng-click="registration()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'STRE_TITLE_CALENDAR_MANAGEMENT' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('HCNS_QDDD')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label>{{'STRE_LIST_COL_DEPARTMENT' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select ng-model="model.Department" theme="bootstrap" ng-change="changeDepartment()">
+                                <ui-select-match placeholder="{{'STRE_LIST_COL_DEPARTMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstDepartment | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Department=''; reloadUser()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label>{{'STRE_CURD_LBL_MEMBER' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select ng-model="model.MemberId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'STRE_TXT_ALL' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listUser | filter: $select.search">
+                                    <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />
+                                    <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.MemberId=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 cus-col-3">
+                        <div class="pt25">
+                            <label ng-repeat="x in schedule" class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 15px!important;">
+                                <input type="checkbox" ng-model="x.checked" ng-change="updateSelection($index, entities)"> {{x.name}}
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="btn-group pt10  actions d-flex">
+                            <div class="pr10">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+<div class="row">
+            <div class="col-md-12">
+                <style>
+                    .fc-time {
+                        display: none;
+                    }
+                </style>
+                <div class="calendar-wrap pt10">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+=

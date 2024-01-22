@@ -1,0 +1,304 @@
+﻿<link rel="stylesheet" type="text/css" href="http://117.6.131.222:4011/assets/admin-tools/admin-forms/css/admin-forms.min.css">
+<!--<link rel="stylesheet" type="text/css" href="http://117.6.131.222:4011/assets/skin/default_skin/css/theme.min.css">-->
+
+<style type="text/css">
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .fileupload .uneditable-input {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+        cursor: text;
+    }
+
+    .fileupload .thumbnail {
+        cursor: pointer;
+        overflow: hidden;
+        vertical-align: middle;
+        text-align: center;
+        padding: 5px;
+        outline: #d9d9d9 dashed 2px;
+        border: 0;
+        background: 0 0;
+    }
+
+        .fileupload .thumbnail > img {
+            display: inline-block;
+            vertical-align: middle;
+            max-height: 100%;
+        }
+
+    .fileupload .btn {
+        vertical-align: middle;
+    }
+
+    .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
+        display: none !important;
+    }
+
+    .fileupload-inline .fileupload-controls {
+        display: inline;
+    }
+
+    .fileupload-new .input-group .btn-file {
+        -webkit-border-radius: 0 3px 3px 0;
+        -moz-border-radius: 0 3px 3px 0;
+        border-radius: 0 3px 3px 0;
+    }
+
+    .thumbnail-borderless .thumbnail {
+        cursor: pointer;
+        border: none;
+        padding: 0;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .fileupload-new.thumbnail-borderless .thumbnail {
+        border: 1px solid #ddd;
+    }
+
+    .control-group.warning .fileupload .uneditable-input {
+        color: #a47e3c;
+        border-color: #a47e3c;
+    }
+
+    .control-group.warning .fileupload .fileupload-preview {
+        color: #a47e3c;
+    }
+
+    .control-group.warning .fileupload .thumbnail {
+        border-color: #a47e3c;
+    }
+
+    .control-group.error .fileupload .uneditable-input {
+        color: #b94a48;
+        border-color: #b94a48;
+    }
+
+    .control-group.error .fileupload .fileupload-preview {
+        color: #b94a48;
+    }
+
+    .control-group.error .fileupload .thumbnail {
+        border-color: #b94a48;
+    }
+
+    .control-group.success .fileupload .uneditable-input {
+        color: #468847;
+        border-color: #468847;
+    }
+
+    .control-group.success .fileupload .fileupload-preview {
+        color: #468847;
+    }
+
+    .control-group.success .fileupload .thumbnail {
+        border-color: #468847;
+    }
+
+    .btn-system {
+        color: #fff;
+        background-color: #37bc9b;
+    }
+
+    .btn {
+        vertical-align: middle;
+    }
+
+    .btn-file {
+        -webkit-border-radius: 0 3px 3px 0;
+        -moz-border-radius: 0 3px 3px 0;
+        border-radius: 0 3px 3px 0;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+</style>
+<div class="modal-header no-color h-30">
+    <!--<img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title">{{''| translate}}Sửa Video</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'CMS_VIDEO_CURD_LBL_TITLE'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group br24'>
+                            <input type="text" class="form-control" ng-model="model.title" name="Title" placeholder="{{'CMS_VIDEO_CURD_TXT_TITLE'| translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.title='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'CMS_VIDEO_CURD_LBL_DESC'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control br12" ng-model="model.description" rows="4" name="Mô tả" placeholder="{{'CMS_VIDEO_CURD_TXT_DESC'| translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'CMS_VIDEO_CURD_LBL_CAT_ID'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group br24'>
+                            <ui-select tagging ng-model="model.category_id" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CMS_VIDEO_CURD_TXT_CAT_ID'| translate}}">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listCatId | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.category_id='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group admin-form">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'CMS_VIDEO_CURD_LBL_UPLOAD'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24 input-file">
+                            <i class="fa fa-upload"></i>
+                            <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" ng-model="model.video" name="Filevideo" style="height:33px" placeholder="Chọn tệp..." readonly></>
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" id="FileItem" custom-on-change="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label">{{'CMS_VIDEO_CURD_LBL_ORDERING'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group br24'>
+                            <input class="form-control" ng-model="model.ordering" name="ActCode" placeholder="{{'CMS_VIDEO_CURD_TXT_ORDERING'| translate}}..." onkeypress="return (event.charCode == 8 || event.charCode == 0 ) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ordering='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label class="control-label">{{'CMS_VIDEO_CURD_LBL_DATE_POST'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group br24 date' id='post_date'>
+                            <input type='text' class="form-control input-date" name="post_date" ng-model="model.post_date" placeholder="{{'CMS_VIDEO_CURD_TXT_DATE_POST' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label class="control-label">{{'Hiển thị'| translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mt-checkbox-list pt10">
+                            <label class="mt-checkbox mt-checkbox-outline mb10 pl-0">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.published != true" ng-click="model.published = true"></i>
+
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.published == true" ng-click="model.published = false"></i>
+                                <!--<input type="checkbox" name="IsEnabled" ng-model="model.published" ng-click="checkedImportLot(IsEnabledImportLot)" ng-checked="IsEnabledImportLot" class="ng-valid ng-dirty ng-valid-parse ng-touched ng-empty">
+    <span></span>-->
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fileupload fileupload-new mh15" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none;">
+                            <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" ng-src="{{model.gallery}}" style="display:none" />
+                            <img id="imageId" ng-click="loadImage()" style="height: 200px; width: 200px;cursor: pointer" ng-src="{{model.gallery==null ? '/images/default/uploadimg.png' : model.gallery}}" onerror="this.src='/images/default/uploadimg.png'" alt="Hình ảnh" />
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail"></div>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="FileImage" data-valmsg-replace="true"></span>
+                        <div class="row text-center">
+                            <!--<div class="col-xs-3">
+                                <input class="btn btn-system btn-block" type="button" id="browseButton" value="{{'CMS_VIDEO_CURD_BTN_BROWSE'| translate}}" ng-click="loadImage()">
+                            </div>-->
+                            <!--<div class="col-xs-3">
+                                <input id="ImageServer" name="ImageServer" type="hidden" value="" />
+                                <a href="javascript:void(0);"
+                                   data-href="#modal-panel-frame"
+                                   class="btn btn-system btn-block"
+                                   data-event="popup-modal"
+                                   data-iframe-href="/assets/vendor/filemanager/dialog.php?type=1&amp;field_id=ImageServer"
+                                   data-iframe-title="Responsive Filemanager"
+                                   data-iframe-height="500">
+                                    {{'CMS_VIDEO_CURD_BTN_BROWSE_SERVER'| translate}}...
+                                </a>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>-->
+    <div class="btn-group actions d-flex pull-right">
+        <div class="text-center pl10 mt10 margin-right-10 next" ng-click="cancel()">
+            <a class1="btn btn-icon-only btn-outline btnn" name="next">
+                <i class="fas fa-times fs30"></i>
+            </a>
+            <p class="text-underline btn-name mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center pl10 mt10 margin-right-10 next" ng-click="submit()">
+            <a class1="btn btn-icon-only btn-outline btnn" name="next">
+                <i class="fa-solid fa-plus fs30"></i>
+            </a>
+            <p class="text-underline btn-name mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

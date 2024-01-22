@@ -1,0 +1,191 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'WZM_ADD_ATTR_ZONE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationAttributeOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneType}">
+                        <label class="control-label require">{{'WZM_STYPE_ZONE_OPTION' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneType" theme="bootstrap" ng-change="selectChange('ZoneType')">
+                                <ui-select-match placeholder="{{'WZM_STYPE_ZONE_OPTION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneType()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneType" class="label-color validation-message">
+                            {{'WZM_STYPE_ZONE_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneGroup}">
+                        <label class="control-label require">{{'WZM_GROUP_ZONE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneGroup" theme="bootstrap" ng-change="selectChange('ZoneGroup')">
+                                <ui-select-match placeholder="{{'WZM_GROUP_ZONE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneGroup()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneGroup" class="label-color validation-message">
+                            {{'WZM_GROUP_ZONE_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label require">{{'WZM_CODE_ATTR' | translate}}</label>
+                            <input class="form-control br24" name="ZoneAttrCode" ng-model="model.ZoneAttrCode" placeholder="{{'WZM_CODE_ATTR' | translate}}..." ng-disabled="isEditAttribute"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WZM_NAME_ATTR' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrName" ng-model="model.ZoneAttrName" placeholder="{{'WZM_NAME_ATTR' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WZM_VALUE' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrValue" ng-model="model.ZoneAttrValue" placeholder="{{'WZM_VALUE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-class="{ 'has-error': errorUnit}">
+                        <label class="control-label">{{'WZM_UNIT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneAttrUnit" theme="bootstrap" ng-change="selectChange('Unit')">
+                                <ui-select-match placeholder="{{'WZM_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAttrUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addAttrUnit()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorUnit" class="label-color validation-message">
+                            {{'WZM_UNIT_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-3 pl-0" ng-class="{ 'has-error': errorType}">
+                        <label class="control-label">{{'WZM_STYPE_DATA' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneAttrType" theme="bootstrap" ng-change="selectChange('Type')">
+                                <ui-select-match placeholder="{{'WZM_SELECT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAttrType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addAttrType()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorType" class="label-color validation-message">
+                            {{'WZM_STYPE_DATA_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-1 ">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <label class="control-label">{{'WZM_SIZE' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrSize" ng-model="model.ZoneAttrSize" placeholder="{{'WZM_SIZE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right">
+                        <div class="btn-group pt20 actions d-flex" ng-if="!isEditAttribute">
+                            <div class="text-center pr10 pull-right" ng-click="submit()">
+                                <a class="">
+                                    <span><i class="fa-solid fa-plus fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group pt20 pull-right actions d-flex" ng-if="isEditAttribute">
+                            <div class="text-center pr20 " ng-click="save()">
+                                <a class="">
+                                    <span><i class="fa-solid fa-plus fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                            <div class="text-center" ng-click="clear()">
+                                <a class="">
+                                    <span><i style="--fa-primary-color: red;" class="fas fa-times fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>

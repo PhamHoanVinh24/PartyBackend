@@ -1,0 +1,319 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            .tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }
+
+            .tab .nav-tabs li div {
+                color: white;
+                background: #696e72;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 30px;
+                border-top: 1px solid #d3d3d3;
+                border-bottom: 1px solid #d3d3d3;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        border-right: 1px solid #d3d3d3;
+    }
+
+    .tab .nav-tabs li div:hover {
+        background: #5c9fb9;
+    }
+
+        .tab .nav-tabs li div:hover:before {
+            border-left: 15px solid #5c9fb9;
+        }
+
+    .tab .nav-tabs li:last-child div:hover:before {
+        border-left: 15px solid #5c9fb9;
+    }
+
+    .tab .nav-tabs li.active div:after,
+    .tab .nav-tabs li div:after {
+        content: "";
+        border-left: 17px solid #5c9fb9;
+        border-top: 16px solid transparent;
+        border-bottom: 17px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li.active div:before {
+        border-left: 17px solid #5c9fb9;
+    }
+
+    .tab .nav-tabs li div:before {
+        border-bottom: 15px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 15px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus,
+    .tab .nav-tabs > li.active > div:hover {
+        border: none;
+        color: #fff;
+        background: #5c9fb9;
+        border-top: 1px solid #d3d3d3;
+        border-bottom: 1px solid #d3d3d3;
+        /*font-weight: 600;*/
+    }
+
+    .tab .nav-tabs li:last-child.active div:after,
+    .tab .nav-tabs li:last-child div:after {
+        content: "";
+        border-left: 19px solid #5c9fb9;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li:last-child div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li:last-child div:before {
+        border-bottom: 17px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 16px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }
+
+    .tab .nav-tabs li:last-child.active div:before {
+        border-left: 17px solid #5c9fb9 !important;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Thêm mới tài sản' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsRecordsPack">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackType}">
+                        <label class="control-label require">{{'Kiểu đóng gói tài sản' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap" ng-change="selectChange('PackType')">
+                                <ui-select-match placeholder="{{'Kiểu đóng gói tài sản' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstPackType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackType()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackType" class="label-color validation-message">
+                            {{'Kiểu đóng gói tài sản không được để trống' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackParent}">
+                        <label class="control-label">{{'Đóng gói trong' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.PackParent" theme="bootstrap" ng-change="selectChange('PackParent')">
+                                <ui-select-match placeholder="{{'Đóng gói trong' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstRecordPack | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackParent=''; reset()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="text-danger fs11">{{model.PackHierarchyPath}}</span>
+                        <span ng-show="errorPackParent" class="label-color validation-message">
+                            {{'Đóng gói trong không được để trống' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'Mã đối tượng tài sản' | translate}}</label>
+                                <input class="form-control" name="PackCode" ng-model="model.PackCode" placeholder="{{'Mã đối tượng tài sản' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'Tiêu đề' | translate}}</label>
+                                <input class="form-control" name="PackName" ng-model="model.PackName" placeholder="{{'Tiêu đề' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt10">
+                        <qrcode style="pointer-events:none" id="{{model.PackCode}}" role="button" data="{{model.PackCode}}" size="60" download></qrcode>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'Số lượng tài sản' | translate}}</label>
+                                <input class="form-control" name="PackQuantity" ng-model="model.PackQuantity" placeholder="{{'Số lượng tài sản' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'Nhãn mô tả' | translate}}</label>
+                                <textarea rows="5" class="form-control" name="PackLabel" ng-model="model.PackLabel" placeholder="{{'Nhãn mô tả' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="control-label">{{'Vị trí xếp' | translate}} <span class="text-danger" ng-show="recordsPack.PackZoneLocation != ''">({{zoneInfo.ZoneHierachy}})</span></label>
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.PackZoneLocation" theme="bootstrap" ng-disabled="true">
+                                    <ui-select-match placeholder="{{'Vị trí xếp' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treeZone | filter: $select.search">
+                                        <div style="padding-left: {{30 * x.Level}}px">
+                                            <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                            <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                            {{x.Title}}
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.PackZoneLocation=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class="col-md-9 pl-0 pr-0">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'Số bậc (Độ sâu)' | translate}}</label>
+                                        <input class="form-control" ng-readonly="true" name="PackLevel" ng-model="model.PackLevel" placeholder="{{'Số bậc (Độ sâu)' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group pt20 actions d-flex pl15">
+                                    <div class="text-center pr10 pull-right" ng-click="submit()">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa fa-save"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <div href="#Section1" aria-controls="home" role="button" data-toggle="tab">Tệp tin</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section2" aria-controls="profile" role="button" data-toggle="tab">
+                    Thuộc tính
+                </div>
+            </li>
+        </ul>
+        <div class="tab-content" style="padding-top: 10px;">
+            <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                <div ng-include="'../views/admin/packManager/records-pack-files.html'"></div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="Section2">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+            
+        </div>
+    </div>
+</div>

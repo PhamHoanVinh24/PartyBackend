@@ -1,0 +1,119 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+            <!--<h1 class="bold mb-0">{{'Cảnh báo' | translate}}</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text-underline" style="color:green;" href="/Admin/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:green;" href="/Notification">{{'SW_TITLE_WARNING' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-lg-3 col-md-3">
+                    <label class="fw600 text-underline">{{'SW_CURD_LBL_EMPLOYEE' | translate}}</label>
+                    <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                    <div class="input-group search-group">
+                        <ui-select ng-model="model.UserId" theme="bootstrap">
+                            <ui-select-match placeholder="{{'SW_CURD_TXT_EMPLOYEE' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                            <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                                <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />
+                                <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.UserId='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'SW_CURD_LBL_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'SW_CURD_TXT_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="FromTo" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'SW_CURD_LBL_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'SW_CURD_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="DateTo" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label class="text-danger">{{'SW_LBL_USER_WORKING ' | translate}}:&nbsp;</label><span class="text-success bold">{{model.CountWorking}}</span>
+            <label class="text-danger">({{'SW_CLICK_DOUBLE_MOUSE_VIEW_DETAIL' | translate}})</label>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataStaffLate"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

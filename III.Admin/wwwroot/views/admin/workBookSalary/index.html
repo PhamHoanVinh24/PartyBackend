@@ -1,0 +1,510 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .mr60 {
+        margin-right: 60px;
+    }
+
+    .tb-header {
+        font-weight: 700;
+    }
+
+    .tb-footer {
+        border: none !important;
+        color: red;
+    }
+
+    .table-salary {
+        width: 2200px;
+        margin-right: 100px;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    .tb-row {
+        width: 60px;
+    }
+
+    .tb-row-80 {
+        width: 80px;
+    }
+
+    .tb-row-120 {
+        width: 120px;
+    }
+
+    td input {
+        border: 1px solid #fffcfc !important;
+        font-size: 12px !important;
+        font-weight: 500;
+        padding-left: 5px;
+    }
+
+    .tb-total td {
+        padding-left: 3px;
+        color: #e74c3c;
+    }
+
+    .form-content {
+        min-height: 600px;
+        max-width: 100vw;
+        overflow: scroll;
+        height: 500px;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 100px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .app-content {
+        width: 100%;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="pr30 text-center mt10" ng-show="!isSearch">
+        <a ng-click="showSearch()" class1="btn btn-icon-only btn-circle btn-outline gold-custom">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <!--<div class="pr30 text-center mt10">
+        <a class1="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="calSalary()">
+            <span><i class="fas fa-calculator fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>-->
+    <div class="pr30 text-center mt10">
+        <a ng-click="saveExcel()" class1="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa-solid fa-plus fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>
+    <div class="pr-2 text-center mt10">
+        <a class1="btn btn-icon-only btn-circle btn-outline blue-custom" ng-click="exportExcel()">
+            <span><i class="fas fa-file-excel fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+    </div>
+</div>
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div id="searchBox" ng-show="isSearch">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body pb-2">
+                <div class="row">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-lg-5">
+                        <label class="fw600 text-underline">{{'WBS_LBL_MONTH' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Month" class="form-control" type="text" placeholder="{{'WBS_TXT_MONTH' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="monthSalary" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Month='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <label class="fw600 text-underline">{{'WBS_LBL_STAFF' | translate}}</label>
+                        <div class="input-group br24 search-group">
+                            <ui-select ng-model="model.Employee" theme="bootstrap" ng-change="model.EmployeeName=$select.selected.Name">
+                                <ui-select-match placeholder="{{'WBS_TXT_STAFF' | translate}}"><p>{{$select.selected.Name}}</p></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listEmployee | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Employee=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex pt25">
+                        <div class="text-center mt10 pr10">
+                            <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="calSalary()">
+                                <span><i class="fas fa-search fs25 color-dark"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-content mt20">
+        <div class="col-md-12 pl-0 mb10 mt5 text-center">
+            <div class="pull-left">
+                <span class="bold">{{'WBS_LBL_NUMBER_WORKDAYS' | translate}} : </span>
+                <input class="w50 bold blue pl5" ng-model="dayInMonth" type="number" ng-change="changeDayInMonth()" />
+            </div>
+            <div class="fs15"><span class="bold">{{'WBS_LBL_EMPLOYEE_PAYROLL' | translate}}</span><span class="text-danger" ng-if="model.Month!=''"> - {{'WBS_LBL_MONTH' | translate}} {{model.Month}}</span><span class="text-danger" ng-if="model.Employee!=''">&nbsp;- {{'WBS_LBL_STAFF' | translate}}: {{model.EmployeeName}}</span></div>
+        </div>
+        <table border="1" class="table-salary">
+            <thead>
+                <tr class="tb-header">
+                    <td style="width: 40px; text-align: center;" rowspan="2">{{'WBS_LBL_INDEX' | translate}}</td>
+                    <td style="width: 230px; text-align: center;" colspan="1" rowspan="2">{{'WBS_LBL_FULL_NAME' | translate}}</td>
+                    <td style="width: 230px; text-align: center;" colspan="1" rowspan="2">{{'WBS_LBL_DEPARTMENT' | translate}}</td>
+                    <td style="width: 123px; text-align: center;" colspan="2">{{'WBS_LBL_RATE_BY_POSITION' | translate}}</td>
+                    <td style="width: 272px; text-align: center;" colspan="4">{{'WBS_LBL_NUM_DAY' | translate}}</td>
+                    <td style="width: 273px; text-align: center;" colspan="3">{{'WBS_LBL_SALARY_FIX' | translate}}</td>
+                    <td style="width: 421px; text-align: center;" colspan="4">{{'WBS_LBL_INCOME_BY_BUSSINESS' | translate}}</td>
+                    <td style="width: 61px; text-align: center;" rowspan="2">{{'WBS_LBL_SALARY_WHEN_SICK' | translate}}</td>
+                    <td style="width: 60px; text-align: center;" rowspan="2">{{'WBS_LBL_SALARY_LUNCH_BY_DAY_WORK' | translate}}</td>
+                    <td style="width: 96px; text-align: center;" rowspan="2">{{'WBS_LBL_SUM_SALARY' | translate}}</td>
+                    <td style="width: 59px; text-align: center;" rowspan="2">{{'WBS_LBL_MONEY_PAYMENT_BY_PHONE' | translate}}</td>
+                    <!--<td style="width: 58px; text-align: center;" rowspan="2">Ăn trưa</td>-->
+                    <td style="width: 88px; text-align: center;" rowspan="2">{{'WBS_LBL_REAL_SALARY' | translate}}</td>
+                    <td style="width: 59px; text-align: center;" rowspan="2">{{'WBS_LBL_SIGN' | translate}}</td>
+                    <td style="width: 59px; text-align: center;" rowspan="2">{{'WBS_LBL_GO_ON_BUSSINESS' | translate}}</td>
+                    <td style="width: 56px; text-align: center;" rowspan="2">{{'WBS_LBL_VR' | translate}}</td>
+                    <td style="width: 58px; text-align: center;" rowspan="2">{{'WBS_LBL_NO_WORK_HOLIDAY' | translate}}</td>
+                    <td style="width: 61px; text-align: center;" rowspan="2">{{'WBS_LBL_NO_WORK_WITH_NO_SALARY' | translate}}</td>
+                </tr>
+                <tr class="tb-header">
+                    <td style="width: 58px; text-align: center;">{{'WBS_LBL_LEVEL' | translate}}</td>
+                    <td style="width: 59px; text-align: center;">{{'WBS_RATE_SALARY' | translate}}</td>
+                    <td style="width: 56px; text-align: center;">{{'WBS_LBL_WORK_ON_OFFICE' | translate}}</td>
+                    <td style="width: 58px; text-align: center;">{{'WBS_LBL_NO_WORK_BY_SICK' | translate}}</td>
+                    <td style="width: 81px; text-align: center;">{{'WBS_LBL_NO_WORK_WITH_PERMISSION' | translate}}</td>
+                    <td style="width: 59px; text-align: center;">{{'WBS_LBL_ACCUMULATION_ON_YEAR' | translate}}</td>
+                    <td style="width: 71px; text-align: center;">{{'WBS_LBL_SALARY_IN_CONTRACT' | translate}}</td>
+                    <td style="width: 81px; text-align: center;">{{'WBS_LBL_PCDT' | translate}}</td>
+                    <td style="width: 109px; text-align: center;">{{'WBS_LBL_CD_SALARY' | translate}}</td>
+                    <td style="width: 77px; text-align: center;">{{'WBS_LBL_SALARY_REPON' | translate}}</td>
+                    <td style="width: 103px; text-align: center;">{{'WBS_LBL_SALARY_RES_BUSS' | translate}}</td>
+                    <td style="width: 65px; text-align: center;">&nbsp;{{'WBS_LBL_REAL_RATE' | translate}}&nbsp; K</td>
+                    <td style="width: 158px; text-align: center;">{{'WBS_LBL_SALARY_BUSSINESS' | translate}}</td>
+                </tr>
+                <tr class="tb-header">
+                    <td style="width: 40px; text-align: center;">A</td>
+                    <td style="width: 230px; text-align: center;" colspan="1">B</td>
+                    <td style="width: 230px; text-align: center;" colspan="1"></td>
+                    <td style="width: 58px; text-align: center;">C</td>
+                    <td style="width: 59px; text-align: center;">D</td>
+                    <td style="width: 56px; text-align: center;">&nbsp;E&nbsp;</td>
+                    <td style="width: 58px; text-align: center;">F</td>
+                    <td style="width: 81px; text-align: center;">G</td>
+                    <td style="width: 59px; text-align: center;">H</td>
+                    <td style="width: 71px; text-align: center;">I</td>
+                    <td style="width: 81px; text-align: center;">J</td>
+                    <td style="width: 109px; text-align: center;">K=I+J</td>
+                    <td style="width: 77px; text-align: center;">L</td>
+                    <td style="width: 103px; text-align: center;">M</td>
+                    <td style="width: 65px; text-align: center;">&nbsp;N&nbsp;</td>
+                    <td style="width: 158px; text-align: center;">O=M*N</td>
+                    <td style="width: 61px; text-align: center;">P</td>
+                    <td style="width: 60px; text-align: center;">Q</td>
+                    <td style="width: 96px; text-align: center;">R=K+O+P+Q</td>
+                    <td style="width: 59px; text-align: center;">S</td>
+                    <!--<td style="width: 58px; text-align: center;">&nbsp;</td>-->
+                    <td style="width: 88px; text-align: center;">T=R-S</td>
+                    <td style="width: 59px; text-align: center;">U</td>
+                    <td style="width: 59px; text-align: center;">V</td>
+                    <td style="width: 56px; text-align: center;">VR</td>
+                    <td style="width: 58px; text-align: center;">X</td>
+                    <td style="width: 61px; text-align: center;">Y</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in listEmployeeDetail">
+                    <td style="width: 40px; text-align: center;">{{$index+1}}</td>
+                    <td class="nowrap pl5 bold" style="width: 230px;">{{x.Name}}</td>
+                    <td class="nowrap pl5 bold" style="width: 230px;">{{x.DepartmentName}}</td>
+                    <td class="nowrap pl5 bold" style="width: 58px;">{{x.SalaryLevel}}</td>
+                    <td class="text-center bold" style="width: 59px;">{{x.SalaryRatio}}</td>
+                    <td style="width: 56px;"><input class="tb-row" type="number" ng-model="x.E" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 58px;"><input class="tb-row" type="number" ng-model="x.F" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 81px;"><input class="tb-row" type="number" ng-model="x.G" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 59px;"><input class="tb-row" type="number" ng-model="x.H" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 71px;"><input class="tb-row-80" ng-model="x.I" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 81px;"><input class="tb-row-80" type="text" ng-model="x.J" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 109px;"><input class="tb-row-120" type="text" ng-model="x.K" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 77px;"><input class="tb-row-80" type="text" ng-model="x.L" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 103px;"><input class="tb-row-120" type="text" ng-model="x.M" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 65px;"><input class="tb-row" type="number" ng-model="x.N" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 158px;"><input class="tb-row-120" type="text" ng-model="x.O" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 61px;"><input class="tb-row" type="text" ng-model="x.P" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 60px;"><input class="tb-row" type="text" ng-model="x.Q" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 96px;"><input class="tb-row-120" type="text" ng-model="x.R" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 59px;"><input class="tb-row" type="text" ng-model="x.S" ng-change="calculateFormula(x)" number-input /></td>
+                    <!--<td style="width: 58px;"><input class="tb-row" type="text" ng-model="x.AT" ng-change="calculateFormula(x)" number-input /></td>-->
+                    <td style="width: 88px;"><input class="tb-row-80 bold" type="text" ng-model="x.T" ng-change="calculateFormula(x)" number-input /></td>
+                    <td style="width: 59px;"></td><!--Ký nhận-->
+                    <td style="width: 59px;"><input class="tb-row" type="number" ng-model="x.V" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 56px;"><input class="tb-row" type="number" ng-model="x.VR" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 58px;"><input class="tb-row" type="number" ng-model="x.X" ng-change="calculateFormula(x)" /></td>
+                    <td style="width: 61px;"><input class="tb-row" type="number" ng-model="x.Y" ng-change="calculateFormula(x)" /></td>
+                </tr>
+                <tr class="tb-total">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 230px;" colspan="2" class="bold">{{'WBS_LBL_TOTAL' | translate}}</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;" class="bold">&nbsp;{{Total.SUM_F | number}}</td>
+                    <td style="width: 58px;" class="bold">&nbsp;{{Total.SUM_G | number}}</td>
+                    <td style="width: 81px;" class="bold">&nbsp;{{Total.SUM_H | number}}</td>
+                    <td style="width: 59px;" class="bold">&nbsp;{{Total.SUM_I | number}}</td>
+                    <td style="width: 71px;" class="bold">&nbsp;{{Total.SUM_J | number}}</td>
+                    <td style="width: 81px;" class="bold">&nbsp;{{Total.SUM_K | number}}</td>
+                    <td style="width: 109px;" class="bold">&nbsp;{{Total.SUM_L | number}}</td>
+                    <td style="width: 77px;" class="bold">&nbsp;{{Total.SUM_M | number}}</td>
+                    <td style="width: 103px;">&nbsp;</td>
+                    <td style="width: 65px;" class="bold">&nbsp;{{Total.SUM_O | number}}</td>
+                    <td style="width: 158px;" class="bold">&nbsp;{{Total.SUM_P | number}}</td>
+                    <td style="width: 61px;" class="bold">&nbsp;{{Total.SUM_Q | number}}</td>
+                    <td style="width: 60px;" class="bold">&nbsp;{{Total.SUM_R | number}}</td>
+                    <td style="width: 96px;" class="bold">&nbsp;{{Total.SUM_S | number}}</td>
+                    <!--<td style="width: 59px;" class="bold">&nbsp;{{Total.SUM_AT | number}}</td>-->
+                    <td style="width: 58px;" class="bold">&nbsp;{{Total.SUM_T | number}}</td>
+                    td
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="width: 165px;" colspan="2">{{'WBS_LBL_MONEY_IN_TEXT' | translate}}: ./</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 77px;">&nbsp;</td>
+                    <td style="width: 103px;">&nbsp;</td>
+                    <td style="width: 65px;">&nbsp;</td>
+                    <td style="width: 158px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <!--<td style="width: 59px;">&nbsp;</td>-->
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">*</td>
+                    <td style="width: 230px;">{{'WBS_LBL_PRESENT' | translate}}:</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;&nbsp; {{'WBS_LBL_IN_HERE' | translate}}</td>
+                    <td style="width: 77px;">&nbsp;</td>
+                    <td style="width: 103px;">&nbsp;</td>
+                    <td style="width: 65px;">&nbsp;</td>
+                    <td style="width: 158px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <!--<td style="width: 59px;">&nbsp;</td>-->
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 555px;" colspan="8">&nbsp;-{{'WBS_LBL_DES_RATE_SALARY' | translate}}</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 421px;" colspan="4">{{'WBS_LBL_BUSSINESS_SALARY' | translate}}</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 632px;" colspan="9">&nbsp;-{{'WBS_LBL_DES_SALARY_RESPON' | translate}}</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 257px;" colspan="3">{{'WBS_LBL_DES_SALARY_IN_HSTN' | translate}}</td>
+                    <td style="width: 158px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 277px;" colspan="4">&nbsp;-{{'WBS_LBL_SALARY_MONTH_INTO_TWO_PICES' | translate}}:</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 257px;" colspan="3">{{'WBS_LBL_DES_KD_BASE' | translate}}</td>
+                    <td style="width: 158px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 632px;" colspan="9">&nbsp;+{{'WBS_LBL_FIX_SALARY_CAL_BY_RATE' | translate}}</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 785px;" colspan="9">{{'WBS_LBL_SALARY_SICK_DES' | translate}}</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 490px;" colspan="7">&nbsp;+{{'WBS_LBL_CAL_SALARY_BUSINESS' | translate}}</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 192px;" colspan="2">&nbsp;-{{'WBS_LBL_PAY_METHOD' | translate}}:</td>
+                    <td style="width: 103px;">&nbsp;</td>
+                    <td style="width: 65px;">&nbsp;</td>
+                    <td style="width: 158px;">&nbsp;</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 230px;">&nbsp;</td>
+
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 421px;" colspan="4">&nbsp;+{{'WBS_LBL_PAY_SALARY_TIME' | translate}}</td>
+                    <td style="width: 61px;">&nbsp;</td>
+                    <td style="width: 60px;">&nbsp;</td>
+                    <td style="width: 96px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 230px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 721px;" colspan="8">&nbsp;+{{'WBS_LBL_SETTLEMENT' | translate}}</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+                <tr class="tb-footer">
+                    <td style="width: 40px;">&nbsp;</td>
+                    <td style="width: 230px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 71px;">&nbsp;</td>
+                    <td style="width: 81px;">&nbsp;</td>
+                    <td style="width: 109px;">&nbsp;</td>
+                    <td style="width: 771px;" colspan="8">&nbsp;-{{'WBS_LBL_COEFFICENT' | translate}}</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                    <td style="width: 88px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 59px;">&nbsp;</td>
+                    <td style="width: 56px;">&nbsp;</td>
+                    <td style="width: 58px;">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

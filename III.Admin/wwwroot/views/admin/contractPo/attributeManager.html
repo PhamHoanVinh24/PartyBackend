@@ -1,0 +1,192 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    .headerTab {
+        margin-top: -6px;
+        background: #cccccc;
+        padding-left: -8px;
+        margin-left: -21px;
+        margin-right: -21px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        font-size: 14px;
+        cursor: pointer
+    }
+
+    .openlog {
+        cursor: pointer
+    }
+
+    /*@media(max-width:1500px) {
+        .custom-col-md-2 {
+            width: 100% !important;
+            float: left;
+        }
+
+        .customs-col-md-2 {
+            width: 100% !important;
+            float: left;
+        }
+
+        .custom-col-md-3 {
+            width: 100% !important;
+            float: left;
+        }
+    }
+
+    @media(min-width:1501px) {
+        .custom-col-md-2 {
+            width: 50% !important;
+            float: left;
+            padding-right: 15px;
+        }
+
+        .customs-col-md-2 {
+            width: 40% !important;
+            float: left;
+            padding-right: 15px;
+        }
+
+        .custom-col-md-3 {
+            width: 60% !important;
+            float: left;
+        }
+    }*/
+
+    @media(max-width:1200px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    @media(min-width:1201px) and (max-width:1500px) {
+        .modal-70 {
+            width: 60% !important;
+        }
+    }
+
+    @media(min-width:1501px) {
+        .modal-70 {
+            width: 60% !important;
+        }
+    }
+</style>
+<div>
+    <div class="modal-header">
+        <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+        </button>
+        <i class="fa fa-plus-circle icon-insert"></i>
+        <!--<span class="modal-title" id="modal-title">{{'CONTRACT_CURD_TITLE_ADD_CONTRACT' | translate}}</span>-->
+        <span class="modal-title" id="modal-title">{{'CP_TITLE_TAB_TTRIBUTE' | translate}}</span>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div class="portlet-body form mt5">
+            <form name="forms.addAtrributeform" method="post" ng-validate="validationOptionsAttr">
+                <div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-3 pl-0">
+                                <div class="form-group mb5">
+                                    <label class="control-label text-left require">&nbsp;{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_ATTR_CODE' | translate}}</label>
+                                    <div class="input-group">
+                                        <input ng-disabled="isAdd==false" class="form-control" name="AttrCode" ng-model="model.AttrCode" placeholder="{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_ATTR_CODE' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button ng-disabled="isAdd==false" type="button" ng-click="model.AttrCode=''" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pl-0">
+                                <div class="form-group mb5">
+                                    <label class="control-label text-left require">&nbsp;{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_ATTR_VALUE' | translate}}</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="AttrValue" ng-model="model.AttrValue" placeholder="{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_ATTR_VALUE' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.AttrValue=''" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pl-0">
+                                <div class="form-group mb5" ng-class="{ 'has-error': errorAttrGroup}">
+                                    <label class="control-label text-left require">&nbsp;{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_GROUP' | translate}}</label>
+                                    <div class="input-group">
+                                        <ui-select tagging ng-model="model.AttrGroup" on-select="changleSelect('AttrGroup', $item)">
+                                            <ui-select-match placeholder="{{'CP_CURD_TAB_ATTRIBUTE_CURD_LBL_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x  in attrGroups | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.AttrGroup=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorAttrGroup" class="label-color validation-message">
+                                        {{'Vui lòng chọn nhóm' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pl-0">
+                                <div class="form-group mb5">
+                                    <label class="control-label text-left">&nbsp;{{'CP_CURD_TAB_ATTRIBUTE_ATT_NOTE' | translate}}</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="Note" ng-model="model.Note" placeholder="{{'CP_CURD_TAB_ATTRIBUTE_ATT_NOTE' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Note=''" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="btn-group actions d-flex pull-right">
+                                    <div class="pl20 text-center" ng-show="isAdd==true">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                    <div class="pl20 text-center" ng-show="isAdd==false">
+                                        <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="close()">
+                                            <span><i class="fa fa-close"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                                    </div>
+                                    <div class="pl20 text-center" ng-show="isAdd==false">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="save()">
+                                            <span><i class="fa fa-save"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblDataAttribute"></table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

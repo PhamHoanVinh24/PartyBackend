@@ -1,0 +1,109 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'LMS_CURD_TITLE_ADD_LMS' | translate}}</span>
+</div>
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="form-group" ng-class="{ 'has-error': errorLmsSubjectCode}">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'LMS_CURD_LBL_LMS_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.LmsSubjectCode" name="Code" placeholder="{{'LMS_CURD_LBL_LMS_CODE' | translate}}" />
+                        <span ng-show="errorLmsSubjectCode" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LMS_CODE' | translate}}
+                        </span>
+                    </div>
+                   
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorLmsSubjectName}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'LMS_CURD_LBL_LMS_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.LmsSubjectName" name="Name" placeholder="{{'LMS_CURD_LBL_LMS_NAME' | translate}}" />
+                        <span ng-show="errorLmsSubjectName" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LMS_NAME' | translate}}
+                        </span>
+                    </div>
+                   
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorLmsSubjectType}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'LMS_CURD_LBL_LMS_TYPE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.LmsSubjectType" ng-change="reload()" theme="bootstrap">
+                            <ui-select-match placeholder="{{'LMS_CURD_LBL_LMS_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorLmsSubjectType" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LMS_TYPE' | translate}}
+                        </span>
+                    </div>
+                   
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorLmsSubjectGroup}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'LMS_CURD_LBL_LMS_GROUP' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.LmsSubjectGroup" ng-change="reload()" theme="bootstrap">
+                            <ui-select-match placeholder="{{'LMS_CURD_LBL_LMS_GROUP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listGroup | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorLmsSubjectGroup" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LMS_GROUP' | translate}}
+                        </span>
+                    </div>
+                   
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label">{{'LMS_CURD_LBL_LMS_DESCRIPTION' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control" ng-model="model.LmsSubjectDesc" rows="3" placeholder="{{'LMS_CURD_LBL_LMS_DESCRIPTION' | translate}}" name="Note"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group pull-right actions d-flex mt10">
+                <div class="text-center pr10">
+                    <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                        <span><i class="glyphicon glyphicon-remove"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                </div>
+                <div class="text-center">
+                    <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+            </div>
+        </form>
+        <div class="row mt10">
+            <!--<div class="col-lg-12">
+                <uib-tabset active="active" class="mb20">
+                    <uib-tab index="3" heading="{{'Thuộc tính con' | translate}}" disable="ParentCode == '' || ParentCode==undefined" ng-click="chkProductAttrMain()">
+                        <div ng-include="'../views/admin/materialProductAttributeMain/tabAttribute.html'"></div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>-->
+        </div>
+    </div>
+</div>
+

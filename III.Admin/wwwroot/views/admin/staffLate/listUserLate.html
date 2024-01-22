@@ -1,0 +1,47 @@
+﻿<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+
+<link href="/lib/robust/css/colors.min.css" rel="stylesheet" />
+<div class="modal-header no-color" style="font-family: 'Open Sans', sans-serif !important;">
+    <i class="fas fa-users fs15 pt5 black"></i>
+    <span class="modal-title pl-0 black" ng-if="viewMode == 'ACTION_TIME'">
+        &nbsp;&nbsp;{{'Danh sách phép sử dụng ngày' | translate}} {{date}} <!--STL_TITLE_TABLE_USER_LATE_ACTION_TIME-->
+    </span>
+    <span class="modal-title pl-0 black" ng-if="viewMode == 'CREATED_TIME'">
+        &nbsp;&nbsp;{{'Danh sách phép được tạo ngày' | translate}} {{date}} <!--STL_TITLE_TABLE_USER_LATE_CREATED_BY-->
+    </span>
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pb25 pt5">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-md-1">{{'STL_LIST_COL_INDEX' | translate}}</th>
+                                    <th class="text-center col-md-3 nowrap">{{'STL_LIST_COL_USERID' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STL_LIST_COL_STATUS' | translate}}</th>
+                                    <th class="text-center col-md-3 nowrap" style="min-width:35px">{{'STL_LIST_COL_TIME' | translate}}</th>
+                                    <th class="text-center col-md-3 nowrap">{{'STL_LIST_COL_PLACE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listUserLate">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td class="text-center">{{x.FullName}}</td>
+                                    <td class="text-center bold" ng-class="{'text-primary' : x.Order == 0, 'text-green' : x.Order == 1, 'text-purple' : x.Order == 2, 'orange' : x.Order == 3, 'red' : x.Order == 4 }">{{x.Status}}</td>
+                                    <td class="text-center nowrap bold" style="min-width:35px">{{x.ActionTime}}</td>
+                                    <td class="text-center">{{x.LocationText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--End No Work-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

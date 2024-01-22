@@ -1,0 +1,143 @@
+﻿<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="bold mb-0">Quản trị lô hàng</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">{{'CATEGORY_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="LotProduct#">Quản trị lô hàng</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 ">
+            <div class="btn-group pull-right actions  d-flex">
+                <!--<a class="btn  btn-accent btnSearch">
+                    <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+                </a>-->
+                <div class="text-center pr10 btnSearch">
+                    <a class="btn btn-icon-only btn-circle btn-outline purple-custom" style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-search fs12" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3 ">Tìm kiếm</p>
+                </div>
+                <div class="text-center pr10" ng-click="add()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-plus fs12" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3">Thêm mới</p>
+                </div>
+                <!--<a ng-click="add()" class="btn btn-green ">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>-->
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 hidden">
+        <div class="portlet-body">
+            <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />
+            <div class="row pt5 mb5">
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">QrCode</label>
+                    <div class="input-group">
+                        <input ng-model="model.QrCode" class="form-control" type="text" placeholder="Nhập mã QrCode.." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.QrCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">BarCode</label>
+                    <div class="input-group">
+                        <input ng-model="model.BarCode" class="form-control" type="text" placeholder="Nhập BarCode..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BarCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">Tiêu đề</label>
+                    <div class="input-group">
+                        <input ng-model="model.Title" class="form-control" type="text" placeholder="Nhập tiêu đề..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Title=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">Nhà cung cấp</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Supplier" theme="bootstrap">
+                            <ui-select-match placeholder="Chọn nhà cung cấp">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Supplier=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">Ngày thêm</label>
+                    <div class="input-group">
+                        <input id="CreatedDate" ng-model="model.CreatedDate" class="form-control" type="text" placeholder="Ngày thêm..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CreatedDate=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">Ngày hết hạn</label>
+                    <div class="input-group">
+                        <input id="ExpiryDate" ng-model="model.ExpiryDate" class="form-control" type="text" placeholder="Ngày hết hạn..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ExpiryDate=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-12 ">
+                    <div class="btn-group pull-right pt10 d-flex">
+                        <!--<div class="text-center pr10 " ng-click="search()">
+                <a class="btn btn-icon-only btn-circle btn-outline blue-custom">
+                    <span><i class="fa fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">Tìm kiếm</p>
+            </div>-->
+                        <div class="text-center pr10" ng-click="search()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" style="width:40px !important; height:40px !important">
+                                <span><i class="fa fa-search" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">Tìm kiếm</p>-->
+                        </div>
+                        <!--<a class="btn btn-accent" ng-click="search()">
+                <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+            </a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+

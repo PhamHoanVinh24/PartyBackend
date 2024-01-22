@@ -1,0 +1,306 @@
+﻿<style>
+    .br4 {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .control-label {
+        font-size: 11px !important;
+    }
+
+    .mt23 {
+        margin-top: 23px;
+    }
+</style>
+<div ng-controller="product">
+    <div class="table-toolbar">
+        <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <!--Start phần tìm kiếm catelogue và sản phẩm, thay đổi tỉ lệ -->
+            <div class="row" ng-if="!isEdit">
+                <div class="col-md-3 hidden">
+                    <label class="control-label text-left">{{'PSP_CURD_TAB_PRODUCT_LBL_PRODUCT_PORTFOLIO' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCatelogueCodeSearch" theme="bootstrap" on-select="changleSelect('ProductCategoryCode',$item)">
+                            <ui-select-match placeholder="{{'PSP_CURD_TAB_PRODUCT_TXT_PRODUCT_PORTFOLIO' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in catelogueProducts | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="clearData()" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label text-left">{{'PSP_CURD_TAB_PRODUCT_LBL_PRODUCT' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.ProductCodeSearch" theme="bootstrap" on-select="changleSelect('ProductCode',$item)" ng-disabled="isEdit">
+                            <ui-select-match placeholder="{{'PSP_CURD_TAB_PRODUCT_TXT_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductCodeSearch=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-12 text-danger fs9">{{'PSP_TITLE_SEARCH_CHILD_PRODUCTS' | translate}}</label>
+                        <label class="col-md-12 text-danger fs9">{{'PSP_TITLE_SEARCH_PRODUCTS_COMPLETE' | translate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-1 mt23 pl-0">
+                    <div class="mr10 pr-0">
+                        <a class="" ng-click="search()">
+                            <i class="fas fa-search pt10 fs30"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <!--<a ng-click="search()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                        <span><i class="fa fa-search"></i></span>
+                    </a>-->
+                </div>
+            </div>
+            <div class="row" ng-if="!isEdit">
+                <div class="hidden">
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_COST_CATELOGUE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceCostCatelogue" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_COST_CATELOGUE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_COST_AIRLINE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceCostAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_COST_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_COST_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceCostSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_COST_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_BUILD' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailBuild" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_BUILD' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_BUILD_AIRLINE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailBuildAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_BUILD_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_BUILD_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailBuildSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_BUILD_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_NO_BUILD' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailNoBuild" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_NO_BUILD' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_NO_BUILD_AIRLINE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailNoBuildAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_NO_BUILD_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_RATE_PRICE_RETAIL_NO_BUILD_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4" ng-model="model.RatePriceRetailNoBuildSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_RATE_PRICE_RETAIL_NO_BUILD_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="control-label text-left bold text-primary">{{'PSP_TAB_PRODUCT_CURD_LBL_TAX' | translate}}</label>
+                    <div class=''>
+                        <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24" ng-model="model.Tax" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_TAX' | translate}}..." num-thousand='true' awnum num-int='21' />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 mt23 pl-0">
+                    <div class="mr10 pr-0">
+                        <a class="" ng-click="saveChangeRate()">
+                            <i class="fa-solid fa-plus fs30"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                    <!--<a ng-click="saveChangeRate()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>-->
+                </div>
+            </div>
+            <!--End phần tìm kiếm catelogue và sản phẩm, thay đổi tỉ lệ -->
+            <!--Start phần sửa 1 sản phẩm -->
+            <div class="row" ng-if="isEdit">
+                <div class="col-md-3">
+                    <label class="control-label text-left require">{{'PSP_TAB_PRODUCT_CURD_LBL_PRODUCT' | translate}}</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('ProductCode',$item)" ng-disabled="isEdit">
+                            <ui-select-match placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in productEdits | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label text-left">{{'Giá mặc định' | translate}}</label>
+                    <div class=''>
+                        <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty bold" ng-model="model.PriceCostDefault" placeholder="{{'Nhập giá mặc định' | translate}}..." num-thousand='true' awnum num-int='21' />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="hidden">
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_COST_CATELOGUE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceCostCatelogue" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_COST_CATELOGUE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_COST_AIRLINE' | translate}}</label>
+                        <div class='input-group '>
+                            <input class="form-control br4 bold" ng-model="model.PriceCostAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_COST_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_COST_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceCostSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_COST_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_BUILD' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailBuild" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_RETAI_BUILD' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_BUILD_AIRLINE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailBuildAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_RETAI_BUILD_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_BUILD_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailBuildSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_RETAI_BUILD_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_NO_BUILD' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailNoBuild" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_RETAI_NO_BUILD' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_NO_BUILD_AIRLINE' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailNoBuildAirline" placeholder="{{'PSP_TAB_PRODUCT_CURD_TXT_PRICE_RETAI_NO_BUILD_AIRLINE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-left">{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_NO_BUILD_SEA' | translate}}</label>
+                        <div class='input-group'>
+                            <input class="form-control br4 bold" ng-model="model.PriceRetailNoBuildSea" placeholder="{{'PSP_TAB_PRODUCT_CURD_LBL_PRICE_RETAI_NO_BUILD_SEA' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1 pr-0">
+                    <label class="control-label text-left bold text-primary">{{'PSP_TAB_PRODUCT_CURD_LBL_TAX' | translate}}</label>
+                    <div class=''>
+                        <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty bold text-primary" ng-model="model.Tax" placeholder="%" num-thousand='true' awnum num-int='21' />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="mt23 pt10 " ng-class="{'col-md-2':isEdit,'col-md-1':!isEdit}">
+                    <a ng-show="isEdit==false" ng-disabled="LotProductCode==''" ng-click="add()" class="">
+                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                    </a>
+                    <!--<p class="text-underline fs12 mb5 pt3">{{COM_BTN_ADD}}</p>-->
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="col-md-6 pr20 text-center">
+                            <a ng-show="isEdit==true" ng-click="close()" class="">
+                                <span><i style="--fa-primary-color: red;" class="fas fa-times fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">Đóng</p>
+                        </div>
+                        <div class="col-md-10 text-center" ng-disabled="model.HeaderCode!=''">
+                            <a ng-show="isEdit==true" ng-click="save()" class=" ">
+                                <span><i class="fa-solid fa-plus fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End phần sửa 1 sản phẩm -->
+        </form>
+    </div>
+    <div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>

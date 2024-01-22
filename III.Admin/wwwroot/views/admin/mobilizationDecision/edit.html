@@ -1,0 +1,204 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle" style="padding-top: 8px;"></i>
+    <!--<span class="modal-title " id="modal-title">{{'CJ_MODAL_TITLE_ADD_EMP' | translate}}</span>-->
+<span class="modal-title " id="modal-title">{{'MDC_BTN_BN_EDITING_DECISION' | translate}}</span>
+</div>
+<div class="modal-body pt-0 pb-0" id="modal-body" style="padding-top: 10px !important;">
+
+    <div class="portlet-body form ">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="fw600 text-underline require">{{'MDC_BTN_BN_CODE_DECISION' | translate}}</label>
+                <div class="input-group">
+                    <input ng-model="model.DecisionCode" type="text" class="form-control br4" name="EstimateTime" placeholder=" {{'MDC_BTN_BN_CODE_DECISION' | translate}}..." />
+                </div>
+            </div>
+            <div class="col-md-3" ng-class="{ 'has-error': errorDecisionWakingDate}">
+                <label class="fw600 text-underline require">{{'MDC_BTN_BN_IMPLEMENTATION_DATE' | translate}}</label>
+                <div class='input-group date' id='decisionMakingDate'>
+                    <input type='text' class="form-control input-date" name="DeadLine" ng-model="model.DecisionWakingDate" placeholder="{{'MDC_BTN_BN_IMPLEMENTATION_DATE' | translate}}..." />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+                <span ng-show="errorDecisionWakingDate" class="label-color validation-message">
+                    {{'MDC_BTN_BN_PLS_IMPORT_IMPLEMENTATION_DATE' | translate}}
+                </span>
+            </div>
+            <div class="col-md-3" ng-class="{ 'has-error': errorDecisionWakingDate}">
+                <label class="fw600 text-underline require">{{'MDC_BTN_BN_MANEUVERING_TYPE' | translate}}</label>
+                <div class="input-group">
+                    <ui-select ng-disabled="true" ng-model="model.StyleDecisionCode" theme="bootstrap" ng-change="changeSelect('UserId')">
+                        <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listStyleDecision | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span ng-show="errorEmployeeId" class="label-color validation-message">
+                        {{'CJ_VALIDATE_EMP' | translate}}
+                    </span>
+                </div>
+                <span ng-show="errorStyleDecisionCode" class="label-color validation-message">
+                    {{'MDC_BTN_BN_PLS_SELECT_MANEUVERING_TYPE' | translate}}
+                </span>
+            </div>
+            <div class="col-md-2" text-align: center;">
+                <label class="fw600 text-underline " style="width:100%;color: white;">.</label>
+                <button class="btn green-custom br4" ng-click="addDecision()">
+                    <i class="fa fa-save"></i>
+                    {{'MDC_BTN_BN_SAVE'| translate}}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="portlet-body form pt15">
+        <form name="addStaff" class="form-horizontal" method="post">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorEmployeeId}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="modelEmployee.EmployeeId" theme="bootstrap" ng-change="changleSelect('UserId')">
+                                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}">{{$select.selected.fullname}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listEmployee | filter: $select.search">
+                                    {{x.fullname}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorEmployeeId" class="label-color validation-message">
+                            {{'MDC_BTN_BN_SELECT_STAFF' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorDepartmentNameOld}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_CURRENT_UNIT' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="modelEmployee.DepartmentNameOld" readonly type="text" class="form-control br4" name="EstimateTime" placeholder=" {{'MDC_BTN_BN_CURRENT_UNIT' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorUserId}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_CURRENT_POCITION' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="modelEmployee.RoleNameOld" readonly type="text" class="form-control br4" name="EstimateTime" placeholder=" {{'MDC_BTN_BN_CURRENT_POCITION' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorDepartmentIdNew}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_MANEUVERING_UNIT' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="modelEmployee.DepartmentIdNew" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'MDC_BTN_BN_MANEUVERING_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listDepartment | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorDepartmentIdNew" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_MANEUVERING_UNIT' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorRoleIdNew}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_DISPATCHING_POSITION' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="modelEmployee.RoleIdNew" theme="bootstrap" on-select="changeSelect('RoleIdNew')">
+                                <ui-select-match placeholder="{{'MDC_BTN_BN_DISPATCHING_POSITION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listRole | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorRoleIdNew" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_DISPATCHING_POSITION' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorWageLevel}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_WAGE' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="modelEmployee.WageLevel" type="number" readonly min="1" class="form-control br4" name="EstimateTime" placeholder=" {{'Bậc lương' | translate}}..." />
+                        </div>
+                        <span ng-show="errorWageLevele" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_IMPORT_WAGE' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorReason}" style="width:20%">
+                        <label class="fw600 text-underline require">{{'MDC_BTN_BN_REASON' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="modelEmployee.Reason" type="text" class="form-control br4" name="EstimateTime" placeholder=" {{'Lý do' | translate}}..." />
+                        </div>
+                        <span ng-show="errorReason" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_SELECT_REASON' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorFormDate}" style="width:20%">
+                        <label class="fw600 text-underline">{{'MDC_BTN_BN_FROM_DATE' | translate}}</label>
+                        <div class='input-group date' id='formDate'>
+                            <input type='text' class="form-control input-date" name="DeadLine" ng-model="modelEmployee.FormDate" placeholder="{{'Từ ngày' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                        <span ng-show="errorFormDate" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_SELECT_FROM_DATE' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorToDate}" style="width:20%">
+                        <label class="fw600 text-underline">{{'MDC_BTN_BN_TO_DATE' | translate}}</label>
+                        <div class='input-group date' id='toDate'>
+                            <input type='text' class="form-control input-date" name="DeadLine" ng-model="modelEmployee.ToDate" placeholder="{{'Đến ngày' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                        <span ng-show="errorToDate" class="label-color validation-message">
+                            {{'MDC_BTN_BN_PLS_SELECT_TO_DATE' | translate}}
+                        </span>
+                    </div>
+                    <div class="pt20 col-md-2 pl-0 pr-0">
+                        <button class="btn br4 pull-right" ng-click="addEmployee()">
+                            <i class="fa-solid fa-plus"></i>
+                                {{'CJ_ADD_EMP_DOWN'| translate}}
+                        </button>
+                    </div>
+                    <div class="row pt-1" style="height: 260px;max-height: 260px;float:left">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-1 fw600 text-underline ng-binding" style="width:5%">{{'MDC_BTN_BN_CD_STAFF' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'MDC_BTN_BN_NAME_STAFF' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline ">{{'MDC_BTN_BN_CURRENT_UNIT' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_POSITION_PRESENT' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_MANEUVERING_UNIT' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_DISPATCHING_POSITION' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_WAGE' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_REASON' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_FROM_DATE' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_TO_DATE' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'MDC_BTN_BN_DELETE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listEmployeeTermination">
+                                    <td>{{x.EmployeeCode}}</td>
+                                    <td class="text-center">{{x.FullName}}</td>
+                                    <td class="text-center">{{x.DepartmentNameOld}}</td>
+                                    <td class="text-center">{{x.RoleNameOld}}</td>
+                                    <td class="text-center">{{x.DepartmentNameNew}}</td>
+                                    <td class="text-center">{{x.RoleNameNew}}</td>
+                                    <td class="text-center">{{x.WageLevel}}</td>
+                                    <td class="text-center">{{x.Reason}}</td>
+                                    <td class="text-center">{{x.FormDate}}</td>
+                                    <td class="text-center">{{x.ToDate}}</td>
+                                    <td class="text-center">
+                                        <i role="button" ng-click="deleteEmployee(x.Id)" class="fa fa-minus-circle" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

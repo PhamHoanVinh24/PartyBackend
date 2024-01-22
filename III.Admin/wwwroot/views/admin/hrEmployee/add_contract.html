@@ -1,0 +1,267 @@
+﻿<style>
+    #contract-form .form-group {
+        margin-bottom: 5px;
+    }
+</style>
+<script>
+    function readURL(input) {
+
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#previewImage')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<div class="modal-header" style="background-color: white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="color:black"></i>
+    <span class="modal-title" id="modal-title" style="color:black">{{'HR_HR_MAN_CURD_TITLE_ADD_CONTRACT' | translate}}</span>
+</div>
+<div class="modal-body" style="padding-bottom:0px;">
+    <form name="addformhd" id="contract-form" class="form-horizontal" method="post" ng-validate="validationOptionsContract">
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="form-group" >
+                        <label class="control-label require col-md-4 text-left"><i class="fa fa-id-card"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_CONTRACT_NUMBER' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24 bold" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_CONTRACT_NUMBER' | translate}}..." ng-model="contract.Contract_Code" name="Contract_Code" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_LABOR_NUMBER' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_LABOR_NUMBER' | translate}}..." ng-model="contract.LaborBook_Code" name="LaborBook_Code" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label require col-md-4 text-left"><i class="glyphicon glyphicon-tint"></i>{{'HR_HR_MAN_CURD_LBL_HR_MAN_INSURRANCE_LEVEL' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" style="font-weight: bold" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_INSURRANCE_LEVEL' | translate}}..." ng-model="contract.Insuarance" name="Insuarance" num-thousand='true' awnum num-int='21' />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" style="border:none"><i class="glyphicon glyphicon-time"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_PAY_DAY' | translate}}</label>
+                        <div class="bs-component col-md-8">
+                            <div class="input-group br24 date pick-date" id="dates_of_pay">
+                                <input type="text" class="form-control" ng-model="contract.Dates_of_pay" name="Dates_of_pay" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_PAY_DAY' | translate}}" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_WORKPLACE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_WORKPLACE' | translate}}..." ng-model="contract.Place_Work" name="Place_Work" />
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-warning-sign"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_SALARY_LEVEL' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_SALARY_LEVEL' | translate}}..." ng-model="contract.Salary_Ratio" name="Salary_Ratio" />
+                        </div>
+                    </div>-->
+                    <div class="form-group" ng-class="{ 'has-error': errorPayScale}">
+                        <label class="control-label require col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_CRUD_PAY_SCALE' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="contract.PayScale" theme="bootstrap" on-select="changePayScaleCat()">
+                                    <ui-select-match placeholder=" {{'HR_CRUD_PAY_SCALE' | translate}}...">{{$select.selected.Code}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in lstScaleCat | filter: $select.search">
+                                        {{x.Code}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorPayScale" class="label-color validation-message">
+                                {{'HR_VALIDATE_PAY_SCALE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorSalary}">
+                        <label class="control-label require col-md-4 text-left"><i class="fas fa-money-bill-alt"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_SALARY' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="contract.Salary" ng-disabled="pull" theme="bootstrap" on-select="changleSelect('Salary')">
+                                    <ui-select-match placeholder=" {{'HR_HR_MAN_CURD_LBL_HR_MAN_SALARY' | translate}}...">{{$select.selected.Code}}-{{$select.selected.Money}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Money as x in lstRange | filter: $select.search">
+                                        {{x.Code}}-{{x.Money}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorSalary" class="label-color validation-message">
+                                {{'Lương không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_PAY' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" style="font-weight: bold" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_PAY' | translate}}..." ng-model="contract.Payment" name="Payment" num-thousand='true' awnum num-int='21' />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-tint"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_CONTRACT_TYPE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_CONTRACT_TYPE' | translate}}..." ng-model="contract.Contract_Type" name="Contract_Type" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-floppy-open"></i> {{'COM_UPLOAD' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group br24 input-file">
+                                <i class="fa fa-upload"></i>
+                                <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFileContract pl30" style="height:33px" placeholder="{{'COM_MSG_CHOSE_FILE' | translate}}..." readonly></>
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                    <input class="form-control" id="fileContract" files-input ng-model="contract.File" name="File" accept=".png, .jpg, .jpeg, .gif, .bmp, .docx, .pdf, .xlsk" onchange="$('.inputFileContract').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_WORK_CONTENT' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="3" type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_WORK_CONTENT' | translate}}..." ng-model="contract.Work_Content" name="Work_Content" />
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left "><i class="fas fa-user"></i> {{'HHR_HR_MAN_CURD_LBL_HR_MAN_SIGNER' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24 bold" placeholder="{{'HHR_HR_MAN_CURD_TXT_HR_MAN_SIGNER' | translate}}..." ng-model="contract.Signer" name="Signer" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_TYPE_MONEY' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="contract.Type_Money" theme="bootstrap" on-select="changleSelect('Type_Money')">
+                                    <ui-select-match placeholder=" {{'HR_HR_MAN_CURD_TXT_HR_MAN_TYPE_MONEY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in CurrencyData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="contract.Type_Money=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorType_Money" class="label-color validation-message">
+                                {{'HR_HR_MAN_VALIDATE_HR_MAN_TYPE_MONEY' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_TIME_WORK' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_TIME_WORK' | translate}}..." ng-model="contract.Exp_time_work" name="Exp_time_work" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label require col-md-4 text-left pr-0 bold" style="border:none"><i class="glyphicon glyphicon-time"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_START_TIME' | translate}}</label>
+                        <div class="bs-component col-md-8">
+                            <div class="input-group date br24">
+                                <input type="text" class="form-control bold" ng-model="contract.Start_Time" name="Start_Time" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_START_TIME' | translate}}" id='datefrom' />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label require col-md-4 text-left pr-0 bold" style="border:none"><i class="glyphicon glyphicon-time"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_END_TIME' | translate}}</label>
+                        <div class="bs-component col-md-8">
+                            <div class="input-group br24 date pick-date">
+                                <input type="text" class="form-control bold" ng-model="contract.End_Time" name="End_Time" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_END_TIME' | translate}}" id='dateto' />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="fas fa-money-bill-alt"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_ALLOWANCE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" style="font-weight: bold" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_ALLOWANCE' | translate}}..." ng-model="contract.Allowance" name="Allowance" num-thousand='true' awnum num-int='21' />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="fas fa-money-bill-alt"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_BONUS' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" style="font-weight: bold" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_BONUS' | translate}}..." ng-model="contract.Bonus" name="Bonus" num-thousand='true' awnum num-int='21' />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_TOOL_WORK' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_TOOL_WORK' | translate}}..." ng-model="contract.Tools_Work" name="Tools_Work" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left pr-0"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_INFO_INSURANCE' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="3" type="text" class="form-control br24"  placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_INFO_INSURANCE' | translate}}..." ng-model="contract.Info_Insuarance" name="Info_Insuarance" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left pr-0"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_INFO_CONTRACT' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="3" type="text" class="form-contro br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_INFO_CONTRACT' | translate}}..." ng-model="contract.Info_Contract" name="Info_Contract" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-file"></i> {{'HR_HR_MAN_CURD_LBL_HR_MAN_OTHER_AGREEMENT' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="3 " type="text" class="form-control br24" placeholder="{{'HR_HR_MAN_CURD_TXT_HR_MAN_OTHER_AGREEMENT' | translate}}..." ng-model="contract.Other_Agree" name="Other_Agree" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--<div class="modal-footer">
+    <div class="pull-right user-mt">
+        <div class="btn-group pull-right actions d-flex mr20">
+            <button class="btn btn-red mr-2" ng-click="cancel()">
+                <i class="glyphicon glyphicon-remove"></i>
+                {{'COM_BTN_CANCEL' | translate}}
+            </button>
+            <button class="btn green-custom" ng-click="submitHD()">
+                <i class="fa fa-save"></i>
+                {{'COM_BTN_SAVE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>-->
+
+<div class="modal-footer">
+    <div class="btn-group actions pull-right mr15">
+        <div class="text-center pull-right pr-1"ng-click="submitHD()" style="margin-left: 14px;">
+            <a class1="fs30" href="javascript:;">
+                <span><i class="fa-solid fa-plus" style="font-size: 30px;"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+        <div class="text-center pull-right pr-1" ng-click="cancel()">
+            <a class1="fs30" data-dismiss="modal" href="javascript:;">
+                <span><i class="fas fa-times" style="font-size: 30px; color: #d62c2c;"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+    </div>
+</div>
+

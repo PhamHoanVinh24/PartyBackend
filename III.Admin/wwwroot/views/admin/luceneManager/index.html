@@ -1,0 +1,150 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(65% - 50px);
+        right: 10px;
+        top: 10px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .progress-container > .abort {
+        float: right;
+        font-size: 30px;
+        cursor: pointer;
+        line-height: 18px;
+        opacity: 0.5;
+    }
+
+        .progress-container > .abort:hover {
+            opacity: 1;
+        }
+
+    .progress-title {
+        /*font-size: 18px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 10px;*/
+        padding-left: 5px;
+    }
+
+    .progress-outer {
+        background: #fff;
+        padding: 5px 80px 5px 5px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .progress {
+        background: #bebfbf;
+        border-radius: 20px !important;
+        margin: 0 !important;
+        height: 50px;
+    }
+
+        .progress .progress-bar {
+            border-radius: 20px;
+            box-shadow: none;
+            animation: animate-positive 2s;
+        }
+
+        .progress .progress-value {
+            font-size: 30px;
+            font-weight: 700;
+            color: #6b7880;
+            position: absolute;
+            right: 10px;
+            line-height: 50px;
+        }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    @keyframes animate-positive {
+        0% {
+            width: 0;
+        }
+    }
+
+    .progress-modal {
+        position: fixed;
+        top: auto;
+        left: auto;
+        bottom: 50px;
+        right: 10%;
+        width: 400px;
+        height: fit-content;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-3" ng-if="!isWorking || true" ng-class="{'disabled-element': isWorking}">
+        <a class="fs50" ng-click="start()">
+            <span><i class="fas fa-play"></i></span>
+        </a>
+        <p class="text-underline fs13 mb5 pt3">{{'Bắt đầu' | translate}}</p>
+        <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+    </div>
+    <div class="text-center pr-3" ng-if="isWorking && false">
+        <a class="fs50" ng-click="pause()">
+            <span><i class="fas fa-pause"></i></span>
+        </a>
+        <p class="text-underline fs13 mb5 pt3">{{'Tạm dừng' | translate}}</p>
+        <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+    </div>
+    <div class="text-center pr-3" ng-class="{'disabled-element': !isWorking}">
+        <a class="fs50" ng-click="stop()">
+            <span><i class="fa-solid fa-stop" style="color: red"></i></span>
+        </a>
+        <p class="text-underline fs13 mb5 pt3">{{'Dừng' | translate}}</p>
+    </div>
+    <div class="text-center pr-3" ng-class="{'disabled-element': !isWorking}">
+        <a class="fs50" ng-click="restart()">
+            <span><i class="fa-solid fa-arrow-rotate-right"></i></span>
+        </a>
+        <p class="text-underline fs13 mb5 pt3">{{'Khởi động lại' | translate}}</p>
+    </div>
+
+</div>
+
+<div class="col-lg-12 p-0 mt20">
+    <h1>
+        <b class="fs30">Trạng thái: {{status}}</b>
+    </h1>
+    <div class="progress-container">
+        <!--<div class="progress-title">{{x.name}}</div>-->
+        <div class="progress-outer">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-success" ng-style="style"></div>
+                <div class="progress-value">{{progress}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12 pl0">
+            <!--<i class="fa fa-barcode"></i>-->
+            <label class="control-label fs20">{{'Log' | translate}}</label>
+            <textarea rows="40" class="form-control br12 bold" style="background: black !important; color: green !important" name="Monitor" web-socket="" ng-model="model.Monitor" type="text" />
+        </div>
+    </div>
+</div>

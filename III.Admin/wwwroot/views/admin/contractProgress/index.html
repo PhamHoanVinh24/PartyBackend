@@ -1,0 +1,108 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pt5 m5">
+                <div class="col-md-3">
+                    <div class="form-group p-0" ng-class="{ 'has-error': errorContractCode}">
+                        <label class="require">{{'CPR_CURD_LBL_CONTRACR' | translate}}</label>
+                        <div class="input-group search-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ContractCode" theme="bootstrap" on-select="changleSelect('ContractCode')">
+                                <ui-select-match placeholder="{{'CPR_CURD_TXT_CONTRACR' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listContract | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorContractCode" class="label-color validation-message">
+                                {{'CPR_CURD_LBL_CONTRACR_BIND' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-3 p-0">
+                        <div class="text-center pt20">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="searchAdvanced()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="col-lg-2 form-group" ng-class="{ 'has-error': errorBoardCode}">
+                    <label class="require">{{'CPR_CURD_LBL_TABLE_WORK' | translate}}</label>
+                    <div class="input-group search-group br24">
+                        <ui-select tagging ng-model="model.BoardCode" theme="bootstrap" on-select="changleSelect('BoardCode')">
+                            <ui-select-match placeholder="{{'CPR_CURD_TXT_TABLE_WORK' | translate}}...">{{$select.selected.BoardName}}</ui-select-match>
+                            <ui-select-choices repeat="x.BoardCode as x in listBoard | filter: $select.search">
+                                {{x.BoardName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addBoard()" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorBoardCode" class="label-color validation-message">
+                        {{'CPR_CURD_LBL_TABLE_WORK_BIND' | translate}}!
+                    </span>
+                </div>
+                <div class="col-lg-2 form-group" ng-class="{ 'has-error': errorListCode}">
+                    <label class="require">{{'CPR_CURD_LBL_LIST' | translate}}</label>
+                    <div class="input-group search-group br24">
+                        <ui-select ng-model="model.ListCode" theme="bootstrap" on-select="changleSelect('ListCode')">
+                            <ui-select-match placeholder="{{'CPR_CURD_TXT_LIST' | translate}}...">{{$select.selected.ListName}}</ui-select-match>
+                            <ui-select-choices repeat="x.ListCode as x in listLists | filter: $select.search">
+                                {{x.ListName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addList()" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorListCode" class="label-color validation-message">
+                        {{'CPR_CURD_LBL_LIST_BIND' | translate}}!
+                    </span>
+                </div>
+                <div class="col-lg-3 form-group" ng-class="{ 'has-error': errorCardName}">
+                    <label class="require">{{'CPR_CURD_LBL_WORK' | translate}}</label>
+                    <input class="form-control br24" ng-model="model.CardName" ng-change="changleSelect('CardName')" placeholder="{{'CPR_CURD_LBL_WORK' | translate}}" />
+                    <span ng-show="errorCardName" class="label-color validation-message">
+                        {{'CPR_CURD_LBL_WORK_BIND' | translate}}!
+                    </span>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="fs30" ng-click="addCard()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-2">
+                            <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+                                <span><i class="fas fa-question " aria-hidden="true"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="contractGantt" dhx-gantt style='height:600px;'>
+        </div>
+    </div>
+</div>

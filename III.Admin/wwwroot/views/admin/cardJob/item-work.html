@@ -1,0 +1,218 @@
+﻿<style>
+    tags-input .tags .tag-item .remove-button {
+        margin: 0 0 0 5px;
+        padding: 0;
+        border: none;
+        background: 0 0;
+        cursor: pointer;
+        vertical-align: middle;
+        font: 700 16px Arial,sans-serif;
+        color: #ea1818;
+    }
+
+    @-webkit-keyframes blinkerAct {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            color: blue;
+        }
+    }
+
+    .blink-act {
+        text-decoration: blink;
+        -webkit-animation-name: blinkerAct;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+
+    .fixTableHead {
+        overflow-y: auto;
+    }
+
+    .fixTableHead thead th, .fixTableHead thead {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: white;
+    }
+
+    .fixTableHead thead th {
+        border-top: 1px solid #e7ecf1 !important;
+        border-bottom: 1px solid #e7ecf1 !important;
+    }
+</style>
+<!--<div class="modal-header" style="background-color:white">-->
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <!--<i class="fa fa-bar-chart icon-edit fs16 black"></i>
+    <span class="modal-title black" id="modal-title" style="width: 92%;">
+        {{'CJ_BTN_REPORT_APPROVAL' | translate}}
+    </span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>-->
+<!--<div class="modal-body" id="modal-body" style="padding-bottom: 0px !important;">
+    
+</div>
+<div class="modal-footer">
+</div>-->
+<div ng-controller="add-item-work" style="height: 465px; overflow-y: scroll; overflow-x: hidden; padding-right: 10px">
+    <div class="portlet-body form" id="item-work-body">
+        <form name="itemWork" class="form-horizontal" method="post" ng-validate="validationOptionsItemWork">
+            <div class="form-body p-0">
+                <div class="row">
+                    <div class="col-md-3 ml-2">
+                        <div class="form-group">
+                            <label class="control-label mb5 fw600">{{'CJ_CURD_TXT_SEARCH_TIME' | translate}}:</label>
+                            <div class="input-group br24 date" id="sessionTime">
+                                <input ng-model="sessionTime" name="sessionTime"
+                                       class="form-control bold" type="text"
+                                       placeholder="{{'CJ_CURD_TXT_SEARCH_TIME' | translate}}..."
+                                       ng-change="changeData('sessionTime', sessionTime)" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ml-1">
+                        <div class="form-group">
+                            <label class="control-label mb5 fw600">{{'CJ_CURD_TXT_SEARCH_SHIFT' | translate}}:</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="shiftCode" ng-change="changeData('shiftCode', shiftCode)" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_SHIFT' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listShift | filter: $select.search">
+                                        <b>{{x.Name}}</b>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="text-danger mt40 text-underline fw600">{{shift}}</label>
+                    </div>
+                    <div class="col-md-3 pr-0" style="width: 29%;">
+                        <div class="btn-group mt35 actions d-flex pull-left">
+                            <div class="text-center" ng-show="!editSessionWork">
+                                <a ng-click="submit()" class1="btn btn-icon-only btn-outline btn-border-black">
+                                    <i class="fa fa-chevron-down fs20" style="color: #183153"></i>
+                                    <!--<span><i class="fa fa-save black"></i></span>-->
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>-->
+                            </div>
+
+                            <div class="text-center mr20" ng-show="editSessionWork">
+                                <a ng-click="approveSessionWork()" class1="btn btn-icon-only btn-outline btn-border-black">
+                                    <i class="fa fa-chevron-down fs25" style="color: #183153"></i>
+                                    <!--<span><i class="fa fa-save black"></i></span>-->
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>-->
+                            </div>
+                            <div class="text-center" ng-show="editSessionWork">
+                                <a ng-click="cancelApprove()" class1="btn btn-icon-only btn-outline btn-border-black">
+                                    <i class="fas fa-times-circle fs25" style="color: #183153"></i>
+                                    <!--<span><i class="fa fa-remove black"></i></span>-->
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_CANCEL' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" style="max-height: 200px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-md-4 nowrap">{{'CJ_CURD_TXT_SEARCH_WORK_ITEM' | translate}}</th>
+                                <th class="text-center col-md-2 nowrap">{{'CJ_CURD_TXT_SEARCH_REPORT_PROGRESS' | translate}} (%)</th>
+                                <th class="text-center col-md-2 nowrap">{{'CJ_CURD_TXT_SEARCH_COMFIRM' | translate}} (%)</th>
+                                <th class="text-center col-md-4 nowrap">{{'CJ_CURD_TXT_SEARCH_NOTE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listReportItem">
+                                <td class="fw600 pt15">
+                                    {{x.Name}}
+                                    <br />
+                                    <input class="form-control border-left-4radius inputFileItemResult pl30" style="pointer-events:none; display: none;" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                                    <a ng-click="setItemForFile(x.Code)" class="mt5 text-underline fw400 pull-right text-green" onclick="$(this).parent().find('input[type=file]').click();">Tải tệp</a>
+                                    <input class="form-control" custom-on-change-customer="loadFileResult" id="{{x.Code}}" onchange="$('.inputFileItemResult').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" class="form-control br24 bold" placeholder="{{'CJ_CURD_TXT_SEARCH_REPORT_PROGRESS' | translate}}"
+                                           ng-click="" ng-model="x.Staff" ng-readonly="!editAllowed"
+                                           onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" class="form-control br24 bold" placeholder="{{'CJ_CURD_TXT_SEARCH_COMFIRM' | translate}}"
+                                           ng-click="" ng-model="x.Leader" ng-readonly="!isApprove"
+                                           onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control br24" placeholder="{{'CJ_CURD_TXT_SEARCH_NOTE' | translate}}"
+                                           ng-click="" value="10" ng-model="x.Note" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label class="control-label fw600">{{'CJ_CURD_TXT_SEARCH_DESCRIPTION' | translate}}</label>
+                        <textarea class="form-control br12" placeholder="{{'CJ_CURD_TXT_SEARCH_DESCRIPTION' | translate}}" ng-model="model.Desc" style="height:75px" />
+                    </div>
+                </div>
+                <div class="row">
+                    <a ng-click="extend()" class="pr15 fs11 text-underline pull-right">{{'CJ_CURD_TXT_SEARCH_DEFAULT_GUIDE' | translate}}</a>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblDataFileResult"></table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive fixTableHead" style="height: 200px;">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1" style="width: 5%;">{{'CJ_LIST_COL_STT' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'CJ_CURD_TXT_SEARCH_SESSION' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'CJ_CURD_TXT_SEARCH_STAFF' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'CJ_CURD_TXT_SEARCH_REPORT_PROGRESS' | translate}}(%)</th>
+                            <th class="text-center col-md-1 nowrap">{{'CJ_CURD_TXT_SEARCH_BROWSING_PROGRESS' | translate}}(%)</th>
+                            <th class="text-center col-md-3 nowrap">{{'CJ_CURD_TXT_SEARCH_TIME_PROGRESS' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in listItemActivity">
+                        <tr>
+                            <td class="text-center pt15">{{$index + 1}}</td>
+                            <td class="text-center pt15">
+                                <a ng-click="getItemSessionWork(x)" class="bold text-underline">{{x.Session}}</a>
+                                <img class="blink-act" ng-show="x.IsApproveAll" src="../../../images/default/green-blink.png" style="width: 15px;" />
+                            </td>
+                            <td class="text-center">{{x.UserReport}}</td>
+                            <td class="text-center">{{x.PercentReport}}</td>
+                            <td class="text-center">{{x.PercentApprove}}</td>
+                            <td class="text-center">{{x.TimeReport}}</td>
+                            <td class="text-center nowrap">
+                                <a title="Xóa" ng-click="delReportResult(x.Id, x.CreatedBy)" style="width: 25px; height: 25px; padding: 0px; color: red" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs20"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

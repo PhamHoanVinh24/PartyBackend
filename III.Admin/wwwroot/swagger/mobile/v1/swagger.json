@@ -1,0 +1,916 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Mobile API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/MobileLogin/GetListLmsCourse": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get list of all courses or filter by course name",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "courseName",
+            "type": "string",
+            "description": "Keyword used to filter course by name"
+          }
+        ],
+        "operationId": "MobileLogin_GetListLmsCourse",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetTopLmsCourse": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get list of all top-search course",
+        "operationId": "MobileLogin_GetTopLmsCourse",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsCourseItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListLmsSubject": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get list of all subjects of a course, can be filter by subject name",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "subjectName",
+            "type": "string",
+            "description": "Keyword used to filter course by name"
+          },
+          {
+            "in": "query",
+            "name": "courseCode",
+            "type": "string",
+            "description": "Exact course code of any course",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListLmsSubject",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsSubjectItem"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsSubjectItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LmsSubjectItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetLmsSubject": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get subject information and all of its lecture and quiz",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "format": "int32",
+            "description": "Exact id of a subject to get its content",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetLmsSubject",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/LmsSubjectExtended"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/LmsSubjectExtended"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/LmsSubjectExtended"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetLectureQuiz": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get all quiz of a lecture",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lectureCode",
+            "type": "string",
+            "description": "Lecture code of a lecture to get its content",
+            "default": "VL10_001",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetLectureQuiz",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListLmsExam": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get list of all exam or filter by exam name or subject",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "practiceTestCode",
+            "type": "string",
+            "description": "Keyword used to filter exam by name"
+          }
+        ],
+        "operationId": "MobileLogin_GetListLmsExam",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetExamQuiz": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get all quiz of an exam",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "practiceTestCode",
+            "type": "string",
+            "description": "Exam code of a exam to get its quiz",
+            "default": "EXAM-001",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sessionCode",
+            "type": "string",
+            "description": "Session used to restore work result"
+          }
+        ],
+        "operationId": "MobileLogin_GetExamQuiz",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetSubjectQuiz": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get all quiz of a subject or all quiz if no subject is chosen",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "subjectCode",
+            "type": "string",
+            "description": "Subject code of a exam to get its quiz",
+            "default": "PHYSIC-101"
+          }
+        ],
+        "operationId": "MobileLogin_GetSubjectQuiz",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetSingleQuiz": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Get information of single quiz",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "quizId",
+            "type": "integer",
+            "format": "int32",
+            "description": "Exact id of a quiz to get its content",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetSingleQuiz",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/InsertQuiz": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Insert a quiz into database",
+        "parameters": [
+        ],
+        "operationId": "MobileLogin_InsertQuiz",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/UpdateAnswer": {
+      "post": {
+        "tags": [
+          "LMS"
+        ],
+        "summary": "Update answer infomartion of a quiz",
+        "parameters": [
+        ],
+        "operationId": "MobileLogin_UpdateAnswer",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetSuggestionsCardCodeFile": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cardCode",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetSuggestionsCardCodeFile",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListBoards": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userId",
+            "type": "string",
+            "required": true,
+            "default": "4b322a31-cdd2-44c0-94fd-5f05743f655b"
+          },
+          {
+            "in": "query",
+            "name": "ObjId",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "UserType",
+            "type": "integer",
+            "format": "int32",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListBoards",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/CheckShowLabelAssign": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cardCode",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "UserId",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_CheckShowLabelAssign",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetGirdCardAll": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "BoardCode",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "ObjId",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListBoards",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetBoardRepeat": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+        ],
+        "operationId": "MobileLogin_GetBoardRepeat",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetCountBoardRepeat": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+        ],
+        "operationId": "MobileLogin_GetCountBoardRepeat",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListTaskByBoard": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "boardCode",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListTaskByBoard",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListCardByList": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "listCode",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListCardByList",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetListCheckItemByCard": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cardCode",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetListCheckItemByCard",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetSubitemByChkItem": {
+      "post": {
+        "tags": [
+          "CardJob"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "checkListCode",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetSubitemByChkItem",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/MobileLogin/GetFullText": {
+      "post": {
+        "tags": [
+          "CMS"
+        ],
+        "summary": "Get full text of cms item",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "format": "int32",
+            "default": "3925",
+            "description": "Exact id of a cms item",
+            "required": true
+          }
+        ],
+        "operationId": "MobileLogin_GetFullText",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LmsCourseItem": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CourseCode": {
+            "type": "string",
+            "description": "Code used to indentify a course"
+          },
+          "CourseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ImgCover": {
+            "type": "string",
+            "nullable": true,
+            "description": "Course avatar"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LmsSubjectItem": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Id used to indentify a subject"
+          },
+          "SubjectCode": {
+            "type": "string"
+          },
+          "SubjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "SubjectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "Teacher": {
+            "type": "string",
+            "nullable": true,
+            "description": "A list of all teachers in the subject, separated by comma"
+          },
+          "Duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Duration of the subject, by minute or by hour"
+          },
+          "Unit": {
+            "type": "string",
+            "description": "Unit of subject duration, can be MINUTE or HOURS"
+          },
+          "ImageCover": {
+            "type": "string",
+            "description": "Full url point to subject avatar",
+            "nullable": true
+          },
+          "VideoPresent": {
+            "type": "string",
+            "description": "Full url point to subject video, can be youtube link or html5 link",
+            "nullable": true
+          },
+          "FileBase": {
+            "type": "string",
+            "description": "Full url point to subject document file",
+            "nullable": true
+          },
+          "Status": {
+            "type": "string",
+            "description": "Status of subject, can be AVAILABLE or UNAVAILABLE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LmsVideoDuration": {
+        "type": "object",
+        "properties": {
+          "VideoFileCode": {
+            "type": "string",
+            "description": "Unique code to identity the video"
+          },
+          "Duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Duration of the video by second"
+          }
+        }
+      },
+      "LmsLectureItem": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Id used to indentify a lecture"
+          },
+          "LectCode": {
+            "type": "string"
+          },
+          "LectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "SubjectCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "LectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "Duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Duration of the lecture, by minute or by hour"
+          },
+          "Unit": {
+            "type": "string",
+            "description": "Unit of lecture duration, can be MINUTE or HOURS"
+          },
+          "VideosDuration": {
+            "type": "string",
+            "description": "List of video duration object formatted to json string",
+            "nullable": true
+          },
+          "VideoPresent": {
+            "type": "string",
+            "description": "Full url point to lecture video, can be youtube link or html5 link",
+            "nullable": true
+          },
+          "ListVideoDuration": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LmsVideoDuration"
+            },
+            "description": "List of Video duration object"
+          },
+          "CreatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "CreatedTime": {
+            "type": "string",
+            "pattern": "\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}",
+            "nullable": true
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "UpdatedTime": {
+            "type": "string",
+            "pattern": "\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}",
+            "nullable": true
+          },
+          "DeletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeletedTime": {
+            "type": "string",
+            "pattern": "\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}",
+            "nullable": true
+          },
+          "IsDeleted": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LmsQuizItem": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Id used to indentify a quiz"
+          },
+          "Code": {
+            "type": "string"
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "SubjectCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "LectureCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "LectureRelative": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "Content": {
+            "type": "string",
+            "nullable": true
+          },
+          "Category": {
+            "type": "integer",
+            "format": "int32",
+            "deprecated": true
+          },
+          "Duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Duration of the quiz, by minute or by hour"
+          },
+          "Unit": {
+            "type": "string",
+            "description": "Unit of quiz duration, can be MINUTE or HOURS"
+          },
+          "Type": {
+            "type": "string",
+            "description": "Type of quiz, can be QUIZ_SING_CH or QUIZ_MUL_CH"
+          },
+          "JsonData": {
+            "type": "string",
+            "description": "List of answer object formatted to json string",
+            "nullable": true
+          },
+          "JsonRef": {
+            "type": "string",
+            "description": "List of reference object formatted to json string",
+            "nullable": true
+          },
+          "Level": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Difficulty level of the question."
+          }
+        },
+        "additionalProperties": false
+      },
+      "LmsSubjectExtended": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LmsSubjectItem" },
+          {
+            "type": "object",
+            "properties": {
+              "ListLecture": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LmsLectureItem"
+                },
+                "description": "List of LMS Lecture object"
+              },
+              "ListQuiz": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LmsQuizItem"
+                },
+                "description": "List of LMS Quiz object"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  }
+}

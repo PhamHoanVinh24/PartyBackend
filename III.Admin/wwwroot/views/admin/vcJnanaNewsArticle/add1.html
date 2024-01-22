@@ -1,0 +1,143 @@
+﻿<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#previewImage')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title">Thêm mới dịch vụ bảo dưỡng</h3>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+
+                <div class="row">
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>Mã dịch vụ</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Nhập mã dịch vụ..." ng-model="model.service_code" name="service_code" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>Tên dịch vụ</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Nhập tên dịch vụ..." ng-model="model.service_name" name="service_name" />
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;Nhóm dịch vụ</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_group_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_group_id = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;Loại dịch vụ</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_type_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.type_id as x in names2 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_type_id = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;Trạng thái</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.status" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.status1 as x in names3 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.status = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                                <i class="sprite-image-16x16"></i>
+                                <label class="control-label" for="Status">Ảnh</label>
+                            </div>
+                            <div class="col-md-8 form-col-control style=" border-left:none"" style="border-left:none">
+                                <div class="fileupload-new thumbnail mb5">
+                                    <img id="previewImage" src="../../images/no_photo_icon.png" data-src="holder.js/150x150" alt="holder" ng-src='{{model.illustrator_img}}' style="height:150px; width:150px" />
+                                </div>
+                                <input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.illustrator_img" name="illustrator_img" onchange="readURL(this);">
+                                <script>
+                                    $(":file").filestyle({ buttonName: "btn btn-primary" });
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>Ghi chú</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Nhập ghi chú..." ng-model="model.note" name="note" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 text-left"> <i class="glyphicon glyphicon-leaf"></i> Danh mục </label>
+                            <div class="col-md-8">
+                                <ui-select tagging ng-model="model.cat_code" theme="bootstrap">
+                                    <ui-select-match placeholder="Status...">{{$select.selected.cat_code}}</ui-select-match>
+                                    <ui-select-choices repeat="x.cat_code as x in treeDatacategory | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-plus"></i>Thêm mới</button>
+    <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"><i class="fa fa-trash-o"></i>Hủy</button>
+</div>

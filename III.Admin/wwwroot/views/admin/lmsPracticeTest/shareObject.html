@@ -1,0 +1,150 @@
+﻿<style type="text/css">
+    
+    .ui-select-multiple.ui-select-bootstrap {
+        padding: 5px !important;
+    }
+
+    .ui-select-search {
+        padding-bottom: 5px;
+    }
+
+    .ui-select-match-item {
+        border-radius: 5px !important;
+    }
+
+    .close {
+        background-image: none !important;
+    }
+
+    .btn-share {
+        border: 1px solid black;
+        border-radius: 5px;
+        background: white;
+        border: 1px solid black;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        margin-top: -3px !important;
+        opacity: 1;
+    }
+</style>
+
+<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-share-alt mt10 black"></i>
+    <span class="fw600 black" id="modal-title"> {{'COM_BTN_SHARE' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="row p10">
+            <div class="col-md-5 pr-0">
+                <label class="control-label text-underline">{{'LMS_CLASS' | translate}}</label>
+                <div class="input-group br24">
+                    <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="modelClass.Code" on-select="classSelect(model.ClassCode)" theme="bootstrap" ng-disabled="isInteract">
+                        <ui-select-match placeholder="{{'LMS_CLASS' | translate}}..."><b>{{$select.selected.Name}}<span class="text-danger" ng-show="false">({{$select.selected.CountUser}})</span></b></ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listClass | filter: $select.search">
+                            {{x.Name}}(<span class="text-danger">{{x.Count}}</span>)
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="classOff()" class="btn btn-default no-shadow start-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group" ng-class="{'has-error': errorStatus }">
+                    <label class="control-label text-underline require">{{'LMS_STUDENT' | translate}}:</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserName" theme="bootstrap" on-select="changeUser($item)">
+                            <ui-select-match placeholder="{{'LMS_STUDENT' | translate}}...">
+                                <p id="status"><span class="fs18 fw600">{{$select.selected.GivenName}}</span></p>
+                            </ui-select-match>
+                            <ui-select-choices repeat="x.UserName as x in listUser | filter: $select.search">
+                                <span class1="fs18 fw600">{{x.GivenName}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="pull-left text-center">
+                    <label class="control-label text-underline">{{'LMS_SHARE_PUBLIC' | translate}}:</label>
+                    <div class="input-group mt10 text-center">
+                        <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;" ng-if="modelShare.isPublic != true" ng-click="modelShare.isPublic = true"></i>
+
+                        <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;" ng-if="modelShare.isPublic == true" ng-click="modelShare.isPublic = false"></i>
+                    </div>
+                </div>
+            </div>
+            <a class1="btn btn-share bold pull-right mt20" ng-click="share()">
+                <i class="fas fa-share-alt fs20 pt30"></i>
+                <!--{{'COM_BTN_SHARE' | translate}}-->
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive" style="height: 300px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 5%;">{{'STT' | translate}}</th>
+                                <th class="text-center" style="width: 70%;">{{'Nhân viên' | translate}}</th>
+                                <!--<th class="text-center" style="width: 15%;">{{'Quyền truy cập' | translate}}</th>-->
+                                <!--<th class="text-center" style="width: 5%;">{{'Quyền ghi' | translate}}</th>
+                    <th class="text-center" style="width: 5%;">{{'Quyền xóa' | translate}}</th>-->
+                                <th class="text-center" style="width: 10%;">{{'Thao tác' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in lstUserSharePermission">
+                                <td class="text-center">{{$index + 1}}</td>
+                                <td>
+                                    <span class="fs18 fw600">{{x.GivenName}}</span><br />
+                                    <!--<span class="badge-customer badge-customer-success">{{x.DepartmentName}}</span>-->
+                                </td>
+                                <!--<td class="text-center">
+                                    <a ng-show="x.Permission.Read == false" class1="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 0, false)" style1="padding: 0px; width: 25px; height: 25px">-->
+                                        <!--<i class="fa fa-times" style="color: #ffffff"></i>-->
+                                        <!--<i class="fas fa-square fs25"></i>
+                                    </a>
+                                    <a ng-show="x.Permission.Read == true" class1="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 0, true)" style1="padding: 0px; width: 25px; height: 25px">-->
+                                        <!--<i class="fa fa-check"></i>-->
+                                        <!--<i class="fas fa-check-square fs25"></i>
+                                    </a>
+                                </td>-->
+                                <!--<td class="text-center">
+                        <button ng-show="x.Permission.Write == false" class="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 1, false)" style="padding: 0px; width: 25px; height: 25px">
+                            <i class="fa fa-times" style="color: #ffffff"></i>
+                        </button>
+                        <button ng-show="x.Permission.Write == true" class="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 1, true)" style="padding: 0px; width: 25px; height: 25px">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </td>
+                    <td class="text-center">
+                        <button ng-show="x.Permission.Delete == false" class="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 2, false)" style="padding: 0px; width: 25px; height: 25px">
+                            <i class="fa fa-times" style="color: #ffffff"></i>
+                        </button>
+                        <button ng-show="x.Permission.Delete == true" class="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 2, true)" style="padding: 0px; width: 25px; height: 25px">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </td>-->
+                                <td class="text-center">
+                                    <a title="Xoá" ng-click="deleteShare(x.UserName)" style1="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class=1"btn btn-icon-only btn-circle btn-outline red">
+                                        <i class="fas fa-trash-alt fs25" style="color: red;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+</div>

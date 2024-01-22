@@ -1,0 +1,264 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .fc-black, .fc-black:hover {
+        color: black !important;
+    }
+
+    .fc-more-popover {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .fc-time {
+        display: none;
+    }
+
+    .fc-content {
+        /*height: 12px;*/
+        padding: 5px;
+    }
+
+    .btn-edit-calendar {
+        margin-top: -15px !important;
+        width: 30%;
+        height: 15px;
+        margin-left: 74% !important;
+        background: none;
+        border: none;
+    }
+
+        .btn-edit-calendar .fc-content {
+            height: 15px !important;
+            padding: 0px !important;
+            font-size: 10px;
+            color: white;
+            text-decoration: underline;
+        }
+
+    .btn-copy-calendar {
+        margin-top: -15px !important;
+        width: 30%;
+        height: 15px;
+        margin-left: 45% !important;
+        background: none;
+        border: none;
+    }
+
+        .btn-copy-calendar .fc-content {
+            height: 15px !important;
+            padding: 0px !important;
+            font-size: 10px;
+            color: white;
+            text-decoration: underline;
+        }
+
+    a.fa-paste-calendar {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        display: block;
+        color: #337ab7 !important;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .fc-day-grid-event {
+        margin: 3px 2px 0;
+        padding: 0 1px;
+    }
+
+    .ui-contextmenu > li > div {
+        width: 200px;
+    }
+
+    .ui-contextmenu > li:hover > div:hover {
+        background-color: white;
+        font-weight: bold;
+        color: #526adc;
+    }
+
+    .ui-icon.ui-icon-copy {
+        background-image: url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png) !important;
+    }
+
+    .ui-icon.ui-icon-clipboard {
+        background-image: url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png) !important;
+    }
+
+    .scrollbar {
+        background-color: #F5F5F5;
+        float: left;
+        height: 300px;
+        margin-bottom: 25px;
+        margin-left: 22px;
+        margin-top: 40px;
+        width: 65px;
+        overflow-y: scroll;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #999;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
+
+    @media only screen and (min-width: 992px) and (max-width: 1200px) {
+        .cus-col-3 {
+            width: 45% !important;
+        }
+    }
+
+    @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+        .cus-col-3 {
+            width: 42% !important;
+        }
+    }
+
+    @media only screen and (min-width: 1400px) and (max-width: 1500px) {
+        .cus-col-3 {
+            width: 45% !important;
+        }
+    }
+
+    .z-index-btn {
+        z-index: 1000;
+    }
+
+    .zoom-container {
+        position: relative;
+    }
+
+    #zoomEmbed {
+        position: absolute;
+        left: 50% !important;
+        top: 100px !important;
+        z-index: 10;
+    }
+
+    .is-sharing.react-draggable {
+        top: 50%;
+    }
+
+    .MuiButtonBase-root.MuiButton-root.MuiButton-text.horizontalRight {
+        top: 50% !important;
+    }
+
+    .fc-content-dynamic {
+        white-space: normal !important;
+        overflow: auto !important;
+    }
+
+    .ui-icon {
+        text-indent: unset;
+    }
+
+    .addAtt {
+        float: right;
+    }
+
+    .text11 {
+        font-size: 20px;
+    }
+</style>
+<div class1="d-flex" class="pr15">
+    <div style="">
+        <div class="table-toolbar">
+            <div class="row">
+                
+                    <div class="col-md-6" ng-if="model.Repeat !== 'REPEAT_DYNAMIC_NONE'" >
+                        <style>
+                            .fc-time {
+                                display: none;
+                            }
+
+                            .fc-content {
+                                font-size: 10px !important;
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-md-12"> <label class="text-primary">{{'DNM_TIPS' | translate}}</label></div>
+                        </div>
+                        <div class="calendar-wrap">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+
+                <div class="col-md-6 p-0">
+                    <div class="col-md-12 p-0">
+                        <div class="col-md">
+                            <div class="col-md-8 text11 br24-nobtn">
+                                <label for="">{{model.GroupName}}:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="addAtt" style="margin-left: 40px;">
+                                    <a class="fs30" ng-click="total()">
+                                        <span><i class="fas fa-list fs30"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'DNM_STATISTICAL' | translate}}</p>
+                                </div>
+                            <div class="addAtt">
+                                <a class="fs30" ng-click="addRegistData()">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+
+                        </div>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0 btn-group actions pt15 pb-1 pull-left d-flex">
+                            <div class="col-md-12 pl-0 pr-0">
+                                <div class="table-responsive" style="overflow-y: auto;  width: 100%;">
+                                    <table class="table table-bordered" style="margin-bottom: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-6 text-center">{{'DNM_NAME_ATTR' | translate}}</th>
+                                                <th class="col-md-2 text-center">{{'DNM_VALUE' | translate}}</th>
+                                                <th class="col-md-2 text-center">{{'DNM_UNIT' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-if="modelMeal.listMealDynamic.length == 0"><td colspan="4" class="text-center">{{'DNM_NO_DATA' | translate}}</td></tr>
+                                            <tr ng-repeat="x in modelMeal.listMealDynamic">
+                                                <td class="col-md-6">
+                                                    <span class="bold">{{x.Name}} <br /></span>
+                                                </td>
+                                                <td class="text-center bs-checkbox" style="width : 30px">
+                                                    <span ng-if="x.DataType ==='BOOLEAN'"> <input type="checkbox" id="vehicle1" name="vehicle1" value="Yes" ng-model="x.Value"></span>
+                                                    <span ng-if="x.DataType !=='BOOLEAN'"> <input class="h-30 bold text-center text-danger br24" ng-model="x.Value"></span>
+                                                </td>
+                                                <td class="col-md-2 text-center">{{x.Unit}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

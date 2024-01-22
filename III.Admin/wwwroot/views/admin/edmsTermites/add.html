@@ -1,0 +1,223 @@
+﻿<style>
+    @media(max-width:992px)
+    {
+        .modal-50{
+            width:70%!important;
+        }
+    }
+     @media (min-width:992px) and (max-width:1200px)
+    {
+        .modal-50{
+            width:65%!important;
+        }
+    }
+      @media (min-width:1201px) and (max-width:1500px)
+    {
+        .modal-50{
+            width:60%!important;
+        }
+    }
+      @media (min-width:1501px)
+      {
+          .modal-50{
+              width:50%!important
+          }
+      }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">{{'EDMSTER_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12 mt5">
+                                <div class="thumbnail " style="border: 0; box-shadow: none;background:none">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <!--<img id="imageId" ng-click="selectImage()" class="img-circle image-upload" style="height: 200px; width: 200px;cursor: pointer" />-->
+                                    <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-200 w200" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center" style="font-size: 10px;margin-top: -5px;">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <label class="control-label ">{{'EDMSTER_LBL_PICTURE' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Code" name="Code" id="Code" placeholder="{{'EDMSTER_TXT_CODE' | translate}}.." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="{{'EDMSTER_TXT_NAME' | translate}}.." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorFromDate}">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_FROMDATE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input ng-model="model.FromDate" name="FromDate" class="form-control" type="text" placeholder="{{'EDMSTER_TXT_FROMDATE' | translate}}..." id='FromTo' on-change="changleSelect('FromDate')"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorFromDate" class="label-color validation-message">
+                                    {{'Chọn ngày bắt đầu ...' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorToDate}">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_TODATE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group date">
+                                    <input ng-model="model.ToDate" name="ToDate" class="form-control" type="text" placeholder="{{'EDMSTER_TXT_TODATE' | translate}}..." id='DateTo' on-change="changleSelect('ToDate')"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorToDate" class="label-color validation-message">
+                                    {{'Chọn ngày kết thúc ...' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_BUSINESS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Business" name="Business" placeholder="{{'EDMSTER_TXT_BUSINESS' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorPersonProcessor}">
+                            <div class="col-md-4">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_LIST_CHOOSE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <ui-select ng-model="model1.ListChoose" multiple theme="bootstrap" class="" style="width: 100%;" on-select="changleSelect('PersonProcessor')">
+                                    <ui-select-match placeholder="{{'EDMSTER_TXT_LIST_CHOOSE' | translate}}...">{{$item.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListPersonProcessor | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorPersonProcessor" class="label-color validation-message">
+                                    {{'EDMSTER_VALIDATE_PROCESSOR' | translate}}...
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">{{'EDMSTER_LBL_LIST_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Pin')">
+                                        <ui-select-match placeholder="{{'EDMSTER_TXT_LIST_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <!--<span class="input-group-btn">
+                                        <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>-->
+                                </div>
+                                <span ng-show="errorStatus" class="label-color validation-message">
+                                    {{'EDMSTER_VALIDATE_STATUS' | translate}}...
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label ">{{'EDMSTER_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea type="text" class="form-control" ng-model="model.Note" rows="3" placeholder="{{'EDMSTER_TXT_NOTE' | translate}}..." name="Note"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="row ">
+            <div class="col-md-12">
+                <uib-tabset active="active">
+                    <uib-tab index="0" heading="{{'EDMSTER_CURD_TAB_DETAIL' | translate}}" disable="Id == ''">
+                        <div ng-include="'../views/admin/edmsTermites/tabBox.html'" ng-class="{'disabled-element' :Id =='' }"></div>
+                    </uib-tab>
+                    <!--<div class="row">
+                        <div class="pull-right mr15 user-mt">
+                            <a ng-click="submit()" class="btn btn-green " href="javascript:;">
+                                <i class="fa fa-plus"></i>&nbsp;{{'COM_BTN_ADD' | translate}}
+                            </a>
+                        </div>
+                    </div>-->
+                    <div class="row">
+                        <div class="btn-group pull-right mr25 actions d-flex">
+                            <div class="text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>-->
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

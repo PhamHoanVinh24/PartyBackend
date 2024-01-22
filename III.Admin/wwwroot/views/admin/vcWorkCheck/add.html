@@ -1,0 +1,178 @@
+﻿<div class="modal-header">
+    <span class="icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="glyphicon glyphicon-plus" style="font-size: 18px;color: #e9edf0;"></i> Thêm sản phẩm</h3>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-12" style="margin-top:5px">
+                            <div class="thumbnail " style="border: 0; box-shadow: none">
+                                <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img id="imageId" ng-click="uploadImage()" class="img-circle " style="height: 200px; width: 200px;cursor: pointer" src="/images/default/uploadimg.png" alt="Hình ảnh" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center" style="font-size: 17px;margin-top: -5px;">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <label class="control-label ">Ảnh sản phẩm</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require">Mã sản phẩm</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.Product_Code" name="Product_Code" placeholder="Mã sản phẩm..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label require">Tên sản phẩm</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.Product_Name" name="Product_Name" placeholder="Tên sản phẩm..." />
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                        <div class="col-md-4">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label require">Đơn vị</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('Unit')">
+                                    <ui-select-match placeholder="Đơn vị...">{{$select.selected.Value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                Đơn vị không được để trống!
+                            </span>
+                            <!--<input type="text" class="form-control" ng-model="model.Unit" name="Unit" placeholder="Nhập đơn vị..." />-->
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorProduct_Group}">
+                        <div class="col-md-4">
+                            <i class="fa fa-cubes" aria-hidden="true"></i>
+                            <label class="control-label require">Nhóm sản phẩm</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Product_Group" theme="bootstrap" on-select="changleSelect('Product_Group')">
+                                    <ui-select-match placeholder="Nhóm sản phẩm...">{{$select.selected.Value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in productgroup | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Product_Group=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorProductGroup" class="label-color validation-message">
+                                Nhóm sản phẩm không được để trống!
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="form-group" ng-class="{ 'has-error': errorProductGroup}">
+        <div class="col-md-4">
+            <i class="glyphicon glyphicon-hdd" aria-hidden="true"></i>
+            <label class="control-label  require">Nhóm sản phẩm</label>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group">
+                <ui-select tagging ng-model="model.ProductGroup" theme="bootstrap" on-select="changleSelect('ProductGroup')">
+                    <ui-select-match placeholder="Nhóm...">{{$select.selected.value}}</ui-select-match>
+                    <ui-select-choices repeat="x.ProductGroup as x in nhom | filter:$select.value">
+                        {{x.value}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.ProductGroup=''" class="btn btn-default no-shadow" style="">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+            <span ng-show="errorProductGroup" class="label-color validation-message">
+                Nhóm sản phẩm không được để trống
+            </span>
+
+        </div>
+    </div>-->
+                    <!--<div class="form-group">
+        <div class="col-md-4">
+            <i class="glyphicon glyphicon-hdd" aria-hidden="true"></i>
+            <label class="control-label ">Nhóm sản pẩm (*)</label>
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="form-control" ng-model="model.ProductGroup" name="Unit" placeholder="Nhập nhóm sản phẩm..." />
+        </div>
+    </div>-->
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label ">Mô tả</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea type="text" class="form-control" ng-model="model.Note" rows="3" placeholder="Nhập mô tả..." name="Note"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-image"></i>
+                        <label class="control-label">Hình ảnh</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="thumbnail">
+                            <img id="image" style="max-height: 200px" src="{{model.FilePath}}" alt="Hình ảnh" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="input-group input-file">
+                            <span class="input-group-btn">
+                                <span style="border-radius: 5px;" class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display:none" type="file" accept="image/*">
+                            </span>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:10px;" ng-click="submit()"><i class="fa fa-plus"></i> Thêm mới</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;  margin-top:10px;margin-right:20px;" ng-click="cancel()"> Hủy bỏ</button>
+    </div>
+</div>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

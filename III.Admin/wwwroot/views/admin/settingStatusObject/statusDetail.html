@@ -1,0 +1,80 @@
+﻿<style>
+</style>
+<div ng-controller="statusDetail" class="pl15 pr15">
+    <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsDetail">
+        <div class="col-md-12">
+            <div class="col-md-4 pl-0">
+                <div class="form-group">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require fw600">{{'Mã trạng thái' | translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0 pr-0">
+                        <input type="text" class="form-control" ng-model="model.StatusCode" name="StatusCode" placeholder="{{'Mã trạng thái' | translate}}..." ng-readonly="isEdited" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 pr-0">
+                <div class="form-group">
+                    <div class="col-md-12 pr-0">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require fw600">{{'Tên trạng thái' | translate}}</label>
+                    </div>
+                    <div class="col-md-12 pr-0">
+                        <input type="text" class="form-control" ng-model="model.StatusName" name="StatusName" placeholder="{{'Tên trạng thái' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12 pr-0 mt5 pb10">
+            <div class="col-md-11 pl-0">
+                <div class="form-group" ng-class=" {'has-error': errorStatusType}">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                        <label class="control-label require fw600">{{'Loại trạng thái'|translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.StatusType" theme="bootstrap" ng-change="changeSelect('StatusType')">
+                                <ui-select-match placeholder="{{'Loại trạng thái'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in listTypeStatus | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorStatusType" class="label-color validation-message">
+                            {{'Loại trạng thái không được bỏ trống'|translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 pr-0 pl-0">
+                <div class=" pull-right">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center" ng-click="submit()" ng-show="!isEdited">
+                            <div class="btn btn-icon-only btn-outline" style="border: 1px solid #000;">
+                                <span><i class="fa fa-plus"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="text-center" ng-click="submit()" ng-show="isEdited">
+                            <div class="btn btn-icon-only btn-outline" style="border: 1px solid #000;">
+                                <span><i class="fa fa-save"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-12 pl-0 pr-0">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataStatusDetail"></table>
+    </div>
+</div>
+

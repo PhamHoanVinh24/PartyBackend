@@ -1,0 +1,416 @@
+﻿<style>
+    .form-horizontal .control-label {
+        text-align: left;
+    }
+      @media(max-width:1200px)
+    {
+        .modal-70{
+            width:80%!important;
+        }
+    }
+     @media (min-width:1201) (max-width:1500px)
+    {
+        .modal-70{
+            width:70%!important;
+        }
+    }
+      @media(min-width:1501px)
+    {
+        .modal-70{
+            width:60%!important;
+        }
+    }
+</style>
+<div class="modal-body" id="modal-body" style="margin-bottom:-30px !important;   margin-left:-15px">
+    <div class="portlet-body form">
+        <form name="forms.addC2more" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionAddC2more">
+            <div class="form-body pt-0 row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" ng-src="{{model1.Image}}"  onerror="this.src='../../../images/default/uploadimg.png'" class="img-circle-no image-upload zoom" style="height: 120px; width: 120px;cursor: pointer" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">&nbsp;{{'MLP_CURE_LBL_IMG' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <img data-ng-src="data:image/png;base64,{{ImageBase}}" ng-class="ImageBase==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" class="h-120 image-upload zoom1" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">&nbsp;{{'MLP_CURE_LBL_QRCODE' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label require"><i class="fa fa-barcode"></i>&nbsp;{{'MLP_CURE_LBL_CODE_CHILDREN_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="getQrCodeFromString()" ng-disabled="isEdit" class="form-control" name="AttributeCode" ng-model="model1.AttributeCode" placeholder="{{'MLP_CURE_TXT_CODE_CHILDREN_CATEGORY' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label require"><i class="fas fa-file-signature"></i>&nbsp;{{'MLP_CURE_LBL_NAME_CHILDREN_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="AttributeName" ng-model="model1.AttributeName" placeholder="{{'MLP_CURE_TXT_NAME_CHILDREN_CATEGORY' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <label class="control-label require"><i class="fab fa-page4"></i>&nbsp;{{'MLP_CURE_LBL_PAGE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" type="number" min="1" class="form-control" name="Page" ng-model="model1.Page" placeholder="{{'MLP_CURE_TXT_PAGE' | translate}}.." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <label class="control-label require"><i class="fas fa-briefcase"></i> &nbsp;{{'MLP_CURE_LBL_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" name="Category" ng-model="model1.Category" placeholder="{{'MLP_CURE_TXT_CATEGORY' | translate}}.." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label require"><i class="fas fa-briefcase"></i>&nbsp;{{'MLP_CURE_LBL_PRICE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="PricePerM"  type="text" num-thousand='true' awnum num-int='21'  ng-model="model1.PricePerM" placeholder="{{'MLP_CURE_TXT_PRICE' | translate}}.." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label require"><i class="fas fa-arrows-alt-h"></i>&nbsp;{{'MLP_CURE_LBL_WIDTH' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" type="number" min="1" name="Width" ng-model="model1.Width" placeholder="{{'MLP_CURE_TXT_WIDTH' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label require"> <i class="fas fa-arrows-alt-v"></i>&nbsp;{{'MLP_CURE_LBL_LENGTH' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" type="number" min="1" name="Length" ng-model="model1.Length" placeholder="{{'MLP_CURE_TXT_LENGTH' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label require"> <i class="fas fa-dumbbell"></i>&nbsp;{{'MLP_CURE_LBL_WEIGHT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" type="number" min="0" name="Weight" ng-model="model1.Weight" placeholder="{{'MLP_CURE_TXT_WEIGHT' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-ruler"></i>&nbsp;{{'MLP_CURE_LBL_VERTICALSTROKE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" type="number" min="1" name="ext_code" ng-model="model1.VerticalStroke" placeholder="{{'MLP_CURE_TXT_VERTICALSTROKE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-ruler"></i>&nbsp;{{'MLP_CURE_LBL_HORIZONTALSTROKE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="onTextChange()" class="form-control" type="number" min="1" name="ext_code" ng-model="model1.HorizontalStroke" placeholder="{{'MLP_CURE_TXT_HORIZONTALSTROKE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-users"></i>&nbsp;{{'MLP_CURE_LBL_GROUP' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.Group" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in productgroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.Group=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-sort-numeric-up"></i>&nbsp;{{'MLP_CURE_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.Unit" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'MLP_CURE_LBL_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.Unit=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-info-circle"></i>&nbsp;{{'MLP_CURE_LBL_E_SEKOU' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.ESekou" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_E_SEKOU' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in eSekous | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.ESekou='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                              
+                                <label class="control-label" style="font-size:11px !important;">  <i class="fas fa-info-circle"></i>&nbsp;{{'MLP_CURE_LBL_MANUFACTURING' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.Sx2021" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_MANUFACTURING' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in sx2021s | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.Sx2021='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-info-circle"></i>&nbsp;{{'MLP_CURE_LBL_MUSHROOM' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.AntiMold" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_MUSHROOM' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in antiMolds | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.AntiMold='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-eraser"></i>&nbsp;{{'MLP_CURE_LBL_DIRTY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.AntiFouling" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_DIRTY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in antiFoulings | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.AntiFouling='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-bug"></i>&nbsp;{{'MLP_CURE_LBL_BACTERIA' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.AntiBacteria" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_BACTERIA' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in antiBacterias | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.AntiBacteria='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fas fa-smoking"></i>&nbsp;{{'MLP_CURE_LBL_DEODORANT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.Deodorant" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_DEODORANT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in deodorants | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.Deodorant='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-tint"></i>&nbsp;{{'MLP_CURE_LBL_HUMIDITY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.HumidityControl" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_HUMIDITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in humidityControls | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.HumidityControl='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-info-circle"></i>&nbsp;{{'MLP_CURE_LBL_PAPER' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.HardPaperSurface" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_PAPER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in hardPaperSurfaces | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.HardPaperSurface='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                               
+                                <label class="control-label" style="font-size:11px !important;"> <i class="fa fa-fire" aria-hidden="true"></i>&nbsp;{{'MLP_CURE_LBL_FIRE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model1.FireSpread" theme="bootstrap"  ng-change="onTextChange()" >
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_FIRE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in fireSpreads | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.FireSpread='_';onTextChange()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label" style="font-size:11px !important;"><i class="fas fa-comment-dots"></i>&nbsp;{{'MLP_CURE_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea cols="3" class="form-control" name="ext_value" ng-model="model1.Note" placeholder="{{'MLP_CURE_LBL_NOTE' | translate}}..."  ng-change="onTextChange()"  />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer mr15 ">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>-->
+    <!--<button ng-click="submit()" class="btn btn-green mr5">
+        {{'COM_BTN_ADD' | translate}}
+    </button>-->
+    <!--<div class="text-center pr10" ng-click="submit()">
+        <a class="btn btn-icon-only btn-circle btn-outline blue-custom">
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs12 mb5 pt3">Lưu</p>
+    </div>-->
+
+    <div class="text-center pr10 pull-right" ng-click="submit1()" ng-if="isAdd==true">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" >
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3 ">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>
+    <div class="text-center pull-right" ng-click="submit1()" ng-if="isAdd==false">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>
+</div>

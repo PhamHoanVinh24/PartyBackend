@@ -1,0 +1,161 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+            <!--<h1 class="bold mb-0">{{'MPT_TITLE_MPT' | translate}}</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="/Admin/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:green;" href="/EDMSMaterialInvoice">{{'MPT_LINK_MPT' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-6 ">
+            <div class="btn-group pull-right actions  d-flex">
+                <div class="text-center pr10 btnSearch">
+                    <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                        <span><i class="fa fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3 ">Tìm kiếm</p>
+                </div>
+                <div class="text-center pr10" ng-click="add()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3">Thêm mới</p>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-4">
+                    <label class="fw600 text-underline">{{'MPT_CURD_LBL_MPT_PAY_TITLE' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.PayTitle" class="form-control" type="text" placeholder="{{'MPT_CURD_TXT_MPT_PAY_TITLE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PayTitle=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw600 text-underline">{{'MPT_CURD_LBL_MPT_PAY_TYPE' | translate}}</label>
+                    <div class='input-group search-group'>
+                        <ui-select tagging ng-model="model.PayType" theme="bootstrap" on-select="changleSelect('PayType')">
+                            <ui-select-match placeholder="--{{'MPT_CURD_COMBO_MPT_PAY_TYPE' | translate}}--">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Value as x in PaymentType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PayType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw600 text-underline">{{'MPT_CURD_LBL_MPT_CONTRACT_NAME' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.ContractName" class="form-control" type="text" placeholder="{{'MPT_CURD_TXT_MPT_PAY_CONTRACT_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ContractName=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw600 text-underline">{{'MPT_CURD_LBL_MPT_FROM_DATE' | translate}}</label>
+                    <div class='input-group '>
+                        <input type='text' class="form-control input-date" ng-model="model.FromDate" placeholder="{{'MPT_CURD_TXT_MPT_PAY_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="FromDate" autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw600 text-underline">{{'MPT_CURD_LBL_MPT_TO_DATE' | translate}}</label>
+                    <div class='input-group '>
+                        <input type='text' class="form-control input-date" ng-model="model.ToDate" placeholder="{{'MPT_CURD_TXT_MPT_PAY_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='DateTo' autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 pt25">
+                    <!--<div class="text-center pr10 pull-right mt15" ng-click="reload()">
+        <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+    </div>-->
+                    <div class="btn-group pull-left  actions d-flex" style="bottom:15px;">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="pl20 text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

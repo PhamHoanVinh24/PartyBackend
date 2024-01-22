@@ -1,0 +1,170 @@
+﻿<style>
+    .text-image {
+        text-align: center;
+        transform: translate(0%, -30%);
+        font-weight: 600;
+        color: #afafaf;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">Cập nhật tin tức</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fa fa-barcode"></i> Mã tin tức</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_code" name="article_code" placeholder="Nhập mã tin tức" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fa fa-info-circle"></i> Tiêu đề</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_title" name="article_title" placeholder="Nhập tiêu đề" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fas fa-comments"></i> Nội dung</label>
+                        <div class="col-md-8">
+                            <textarea rows="7" cols="25" type="text" class="form-control" ng-model="model.article_content" name="article_content" placeholder="Nhập nội dung" />
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"> <i class="fas fa-cart-plus"></i> Danh mục </label>
+                        <div class="col-md-8">
+                            <div class='input-group '>
+                                <ui-select ng-model="model.cat_code" class="" ui-select-required>
+                                    <ui-select-match placeholder="Tên danh mục...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treeDatacategory | filter:$select.value">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.cat_code='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="fas fa-sort-numeric-up"></i> Ưu tiên</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" ng-model="model.artile_order" name="artile_order" placeholder="Nhập ưu tiên" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-left" style="border-left:none">
+                            <i class="fa fa-picture-o"></i>
+                            <label class="control-label" for="Status"> Ảnh</label>
+                        </div>
+                        <div class="col-md-8 ">
+                            <div class="fileupload-new thumbnail mb-0" role="button">
+                                <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img ng-click="selectImage()" ng-src="{{model.article_avarta}}" src="../../../images/default/upload_image.png" onerror="this.src='../../../images/default/no_image.png'" class="h-120 w120" />
+                                <div class="text-image mt10" ng-click="selectImage()">Nhấn vào đây để chọn ảnh</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-right">
+                    <button ng-click="submit()" class="btn btn-green" href="javascript:;">
+                        <i class="fas fa-save"></i>&nbsp;Lưu lại
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#file" style=" height: 35px;  border-top-left-radius: 10px; border-top-right-radius: 10px;" data-toggle="tab"> Tệp tin</a></li>
+    </ul>
+    <div class="tab-content" style="font-size:13px;padding-top: 0px;">
+        <div id="file" class="tab-pane fade in active" style="padding-left: 10px;padding-right: 10px;">
+            <div class="row" style=" padding-bottom:20px;">
+                <div id="sua" class="" ng-show="editBanking">
+                    <div class="row" style="font-size: 14px; ">
+                        <div class="col-md-7" style="padding-left:0px;">
+                            <div class="form-group">
+                                <label class="control-label col-md-5 text-right" style="margin-top:7px"> <i class="glyphicon glyphicon-leaf"></i> Thêm file liên quan</label>
+                                <div class="col-md-7 form-col-control">
+                                    <div class="bs-component">
+                                        <div class="input-group col-md-6">
+                                            <ui-select ng-model="model.file_code" class="" style="width:250PX;" ui-select-required>
+                                                <ui-select-match placeholder="Tên file...">{{$select.selected.file_name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.file_code as x in treedataFile | filter:$select.value">
+                                                    {{x.file_name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; height:30px;margin-left:5px" ng-click="submitFile1()"><i class="fa fa-edit"></i> Lưu</button>
+                                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;height:30px;margin-left:5px" ng-click="cancelFile()"><i class="fa fa-close"></i> Hủy</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-md-3">
+                    <label> Tên tập tin</label>
+                    <div class="bs-component">
+                        <div class="input-group date pick-date" id="">
+                            <input type="text" class="form-control" placeholder="Tên tập tin..." ng-model="model.Key1" name="Key1" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Key1 = ''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Ngày đăng</label>
+                    <div class="bs-component">
+                        <div class="input-group date pick-date" id="">
+                            <input class="form-control " id="postDate" placeholder="Ngày đăng..." name="NextTimeCheck" type="text" ng-model="model.postDate">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.postDate = ''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-accent mt25" ng-click="reload()"><i class="fa fa-search"></i> Tìm kiếm </button>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group pull-right actions" style="margin-top:25px">
+                        <button class="btn btn-circle btn-icon-only btn-primary" ng-click="add_file()" title="Thêm mới file" style="border-radius:50% !important"><i class="fa fa-plus"></i> </button>
+                        <!--<button class="btn  btn-circle btn-icon-only btn-primary" ng-click="Banking()" title="Thêm tiếp file khác" style="border-radius:50% !important;margin-left:5px"><i class="glyphicon glyphicon-plus-sign"></i> </button>-->
+                    </div>
+                </div>
+            </div>
+            <div class="mt5">
+                <table class="table dataTable table-bordered table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

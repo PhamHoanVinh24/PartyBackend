@@ -1,0 +1,256 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .table-time-sheet {
+        width: 1600px;
+        padding: 10px;
+        font-family: 'Times New Roman', Times, serif;
+        text-align: center;
+    }
+
+    .tb-no-boder {
+        border: none !important;
+    }
+
+    .tb-header {
+        font-weight: 700;
+    }
+
+    .tb-header-day td {
+        width: 23px;
+    }
+
+    .holiday {
+        background: #7f8c8d;
+        color: white;
+    }
+
+    .tb-content {
+        margin-top: 10px;
+    }
+
+    td input {
+        border: 1px solid #fffcfc !important;
+        font-size: 12px !important;
+        font-weight: 700;
+        padding-left: 5px;
+    }
+
+    .form-content {
+        min-height: 400px;
+        max-width: 100vw;
+        overflow: scroll;
+        height: 350px;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="tb-header row mt10">
+        <div class="col-lg-3">
+            <label class="fw600 text-underline">{{'ALSP_LBL_DEPARTMENT' | translate}}</label>
+            <div class="input-group search-group br24">
+                <ui-select ng-model="model.DepartmentId" theme="bootstrap" ng-change="changeDepartment()">
+                    <ui-select-match placeholder="{{'COM_TXT_ALL' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                    <ui-select-choices repeat="x.DepartmentCode as x in listDepartment | filter: $select.search">
+                        {{x.Title}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.DepartmentId='';_listUser=listUser" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0">
+            <label class="fw600 text-underline">{{'ALSP_CRUD_MONTH' | translate}}</label>
+            <div class="input-group br24">
+                <input ng-model="model.Month" class="form-control" type="text" placeholder="{{'ALSP_CRUD_MONTH' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="Month" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Month='';" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="btn-group pt20 actions d-flex">
+                <div class="text-center pr10">
+                    <a class="fs30" ng-click="calTimeSheet()">
+                        <span><i class="fas fa-calculator"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'ALSP_BTN_CAL_ALLOWCANCE' | translate}}</p>
+                </div>
+                <div class="text-center pr10">
+                    <a class="fs30" ng-click="saveExcel()">
+                        <span><i class="fa-solid fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+                <div class="text-center">
+                    <a class="fs30" ng-click="exportExcel()">
+                        <span><i class="fas fa-file-excel"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                </div>
+                <div class="text-center pr-2">
+                    <a ng-click="viewCmsDetail('HCNS_QDDD')" class="fs30">
+                        <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-content">
+        <div class="tb-content">
+            <table border="1" class="table-time-sheet">
+                <tbody>
+                    <tr>
+                        <td colspan="42" width="1172" height="50" class="bold uppercase">{{'ALSP_TR_MONTH' | translate}} {{month}} {{'ALSP_TR_YEAR' | translate}} {{year}}</td>
+                    </tr>
+                    <tr class="tb-header">
+                        <td rowspan="3" width="33">{{'ALSP_COL_INDEX' | translate}}</td>
+                        <td rowspan="3" width="200">{{'ALSP_COL_NAME' | translate}}</td>
+                        <td rowspan="3" width="78">{{'ALSP_COL_SALARY' | translate}}</td>
+                        <td rowspan="3" width="39">{{'ALSP_COL_DAY_WORK_OF_MONTH' | translate}}</td>
+                        <td colspan="7" width="252">{{'ALSP_COL_TIME_DAY_WORK' | translate}}</td>
+                        <td colspan="9" width="782">{{'ALSP_COL_MONEY' | translate}}</td>
+                        <td width="132">&nbsp;</td>
+                        <td width="97">&nbsp;</td>
+                        <td width="111">&nbsp;</td>
+                        <td width="89">&nbsp;</td>
+                        <td width="100">&nbsp;</td>
+                    </tr>
+                    <tr class="tb-header">
+                        <td colspan="2" width="72">{{'ALSP_COL_DAY_FEE' | translate}}</td>
+                        <td colspan="2" width="72">{{'ALSP_COL_DAY_ALLOW_STAY' | translate}}</td>
+                        <td colspan="3" width="108">{{'ALSP_COL_TIME_ADDITION' | translate}}</td>
+                        <td colspan="2" width="168">{{'ALSP_COL_MONEY_FEE' | translate}}</td>
+                        <td colspan="2" width="164">{{'ALSP_COL_MONEY_STAY' | translate}}</td>
+                        <td colspan="3" width="246">{{'ALSP_MONEY_WORK_ADDITION' | translate}}</td>
+                        <td rowspan="2" width="81">{{'ALSP_COL_MONEY_CAR' | translate}}</td>
+                        <td width="123">{{'ALSP_COL_SUM_MONEY' | translate}}</td>
+                        <td width="132">{{'ALSP_COL_REGISTRATION' | translate}}</td>
+                        <td width="97">{{'ALSP_COL_NOTE' | translate}}</td>
+                        <td width="111">{{'ALSP_COL_SALARY_PER_MONTH' | translate}}</td>
+                        <td>{{'ALSP_COL_MONEY_LUNCH' | translate}}</td>
+                        <td>{{'ALSP_COL_MONEY_PHONE' | translate}}</td>
+                    </tr>
+                    <tr class="tb-header">
+                        <td width="36">{{'ALSP_SUB_COL_KV_I' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_KV_II' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_KV_I' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_KV_II' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_DAY_WORK' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_DAY_OFF' | translate}}</td>
+                        <td width="36">{{'ALSP_SUB_COL_HOLIDAY' | translate}}</td>
+                        <td width="90">{{'ALSP_SUB_COL_KV_I' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_KV_II' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_KV_I' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_KV_II' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_DAY_WORK' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_DAY_OFF' | translate}}</td>
+                        <td width="100">{{'ALSP_SUB_COL_HOLIDAY' | translate}}</td>
+                        <td width="100">&nbsp;</td>
+                        <td width="100">&nbsp;</td>
+                        <td width="97">&nbsp;</td>
+                        <td width="100">&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr class="tb-header">
+                        <td>A</td>
+                        <td>B</td>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>E</td>
+                        <td>F</td>
+                        <td>G</td>
+                        <td>H</td>
+                        <td>I</td>
+                        <td>K</td>
+                        <td>L</td>
+                        <td>M=150000*E</td>
+                        <td>N=150000*1.5*F</td>
+                        <td>O=100000*G</td>
+                        <td>P=100000*1.5*H</td>
+                        <td>Q=C/D/8*1.5*I</td>
+                        <td>R=C/D/8*2*K</td>
+                        <td>S=C/D/8*3*L</td>
+                        <td>T</td>
+                        <td>U=Q+R+S+T</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr ng-repeat="x in listEmployeeDetail">
+                        <td width="23" class="bold">{{$index+1}}</td>
+                        <td width="155" class="bold text-left pl5 nowrap">{{x.EmployeeName}}</td>
+                        <td>{{x.C | number}}</td>
+                        <td>{{x.D | number}}</td>
+                        <td>{{x.E | number}}</td>
+                        <td>{{x.F | number}}</td>
+                        <td>{{x.G | number}}</td>
+                        <td>{{x.H | number}}</td>
+                        <td>{{x.I | number}}</td>
+                        <td>{{x.J | number}}</td>
+                        <td>{{x.K | number}}</td>
+                        <td>{{x.L | number}}</td>
+                        <td>{{x.M | number}}</td>
+                        <td>{{x.N | number}}</td>
+                        <td>{{x.O | number}}</td>
+                        <td>{{x.P | number}}</td>
+                        <td>{{x.Q | number}}</td>
+                        <td>{{x.R | number}}</td>
+                        <td>{{x.S | number}}</td>
+                        <td class="bold">{{x.T | number}}</td>
+                        <td></td><!--<td>{{x.U | number}}</td>-->
+                        <td></td><!--<td>{{x.V | number}}</td>-->
+                        <td>{{x.W | number}}</td>
+                        <td>{{x.X | number}}</td>
+                        <td>{{x.Y | number}}</td>
+                    </tr>
+                    <tr style="height:20px">
+                        <td width="23" class="bold"></td>
+                        <td width="155" class="bold text-left pl5 nowrap"></td>
+                        <td class="bold">{{Total.C | number}}</td>
+                        <td class="bold">{{Total.D | number}}</td>
+                        <td class="bold">{{Total.E | number}}</td>
+                        <td class="bold">{{Total.F | number}}</td>
+                        <td class="bold">{{Total.G | number}}</td>
+                        <td class="bold">{{Total.H | number}}</td>
+                        <td class="bold">{{Total.I | number}}</td>
+                        <td class="bold">{{Total.J | number}}</td>
+                        <td class="bold">{{Total.K | number}}</td>
+                        <td class="bold">{{Total.L | number}}</td>
+                        <td class="bold">{{Total.M | number}}</td>
+                        <td class="bold">{{Total.N | number}}</td>
+                        <td class="bold">{{Total.O | number}}</td>
+                        <td class="bold">{{Total.P | number}}</td>
+                        <td class="bold">{{Total.Q | number}}</td>
+                        <td class="bold">{{Total.R | number}}</td>
+                        <td class="bold">{{Total.S | number}}</td>
+                        <td class="bold">{{Total.T | number}}</td>
+                        <td class="bold">{{Total.U | number}}</td>
+                        <td class="bold">{{Total.V | number}}</td>
+                        <td class="bold">{{Total.W | number}}</td>
+                        <td class="bold">{{Total.X | number}}</td>
+                        <td class="bold">{{Total.Y | number}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,180 @@
+﻿<style>
+    .result-header {
+        margin-top: -7px;
+        text-align: center;
+    }
+
+        .result-header .text {
+            margin-top: -4px;
+            background: #797979;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+        }
+
+    .result-body {
+        height: 600px;
+        border-radius: 10px;
+        border: 2px solid #cccccc;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+            <h1 class="bold mb-0">{{'EDMSPB_TITLE_PROFILE_BOX' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'EDMSPB_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div href="#/user" class="bold">{{'EDMSPB_LINK_PROFILE_BOX' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-6">
+            <div class="btn-group pull-right actions">
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class="ng-binding"><i class="fa fa-plus"></i> Thêm mới</span>
+                </a>
+                <a class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i>{{'EDMSPB_BTN_EXCEL' | translate}}</span>
+                </a>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mt5 p10">
+        <div class="portlet-body">
+            <!--<img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_LBL_BOX_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.BoxCode" class="form-control" type="text" placeholder="{{'EDMSPB_CURD_SEARCH_TXT_BOX_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BoxCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_SEARCH_LBL_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" id="dateFrom" class="form-control" type="text" placeholder="{{'EDMSPB_CURD_SEARCH_TXT_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_SEARCH_LBL_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" id="dateTo" class="form-control" type="text" placeholder="{{'EDMSPB_CURD_SEARCH_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_SEARCH_LBL_UNIT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.BranchCode" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'EDMSPB_CURD_SEARCH_TXT_UNIT' | translate}}...">{{$select.selected.OrgCode}} - {{$select.selected.OrgName}}</ui-select-match>
+                            <ui-select-choices repeat="x.OrgAddonCode as x in listBranch | filter:$select.search">
+                                {{x.OrgCode}} - {{x.OrgName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BranchCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 hidden">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_SEARCH_LBL_STATUS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'EDMSPB_CURD_SEARCH_TXT_STATUS' | translate}} ...">{{$select.selected.ValueSet}}</ui-select-match>
+                            <ui-select-choices repeat="x.SettingID as x in listDocumentType| filter: $select.search">
+                                {{x.ValueSet}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_LBL_TYPE_PROFILE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.TypeProfile" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'EDMSPB_CURD_SEARCH_TXT_TYPE_PROFILE' | translate}} ...">{{$select.selected.ValueSet}}</ui-select-match>
+                            <ui-select-choices repeat="x.SettingID as x in listDocumentType| filter: $select.search">
+                                {{x.ValueSet}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.TypeProfile=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSPB_CURD_SEARCH_LBL_WHS_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" ng-change="changeSelect('WAREHOUSE',model.Box.WHS_Code)">
+                            <ui-select-match placeholder="{{'EDMSPB_CURD_SEARCH_TXT_WHS_CODE' | translate}}">{{$select.selected.WHS_Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.WHS_Code as x in listWareHouse | filter:$select.search">
+                                {{x.WHS_Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WHS_Code =''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()" href="javascript:;">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="text-danger">{{'EDMSPB_LBL_NOTE' | translate}}</span>
+<table class="table dataTable  table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+
+
+
+

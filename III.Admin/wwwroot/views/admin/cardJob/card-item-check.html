@@ -1,0 +1,147 @@
+﻿<div ng-controller="card-item-check" style=" height: 465px; overflow-y: scroll; overflow-x: hidden; padding-right: 10px">
+    <div class="row" style="margin-top: -5px;">
+        <form name="checklist" method="post" ng-validate="validationOptionsCheckList">
+            <div class="form-group">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label class="control-label fw600 text-underline">{{'CJ_LBL_ITEM_CHECK_NEW' | translate}}</label>
+                        <input class="form-control br24 bold fs13 black" name="Title" type="text" ng-model="modelCheckList.Title" placeholder="{{'CJ_TXT_ENTER_ITEM_CHECK_NEW' | translate}}..." ng-disabled="IsLock || !isAceptCard " />
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0" style="width: 11%;">
+                    <div class="form-group">
+                        <label class="control-label fw600 text-underline">{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}</label>
+                        <div class="input-group">
+                            <input class="form-control br24" ng-model="modelCheckList.WeightNum" name="WeightNumCheckList" placeholder="{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}..." autocomplete="off" ng-disabled="IsLock || !isAceptCard ">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0 pr-0 pt20" ng-show="isUpdateCheckList == false" style="width: 30%; margin-top: -7px;">
+                    <div class="btn-group actions pt5 pb-1 pull-left d-flex">
+                        <div class="text-center pr-2" ng-disabled="IsLock || !isAceptCard ">
+                            <a ng-click="addCheckList()" class="btn btn-icon-only btn-outline p-0 fs25">
+                                <i class="fas fa-tasks" style="color:green"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <!--<div class="text-center pr-1" ng-disabled="IsLock || !isAceptCard ">
+                            <a ng-click="addItemWork()" class="btn btn-icon-only btn-outline p-0 fs25">
+                                <i class="fas fa-chart-bar" style="color:green"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'CJ_LBL_PROGRESS' | translate}}</p>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0 pr-0 pt20 pl-0" ng-show="isUpdateCheckList == true" style="width: 30%; margin-top: -7px;">
+                    <div class="btn-group actions pt5 pb-1 pull-left d-flex">
+                        <div class="text-center pr-2" ng-disabled="IsLock || !isAceptCard ">
+                            <a ng-click="updateCheckList()" class="btn btn-icon-only btn-outline p-0 fs25">
+                                <i class="fas fa-tasks" style="color:green"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_EDIT' | translate}}</p>
+                        </div>
+                        <!--<div class="text-center pr-1" ng-disabled="IsLock || !isAceptCard ">
+                            <a ng-click="addItemWork()" class="btn btn-icon-only btn-outline p-0 fs25">
+                                <i class="fas fa-chart-bar" style="color:green"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'CJ_LBL_PROGRESS' | translate}}</p>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style=" width:101%;">
+        <div class="col-lg-12 p0 mt5 padding-right-dashboard padding-left-dashboard" ng-repeat="checklist in checklists">
+            <div class="table-toolbar table_toolbar">
+                <div class="col-md-12 p0 pl10 pr10" ng-init="show.addCheckItem[checklist.ChkListCode] = false; show.editCheckTitle[checklist.ChkListCode] = false" style="font-size: 14px;">
+                    <i class="fa fa-check-square-o inline"></i>
+                    <input role="button" ng-if="show.editCheckTitle[checklist.ChkListCode]" ng-click="updateCheckList($event)" checkcode="{{checklist.ChkListCode}}" ng-blur="editCheckTitle($event)" class="form-control bold ml5 inline" style="width: 85%" value="{{checklist.CheckTitle}}" ng-disabled="IsLock || !isAceptCard " />
+                    <span title="{{checklist.CheckTitle}}" role="button" ng-if="!show.editCheckTitle[checklist.ChkListCode]" ng-click="getCheckList(checklist.ChkListCode, checklist.CheckTitle, checklist.WeightNum, checklist.Id)" class="bold ml5" ng-disabled="IsLock || !isAceptCard ">
+                        {{checklist.CheckTitle}}&nbsp;
+                        <i ng-show="isShowPercentItem" style="color:cadetblue;font-family:serif">({{checklist.Completed  | number : fractionSize}}%)</i>&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <i ng-show="isShowPercentItem" class="fas fa-balance-scale fs9">
+                        &nbsp;<span class="text-danger">{{checklist.WeightNum  | number : fractionSize}}%</span>
+                    </i>
+                    <div class="d-flex pull-right">
+                        <span class1="badge-customer fs9 pull-right btn-border-black black" ng-click="advance(checklist)" style="margin-right: 10px;" ng-disabled="IsLock || !isAceptCard ">
+                            <!--<i class="fas fa-file-archive fs20" style1="padding-right: 3px; line-height: 1.1 !important"></i>-->
+                            <i class="fas fa-edit fs20"></i>
+                            <!--{{'Nâng cao' | translate}}-->
+                        </span>
+                        <span class1="badge-customer fs9 pull-right btn-border-black black" ng-click="viewCmsCheckItem(checklist)" style="margin-right: 10px;" ng-disabled="IsLock || !isAceptCard ">
+                            <!--<i class="fas fa-file-archive fs20" style1="padding-right: 3px; line-height: 1.1 !important"></i>-->
+                            <i class="fas fs20 fa-eye"></i>
+                            <!--{{'Xem mô tả' | translate}}-->
+                        </span>
+                        <!--<span class="badge-customer fs9 pull-right btn-border-black black" ng-click="addItemWork(checklist.ChkListCode, checklist.CheckTitle)" style="padding: 8px; margin-right: 5px;" ng-disabled="IsLock || !isAceptCard "><i class="fa fa-bar-chart black" style="padding-right: 3px; line-height: 1.1 !important"></i>{{'CJ_LBL_PROGRESS' | translate}}</span>-->
+                        <!--<span class="badge-customer fs9 pull-right btn-border-black black" ng-click="approve(checklist.ChkListCode, checklist.CheckTitle)" style="padding: 8px; margin-right: 5px;" ng-disabled="IsLock || !isAceptCard "><i class="fa fa-check-square-o black" style="padding-right: 3px; line-height: 1.1 !important"></i>{{'CJ_BTN_APPROVE' | translate}}</span>-->
+                        <span class1="pull-right" ng-if="!show.editCheckTitle[checklist.ChkListCode]">
+                            <a style="margin-right: 10px;" class1="pull-right pr10 btn btn-icon-only btn-border-black black" ng-click="assignUserToItem(checklist.ChkListCode)" style1="width: 26px; height: 26px; padding-top: 3px;padding-left: 7px;margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)" ng-disabled="IsLock || !isAceptCard ">
+                                <i class="fas fa-users fs20"></i>
+                            </a>
+                        </span>
+                        <span class1="pull-right" ng-if="!show.editCheckTitle[checklist.ChkListCode]">
+                            <a class1="pull-right pr15 btn btn-icon-only btn-border-black black" style1="width: 26px; height: 26px; padding-top: 3px;padding-left: 7px; margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)" ng-click="deleteCheckList(checklist.ChkListCode, checklist.Id)" ng-disabled="IsLock || !isAceptCard ">
+                                <i class="fas fa-trash-alt fs20 text-danger"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div>
+                        <span ng-repeat="x in checklist.ListUserItemChk">
+                            <i class="text-danger" style="font-size:11px;">{{x.GivenName}},&nbsp;</i>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="fs11 text-green" ng-show="checklist.ListObject != ''">{{checklist.ListObject}}</span>
+                    </div>
+                    <div>
+                        <span class="text-success fs12" ng-if="statusItem[checklist.ChkListCode]">{{'Đã duyệt' | translate}}</span>
+                        <span class="text-warning fs12" ng-if="!statusItem[checklist.ChkListCode]">{{'Đang triển khai' | translate}}</span>
+                    </div>
+                    <div>
+                        <label class="bold col-md-10 pl-0 fs13">
+                            <a title=" {{checklist.FileItemCheck.FileName}}" ng-click="viewFileOnl(checklist.FileItemCheck.FileUrl, checklist.FileItemCheck.IsEdms, checklist.FileItemCheck.Id, checklist.FileItemCheck.MemberId, checklist.FileItemCheck.IdMapping)">{{checklist.FileItemCheck.FileName.substring(0, 100)}}<span ng-if="checklist.FileItemCheck.FileName.length > 100">...</span></a>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-12 pl20 mt-1" ng-init="show.editCheckItem[checkitem.Id] = false" ng-repeat="checkitem in checkList[checklist.ChkListCode]">
+                    <input role="button" class="form-control inline" ng-checked="checkitem.Approve == true" ng-click="checkItemClick(checkitem.Id,checklist.Id, checkItem.DisableApprove)" style="width: 18px; height: 18px" type="checkbox" ng-disabled="IsLock || !isAceptCard || checkitem.DisableApprove" />
+                    <input role="button" type="text" class="form-control inline edit-check-item" itemid="{{checkitem.Id}}" ng-blur="editCheckItemTitle($event)" ng-if="show.editCheckItem[checkitem.Id]" value="{{checkitem.Title}}" ng-disabled="IsLock || !isAceptCard " />
+                    <label role="button" class="strikethrough inline" style="position: inherit" ng-if="!show.editCheckItem[checkitem.Id]" ng-click="show.editCheckItem[checkitem.Id] = true" ng-disabled="IsLock || !isAceptCard ">
+                        {{checkitem.Title}} [{{checkitem.Id}}]
+                    </label>
+                    <label role="button" ng-if="checkitem.MemberChecked != null && checkitem.MemberChecked != '' && !show.editCheckItem[checkitem.Id]">({{checkitem.MemberChecked}}-{{checkitem.TimeChecked | date: "dd/MM/yyyy"}})</label>
+                    <a ng-if="!show.editCheckItem[checkitem.Id]" ng-click="deleteCheckItem(checkitem.Id)" ng-disabled="IsLock || !isAceptCard " class="pull-right pr10 pr-1" style1="width: 26px; height: 26px; padding-top: 3px; padding-left: 7px; -webkit-box-shadow: 0 2px 5px 0 rgba(230, 60, 95, 0.45)">
+                        <i class="fas fs20 fa-trash-alt text-danger"></i>
+                    </a>
+                    <a ng-if="!show.editCheckItem[checkitem.Id]" ng-click="assignUserToSubItem(checkitem.Id, checklist.ChkListCode)" ng-disabled="IsLock || !isAceptCard " class="pull-right pr10">
+                        <i class="fas fs20 fa-users"></i>
+                    </a>
+                    <div style="background-color:azure">
+                        <a ng-repeat="k in checkitem.ListUserSubItem">
+                            <i class="text-danger" style="font-size:11px;">{{k.GivenName}},&nbsp;</i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt10" ng-if="show.addCheckItem[checklist.ChkListCode]">
+                    <div class="col-md-12 pr-0">
+                        <textarea class="form-control" placeholder="{{'CJ_CURD_TXT_CHECK_ITEM' | translate}}..." ng-model="checkitem.Title" ng-disabled="IsLock || !isAceptCard "></textarea>
+                    </div>
+                    <div class="col-md-12 pt10">
+                        <button class="btn green-dark bold" ng-click="addCheckItem(checklist.ChkListCode)" ng-disabled="IsLock || !isAceptCard ">{{'COM_BTN_ADD' | translate}}</button>
+                        <button class="btn btn-close" ng-click="show.addCheckItem[checklist.ChkListCode] = false" ng-disabled="IsLock || !isAceptCard "><span class="fa fa-times"></span></button>
+                    </div>
+                </div>
+
+                <div class="col-md-12 pl25 mt10" ng-if="!show.addCheckItem[checklist.ChkListCode]">
+                    <a class="gray" ng-click="show.addCheckItem[checklist.ChkListCode] = true" ng-disabled="IsLock || !isAceptCard ">{{'CJ_CURD_BTN_CHECK_ITEM' | translate}}...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

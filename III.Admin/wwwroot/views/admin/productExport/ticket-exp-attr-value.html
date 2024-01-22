@@ -1,0 +1,106 @@
+﻿<style>
+    tags-input .tags .tag-item .remove-button {
+        margin: 0 0 0 5px;
+        padding: 0;
+        border: none;
+        background: 0 0;
+        cursor: pointer;
+        vertical-align: middle;
+        font: 700 16px Arial,sans-serif;
+        color: #ea1818;
+    }
+</style>
+<div class="modal-header" style="background-color:white">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit fs16 black"></i>
+    <span class="modal-title black" id="modal-title" style="width: 92%;">
+       {{'Thuộc tính sản phẩm' | translate}}
+    </span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px !important;">
+    <div class="portlet-body form">
+        <form name="attrValue" class="form-horizontal" method="post" ng-validate="">
+            <div class="form-body pt-0 pb-0 pl15">
+                <div class="col-md-4 pl-0" ng-class="{'has-error' : errorAttrCode}">
+                    <label class="control-label require">{{'Thuộc tính' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.AttrCode" theme="bootstrap" on-select="changeSelect('AttrCode')">
+                            <ui-select-match placeholder="{{'Thuộc tính' | translate}}...">{{$select.selected.AttrName}}</ui-select-match>
+                            <ui-select-choices repeat="x.AttrCode as x in listAttr | filter: $select.search">
+                                {{x.AttrName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <span ng-show="errorAttrCode" class="label-color validation-message">
+                        {{'Thuộc tính không được bỏ trống' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group" ng-class="{'has-error' : errorValue}">
+                        <label class="control-label require">{{'Giá trị' | translate}}</label>
+                        <div class='input-group'>
+                            <input ng-change="changeValue('Value')" class="br4 form-control bold" ng-model="model.Value" placeholder="{{'Giá trị' | translate}}..." />
+                            <span ng-show="errorValue" class="label-color validation-message">
+                                {{'Giá trị không được bỏ trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" ng-class="{'has-error' : errorUnit}">
+                    <label class="control-label">{{'Đơn vị tính' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('Unit')" ng-disabled="true">
+                            <ui-select-match placeholder="{{'Đơn vị tính' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstUnit | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'Đơn vị không được bỏ trống!' | translate}}
+                    </span>
+                </div>
+                <button class="btn green-custom ml5 mt20 mr-2" ng-click="submit()">
+                    <i class="fa fa-plus"></i>
+                    {{'COM_BTN_ADD' | translate}}
+                </button>
+            </div>
+            
+        </form>
+        <div class="col-md-12 pb5 pt5">
+            <div class="form-group">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-md-1">{{'STT' | translate}}</th>
+                                <th class="text-center col-md-3 nowrap">{{'Sản phẩm' | translate}}</th>
+                                <th class="text-center col-md-2 nowrap">{{'Thuộc tính' | translate}}</th>
+                                <th class="text-center col-md-2 nowrap">{{'Giá trị' | translate}}</th>
+                                <th class="text-center col-md-1 nowrap">{{'Đơn vị tính' | translate}}</th>
+                                <th class="text-center col-md-2 nowrap">{{'Thao tác' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="x in lstAttrValue">
+                            <tr>
+                                <td class="text-center pt15">{{$index + 1}}</td>
+                                <td class="text-center pt15">{{x.ProductName}}</td>
+                                <td class="text-center pt15">{{x.Name}}</td>
+                                <td class="text-center">{{x.Value}}</td>
+                                <td class="text-center">{{x.Unit}}</td>
+                                <td class="text-center">
+                                    <!--<button title="Sửa" ng-click="edit(x.ID)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline blue"><i class="fa fa-edit"></i></button>-->
+                                    <button title="Xóa"  ng-click="delete(x.ID)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="padding: 0xp !important;">
+   
+</div>

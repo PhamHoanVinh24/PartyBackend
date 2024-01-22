@@ -1,0 +1,1109 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .sharp {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5%;
+        margin-left: 15%;
+    }
+
+    .main-menu-top {
+        position: absolute;
+        top: 85px;
+        left: 145px;
+        display: flex;
+    }
+
+    .main-menu-editActivity {
+        position: absolute;
+        top: 90px;
+        right: 80px;
+        display: flex;
+    }
+
+    .main-right-edit {
+        position: absolute;
+        right: 80px;
+        display: flex;
+    }
+
+    /*svg {
+        left: 155px !important;
+        position: unset !important;
+    }*/
+
+    .text-label-command {
+        color: white;
+    }
+
+    .act-sidebar {
+        position: absolute;
+        left: 8.5%;
+        width: 100%;
+        top: 16%;
+        height: 700px;
+    }
+
+    .sharp {
+        padding: 10px;
+        font-size: 22px !important;
+    }
+
+    .sharpicon {
+        font-size: 40px;
+    }
+
+    [class^="flaticon-"]:before, [class*=" flaticon-"]:before, [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+        font-family: Flaticon;
+        font-size: 40px;
+        font-style: normal;
+        margin-left: 0px;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    body.modal-open {
+        overflow: hidden !important;
+    }
+    .wfCat > .ui-select-container > .ui-select-match > span {
+        background-color: #a6eaa6;
+    }
+
+    #loginInfo, #userInfo {
+        display: none;
+    }
+
+    #toggleLoginInfo, #toggleUserInfo {
+        cursor: pointer;
+    }
+
+    .menu-top.menu-3 {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .label-lg {
+        font-size: 14px; /* Điều chỉnh kích thước chữ theo ý muốn */
+        font-weight: bold; /* Điều chỉnh độ đậm của chữ nếu cần */
+    }
+
+    .label-lg-content {
+        font-size: 14px; /* Điều chỉnh kích thước chữ theo ý muốn */
+    }
+
+    .toggle-content {
+        display: none;
+    }
+
+    .toggle-header {
+        cursor: pointer;
+        background-color: #EEEEEE;
+        padding-left: 10px;
+    }
+</style>
+
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class1="btn-group actions pt5 pb-1 pull-right d-flex mr5" class="pull-right d-flex col-md-6 pl-0 pr-0" style="margin-top: -40px;">
+    <!--<div class="text-center pr-2" ng-show="!isSearch">
+        <a class="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="row fluid-width">
+        <!--<div class="col-md-3">
+            <label class="fw600 text-underline">{{'ACT_LBL_CATEGORY_CODE'| translate}}</label>
+            <div class="input-group br24">
+                <input type="text" name="ObjActCode" ng-model="model.WorkFlowCode" placeholder="{{'ACT_LBL_CATEGORY_CODE' | translate}}..." class="form-control" ng-keydown="($event.keyCode == 13) && reloadActivity()" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.WorkFlowCode=''" class="btn btn-default no-shadow" style="">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>-->
+        <div class="col-md-8">
+            <!--<label class="fw600 text-underline">{{'ACT_LBL_CATEGORY_NAME'| translate}}</label>-->
+            <div class="input-group br24">
+                <input type="text" name="Name" ng-model="model.Name" placeholder="{{'ACT_LBL_CATEGORY_NAME'| translate}}..." class="form-control" ng-keydown="($event.keyCode == 13) && reloadActivity()" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Name=''" class="btn btn-default no-shadow" style="">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4 pr-0">
+            <div class="btn-group actions">
+                <div class="text-center mt10 pr-2" ng-click="reloadActivity()">
+                    <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                        <span><i class="fas fa-search fs30"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                </div>
+            </div>
+            <div class="btn-group actions d-flex pull-right">
+                <div class="text-center mt10 pr-2">
+                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addWorkflow()">
+                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                </div>
+                <div class="text-center pr-2">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="showDiagram()">
+                        <span><img style="width:15px" src="../../../images/workflowActivity/icon-wf.png" /></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'ACT_BTN_DIAGRAM' | translate}}</p>
+                </div>
+                <div class="text-center mt10">
+                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="showGrid()">
+                        <span><i class="fas fa-list fs30"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'ACT_BTN_LIST' | translate}}</p>
+                </div>
+            </div>
+        </div>
+        <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>-->
+    </div>
+</div>
+<!--<div class="table-toolbar" ng-show="isGrid">
+    <div class="portlet light bordered input-search mb5 mt10">
+    </div>
+</div>-->
+<div ng-show="isGrid">
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>
+<div ng-show="isDiagram" id="canvas-activity">
+    <div id="toolbar" class="navbar-default">
+    </div>
+    <div ng-show="isWF" class="parent_svg" onselectstart="javascript:return false" id="gfx_holder" style="width: 2000px; height:1500px; position: relative;">
+        <div class="milestone" style="width:1500px;height:1500px ;display:flex"></div>
+    </div>
+
+    <nav class="main-menu-wf" ng-show="false">
+        <ul>
+            <li>
+                <a href="#">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_DASHBOARD' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-laptop fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_STAR_COMPONENT' | translate}}
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_FORMS' | translate}}
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-folder-open fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_PAGE' | translate}}
+                    </span>
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-bar-chart-o fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_GRAPH' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-font fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_QUOTE' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-table fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_TABLE' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-map-marker fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_MAP' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-info fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_DOCUMENT' | translate}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a class="workflow-link d-f" href="#">
+                    <i class="fas fa-network-wired fa-2x wf-icon"></i>
+                    <span class="wl-text nav-text">
+                        {{'ACT_BTN_WF' | translate}}
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <ul class="logout">
+            <li>
+                <a href="#">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        {{'ACT_BTN_LOG_OUT' | translate}}
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="main-menu-top">
+        <div class="menu-top ">
+            <div class="create-box">
+                <i class="fas fa-long-arrow-alt-left undo fs28"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_UNDO' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fas fa-long-arrow-alt-right redo fs28"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_REDO' | translate}}
+                </div>
+            </div>
+            <!--<div class="create-box" ng-click="showListAct()">
+                <i class="fas fa-list-alt list-activity fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_LST_ACT' | translate}}
+                </div>
+            </div>-->
+            <div class="create-box" ng-click="createActivity()">
+                <i class="fab fa-buromobelexperte create-activity fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CREATE_ACT' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fab fa-gg create-line fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CREATE_LINE' | translate}}
+                </div>
+            </div>
+        </div>
+        <div id="canvas">
+        </div>
+        <div class="menu-top menu-2">
+            <div class="create-box">
+                <i class="fa-solid fa-user fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_ACTOR' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fas fa-terminal fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_COMMAND' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fa-solid fa-clock fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_TIMER' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fas fa-code fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CODE_ACTION' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fa-solid fa-map fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_LOCATION' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fas fa-prescription fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_PROCESS_INFO' | translate}}
+                </div>
+            </div>
+        </div>
+        <div class="menu-top menu-3">
+            <div class="create-box">
+                <i class="fab fa-buromobelexperte create-activity fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CREATE_ACT' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fab fa-gg create-line fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CREATE_LINE' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="library()">
+                <i class="fa-solid fa-map fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_CREATE_LINE' | translate}}
+                </div>
+            </div>
+            <div class="create-box">
+                <i class="fab fa-gg create-line autoarange fs24"></i>
+                <div class="create-box__hover">
+                    {{'ACT_BTN_AUTO_RANGE' | translate}}
+                </div>
+            </div>
+            <div class="" style="width: 255px; line-height: 15px !important;">
+                <div class="col-md-12">
+                    <div class="input-group wfCat">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfCode" theme="bootstrap" ng-change="changeWf(model.WfCode)">
+                            <ui-select-match placeholder="{{'ACT_CRUD_TXT_WF' | translate}}..."><b class="text-brown">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listWF | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="create-box">
+                <button class="btn btn-custom-tab-color ml5" ng-click="editWorkflow(WorkflowId)">
+                    <span class="fa fa-edit"></span>
+                    {{'Chi tiết' | translate}} <!--ACT_DETAIL_WORKFLOW-->
+                </button>
+            </div>
+            <div class="create-box">
+                <button class="btn btn-custom-tab-color ml5" ng-click="showJson()">
+                    <span class="fa fa-bullseye"></span>
+                    {{'ACT_BTN_JSON' | translate}}
+                </button>
+            </div>
+            <div class="create-box">
+                <button class="btn btn-custom-tab-color ml5" ng-click="showMileStone()">
+                    <span class="fa fa-trello"></span>
+                    {{'ACT_BTN_MILE_STONE' | translate}}
+                </button>
+            </div>
+            <div class="create-box">
+                <button class="btn btn-custom-tab-color ml5" ng-click="saveDiagram()">
+                    <span class="fa fa-save"></span>
+                    {{'Lưu JSON' | translate}} <!--ACT_BTN_SAVE_JSON-->
+                </button>
+            </div>
+            <div class="create-box">
+                <button class="btn btn-custom-tab-color ml5" ng-click="editActivity()">
+                    <span class="fa fa-save"></span>
+                    {{'Edit' | translate}} <!--ACT_BTN_SAVE_JSON-->
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-right" id="zoom" ng-show="isWF">
+        <div class="create-box create-box-r">
+            <i class="fas fa-expand-arrows-alt move"></i>
+            <div class="create-box__hover create-box__hover--r">
+                {{'ACT_BTN_MOVE' | translate}}
+            </div>
+        </div>
+        <div class="create-box create-box-r">
+            <i class="fas fa-expand-alt fullscreen"></i>
+            <div class="create-box__hover create-box__hover--r">
+                {{'ACT_BTN_FULL_SCREEN' | translate}}
+            </div>
+        </div>
+        <div class="create-box create-box-r" ng-click="zoomDefault()">
+            <i class="fas fa-search-minus zoomdefault"></i>
+            <div class="create-box__hover create-box__hover--r">
+                {{'ACT_BTN_ZOOM_DEFAULT' | translate}}
+            </div>
+        </div>
+        <div class="create-box create-box-r">
+            <i class="fas fa-plus zoomin" ng-click="zoomIn()"></i>
+            <div class="create-box__hover create-box__hover--r">
+                {{'ACT_BTN_ZOOM_IN' | translate}}
+            </div>
+        </div>
+        <div class="create-box create-box-r" ng-click="zoomOut()">
+            <i class="fas fa-minus zoomout"></i>
+            <div class="create-box__hover create-box__hover--r">
+                {{'ACT_BTN_ZOOM_OUT' | translate}}
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-top menu-bottom" ng-show="isWF" ng-show="!isEditActivity">
+        <div class="create-box">
+            <i class="fas fa-long-arrow-alt-left"></i>
+            <div class="create-box__hover">
+                {{'ACT_BTN_UNDO' | translate}}
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-long-arrow-alt-right"></i>
+            <div class="create-box__hover">
+                {{'ACT_BTN_REDO' | translate}}
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fab fa-buromobelexperte create-activity"></i>
+            <div class="create-box__hover">
+                {{'ACT_BTN_CREATE_ACT' | translate}}
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fab fa-gg create-line"></i>
+            <div class="create-box__hover">
+                {{'ACT_BTN_CREATE_LINE' | translate}}
+            </div>
+        </div>
+    </div>
+
+    <div class="main-menu-editActivity" style="top:82px;width:570px;height:2000px ;display:flex; background-color: #fff; border: 1px solid gray;" ng-show="isEditActivity">
+        <div class="portlet-body form baolo" style="width:100%;position:absolute;background:#fff;">
+            <div class="modal-header" style="background-color: #ffffff; border: 1px solid gray; padding: 5px;">
+                <div class="col-md-10 pl-0">
+                    <i class="fa fa-edit black icon-insert fs20"></i>
+                    <span class="label-lg" id="modal-title" style="vertical-align: 5px; color: black;">[{{'Thiết lập hoạt động'|translate}}] {{'ACT_TITLE_EDIT_ACT'|translate}} '{{modelEditActivity.Title}}'</span>
+                </div>
+                <!-- <div class="col-md-2 text-right">
+                    <i class="fa-solid fa-caret-right icon-scalet fs20 mt5" ng-click="editActivity()"></i>
+                </div> -->
+            </div>
+            <div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleInfo" class="toggle-header">
+                                <i ng-show="checkHiddenInfo" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenInfo" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'Thông tin chung' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="Info" class="toggle-content">
+                                <div class="portlet-body form">
+                                    <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptionsActivity">
+                                        <div class="form-body pt-0 pl-0 pr-0">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_ACT_NAME' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control br24 title-act" ng-model="modelEditActivity.Title" ng-change="changeName()" name="Title" placeholder="{{'ACT_CRUD_ACT_NAME' | translate}}..." />
+                                                        </div>
+                                                        <!--<span class="text-danger pl15 fs12">{{model.ActivityCode}}</span>-->
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error' : errorStatus}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_STATUS' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="input-group br24-nobtn">
+                                                                <ui-select tagging ng-model="modelEditActivity.Status" theme="bootstrap" ng-change="changeSelect('Status')">
+                                                                    <ui-select-match placeholder="{{'ACT_CRUD_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in lstStatus | filter: $select.search">
+                                                                        {{x.Name}}
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                            </div>
+                                                            <span ng-show="errorStatus" class="label-color validation-message">
+                                                                {{'ACT_VALIDATE_STATUS' | translate}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error' : errorStatus}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_ACT_LEVEL' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type='number' name="ActLevel" class="form-control br24" ng-model="modelEditActivity.Level" placeholder="{{'ACT_CRUD_ACT_LEVEL' | translate}}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_DURATION' | translate}}</label>
+                                                            <input type="text" class="form-control br24" ng-model="modelEditActivity.Duration" name="Duration" placeholder="{{'ACT_CRUD_DURATION' | translate}}..." />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error' : errorUnit}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_UNIT' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="input-group br24">
+                                                                <ui-select tagging ng-model="modelEditActivity.Unit" theme="bootstrap" ng-change="changeSelect('Unit')">
+                                                                    <ui-select-match placeholder="{{'ACT_CRUD_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in lstUnit | filter: $select.search">
+                                                                        {{x.Name}}
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" ng-click="addUnit()" class="btn no-shadow   btn-default" style="">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <span ng-show="errorUnit" class="label-color validation-message">
+                                                            {{'ACT_VALIDATE_UNIT' | translate}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group" ng-class="{'has-error' : errorGroup}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_GROUP' | translate}}</label>
+                                                            <div class="input-group br24">
+                                                                <ui-select tagging ng-model="modelEditActivity.Group" theme="bootstrap" ng-change="changeSelect('Group')">
+                                                                    <ui-select-match placeholder="{{'ACT_CRUD_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in lstGroup | filter: $select.search">
+                                                                        {{x.Name}}
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" ng-click="addGroup()" class="btn no-shadow btn-default" style="">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                            <span ng-show="errorGroup" class="label-color validation-message">
+                                                                {{'ACT_VALIDATE_GROUP' | translate}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error' : errorType}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_TYPE' | translate}}</label>
+                                                            <div class="input-group br24">
+                                                                <ui-select tagging ng-model="modelEditActivity.Type" theme="bootstrap" ng-change="changeSelect('Type')">
+                                                                    <ui-select-match placeholder="{{'ACT_CRUD_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in lstType | filter: $select.search">
+                                                                        {{x.Name}}
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" ng-click="addType()" class="btn no-shadow btn-default" style="">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                            <span ng-show="errorType" class="label-color validation-message">
+                                                                {{'ACT_VALIDATE_TYPE' | translate}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error' : errorMileStone}">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_MILE_STONE' | translate}}</label>
+                                                            <div class="input-group br24">
+                                                                <ui-select tagging ng-model="modelEditActivity.MileStone" theme="bootstrap" ng-change="changeSelect('MileStone')">
+                                                                    <ui-select-match placeholder="{{'ACT_CRUD_MILE_STONE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in lstMileStone | filter: $select.search">
+                                                                        {{x.Name}}
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" ng-click="addMileStone()" class="btn no-shadow btn-default" style="">
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                            <span ng-show="errorMileStone" class="label-color validation-message">
+                                                                {{'ACT_VALIDATE_MILE_STONE' | translate}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label class="label-lg-content">{{'ACT_CRUD_LOCATION' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control br24" ng-model="modelEditActivity.Located" name="Located" placeholder="{{'ACT_CRUD_LOCATION' | translate}}..." />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="col-md-4 mt10">
+                                                            <label class="label-lg-content">{{'Hình ảnh' | translate}}</label>
+                                                        </div>
+                                                        <div class="col-md-6 mt15">
+                                                            <a class1="btn btn-icon-only btn-circle btn-outline red-custom">
+                                                                <span><i class="fas fa-picture-o fs25" aria-hidden="true"></i></i></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mt10 pr-2 text-right"> <!-- Sử dụng text-right -->
+                                                        <a class1="btn btn-icon-only btn-circle btn-outline btn-default" ng-click="submit()">
+                                                            <span><i class="fa-solid fa-plus fs25" aria-hidden="true"></i></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleAssign" class="toggle-header">
+                                <i ng-show="checkHiddenAssign" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenAssign" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'ACT_TAB_ASSIGN' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="Assign" class="toggle-content">
+                                <div ng-include="'../views/admin/activity/assign-user-to-activity.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleSettingValue" class="toggle-header">
+                                <i ng-show="checkHiddenSettingValue" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenSettingValue" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'ACT_TAB_SETTING_VALUE' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="SettingValue" class="toggle-content">
+                                <style>
+                                    .dataTables_wrapper .table-scrollable {
+                                        border: 1px solid #e7ecf1 !important;
+                                    }
+                
+                                    .h-60 {
+                                        height: 60px;
+                                    }
+                
+                                    .pl0 {
+                                        padding-left: 10px;
+                                    }
+                
+                                    .p25 {
+                                        padding-left: 25px;
+                                    }
+                
+                                    .pt5 {
+                                        padding-top: 5px;
+                                    }
+                
+                                    .pr15 {
+                                        padding-right: 10px;
+                                    }
+                
+                                    .pr15 {
+                                        padding-right: 15px;
+                                    }
+                
+                                    .pr20 {
+                                        padding-right: 20px;
+                                    }
+                
+                                    .pr5 {
+                                        padding-right: 5px;
+                                    }
+                
+                                    .mt5 {
+                                        margin-top: 5px;
+                                    }
+                
+                                    .mt15 {
+                                        margin-top: 15px;
+                                    }
+                
+                                    .ml15 {
+                                        margin-left: 20px;
+                                    }
+                
+                                    .mt23 {
+                                        margin-right: 60px;
+                                    }
+                
+                                    .mt25 {
+                                        margin-top: 25px;
+                                    }
+                
+                                    .w-100-percent {
+                                        width: 100%;
+                                    }
+                
+                                    .w-30-percent {
+                                        width: 30%;
+                                    }
+                
+                                    .bgWhite {
+                                        background: #FFF;
+                                    }
+                
+                                    .labelbodergroup {
+                                        margin-left: 24px;
+                                        margin-top: -12px;
+                                        position: absolute;
+                                        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+                                        border: 1px solid #e9dada;
+                                        border-radius: 4px;
+                                        font-size: 11px;
+                                        padding: 3px 10px !important;
+                                    }
+                
+                                    .table_body {
+                                        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+                                        border-radius: 4px !important;
+                                        border: 1px solid #e9dada;
+                                        padding-top: 15px;
+                                        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+                                        padding-bottom: 15px;
+                                    }
+                
+                                    .text-box-important {
+                                        background-color: #27ae60 !important;
+                                        color: #fcfdfd !important;
+                                        font-weight: bold;
+                                    }
+                
+                                    .ui-select-match-close {
+                                        color: red;
+                                        margin-top: 0px !important;
+                                        margin-right: 15px;
+                                        line-height: 20px !important;
+                                        font-size: 30px !important;
+                                    }
+                
+                                    .ui-select-match-item {
+                                        font-size: 13px !important;
+                                        padding-bottom: 5px !important;
+                                        padding-top: 5px !important;
+                                    }
+                                </style>
+                                <div class="row">
+                                    <form name="addheader" class="form-horizontal " method="post" ng-validate="validationOptionsAttr">
+                                        <div class="form-body">
+                                            <div class="pt-0" style="height: 200px;">
+                                                <div class="col-md-11 pr-0">
+                                                    <label class="label-lg-content">{{'Bộ dữ liệu kết quả'|translate}}</label>
+                                                    <ui-select ng-model="model.ListGroupData" multiple theme="bootstrap" class="h-100 mh-100 br12">
+                                                        <ui-select-match placeholder="{{'Bộ dữ liệu kết quả'|translate}}...">{{$item.Name}}</ui-select-match>
+                                                        <ui-select-choices repeat="x.Code as x in lstAttrGroup | filter:$select.search">
+                                                            {{x.Name}}
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="col-md-1 pt20">
+                                                    <div class="btn-group pull-right actions d-flex mt25 ml15">
+                                                        <div class="text-center mt10">
+                                                            <a ng-click="save()" class1="btn btn-icon-only btn-boder1">
+                                                                <span><i class="fa-solid fa-plus fs25"></i></span>
+                                                            </a>
+                                                            <p class="text-underline fs14 mb8 pt5">{{'COM_BTN_SAVE' | translate}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleFile" class="toggle-header">
+                                <i ng-show="checkHiddenFile" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenFile" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'ACT_TAB_FILE' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="File" class="toggle-content">
+                                <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleDescription" class="toggle-header">
+                                <i ng-show="checkHiddenDescription" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenDescription" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'ACT_TAB_DESCRIPTION' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="Description" class="toggle-content">
+                                <textarea class="form-control fs14" id="description" rows="22" ng-model="model.Desc"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleChild" class="toggle-header">
+                                <i ng-show="checkHiddenChild" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenChild" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'Luồng con' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="Child" class="toggle-content">
+                                <div ng-include="'../views/admin/activity/nested-wf-cat.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div id="toggleDefault" class="toggle-header">
+                                <i ng-show="checkHiddenDefault" class="fa-solid fa-caret-down icon-scalet fs20 mt5"></i>
+                                <i ng-show="!checkHiddenDefault" class="fa-solid fa-caret-right icon-scalet fs20 mt5"></i>
+                                <label class="label-lg" style="vertical-align: 3px;">{{'Vai trò mặc định' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl30">
+                            <div id="Default" class="toggle-content">
+                                <div ng-include="'../views/admin/activity/role-default.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="act-sidebar">
+        <div class="act-sidebar__title ">
+            <h3 class="act-sidebar__title--h3 accordion1">
+                <i class="fas fa-sort-amount-down"></i>  {{'ACT_BTN_SYMBOL' | translate}}
+            </h3>
+            <i class="fa-solid fa-xmark act-sidebar__close"></i>
+        </div>
+        <div class="act-sidebar__content act__content1" ng-repeat="x in lstLibSharp">
+            <!--<b class="text-underline" ng-if="x.ListSharpLib.length > 0">{{x.TypeName}}</b>-->
+            <div class="" ng-repeat="k in x.ListSharpLib">
+                <div ng-click="creatActByLib(k.SharpCode)" id="{{k.SharpCode}}" class="sharp fs16" style="font-weight: 600;cursor: pointer;width:60%;"><i class="{{k.SharpPath}} sharpicon"></i>&nbsp;&nbsp;{{k.SharpName}}</div>
+            </div>
+        </div>
+        <div class="act-sidebar__content act__content2">
+        </div>
+    </div>
+    <!--end menu activity-left -->
+    <!-- wfl instance -->
+    <div class="wfl-instance" style="top: 45px; height: 93vh !important;" id="tab-menu-wfinst">
+        <div class="tab" role="tabpanel">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <div href="#WFContent" aria-controls="home" role="button" data-toggle="tab">{{'ACT_LBL_LIST_WF' | translate}} ({{lstWfInst.length}})</div>
+                </li>
+                <div class="btn-group actions d-flex pull-right">
+                    <div class="text-center pr-1">
+                        <i data-dismiss="modal" ng-click="showSearch()" class="btn btn-icon-only btn-circle btn-outline btn-custom-tab-color">
+                            <span><i class="fa fa-search"></i></span>
+                        </i>
+                    </div>
+                </div>
+            </ul>
+            <div>
+                <input type="text" class="form-control mt5 ml5 pr5" ng-show="isSearch" ng-change="searchWfInst(model.WfInst)" ng-model="model.WfInst" name="WfInst" placeholder="Tìm kiếm..." />
+                <span class="fas fa-times fs15 ng-scope" style="position:absolute;right: 30px;top: 63px;cursor: pointer;" ng-click="model.WfInst='';searchWfInst(model.WfInst)" ng-if="model.WfInst!=''"></span>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="WFContent">
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table">
+                        <thead class="grey white-text title">
+                            <tr>
+                                <th style="width: 3%;"></th>
+                                <th style="width: 94%;"></th>
+                                <th style="width: 3%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in lstWfInst">
+                                <td class="text-center">{{$index + 1}}</td>
+                                <td class="">
+                                    <a ng-click="wfInstanceClick(x.Code)">{{x.WfName}} - {{x.Code}}</a>
+                                    <br /><span class="fs12" style="color: green;">{{x.CreatedBy}}&nbsp;&nbsp;{{x.CreatedTime}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button title="Sửa" ng-click="editWfInst(x.Code)" style="width: 25px; height: 25px; padding: 0px; background: #3598dc;" class="btn btn-icon-only btn-circle btn-outline blue"><i class="fa fa-edit fs10" style="color: #fff;"></i></button>
+                                    <button title="Xoá" ng-click="deleteWfInstance(x.Code)" style="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash fs10" style="color: #fff;"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <div href="#ActInst" aria-controls="home" role="button" data-toggle="tab">{{'ACT_TAB_ACT' | translate}}</div>
+                        </li>
+                        <li role="presentation" class="disabled stepNext">
+                            <div href="#ActInstDocs" aria-controls="home" role="button" data-toggle="tab">{{'ACT_TAB_DOCUMENT' | translate}}</div>
+                        </li>
+                        <li role="presentation" class="disabled stepNext">
+                            <div href="#ActInstResult" aria-controls="home" role="button" data-toggle="tab">{{'ACT_TAB_RESULT_DATA' | translate}}</div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="ActInst">
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table">
+                                <thead class="grey white-text title">
+                                    <tr>
+                                        <th scope="col">{{'ACT_LIST_COL_INDEX' | translate}}</th>
+                                        <th scope="col">{{'ACT_LIST_COL_ACT_NAME' | translate}}</th>
+                                        <th scope="col">{{'ACT_LIST_COL_STATUS' | translate}}</th>
+                                        <th scope="col">{{'ACT_LIST_COL_DOWN_TIME' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="activity">
+                                    <tr ng-repeat="x in lstActInst">
+                                        <td class="text-center">{{$index + 1}}</td>
+                                        <td class=""><a ng-click="editInstAct(x.ID, x.ObjCode)">{{x.Title}}</a></td>
+                                        <td class="text-center">{{x.Status}}</td>
+                                        <td class="text-center">{{x.Timer}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="ActInstDocs">
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table">
+                                <thead class="grey white-text title">
+                                    <tr>
+                                        <th style="width: 3%;">STT</th>
+                                        <th class="col-md-8">Tệp tin</th>
+                                        <th class="col-md-2">Hoạt động</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="activity">
+                                    <tr ng-repeat="x in lstAttachment">
+                                        <td class="text-center">{{$index + 1}}</td>
+                                        <td class="">
+                                            <div class="col-md-12 pr-0 pl-0" ng-repeat="file in x.LstAttachment">
+                                                <div class="col-md-12 pr-0 pl-0">
+                                                    <i style="color: '{{file.Color}}';font-size: 15px;" class="{{file.Icon}} pr5 pull-left" aria-hidden="true"></i>
+                                                    <label class="bold col-md-10 pr-0 pl-0"><a title="{{file.FileName}}" ng-click="viewFile(file.FileCode, file.FileUrl)">{{file.FileName.substring(0, 100)}}<span ng-if="file.FileName.length > 100">...</span></a></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{{x.Title}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="ActInstResult">
+                        <div class="table-responsive" style="max-height: 335px; overflow-y: auto;">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2 text-center">{{'Tên dữ liệu' | translate}}</th>
+                                        <th class="col-md-1 text-center">{{'Giá trị' | translate}}</th>
+                                        <th class="col-md-2 text-center">{{'Hoạt động' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in lstResultAttrData">
+                                        <td class="text-center">
+                                            {{x.AttrName}}
+                                            <br /><span class="fs12" style="color:green;">
+                                                {{x.CreatedBy}} <br /> {{x.CreatedTime}}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">{{x.Value}} {{x.Unit}}</td>
+                                        <td class="text-center">{{x.Title}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-right-edit" style="top:82px;width:35px;height:40px; display:flex; background-color: #cccccc;">
+        <div class="create-box create-box-r" ng-click="editActivity()">
+            <i class="fa-solid fa-caret-right icon-scalet fs25 mt15" style="margin-left: 15px;" ng-show="isEditActivity"></i>
+            <i class="fa-solid fa-caret-left icon-scalet fs25 mt15" style="margin-left: 15px;" ng-show="!isEditActivity"></i>
+        </div>
+    </div>
+    </div>
+    <pre id="json" ng-show="isShowJson" class="json_div" style="overflow:auto;position:absolute; top:140px; right:10px; width:350px; height:500px;background:white;border:1px solid gray"></pre>
+    
+</div>

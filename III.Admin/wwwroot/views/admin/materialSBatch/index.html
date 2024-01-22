@@ -1,0 +1,129 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6">
+            <!--<h1 class="bold mb-0">{{'MSB_TITLE_LIST_BATCH' | translate}}</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="/Admin/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <!--<li>
+                    <a href="#">Quản lý kho và bán hàng</a>
+                    <span>&gt;</span>
+                </li>-->
+                <li>
+                    <a class=" bold text-underline" style="color:green;" href="/Admin/MaterialSbatch">{{'MSB_LINK_LIST_BATCH' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group pull-right actions">
+                <a class="btn  btn-accent btnSearch">
+                    <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+                </a>
+                <a ng-click="add()" class="btn btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 hidden">
+        <div class="portlet-body">
+            <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'MSB_CURD_SEARCH_NAME_BATCH' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.Name" class="form-control" type="text" placeholder="{{'MSB_CURD_TXT_SEARCH_NAME_BATCH' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Name=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'MSB_CURD_SEARCH_NAME_PRODUCT' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.ProductName" class="form-control" type="text" placeholder="{{'MSB_CURD_TXT_SEARCH_NAME_PRODUCT' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductName=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'MSB_CURD_SEARCH_DATE' | translate}}</label>
+                    <div class='input-group date' id='FromTo'>
+                        <input type='text' class="form-control input-date" ng-model="model.FromTo" placeholder="{{'MSB_CURD_TXT_SEARCH_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromTo=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'MSB_CURD_SEARCH_EXPIRATION_DATE' | translate}}</label>
+                    <div class='input-group date' id='DateTo'>
+                        <input type='text' class="form-control input-date" ng-model="model.DateTo" placeholder="{{'MSB_CURD_TXT_SEARCH_EXPIRATION_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DateTo=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="btn-group pull-right pt10">
+                        <a class="btn btn-accent" ng-click="search()">
+                            <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

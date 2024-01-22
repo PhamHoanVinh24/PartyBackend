@@ -1,0 +1,164 @@
+﻿<div ng-controller="card-attr-result-data" style="height: 465px; overflow-y: scroll; overflow-x: hidden; background: white " fullscreen="isFullScreen" id="card-attr-result-data">
+    <form name="cardLogger" class="" method="post" ng-validate="validationOptionsCardLogger">
+        <div class="col-md-12 p-0">
+            <div class="col-md-12 p-0">
+                <!--<div class="col-md-2" ng-repeat="x in lstAttrGroup" style="width:{{100/lstAttrGroup.length}}%">
+                    <div class="text-center ml-3">
+                        <img ng-click="changeAttrGroup(x.Code)" src="../../../images/workflowActivity/icon-data-orange.png" style="width: 40px; border-radius: 50%;box-shadow: 2px 2px 3px #b57706;" />
+                        <p class="text-underline fs12 mb5 pt3">{{x.Name}} (<span class="bold text-danger">{{x.Count}}</span>)</p>
+                    </div>
+                </div>-->
+                <div class="col-md-4 pl-0 pb10">
+                    <label class="control-label text-underline">{{'CJ_LBL_GROUP_DATA' | translate}}</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelAttr.DtGroup" theme="bootstrap" ng-disabled="model.IsLock" ng-change="changeAttrGroup(modelAttr.DtGroup)">
+                            <ui-select-match placeholder="{{'CJ_LBL_GROUP_DATA' | translate}}..."><b class="bold fs14">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstAttrGroup | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="btn-group actions pt15 pb-1 pull-left d-flex col-md-8 justify-content-sb">
+                    <div class="text-center pr10">
+                        <a class="fs30" ng-click="submitAttr()">
+                            <span><i class="fa-solid fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                    <div class="text-center" ng-if="!isFullScreen">
+                        <a class="fs30" ng-click="goFullscreen()" style1="border: 1px solid #000;">
+                            <i class="fa-solid fa-expand"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'CJ_BTN_EXTEND' | translate}}</p> <!--WFAI_BTN_EXPAND-->
+                    </div>
+                    <div class="text-center" ng-if="isFullScreen">
+                        <a class="fs30" ng-click="goFullscreen()" style1="border: 1px solid #000;">
+                            <i class="fas fa-compress"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'CJ_TXT_BN_NARROW_DOWN' | translate}}</p> <!--WFAI_BTN_COLLAPSE-->
+                    </div>
+                    <!--<button class="btn btn-default" ng-click="submitAttr()" style="border: 1px solid #000;">
+        <i class="fa fa-save" aria-hidden="true"></i>
+        {{'COM_BTN_SAVE' | translate}}
+    </button>-->
+                </div>
+            </div>
+
+            <!--<div class="col-md-2 pr-0" style="width: 10%;width: 10%;float: right;position: fixed;right: 40px;">
+                <div class="btn-group actions pt5 pb-1 pull-right d-flex">
+                    <div class="text-center">
+                        <a class="btn btn-icon-only btn-outline" ng-click="addNewAttr()" style="border: 1px solid #000;">
+                            <span><i class="fa fa-plus black"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'Thêm thuộc tính' | translate}}</p>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="table-responsive" style1="overflow-y: auto; max-height: 250px;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="col-md-6 text-center">{{'CJ_TXT_BN_ATTR_NAME' | translate}}</th>
+                                <th class="col-md-2 text-center">{{'CJ_TXT_BN_VALUE' | translate}}</th>
+                                <th class="col-md-2 text-center">{{'CJ_TXT_BN_UNIT' | translate}}</th>
+                                <th class="col-md-2 text-center">{{'CJ_TXT_BN_PERFORMER' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="lstLoggerDataCard.length == 0"><td colspan="4" class="text-center">{{'CJ_TXT_BN_NOT_DATA' | translate}}</td></tr>
+                            <tr ng-repeat="x in lstLoggerDataCard">
+                                <td class="col-md-6">
+                                    <span class="bold">{{x.Title}} <br /></span>
+                                </td>
+                                <td class="col-md-2 text-center">
+                                    <input class="h-30 bold text-center text-danger br24" ng-model="x.Value">
+                                </td>
+                                <td class="col-md-2 text-center">{{x.Unit}}</td>
+                                <td class="col-md-2 text-center">
+                                    {{x.CreatedBy}}<br />
+                                    <span>{{x.CreatedTime}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-12 pr-0 pl-0" ng-show="listNewAttr.length != 0">
+                    <div class="col-md-12 pl-0 pr-0" ng-repeat="x in listNewAttr">
+                        <div class="col-md-5 pr-0 pl-0">
+                            <div class="form-group">
+                                <div class="col-md-12 pr-0 pl-0">
+                                    <label class="control-label fw600">{{'CJ_TXT_BN_ATTRI' | translate}}</label>
+                                </div>
+                                <div class="col-md-12 pr-0 pl-0">
+                                    <input type="text" class="form-control bold" ng-model="x.AttrName" name="AttrName" placeholder="{{'CJ_TXT_BN_ATTR_NAME' | translate}}..." ng-disabled="IsLock || !isAccepted" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 pr-0">
+                            <div class="form-group">
+                                <div class="col-md-12 pr-0 pl-0">
+                                    <label class="control-label fw600">{{'CJ_TXT_BN_VALUE' | translate}}</label>
+                                </div>
+                                <div class="col-md-12 pr-0 pl-0">
+                                    <input type="text" class="form-control bold" ng-model="x.Value" name="Value" placeholder="{{'CJ_TXT_BN_VALUE' | translate}}..." ng-disabled="IsLock || !isAccepted" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pr-0">
+                            <div class="form-group">
+                                <div class="col-md-12 pr-0 pl-0">
+                                    <label class="control-label fw600">{{'CJ_TXT_BN_DVT' | translate}}</label>
+                                    <div class="input-group">
+                                        <ui-select tagging ng-model="x.AttrUnit" theme="bootstrap">
+                                            <ui-select-match placeholder="{{'CJ_TXT_BN_DVT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.Code as x in listAttrUnit | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pr-0">
+                            <button title="Xoá" ng-click="deleteNewAtt(x.Id)" style="width: 25px; height: 25px; padding: 0px"
+                                    class="btn mt25 pull-right btn-icon-only btn-circle btn-outline red">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-12 pl-0 pr-0" style="">
+                <div class="col-md-12 attr-result mt10 table_toolbar" ng-repeat="x in listData">
+                    <div class="col-md-10">
+                        <span class="fw600 text-underline text-success">Phiên ({{x[0].SessionId}})</span>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <button title="Xoá" ng-click="deleteDataLogger(x[0].SessionId)" style="width: 25px; height: 25px; padding: 0px" class="btn pull-right btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                    </div>
+                    <div class="col-md-12 pr-0" ng-repeat="k in x">
+                        <div class="col-md-4 pl5">
+                            {{k.Title}}
+                        </div>
+                        <div class="col-md-3 pl5">
+                            {{k.Value}}
+                        </div>
+                        <div class="col-md-2 pl5">
+                            {{k.Unit}}
+                        </div>
+                        <div class="col-md-3 pl5 pr-0">
+                            {{k.CreatedBy}}<br />
+                            <span>{{k.CreatedTime}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,283 @@
+﻿
+<div class="mb10">
+    <div class="">
+        <button type="button" class="btn btn-default btn-sm" ng-click="backToList()">
+            <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;
+            Back to list
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <span>
+            Username: <b ng-bind="UserInfo.UserName"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            Fullname: <b ng-bind="UserInfo.GivenName"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            Email: <b ng-bind="UserInfo.Email"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            Employee Code: <b ng-bind="UserInfo.EmployeeCode"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            Branch: <b ng-bind="UserInfo.BranchName"></b>
+        </span>
+    </div>
+</div>
+<div class="todo-ui row">
+    <style>
+        .table-height-scroll {
+            display: block;
+            height: 375px;
+            overflow: auto;
+            border: 1px solid #e7ecf1;
+        }
+
+        .table-height-scroll1 {
+            display: block;
+            height: 468px !important;
+            overflow: auto;
+            margin-bottom: 0 !important;
+        }
+
+        .table-height-scroll2 {
+            display: block;
+            height: 410px !important;
+            overflow: auto
+        }
+
+        .block-tree-branch {
+            height: 469px;
+            overflow: auto;
+            border: 1px solid #e7ecf1;
+        }
+
+        .ui-select-match-text > span {
+            width: 80% !important;
+            overflow: hidden !important;
+            text-overflow: "…" !important;
+            position: absolute !important;
+        }
+
+        .table-function .mt-checkbox {
+            padding-left: 18px;
+        }
+
+        tr.selected-group {
+            background: #6495ed !important;
+            /*color: #fff !important;*/
+            font-weight: bold !important;
+        }
+        .table-hover > tbody > tr.selected-group:hover, .table-hover > tbody > tr.selected-group:hover > td {
+            background: #6495ed !important;
+        }
+        
+        
+        @media only screen and (min-width : 992px) {
+            .res-pa-h0 {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+
+        .todo-ui .portlet.light {
+            padding: 5px 12px 15px;
+            margin-bottom: 5px;
+        }
+
+            .todo-ui .portlet.light > .portlet-title > .caption {
+                padding: 7px 0;
+            }
+
+            .todo-ui .portlet.light > .portlet-title {
+                min-height: 40px;
+            }
+
+            .todo-ui .portlet.light .portlet-body {
+                padding-top: 0px;
+            }
+    </style>
+    <div class="col-md-4">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="">
+                            <div class="input-group">
+                                <ui-select ng-model="model.AppCode" class="" style="width: 100%;" ng-change="changeApplication()">
+                                    <ui-select-match placeholder="{{'SELECT_APP' | translate }}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listApplication | filter:$select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="clearApplication()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="portlet-body todo-project-list-content">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search department / profit center..." ng-model="txtGroupUserName" name="txtGroupUserName" ng-keydown="($event.keyCode == 13) && searchGroupUser()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="clearSearchGroupUser();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchGroupUser();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id="contentMainTree2">
+                    <div class="table-scrollable table-height-scroll1">
+                        <table class="table table-bordered table-hover table-groupuser">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <label class="mt-checkbox" style="padding-left: 18px !important;">
+                                            <input type="checkbox" ng-model="selectAllGroup" ng-click="clickSelectAllGroup(selectAllGroup)" /><span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">Department / PC</th>
+                                    <th class="text-center">Role</th>
+                                    <th class="text-center">Permission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in listGroupUsers" ng-class="{'selected-group': selectedGroup[$index]}">
+                                    <td class="text-center">
+                                        <label class="mt-checkbox" style="padding-left: 18px !important;"><input type="checkbox" ng-model="item.IsChecked" ng-click="clickSelectOneGroup($index, item)" /><span></span></label>
+                                    </td>
+                                    <td ng-click="showUserPermission(item, $index)">
+                                        {{ item.Title }}
+                                    </td>
+                                    <td>
+                                        <select ng-model="item.RoleId" ng-change="changeRoleOfGroup(item)">
+                                            <option value="">--- {{'ROLE' | translate }} ---</option>
+                                            <option ng-repeat="role in listRoles" value="{{ role.Id }}" ng-selected="{{ role.Id == item.RoleId }}">{{ role.Title | limitTo: 40 }}{{role.Title.length > 40 ? '...' : ''}}</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="javascript:;" class="" ng-click="showUserPermission(item, $index)">Show</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 res-pa-h0">
+        <div class="portlet light bordered">
+            <!-- PROJECT HEAD -->
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">{{"RESOURCE" | translate }}</span>
+                </div>
+                <div class="pull-right">
+                    <a ng-click="saveResource()" title="{{'SAVE' | translate }}" data-toggle="modal" class="btn btn-circle btn-icon-only btn-default blue">
+                        <i class="fa fa-floppy-o"></i>
+                    </a>
+                    <a ng-click="refreshResource()" title="{{'CLEAR' | translate }}" class="btn btn-circle btn-icon-only btn-default">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                    <a ng-click="clearAllResource()" title="Clear all resource" class="btn btn-circle btn-icon-only red">
+                        <i class="fa fa-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- end PROJECT HEAD -->
+            <div class="portlet-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Resource API code / name ..." ng-model="txtResourceApi" name="txtResourceApi" ng-keydown="($event.keyCode == 13) && searchResource()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="clearSearchResource();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchResource();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id="contentMainTree3">
+                    <div class="table-scrollable table-height-scroll1">
+                        <table class="table table-bordered table-hover table-function">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" ng-model="selectAll" ng-click="selectAllResource(selectAll)" /><span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">{{'RESOURCE_NAME' | translate }}</th>
+                                    <th class="text-center">{{'DESCRIPTION' | translate }}</th>
+                                    <th class="text-center">{{'API' | translate }}</th>
+                                    <th class="text-center">Function</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in model.Resources">
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-icon-only green" style="margin-right: 0px !important" ng-class="{ green: item.HasPermission, red: !item.HasPermission}" ng-click="selectOneResource(item)">
+                                            <i class="fa fa-check" ng-class="{ 'fa-check': item.HasPermission, 'fa-remove': !item.HasPermission }"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{ item.Title}}</td>
+                                    <td>{{ item.Description }}</td>
+                                    <td>{{ item.Api }}</td>
+                                    <td>{{ item.FunctionName }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" id="contentMainTree1">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">Branch Reference</span>
+                </div>
+            </div>
+
+            <div class="portlet-body todo-project-list-content">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Branch name / code ..." ng-model="txtBranchName" name="txtBranchName" ng-keydown="($event.keyCode == 13) && searchBranch()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="clearSearchBranch();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchBranch();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="contentMainTreeBranch">
+                    <div id="treeDivBranch" class="block-tree-branch" js-tree="treeConfigBranch" should-apply="ac()" ng-model="treeDataBranch" tree="treeInstance" tree-events="ready:readyCBBranch;search:searchTreeBranch"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

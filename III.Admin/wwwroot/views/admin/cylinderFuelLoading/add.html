@@ -1,0 +1,259 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f1f1f1, #FBFCFC);
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166, 0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f1f1f1, #FBFCFC);
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Nạp nhiên liệu vào bình' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mb5">
+                    <div class="form-group col-lg-12" ng-class="{ 'has-error': errorTankCode}">
+                        <label class="fw600 text-bold require">{{'Chọn bồn' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.TankCode" theme="bootstrap"
+                                on-select="changeTank($item)">
+                                <ui-select-match placeholder="{{'Chọn bồn' | translate}}...">
+                                    <b class="fs16">{{$select.selected.Title}}</b>
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listStaticTank | filter: $select.search"
+                                    refresh="reloadProductTank($select.search)">
+                                    {{x.Title}}
+                                    <div class="row mt15" ng-if="$last && listStaticTank.length >= 9">
+                                        <button class="btn btn-xs btn-warning" style="width: 100%;"
+                                            ng-click="loadMoreTank($select, $event);" ng-disabled="loading">
+                                            Load more...
+                                        </button>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.TankCode='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="pt10 ml15" ng-show="model.TankCode!=''">
+                            <span>{{'Trọng lượng' | translate}}: </span>
+                            <span class="text-danger">{{weight2}} {{weightUnit2}}</span>
+                            <span>-{{'Tổng trọng lượng còn lại' | translate}}: </span>
+                            <span class="text-danger">{{Total2}} {{weightUnit2}}</span>
+                        </span>
+                        <span ng-show="errorTankCode" class="label-color validation-message">
+                            {{'Bồn không được để trống'|translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="form-group col-lg-12" ng-class="{ 'has-error': errorCylinkerCode}">
+                        <label class="fw600 text-bold require">{{'Chọn bình' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.CylinkerCode" theme="bootstrap"
+                                on-select="changeCL($item)">
+                                <ui-select-match placeholder="{{'Chọn bình' | translate}}...">
+                                    <b class="fs16">{{$select.selected.Title}}</b>
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listBottle | filter: $select.search"
+                                    refresh="reloadProductBottle($select.search)">
+                                    {{x.Title}}
+                                    <div class="row mt15" ng-if="$last && listBottle.length >= 9">
+                                        <button class="btn btn-xs btn-warning" style="width: 100%;"
+                                            ng-click="loadMoreBottle($select, $event);" ng-disabled="loading">
+                                            Load more...
+                                        </button>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CylinkerCode='';"
+                                    class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="pt10 ml15" ng-show="model.CylinkerCode!=''">
+                            <span>{{'Trọng lượng' | translate}}: </span>
+                            <span class="text-danger">{{weight}} {{weightUnit}}</span>
+                            <span>-{{'Trọng lượng tối đa có thể thêm' | translate}}: </span>
+                            <span class="text-danger">{{Total}} {{weightUnit}}</span>
+                        </span>
+                        <span ng-show="errorCylinkerCode" class="label-color validation-message">
+                            {{'Bình không được để trống'|translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class="form-group col-lg-7" ng-class="{'has-error' : errorVolume}">
+                        <label class="fw600 text-bold require">{{'Khối lượng' | translate}}</label>
+                        <div class='mr5'>
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24"
+                                ng-model="model.Volume" placeholder="{{'Khối lượng...' | translate}}..."
+                                num-thousand='true' awnum num-int='21'
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            <span ng-show="errorVolume" class="label-color validation-message">
+                                {{validVolume | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-5 ml20" ng-class="{'has-error' : errorUnit}">
+                        <label class="fw600 text-bold require">{{'Đơn vị tính' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                <ui-select-match
+                                    placeholder="{{'Đơn vị tính...' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Unit='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorUnit" class="label-color validation-message">
+                            {{'Đơn vị tính không được để trống'|translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class="form-group col-lg-12" ng-class="{ 'has-error': errorTypeCode}">
+                        <input class="btn btn-cancel" ng-if="isEditTicketDetail" ng-click="cancelEdit()" type="button"
+                            value="Hủy bỏ" style="width: 100px; float: right;">
+                        <input class="btn btn-success mr10" ng-click="submit()" type="button" value="Lưu"
+                            style="width: 100px; float: right;">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table dataTable table-hover table-striped" datatable dt-options="dtOptions" dt-columns="dtColumns"
+    dt-instance="dtInstance" id="tblDataDetail">
+</table>

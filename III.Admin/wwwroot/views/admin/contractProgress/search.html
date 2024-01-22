@@ -1,0 +1,134 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-search icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'CPR_TITLE_SEARCH' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="searcform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_FROM_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group date" id="FromTo">
+                            <input type="text" autocomplete="off" class="form-control" placeholder="{{'CPR_CURD_LBL_FROM_DATE' | translate}}..." ng-model="model.StartTime">
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_TO_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group date" id='DateTo'>
+                            <input type='text' autocomplete="off" class="form-control " ng-model="model.EndTime" placeholder="{{'CPR_CURD_LBL_TO_DATE' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_CONTRACR' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input ng-model="model.ContractCode" class="form-control" type="text" placeholder="{{'CPR_CURD_LBL_CONTRACR' | translate}}'.." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ContractCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_STATUS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CPR_CURD_LBL_STATUS' | translate}}"><span><i class="{{$select.selected.Icon}}"></i>{{$select.selected.Name}}</span></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in status | filter: $select.search">
+                                    <i class="{{x.Icon}}"></i>{{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_BUDGET_F' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input ng-model="model.BudgetF" class="form-control" type="text" placeholder="{{'CPR_CURD_LBL_BUDGET_F' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" num-thousand='true' awnum num-int='21' />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_BUDGET_T' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input ng-model="model.BudgetT" class="form-control" type="text" placeholder="{{'CPR_CURD_LBL_BUDGET_T' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" num-thousand='true' awnum num-int='21' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.BudgetT=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <label>{{'CPR_CURD_LBL_CUSTOMER_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CusCode" theme="bootstrap" on-select="changleSelect('CusCode')" ng-change="changeCustomer()">
+                                <ui-select-match placeholder="{{'CPR_CURD_LBL_CUSTOMER_CODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in Customers | filter: $select.search">
+                                    {{x.Code}} - {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CusCode=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group actions d-flex pull-right">
+        <div class="text-center pr20">
+            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="submit()">
+                <span><i class="fa fa-search"></i></span>
+            </a>
+            <p class=" fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+        </div>
+    </div>
+</div>

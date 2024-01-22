@@ -1,0 +1,89 @@
+﻿<div ng-controller="contractTabProject">
+    <div class="table-toolbar">
+        <form name="searchform" method="post" ng-validate="validationOptionsProject">
+            <div class="col-md-3 form-group" ng-class="{ 'has-error': errorObjCode}">
+                <label class="control-label require">{{'CP_TAB_PROJECT' | translate}}</label>
+                <div class="input-group br24">
+                    <ui-select ng-model="model.ObjCode" theme="bootstrap" ng-disabled="model.Id!=0" on-select="changleSelect('ObjCode')">
+                        <ui-select-match placeholder="{{'CP_TAB_PROJECT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listProject | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.ObjCode=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorObjCode" class="label-color validation-message">
+                    {{'CP_VALIDATE_PROJECT' | translate}}!
+                </span>
+            </div>
+            <div class="col-md-3 form-group" ng-class="{ 'has-error': errorObjRelative}">
+                <label class="control-label require">{{'CP_CURD_LBL_RELA' | translate}}</label>
+                <div class="input-group br24">
+                    <ui-select ng-model="model.ObjRelative" theme="bootstrap" on-select="changleSelect('ObjRelative')">
+                        <ui-select-match placeholder="{{'CP_CURD_LBL_RELA' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listRelative | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.ObjRelative=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorObjRelative" class="label-color validation-message">
+                    {{'CP_VALIDATE_RELA_REQUIRE' | translate}}!
+                </span>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">{{'CP_CURD_LBL_NOTE' | translate}}</label>
+                <div class="input-group br24">
+                    <div class="input-group">
+                        <input ng-model="model.ObjNote" class="form-control" type="text" placeholder="{{'CP_CURD_LBL_NOTE' | translate}}.." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ObjNote=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="btn-group pt20">
+                    <div class="mr10 pr-0 text-center" ng-if="model.Id==0">
+                        <a class=" fs30 p-0" ng-click="add()">
+
+                            <span><i class="fa-solid fa-plus"></i></span>
+
+                        </a>
+
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+
+                    <div class="mr10 pr-0 text-center" ng-if="model.Id !=0">
+                        <a class=" fs30 p-0" ng-click="update()">
+
+                            <span><i class="fa-solid fa-plus"></i></span>
+
+                        </a>
+
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataPoSale"></table>
+</div>

@@ -1,0 +1,104 @@
+﻿<link href="../../css/message-box/style.css" rel="stylesheet" />
+<style>
+    .titleTable {
+        height: 35px;
+        text-align: center;
+        border: 1px solid #d2d2d2;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .cssContent {
+        height: 35px;
+        text-align: center;
+        border: 1px solid #d2d2d2;
+        font-size: 12px;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
+<div ng-controller="add-card-link">
+    <div class="col-lg-12 mt5 padding-right-dashboard padding-left-dashboard">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pt5">
+                <div class="col-md-5 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-10" style="padding-left: 0px;">
+                            <label class="text-underline">{{'CJ_LBL_CARD_INHERIT' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="Inherit" theme="bootstrap" on-select="changeInherit(Inherit)" ng-disabled="IsLock || !isAceptCard">
+                                    <ui-select-match placeholder="{{'CJ_LBL_CARD_INHERIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listCardJob | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <!--<div class="col-md-2 pr-0 pl-0">
+                            <div class="text-center pt25 pr25">
+                                <a class="btn btn-icon-only btn-outline btn-border-black" ng-click="addCardInherit()">
+                                    <span><i class="fa fa-ellipsis-h black"></i></span>
+                                </a>
+                            </div>
+                        </div>-->
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10" style="padding-left: 0px;">
+                            <label class="text-underline">{{'CJ_BTN_CARD_LINK' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.CardLink" theme="bootstrap" on-select="changeSelect('CardLink')" ng-disabled="IsLock || !isAceptCard">
+                                    <ui-select-match placeholder="{{'CJ_BTN_CARD_LINK' | translate}}...">#{{$select.selected.Code}}: {{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listCardJob | filter: $select.search">
+                                        #{{x.Code}}: {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorCardLink" class="label-color validation-message">
+                                    {{'CJ_VALIDATE_CARD_LINK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pr-0 pl-0 pt10">
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center pt10">
+                                    <!--<a class="btn btn-icon-only btn-outline btn-border-black" ng-click="add()">
+        <span><i class="fa fa-plus black"></i></span>
+    </a>-->
+                                    <a class="btn btn-icon-only fs25 p-0" ng-click="add()">
+                                        <span><i class="fas fa-link"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 pl30 pt15" style="height: 455px; overflow-y: scroll; overflow-x: hidden; padding-left: 10px; padding-right: 20px">
+                    <div class="form-group">
+                        <div class="table-wrapper-scroll-y">
+                            <table class="table table-bordered table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="titleTable nowrap" style="width: 5%;">{{'CJ_LIST_COL_STT' | translate}}</th>
+                                        <th class="titleTable col-md-8" style="width: 75%;">{{'CJ_LBL_TITLE' | translate}}</th>
+                                        <th class="titleTable nowrap" style="width: 15%;"> {{'COM_LIST_COL_ACTION' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in listCardJobLink">
+                                        <td class="cssContent col-md-2">{{$index + 1}}</td>
+                                        <td class="cssContent col-md-8">{{x.CardName}}</td>
+                                        <td class="titleTable col-md-2">
+                                            <div class="text-center"><button title="Xoá" ng-click="delete(x.Id)" style="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash white fs10"></i></button></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

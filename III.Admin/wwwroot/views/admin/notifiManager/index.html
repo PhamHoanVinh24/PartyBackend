@@ -1,0 +1,125 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'PROJECT_MANAGEMENT_CURD_LBL_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Code" class="form-control" type="text" placeholder="{{'PROJECT_MANAGEMENT_CURD_TXT_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Code='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'PROJECT_MANAGEMENT_CURD_LBL_CAR_NAME' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Name" class="form-control" type="text" placeholder="{{'PROJECT_MANAGEMENT_CURD_TXT_CAR_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Name='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'PROJECT_MANAGEMENT_LIST_COL_STATUS' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select ng-model="model.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'PROJECT_MANAGEMENT_LIST_COL_STATUS' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in CardStatus | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>               
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'PROJECT_MANAGEMENT_CURD_LBL_FORM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'PROJECT_MANAGEMENT_CURD_TXT_FORM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()"  id="FromTo" autocomplete="off"/>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'PROJECT_MANAGEMENT_CURD_LBL_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'PROJECT_MANAGEMENT_CURD_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="DateTo" autocomplete="off"/>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="btn-group pt10 actions d-flex">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="text-danger">{{'NTMC_LBL_INSTRUCTION_EDIT' | translate}}</span>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "Xác nhận xóa dữ liệu tài khoản";
+    Layout = null;
+}
+@*@section plugin_script {
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    }
+    @section plugin_style{
+        <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+        <link href="~/lib/assets/global/plugins/ui-select/select.css" rel="stylesheet" type="text/css" />
+    }*@
+<link href="../../css/message-box/style.css" rel="stylesheet" />
+
+<head>
+    <style>
+        .mfp-content {
+            background: #fff;
+            width: 60% !important;
+        }
+
+        .mfp-close-btn-in .mfp-close {
+            color: #33333300;
+            width: 29px;
+            height: 28px;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: bold
+        }
+
+        .icon-insert {
+            font-size: 15px;
+        }
+
+        .mfp-container {
+            text-align: center;
+            position: absolute;
+            width: 60% !important;
+            height: 100%;
+            left: 20% !important;
+            top: -20% !important;
+        }
+
+        .tags-custom {
+            margin: 2px;
+            padding: 0 5px;
+            display: inline-block;
+            float: left;
+            font: 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+            /*height: 26px;*/
+            height: auto;
+            line-height: 25px;
+            border: 1px solid #acacac;
+            border-radius: 3px;
+            background: -webkit-linear-gradient(top,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+            background: linear-gradient(to bottom,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+        }
+
+        .h-95-srcoll {
+            overflow: auto;
+            max-height: 95px !important;
+            height: 95px !important;
+        }
+
+        .boder-box-custom-scroll {
+            padding: 1px;
+            word-wrap: break-word;
+            cursor: text;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            height: 100%;
+            border-radius: 4px;
+            max-height: 200px;
+            height: 150px;
+            width: 95%;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-header no-color">
+        <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+        <div class="message-title black" id="message-title">Xác nhận</div>
+    </div>
+    <button type="button" class="close-modal" onclick="closeModal()">
+    </button>
+    <div class="message-body">
+        <!--<div class="portlet-body form">
+        <div class="form-body">-->
+        <!--<div class="col-md-2">
+            <img src="../../images/message/deleted.png" class="h-40" />
+        </div>-->
+        <div class="col-md-9">
+            <span>Bạn có đồng ý sẽ xóa dữ liệu tài khoản.</span>
+        </div>
+        <!--</div>
+        </div>-->
+    </div>
+    <div class="message-footer pt-0">
+        <!--<a ng-click="ok()" class="btn btn-green">
+            <i class="fas fa-check"></i>&nbsp;Xác nhận
+        </a>-->
+        <div class="pr10" onclick="deleteAccount()">
+            <a class1="btn btn-icon-only btn-circle btn-outline blue-custom" style="margin-right:8px;">
+                <!--<span><i class="fa fa-check"></i></span>-->
+                <i class="fas fa-check fs20"></i>
+            </a>
+            <p class="text-underline fs12 mb5 pt3">Xác nhận</p>
+        </div>
+    </div>
+</body>
+<script>
+    function deleteAccount() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/User/Delete?id=" + userId,
+            contentType: "application/json",
+            dataType: "JSON",
+            //data: JSON.stringify(obj),
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (rs) {
+                App.unblockUI("#contentMain");
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                } else {
+                    App.toastrSuccess(rs.Title);
+                    location.href = "/Admin/Account/Logout";
+                    //location.reload('')
+                }
+            },
+            failure: function (errMsg) {
+                App.unblockUI("#contentMain");
+                alert(errMsg);
+            }
+        });
+    }
+    function closeModal() {
+        $('#modal-panel-lg').html("");
+        $.magnificPopup.close();
+    }
+    function init() {
+
+    };
+    init();
+
+</script>

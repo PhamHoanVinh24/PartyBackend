@@ -1,0 +1,166 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <!--<div class="text-center pr-2" ng-show="!isSearch">
+        <a class="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body pb5">
+            <div class="row pb5">
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_POST_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'CMS_ITEM_CURD_TXT_POST_FROM_DATE' | translate}}..." ng-model="model.PostFromDate" id="PostFromDate">
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_POST_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'CMS_ITEM_CURD_TXT_POST_TO_DATE' | translate}}..." ng-model="model.PostToDate" id="PostToDate">
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_CREATED_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'CMS_ITEM_CURD_TXT_CREATED_FROM_DATE' | translate}}..." ng-model="model.CreFromDate" id="CreFromDate">
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_CREATED_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'CMS_ITEM_CURD_TXT_CREATED_TO_DATE' | translate}}..." ng-model="model.CreToDate" id="CreToDate">
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_TITLE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Title" class="form-control br4" type="text" placeholder="{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0" style="width: 14%;">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_CATEGORY' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.Category" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CMS_ITEM_COMBO_CATEGORY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x  in listCatId | filter: $select.search">
+                                <span class="text-brown fs10">{{x.Path}}</span><br />
+                                <span class="bold fs11">{{x.Name}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Category='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>-->
+                <div class="col-md-2 pr-0">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_STATUS' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CMS_ITEM_COMBO_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listPublished | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0" style="width: 14%;">
+                    <label class="fw600 text-underline">{{'CMS_ITEM_CURD_LBL_TYPE_ITEM' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.TypeItem" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CMS_ITEM_COMBO_TYPE_ITEM' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listFeaturedOrdering | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.TypeItem='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1" style="width: 5%;">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                        </div>
+                        <!--<div class="pl20 text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

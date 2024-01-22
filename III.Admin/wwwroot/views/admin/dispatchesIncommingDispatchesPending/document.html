@@ -1,0 +1,486 @@
+﻿<style>
+    .table thead {
+        background: #f8f5f1;
+    }
+
+    .status .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .tree_user {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 305px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+
+    .mt-checkbox {
+        margin-bottom: 0px !important;
+    }
+
+    .portlet.light > .portlet-title > .caption {
+        padding: 7px 0;
+    }
+
+    .portlet.light > .portlet-title {
+        min-height: 40px;
+    }
+
+    .portlet {
+        box-shadow: none !important;
+    }
+
+    #treeDiv {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 305px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-lg-5 col-sm-5">
+            <h1 class="bold mb-0">{{'DIDP_TITLE_TEXT_INFORMATION' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'DIDP_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="#">{{'DIDP_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div href="#/customer">{{'DIDP_LINK_TEXT_INFORMATION' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-7 col-sm-7 pt10">
+            <div class="btn-group pull-right actions" style="display:flex">
+                <a ng-click="cancel()" class="btn btn-default br4">
+                    <span class=""><i class="fa fa-arrow-left"></i>&nbsp;{{'COM_BTN_BACK' | translate}}</span>
+                </a>
+                <a ng-click="done()" ng-if="!DocumentStatus && !RoleStatus  && Role!='2' && Role!='3'" class="btn btn-blue br4">
+                    <span class=""><i class="fa fa-check"></i>&nbsp;{{'DIDP_BTN_DONE' | translate}}</span>
+                </a>
+                <a ng-click="send()" ng-if="!DocumentStatus && !RoleStatus  && Role!='3'" class="btn btn-green br4">
+                    <span><i class="fas fa-retweet"></i>&nbsp;{{Role=='2' ? 'Chuyển xử lý':'Chuyển xử lý'}}</span>
+                </a>
+                <a ng-click="update()" ng-if="Role!='3'" class="btn btn-blue br4">
+                    <span class=""><i class="fa fa-edit"></i>&nbsp;{{'COM_BTN_EDIT' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="text-center pt20">
+    <h1 style="margin-bottom:-10px"><b>Công khai văn bản</b></h1>
+</div>-->
+<hr>
+<div class="col-lg-12 mb10">
+    <h2><u><b>{{'DIDP_CURD_LBL_BASIC_INFORMATION' | translate}}</b></u></h2>
+</div>
+<div class="col-lg-12">
+    <div class="col-lg-4">
+        <div class="form-group">
+            <b class=" require">{{'DIDP_CURD_LBL_DOCUMENT_NAME' | translate}}:</b><span>&nbsp;{{model.Header.DocumentName}}</span>
+        </div>
+        <div class="form-group">
+            <b class="require">{{'DIDP_CURD_LBL_DOCUMENT_SYMBOL' | translate}}:</b><span>&nbsp;{{model.Header.DocumentSymbol}}</span>
+        </div>
+        <div class="form-group">
+            <b class=" require">{{'DIDP_CURD_LBL_FROM_DATE' | translate}}:</b><span>&nbsp;{{model.Header.FromDate | date:'dd/MM/yyyy'}}</span>
+        </div>
+        <div class="form-group">
+            <b class="require">{{'DIDP_CURD_LBL_TEXT_CREATED_USER' | translate}}:</b><span>&nbsp;{{model.Header.CreatedUser}}</span>
+        </div>
+
+    </div>
+    <div class="col-lg-4">
+        <div class="form-group">
+            <b class="require">{{'DIDP_CURD_LBL_DOCUMENT_NUMBER' | translate}}:</b><span>&nbsp;{{model.Header.DocumentNumber}}</span>
+        </div>
+        <div class="form-group">
+            <b class=" require">{{'DIDP_CURD_LBL_ORIGANIZATION' | translate}}:</b><span>&nbsp;{{model.Header.Origanization}}</span>
+        </div>
+        <div class="form-group">
+            <b class="">{{'DIDP_CURD_LBL_PROMULGATE_DATE' | translate}}:</b><span>&nbsp;{{model.Header.PromulgateDate | date:'dd/MM/yyyy'}}</span>
+        </div>
+        <div class="form-group">
+            <b class="">{{'DIDP_CURD_LBL_GET_METHOD' | translate}}:</b><span>&nbsp;{{model.Header.GetMothod}}</span>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="form-group">
+            <b class="">{{'DIDP_CURD_LBL_DEAD_LINE_SEND_USER' | translate}}:</b><span>&nbsp;{{model.Detail.DeadLineSendUser | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="form-group">
+            <b class="">{{'DIDP_CURD_LBL_TIME_REMAINING' | translate}}:</b>
+            <span ng-if="model.Days<=0 && model.Days!=null ">
+                &nbsp;<span class="text-danger">{{'DIDP_CURD_TITLE_EXPIRED' | translate}}</span>
+            </span>
+            <span ng-if="model.Days>0">
+                &nbsp;<span class="text-danger">{{model.Days}}&nbsp;(Ngày)</span>
+            </span>
+            <span ng-if="model.Days==null">
+                &nbsp;<span class="text-danger"></span>
+            </span>
+        </div>
+        <div class="form-group">
+            <b class="">{{'DIDP_CURD_LBL_NOTE' | translate}}:</b><span>&nbsp;{{model.Header.Note}}</span>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 pb20">
+    <div class="col-lg-2 col-sm-12"><h2><u><b>{{'COM_ATTACHED_FILE' | translate}}</b></u></h2></div>
+    <div class="col-lg-10 col-sm-12" id="contentFile">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="col-lg-4 text-center">{{'COM_NAME_FILE' | translate}}</th>
+                    <th class="col-lg-4 text-center">{{'COM_BTN_DOWLOAD' | translate}}</th>
+                    <th class="col-lg-4 text-center">{{'COM_PREVIEW' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in model.Detail.ListFile">
+                    <td class="text-center long">{{x.FileName}}</td>
+                    <td class="text-center">
+                        <i ng-show="x.IsShowDelete" role="button" class="fa fa-minus-circle pt5" ng-click="deleteFile($index,x.Id)" title="Xóa" style="color:red !important;font-size: 25px"></i>
+                        <a href="{{x.Source}}" target="_blank" download>
+                            <i role="button" hr class="fa fa-download pl10 pt5" title="Tải xuống" style="color:#147aa9!important;font-size: 25px"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a ng-click="view(x.Source)" ng-if="x.Fomart==4">
+                            {{'COM_PREVIEW' | translate}}
+                        </a>
+                        <label ng-if="x.Fomart!=4">
+                            {{'COM_MSG_FILE_SUPPORT_PREVIEW' | translate}}
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="col-lg-12 pb20">
+    <div class="col-lg-2 col-sm-12"><h2><u><b>{{'DIDP_CURD_LBL_COMMENT' | translate}}</b></u></h2></div>
+    <div class="col-lg-5 col-sm-8">
+        <textarea class="form-control" ng-model="model1.Comment" autocomplete="off" type="text" placeholder="{{'DIDP_CURD_TXT_COMMENT' | translate}}..." style="border: 1px solid #e7ecf1 !important;" />
+    </div>
+    <div class="col-lg-5 col-sm-4" ng-if="Role!='3'">
+        <a ng-click="addComment()" class="btn btn-red br4">
+            <span><i class="fa fa-plus"></i> {{'DIDP_BTN_COMMENT' | translate}}</span>
+        </a>
+    </div>
+    <div class="col-lg-offset-2 col-lg-10 col-sm-12 pt10">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="col-lg-2 text-center">{{'DIDP_LICK_CMT_LIST_COL_COMMENTER' | translate}}</th>
+                    <th class="col-lg-7 text-center">{{'DIDP_CLICK_CMT_LIST_COL_CONTENT' | translate}}</th>
+                    <th class="col-lg-2 text-center">{{'COM_TIME' | translate}}</th>
+                    <th class="col-lg-1 text-center" ng-if="Role!='3'">{{'DIDP_CLICK_LIST_COL_DELETE' |translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in model.Detail.ListComment">
+                    <td class="text-center">
+                        {{x.User}}
+                    </td>
+                    <td class="text-center long" data-toggle="tooltip" data-placement="top">
+                        <textarea class="text-center" ng-show="x.IsShowComment" ng-model="x.Comment" style="width:100%;border: 1px solid #e7ecf1 !important;" />
+                        <span ng-show="!x.IsShowComment">{{x.Comment}}</span>
+                    </td>
+                    <td class="text-center">
+                        {{x.CreatedTime | date:"MM/dd/yyyy"}}
+                    </td>
+                    <td class="text-center" ng-if=" Role!='3'">
+                        <i ng-show="x.IsShowDelete" role="button" class="fa fa-minus-circle pt5" ng-click="deleteComment($index)" title="Xóa" style="color:red !important;font-size: 25px"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--Receiver,Reason-->
+        <div class="col-lg-12 pb20">
+            <div class="col-lg-2 col-sm-12">
+                <h2><u><b>{{'DIDP_CURD_LBL_RECEIVER' | translate}}</b></u></h2>
+            </div>
+            <div class="col-lg-10 col-sm-12">
+                <!-- <div class="col-lg-12 pt15" style="border:1px solid #ccc;border-radius:4px">-->
+                <!--  <div class="col-lg-12">-->
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-bar-chart font-green-sharp hide"></i>
+                            <span class="caption-subject bold">{{'DIDP_DEPARTMENT' | translate}}</span>
+                        </div>
+                        <div class="tools">
+                            <a class="fullscreen" data-container="false" title="Toàn màn hình">
+                                <i class="fas fa-arrows-alt"></i>
+                            </a>
+                            <a class="question" data-toggle="popover" data-placement="left" data-content="Chọn phòng ban hoặc chọn người dùng để thêm người nhận." data-trigger="hover" data-original-title="Hướng dẫn chọn phòng ban">
+                                <i class="fas fa-question"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="scrollbar-sm">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 form-group">
+                                    <div id="treeDiv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 ">
+                                    <div class="tree_user">
+                                        <div class="input-group pb10">
+                                            <ui-select ng-model="model1.Member" multiple theme="bootstrap" limit="4" class="" style="width: 100%;">
+                                                <ui-select-match placeholder="Chọn người dùng...">
+                                                    <span ng-class="{'bold': $item.IsPermision}">
+                                                        <i ng-show="$item.IsMain" class="fas fa-award"></i>
+                                                        <i ng-show="$item.IsPermision && !$item.IsMain" class="fas fa-user-clock"></i>{{$item.Name}}
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="x in ListSearchMember |  filter:$select.search" ui-disable-choice="x.IsMain && !x.IsPermision">
+                                                    <div ng-class="{'bold':x.IsMain && !x.IsPermision}">
+                                                        {{x.Name}}<i ng-show="x.IsMain" class="fas fa-award pl20"></i>
+                                                        <i ng-show="x.IsPermision && !x.IsMain" class="fas fa-user-clock pl20"></i>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model1.Member=''" class="btn btn-default no-shadow " title="Add account to Branch">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="portlet light bordered mb-0">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                                                    <span class="caption-subject bold">{{'DIDP_ROLE' | translate}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body todo-project-list-content">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-sm-12" ng-repeat="x in ListRole">
+                                                        <div class="mt-checkbox-list ">
+                                                            <label class="mt-checkbox mt-checkbox-outline ">
+                                                                {{x.Name}}
+                                                                <input type="checkbox" ng-click="updateSelection($index, ListRole)" id="chkCustomer_{{x.Code}}" ng-model="x.Checked">
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 text-center" style="padding: 10px;">
+                                                        <a ng-click="addMember(model1.Member)" ng-if="!DocumentStatus && Role!='3' && !RoleStatus " class="btn btn-red br4" style="box-shadow:none;">
+                                                            <span><i class="fa fa-plus"></i> {{'DIDP_BTN_ADD_RECEIVER' | translate}}</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--</div>-->
+                <!-- <div class="col-lg-12">-->
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-bar-chart font-green-sharp hide"></i>
+                            <span class="caption-subject bold">{{'DIDP_DISPATCH_PROCESSING_ACTIVITIES' | translate}}</span>
+                        </div>
+                        <div class="pull-right">
+                            <!--<a ng-click="detailAssignee(model.Header.DispatchCode)" title="Xem chi tiết danh sách người chuyển" class="btn btn-circle btn-icon-only btn-success">
+                                <i class="fas fa-info"></i>
+                            </a>-->
+                            <a ng-click="exportFlow()" title="Xuất luồng xử lý ra Excel" class="btn btn-circle btn-icon-only btn-success">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="portlet-body todo-project-list-content">
+                        <div class="scrollbar-sm">
+                            <div class="">
+                                <table class="table table-bordered" style="margin-bottom: 0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-lg-2 text-center">{{'DIDP_LIST_COL_CARRIER_PERSION' | translate}}</th>
+                                            <th class="col-lg-2 text-center">{{'DIDP_LIST_COL_RECEIVER' | translate}}</th>
+                                            <th class="col-lg-2 text-center">{{'DIDP_LIST_COL_COMMENT' | translate}}</th>
+                                            <th class="col-lg-1 text-center">{{'COM_TIME' | translate}}</th>
+                                            <th class="col-lg-2 text-center">{{'DIDP_ROLE' | translate}}</th>
+                                            <th class="col-lg-2 text-center">{{'DIDP_CURD_LIST_COL_STATUS' |translate}}</th>
+                                            <th class="col-lg-1 text-center" ng-if="!DocumentStatus  && Role!='3'">{{'DIDP_CURD_LIST_COL_DELETE' | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in model.Detail.ListMember">
+                                            <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                                <div>{{x.AssignerName}}</div>&nbsp;<span class="group-user">{{x.AssignerGroupUserName}}</span>
+                                            </td>
+                                            <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                                <div>{{x.Name}}</div>&nbsp;<span class="group-user">{{x.GroupUserName}}</span>
+                                            </td>
+                                            <td class="text-center" title="Nhấn đúp chuột để xem chi tiết/chỉnh sửa ý kiến">
+                                                <textarea ng-show="x.IsShowComment && !DocumentStatus  && Role!='3' " ng-model="x.Comment" ng-dblclick="editComment(x.Comment,x.Id)" />
+                                                <span ng-class="{'bold': x.Role=='1'}" ng-show="!x.IsShowComment || DocumentStatus || Role=='3'" ng-dblclick="showComment(x.Comment)">{{x.Comment}}</span>
+                                            </td>
+                                            <td class="text-center " ng-class="{'bold': x.Role=='1'}">{{x.CreatedTime | date:'dd/MM/yyyy'}}</td>
+                                            <td class="text-center " ng-class="{'bold': x.Role=='1'}">{{x.Role=='1' ? 'Xử lý chính':x.Role=='2' ? 'Phối hợp' :'Xem để biết' }}</td>
+                                            <td class="text-center">
+                                                <div ng-if="(x.Role=='3' || x.Role=='1' || !x.IsShowAction)">
+                                                    <span class="text-success" ng-if="x.Status=='DONE'">{{'DIDP_CURD_LBL_DONE' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='SEND'">{{'DIDP_CURD_LBL_SEND' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='ADD_SEND'">{{'DIDP_CURD_LBL_ADD_SEND' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='SEND_COORDINATED'">{{'DIDP_CURD_LBL_SEND_COORDINATED' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='UPDATED'">{{'DIDP_CURD_LBL_UPDATED' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='COORDINATED'">{{'DIDP_CURD_LBL_COORDINATED' | translate}}</span>
+                                                    <span class="text-danger" ng-if="x.Status=='PROCESSING'">{{'DIDP_CURD_LBL_PROCESSING' | translate}}</span>
+                                                    <span class="text-danger" ng-if="x.Status=='NOCOORDINATED'">{{'DIDP_CURD_LBL_NOCOORDINATED' | translate}}</span>
+                                                    <span class="text-danger" ng-if="x.Status==null">{{'DIDP_CURD_LBL_NOT_YET_SEEN' | translate}}</span>
+                                                    <span class="text-danger" ng-if="x.Status==''">{{'DIDP_CURD_LBL_NOT_DELIVERED' | translate}}</span>
+                                                    <span class="text-success" ng-if="x.Status=='REVIEW'">{{'DIDP_CURD_LBL_REVIEW' | translate}}</span>
+                                                </div>
+                                                <div ng-if="x.IsShowAction && x.Role =='2'" class="status">
+                                                    <div ng-if="x.Status=='SEND_COORDINATED'">
+                                                        <span class="text-success">{{'DIDP_CURD_LBL_SEND_COORDINATED' | translate}}</span>
+                                                    </div>
+                                                    <div ng-if="x.Status!='SEND_COORDINATED'">
+                                                        <ui-select tagging ng-model="x.Status" theme="bootstrap">
+                                                            <ui-select-match placeholder="Trạng thái...">{{$select.selected.Name}}</ui-select-match>
+                                                            <ui-select-choices repeat="x.Code as x in StatusActivity | filter: $select.search">
+                                                                {{x.Name}}
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center " ng-if="!DocumentStatus && Role!='3'">
+                                                <i ng-show="x.IsShowDelete" role="button" class="fa fa-minus-circle" ng-click="deleteMember($index,x.Id)" title="Xóa" style="color:red !important;font-size: 25px"></i>
+                                            </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="col-lg-12 pb20 " ng-if=" Role!='3' && Role!='2'">
+            <div class="col-lg-2 col-sm-12">
+                <h2><u><b>{{'DIDP_CURD_LBL_DEAD_LINE_SEND_USER' | translate}}</b></u></h2>
+            </div>
+            <div class="col-lg-10 col-sm-12">
+                <div class="input-group">
+                    <input ng-model="model.Detail.DeadLine" class="form-control" type="text" placeholder="{{'DIDP_CURD_TXT_DEAD_LINE_SEND_USER' | translate}}..." id='DeadLine' />
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Detail.DeadLine=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 pb20">
+            <div class="col-lg-2 col-sm-12">
+                <h2><u><b>{{'COM_ACTIVITY' | translate}}</b></u></h2>
+            </div>
+            <div class="col-lg-10 col-sm-12">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{'DIDP_PEOPLE_ACTIVITY' | translate}}</th>
+                            <th class="text-center">{{'COM_ACTIVITY' | translate}}</th>
+                            <th class="text-center">{{"COM_TIME" | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in ActivityData">
+                            <td class="text-center">{{x.User}}</td>
+                            <td class="text-center">
+                                <div ng-if="x.Action=='CREATED'">
+                                    <span>{{'DIDP_CURD_CREATED_DOCUMENT' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='UPDATED'">
+                                    <span>{{'DIDP_CURD_UPDATED_DOCUMENT' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='COORDINATED'">
+                                    <span>{{'DIDP_CURD_LBL_COORDINATED' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='REVIEW'">
+                                    <span>{{'DIDP_REVIEW_DOCUMENT' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='SEND'">
+                                    <span class="text-success">{{'DIDP_CURD_LBL_SEND' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='SEND_COORDINATED'">
+                                    <span class="text-success">{{'DIDP_CURD_LBL_SEND_COORDINATED' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='ADD_SEND'">
+                                    <span>{{'DIDP_CURD_LBL_ADD_SEND' | translate}}</span>
+                                </div>
+                                <div ng-if="x.Action=='PROCESSING'">
+                                    <span>Đang xử lý</span>
+                                </div>
+                                <div ng-if="x.Action=='NOCOORDINATED'">
+                                    <span>Chưa phối hợp</span>
+                                </div>
+                                <div ng-if="x.Action=='RECOVER'">
+                                    <span class="text-danger">{{'DIDP_CURD_RECOVER' | translate}}</span>
+                                    <i class="fas fa-ban" style="color:red"></i>
+                                </div>
+                                <div ng-if="x.Action=='DONE'">
+                                    <span class="text-success">{{'DIDP_DONE_DOCUMENT' | translate}}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">{{x.CreatedTime | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-12 pb20 ">
+            <div class="col-lg-12">
+                <div class="btn-group pull-right actions" style="display:flex">
+                    <a ng-click="cancel()" class="btn btn-default br4">
+                        <span class=""><i class="fa fa-arrow-left"></i>{{'COM_BTN_BACK' | translate}}</span>
+                    </a>
+                    <a ng-click="done()" ng-if="!DocumentStatus && !RoleStatus  && Role!='2' && Role!='3'" class="btn btn-blue ml5 br4">
+                        <span class=""><i class="fa fa-check"></i> {{'DIDP_BTN_DONE' | translate}}</span>
+                    </a>
+                    <a ng-click="send()" ng-if="!DocumentStatus && !RoleStatus  && Role!='3'" class="btn btn-green ml5 br4">
+                        <span><i class="fas fa-retweet"></i>{{Role=='2' ? 'Chuyển xử lý':'Chuyển xử lý'}}</span>
+                    </a>
+                    <a ng-click="update()" ng-if="Role!='3'" class="btn btn-blue ml5 br4">
+                        <span class=""><i class="fa fa-edit"></i>{{'COM_BTN_EDIT' | translate}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

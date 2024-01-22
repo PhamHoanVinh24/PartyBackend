@@ -1,0 +1,119 @@
+﻿<style>
+    @media (min-width: 992px) and (max-width:1200px) {
+        .cus-col-lg-5 {
+            width: 100%;
+        }
+        .cus-col-lg-7 {
+            width: 100%;
+        }
+    }
+</style>
+<form name="forms.basicForm" method="post" class="form-horizontal" ng-validate="validationOptionsBasic">
+    <div class="form-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" ng-show="!IsEdit">
+                    <div class="row">
+                        <label class="control-label text-left require col-md-12">{{'CM_CURD_LBL_CM_CANDIDATE_CODE' | translate}}</label>
+                        <div class="col-lg-5 cus-col-lg-5">
+                            <div class="col-sm-9 row">
+                                <input id="CandidateCode" ng-model="modelInfo.CandidateCode"  name="CandidateCode" type="text" class="form-control" placeholder="{{'CM_CURD_LBL_CM_CANDIDATE_CODE' | translate}}..." ng-readonly="type==0" autocomplete="off" />
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="btn btn-default" ng-click="createdSearchCandiateCode(type)">
+                                    <span class="fs10"><i class=" fas " ng-class="type == 0 ? 'fa-long-arrow-alt-down' : 'fa-search'"></i> {{type==0 ? 'CM_CURD_GET_CODE' : 'CM_CURD_SEARCH' | translate}}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 cus-col-lg-7">
+                            <label class="checkbox-inline pb5 pl-0"><input ng-model="type" value="0" class="mr5" type="radio" name="type" checked>{{'CM_CURD_LBL_CM_SIGN_UP' | translate}}</label>
+                            <label class="checkbox-inline pb5"><input ng-model="type" value="1" class="mr5" type="radio" name="type">{{'CM_CURD_LBL_CM_REGISTERED_REPAIR' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="IsEdit">
+                    <div class="row">
+                        <label class="control-label text-left require col-md-12">{{'CM_CURD_LBL_CM_CANDIDATE_CODE' | translate}}</label>
+                        <div class="col-md-6">
+                            <input id="CandidateCode" ng-model="modelInfo.CandidateCode" name="CandidateCode" type="text" class="form-control" placeholder="{{'CM_CURD_TXT_CM_CANDIDATE_CODE' | translate}}..." readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="checkbox-inline pb5"><input value="0" class="mr5" type="radio" name="type" checked>{{'CM_CURD_LBL_CM_REGISTERED_REPAIR' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{'CM_CURD_LBL_CM_SEX' | translate}}</label>
+                    <label class="checkbox-inline pb5"><input ng-model="modelInfo.Sex" value="1" class="mr5" type="radio" name="gt" checked>{{'CM_CURD_LBL_CM_MALE' | translate}} </label>
+                    <label class="checkbox-inline pb5"><input ng-model="modelInfo.Sex" value="0" class="mr5" type="radio" name="gt">{{'CM_CURD_LBL_CM_FEMALE' | translate}}</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_ADDRESS' | translate}}</label>
+                    <input type="text" name="Address" ng-model="modelInfo.Address" class="form-control" placeholder="{{'CM_CURD_TXT_CM_ADDRESS' | translate}}...">
+                </div>
+                <div class="form-group">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_EMAIL' | translate}}</label>
+                    <input type="text" name="Email" ng-model="modelInfo.Email" class="form-control " placeholder="{{'CM_CURD_TXT_CM_EMAIL' | translate}}...">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{'CM_CURD_LBL_CM_SKYPE' | translate}}</label>
+                    <input type="text" name="Skype" ng-model="modelInfo.Skype" class="form-control" placeholder="{{'CM_CURD_TXT_CM_SKYPE' | translate}}...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_FULLNAME' | translate}}</label>
+                    <input type="text" name="FullName" ng-model="modelInfo.Fullname" class="form-control" placeholder="{{'CM_CURD_TXT_CM_FULLNAME' | translate}}...">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{'CM_CURD_LBL_CM_MARRIAGE' | translate}}</label>
+                    <label class="checkbox-inline pb5"><input ng-model="modelInfo.Married" value="1" class="mr5" type="radio" name="RadioMaried">{{'CM_CURD_LBL_CM_MARRIED' | translate}}</label>
+                    <label class="checkbox-inline pb5"><input ng-model="modelInfo.Married" value="0" class="mr5" type="radio" name="RadioMaried" checked>{{'CM_CURD_LBL_CM_SINGLE' | translate}}</label>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorPhone}">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_PHONE' | translate}}</label>
+                    <input name="MobilePhone" ng-model="modelInfo.Phone" class="form-control" placeholder="{{'CM_CURD_TXT_CM_PHONE' | translate}}..." step="1" ng-change="changleSelect('Phone')" />
+                    <span ng-show="errorPhone" class="label-color validation-message">
+                        {{'CM_CURD_VALIDATE_CM_PHONE' | translate}}!
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_BIRTHDAY' | translate}}</label>
+                    <div class='input-group date' id="datebirthday">
+                        <input type='text' ng-model="modelInfo.Birthday" name="Birthday" class="form-control" placeholder="{{'CM_CURD_TXT_CM_BIRTHDAY' | translate}}..." />
+                        <span class="input-group-addon" style="border: 1px solid #ccc; border-left: 0px">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label require">{{'CM_CURD_LBL_CM_FILECV' | translate}}</label>
+                    <div class="input-group input-file">
+                        <input class="form-control inputFile" id="FileCV" name="FileCV" ng-change="loadFile()" readonly ng-model="modelInfo.FileCv_1" placeholder="{{'CM_CURD_TXT_CM_FILECV' | translate}}" />
+                        <span class="input-group-btn">
+                            <span class="btn btn-default btn-choose" style="height:33px;box-shadow:none" onclick="$(this).parent().find('input[type=file]').click();">Chọn</span>
+                            <input class="form-control" id="File" accept=".docx,.doc,.pdf"custom-on-change="loadFile"  onchange="$('.inputFile').val($(this).val().split('\\').pop())" style="display:none" type="file">
+                        </span>
+                    </div>
+                    <a ng-if="modelInfo.FileCv_1!=null && modelInfo.FileCv_1!=''" download href="{{modelInfo.FileCv_1}}">{{'CM_LINK_CV' | translate}}</a>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'CM_CURD_LBL_CM_TARGET' | translate}}</label>
+                    <textarea id="projectinput8" rows="5" class="form-control" ng-model="modelInfo.Targeting" name="comment" placeholder="{{'CM_CURD_TXT_CM_TARGET' | translate}}"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 text-right">
+                <div class="text-center">
+                    <div class="btn-group pull-right actions">
+                        <a ng-click="submitNextTab(1)" class="btn btn-icon-only btn-outline btn-boder1">
+                            <span><i class="fa fa-save"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

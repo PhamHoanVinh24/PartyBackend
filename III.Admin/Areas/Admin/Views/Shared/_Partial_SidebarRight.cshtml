@@ -1,0 +1,764 @@
+﻿@using ESEIM.Utils
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IParameterService ParameterService
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ILanguageService LanguageService
+@inject IViewLocalizer Localizer
+@{
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+    var userName = session.UserName;
+    var fullName = session.FullName;
+    var avatar = session.Picture;
+    var userId = session.UserId;
+    //var host = "https://vatco.s-work.vn/";
+    string host = HttpContextAccessor.HttpContext.Request.Host.Value;
+}
+
+<link href="~/lib/chat/css/style.css" rel="stylesheet" />
+<link href="~/lib/chat/css/main.css" rel="stylesheet" />
+<style>
+    .cssSearch {
+        width: 100%;
+        float: left;
+    }
+
+    .viewButtonSearch1 {
+        width: 85%;
+        /*height: 30px;*/
+        float: left;
+        font-size: 13px;
+        /*margin-left: 3%;*/
+        border-radius: 5px 0px 0px 5px;
+        /*border: 1px solid #d2d2d2;*/
+    }
+
+    .btnSearch1 {
+        width: 13%;
+        /*height: 30px;*/
+        float: left;
+        border-radius: 0px 5px 5px 0px;
+        /*border: 1px solid #d2d2d2;*/
+        background: white;
+    }
+
+    #icon-header-chat-out-room {
+        width: 100%;
+        float: left;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: #aeaeae;
+        white-space: nowrap;
+    }
+
+        #icon-header-chat-out-room a {
+            color: #aeaeae;
+        }
+
+    .border-radius-50 {
+        border-radius: 50%;
+    }
+
+    .menu-tray {
+        display: block !important;
+    }
+
+    .csspadding2px {
+        font-weight: 600;
+        font-size: 13px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        /* padding-top: 11px; */
+        color: #b8b8b8;
+    }
+
+    .cssBtn {
+        float: right;
+        width: 20%;
+        margin-top: -10px;
+    }
+
+    .img-call:hover {
+        cursor: pointer;
+    }
+
+    .btn-zoom-out:hover {
+        height: 30px;
+        width: 30px;
+    }
+
+    .btn-zoom-out-2x {
+        height: 30px;
+        width: 30px;
+    }
+
+        .btn-zoom-out-2x:hover {
+            height: 35px;
+            width: 35px;
+        }
+
+    .attend-list,
+    .attend-video-list,
+    .chat_box {
+        padding-top: 10px;
+        height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border-bottom: 5px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .style-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #b1b3b5;
+        border-radius: 2px;
+    }
+
+    .style-scrollbar::-webkit-scrollbar-track {
+        background-color: #858585;
+        opacity: 0.8;
+    }
+
+    .style-scrollbar::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    .title-group {
+        padding: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    .header-menu {
+        width: 100%;
+        float: left;
+        height: 215px;
+        overflow-y: auto;
+        border-top: 1px solid #bebebe;
+        border-bottom: 1px solid #bebebe;
+        padding: 20px 0 10px 20px;
+    }
+
+    .chat-body {
+        width: 100%;
+        float: left;
+        height: 370px;
+    }
+
+    .inbox-message {
+        padding-top: 10px;
+        height: 1500px;
+        overflow: auto;
+        position: relative;
+        padding-right: 5px;
+    }
+
+    .message-send {
+        height: auto !important;
+        border: #706d6d 1px solid;
+        background: #323130;
+        padding: 0px;
+        border-radius: 0px !important;
+        position: fixed;
+        bottom: 0;
+        width: 446px;
+    }
+
+        .message-send textarea {
+            width: 100% !important;
+            border: none !important;
+            background-color: #323130;
+            padding-left: 10px;
+            color: #cfcfd0;
+            padding-top: 15px;
+            height: 45px;
+        }
+
+    .message-input {
+        width: 80%;
+    }
+
+    .button-send {
+        height: 50px;
+        background: #212121;
+        color: aliceblue;
+        width: 10%;
+        font-size: 30px;
+    }
+
+    .button-attach {
+        height: 50px;
+        background: none;
+        color: aliceblue;
+        width: 10%;
+        padding-top: 5px;
+        font-size: 25px;
+    }
+
+    .CssBtnUpdate {
+        padding-top: 10px;
+        float: right;
+        color: #cfd0d1;
+        font-size: 10px !important;
+    }
+
+    textarea::-webkit-input-placeholder {
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    textarea:-moz-placeholder { /* Firefox 18- */
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    textarea::-moz-placeholder { /* Firefox 19+ */
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    textarea:-ms-input-placeholder {
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    textarea::placeholder {
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    .text-userName {
+        font-size: 12px;
+        font-weight: 600;
+        color: #e2e3e4;
+    }
+
+    .tit-head {
+        padding-bottom: 15px;
+        margin-left: 18px;
+        font-weight: bold;
+        color: black;
+    }
+
+    .list_participants {
+        padding: 0 10px 0 16px;
+    }
+
+        .list_participants .item-list .text-overfl {
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+    .tit-head span {
+        font-weight: normal;
+    }
+
+    .attend-list .item-list {
+        position: relative;
+        margin: 6px 3px 8px;
+        border-bottom: 1px solid #ede4e459;
+    }
+
+    .avatar-attend img {
+        height: 43px;
+        width: 43px;
+        background: #fff;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .text-overfl {
+        font-weight: 600;
+        width: 70%;
+        white-space: nowrap;
+        font-size: 13px;
+        color: black;
+        margin: 3px 0;
+        position: absolute;
+        top: 8px;
+        left: 61px;
+    }
+
+    .share-object > span:after {
+        left: 8px;
+        top: 4px;
+        border: solid #000 !important;
+        border-width: 0 2px 2px 0 !important;
+    }
+
+    .chat_box .ui-resizable-n {
+        width: 100%;
+        height: 8px;
+        background: #b0b0b0;
+        cursor: ns-resize;
+        display: none;
+    }
+
+    .menu-tray.show-both .chat_box .ui-resizable-n {
+        display: block;
+    }
+
+    #joinRoomChat:hover {
+        font-size: 16px;
+        transition-duration: 0.5s;
+    }
+
+    #inviteRoomChat:hover {
+        font-size: 16px;
+        transition-duration: 0.5s;
+    }
+
+    #searchUserRoom {
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
+    .border-right-radius-custom {
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .block-chat i, .block-chat a, .block-chat p {
+        color: #43516c !important;
+    }
+</style>
+<div class="table-toolbar" id="nav-right">
+    <div class="pt5">
+        <div class="sidebar-left" style="z-index: 999; position: fixed; background: #e5e5e6; top: 80px; width: 80px; overflow-y: scroll; height: calc(100vh - 80px) ">
+            <div class="block-chat" style="padding-bottom: 0px; margin-top: 25px; margin-bottom: 15px">
+                <div class="" id="checkInOut" style1="z-index: 20; text-align: center !important;">
+                    <div class="mt10 text-center" style1="max-width:53px;">
+                        <a>
+                            <i id="imgIn" class="fa-solid fa-yin-yang color-green fs35" onclick="checkInOut()" style="--fa-secondary-color: #fff; --fa-primary-color: #82c91e;"></i> 
+                            <i id="imgOut" class="fa-solid fa-yin-yang color-red fs35" onclick="checkInOut()" style="--fa-secondary-color: #fff; --fa-primary-color: red;"></i><br />
+                            <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_IN"] / @Localizer["MENU_SIDEBAR_R_OUT"]</span>
+                        </a>
+                        @*<img id="imgIn" class="text-center br4" src="../../../images/default/image_in.png" onclick="checkInOut()" alt="Check In" style="width: 35px !important;height:35px;box-shadow: 2px 2px 2px #4e4d4d;background-color: #fbfffd;" />
+                            <img id="imgOut" class="text-center br4" src="../../../images/default/image_out.png" onclick="checkInOut()" alt="Check In" style="width: 35px !important;height:35px;box-shadow: 2px 2px 2px #4e4d4d;background-color: #fbfffd;" />*@
+                    </div>
+                </div>
+            </div>
+            <div class="block-chat">
+                <div class="text-center mb15">
+                    <p>
+                        <a title="Sự kiện công ty" href="/Admin/CompanyEvent">
+                            <i class="fa-solid fa-calendar fs35" style="--fa-primary-color: brown;"></i><br /> 
+                            <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_EVENT"]</span>
+                        </a>
+                    </p>
+                </div>
+
+                <div class="text-center mb15">
+                    <p>
+                        <a title="Lịch công tác tuần" href="/Admin/WeekWorkingSchedule">
+                            <i class="fa-solid fa-calendar-check fs35"></i><br />
+                            <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_CALENDAR"]</span>   
+                        </a>
+                    </p>
+                </div>
+
+                <div class="text-center mb15">
+                    <p>
+                        <a title="Hướng dẫn sử dụng" href="/Admin/UserManual">
+                            <i class="fas fa-question-circle fs35" style="--fa-secondary-color: #fff;"></i><br />
+                            <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_USER_MANUAL"]</span>
+                        </a>
+                    </p>
+                </div>
+                <div class="text-center mb15">
+                    <p class="pop-chat">
+                        <a>
+                            <img class="text-center mb5" src="../../../images/default/Chat-GPT-icon.png" onclick="chatGpt()" alt="Check In" style="width: 35px !important;height:35px;border-radius: 50%" />
+                            <br />
+                            <span class=" title fw400 margin_bottom_10 black fs12">@*@Localizer["MENU_SIDEBAR_R_CHAT_AND_VIDEO"]*@Chat GPT</span>
+                        </a>
+                    </p>
+                </div>
+                <div class1="stl-border" onclick="initData()">
+                    <p class="pop-chat">
+                        <a>
+                            <i class="fs15 fa-stack fa-2x fs17">
+                                <i class="fas fa-comments fa-stack-2x" style="--fa-secondary-color: #555; --fa-primary-color: #82c91e;"></i>
+                                <i class="fas fa-video fa-stack-1x fa-inverse" style="margin-top: 8px; margin-left: 10px; color: #43516c; --fa-secondary-opacity: 1 "></i>
+                            </i><br />
+                                <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_CHAT_AND_VIDEO"]</span>
+                        </a>
+                    </p>
+                </div>
+                <p class="student_list dbIOT mb15" style="padding-top: 5px !important;">
+                    <a>
+                        <i class="fas fa-microchip fs35"></i>
+                        <br /><span class1="text-white">@Localizer["MENU_SIDEBAR_R_IOT"]</span>
+                    </a>
+                </p>
+                <p class="video_list mb15" style="padding-top: 5px !important;">
+                    <a>
+                        <i class="fa-solid fa-camera fs35"></i>  
+                        <br /><span class1="text-white">@Localizer["MENU_SIDEBAR_R_CAMERA"]</span>
+                    </a>
+                </p>
+                <p id="catturacam" style="padding-top: 5px !important;">
+                    <a>
+                        <i class="fs15 fa-stack fa-2x fs17">
+                            <i class="fas fa-door-open fa-stack-2x" style="--fa-secondary-color: #555; --fa-primary-color: #82c91e;"></i>
+                            <i class="fas fa-credit-card fa-stack-1x fa-inverse" style="margin-top: 8px; margin-left: 10px; color: #43516c; --fa-secondary-opacity: 1 "></i>
+                        </i>
+                        <br /><span class1="text-white">@Localizer["MENU_SIDEBAR_R_GATE"]</span>
+                    </a>
+                </p>
+            </div>
+            <div class="block-video text-center">
+                <a>
+                    <!--<p>-->
+                    @*<img src="../../../lib/chat/image/icon_VIDEO.png" alt="Video" class="btn-zoom-out">*@
+                    <!--<i class="fas fa-chimney fs30"></i>
+                    </p>-->
+                    <p class="switch hidden p-0 mb10" id="toggleVideoMute">
+                        <i class="fas fa-toggle-off fs35"></i>
+                        @*<img src="../../../lib/chat/image/icon_Toggle_ALL_OFF.png" alt="Video" class="btn-zoom-out">*@
+                    </p>
+                    <p class="switch active p-0 mb10" id="toggleAudioMute">
+                        <i class="fas fa-toggle-on fs35"></i>
+                        @*<img src="../../../lib/chat/image/icon_Toggle_ALL_ON.png" alt="Voice" class="btn-zoom-out-2x">*@
+                    </p>
+                    <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["MENU_SIDEBAR_R_MODE_DARK"]</span>
+                </a>
+            </div>
+        </div>
+        <div class="menu-tray hidden" style="box-shadow: 0px 3px 8px rgb(100,100,100);" id="zoom-chat-vatco">
+            <div style="width: 100%; float: left;" id="header-chat-out-room">
+                <div class="col-md-12 pt10">
+                    <div class="input-group pt5 pr5">
+                        <input class="form-control" id="searchUserRoom" type="text" value="" placeholder="Tìm kiếm..." />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default no-shadow" onclick="searchRoomAndUser()" style="border-bottom-right-radius: 15px!important;border-top-right-radius: 15px!important;">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div id="icon-header-chat-out-room">
+                <div class="col-md-12 text-center" role="button">
+                    <div class="col-md-3">
+                        <div class="">
+                            <a><span><i class="fa fa-commenting-o fs20"></i></span></a>
+                            <p style="margin-bottom: 0px;" class="fs11">@Localizer["MENU_SIDEBAR_R_CHAT"]</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="">
+                            <a><span><i class="fa fa-phone fs20"></i></span></a>
+                            <p style="margin-bottom: 0px;" class="fs11">@Localizer["MENU_SIDEBAR_R_CALL"]</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div onclick="common.CreateGroup()">
+                            <a><span> <i class="fa fa-users fs20" aria-hidden="true"></i></span></a>
+                            <p style="margin-bottom: 0px;" class="fs11">@Localizer["MENU_SIDEBAR_R_ADD_GROUD"]</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div onclick="common.CreateMeeting()">
+                            <a><span><i class="fa fa-plus fs20" aria-hidden="true"></i></span></a>
+                            <p style="margin-bottom: 0px;" class="fs11">@Localizer["MENU_SIDEBAR_R_ADD_MEETING"]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-menu style-scrollbar">
+                <div class="chat-group">
+                    <div id="div-list-user-header" class="title-group">
+                        <span id="countGroup">@Localizer["MENU_SIDEBAR_R_GROUP"] (0)</span>
+                    </div>
+                    <div id="div-list-group"></div>
+                </div>
+                <div class="chat-user mt10">
+                    <div id="div-list-user-header" class="title-group">
+                        <span id="countUser">@Localizer["MENU_SIDEBAR_R_USER"] (0)</span>
+                    </div>
+                    <div id="div-list-user"></div>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="ui-resizable-handle ui-resizable-n"></div>
+                <div id="chat" class="chat-content style-scrollbar">
+                    <ul id="testichat" class="inbox-message" style="width: 100%; background: white"></ul>
+                </div>
+                <div class="box-chat text-center">
+                    <div class="message-send pl-0 br4">
+                        <div class="float-left message-input">
+                            <textarea id="text-input" placeholder="Nhập tin nhắn..." autofocus class="fs14"></textarea>
+                        </div>
+                        <div class="button-attach float-left">
+                            <input id="btn-attach" type="file" style="display:none" />
+                            <div id="btn-attach-file" role="button" title="Tệp" onclick="attachFile()">
+                                <span class="fa fa-paperclip"></span>
+                            </div>
+                        </div>
+                        <div class="button-send float-left">
+                            <div id="btn-send" role="button" title="Gửi" onclick="logMessageGptMe()">
+                                <span class="fa fa-angle-right"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden">
+            <input type="hidden" id="UserName" value="@userName" />
+            <input type="hidden" id="FullName" value="@fullName" />
+            <input type="hidden" id="Avatar" value="@avatar" />
+            <input type="hidden" id="UserId" value="@userId" />
+            <input type="hidden" id="Host" value="@host" />
+        </div>
+    </div>
+    <div id="view-shift-details" class="pull-right hidden" style="z-index: 999;background: #c6d4c6;position: fixed;top: 90px;right: 59px;padding-top: 10px;padding-bottom: 10px;border-radius: 5px;">
+        <div class="pl5" style="">
+            <div class="pull-left badge-customer badge-customer-success">
+                <span class="text-white">@Localizer["MENU_SIDEBAR_R_IN"]: </span>
+                <span id="inTime" class="pl10" style="color:white;">&nbsp;</span>
+                <span id="inDate" class="" style="color:white;"></span>
+            </div><br />
+            <div class="row pr-2 pull-left">
+            </div>
+        </div>
+        <div class="pl5" style="">
+            <div class="pull-left badge-customer badge-customer-danger">
+                <span class="text-white">@Localizer["MENU_SIDEBAR_R_OUT"]: </span>
+                <span id="outTime" class="" style="color: white">&nbsp;</span>
+                <span id="outDate" class="" style="color:white"></span>
+            </div><br />
+            <div class="row pull-left" style="padding-left:20px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/chat/js/fm.js"></script>
+<script src="~/lib/chat/js/fm.websync.js"></script>
+<script src="~/lib/chat/js/fm.websync.subscribers.js"></script>
+<script src="~/lib/chat/js/fm.websync.chat.js"></script>
+<script src="~/lib/chat/js/fm.icelink.js"></script>
+<script src="~/lib/chat/js/fm.icelink.webrtc.js"></script>
+<script src="~/lib/chat/js/fm.icelink.websync.js"></script>
+<script src="~/lib/chat/js/app.js"></script>
+<script src="~/lib/chat/js/localMedia.js"></script>
+<script src="~/lib/chat/js/signalling.js"></script>
+@*<script src="~/lib/chat/js/socket.io.js"></script>*@
+
+<script src="~/lib/chat/js/chat.js"></script>
+<script>
+    var shiftCode = "";
+    var isCheckIn = false;
+    var lat = 0;
+    var lon = 0;
+    window.userId = "@userId";
+    window.userName = "@userName";
+    getLastShift();
+    function checkInOut() {
+        initGeolocation();
+    }
+    function initGeolocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successLoc, fail);
+            if (isCheckIn == false) {
+                var data = {
+                    ShiftCode: '',
+                    Lat: lat,
+                    Lon: lon
+                }
+                if (lat != null && lon != null)
+                    jQuery.ajax({
+                        beforeSend: function (jqXHR, settings) {
+                            App.blockUI({
+                                target: "html",
+                                boxed: true,
+                                message: 'loading...'
+                            });
+                        },
+                        type: "POST",
+                        url: "/Admin/StaffTimeKeeping/CheckIn",
+                        contentType: "application/json",
+                        dataType: "JSON",
+                        data: JSON.stringify(data),
+                        success: function (rs) {
+                            App.unblockUI("html");
+                            App.toastrSuccess(rs.Title);
+                            getLastShift();
+                        },
+                        failure: function (errMsg) {
+                            App.toastrSuccess(errMsg);
+                        }
+                    });
+            } else {
+                var data = {
+                    ShiftCode: shiftCode,
+                    Lat: lat,
+                    Lon: lon
+                }
+                if (lat != null && lon != null)
+                    jQuery.ajax({
+                        beforeSend: function (jqXHR, settings) {
+                            App.blockUI({
+                                target: "html",
+                                boxed: true,
+                                message: 'loading...'
+                            });
+                        },
+                        type: "POST",
+                        url: "/Admin/StaffTimeKeeping/CheckOut",
+                        contentType: "application/json",
+                        dataType: "JSON",
+                        data: JSON.stringify(data),
+                        success: function (rs) {
+                            App.unblockUI("html");
+                            App.toastrSuccess(rs.Title);
+                            getLastShift();
+                        },
+                        failure: function (errMsg) {
+                            App.toastrSuccess(errMsg);
+                        }
+                    });
+            }
+        }
+        else {
+            alert("Trình duyệt không hỗ trợ");
+        }
+    }
+    function successLoc(position) {
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+    }
+    function fail() {
+
+    }
+    function getLastShift() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/StaffTimeKeeping/GetLastShiftLog",
+            contentType: "application/json",
+            dataType: "JSON",
+            success: function (rs) {
+                shiftCode = rs.ShiftCode;
+                isCheckIn = rs.IsCheckIn;
+                if (rs.ChkinLocationTxt != null) {
+                    var locIn = rs.ChkinLocationTxt.length > 50 ? (rs.ChkinLocationTxt.substr(0, 50) + "...") : rs.ChkinLocationTxt;
+                    //document.getElementById('locIn').setAttribute('data-tooltip', rs.ChkinLocationTxt);
+                    $('#locIn').text(locIn);
+                }
+                if (rs.ChkoutLocationTxt != null) {
+                    var locOut = rs.ChkoutLocationTxt.length > 50 ? (rs.ChkoutLocationTxt.substr(0, 50) + "...") : rs.ChkoutLocationTxt;
+                    //document.getElementById('locOut').setAttribute('data-tooltip', rs.ChkoutLocationTxt);
+                    $('#locOut').text(locOut);
+                } else {
+                    $('#locOut').text(rs.ChkoutLocationTxt);
+                }
+                if (rs.ChkinTime != null) {
+                    var inDate = getDateInOut(rs.ChkinTime);
+                    $('#inDate').text(inDate);
+                    var inTime = getTimeInOut(rs.ChkinTime);
+                    $('#inTime').text(inTime + " ");
+                } else {
+                    $('#inDate').text("");
+                    $('#inTime').text("");
+                }
+                if (rs.ChkoutTime != null) {
+                    var outDate = getDateInOut(rs.ChkoutTime);
+                    var outTime = getTimeInOut(rs.ChkoutTime);
+                    $('#outTime').text(outTime + " ");
+                    $('#outDate').text(outDate);
+                } else {
+
+                    $('#outTime').text("");
+                    $('#outDate').text("");
+                }
+                if (rs.IsCheckIn == false) {
+                    if ($('#imgIn').hasClass('hidden'))
+                        $('#imgIn').removeClass('hidden');
+                    $('#imgOut').addClass('hidden');
+                    $("#shiftBefore").addClass('hidden');
+                    //$("#checkInOut").addClass('margin-right-out');
+                } else {
+                    if ($('#imgOut').hasClass('hidden'))
+                        $('#imgOut').removeClass('hidden');
+                    $('#imgIn').addClass('hidden');
+                    $("#shiftBefore").removeClass('hidden');
+                    $("#shiftBefore").text(rs.ShiftCodeBefore);
+                    //$("#checkInOut").addClass('margin-right-in');
+                }
+            },
+            failure: function (errMsg) {
+                App.toastrSuccess(errMsg);
+            }
+        });
+    }
+    function getDateInOut(inOutDateTime) {
+        var dateTimeInOut = new Date(inOutDateTime);
+        var dd = dateTimeInOut.getDate();
+
+        var mm = dateTimeInOut.getMonth() + 1;
+        var yyyy = dateTimeInOut.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        dateTimeInOut = dd + '/' + mm + '/' + yyyy;
+        return dateTimeInOut;
+    }
+    function getTimeInOut(inOutDateTime) {
+        var timeInOut = new Date(inOutDateTime);
+        var hour = timeInOut.getHours();
+        if (hour < 10) {
+            hour = '0' + hour
+        }
+        var minute = timeInOut.getMinutes();
+        if (minute < 10) {
+            minute = '0' + minute
+        }
+        var second = timeInOut.getSeconds();
+        if (second < 10) {
+            second = '0' + second
+        }
+        timeInOut = hour + ":" + minute + ":" + second;
+        return timeInOut;
+    }
+    function joinMeeting(meetingId) {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Meeting/JoinMeeting?meetingID=" + meetingId,
+            contentType: "application/json",
+            dataType: "JSON",
+            success: function (rs) {
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                } else {
+                    window.open('/Admin/Meeting', '_blank');
+                }
+            },
+            failure: function (errMsg) {
+                App.toastrSuccess(errMsg);
+            }
+        });
+    }
+
+
+
+    $("#imgIn").hover(function () {
+        $("#view-shift-details").removeClass("hidden");
+    })
+    $("#imgOut").hover(function () {
+        $("#view-shift-details").removeClass("hidden");
+    })
+    $("#imgIn").mouseleave(function () {
+        $("#view-shift-details").addClass("hidden");
+    })
+    $("#imgOut").mouseleave(function () {
+        $("#view-shift-details").addClass("hidden");
+    })
+</script>

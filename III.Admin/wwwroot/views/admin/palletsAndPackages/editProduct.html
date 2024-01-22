@@ -1,0 +1,315 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f1f1f1, #FBFCFC);
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166, 0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f1f1f1, #FBFCFC);
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+
+    /* Thiết lập nút bật tắt */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 62px;
+        height: 50px;
+    }
+
+    /* Ẩn input checkbox */
+    .toggle-switch input {
+        display: none;
+    }
+
+    /* Tạo nút trượt */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        /* Màu nền của nút */
+        border-radius: 30px;
+        /* Viền cong */
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    /* Khi input được kiểm tra (checked), thay đổi màu nền của nút */
+    .toggle-switch input:checked+.slider {
+        background-color: #2196F3;
+        /* Màu nền khác */
+    }
+
+    /* Tạo một nút trượt bật tắt */
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 19px;
+        width: 19px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        /* Màu của nút trượt */
+        border-radius: 50%;
+        /* Viền cong để tạo hình tròn */
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    /* Khi input được kiểm tra (checked), di chuyển nút trượt đến phía phải */
+    .toggle-switch input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .toggle-container {
+        display: flex;
+        align-items: center;
+    }
+</style>
+<div class="ml20" ng-controller="editProduct">
+    <div class="row mb5">
+        <div class="form-group col-lg-4 mr10" ng-class="{ 'has-error': errorTypeCode}">
+            <label class="fw600 text-underline">{{'PAUP_PALLETANDPACKAGE' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="modelDetail.PackCode" theme="bootstrap" ng-click="changePack()">
+                    <ui-select-match
+                        placeholder="{{'PAUP_PALLETANDPACKAGE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listPackage | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="modelDetail.PackCode='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group col-lg-4 mr10" ng-class="{ 'has-error': errorTypeCode}">
+            <label class="fw600 text-underline">{{'PAP_PALLETANDPACKAGE_READYSTATE' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="modelDetail.StatusReady" theme="bootstrap">
+                    <ui-select-match
+                        placeholder="{{'PAP_PALLETANDPACKAGE_READYSTATE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listStatusReady | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="modelDetail.StatusReady='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group col-lg-4" ng-class="{ 'has-error': errorTypeCode}">
+            <label class="fw600 text-underline">{{'PAUP_PALLETANDPACKAGE_PRODUCT_MATERIAL' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="modelDetail.ProductCode" theme="bootstrap"
+                    ng-change="changeProduct(modelDetail.ProductCode)">
+                    <ui-select-match
+                        placeholder="{{'PAUP_PALLETANDPACKAGE_PRODUCT_MATERIAL' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listProduct | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="modelDetail.ProductCode='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb5">
+        <div class="form-group col-lg-3 mr10" ng-class="{'has-error' : errorQuantityImp}">
+            <label class="fw600 text-underline">{{'PAUP_PRODUCT_NUMBER' | translate}}</label>
+            <div class='mr5'>
+                <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24"
+                    ng-model="modelDetail.ProductNumRange" placeholder="{{'PAUP_PRODUCT_NUMBER' | translate}}..." />
+                <label class="fs10" style="font-weight:bold; color: red;">Dãy số chưa được sử dụng.VD: 2..5 không thể
+                    dùng lại 2,3,4,5</label>
+            </div>
+        </div>
+        <div class="form-group col-lg-2 mr10" ng-class="{'has-error' : errorQuantityImp}">
+            <label class="fw600 text-underline">{{'PAUP_ITEM_CODE' | translate}}</label>
+            <div class='mr5'>
+                <input readonly class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24"
+                    ng-model="modelDetail.IdImpProduct" placeholder="{{'PAUP_ITEM_CODE' | translate}}..." />
+            </div>
+        </div>
+        
+        <div class="form-group col-lg-4 mr10">
+            <label class="fw600 text-underline">{{'PAUP_ATTRIBUTE_GROUP' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="modelDetail.GattrCode" theme="bootstrap">
+                    <ui-select-match
+                        placeholder="{{'PAUP_ATTRIBUTE_GROUP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listProperties | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="modelDetail.GattrCode='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group col-lg-2 mr10" ng-class="{'has-error' : errorQuantityImp}">
+            <label class="fw600 text-underline">{{'PAUP_MEASURE' | translate}}</label>
+            <div class='mr5'>
+                <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24"
+                    ng-model="modelDetail.Measure" placeholder="{{'PAUP_MEASURE' | translate}}..." num-thousand='true'
+                    awnum num-int='21'
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="col-lg-12" ng-show="IsUpdate">
+                <div class="btn-group actions pull-right d-flex pt15" style="margin-right: -30px;">
+                    <div class="text-center pr10">
+                        <a ng-click="saveDetail()" class="fs30">
+                            <span><i class="fas fa-floppy-disk" class="fs30"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12" ng-show="!IsUpdate">
+                <div class="btn-group actions pull-right d-flex pt15" style="margin-right: -30px;">
+                    <div class="text-center pr10">
+                        <a ng-click="addDetail()" class="fs30" ng-show="!IsUpdate">
+                            <span><i class="fas fa-plus" class="fs30"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row mb5">
+    </div> -->
+    <div class="row mb20">
+        <div class="col-md-12">
+            <table class="table dataTable table-hover table-striped" datatable dt-options="dtOptions"
+                dt-columns="dtColumns" dt-instance="dtInstance" id="tblDataEditProduct">
+            </table>
+        </div>
+    </div>
+</div>

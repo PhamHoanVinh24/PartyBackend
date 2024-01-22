@@ -1,0 +1,212 @@
+﻿<style>
+
+    .tableFix {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+        .tableFix  thead, .tableFix  tbody, .tableFix  tr, .tableFix  td, .tableFix  th {
+            display: block;
+        }
+
+        .tableFix  tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        .tableFix  thead  th {
+            height: 30px;
+            /*text-align: left;*/
+        }
+
+        .tableFix tbody {
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .tableFix  thead {
+            /* fallback */
+        }
+
+
+            .tableFix  tbody  td, .tableFix  thead  th {
+                float: left;
+            }
+</style>
+
+<div class="col-md-5 pl-0">
+    <div class="col-md-10 p1">
+        <input type="text" placeholder="Nhập biển số/Mã PO/Nhập vị trí..." id="autocomplete"  class="form-control" autocapitalize="off" autocomplete="off">
+    </div>
+    <div class="col-md-2 p2">
+        <button class="btn btn-primary" id="searchMap">
+            <i class="fa fa-search"></i>{{'COM_BTN_SEARCH' | translate}}
+        </button>
+    </div>
+</div>
+<div class="col-md-7 hidden">
+    <div class="rightPanel" id="pnSearch" style="z-index:999">
+        <div class="col-md-12" style="padding:0">
+            <ul class="nav nav-tabs pull-right">
+                <li class="text-center active">
+                    <a class="tablinks fs13 " data-toggle="tab" data-target="#staff">{{'Xe' | translate}}</a>
+                </li>
+                <li class="mini-submenu pull-right" ng-click="toogleClick()">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <!--Staff-->
+            <div class="tab-pane active " id="staff">
+                <div class="table-toolbar">
+                    <div class="form-bordered">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="fw600">{{'VCSP_CURD_TAB_CUSTOMER_LBL_FROM_DATE' | translate}}</label>
+                                <div class="input-group">
+                                    <input ng-model="model.fromDate" class="form-control fs11" type="text" placeholder="{{'VCSP_CURD_TAB_CUSTOMER_TXT_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="FromDate" autocomplete="off" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.fromDate='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw600">{{'VCSP_CURD_TAB_CUSTOMER_LBL_TO_DATE' | translate}}</label>
+                                <div class="input-group" ng-readonly="true">
+                                    <input ng-readonly="true" ng-model="model.toDate" class="form-control fs11" type="text" placeholder="{{'VCSP_CURD_TAB_CUSTOMER_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="ToDate" autocomplete="off"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.toDate='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="fw600">Chọn xe</label>
+                                <!--<div class="input-group">
+                                    <input ng-model="model.StaffName" class="form-control fs11" type="text" placeholder="{{'VCSP_CURD_TAB_CUSTOMER_COMBO_STAFF_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.StaffName='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>-->
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.UserName" theme="bootstrap">
+                                        <ui-select-match placeholder="Chọn nhân viên...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.UserName as x in Customers | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.UserName=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 pull-right mt25">
+                                <button ng-click="reload()" class="btn btn-accent">
+                                    <i class="fa fa-search"></i>
+                                    {{'COM_BTN_SEARCH' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row pt5 mb5">
+                            <div class="col-md-12">
+                                <!--<table class="table dataTable table-hover table-striped"
+                                       datatable
+                                       dt-options="dtOptions"
+                                       dt-columns="dtColumns"
+                                       dt-instance="dtInstance"
+                                       id="tblData"></table>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End_Staff-->
+        </div>
+    </div>
+</div>
+<div id="map" class="col-md-12 pl-0 pr-0">
+    <div id="popup" title="" style="align-content:center"></div>
+</div>
+<div id="Modal_Info" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 40%; min-width:300px !important">
+        <!-- Modal content-->
+        <div class="modal-content" style="margin-top:100px">
+            <div class="modal-header" style="height: 40px;">
+                <h4 class="modal-title col-md-6 mt10" id="title"></h4>
+                <img class="close icon-remove" data-dismiss="modal" id="close" style="margin-top: 5px !important;" src="/images/default/close.png" />
+            </div>
+            <div class="modal-body">
+                <div class="row pt10">
+                    <div class="col-md-5 col-sm-5 col-lg-5">
+                        <img style="height:150px;width:150px" src="{{modelPopUp.Avatar}}" onerror="this.src='../../../images/default/no_user.png'">
+                    </div>
+                    <div class="col-md-7 col-sm-7 col-lg-7">
+                        <label class="mt5"><b>Tên nhân viên: </b>{{modelPopUp.Name}}</label><br>
+                        <label class="mt5"><b>Số điện thoại: </b>{{modelPopUp.Phone}}</label><br>
+                        <label class="mt5"><b>Thời gian: </b>{{modelPopUp.CheckInTime}}</label><br>
+                        <label class="mt5"><b>Vị trí: </b>{{modelPopUp.Position}}</label>
+                    </div>
+                </div>
+                <label class="mt10"><b>Danh sách checkIn trong ngày {{modelPopUp.CheckInDate}}</b></label>
+                <div class="tableFix">
+                    <div class="table-responsive ">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%"><b>Thời gian</b></th>
+                                    <th style="width:30%"><b>Cửa hàng</b></th>
+                                    <th style="width:50%"><b>Vị trí</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in modelPopUpList | orderBy: '-CheckInTime'">
+                                    <td style="width:20%">{{item.CheckInTime}}</td>
+                                    <td style="width:30%">{{item.CompanyName}}</td>
+                                    <td style="width:50%">{{item.CompanyAddress}}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <!--<div class="row pt10">
+                    <div class="col-md-12">
+                        <div class="table-responsive tableFixHead">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-3"><b>Thời gian</b></th>
+                                        <th class="col-md-2"><b>Cửa hàng</b></th>
+                                        <th class="col-md-5"><b>Vị trí</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in modelPopUpList">
+                                        <td class="col-md-3">{{item.CheckInTime}}</td>
+                                        <td class="col-md-2">{{item.CompanyName}}</td>
+                                        <td class="col-md-5">{{item.CompanyAddress}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,182 @@
+﻿<div ng-controller="assetDetail">
+    <div class="table-toolbar">
+        <form name="addformAsset" class="form-horizontal" method="post" ng-validate="validationOptionsAssetAttribute">
+            <div class="form-group" style="margin-top: -10px;">
+                <div class="col-md-3">
+                    <div class="form-group" ng-class="{ 'has-error': errorAssetCode}">
+                        <div class="col-md-12">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                            <label class="control-label require">{{'ASLQDT_CURD_LBL_ASSET' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="modelAsset.AssetCode" theme="bootstrap" ng-change="changeSelectBox('AssetCode', modelAsset.AssetCode)">
+                                    <ui-select-match placeholder="{{' ASLQDT_CURD_TXT_ASSET' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in modelAsset.listAsset | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorAssetCode" class="label-color validation-message">
+                                {{'ASLQDT_MSG_CURD_LBL_ASSET_NULL' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0 pl-0" style="width: 12%;">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require">{{'ASLQDT_MSG_CURD_LBL_QUANTITY' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+
+                            <input class="form-control text-danger br24" style="font-weight:bold;" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="Price" ng-model="modelAsset.Quantity" placeholder="{{'ASLQDT_MSG_CURD_LBL_QUANTITY' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            <!--<input type="number" class="br24"onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control " ng-model="modelAsset.Quantity" name="Quantity" placeholder="{{'ASLQDT_MSG_CURD_LBL_QUANTITY' | translate}}" />-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0" style="width: 20%;">
+                    <div class="form-group" style="margin-bottom: -5px !important;">
+                        <div class="col-md-12">
+                            <i class="fa fa-money"></i>
+                            <label class="control-label require">{{'ASLQDT_MSG_CURD_LBL_PRICE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8 p-0 pr10">
+                                <input class="form-control text-danger br24" style="font-weight:bold;" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="Price" ng-model="modelAsset.Price" placeholder="{{'ASLQDT_MSG_CURD_LBL_PRICE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            </div>
+                            <div class="col-md-4 p-0 pl10">
+                                <div class="form-group" ng-class="{ 'has-error': errorCurrencyAsset}">
+                                    <div class="input-group br24-nobtn">
+                                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="modelAsset.CurrencyAsset" theme="bootstrap" ng-change="changeSelectBox('CurrencyAsset', modelAsset.CurrencyAsset)">
+                                            <ui-select-match placeholder="{{'ASLQDT_CURD_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in ListCurrency | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorCurrencyAsset" class="label-color validation-message">
+                                        {{'ASLQDT_CURD_CURRENCY_NOT_BLANK!' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pl30 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <label class="control-label">&nbsp;{{'ASLQDT_CURD_LBL_ASSET_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select ng-model="modelAsset.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ASLQDT_CURD_TXT_ASSET_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in modelAsset.listStatusAsset  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label">{{'ASLQDT_CURD_LBL_ASSET_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <input type="text" class="form-control br24" ng-model="modelAsset.Note" placeholder="{{'ASLQDT_CURD_TXT_ASSET_NOTE' | translate}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt5">
+                    <div class="btn-group pull-right actions d-flex mt5">
+                        <div class="text-center ">
+                            <a ng-click="addAsset()" class="fs30 ">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3" ng-click="addAsset()" style="font-size: 12px !important;color: #428bca;"> {{'ASLQDT_CURD_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <table class="table dataTable table-hover table-striped"
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataAssetLiqui"></table>
+        </div>
+    </div>
+    <!--<form name="addformAsset" method="post" ng-validate="validationOptionsAssetAttribute">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-12" id="box">
+                    <div class="table-toolbar table_body">
+                        <div class="col-md-12">
+                            <div class="col-md-3 form-group" ng-class="{ 'has-error': errorAssetCode}">
+                                <label class="require">{{'ASLQDT_CURD_LBL_ASSET' | translate}}</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelAsset.AssetCode" theme="bootstrap" ng-change="changeSelectBox('AssetCode', modelAsset.AssetCode)">
+                                    <ui-select-match placeholder="{{'ASLQDT_CURD_TXT_ASSET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in modelAsset.listAsset| filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorAssetCode" class="label-color validation-message">
+                                    {{'ASLQDT_MSG_CURD_LBL_ASSET_NULL' | translate}}
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="require">{{'ASLQDT_MSG_CURD_LBL_QUANTITY' | translate}}</label>
+                                    <input type="number" name="Quantity" class="form-control" placeholder="{{'ASLQDT_MSG_CURD_TXT_QUANTITY' | translate}}..." ng-model="modelAsset.Quantity"  />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="require">{{'ASLQDT_MSG_CURD_LBL_PRICE' | translate}}</label>
+                                    <input type="number" class="form-control" name="Price" placeholder="{{'ASLQDT_MSG_CURD_TXT_PRICE' | translate}}..." ng-model="modelAsset.Price" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="">{{'ASLQDT_CURD_LBL_ASSET_STATUS' | translate}}</label>
+                                <div class='input-group'>
+                                    <ui-select tagging ng-model="modelAsset.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'ASLQDT_CURD_TXT_ASSET_STATUS' | translate}} ...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in modelAsset.listStatusAsset | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label class="">{{'ASLQDT_CURD_LBL_ASSET_NOTE' | translate}}</label>
+                                    <textarea class="form-control" placeholder="{{'ASLQDT_CURD_TXT_ASSET_NOTE' | translate}}..." ng-model="modelAsset.Note"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group actions pt20">
+                                    <div class="text-center">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addAsset()">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>-->
+</div>

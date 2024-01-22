@@ -1,0 +1,142 @@
+﻿<script>
+    function readURL(input) {
+        //alert('fine');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#previewImage')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title">Sửa thông tin</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class=" col-md-6">
+                        <div class="form-group" hidden>
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>Id</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Họ và tên.." ng-model="model.Id" name="FullName" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>First name</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Họ.." ng-model="model.FirstName" name="FullName" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>Last name</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Tên.." ng-model="model.LastName" name="FullName" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Số điện thoại</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Số điện thoại.." ng-model="model.Phone" name="Phone" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                                <i class="sprite-image-16x16"></i>
+                                <label class="control-label" for="Status">Ảnh đại diện</label>
+                            </div>
+                            <div class="col-md-8 form-col-control style=" border-left:none"" style="border-left:none">
+                                <div class="fileupload-new thumbnail mb5">
+                                    <img id="previewImage" src="{{model.Profile_picture}}"  ng-src='{{model.Profile_picture}}' style="height:150px; width:150px" />
+                                </div>
+                                <input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Profile_picture" name="Profile_picture" onchange="readURL(this);">
+                                <script>
+                                    $(":file").filestyle({ buttonName: "btn btn-primary" });
+                                </script>
+                            </div>
+                        </div>                      
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Email</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="" ng-model="model.Email" name="Phone" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Ví tài khoản</label>
+                            <div class="col-md-8">
+                                <input type="text" disabled class="form-control" placeholder="" ng-model="model.Balance_credit" name="Phone" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Tổng số chuyến</label>
+                            <div class="col-md-8">
+                                <input type="text" disabled class="form-control" placeholder="" ng-model="model.Total_trip" name="Phone" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Tài khoản mạng xã hội</label>
+        <div class="col-md-8 form-col-control" style="border-left:none">
+            <div class="bs-component ">
+                <div class="col-md-6">
+                    <label>
+                        <input type="radio" ng-model="model.isSocial" value="0">
+                        Có
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <label>
+                        <input type="radio" ng-model="model.isSocial" value="1">
+                        Không
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Social Id</label>
+                            <div class="col-md-8">
+                                <input type="text" disabled class="form-control" placeholder="" ng-model="model.Social_Id" name="Social" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i>Kích hoạt</label>
+                            <div class="col-md-8 form-col-control" style="border-left:none">
+                                <div class="bs-component ">
+                                    <div class="col-md-6">
+                                        <label>
+                                            <input type="radio" ng-model="model.Active" value="1">
+                                            Kích hoạt
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>
+                                            <input type="radio" ng-model="model.Active" value="0">
+                                            Không kích hoạt
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-edit"></i>Lưu</button>
+    <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"><i class="fa fa-trash-o"></i>Hủy</button>
+</div>

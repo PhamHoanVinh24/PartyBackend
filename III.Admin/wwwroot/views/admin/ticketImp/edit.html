@@ -1,0 +1,130 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">Cập nhập sản phẩm</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="thumbnail ">
+                                <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img id="imageId" ng-click="selectImage()" src="{{model.PathImg}}" ng-src="{{model.PathImg}}" onerror='this.src="../../../images/default/no_image.png"' class="img-circle h-200 w200" role="button" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center" style="font-size: 17px;margin-top: -5px;">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <label class="control-label ">Ảnh sản phẩm</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require">Mã sản phẩm</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.ProductCode" name="ProductCode" placeholder="Mã sản phẩm..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label require">Tên sản phẩm</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.ProductName" name="ProductName" placeholder="Tên sản phẩm..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label">Đơn vị</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                    <ui-select-match placeholder="Đơn vị...">{{$select.selected.Value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cubes" aria-hidden="true"></i>
+                            <label class="control-label">Phân khúc SP</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.ProductGroup" theme="bootstrap">
+                                    <ui-select-match placeholder="Phân khúc SP...">{{$select.selected.Value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in productgroup | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ProductGroup=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-book" aria-hidden="true"></i>
+                            <label class="control-label ">Sổ tay hướng dẫn</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="Col-md-12">
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload" style="z-index: 100;position: absolute;padding: 10px;"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" ng-model="model.FileName" style="height:34px;pointer-events:none;" placeholder='Chọn tệp sổ tay hướng dẫn...'></>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="clearFile();" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                        <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                            <div ng-if="model.PathFile!=null"><a href="{{model.PathFile}}" download="{{model.PathFile}}" target="_blank"> {{model.FileName}}</a></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label ">Mô tả</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea type="text" class="form-control" ng-model="model.Note" rows="3" placeholder="Nhập mô tả..." name="Note"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr40" href="javascript:;">
+        Lưu lại
+    </button>
+</div>

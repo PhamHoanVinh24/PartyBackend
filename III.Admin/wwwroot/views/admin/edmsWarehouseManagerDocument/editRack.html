@@ -1,0 +1,202 @@
+﻿<style>
+    /*.modal-header {
+        background: #f1f1f1;
+        color: black;
+    }*/
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #documentType .tags {
+        max-height: 73px;
+        height: 73px;
+    }
+
+    tags-input .tags {
+        max-height: 50px;
+        height: 50px;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .border-qrcode {
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        height: auto;
+    }
+
+        .border-qrcode .img-thumbnail {
+            border: none;
+        }
+
+    #box .table_body .file {
+        height: 170px;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'EDMSWM_TITLE_EDIT_RACK' | translate}}</span>
+</div>
+
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10 pb20">
+                <div class="col-md-12">
+                    <label class="label-red">{{'EDMSWM_CURD_LBL_QRCODE_RACK' | translate}}</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_RACK_CODE' | translate}}</label>
+                                    <input ng-model="model.RackCode" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_RACK_CODE' | translate}}..." readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_RACK_NAME' | translate}}</label>
+                                    <input ng-model="model.RackName" name="RackName" ng-blur="changeRackName(model.RackName)" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_RACK_NAME' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" ng-show="Type=='RV'">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_CNT_BOX_RV' | translate}}</label>
+                                    <input type="number" min="1" ng-model="model.CNT_Box" name="CNT_Box" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_CNT_BOX_RV' | translate}}..." />
+                                </div>
+                                <div class="form-group" ng-show="Type=='PR'">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_CNT_BOX_PR' | translate}}</label>
+                                    <input type="number" min="1" ng-model="model.CNT_Box" name="CNT_Box" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_CNT_BOX_PR' | translate}}.." />
+                                </div>
+                            </div>
+                            <!--<div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_R_POSITION' | translate}}</label>
+                                    <input ng-model="model.R_Position" name="R_Position" class="form-control remove-zero" placeholder="{{'EDMSWM_CURD_TXT_R_POSTION' | translate}}..."  num-thousand='true' awnum num-int='21'/>
+                                </div>
+                            </div>-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{'EDMSWM_CURD_LBL_R_SIZE' | translate}}</label>
+                                    <input ng-model="model.R_Size" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_R_SIZE' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group input-group br24-nobtn">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_LINE_CODE' | translate}}</label>
+                                    <ui-select tagging ng-model="model.LineCode" theme="bootstrap" ng-disabled="true">
+                                        <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_LINE_CODE' | translate}}">{{$select.selected.L_Text}}</ui-select-match>
+                                        <ui-select-choices repeat="x.LineCode as x in listLine | filter: $select.search">
+                                            {{x.L_Text}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{'EDMSWM_CURD_LBL_ORDERING' | translate}}</label>
+                                    <input ng-model="model.Ordering" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_ORDERING' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{'EDMSWM_CURD_LBL_MATERIAL' | translate}}</label>
+                                    <input ng-model="model.Material" class="form-control br24" placeholder="{{'EDMSWM_CURD_TXT_MATERIAL' | translate}}..." />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group input-group br24-nobtn">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_R_STATUS' | translate}}</label>
+                                    <ui-select tagging ng-model="model.R_Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_R_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Value as x in StatusRack | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>{{'EDMSWM_CURD_LBL_NOTE' | translate}}</label>
+                                <textarea ng-model="model.Note" name="Note" placeholder="{{'EDMSWM_CURD_TXT_NOTE' | translate}}" rows="4" class="form-control br12"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt20">
+                        <div class="border-qrcode">
+                            <div class="text-center">
+                                <div class="img-thumbnail">
+                                    <!--<img data-ng-src="data:image/png;base64,{{QR_Code}}" class="h-80" />-->
+                                    <img data-ng-src="data:image/png;base64,{{QR_Code}}" ng-class="QR_Code==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" class="h-80" />
+                                    <label><span class="fa fa-qrcode"></span> <!--Mã QR CODE-->{{'EDMSWM_CURD_LBL_QR_CODE' | translate}}</label>
+                                </div>
+                                <!--<a class="btn btn-print-qrCode" ng-click="print(QR_Code)">
+                                    <b><i class="fas fa-print"></i>&nbsp; Print</b>
+                                </a>-->
+                                <div class="text-center " ng-click="print(QR_Code)">
+                                    <a class="fs30">
+                                        <span><i class="fas fa-print"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'EDMSWM_BTN_PRINT_QR_CODE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="background-color:transparent">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>-->
+    <div class="btn-group pull-right actions d-flex pr25">
+        <div class="fs30" ng-click="cancel()" style="margin-right: 20px; margin-top: 18px;">
+            <a>
+                <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

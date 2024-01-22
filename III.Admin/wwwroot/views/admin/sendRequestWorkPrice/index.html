@@ -1,0 +1,181 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+        z-index: 1032 !important;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class=" fs30 p-0" ng-click="add()">
+
+            <span><i class="fa-solid fa-plus"></i></span>
+
+        </a>
+
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+
+    <!--<div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="addCardJob()">
+            <span><i class="fa fa-trello"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+    </div>-->
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt15">
+            <div class="portlet-body">
+                <div class="row mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'SRWP_LBL_SEARCH_KEY' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Key" class="form-control" type="text" placeholder="{{'SRWP_LBL_SEARCH_KEY' | translate}}.." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Key=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'SRWP_LBL_ORGANIZATION' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.BranchId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'SRWP_TXT_ORGANIZATION' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listBranch | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.BranchId='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'SRWP_CURD_LBL_SEARCH_FROM_DATE'|translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'SRWP_CURD_LBL_SEARCH_FROM_DATE'|translate}}.." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'SRWP_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.ToDate" class="form-control" type="text" autocomplete="off" placeholder="{{'SRWP_CURD_LBL_SEARCH_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='dateto' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'SRWP_CURD_LBL_SEARCH_STATUS' | translate}}</label>
+                        <div class="input-group search-grou br24">
+                            <ui-select ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'SRWP_CURD_LBL_SEARCH_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in Status| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pt10 actions d-flex">
+                            <div class="pr10 text-center mt10">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"> <label style="color:red">{{'SRWP_LBL_NOTE'|translate}} : {{'SRWP_LBL_NOTE2'|translate}}</label></div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataRequestPrice"></table>
+    <script>
+        setTimeout(function () {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            $('.table-scrollable').mousedown(function (e) {
+                isDown = true;
+                startX = e.pageX - $('.table-scrollable').offset().left;
+                scrollLeft = $('.table-scrollable').scrollLeft();
+            });
+            $('.table-scrollable').mouseleave(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mouseup(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mousemove(function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $('.table-scrollable').offset().left;
+                const walk = (x - startX) * 1; //scroll-fast
+                $('.table-scrollable').scrollLeft(scrollLeft - walk);
+                console.log(walk);
+            });
+        }, 1000);
+
+    </script>

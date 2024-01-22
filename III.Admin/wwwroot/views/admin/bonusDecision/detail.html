@@ -1,0 +1,212 @@
+﻿<div class="portlet-body" ng-controller="detail">
+    <div class="row pt5 mb5">
+        <div class="row" ng-show="!detailDisable">
+            <div class="col-lg-3 pl30 txt" ng-class="{ 'has-error': errorUnit}">
+                <i class="fa-solid fa-building fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_DEPARTMENT' | translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" ng-change="ChangeUnit(model.Unit)">
+                        <ui-select-match placeholder="{{'ECD_LBL_CRUD_DEPARTMENT' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                        <ui-select-choices repeat="x.DepartmentCode as x in treeDataunit | filter:$select.search">
+                            {{x.Title}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorUnit" class="label-color validation-message">
+                    {{'ECD_MSG_DEPARTMENT_NO_USER' | translate}}
+                </span>
+            </div>
+            <div class="col-md-3 txt">
+                <i class="fas fa-users fs16 pr5"></i>
+                <label class="fw600 text-underline">{{'ECD_LBL_CRUD_EMPOYEE'| translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.UserinDepart" ng-disabled="model.Unit === '' ||model.Unit === undefined || isEditDetail=== true" theme="bootstrap" ng-change="ChangeEmployee(model.UserinDepart)">
+                        <ui-select-match placeholder="{{'ECD_LBL_CRUD_EMPOYEE' | translate}}...">{{$select.selected.Name}} - {{$select.selected.Code}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in lstUserinDpt | filter:$select.search">
+                            {{x.Name}} - {{x.Code}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.UserinDepart=''" class="btn btn-default no-shadow" ng-disabled="model.Unit === '' ||model.Unit === undefined || isEditDetail=== true">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4 txt" ng-class="{ 'has-error': errorNewRole}">
+                <i class="fas fa-file-signature fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_POSITION'| translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.OldRole" ng-disabled="true" theme="bootstrap">
+                        <ui-select-match placeholder="{{'ECD_LBL_POSITION' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listRole | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.OldRole=''" ng-disabled="true" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorNewRole" class="label-color validation-message">
+                    {{'ECD_LBL_POSITION_NOT_BLANK' | translate}}
+                </span>
+            </div>
+        </div>
+        <div class="row pt20" ng-show="!detailDisable">
+            <div class="col-md-3 pl30 txt" ng-class="{ 'has-error': errorNewDepartmentCode}">
+                <i class="fa-solid fa-building fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_DEPARTMENT_NEW'| translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.NewDepartmentCode" theme="bootstrap">
+                        <ui-select-match placeholder="{{'ECD_LBL_CRUD_DEPARTMENT_NEW' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listDepartment | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.NewDepartmentCode=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorNewDepartmentCode" class="label-color validation-message">
+                    {{'ECD_LBL_CRUD_DEPARTMENT_NEW_NOT_BLANK' | translate}}
+                </span>
+            </div>
+            <div class="col-md-3 txt" ng-class="{ 'has-error': errorNewRole}">
+                <i class="fas fa-file-signature fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_POSITION_NEW'| translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.NewRole" theme="bootstrap" ng-change="ChangePayScale(model.NewRole, model.PayScale)">
+                        <ui-select-match placeholder="{{'ECD_LBL_POSITION_NEW' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listRole | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.NewRole=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorNewRole" class="label-color validation-message">
+                    {{'ECD_LBL_POSITION_NEW_NOT_BLANK' | translate}}
+                </span>
+            </div>
+            <div class="col-md-2 txt" ng-class="{ 'has-error': errorPayScale}">
+                <i class="fas fa-balance-scale fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_LEVEL_WAGE' | translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.PayScale" theme="bootstrap" ng-change="ChangePayScale(model.NewRole, model.PayScale)">
+                        <ui-select-match placeholder="{{'ECD_LBL_CRUD_LEVEL_WAGE' | translate}}...">{{$select.selected.Code}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in lstPayScale | filter:$select.search">
+                            {{x.Code}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.PayScale=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorPayScale" class="label-color validation-message">
+                    {{'ECD_LBL_CRUD_LEVEL_WAGE_NOT_BLANK' | translate}}
+                </span>
+            </div>
+            <div class="col-md-2 txt" ng-class="{ 'has-error': errorPayRanges}">
+                <i class="fas fa-money-bill-wave fs16 pr5"></i>
+                <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_UP_WAGE' | translate}}</label>
+                <div class="input-group">
+                    <ui-select tagging ng-model="model.PayRanges" theme="bootstrap">
+                        <ui-select-match placeholder="{{'ECD_LBL_CRUD_UP_WAGE' | translate}}...">{{$select.selected.Ranges}}</ui-select-match>
+                        <ui-select-choices repeat="x.Ranges as x in lstRange | filter:$select.search">
+                            {{x.Ranges}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.PayRanges=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorPayRanges" class="label-color validation-message">
+                    {{'ECD_LBL_CRUD_UP_WAGE_NOT_BLANK' | translate}}
+                </span>
+            </div>
+        </div>
+        <div class="row pt20">
+            <div ng-show="!detailDisable">
+                <div class="col-md-3 pl30 txt" ng-class="{ 'has-error': errorFromTime}">
+                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromTime" class="form-control" type="text" placeholder="{{'ECD_LBL_CRUD_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='appfrom' autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromTime=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorFromTime" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_FROM_DATE_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-3 txt" ng-class="{ 'has-error': errorToTime}">
+                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                    <label class="fw600 text-underline">{{'ECD_LBL_CRUD_TO_DATE' | translate}}</label>
+                    <div class="input-group ">
+                        <input ng-model="model.ToTime" class="form-control" type="text" placeholder="{{'ECD_LBL_CRUD_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='appto' autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToTime=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorToTime" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_TO_DATE_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-4 txt">
+                    <i class="fas fa-comments fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'ECD_LBL_CRUD_REASON_MABEUVERING' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ReasonMovement" class="form-control" type="text" placeholder="{{'ECD_LBL_CRUD_REASON_MABEUVERING' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 txt pull-right pt23">
+                <div class="btn-group actions d-flex pull-right pr15">
+                    <div class="text-center pl10 margin-right-10 next" ng-click="cancel()" ng-if="!detailDisable">
+                        <a class="btn btn-icon-only btn-outline btnn" name="next">
+                            <i class="fa-solid fa-xmark fs25" aria-hidden="true"></i>
+                        </a>
+                        <p class="text-underline btn-name mb5 pt3">{{'ECD_BTN_CANCLE' | translate}}</p>
+                    </div>
+                    <div class="text-center pl10 margin-right-10 next" ng-click="save()" ng-if="!detailDisable">
+                        <a class="btn btn-icon-only btn-outline btnn " name="next">
+                            <i class="fas fa-save fs25" aria-hidden="true"></i>
+                        </a>
+                        <p class="text-underline btn-name mb5 pt3">{{'ECD_BTN_SAVE' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-card">
+            <div class="row">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataDetail"></table>
+            </div>
+        </div>
+    </div>
+</div>

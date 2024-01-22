@@ -1,0 +1,284 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+    .tab .nav-tabs li {
+        border-right: 1px solid #ddd;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .nav-tabs li div {
+        color: black;
+        background: white;
+        border-radius: 0;
+        margin-right: -1px;
+        padding: 5.5px 20px;
+        border-bottom: none;
+        font-weight: 600;
+    }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active>div,
+    .tab .nav-tabs>li.active>div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .top-corner {
+        right: 0px;
+        position: absolute;
+    }
+
+    /*CSS form Tab*/
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'LMS_NEW_QUIZ' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-3 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_QUIZ_CODE,' | translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <input class="form-control text-important" name="Code" ng-model="model.Code" type="text"
+                                placeholder="{{'LMS_QUIZ_CODE,' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Code='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_DIFFICULT_LEVEL' | translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <input class="form-control text-important" name="Level" ng-model="model.Level" type="text"
+                                placeholder="{{'LMS_DIFFICULT_LEVEL' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Level='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline require">{{'LMS_DURATION' |
+                            translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <input class="form-control text-important" name="Duration" ng-model="model.Duration"
+                                type="text" placeholder="{{'LMS_DURATION' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Duration='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_UNIT' | translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                <ui-select-match placeholder="{{'LMS_UNIT' | translate}}...">{{$select.selected.Name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Unit='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline require">{{'LMS_TYPE' | translate}}</label>
+                        <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorType}">
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap"
+                                ng-change="changeType(); errorType = false">
+                                <ui-select-match placeholder="{{'Loại' | translate}}...">{{$select.selected.Name |
+                                    translate}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listTypeQuiz | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name | translate}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Type='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorType" class="label-color validation-message">
+                            {{'LMS_TYPE_NOT_EMPTY' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-5 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline require">{{'LMS_SUBJECT' | translate}}</label>
+                        <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorType}">
+                            <ui-select tagging ng-model="model.SubjectCode" theme="bootstrap"
+                                ng-disabled="SubjectCode != '' && SubjectCode != null && SubjectCode != undefined"
+                                on-select="changeData('SubjectCode', $item)">
+                                <ui-select-match placeholder="{{'LMS_SUBJECT' | translate}}...">
+                                    {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listSubject | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.SubjectCode='';"
+                                    class="btn btn-default no-shadow start-date"
+                                    ng-disabled="SubjectCode != '' && SubjectCode != null && SubjectCode != undefined">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pr-0">
+                        <label class="col-md-12 pl-0 fw600 text-underline require">{{'LMS_LECTURE' | translate}}</label>
+                        <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorType}">
+                            <ui-select tagging ng-model="model.LectureCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'LMS_LECTURE' | translate}}...">
+                                    {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listLecture | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.LectureCode='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="pull-right mt20">
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center">
+                                    <a ng-click="submit()"
+                                        class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pr-0">
+                        <!--<label class="col-md-12 pl-0 fw600 text-underline require">{{'Media đi kèm' | translate}}</label>-->
+                        <div class="col-md-4" ng-repeat="x in listMediaType">
+                            <div class="border bg-white" style="position: relative"
+                                ng-class="{'disabled-element' : x.Check == false && mediaChecked == true }">
+                                <button ng-click="deleteMedia(x)" class="top-corner" ng-if="x.Check">
+                                    <span><i class="fa fa-times black fs8"></i></span>
+                                </button>
+                                <div class="text-center h-200 d-flex"
+                                    style="flex-direction: column; justify-content: center; align-content: center;">
+                                    <a class="fs100" ng-click="addMedia($index)"
+                                        onclick="$(this).parent().find('input[type=file]').click();">
+                                        <span><i class="fas fa-{{x.Icon}}"></i></span>
+                                    </a>
+                                    <input class="form-control" custom-on-change-lms="loadFileQuiz"
+                                        style="display: none;" type="file" />
+                                    <p class="text-underline fs16 mb5 pt3 ng-binding">{{x.Name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-12 tab mb10" role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <div href="#Section1" aria-controls="location" role="button" data-toggle="tab">
+                        <!--{{'CMS_CAT_LBL_DESCRIPTION' | translate}}-->{{'LMS_DASH_BOARD_TH_QUIZ_CONTENT' | translate}}
+                    </div>
+                </li>
+                <li role="presentation">
+                    <div href="#Section2" aria-controls="route" role="button" data-toggle="tab">
+                        <!--{{'CMS_CAT_LBL_IMAGE' | translate}}-->{{'LMS_DASD_BOARD_LBL_ADD_QUIZ_ANSWER_PLAN' | translate}}
+                    </div>
+                </li>
+                <li role="presentation">
+                    <div href="#Section3" aria-controls="route" role="button" data-toggle="tab">
+                        <!--{{'CMS_CAT_LBL_IMAGE' | translate}}-->{{'LMS_DASD_BOARD_LBL_ADD_QUIZ_REFERENCES' | translate}}
+                    </div>
+                </li>
+            </ul>
+
+            <div class="tab-content pt10">
+                <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                    <textarea ng-model="model.Content" id="ckEditorItem"></textarea>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="Section2">
+                    <div class="table-responsive">
+                        <div ng-include="'../views/admin/lmsDashBoard/manage-answer.html'"></div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="Section3">
+                    <div class="table-responsive">
+                        <div ng-include="'../views/admin/lmsDashBoard/manage-ref.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

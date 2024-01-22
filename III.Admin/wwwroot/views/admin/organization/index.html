@@ -1,0 +1,203 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(50% - 50px);
+        right: 50px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right actions pt5 pb-1 d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a ng-click="showSearch()" class="fs30">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="portlet light bordered mb5 mt10">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group br24">
+                        <input type="text" class="form-control" placeholder="{{'ADM_BRANCH_TXT_BRANCH_NAME' | translate}}..." ng-model="model.Name" name="Name" autocomplete="off" ng-change="loadFullBranch()" ng-keydown="($event.keyCode == 13) && searchBranch()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Name=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <!--<button class="btn btn-accent" ng-click="searchBranch()"><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</button>-->
+                    <!--  <button class="btn btn-red" ng-click="add()"><i class="fa fa-plus"> Thêm mới</i></button>-->
+                    <!-- <button class="btn btn-blue" ng-click="edit()"><i class="fa fa-edit"> Sửa</i></button>-->
+                    <!--<div class="col-md-6">
+                    <div class="form-group">-->
+                    <!--<label class="control-label col-md-4">{{'SELECT_ORGANIZATION_TYPE' | translate}}</label>-->
+                    <!--<div class="col-md-12">-->
+                    <!--<div class="input-group">
+                        <ui-select ng-model="model.Id" class="" style="width: 100%;" ng-change="reload()">
+                            <ui-select-match placeholder="{{'SELECT_ORGANIZATION_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in organizationType | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="clear()" class="btn btn-default no-shadow" style="font-size:13px">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>-->
+                    <!--</div>-->
+                    <!--</div>
+                    </div>-->
+                </div>
+                <div class="col-md-5" ng-if="showUserInOrg">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group search-group">
+                                <ui-select ng-model="model.GroupUserCode" class="" ng-change="loadUserOutOrg()">
+                                    <ui-select-match placeholder="{{'ADM_BRANCH_COMBO_DEPARTMENT' | translate}}...">{{ $select.selected.Title }}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in groupUserData | filter:$select.search">
+                                        {{ x.Title }}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.GroupUserCode='';loadUserOutOrg();" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group search-group">
+                                <ui-select ng-model="model.UserOutOrg">
+                                    <ui-select-match placeholder="{{'ADM_BRANCH_COMBO_ACCOUNT' | translate}}...">
+                                        {{$select.selected.UserName}} - {{$select.selected.FullName}}
+                                    </ui-select-match>
+                                    <ui-select-choices refresh="fetchAccount($select)"
+                                                       refresh-delay="300"
+                                                       repeat="user in listUserOutOrg | filter: $select.search">
+                                        {{user.UserName}} - {{user.FullName}}
+                                        <div ng-if="$index == listUserOutOrg.length - 1 && showButtonLoadMore">
+                                            <button class="btn btn-xs btn-success"
+                                                    style="width: 100%; margin-top: 5px;"
+                                                    ng-click="fetchAccount($select, $event);"
+                                                    ng-disabled="loading">
+                                                Load more...
+                                            </button>
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="clickAddAccountToBranch()" class="btn btn-default no-shadow badge-success" title="Add account to Branch" style="color:white">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn-group pull-left pt10 actions d-flex" style="bottom:15px;">
+                        <div class="text-center">
+                            <a class="fs30" ng-click="searchBranch()">
+                                <span><i class="fas fa-search"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="text-danger">{{'COM_MSG_BRANCH_GUIDE' | translate}}</span>
+                </div>
+            </div>
+        </div>
+        <!--<div class="" ng-init="initData()">
+            <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property"
+                       on-select="my_tree_handler(branch)" expand-level="4" icon-leaf="glyphicon glyphicon-adjust"></tree-grid>
+        </div>-->
+        <!--<table class="table dataTable table-bordered table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>-->
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6" id="contentMainTree">
+        <div id="treeDiv" class="block-tree-branch" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree="treeInstance" tree-events-obj="treeEventsObjBranch"></div>
+    </div>
+    <div class="col-md-6 " ng-show="showUserInOrg">
+        <div class="table-responsive table-box-shadow table-height-scroll">
+            <table class="table table-bordered table-striped table-hover no-margin">
+                <thead>
+                    <tr class="table-header">
+                        <!--<th width="30"><label class="mt-checkbox"><input type="checkbox" ng-model="selectAllUserInOrg" ng-change="addOrRemoveUserInOrg(null, selectAllUserInOrg)" /><span></span></label></th>-->
+                        <th width="25">#</th>
+                        <th>{{'ADM_BRANCH_USER_NAME' | translate}}</th>
+                        <th>{{'ADM_BRANCH_USER_FULLNAME' | translate}}</th>
+                        <th>{{'ADM_BRANCH_USER_EMAIL' | translate}}</th>
+                        <th width="25">
+                            <span class="fa fa-times fa-2x text-danger cursor" title="Delete All User" ng-click="removeUserInOrg(null)"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in userInOrgs">
+                        <!--<td><label class="mt-checkbox"><input type="checkbox" ng-model="selectUserInOrg[$index]" ng-change="addOrRemoveUserInOrg(user, selectUserInOrg[$index])" /><span></span></label></td>-->
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ user.UserName }}</td>
+                        <td>{{ user.FullName }}</td>
+                        <td>{{ user.Email }}</td>
+                        <td class="text-center">
+                            <span class="fa fa-times fa-2x text-danger cursor" title="Delete User" ng-click="removeUserInOrg(user)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-group actions d-flex pull-right">
+            <div class="text-center pr10">
+                <a class="fs30" ng-click="updateUserInOrg()" href="javascript:;">
+                    <span><i class="fa-solid fa-plus"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+            </div>
+            <div class="text-center">
+                <a class="fs30" ng-click="refreshUserInOrg()">
+                    <span><i class="fa fa-refresh"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_REFRESH' | translate}}</p>
+            </div>
+        </div>
+    </div>
+</div>

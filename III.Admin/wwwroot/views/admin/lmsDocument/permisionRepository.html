@@ -1,0 +1,137 @@
+﻿<style>
+    .border .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+        .border .btn:hover {
+            background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+            border: none;
+        }
+
+    .fa-times {
+        color: #999;
+    }
+
+        .fa-times:hover {
+            background: #999999;
+            color: white;
+        }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-cogs white" style="font-size: 25px; padding-top: 10px;color:black"></i>
+    <span class="modal-title " id="modal-title"> {{'EDMSR_TITLE_DECENTRALIZE_REPOSITORY' | translate}}</span>
+</div>
+<div class="modal-body" style="padding-bottom:0;" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <label class="control-label text-left">{{'EDMSR_LBL_GROUP_MEMBER' | translate}}</label>
+                        <ui-select tagging ng-model="model.MemberGroup" theme="bootstrap" on-select="selectGroupMember(model.MemberGroup)">
+                            <ui-select-match placeholder="{{'EDMSR_CURD_TXT_MEMBER_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x in model.listGroupMember | filter: $select.search">
+                                <div style="padding-left: {{15 * x.Level}}px">
+                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                    {{x.Name}}
+                                </div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label text-left">{{'EDMSR_LBL_MEMBER' | translate}}</label>
+                        <ui-select tagging ng-model="model.Member" theme="bootstrap" on-select="selectMember(model.Member)">
+                            <ui-select-match placeholder="{{'EDMSR_CURD_TXT_MEMBER' | translate}}...">{{$select.selected.UserName}}</ui-select-match>
+                            <ui-select-choices repeat="x in model.listMember | filter: $select.search">
+                                {{x.UserName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="model.listUser.length>0">
+                    <div class="col-md-12">
+                        <div class="col-md-12 border br4">
+                            <button type="button" class="btn" ng-repeat="x in model.listUser">
+                                <i class="fa fa-times float-right" aria-hidden="true" ng-click="removeUser(x.Id)"></i>{{x.UserName}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-12 border br4">
+                            <div class="row">
+                                <div class="col-md-6 pt10 pb10">
+                                    <div class="checkbox-default pl5">
+                                        <input id="checkbox1" type="checkbox" ng-model="model.Read" ng-click="selectPermision('Read')">
+                                        <label for="checkbox1">
+                                            {{'EDMSR_CHK_R_V' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-default pl5">
+                                        <input id="checkbox2" type="checkbox" ng-model="model.Update" ng-click="selectPermision('Update')">
+                                        <label for="checkbox2">
+                                            {{'EDMSR_CHK_UPDATE' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-default pl5">
+                                        <input id="checkbox3" type="checkbox" ng-model="model.Full" ng-click="selectPermision('Full')">
+                                        <label for="checkbox3">
+                                            {{'EDMSR_CHK_FULL_CONTROL' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pt10 pb10">
+                                    <div class="checkbox-default pl5">
+                                        <input id="checkbox4" type="checkbox" ng-model="model.Download" ng-click="selectPermision('Download')">
+                                        <label for="checkbox4">
+                                            {{'EDMSR_CHK_D_S' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-default pl5">
+                                        <input id="checkbox5" type="checkbox" ng-model="model.Delete" ng-click="selectPermision('Delete')">
+                                        <label for="checkbox5">
+                                            {{'EDMSR_CHK_DEL' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="col-lg-4 pull-right">
+        <div class="btn-group pt10 actions d-flex pull-right">
+            <div class="text-center pl20">
+                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()" href="javascript:;">
+                    <span><i class="fa fa-save"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+            </div>
+            <div class="text-center pl20 pr10">
+                <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+                    <span><i class="fa fa-close"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+            </div>
+        </div>
+
+    </div>
+    <!--a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green bold mr25" href="javascript:;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>-->
+</div>

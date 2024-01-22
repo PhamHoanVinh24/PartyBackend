@@ -1,0 +1,61 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">Thêm mới dịch vụ</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom:10px;">
+    <div class="portlet-body form">
+        <form class="form-horizontal userFormAreaHeader" name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="fw600 text-underline">Dịch vụ</label>
+                            <div class="input-group">
+                                <ui-select ng-model="model.ServiceCode" theme="bootstrap">
+                                    <ui-select-match placeholder="Chọn dịch vụ">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices  repeat="x.Code as x in services | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ServiceCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label require">Số lượng</label>
+                            <input type="number" min="1" class="form-control" ng-model="model.Quantity" name="Code" placeholder="Số lượng..." />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label require">Ghi chú</label>
+                            <textarea rows="5" type="text" class="form-control" ng-model="model.Note" name="Code" placeholder="ghi chú..." />
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <div class="btn-group pull-right actions d-flex">
+                            <div class="pl20 text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

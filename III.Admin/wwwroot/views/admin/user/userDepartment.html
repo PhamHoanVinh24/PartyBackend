@@ -1,0 +1,99 @@
+﻿<div ng-controller="userDepartment" ng-show="IsTranslate" class=" h-300">
+    <div class="col-lg-3 mb10 pl-0">
+        <div class="form-group" ng-class="{ 'has-error': errorBranchExt}">
+            <div class="col-md-12 pl-0">
+                <label class="control-label bold require">{{'ADM_USER_LBL_HEADOFFFICE_BRANCH' | translate}}</label>
+            </div>
+            <div class="col-md-12 pl-0 pr-1">
+                <div class="input-group br24 col-md-12">
+                    <ui-select ng-model="modelDepartmentUser.Branch" ng-required="true" on-select="changleSelect('Branch')" ng-disabled="isAllData != 'True'">
+                        <ui-select-match placeholder="{{'ADM_USER_LBL_HEADOFFFICE_BRANCH' | translate}}...">{{$select.selected.OrgName}}</ui-select-match>
+                        <ui-select-choices repeat="x.OrgAddonCode as x in lstBranch | filter:$select.search">
+                            {{x.OrgName}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="modelDepartmentUser.Branch=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorBranchExt" class="label-color validation-message">
+                    {{'ADM_USER_CURD_MSG_ERR_BRANCH' | translate}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 pl-0">
+        <div class="form-group" ng-class="{ 'has-error': errorDepartmentCode}">
+            <div class="col-md-12 pl-0">
+                <label class="control-label bold require">{{'ADM_USER_CURD_TAP_DEPARTMENT' | translate}}</label>
+            </div>
+            <div class="col-md-12 pl-0 pr-1">
+                <div class="input-group br24 col-md-12">
+                    <ui-select ng-model="modelDepartmentUser.DepartmentCode" ng-required="true" on-select="changleSelect('DepartmentCode')" ng-disabled="isAllData != 'True'">
+                        <ui-select-match placeholder="{{'ADM_USER_CURD_TAP_DEPARTMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in departmentList | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="modelDepartmentUser.DepartmentCode=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorDepartmentCode" class="label-color validation-message">
+                    {{'ADM_USER_VALIDATE_DEPARTMENT' | translate}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 pl-0">
+        <div class="form-group" ng-class="{ 'has-error': errorRoleId}">
+            <div class="col-md-12 pl-1">
+                <label class="control-label" ng-class="{'require':(model.TypeStaff === '' || model.TypeStaff === null )||(model.TypeStaff === 10)}">{{'ADM_USER_CURD_LBL_ROLE' | translate}}</label>
+            </div>
+            <div class="col-md-12 pl-1 pr-0">
+                <div class="input-group br24 col-md-12">
+                    <ui-select ng-model="modelDepartmentUser.RoleId" ng-required="true" on-select="changleSelect('RoleId')" ng-disabled="isAllData != 'True'">
+                        <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_ROLE' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                        <ui-select-choices repeat="x.Id as x in roleList | filter:$select.search">
+                            {{x.Title}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="modelDepartmentUser.RoleId=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+                <span ng-show="errorRoleId" class="label-color validation-message">
+                    {{'ADM_USER_CURD_MSG_ERR_ROLE' | translate}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 pr-0">
+        <!--<div class="mr10 pr-0 pull-right pt15">
+            <button class="btn green-custom" ng-click="addUserDepartRole()" style="border-radius: 0px !important">
+                <i class="fa fa-plus"></i>
+                {{'ADM_USER_BTN_ADD_BELOW' | translate}}
+            </button>
+        </div>-->
+        <div class="pr0 text-center pull-right mt-1">
+            <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addUserDepartRole()">
+                <span><i class="fa-solid fa-plus fs30"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5">{{'ADM_USER_BTN_ADD_BELOW' | translate}}</p>
+        </div>
+    </div>
+    <div class="pt10">
+        <table class="table dataTable table-hover table-striped mt10"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataDepartment"></table>
+    </div>
+</div>

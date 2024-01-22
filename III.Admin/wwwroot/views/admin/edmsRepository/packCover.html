@@ -1,0 +1,90 @@
+﻿<style type="text/css">
+    .tag-wareHouseFile .tags {
+        height: 75px;
+        max-height: 75px;
+    }
+
+    .contentMainCategory {
+        max-height: 360px;
+        overflow: auto;
+        height: 360px;
+    }
+
+    tags-input .host {
+        position: relative;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height: 0;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title"> {{'EDMSR_TAB_PACKCOVER_CURD_LIST_BOX' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addPackCover" class="form-horizontal" method="post" ng-validate="validationOptionsPackCover">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="col-md-3 pl-0">
+                    <label class="control-label require"><i class="fas fa-barcode"></i>&nbsp;{{'EDMSR_TAB_PACKCOVER_CURD_CODE' | translate}}</label>
+                    <input ng-model="model.ObjPackCode" name="ObjPackCode" class="form-control br24" type="text" placeholder="{{'EDMSR_TAB_PACKCOVER_CURD_CODE' | translate}}..." readonly />
+                </div>
+                <div class="col-md-3 pl-0">
+                    <label class="control-label require"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_PACKCOVER_CURD_NAME' | translate}}</label>
+                    <input ng-model="model.Name" name="Name" class="form-control br24" type="text" placeholder="{{'EDMSR_TAB_PACKCOVER_CURD_NAME' | translate}}..." />
+                </div>
+                <div class="col-md-2 pl-0">
+                    <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_PACKCOVER_CURD_SIZE' | translate}}</label>
+                    <input ng-model="model.SpecSize" name="SpecSize" class="form-control br24" type="text" placeholder="{{'EDMSR_TAB_PACKCOVER_CURD_SIZE' | translate}}..." />
+                </div>
+                <div class="col-md-1 w-11-percent pl-0">
+                    <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_PACKCOVER_CURD_WEIGHT' | translate}}</label>
+                    <input ng-model="model.Weight" name="Weight" class="form-control br24" type="text" placeholder="{{'EDMSR_TAB_PACKCOVER_CURD_WEIGHT' | translate}}..." />
+                </div>
+                <div class="col-md-1 w-11-percent pl-0 br24-nobtn">
+                    <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_PACKCOVER_CURD_UNIT' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.Unit" theme="bootstrap">
+                        <ui-select-match placeholder="{{'EDMSR_TAB_PACKCOVER_CURD_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-md-1 pl-0 pr-0 d-flex">
+                    <div class="text-center mt30" ng-if="!isEdit">
+                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addPack()">
+                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3 ml5">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                    <div class="text-center mt30 pr20" ng-if="isEdit">
+                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="editPack()">
+                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3 ml5">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                    <div class="text-center mt30" ng-if="isEdit">
+                        <a class1="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancelPack()">
+                            <span><i class="fas fa-times fs25"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3 ml5">{{'COM_BTN_CANCEL' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12" ng-show="IsTranslate">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptionsPackCover"
+                       dt-columns="dtColumnsPackCover"
+                       dt-instance="dtInstancePackCover"
+                       id="tblDataPackCover"></table>
+            </div>
+        </div>
+    </div>
+</div>
+

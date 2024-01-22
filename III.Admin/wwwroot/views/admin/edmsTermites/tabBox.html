@@ -1,0 +1,92 @@
+﻿<style>
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+</style>
+<div ng-controller="tabBox">
+    <div class="row">
+        <form name="searchform" method="post" ng-validate="validationOptions">
+            <div class="col-md-9 row">
+                <div class="col-md-9">
+                    <label class="control-label require fs11 " style="font-size:11px !important">{{'EDMSTER_CURD_LBL_FROFILE_BOX' | translate}}</label>
+                    <div class="form-group " ng-class="{ 'has-error': errorBoxId}">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.BoxId" theme="bootstrap" on-select="changleSelect('BoxId',$item)">
+                                <ui-select-match placeholder="{{'EDMSTER_COMBOX_FROFILE_BOX' | translate}}...">{{$select.selected.BoxCode}} - Thùng số {{$select.selected.NumBoxth}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in ListBoxId | filter: $select.search">
+                                    {{x.BoxCode}} - Thùng số {{x.NumBoxth}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <!--<span class="input-group-btn">
+                                <button type="button" ng-click="model1.BoxId=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>-->
+                        </div>
+                        <span ng-show="errorBoxId" class="label-color validation-message">
+                            {{'Chọn thùng để thêm' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+                    <div class="form-group mb5">
+                        <button ng-click="add()" id="btnAddFile" type="submit" class="btn btn-green">
+                            <i class="fa fa-plus"></i>
+                            {{'COM_BTN_ADD' | translate}}
+                        </button>
+                        <button ng-click="save()" id="btnEditFile" type="submit" class="btn btn-info hidden">
+                            <i class="fa fa-edit"></i>
+                            {{'COM_BTN_EDIT' | translate}}
+                        </button>
+                    </div>
+                </div>-->
+                <div class="col-md-3">
+                    <div class="btn-group actions d-flex mt20">
+                        <div class="text-center">
+                            <a ng-show="!isEdit" ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <a ng-show="isEdit" ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb5">
+                        <input type="text" class="form-control" ng-model="modelSearch.Text" placeholder="{{'EDMSTER_CURD_TXT_ENTER_KEYWORD' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+                    <button ng-click="reload()" class="btn btn-accent">
+                        <i class="fa fa-search"></i>
+                        Tìm kiếm
+                    </button>
+                </div>-->
+                <div class="col-md-3">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center">
+                            <a ng-click="reload()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 row" style="margin-top: -10px;">
+                <div class="text-center border-qrcode">
+                    <div class="img-thumbnail">
+                        <img data-ng-src="data:image/png;base64,{{QR_Code_Req}}" ng-class="QR_Code_Req==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" width="80" height="80" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataFile"></table>
+</div>

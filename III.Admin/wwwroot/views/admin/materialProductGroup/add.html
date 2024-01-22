@@ -1,0 +1,130 @@
+﻿
+<style type="text/css">
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .list-user input {
+        border: 0 !important;
+    }
+
+    .form-group {
+        margin-bottom: 5px !important;
+    }
+
+    .control-label.require::after {
+        content: '*';
+        color: red;
+        margin-left: 5px;
+    }
+
+    .br {
+        background-color: white;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title "> {{'MPG_CURD_TITLE_ADD_MPG' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form style="border: 0px solid #e7ecf1 !important;" name="addform" class="form-horizontal userFormAreaHeader br" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label ">{{'MPG_CURD_LBL_MPG_FATHER_GROUP' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.ParentID" ng-change="reload()" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MPG_CURD_COMBO_MPG_FATHER_GROUP' | translate}}...">
+                                    <i ng-show="!$select.selected.HasChild" class="fa fa-folder text-info"></i>
+                                    <i ng-show="$select.selected.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                    {{$select.selected.Title}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in treeDataParent | filter: $select.search">
+                                    <div style="padding-left: {{15 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ParentID=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPG_CURD_LBL_MPG_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Code" name="ProductCode" id="ProductCode" placeholder="{{'MPG_CURD_TXT_MPG_CODE' | translate}}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MPG_CURD_LBL_MPG_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Name" name="ProductName" placeholder="{{'MPG_CURD_TXT_MPG_NAME' | translate}}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'Loại nhóm' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="input-group br24-nobtn">
+                            <ui-select tagging ng-model="model.GroupType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Loại nhóm' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in Types | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'MPG_CURD_LBL_MPG_DESCRIPTION' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control br12" ng-model="model.Description" rows="3" placeholder="{{'MPG_CURD_TXT_MPG_DESCRIPTION' | translate}}" name="Note"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pt5">
+    <div class="btn-group text-center pull-right actions d-flex pr20">
+        <div class="fs30 pr20" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+            <a>
+                <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,224 @@
+﻿<style>
+    .mt-checkbox > span:after {
+        left: 6px !important;
+        top: 2px !important;
+        width: 5px;
+        height: 10px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+</style>
+<div ng-controller="assign-member">
+    <div class="row mt10">
+        <div class="col-md-3">
+            <label>{{'Trụ sở - chi nhánh' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="changeSelect('Branch', model.Branch)" theme="bootstrap">
+                <ui-select-match placeholder="{{'Trụ sở - chi nhánh' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.Code as x in lstBranch | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-5">
+            <label>{{'Phòng ban/Nhóm' | translate}}</label>
+            <div class="d-flex">
+                <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap">
+                    <ui-select-match placeholder="{{'Phòng ban/Nhóm' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                    <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label>{{'Nhân viên' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserId" on-select="submit()" theme="bootstrap">
+                <ui-select-match placeholder="{{'Nhân viên' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.UserId as x in listUser | filter: $select.search">
+                    {{x.GivenName}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-12 mt5">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+
+                .table-responsive {
+                    overflow: unset;
+                }
+            </style>
+            <div class="portlet light bordered mb5">
+                <div class="portlet-title mnh25">
+                    <div class="caption">
+                        <span class="caption-subject bold fs12">{{'Danh sách phòng ban/Nhóm/Nhân viên được giao việc' | translate}} ({{cardMember.listMember.length + cardMember.listObj.length}})</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content">
+                    <div class="scrollbar-sm">
+                        <!--<div class="table-responsive mh-200" style="overflow-y:auto">-->
+                        <div class="table-responsive" style="height: 260px;">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="pl25 col-md-6">{{'Phòng ban/Nhóm/Nhân viên' | translate}}</th>
+                                        <th class="col-md-2">{{'Trạng thái' | translate}}</th>
+                                        <th class="text-center nowrap col-md-3">{{'Vai trò' | translate}}</th>
+                                        <th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <!--Người được giao-->
+                                <tbody>
+                                    <tr>
+                                        <td ng-if="lstMemberAssign.length!=0" colspan="3" class="pl25">
+                                            <i class="fa fa-user"></i>
+                                            <span class="groupValue"><b>{{'Người được giao' | translate}} ({{lstMemberAssign.length}})</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="x in lstMemberAssign">
+                                        <td class="text-left">
+                                            <span class="fs14">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{x.RoleSys}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{x.DepartmentName}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Status" on-select="changeStatus(x.Id, x.Status)" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in lstStatusAssign | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group">
+                                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" theme="bootstrap" on-select="changeRole(x.Id, x.Role)">
+                                                    <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </td>
+                                        <td class="text-center"><i role="button" class="fa fa-minus-circle pt5 ng-scope" ng-click="delete(x.Id)" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="row">
+        <div class="col-md-3" style="width: 20%;">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorBranch}">
+                    <label class="control-label">{{'Trụ sở - chi nhánh' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="changeSelect('Branch', model.Branch)" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Trụ sở - chi nhánh' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                        <ui-select-choices style="height: auto" repeat="x.Code as x in lstBranch | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorBranch" class="label-color validation-message">
+                    Chi nhánh không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3" style="width: 20%;">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorObject}">
+                    <label class="control-label">{{'Phòng ban/Nhóm' | translate}}</label>
+                    <div class="d-flex">
+                        <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Phòng ban/Nhóm' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <span ng-show="errorObject" class="label-color validation-message">
+                    Phòng ban/Nhóm không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorUserId}">
+                    <label class="control-label">{{'Nhân viên' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserId" on-select="changeSelect('UserId')" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Nhân viên' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                        <ui-select-choices style="height: auto" repeat="x.UserId as x in listUser | filter: $select.search">
+                            {{x.GivenName}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorUserId" class="label-color validation-message">
+                    Nhân viên không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorRole}">
+                    <label class="control-label">{{'Vai trò' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Role" on-select="changeSelect('Role')" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorRole" class="label-color validation-message">
+                    Vai trò không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-1" style="padding-top: 22px; width: 9.3%;">
+            <button class="btn green-custom" ng-click="submit()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                {{'Thêm xuống' | translate}}
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive" style="height: 350px; overflow-y: scroll;">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="col-md-1 text-center">STT</th>
+                    <th class="col-md-2 text-center">{{'Chi nhánh' | translate}}</th>
+                    <th class="col-md-2 text-center">{{'Phòng ban' | translate}}</th>
+                    <th class="col-md-2 text-center">{{'Nhóm' | translate}}</th>
+                    <th class="text-center col-md-2">{{'Nhân viên' | translate}}</th>
+                    <th class="text-center col-md-3">{{'Vai trò' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in lstMemberAssign">
+                    <td class="text-center">{{$index + 1}}</td>
+                    <td class="text-center">{{x.Branch}}</td>
+                    <td class="text-center">{{x.Department}}</td>
+                    <td class="text-center">{{x.Group}}</td>
+                    <td class="text-center">{{x.GivenName}}</td>
+                    <td class="text-center">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" on-select="changeRole(x.ID, x.Role)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>-->
+</div>

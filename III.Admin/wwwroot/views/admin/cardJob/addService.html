@@ -1,0 +1,183 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'SVC_TITLE_ADD_CATEGORY' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsService">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'SVC_CURD_LBL_SERVICE_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control custom-title-code-bold" ng-model="model.ServiceCode" name="ServiceCode" id="ServiceCode" placeholder="{{'SVC_CURD_TXT_SERVICE_CODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'SVC_CURD_LBL_SERVICE_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control custom-title-code-bold" ng-model="model.ServiceName" name="ServiceName" placeholder="{{'SVC_CURD_TXT_SERVICE_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-project-diagram" aria-hidden="true"></i>
+                                <label class="control-label">{{'SVC_CURD_LBL_SERVICE_PARENT' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ServiceParent" theme="bootstrap" on-select="changleSelect('ServiceGroup')">
+                                        <ui-select-match placeholder="{{'SVC_CURD_TXT_SERVICE_PARENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ServiceCategoryParent | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ServiceParent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorServiceType}">
+                            <div class="col-md-5">
+                                <i class="fas fa-cubes" aria-hidden="true"></i>
+                                <label class="control-label require">{{'SVC_CURD_LBL_SERVICE_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ServiceType" theme="bootstrap" on-select="changleSelect('ServiceType')">
+                                        <ui-select-match placeholder="{{'SVC_CURD_TXT_SERVICE_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ServiceCategoryType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ServiceType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorServiceType" class="label-color validation-message">
+                                    {{'SVC_MSG_NOT_TYPE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorServiceGroup}">
+                            <div class="col-md-5">
+                                <i class="fas fa-cubes" aria-hidden="true"></i>
+                                <label class="control-label require">{{'SVC_CURE_LBL_GROUP' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ServiceGroup" theme="bootstrap" on-select="changleSelect('ServiceGroup')">
+                                        <ui-select-match placeholder="{{'SVC_CURE_TXT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ServiceCategoryGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ServiceGroup=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorServiceGroup" class="label-color validation-message">
+                                    {{'SVC_MSG_NOT_GROUP' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <div class="col-md-5">
+                                <i class="fa-solid fa-money-bill" aria-hidden="true"></i>
+                                <label class="control-label">{{'SVC_CURE_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('Unit')">
+                                        <ui-select-match placeholder="{{'SVC_CURE_TXT_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ServiceUnitData | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addCommonSettingUnit()" class="btn no-shadow  green-custom" style="">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'SVC_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <uib-tabset active="active">
+                    <uib-tab class="mt5" index="0" heading="{{'SVC_CURD_TAB_NOTE' | translate}}">
+                        <textarea ng-model="model.Note" ui-tinymce="tinymceOptions" class="mb15"></textarea>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="1" heading="{{'SVC_CURD_TAB_ATTRIBUTE' | translate}}" disable="ServiceCode == '' || ServiceCode==undefined">
+                        <div ng-include="'../views/admin/cardJob/tabAttrService.html'" ng-class="{'disabled-element' : ServiceCode =='' || ServiceCode==undefined }"></div>
+                    </uib-tab>
+                    <div class=" pull-right">
+                        <div class="btn-group actions d-flex">
+                            <div class="text-center pr10" ng-click="cancel()">
+                                <a class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                    <span><i class="glyphicon glyphicon-remove"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="text-center" ng-click="submit()">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb-0  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

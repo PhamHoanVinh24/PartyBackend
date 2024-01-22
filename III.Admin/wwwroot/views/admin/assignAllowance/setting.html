@@ -1,0 +1,113 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+</style>
+<div class="modal-header" style="background-color:white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="color:black"></i>
+    <span class="modal-title" id="modal-title" style="color:black"> {{'AAC_LBL_SET_VALUE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="settingform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-2 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'AAC_LBL_MONTH' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Months" name="Month" id="Month" placeholder="{{'AAC_LBL_MONTH' | translate}}..." ng-disabled="IsEdit" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0" ng-class="{ 'has-error': errorParamCode}">
+                        <i class="fas fa-list" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{'AAC_TITLE_PARAMETERS' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ParamCode" theme="bootstrap" on-select="changleSelect('ParamCode')" ng-disabled="IsEdit">
+                                <ui-select-match placeholder="{{'AAC_TITLE_PARAMETERS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listParam | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ParamCode=''" class="btn btn-default no-shadow" ng-disabled="IsEdit">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorParamCode" class="label-color validation-message">
+                            {{'AAC_LBL_PARAMETERS_REQUIED' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-2 p-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'AAC_LBL_VALUE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input ng-model="model.Value" class="form-control br24 bold" name="Value" placeholder="{{'AAC_LBL_VALUE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0 pt15">
+                        <div class="btn-group pull-right actions d-flex">
+                            <div class="pr10" ng-if="IsEdit==true">
+                                <a data-dismiss="modal" ng-click="cancelSave()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                    <span><i class="glyphicon glyphicon-remove"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="pr10" ng-if="IsEdit==true">
+                                <a ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                            </div>
+                            <div class="pr10" ng-if="IsEdit==false">
+                                <a ng-click="add()" class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblData"></table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

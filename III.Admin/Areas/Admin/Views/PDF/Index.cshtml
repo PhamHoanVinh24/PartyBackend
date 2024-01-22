@@ -1,0 +1,45 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+@{
+    ViewData["Title"] = "Pdf";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+<!-- Syncfusion ASP.NET Core controls styles -->
+<link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.2.43/fluent.css" />
+<!-- Syncfusion ASP.NET Core controls scripts -->
+<script src="https://cdn.syncfusion.com/ej2/20.2.43/dist/ej2.min.js"></script>
+
+@section ControlsSection{
+    <div>
+        <style>
+            .app-content {
+                width: 100%;
+            }
+        </style>
+        <ejs-pdfviewer id="pdfviewer" enableToolbar="true" style="height: calc(100vh - 150px); width: 100%;"></ejs-pdfviewer>
+    </div>
+
+    <ejs-scripts></ejs-scripts>
+}
+<script type="text/javascript">
+    window.onload = function () {
+        var pdfViewer = document.getElementById('pdfviewer').ej2_instances[0];
+
+        pdfViewer.toolbar.downloadItem.hidden = true;
+
+        pdfViewer.serviceUrl = '/PDF';
+        documenteditor = pdfViewer.documentEditor;
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/PDF/Loadtest",
+            success: function (data) {
+                pdfViewer.load(data);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    $(".menu-toggle").addClass("hidden");
+</script>
+

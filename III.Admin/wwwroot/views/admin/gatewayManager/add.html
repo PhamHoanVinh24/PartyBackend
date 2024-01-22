@@ -1,0 +1,164 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-60 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-60 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-60 {
+            width: 65%;
+        }
+    }
+</style>
+<button type="button" class="close-modal ng-scope" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color h-40">
+    <i class="fas fa-plus-circle black icon-insert" style="line-height: 30px"></i>
+    <span class="modal-title pt15 black" id="modal-title">Thêm mới cấu hình dịch vụ hệ thống</span><!--{{'TOKEN_MANAGER_ADD_TOKEN_TITLE' | translate}}-->
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div>
+                <div class="row mt15">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <div class="col-lg-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-120 w125" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center fs10 mtn30">
+                                <label class="control-label ">{{'COM_LBL_PRESENT_IMAGE' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="col-lg-12">
+                            <div class="form-group" ng-class="{ 'has-error': errorServiceType}">
+                                <div class="col-md-12">
+                                    <i class="fas fa-font"></i>
+                                    <label class="control-label require text-important1"><!--{{'TOKEN_MANAGER_SERVICE_TYPE' | translate}}-->Nhà cung cấp</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.ServiceType" theme="bootstrap" ng-change="changleSelect('ServiceType')">
+                                            <ui-select-match placeholder="Chọn nhà cung cấp...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listService | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.ServiceType=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorServiceType" class="label-color validation-message">
+                                        {{'TOKEN_MANAGER_VALIDATE_SERVICE_TYPE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fas fa-barcode"></i>
+                                    <label class="control-label text-important1"><!--{{'TOKEN_MANAGER_ACCOUNT_CODE' | translate}}-->Mã cổng thanh toán</label>
+                                    <input class="form-control br24 text-important1" ng-model="model.GatewayCode" type="text" placeholder="Nhập mã cổng thanh toán..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fas fa-users-medical"></i>
+                                    <label class="control-label require text-important1"><!--{{'TOKEN_MANAGER_ACCOUNT_NAME' | translate}}-->Tên cổng thanh toán</label>
+                                    <input class="form-control br24 text-important1" name="AccountName" ng-model="model.GatewayName" type="text" placeholder="Nhập tên cổng thanh toán" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="flex-grow-full pl15 pr15 mt10">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-envelope"></i>
+                                <label class="control-label require text-important1"><!--{{'TOKEN_MANAGER_EMAIL' | translate}}-->Thư điện tử</label>
+                                <input class="form-control br24 text-important1" name="Email" ng-model="model.Email" type="text" placeholder="Nhập thư điện tử..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mnw125 pr15 pt40 pull-right pull-right">
+                        <div class="btn-group actions d-flex justify-content-ct">
+                            <div class="text-center" ng-click="addNewAttr()">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa-solid fa-plus fs25"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD_ATTR' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 h-250" style="overflow-y: auto">
+                        <div class="col-md-12 pt20" ng-repeat="x in listNewAttr">
+                            <div class="col-md-6 pr30 pl-0">
+                                <div class="form-group">
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <label class="control-label fw600">{{'COM_CRUMB_WF_PROPER' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <input type="text" class="form-control bold br24" ng-model="x.AttrName" name="AttrName" placeholder="{{'COM_CRUMB_WF_PROPER_NAME' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 pr30">
+                                <div class="form-group">
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <label class="control-label fw600">{{'COM_CRUMB_WF_VALUE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <input type="text" class="form-control bold br24" ng-model="x.Value" name="Value" placeholder="{{'COM_CRUMB_WF_VALUE' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pt30 text-center pr-0">
+                                <a title="Xoá" ng-click="deleteNewAtt(x.Id)" style1="width: 25px; height: 25px; padding: 0px"
+                                   class1="btn mt25 pull-right btn-icon-only btn-circle btn-outline red">
+                                    <i class="fas fa-trash-alt fs25 text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt10 pb15">
+                        <div class="form-group">
+                            <div class="col-md-1 pl-0 pr-0 pt50 pull-right">
+                                <div class="btn-group actions d-flex justify-content-ct">
+                                    <div class="text-center" ng-click="submit()">
+                                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa-solid fa-plus fs25"></i></span>
+                                        </a>
+                                        <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,270 @@
+﻿<style>
+    .close-input-search-box {
+        margin: -15px 0px;
+        z-index: 10;
+        position: relative;
+    }
+
+    .labelbodergroup {
+        margin-top: 5px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        padding: 3px 10px !important;
+    }
+
+    @media (min-width: 1200px) and (max-width:1500px) {
+        .col-custom-lg-2 {
+            float: left !important;
+            width: 25% !important;
+        }
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(70% - 50px);
+        right: 75px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb>li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="col-md-12 pl-0 pr-0 d-flex">
+            <div class="col-md-3 pl-0" ng-class="{'has-error' : errorGroupCode}">
+                <label class="control-label require">{{'Mã nhóm vật tư' | translate}}</label>
+                <div class="d-flex">
+                    <div class='mr5 flex-grow-full'>
+                        <input class="form-control br24" ng-model="model.GroupCode" placeholder="{{'Mã nhóm' | translate}}..." />
+                        <span ng-show="errorGroupCode" class="label-color validation-message">
+                            {{'Mã nhóm không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 pl-0" ng-class="{'has-error' : errorNoParent}">
+                <label class="control-label require">{{'Thứ tự sp' | translate}}</label>
+                <div class="d-flex">
+                    <div class='mr5 flex-grow-full'>
+                        <input class="form-control br24" ng-model="model.ProductNo" placeholder="{{'No' | translate}}..." />
+                        <span ng-show="errorNoParent" class="label-color validation-message">
+                            {{'Thứ tự không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 pl-0" ng-class="{'has-error' : errorNoParent}">
+                <label class="control-label require">{{'Thứ tự Qrcode' | translate}}</label>
+                <div class="d-flex">
+                    <div class='mr5 flex-grow-full'>
+                        <input class="form-control br24" ng-model="model.QrcodeNo" placeholder="{{'No' | translate}}..." />
+                        <span ng-show="errorNoParent" class="label-color validation-message">
+                            {{'Thứ tự không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-75 flex-no-shrink" style="margin-top: 13px;" ng-click="print()">
+                <a class="">
+                    <span><i class="fas fs30 fa-print"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'In QrCode' | translate}}</p>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-75 flex-no-shrink" style="margin-top: 13px;" ng-click="exportExcel()">
+                <a class="">
+                    <span><i class="fas fs30 fa-file-excel"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'Xuất excel' | translate}}</p>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-75 flex-no-shrink" style="margin-top: 13px;" ng-click="delete()">
+                <a class="">
+                    <span><i class="fas fs30 fa-trash-can"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'Xóa QrCode' | translate}}</p>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-75 flex-no-shrink" style="margin-top: 13px;" ng-click="generate()">
+                <a class="">
+                    <span><i style="--fa-primary-color: green; margin-right: 13px;" class="fa-solid fa-layer-group pl10 fs30"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">
+                    {{'Sinh' | translate}}
+                </p>
+            </div>
+            <div class="col-lg-3 pl-0">
+                <label class="fw600 text-underline">{{'PQRCM_LBL_PRODUCT' | translate}}</label>
+                <div class='input-group date br24'>
+                    <input type='text' autocomplete="off" class="form-control " ng-model="modelSearch.Product"
+                        placeholder="{{'PQRCM_TXT_PRODUCT' | translate}}..." />
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="modelSearch.Product='';"
+                            class="btn btn-default no-shadow end-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-75 flex-no-shrink" style="margin-top: 13px;" ng-click="search()">
+                <a class="">
+                    <span><i class="fas fs30 fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()"
+                            style="margin-top:9px !important; margin-right:5px !important; font-size:25px"
+                            class="fas fa-times  pull-right h28 w28  close-input-search" role="button"
+                            title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2  ">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10 " ng-click="search()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3 ">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive" style="min-height: 500px">
+    <table class="table table-bordered" id="tblListQrCodes">
+        <thead>
+            <tr>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">
+                    <label class="mt-checkbox"><input type="checkbox" ng-model="selectAll" ng-change="toggleAll()" /><span></span></label>
+                </th>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'STT' | translate}}</th>
+                <th class="col-md-3 text-center fw600 text-underline" style="width: 5%">{{'Qr Code' | translate}}</th>
+                <th class="col-md-2 text-center fw600 text-underline">{{'Mã SP' | translate}}</th>
+                <th class="col-md-3 text-center fw600 text-underline">{{'Serial' | translate}}</th>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'Thao tác' | translate}}</th>
+            </tr>
+        </thead>
+        <tfoot class="dataTables_wrapper">
+            <tr>
+                <td colspan="6">
+                    <div class="dataTables_paginate paging_full_numbers">
+                        <ul class="pagination">
+                            <li class="paginate_button first"
+                                ng-class="{disabled: currentPage == 0}"
+                                ng-click="firstPage()">
+                                <a>First</a>
+                            </li>
+                            <li class="paginate_button previous"
+                                ng-class="{disabled: currentPage == 0}">
+                                <a ng-click="prevPage()">Previous</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-if="(pagedItems.length >= 6 && pagedItems.length <= 7 && currentPage == pagedItems.length - 1) || (pagedItems.length > 7 && currentPage > 2)"
+                                ng-click="firstPage()">
+                                <a>{{1}}</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-if="pagedItems.length == 7 && currentPage == pagedItems.length - 1"
+                                ng-click="n = 1;setPage()">
+                                <a>{{2}}</a>
+                            </li>
+                            <li class="paginate_button disabled" id="tblData_ellipsis"
+                                ng-if="pagedItems.length > 7 && currentPage > 3">
+                                <a>…</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-repeat="n in range(pagedItems.length, currentPage - gap, currentPage + gap) "
+                                ng-class="{active: n === currentPage}"
+                                ng-click="setPage()"
+                                ng-if="n + 1 >= 0">
+                                <a ng-bind="n + 1" ng-if="n + 1 >= 1">1</a>
+                            </li>
+                            <li class="paginate_button active"
+                                ng-if="pagedItems.length === 0">
+                                <a>1</a>
+                            </li>
+                            <li class="paginate_button disabled" id="tblData_ellipsis"
+                                ng-if="pagedItems.length > 7 && currentPage < pagedItems.length - 3">
+                                <a>…</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-if="pagedItems.length == 7 && currentPage == 0"
+                                ng-click="n = pagedItems.length - 2;setPage()">
+                                <a>{{pagedItems.length - 1}}</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-if="(pagedItems.length >= 6 && pagedItems.length <= 7 && currentPage == 0) || (pagedItems.length > 7 && currentPage < pagedItems.length - 2)"
+                                ng-click="lastPage()">
+                                <a>{{pagedItems.length}}</a>
+                            </li>
+                            <li class="paginate_button next"
+                                ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                <a ng-click="nextPage()">Next</a>
+                            </li>
+                            <li class="paginate_button last"
+                                ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                <a ng-click="lastPage()">Last</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr ng-repeat="x in pagedItems[currentPage]">
+                <td class="text-center">
+                    <label class="mt-checkbox"><input type="checkbox" ng-model="x.Selected" ng-click="toggleOne(x)" /><span></span></label>
+                </td>
+                <td class="text-center">{{x.Index + 1}}</td>
+                <td class="text-center" style="white-space: nowrap;">
+                    <img src='data:image/png;base64,{{x.QrCode}}' ng-click="viewQrCode(x.QrCode)" height="40" width="40" style="margin-right: 10px" />
+                    <span class="fs20">[ {{x.Code}} ]</span>
+                    <b ng-if="x.LastLog" style="color:brown">[ Đã in lúc {{x.LastLog.SCreatedTime}} bởi {{x.LastLog.CreatedBy}} ]</b>
+                </td>
+                <td class="text-center">
+                    {{x.ProductCode}}
+                    <!--<input ng-model="x.ProductCode" class="form-control br24" placeholder="{{'Nhập mã SP' | translate}}..." />-->
+                </td>
+                <td class="text-center">
+                    {{x.Serial}}
+                    <!--<input ng-model="x.ProductCode" class="form-control br24" placeholder="{{'Nhập mã SP' | translate}}..." />-->
+                </td>
+                <td class="text-center">
+                    <a title="Lưu" ng-click="saveQr(x)"
+                       style="width: 25px; height: 25px; padding: 0px;" class="">
+                        <i class="fa-solid fa-floppy-disk fs25 mt10"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,118 @@
+﻿<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title">{{'COM_SET_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form ">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsNew">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'Mã thuộc tính' | translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control br24" ng-model="model.CodeSet" name="CodeSet" placeholder="{{'Mã thuộc tính' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'Tiêu đề' | translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control br24" ng-model="model.Title" name="Title" placeholder="{{'Tiêu đề' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'Giá trị' | translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control br24" ng-model="model.ValueSet" name="ValueSet" placeholder="{{'Giá trị' | translate}}..." />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'Kiểu dữ liệu' | translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Kiểu dữ liệu' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listDataType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.Type=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error': errorGroupSetting}">
+                    <div class="col-md-12">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'COM_SET_CURD_COMBO_ASSET_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.AssetCode" theme="bootstrap" ng-change="selectGroupSetting(model.AssetCode)" on-select="changleSelect($item, 'AssetCode')">
+                                <ui-select-match placeholder="{{'COM_SET_CURD_COMBO_ASSET_CODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in groupData | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.AssetCode=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                        <span ng-show="errorGroupSetting" class="label-color validation-message">
+                            {{'COM_SET_CURD_VALIDATE_ASSET_CODE' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorGroupValue}">
+                    <div class="col-md-12">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'COM_SET_CURD_LBL_GROUP_VALUE' | translate}} </label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Group" theme="bootstrap" on-select="changleSelect($item, 'GroupValue')">
+                                <ui-select-match placeholder="{{'Nhóm giá trị' | translate}}...">{{$select.selected.Code}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listFunctionGroup | filter: $select.search">
+                                    {{x.Code}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.Group=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                        <span ng-show="errorGroupValue" class="label-color validation-message">
+                            {{'COM_SET_CURD_VALIDATE_GROUP_VALUE' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>-->
+    <div>
+        <a ng-click="submit()" class="fs30" href="javascript:;">
+            <span><i class="fa-solid fa-plus" style="margin-right: 15px;"></i></span>
+        </a>
+        <p>{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>

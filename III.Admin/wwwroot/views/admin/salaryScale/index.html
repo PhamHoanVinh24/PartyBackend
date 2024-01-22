@@ -1,0 +1,181 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .btn-de {
+        background: #fff !important;
+        border: 1px solid #d4d4d4;
+        width: auto;
+        min-width: 50px;
+        color: #000 !important
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .glyphicon-plus {
+        color: #000
+    }
+
+    .fa-save {
+        color: #000
+    }
+
+    .table > tbody > tr > th {
+        padding: 15px 8px 15px 8px !important;
+    }
+
+    .table > tbody > tr > td {
+        padding: 15px 8px 15px 8px !important;
+    }
+
+    .ui-select-placeholder {
+        color: #55595c !important;
+        font-weight: bold
+    }
+
+    .row-bold th {
+        font-weight: 700 !important;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(70% - 50px);
+        right: 50px;
+        top: 10px
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<div class="btn-group pull-right actions pt5 d-flex" style="margin-top: -50px;">
+    <div class="text-center mt10 pr30">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center mt10 pr-2">
+        <a class1="btn btn-icon-only btn-outline green-custom btn-de" ng-click="add()">
+            <span><i class="fas fa-edit fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('HCNS_QDDD')" class="fs30">
+            <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-5">
+                        <i class="fa fa-safari"></i>
+                        <label class="control-label">{{'SALARYS_WAGE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PayScaleCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'SALARYS_WAGE' | translate}}">{{$select.selected.Code}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstScaleCat | filter: $select.search">
+                                    {{x.Code}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PayScaleCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <i class="fa fa-graduation-cap"></i>
+                        <label class="control-label">{{'SALARYS_LEVEL_WAGE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input type="text" class="form-control" style="font-weight:bold;" ng-model="model.Ranges" name="Ranges" placeholder="{{'SALARYS_LEVEL_WAGE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Ranges=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2" style="width: 14%;">
+                        <div class="btn-group pt25 actions d-flex">
+                            <div class="text-center pr10 pull-right" ng-click="searchpayScale()">
+                                <a class="fs30" ng-click="searchkpi(model)">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>
+</div>
+<table class="table" ng-show="showindex">
+    <thead>
+        <tr class="row-bold">
+            <th>{{'SALARYS_STT' | translate}}</th>
+            <th>{{'SALARYS_WAGE' | translate}}</th>
+            <th ng-repeat="x in lstRanges">{{'SALARYS_LEVEL' | translate}} {{x}}</th>
+            <th>{{'SALARYS_MANIPULATION' | translate}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="x in arr" ng-dblclick="showdetail(x.PayScaleCode)">
+            <th class="bold pl15">{{$index + 1}}</th>
+            <td class="bold">
+                {{x.PayScaleCode }}
+            </td>
+            <td class="bold" ng-repeat="a in x.Salary track by $index">{{(a|number:0) + x.Postfix[$index]}}</td>
+            <td class="dataTable-w80 text-center">
+                <a title="Xoá" ng-click="deletePayScaleAll(x.PayScaleCode )" style1="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs20 text-danger"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" ng-show="showsearch">
+    <thead>
+        <tr class="row-bold">
+            <th>{{'SALARYS_STT' | translate}}</th>
+            <th>{{'SALARYS_WAGE' | translate}}</th>
+            <th ng-repeat="x in lstRanges">{{'SALARYS_LEVEL' | translate}} {{x}}</th>
+            <th>{{'SALARYS_MANIPULATION' | translate}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="x in arrt" ng-dblclick="showdetail(x.PayScaleCode)">
+            <th class="bold pl15">{{$index + 1}}</th>
+            <td class="bold">
+                {{x.PayScaleCode }}
+            </td>
+            <td class="bold" ng-repeat="a in x.Salary track by $index">{{(a|number:0) + x.Postfix[$index]}}</td>
+            <td class="dataTable-w80 text-center">
+                <a title="Xoá" ng-click="deletePayScaleAll(x.PayScaleCode )" style1="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs20 text-danger"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

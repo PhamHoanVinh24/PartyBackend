@@ -1,0 +1,594 @@
+﻿<style>
+    .width_90 {
+        width: 90px;
+    }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .nav .nav-item .nav-link {
+        display: block;
+        font-size: 12px;
+    }
+
+    .font-in-tab {
+        /* border-radius: 4px !important; */
+        border: 1px solid #e7ecf1;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .tab-content {
+        width: 100%;
+        min-height: 200px;
+    }
+
+    @-webkit-keyframes showTooltip {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @-moz-keyframes showTooltip {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes showTooltip {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .form-item {
+        position: relative;
+    }
+
+    .message-error:after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 0;
+        left: 10%;
+        display: none;
+        padding: 1em 2em;
+        color: white;
+    }
+
+    .message-error:hover:after {
+        display: block;
+        -webkit-animation: showTooltip 0.35s ease-in-out;
+        -moz-animation: showTooltip 0.35s ease-in-out;
+        animation: showTooltip 0.35s ease-in-out;
+    }
+
+    .message-error:after {
+        background: #c8fbfb;
+        border-radius: 5px;
+        color: #000000;
+        z-index: 99999;
+        margin-top: 0px;
+        margin-left: 225px;
+        border: 1px solid #d4d4d4;
+        width: 200px !important;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title "> {{'ASSET_TITLE_ADD_ASSET' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form style="border: 0px solid #e7ecf1 !important;" name="addform" class="form-horizontal font-in-tab" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-lg-9 pr-0 pl-0">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-group"></i>
+                                    <label class="control-label bold">{{'ASSET_CURD_LBL_ASSET_GROUP' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.AssetGroup" theme="bootstrap" ng-change="changeAssetGroupType()">
+                                            <ui-select-match class="text-box-asset" placeholder="{{'ASSET_CURD_COMBO_ASSET_GROUP' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x  in AssetGroup | filter: $select.search">
+                                                <div style="padding-left: {{30 * x.Level}}px">
+                                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                    {{x.Title}}
+                                                </div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.AssetGroup=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-barcode"></i>
+                                    <label class="control-label require custom-title-code-bold">{{'ASSET_CURD_LBL_ASSET_CODE' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class1='br24 '>
+                                        <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-empty" name="AssetCode" data-ng-model="model.AssetCode" type="text" placeholder="{{'ASSET_CURD_TXT_ASSET_CODE' | translate}}..." ng-change="changeQRCode()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorSupplierCode}">
+                                <div class="col-md-4">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label ">{{'ASSET_CURD_LBL_SUPPILER_CODE' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.SupplierCode" theme="bootstrap" on-select="changleSelect('SupplierCode')">
+                                            <ui-select-match name="SupplierCode" placeholder="{{'ASSET_CURD_COMBO_SUPPILER_CODE' | translate}}...">{{$select.selected.SupName}}</ui-select-match>
+                                            <ui-select-choices repeat="x.SupCode as x in SupplierData | filter: $select.search">
+                                                {{x.SupName}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.SupplierCode='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorSupplierCode" class="label-color validation-message">
+                                        {{'ASSET_CURD_VALIDATE_SUPPILER_CODE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorBranch}">
+                                <div class="col-md-4">
+                                    <i class="fa-solid fa-building"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_BRANCH' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Branch" theme="bootstrap" on-select="changleSelect('Branch')">
+                                            <ui-select-match placeholder="{{'ASSET_CURD_CBB_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listBranch | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Branch='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorBranch" class="label-color validation-message">
+                                        {{'ASSET_VLD_BRANCH_NOT_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorDepartment}">
+                                <div class="col-md-4">
+                                    <i class="fa fa-th-list"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_DEPARTMENT' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Department" theme="bootstrap" on-select="changleSelect('Department')">
+                                            <ui-select-match placeholder="{{'ASSET_CURD_TXT_DEPARTMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listDepartment | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Department='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorDepartment" class="label-color validation-message">
+                                        {{'ASSET_VLD_DEPARTMENT_NOT_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-money"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_COST' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="col-md-7 p-0">
+                                        <input class="form-control br24 text-danger" style="font-weight:bold;" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="AssetCost" ng-model="model.Cost" placeholder="{{'ASSET_CURD_LBL_COST' | translate}}..." num-thousand='true' awnum num-int='21' />
+                                    </div>
+                                    <div class="col-md-5 pull-right">
+                                        <div class="form-group">
+                                            <div class="input-group br24-nobtn">
+                                                <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.Currency" theme="bootstrap">
+                                                    <ui-select-match placeholder="{{'ASSET_CURD_COMBO_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in Currency | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-calendar"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_BUYED_TIME' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <input type='text' class="form-control input-date" ng-model="model.BuyedTime" placeholder="{{'ASSET_CURD_TXT_BUYED_TIME' | translate}}..." id='datefrom' />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.BuyedTime='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-calendar"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_EXPIRED_DATE' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <input type='text' class="form-control input-date" ng-model="model.ExpiredDate" placeholder="{{'ASSET_CURD_TXT_EXPIRED_DATE' | translate}}..." id='dateto' />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.ExpiredDate='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-sort-numeric-down"></i>
+                                    <label class="control-label">{{'ASSET_QUANTITY' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <input type='number' class="form-control" ng-model="model.Quantity" placeholder="{{'ASSET_QUANTITY' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Quantity='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-tag"></i>
+                                    <label class="control-label bold">{{'ASSET_CURD_LBL_ASSET_TYPE' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.AssetType" theme="bootstrap" ng-change="changeAssetGroupType()">
+                                            <ui-select-match class="text-box-asset" placeholder="{{'ASSET_CURD_COMBO_ASSET_TYPE' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x  in AssetType | filter: $select.search">
+                                                <div style="padding-left: {{30 * x.Level}}px">
+                                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                    {{x.Title}}
+                                                </div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.AssetType=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold ">{{'ASSET_CURD_LBL_ASSET_NAME' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class1="br24" data-tooltip="{{model.AssetName}}">
+                                        <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-empty" name="AssetName" ng-model="model.AssetName" type="text" placeholder="{{'ASSET_CURD_TXT_ASSET_NAME' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                    <label class="control-label">&nbsp;&nbsp;{{'ASSET_CURD_LBL_CHOOSE_MAP' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <div class="input-group" ng-click="openMap()">
+                                            <!--<i style="z-index:10" class="fa fa-map-marker"></i>-->
+                                            <input class="form-control" ng-model="model.LocationGps" type="text" placeholder="{{'ASSET_CURD_CBB_CHOOSE_MAP' | translate}}..." onkeypress="return false;" onkeydown="return false;" style="border-top-left-radius: 4px;border-bottom-left-radius: 4px;" />
+                                        </div>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.LocationGps='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fas fa-map-pin"></i>
+                                    <label class="control-label">&nbsp;&nbsp;{{'PRICE_AREA_ASSET' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <input class="form-control" type="text" ng-model="model.LocationText" id="address" placeholder="{{'PRICE_AREA_ASSET' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.LocationText='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label">&nbsp;&nbsp;{{'ASSET_CURD_LBL_ASSET_LOCATION' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group form-item message-error br24" data-tooltip="{{model.LocationSet}}">
+                                        <input class="form-control" type="text" ng-model="model.LocationSet" placeholder="{{'ASSET_CURD_TXT_ASSET_LOCATION' | translate}}..." />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.LocationSet='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error': errorUserResponsible}">
+                                <div class="col-md-4">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_PERSION_MANAGER' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.UserResponsible" theme="bootstrap" on-select="changleSelect('UserResponsible')">
+                                            <ui-select-match placeholder="{{'ASSET_CURD_CBB_PERSION_MANAGER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in ListPerson | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.UserResponsible='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorUserResponsible" class="label-color validation-message">
+                                        {{'ASSET_VLD_PERSION_MANAGER_NOT_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                                <div class="col-md-4">
+                                    <i class="fa fa-flag"></i>
+                                    <label class="control-label require">{{'ASSET_CURD_LBL_STATUS' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status')">
+                                            <ui-select-match placeholder="{{'ASSET_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in Status | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorStatus" class="label-color validation-message">
+                                        {{'ASSET_CURD_VALIDATE_STATUS' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <i class="fa fa-comment"></i>
+                                    <label class="control-label">{{'ASSET_CURD_LBL_DESCRIPTION' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <textarea rows="4" class="form-control br12" ng-model="model.Description" placeholder="{{'ASSET_CURD_TXT_DESCRIPTION' | translate}}..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none; margin-bottom: 0px;">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="picture" ng-click="loadImage()" class="img-circle h-150 w150 br-n" onerror="this.src='/uploads/images/no-image.png'" ng-src="{{model.PathIMG==null ? '/uploads/images/no-image.png' : model.PathIMG}}" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 pl-0 pr-0 pt-0">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <label class="control-label bold ">&nbsp;{{'ASSET_CURD_LBL_IMAGES' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 pr-0 pl10 pt20">
+                                <div class="border-qrcode text-center">
+                                    <qrcode size="80" data="{{model.AssetCode}}"></qrcode>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group actions d-flex pt30" style="margin-left: 88px;">
+                                <div class="text-center pr20 pl10" ng-click="printQRCode()">
+                                    <a class="fs30">
+                                        <span><i class="fas fa-print"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9  pt3">{{'ASSET_CURD_LBL_PRINT' | translate}}</p>
+                                </div>
+                                <div class="text-center pl10" ng-click="submit()">
+                                    <a class="fs30">
+                                        <span><i class="fa-solid fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9 pt3" ng-show="!isAdded">{{'COM_BTN_ADD' | translate}}</p>
+                                    <p class="text-underline mb-0 fs9 pt3" ng-show="isAdded">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                                <div class="text-center pr-2" style="padding-left: 22px;">
+                                    <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+                                        <span><i class="fas fa-question fs30" aria-hidden="true"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-lg-12 ">
+                <div class="tab" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <div href="#1" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'ASSET_CURD_LBL_CMSET' | translate}}</div>
+                        </li>
+                        <li role="presentation" class="disabled stepNext">
+                            <div href="#2" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'ASSET_CURD_LBL_DOCUMENT' | translate}}</div>
+                        </li>
+                        <li role="presentation" class="disabled stepNext">
+                            <div href="#3" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'ASSET_TAB_ARRANGE_ASSET' | translate}}</div>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="1">
+                            <div disable="tests" ng-include="'../views/admin/asset/tabAttribute.html'"></div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade in" id="2">
+                            <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade in" id="3">
+                            <div ng-include="'../views/admin/supplier/more.html'"></div>
+                        </div>
+                    </div>
+                    <!--<uib-tabset active="active">
+                    <uib-tab class="mt5" index="2" heading="{{'ASSET_CURD_LBL_CMSET' | translate}}" disable="CheckCode == '' || CheckCode==undefined" ng-click="chkAdd()">
+                        <div disable="tests" ng-include="'../views/admin/asset/tabAttribute.html'"></div>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="1" heading="{{'ASSET_CURD_LBL_DOCUMENT' | translate}}" disable="CheckCode == '' || CheckCode==undefined" ng-click="chkAdd()">-->
+                    <!--<div disable="tests" ng-include="'../views/admin/asset/file.html'" ng-class="{'disabled-element' : CheckCode =='' || CheckCode==undefined }"></div>-->
+                    <!--<div ng-include="'../views/admin/filePlugin/file-plugin.html'" ng-class="{'disabled-element' : CheckCode =='' || CheckCode==undefined }"></div>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="3" heading="{{'ASSET_TAB_ARRANGE_ASSET' | translate}}" disable="CheckCode == '' || CheckCode==undefined" ng-click="chkAdd()">
+                        <div ng-include="'../views/admin/asset/tabOrderAsset.html'"></div>
+                    </uib-tab>-->
+                    <!--<uib-tab class="mt5" index="3" heading="{{'ASSET_HITORY_SCBD' | translate}}" disable="CheckCode == '' || CheckCode==undefined" ng-click="chkAdd()">
+
+                        <div ng-include="'../views/admin/asset/assetTabMaintenanceHistory.html'"></div>
+                    </uib-tab>-->
+                    <!--<uib-tab class="mt5" index="4" heading="{{'ASSET_ACTION_ASSET' | translate}}" disable="CheckCode == '' || CheckCode==undefined" ng-click="chkAdd()">
+                        <div disable="tests" ng-include="'../views/admin/asset/assetTabHistoryRun.html'"></div>
+                    </uib-tab>-->
+                    <!--</uib-tabset>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

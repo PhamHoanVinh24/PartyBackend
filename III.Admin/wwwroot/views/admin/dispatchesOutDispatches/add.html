@@ -1,0 +1,645 @@
+﻿<style>
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+        .groupUser .btn:hover {
+            background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+            border: none;
+        }
+
+    tr.selected-row {
+        background: #c7ecfc !important;
+        color: #333 !important;
+        font-weight: bold !important;
+    }
+
+
+    .table thead {
+        background: #f8f5f1;
+    }
+
+    .tree_user {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 360px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .table-height-scroll1 {
+        display: block;
+        height: 225px !important;
+        overflow: auto;
+        margin-bottom: 0 !important;
+    }
+
+    table label.mt-checkbox span {
+        background: #fff !important;
+        border: 1px solid #CFCFCF !important;
+    }
+
+    .portlet.light > .portlet-title > .caption {
+        padding: 7px 0;
+    }
+
+    .portlet.light > .portlet-title {
+        min-height: 40px;
+    }
+
+    .portlet {
+        box-shadow: none !important;
+    }
+
+    #treeDiv {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 360px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    /*start css phone*/
+    @media (min-width: 992px) and (max-width: 1200px) {
+        .col-lg-4 {
+            float: left;
+            width: 43.33333%;
+        }
+
+        .col-lg-8 {
+            float: left;
+            width: 56.66667%;
+            padding-left: 0px;
+        }
+
+        .comment {
+            width: 96%;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .col-lg-4 {
+            float: left;
+            width: 36.33333%;
+        }
+
+        .col-lg-8 {
+            float: left;
+            width: 63.66667%;
+            padding-left: 0px;
+        }
+
+        .custom-col-lg-offset-2 {
+            margin-left: 16.1667%;
+        }
+
+        .comment {
+            width: 99.8%;
+        }
+
+        .custom-inline {
+            padding-top: 7px;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .custom-inline {
+            padding-top: 7px;
+        }
+    }
+    /*end start phone*/
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-5">
+            <h1 class="bold mb-0">{{'DOD_TITLE_ADD_DOD' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'COM_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="#">{{'DOD_LINK_TXT_GOES' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div>{{'DOD_TITLE_ADD_DOD' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-7">
+            <div class="btn-group pull-right actions mr20">
+                <a ng-click="cancel()" class="btn btn-default br4">
+                    <span class=""><i class="fa fa-arrow-left"></i>&nbsp;{{'COM_BTN_BACK' | translate}}</span>
+                </a>
+                <a ng-click="submit()" class="btn btn-blue br4 ">
+                    <span class=""><i class="fa fa-edit"></i>&nbsp;{{'COM_BTN_SAVE' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet-body form">
+    <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="form-body pt-0">
+            <div class="row mt-action-5">
+                <div class="col-lg-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorDocumentCode}">
+                        <div class="col-lg-4">
+                            <i class="far fa-file-alt"></i>
+                            <label class="control-label require">{{'DOD_CURD_LBL_TEXT_BOOK' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_TEXT_BOOK' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in dispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorDocumentCode" class="label-color validation-message">
+                                {{'DOD_VALIDATE_TEXT_BOOK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-sort-numeric-up"></i>
+                            <label class="control-label require">{{'DOD_CURD_LBL_NUMBER_BOOK' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 ">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="model.Header.DocumentNumber" id="DocumentNumber" name="DocumentNumber" type="text" placeholder="{{'DOD_CURD_TXT_NUMBER_BOOK' | translate}}..." ng-change="changeDocumentNumber()" onkeypress="return ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 8 || event.charCode == 32 || (event.charCode >= 48 && event.charCode <= 57));" autocomplete="off" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentNumber=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4 ">
+                            <i class="far fa-calendar-alt"></i>
+                            <label class="control-label ">{{'DOD_CURD_LBL_RELEASE_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" name="PromulgateDate" ng-model="model.Header.PromulgateDate" id="PromulgateDate" type="text" placeholder="{{'DOD_CURD_TXT_RELEASE_DATE' | translate}}..." autocomplete="off" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.PromulgateDate=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorSignUser}">
+                        <div class="col-lg-4">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label require">{{'DOD_CURD_LBL_SIGNER' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.SignUser" theme="bootstrap" on-select="selectRole(model.Header.SignUser)" ng-change="changeSelect('SignUser')">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_SIGNER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in ListUserData | filter: $select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="clearSignUser()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorSignUser" class="label-color validation-message">
+                                {{'DOD_VALIDATE_SIGNER' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group" ng-class="{ 'has-error': errorUnitEditor}">
+                        <div class="col-lg-4 custom-inline">
+                            <i class="fas fa-university"></i>
+                            <label class="control-label inline require">{{'DOD_CURD_LBL_UNIT' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.UnitEditor" theme="bootstrap" on-select="selectUnitEditor(model.Header.UnitEditor)" ng-change="changeSelect('UnitEditor')">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_UNIT' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in UnitEditorDataOrderBy | filter: $select.search ">
+                                        <span>{{x.Title}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.UnitEditor=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorUnitEditor" class="label-color validation-message">
+                                {{'DOD_VALIDATE_UNIT' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label">{{'DOD_CURD_LBL_ENTER_BOOK' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.CreatedUserId" theme="bootstrap" on-select="selectCreatedUser(model.Header.CreatedUserId)" ng-change="changeSelect('CreatedUserId')" disabled="disabled">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_ENTER_BOOK' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in ListUserData1 | filter: $select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.CreatedUserId=''" class="btn btn-default no-shadow" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!--<div class=" form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-comment"></i>
+                            <label class="control-label">Trích yếu</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <textarea class="form-control" placeholder="Nhập trích yếu..." rows="5" ng-model="model.Header.Note"></textarea>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fab fa-adn"></i>
+                            <label class="control-label require">{{'DOD_CURD_LBL_NUMBER_SYMBOL' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" name="DocumentSymbol" ng-model="model.Header.DocumentSymbol" type="text" placeholder="{{'DOD_CURD_TXT_NUMBER_SYMBOL' | translate}}..." readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentSymbol=''" class="btn btn-default no-shadow" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4 custom-inline">
+                            <i class="fab fa-adn"></i>
+                            <label class="control-label inline require">{{'DOD_CURD_LBL_VALIDATE_SYMBOL' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" list="autocompleList" name="DocumentSymbols" ng-model="model.Header.DocumentSymbols" type="text" placeholder="{{'DOD_CURD_TXT_VALIDATE_SYMBOL' | translate}}..." ng-change="changeDocumentSymbols()" autocomplete="off" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentSymbols=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <datalist id="autocompleList">
+                                <option ng-repeat="item in dataListSymboys" value={{item}}>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-calendar-alt"></i>
+                            <label class="control-label ">{{'DOD_CURD_LBL_DAY_SIGN' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="model.Header.SignDate" id="SignDate" type="text" placeholder="{{'DOD_CURD_TXT_DAY_SIGN' | translate}}..." autocomplete="off" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.SignDate=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-award"></i>
+                            <label class="control-label ">{{'DOD_CURD_LBL_POTISION' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 ">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.Position" theme="bootstrap" disabled="disabled">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_POTISION' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in PositioData | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.Position=''" class="btn btn-default no-shadow" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorCreatedEditor}">
+                        <div class="col-lg-4 custom-inline">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label inline require">{{'DOD_CURD_LBL_DRAFTERS' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.CreatedEditor" theme="bootstrap" ng-change="changeSelect('CreatedEditor')">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_DRAFTERS' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in ListUserCreatedEditor | filter: $select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.CreatedEditor=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCreatedEditor" class="label-color validation-message">
+                                {{'DOD_VALIDATE_DRAFTERS' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-lock"></i>
+                            <label class="control-label">{{'DOD_CURD_LBL_CONFIDENTIALITY' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.SecurityLevel" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'DOD_CURD_TXT_CONFIDENTIALITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DocumentSecurityData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.SecurityLevel=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <i class="far fa-comment"></i>
+                            <label class="control-label">{{'DOD_CURD_LBL_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-10">
+                            <textarea class="form-control float-right comment" placeholder="{{'DOD_CURD_TXT_NOTE' | translate}}..." rows="3" ng-model="model.Header.Note"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="detail">
+    <!--Start_file-->
+    <div class="col-lg-12 ">
+        <h2><u><b>{{'DOD_CURD_LBL_FILE_ATTACH' | translate}}</b></u></h2>
+        <div class="col-lg-offset-2 col-lg-5 col-sm-7 custom-col-lg-offset-2">
+            <div class="input-group input-file">
+                <i class="fa fa-upload"></i>
+                <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:34px;pointer-events:none;" placeholder='{{'DOD_CURD_TXT_FILE_ATTACH' | translate}}...'></>
+                <span class="input-group-btn">
+                    <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                    <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-5 col-sm-3">
+            <a ng-click="addFile()" class="btn btn-red br4">
+                <span><i class="fa fa-plus"></i> {{'COM_ADD_FILE' | translate}}</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-12 pt10">
+        <div class="col-lg-offset-2 col-lg-10 custom-col-lg-offset-2 pr-0 col-sm-12 " id="contentFile">
+            <table class="table table-bordered" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th class="col-lg-4 text-center">{{'DOD_CURD_LBL_NAME_FILE' | translate}}</th>
+                        <!--<th class="col-md-2 text-center">Người soạn thảo</th>
+                        <th class="col-md-2 text-center">Người tải lên</th>
+                        <th class="col-md-1 text-center">Loại tệp</th>
+                        <th class="col-md-1 text-center">Ngày tạo</th>-->
+                        <th class="col-lg-2 text-center">{{'COM_MSG_DOWLOAD' | translate}}</th>
+                        <th class="col-lg-2 text-center">{{'COM_PREVIEW' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in model.Detail.ListFile">
+                        <td class="text-center long">{{x.FileName}}</td>
+
+
+
+
+                        <!--<td class="text-center">
+                            {{x.CreatedEditor}}
+                        </td>
+                        <td class="text-center">{{x.User}}</td>
+                        <td class="text-center" ng-if="x.Fomart=='1'">
+                            <i style="color: rgb(106,170,89);font-size: 15px;" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='2'">
+                            <i style="color: rgb(13,118,206);font-size: 15px;" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='3'">
+                            <i style="color: rgb(0,0,0);font-size: 15px;" class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='4'">
+                            <i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='5'">
+                            <i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='6'">
+                            <i style="color: rgb(17,17,17);font-size: 15px;" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        </td>
+                        <td class="text-center" ng-if="x.Fomart=='0'">
+                            Không xác định
+                        </td>
+                        <td class="text-center">{{x.CreatedTime| date:'dd/MM/yyyy'}}</td>-->
+                        <td class="text-center">
+                            <i role="button" class="fa fa-minus-circle pt5" ng-click="deleteFile($index)" title="Xóa" style="color:red !important;font-size: 25px"></i>
+                            <a href="{{x.Source}}" target="_blank" download>
+                                <i role="button" hr class="fa fa-download pl10" title="Tải xuống" style="color:#147aa9!important;font-size: 25px"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a ng-click="view(x.Source)" ng-if="x.Fomart==4">
+                                {{'COM_PREVIEW' | translate}}
+                            </a>
+                            <label ng-if="x.Fomart!=4">
+                                {{'DOD_ERR_FILE_PREVIEW' | translate}}
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--End_file-->
+    <!--Start_Received-->
+    <div class="col-lg-12">
+        <h2><u><b>{{'DOD_TITLE_TRANSFER_TEXT' | translate}}</b></u></h2>
+    </div>
+    <div class="col-lg-12 ">
+        <div class="col-lg-12">
+            <h2><b>{{'DOD_TITLE_RECEIVER' | translate}}</b></h2>
+        </div>
+    </div>
+    <div class="col-lg-offset-2 col-lg-10 custom-col-lg-offset-2 pr-0 col-sm-12 ">
+        <div class="col-lg-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold">{{'DOD_ADD_DEPARTMENT' | translate}}</span>
+                    </div>
+                    <div class="tools">
+                        <a class="fullscreen" data-container="false" title="{{'DOD_TITLE_FULL_SCREEN' | translate}}">
+                            <i class="fas fa-arrows-alt"></i>
+                        </a>
+                        <a class="question" data-toggle="popover" data-placement="left" data-content="{{'DOD_MSG_CHOOSE_DEPARTMENT_USER' | translate}}" data-trigger="hover" data-original-title="{{'DOD_MSG_TUTORIAL' | translate}}">
+                            <i class="fas fa-question"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-lg-7 col-sm-6">
+                            <div id="treeDiv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                        </div>
+                        <div class="col-lg-5 col-sm-6 tree_user">
+                            <div class="portlet light bordered mb-0">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                                        <span class="caption-subject bold">{{'DOD_TITLE_USER' | translate}}</span>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a ng-click="saveUser(selectAll)" ng-hide="hideSave" title="Save" data-toggle="modal" class="btn btn-circle btn-icon-only btn-default blue">
+                                            <i class="fas fa-save"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="table-scrollable table-height-scroll1">
+                                        <table class="table table-bordered table-hover table-resource">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center bs-checkbox" style="width: 28px; padding: 5px 0;">
+                                                        <label class="mt-checkbox" style="padding-left: 18px;" title="Chọn tất cả">
+                                                            <input type="checkbox" ng-model="selectAll" ng-click="selectAllUser(selectAll)" /><span></span>
+                                                        </label>
+                                                    </th>
+                                                    <th class="">
+                                                        {{'DOD_TITLE_USER_LIST' | translate}}&nbsp;
+                                                        <span>
+                                                            {{lengthMemberSelect}}/{{lengthMember}}
+                                                        </span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="x in ListSearchMember" ng-class="{ 'selected-row': x.IsChecked, 'highlight-row': x.IsEnabled }">
+                                                    <td class="text-center bs-checkbox" style="width: 34px;">
+                                                        <label class="mt-checkbox" style="padding-left: 18px;">
+                                                            <input type="checkbox" ng-model="x.IsChecked" ng-click="clickSelectOneUser(x, 0)" /><span></span>
+                                                        </label>
+                                                    </td>
+                                                    <td nowrap ng-click="clickSelectOneUser(x, 1)" role="button">
+                                                        <div ng-class="{'bold': x.IsPermision}">
+                                                            {{x.Name}}<i ng-show="x.IsPermision" class="fas fa-award pl20"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 ">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold">{{'DOD_TITLE_RECEIVER' | translate}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content ">
+                    <div class="row">
+                        <div class="col-lg-12 groupUser">
+                            <button type="button" class="btn" ng-repeat="x in ListGroup">
+                                <i class="fa fa-times float-right" aria-hidden="true" ng-click="removeGroup($index,x.Id)"></i><span></span> {{x.Name}}
+                            </button>
+
+
+                        </div>
+                        <div class="col-lg-12 groupUser">
+                            <button type="button" class="btn" ng-repeat="x in ListMember">
+                                <i class="fa fa-times float-right" aria-hidden="true" ng-class="{'bold': x.IsPermision}" ng-click="removeUser($index)"></i>{{x.Name}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 pb50">
+            <div class="btn-group pull-right actions">
+                <a ng-click="cancel()" class="btn btn-default br4">
+                    <span class=""><i class="fa fa-arrow-left"></i> {{'COM_BTN_BACK' | translate}}</span>
+                </a>
+                <a ng-click="submit()" class="btn btn-blue ml5 br4 ">
+                    <span class=""><i class="fa fa-edit"></i> {{'COM_BTN_SAVE' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--End_Received-->
+</div>

@@ -1,0 +1,200 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 69px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+        z-index: 1032 !important;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a ng-click="showSearch()" class="fs30">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+
+    <div class="pr-2 text-center">
+        <a class="fs30" ng-click="export()">
+            <span><i class="fas fa-file-excel" style="--fa-primary-color: green"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'RSRIP_BTN_EXEL' | translate}}</p>
+    </div>
+    <div class="pr-2 text-center">
+        <a class="fs30" ng-click="exportToManufacurer()">
+            <span><i class="fas fa-file-excel" style="--fa-primary-color: red"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'RSRIP_BTN_EXEL_MANUFACTURER' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt15">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="row pt5 mb5">
+
+                        <div class="col-md-12" style="height:20px">
+                            <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-sm-6">
+                            <label class="fw600 text-underline">{{'RSRIP_CURD_LBL_SEARCH_FROM_DATE'|translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'RSRIP_CURD_LBL_SEARCH_FROM_DATE'|translate}}..." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 actions" accesskey="">
+                            <label class="fw600 text-underline">{{'RSRIP_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.ToDate" class="form-control" type="text" autocomplete="off" placeholder="{{'RSRIP_CURD_LBL_SEARCH_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='datetotimepicker' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="fw600 text-underline">{{'RSRIP_COL_REQ_CODE' | translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.ReqCode" class="form-control" type="text" placeholder="{{'RSRIP_COL_REQ_CODE' | translate}}.." ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ReqCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline">{{'RSRIP_LBL_SUPPLIER' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select tagging ng-model="model.SupCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'RSRIP_LBL_SUPPLIER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.SupCode=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline">{{'RSRIP_MSG_LBL_CONTRACT' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select tagging ng-model="model.ContractCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'RSRIP_MSG_LBL_CONTRACT' | translate}}...">
+                                        {{$select.selected.ContractNo != null && $select.selected.ContractNo != null && $select.selected.ContractNo != "" ? $select.selected.ContractNo + " -" : ""}}
+                                        {{$select.selected.Name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ContractData | filter: $select.search">
+                                        {{x.ContractNo != null && x.ContractNo != null && x.ContractNo != "" ? x.ContractNo + " -" : ""}} {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ContractCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-1" hidden>
+                            <label class="fw600 text-underline">{{'RSRIP_CURD_LBL_STATUS' | translate}}</label>
+                            <div class="input-group search-group br24">
+                                <ui-select ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'RSRIP_CURD_LBL_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListCommon | filter:{Group:'CONTRACT_STATUS'} | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="btn-group pt20 actions d-flex">
+                                <div class="text-center pr10">
+                                    <a class="fs30" ng-click="search()">
+                                        <span><i class="fas fa-search"></i></span>
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataContract"></table>
+    <script>
+        setTimeout(function () {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            $('.table-scrollable').mousedown(function (e) {
+                isDown = true;
+                startX = e.pageX - $('.table-scrollable').offset().left;
+                scrollLeft = $('.table-scrollable').scrollLeft();
+            });
+            $('.table-scrollable').mouseleave(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mouseup(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mousemove(function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $('.table-scrollable').offset().left;
+                const walk = (x - startX) * 1; //scroll-fast
+                $('.table-scrollable').scrollLeft(scrollLeft - walk);
+                console.log(walk);
+            });
+        }, 1000);
+
+    </script>

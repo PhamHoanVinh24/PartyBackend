@@ -1,0 +1,238 @@
+﻿<style>
+
+    .icon-category {
+        width: 30px;
+        height: 30px;
+    }
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <label class="fw600 text-underline" id="modal-title">{{'Tìm kiếm phiếu đánh giá' | translate}}</label>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="form-group" ng-class="{'has-error' : errorQuantityImp}">
+                <label class="fw600 text-underline">{{'PRD_QC_LBL_TITLE' | translate}}</label>
+                <div class="input-group br24">
+                    <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
+                    ng-model="model.Keyword" placeholder="{{'PRD_QC_LBL_TITLE' | translate}}..." ng-keydown="($event.keyCode == 13) &amp;&amp; reload()"/>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Keyword=''; reload()" class="btn btn-default no-shadow start-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 ">
+            <label class="fw600 text-bold">{{'PRD_QC_LBL_STATUS' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                    <ui-select-match placeholder="{{'PRD_QC_LBL_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Status=''; reload()" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <label class="fw600 text-bold">{{'PRD_QC_LBL_CREATOR' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select tagging ng-model="model.TicketCreator" theme="bootstrap">
+                    <ui-select-match placeholder="{{'PRD_QC_LBL_CREATOR' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Id as x in listEmployee | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.TicketCreator=''; reload()" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div> 
+        <div class="col-md-1">
+            <div class="btn-group actions pull-left d-flex pt15">
+                <div class="text-center pr10">
+                    <a ng-click="search()" class="fs30">
+                        <span><i class="fas fa-search"></i></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="text-center pull-right pl-2 pr10" ng-click="add()" style="float: right; margin-top: 24px; margin-right: -20px;">
+                <input id="button-submit" class="btn" type="button" value="{{'Thêm mới' | translate}}" style="width: 100px; background-color: green; color: #f1f1f1;" href="/Admin/CheckProductQuality/add">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <label class="fw600 text-underline">{{'Danh sách phiếu đánh giá' | translate}}</label>
+</div>
+<table class="table dataTable table-hover table-striped mb50"
+    datatable
+    dt-options="dtOptions"
+    dt-columns="dtColumns"
+    dt-instance="dtInstance"
+    id="tblDataHeader">
+</table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

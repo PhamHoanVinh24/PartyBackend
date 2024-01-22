@@ -1,0 +1,127 @@
+﻿<style>
+    .h-95-srcoll {
+        overflow: auto;
+        max-height: 95px !important;
+        height: 95px !important;
+    }
+
+    .boder-box-custom-scroll {
+        padding: 1px;
+        /* overflow: hidden; */
+        word-wrap: break-word;
+        cursor: text;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        height: 100%;
+        border-radius: 4px;
+        max-height: 200px;
+        height: 150px;
+    }
+
+    .tags-custom {
+        margin: 2px;
+        padding: 0 5px;
+        display: inline-block;
+        float: left;
+        font: 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+        /*height: 26px;*/
+        height: auto;
+        line-height: 25px;
+        border: 1px solid #acacac;
+        border-radius: 3px;
+        background: -webkit-linear-gradient(top,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+        background: linear-gradient(to bottom,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+    }
+</style>
+<div ng-controller="tabAttributeManager">
+    <div class="table-toolbar">
+        <div class="row">
+            <form name="forms.addAttr" method="post" ng-validate="validationAttributeManagerOptions">
+                <div class="col-md-4">
+                    <div class="form-group" ng-class="{ 'has-error': errAttrCode}">
+                        <label class="control-label bold require">{{'ATTRM_CURD_LBL_ATTRM_PROPERTY' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.AttrCode" theme="bootstrap" ng-change="selectAttributeMain(model.AttrCode)" on-select="selectAttr($item)" ng-disabled="isEditAttribute">
+                                <ui-select-match placeholder="{{'ATTRM_CURD_LBL_ATTRM_PROPERTY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAttributeManager | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addAttributeMain()" class="btn btn-default no-shadow start-date" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errAttrCode" class="label-color validation-message">
+                            {{'ATTRM_VALIDATE_PROPERTY_CODE' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="!isControlDate">
+                    <div class="form-group">
+                        <label class="control-label bold require">{{'ATTRM_CURD_LBL_COST' | translate}}</label>
+                        <input class="form-control br24" name="Value" ng-model="model.AttrValue" placeholder="{{'ATTRM_CURD_LBL_COST' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="isControlDate">
+                    <div class="form-group">
+                        <label class="control-label bold require">{{'ATTRM_CURD_LBL_COST' | translate}}</label>
+                        <div class="input-group br24">
+                            <input class="form-control" id="dateAttrValue" name="Value" ng-model="model.AttrValue" placeholder="{{'ATTRM_CURD_LBL_COST' | translate}}..." readonly />
+                            <span class="input-group-btn">
+                                <!--<a class="fs30">
+        <span class="fa-regular fa-calendar"></span>
+    </a>-->
+                                <button type="button" class="btn btn-default no-shadow start-date" style="">
+                                    <!--<span class="glyphicon glyphicon-plus"></span>-->
+                                    <span class="fa-regular fa-calendar color-cf-blue fs25"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn-group pt10 actions d-flex">
+                        <div class="text-center pr10" ng-hide="isEditAttribute">
+                            <a ng-disabled="ProductID==''" class="" ng-click="add()">
+                                <i class="fa-solid fa-plus pt15 text-#be4bdb fs30"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <!--<div class="text-center pr10" ng-hide="isEditAttribute">
+                            <a ng-disabled="ProductID==''" class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="saveAll()">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'Lưu tất cả' | translate}}</p>
+                        </div>-->
+                        <!--<div class="text-center pr10" ng-hide="isEditAttribute" ng-if="isShowInheritance">
+                            <a ng-disabled="ProductID==''" class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="inheritance()">
+                                <span><i class="fa fa-recycle"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_INHERITANCE' | translate}}</p>
+                        </div>-->
+                        <div class="text-center pt20 pr20" ng-hide="!isEditAttribute">
+                            <a ng-disabled="ProductID==''" class="" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <div class="text-center pt20" ng-hide="!isEditAttribute">
+                            <a data-dismiss="modal" ng-click="cancel()" class="">
+                                <span><i style="--fa-primary-color: red;" class="fas fa-times fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataAttribute"></table>
+</div>

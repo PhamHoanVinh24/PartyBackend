@@ -1,0 +1,75 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color h-30">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black fa fa-cubes lh30"></i>
+    <span class="modal-title black" id="modal-title"> {{'EDMSR_BTN_ARRANGE_FILE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsRecordsPack">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label class="control-label">{{'EDMSR_TAB_FILE_CURD_POSITION' | translate}} <span class="text-danger">({{zoneHierarchy}})</span></label>
+                        <div class="input-group br24-nobtn">
+                            <!--<ui-select tagging ng-model="model.ZoneCode" theme="bootstrap" ng-change="selectChange()">
+                                <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_POSITION' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstZone | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>-->
+                            <ui-select tagging ng-model="model.ZoneCode" theme="bootstrap" on-select="selectChange($item)">
+                                <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_POSITION' | translate}}...">
+                                    {{$select.selected.Name}} - {{$select.selected.Mapping}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstZone | filter: $select.search">
+                                    {{x.Name}} - {{x.Mapping}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group mt30 actions d-flex pl15">
+                            <div class="text-center pr10 pull-right" ng-click="submit()">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fas fa-cubes fs25"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'EDMSR_BTN_ARRANGE_FILE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

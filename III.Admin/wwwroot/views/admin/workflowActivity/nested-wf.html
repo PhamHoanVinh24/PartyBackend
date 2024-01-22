@@ -1,0 +1,67 @@
+﻿<div ng-controller="nested-wf">
+    <div class="row">
+        <div class="portlet-body todo-project-list-content">
+            <div class="scrollbar-sm">
+                <div class="table-responsive" style="height: 400px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="pl25" style="width: 5%;">{{'STT' | translate}}</th>
+                                <th class="text-center" style="width: 20%;">{{'Luồng hoạt động' | translate}}</th>
+                                <th class="text-center" style="width: 30%;">{{'Tên thể hiện luồng' | translate}}</th>
+                                <th class="text-center" style="width: 15%;">{{'Loại đối tượng' | translate}}</th>
+                                <th class="text-center" style="width: 25%;">{{'Đối tượng' | translate}}</th>
+                                <th class="text-center" style="width: 5%;">{{'Thao tác' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listWfNestedAct">
+                                <td class="text-center">{{$index + 1}}</td>
+                                <td>
+                                    <span class="fw600">{{x.WfName}}</span><br />
+                                    <span class="badge-customer badge-customer-success">{{x.WfGroup}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="input-group" ng-show="!x.IsInit">
+                                        <input ng-model="x.WfInstName" class="form-control br24" name="WfInstName" placeholder=" {{'Tên thể hiện luồng' | translate}}..." ng-disabled="IsLock || !isAccepted" />
+                                    </div>
+                                    <span ng-show="x.IsInit" class="fw600 pull-left">{{x.WfInstName}}</span> <br />
+                                    <span class="badge-customer badge-customer-success pull-left mt5" ng-show="x.IsInit">{{x.WfInstStatus}}</span>
+                                </td>
+                                <td class="text-center br24-nobtn">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.ObjectType" theme="bootstrap" on-select="changeSelect('ObjectType', x.ObjectType, x.WfCode)" ng-disabled="x.IsInit || IsLock || !isAccepted">
+                                        <ui-select-match placeholder="{{'Loại đối tượng' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstObjectType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td class="">
+                                    <div class="br24-nobtn" style="margin: auto;">
+                                        <span class="fw600 badge-customer p10 badge-customer-puple" ng-show="x.IsInit && x.ObjectInst != ''" ng-if="x.ObjectInst.length <= 40">{{x.ObjectInst}}</span>
+                                        <span class="fw600 badge-customer p10 badge-customer-puple" ng-show="x.IsInit && x.ObjectInst != ''" ng-if="x.ObjectInst.length > 40" title="{{x.ObjectInst}}">{{x.ObjectInst.substr(0,40)}} ...</span>
+                                        <ui-select class="ui-select-bootstrap-right-radius" ng-show="!x.IsInit" ng-model="x.ObjectInst" theme="bootstrap" on-select="changeSelect('ObjectInst', x.ObjectInst, x.WfCode)" ng-disabled="IsLock || !isAccepted">
+                                            <ui-select-match placeholder="{{'Đối tượng' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in lstObjectInst | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group pt5 pb-1 pull-right actions d-flex">
+                                        <div class="text-center mt10 pr-2" ng-show="!x.IsInit">
+                                            <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="initWF(x.WfCode)">
+                                                <span><i class="fas fa-play text-green fs25"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

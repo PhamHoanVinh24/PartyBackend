@@ -1,0 +1,171 @@
+﻿<style>
+
+    /*.custom_width thead tr th {
+        width: 11% !important
+    }*/
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    /*.mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }*/
+
+    #tblListPoProduct th, td {
+        white-space: nowrap;
+    }
+</style>
+<div>
+    <div class="form-body col-md-12 pt-0">
+        <!--<form method="post" name="addProduct" ng-validate="validationProductOptions">-->
+        <div class="row pb10">
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label class="control-label text-left">{{'SRIP_LBL_PO_CODE'|translate}}</label>
+                    <div class="input-group mBorder br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.PoCode" theme="bootstrap" on-select="selectContractBuyer($item)">
+                            <ui-select-match placeholder="{{'SRIP_LBL_PO_CODE'|translate}}...">{{$select.selected.Name}} ({{$select.selected.Quantity}})</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in ListPoCus | filter: $select.search">
+                                {{x.Name}}<span class="bold text-danger">&nbsp;({{x.Quantity}})</span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label text-left">{{'SRIP_CURD_LBL_PRO'|translate}}</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ProjectCode" theme="bootstrap" on-select="selectProject($item)">
+                            <ui-select-match placeholder="{{'SRIP_CURD_LBL_PRO'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in ListProjectCode | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="control-label text-left">{{'SRIP_LBL_PRODUCT'|translate}}</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ProductCode" theme="bootstrap" on-select="selectProduct($item)">
+                            <ui-select-match placeholder="{{'SRIP_LBL_PRODUCT'|translate}}..."><div class="bold">{{$select.selected.Name}}</div></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in listProduct | filter: $select.search">
+                                <span>{{x.Name}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex justify-content-sb">
+                        <div class="text-center pt10">
+
+                            <a class=" fs30 p-0" ng-click="addProduct()">
+
+                                <!--<span><i class="fa-solid fa-plus"></i></span>-->
+                                <i style="--fa-primary-color: green;" class="fa-solid fa-arrow-down fs30"></i>
+
+                            </a>
+
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pt10">
+                            <a ng-click="save()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <!--<div class="d-flex">
+                            <div class="text-center pr20 pt10">
+                                <a class="fs30" ng-click="addCardJob()">
+                                    <span class="fa-solid fa-list-check fs30"></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group table-responsive" style="overflow: visible;">
+                    <div class="col-md-12 height-350">
+                        <table class="table table-striped table-bordered table-sm mb5" cellspacing="0" id="tblListPoProduct">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'SRIP_LBL_PRO_CODE' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'SRIP_LBL_PRO_NAME' | translate}}</th>
+                                    <th class="col-md-3 text-center fw600 text-underline require">{{'SRIP_LBL_SUPPLIER' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'SRIP_LBL_PO_COUNT' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline require">{{'SRIP_LBL_RATE_CONVERTION' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline require">{{'SRIP_LBL_RATE_LOSS' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline require">{{'SRIP_LIST_COL_QUANTITY' | translate}}</th>
+                                    <!--<th class="col-md-1 text-center fw600 text-underline">{{'SRIP_LBL_QUANTITY' | translate}}</th>-->
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'SRIP_LBL_UNIT_NAME' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'SRIP_LBL_EXPECTED_DATE' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'SRIP_LBL_NOTE' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'Xóa' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listProducts">
+                                    <td class="text-center">{{x.ProductCode}}</td>
+                                    <td class="text-center bold">{{x.ProductName}}</td>
+                                    <!--<td class="text-center pl-1 pr-1"><input placeholder="{{'SRIP_LIST_COL_QUANTITY' | translate}}..." num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" ng-model="x.Quantity" name="Quantity" ng-blur="changeRate(x)" class="br4 form-control text-center" /></td>-->
+                                    <td class="text-center pl-0 pr-0">
+                                        <div class="input-group w200">
+                                            <ui-select tagging ng-model="x.SupCode" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'SRIP_LIST_COL_SUPP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="x.SupCode=''" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center bold text-primary">{{x.PoCount|number : fractionSize}}</td>
+                                    <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateConversion" ng-blur="changeRate(x)" /></td>
+
+                                    <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateLoss" ng-blur="changeRate(x)" /></td>
+                                    <!--<td class="text-center bold text-primary">{{x.Quantity|number : fractionSize}}</td>-->
+                                    <td class="text-center bold text-primary"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.Quantity" ng-blur="changeQuantity(x)" /><label class="text-danger">{{x.Edit}}</label></td>
+
+                                    <td class="text-center">{{x.UnitName}}</td>
+                                    <td class="text-center pl-0 pr-0">
+                                        <div class='input-group date dateExpect'>
+                                            <input type='text' class="form-control input-date" ng-model="x.sExpectedDate" placeholder="{{'Ngày dự kiến hàng về' | translate}}..." />
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center p5"><textarea rows="3" class="br4 form-control text-center" ng-model="x.Note" /></td>
+                                    <td class="text-center">
+                                        <i role="button" class="fa fa-minus-circle" ng-click="removeProduct(x)" title="{{'COM_BTN_DELETE'| translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+</div>

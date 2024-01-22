@@ -1,0 +1,822 @@
+﻿<style>
+    .table thead {
+        background: #f8f5f1;
+    }
+
+    .mt-checkbox {
+        margin-bottom: 0px !important;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .tree_user {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 305px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .portlet.light > .portlet-title > .caption {
+        padding: 7px 0;
+    }
+
+    .portlet.light > .portlet-title {
+        min-height: 40px;
+    }
+
+    .portlet {
+        box-shadow: none !important;
+    }
+
+    #treeDiv {
+        border: 1px solid rgb(231, 236, 241);
+        border-radius: 4px;
+        height: 305px;
+        max-height: 547px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    @media (min-width: 992px) and (max-width: 1200px) {
+        .col-lg-4 {
+            float: left;
+            width: 43.33333%;
+        }
+
+        .col-lg-8 {
+            float: left;
+            width: 56.66667%;
+            padding-left: 0px;
+        }
+
+        .comment {
+            width: 96%;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .custom-col-lg-offset-2 {
+            margin-left: 16.1667%;
+        }
+
+        .custom-inline {
+            padding-top: 7px;
+        }
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-lg-5">
+            <h1 class="bold mb-0">{{'DID_LBL_EDIT_DID' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'DID_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="#">{{'DID_LINK_DID' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div>{{'DID_LINK_EDIT_DID' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-7">
+            <div class="btn-group pull-right actions mr20">
+                <a ng-click="cancel()" class="btn btn-default br4">
+                    <span class=""><i class="fa fa-arrow-left"></i>&nbsp;{{'COM_BTN_BACK' | translate}}</span>
+                </a>
+                <a ng-if="!DocumentStatus" ng-click="submit()" ng-dblclick="return" class="btn btn-blue br4 ">
+                    <span class=""><i class="fa fa-edit"></i>&nbsp;{{'COM_BTN_SAVE' | translate}}</span>
+                </a>
+                <a ng-if="!DocumentStatus" ng-click="recover()" class="btn btn-red br4 ">
+                    <span class=""><i class="fas fa-ban"></i>&nbsp;{{'COM_BTN_RECALL' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet-body form">
+    <!--Header-->
+    <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="form-body pt-0">
+            <div class="row mt-action-5">
+                <div class="col-lg-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorDocumentCode}">
+                        <div class="col-lg-4">
+                            <i class="far fa-file-alt"></i>
+                            <label class="control-label require">{{'DID_CURD_LBL_HEADER_DOCUMENT_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'DID_CURD_TXT_HEADER_DOCUMENT_CODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorDocumentCode" class="label-color validation-message">
+                                {{'DID_CURD_VALIDATE_HEADER_DOCUMENT_CODE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fab fa-adn"></i>
+                            <label class="control-label require">{{'DID_CURD_LBL_HEADER_DOCUMENT_SYMBOL' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" name="DocumentSymbol" ng-model="model.Header.DocumentSymbol" type="text" placeholder="{{'DID_CURD_TXT_HEADER_DOCUMENT_SYMBOL' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentSymbol=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-calendar-alt"></i>
+                            <label class="control-label require">{{'DID_CURD_LBL_HEADER_FROM_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input ng-model="model.Header.FromDate" name="FromDate" class="form-control" type="text" placeholder="{{'DID_CURD_TXT_HEADER_FROM_DATE' | translate}}..." autocomplete="off" id='FromDate' onkeypress="return false;" onkeydown="return false;" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.FromDate=''" class="btn btn-default no-shadow from-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-shield-alt"></i>
+                            <label class="control-label">Lĩnh vực</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.DocumentZone" theme="bootstrap">
+                                    <ui-select-match placeholder="Lĩnh vực...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DocumentFieldData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentZone=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label require">Người ký</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="model.Header.SignUser" name="SignUser" type="text" placeholder="Người ký..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.SignUser=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-file"></i>
+                            <label class="control-label">Tính chất văn bản</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.Confidentiality" theme="bootstrap">
+                                    <ui-select-match placeholder="Tính chất văn bản...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DocumentFieldData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.Confidentiality=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="form-group" ng-class="{ 'has-error': errorCreatedUserId}">
+                        <div class="col-lg-4 custom-inline">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label inline require">{{'DID_CURD_LBL_HEADER_CREATED_USER' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.CreatedUserId" theme="bootstrap" on-select="selectCreatedUser(model.Header.CreatedUserId)" ng-change="changeSelect('CreatedUserId')" disabled="disabled">
+                                    <ui-select-match placeholder="{{'DID_CURD_COMBO_HEADER_CREATED_USER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in ListUserData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.CreatedUserId=''" class="btn btn-default no-shadow" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCreatedUserId" class="label-color validation-message">
+                                {{'DID_CURD_VALIDATE_HEADER_CREATED_USER' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class=" form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-comment"></i>
+                            <label class="control-label">Trích yếu</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <textarea class="form-control" placeholder="Nhập trích yếu..." rows="5" ng-model="model.Header.Note"></textarea>
+                        </div>
+                    </div>-->
+                    <!--<div class=" form-group" ng-class="{ 'has-error': errorUnitEditor}">
+                        <div class="col-lg-4">
+                            <i class="fas fa-university"></i>
+                            <label class="control-label require">Đơn vị soạn thảo</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.UnitEditor" theme="bootstrap" ng-change="selectUnit(model.Header.UnitEditor)" on-select="changeSelect('UnitEditor')" disabled="disabled">
+                                    <ui-select-match placeholder="Đơn vị soạn thảo...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in UnitEditorData | filter: $select.search">
+                                        <div style="padding-left: {{15 * x.Level}}px">
+                                            <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                            <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                            {{x.Title}}
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.UnitEditor=''" class="btn btn-default no-shadow" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorUnitEditor" class="label-color validation-message">
+                                Đơn vị soạn thảo không được để trống
+                            </span>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fa fa-reply"></i>
+                            <label class="control-label">Trả lời bằng VB đi</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="mt-radio-list pb-0" style="display:inline-flex;padding-top:7px">
+                                <label class="mt-radio mt-radio-outline" style="margin-bottom: 0px!important;">
+                                    <label for="IsReply" style="cursor:pointer">Có</label>
+                                    <input type="radio" id="IsReply" name="optradio1" ng-model="model.Header.IsReply" ng-value="true">
+                                    <span></span>
+                                </label>
+                                <label class="mt-radio mt-radio-outline ml15" style="margin-bottom: 0px!important;">
+                                    <label for="IsReply1" style="cursor:pointer">Không</label>
+                                    <input type="radio" id="IsReply1" name="optradio1" ng-model="model.Header.IsReply" ng-value="false">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-calendar-times"></i>
+                            <label class="control-label require">Hạn trả lời</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input ng-model="model.Header.ExperiedReply" class="form-control" type="text" placeholder="Hạn trả lời..." autocomplete="off" id='ExperiedReply' ng-change="selectExperiedReply(model.Header.ExperiedReply)" onkeypress="return false;" onkeydown="return false;" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="deleteExperiedReply()" class="btn btn-default no-shadow experied-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-sort-numeric-up"></i>
+                            <label class="control-label require">{{'DID_CURD_LBL_DOCUMENT_NUMBER' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8 ">
+                            <div class="input-group">
+                                <input class="form-control" id="DocumentNumber" ng-model="model.Header.DocumentNumber" onkeypress="return ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 8 || event.charCode == 32 || (event.charCode >= 48 && event.charCode <= 57));" name="DocumentNumber" type="text" placeholder="{{'DID_CURD_TXT_DOCUMENT_NUMBER' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentNumber=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4 custom-inline">
+                            <i class="fas fa-building"></i>
+                            <label class="control-label require inline">{{'DID_CURD_LBL_ORIGANIZATION' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="model.Header.Origanization" name="Origanization" type="text" placeholder="{{'DID_CURD_TXT_ORIGANIZATION' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.Origanization=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="far fa-calendar-alt"></i>
+                            <label class="control-label ">{{'DID_CURD_LBL_PROMULGATE_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <input class="form-control" name="PromulgateDate" ng-model="model.Header.PromulgateDate" id="PromulgateDate" autocomplete="off" type="text" placeholder="{{'DID_CURD_TXT_PROMULGATE_DATE' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.PromulgateDate=''" class="btn btn-default no-shadow promulgate-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-file-signature"></i>
+                            <label class="control-label">Loại văn bản</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.DocumentType" theme="bootstrap">
+                                    <ui-select-match placeholder="Loại văn bản...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DocumentTypeData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.DocumentType=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class=" form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-info-circle"></i>
+                            <label class="control-label">{{'DID_CURD_LBL_GET_METHOD' | translate}}</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.GetMothod" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'DID_CURD_TXT_GET_METHOD' | translate}} ...">{{$select.selected.ValueSet}}</ui-select-match>
+                                    <ui-select-choices repeat="x.CodeSet as x in GetMothodData | filter: $select.search">
+                                        {{x.ValueSet}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.GetMothod=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-award"></i>
+                            <label class="control-label ">Chức vụ</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Header.Position" theme="bootstrap">
+                                    <ui-select-match placeholder="Chức vụ...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in PositionData | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.Position=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                        <div class="col-lg-4">
+                            <i class="fas fa-clock"></i>
+                            <label class="control-label ">Thời gian còn lại</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <label ng-if="time_left<0" class="control-label">
+                                &nbsp;<label class="text-danger">Đã quá hạn</label>
+                            </label>
+                            <label ng-if="time_left>0" class="control-label">
+                                &nbsp;<label class="text-success">{{time_left}}&nbsp;(Ngày)</label>
+                            </label>
+                        </div>
+                    </div>-->
+                    <!--<div class=" form-group">
+                        <div class="col-lg-5 ">
+                            <i class="fas fa-file-medical-alt"></i>
+                            <label class="control-label">VB cần phải xử lý</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="mt-radio-list pb-0" style="display:inline-flex;padding-top:7px">
+                                <label class="mt-radio mt-radio-outline" style="margin-bottom: 0px!important;">
+                                    <label for="IsProcess" style="cursor:pointer">Có</label>
+                                    <input type="radio" id="IsProcess" name="optradio" ng-model="model.Header.IsProcess" ng-value="true">
+                                    <span></span>
+                                </label>
+                                <label class="mt-radio mt-radio-outline ml15" style="margin-bottom: 0px!important;">
+                                    <label for="IsProcess1" style="cursor:pointer">Không</label>
+                                    <input type="radio" id="IsProcess1" name="optradio" ng-model="model.Header.IsProcess" ng-value="false">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class=" form-group">
+                        <div class="col-lg-5 ">
+                            <i class="fas fa-reply-all"></i>
+                            <label class="control-label">Tình trạng trả lời</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="model.Header.ReplyStatus" type="text" placeholder="Tình trạng trả lời..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Header.ReplyStatus=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <i class="far fa-comment"></i>
+                            <label class="control-label">{{'DID_CURD_LBL_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-10">
+                            <textarea class="form-control float-right comment" placeholder="{{'DID_CURD_TXT_NOTE' | translate}}..." rows="3" ng-model="model.Header.Note"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--End Header-->
+</div>
+<div class="detail">
+    <!--Start_file-->
+    <div class="col-lg-12 ">
+        <h2><u><b>{{'DID_CURD_LBL_ATTACHMENTS' | translate}}</b></u></h2>
+        <div class="col-lg-offset-2 col-lg-5 col-sm-7 custom-col-lg-offset-2" ng-if="!DocumentStatus">
+            <div class="input-group input-file">
+                <i class="fa fa-upload"></i>
+                <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:34px;pointer-events:none" placeholder="{{'DID_CURD_TXT_ATTACHMENTS' | translate}}..."></>
+                <span class="input-group-btn">
+                    <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                    <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-5 col-sm-3" ng-if="!DocumentStatus">
+            <a ng-click="addFile()" class="btn btn-red br4">
+                <span><i class="fa fa-plus"></i> {{'DID_CURD_LBL_ADD_FILE' | translate}}</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-12 pt10">
+        <div class="col-lg-offset-2 col-lg-10 custom-col-lg-offset-2 pr-0 col-sm-12 " id="contentFile">
+            <table class="table table-bordered" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th class="col-lg-4 text-center">{{'DID_CURD_LIST_COL_FILE_NAME' | translate}}</th>
+                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_DOWLOAD' | translate}}</th>
+                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_PREVIEW' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in model.Detail.ListFile">
+                        <td class="text-center long">{{x.FileName}}</td>
+                        <td class="text-center">
+                            <i ng-show="x.IsShowDelete && !DocumentStatus" role="button" class="fa fa-minus-circle pt5" ng-click="deleteFile($index,x.Id)" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px"></i>
+                            <a href="{{x.Source}}" target="_blank" download>
+                                <i role="button" hr class="fa fa-download pl10" title="{{'COM_BTN_DOWLOAD' | translate}}" style="color:#147aa9!important;font-size: 25px"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a ng-click="view(x.Source)" ng-if="x.Fomart==4">
+                                {{'DID_CURD_BTN_PREVIEW' | translate}}
+                            </a>
+                            <label ng-if="x.Fomart!=4">
+                                {{'DID_CURD_LBL_NO_SUPPORT_PREVIEW' | translate}}
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--End_file-->
+    <!--Start_comment-->
+    <div class="col-lg-12 ">
+        <h2><u><b>{{'DID_CURD_LBL_COMMENT' | translate}}</b></u></h2>
+        <div class="col-lg-offset-2 col-lg-5 col-sm-7 custom-col-lg-offset-2" ng-if="!DocumentStatus">
+            <textarea class="form-control" ng-model="model1.Comment" autocomplete="off" type="text" placeholder="{{'DID_CURD_TXT_COMMENT' | translate}}..." />
+        </div>
+        <div class="col-lg-5 col-sm-3" ng-if="!DocumentStatus">
+            <a ng-click="addComment()" class="btn btn-red br4">
+                <span><i class="fa fa-plus"></i> {{'DID_CURD_BTN_ADD_COMMENT' | translate}}</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-12 pt10">
+        <div class="col-lg-offset-2 col-lg-10 custom-col-lg-offset-2 pr-0 col-sm-12 ">
+            <table class="table table-bordered" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_COMMENTER' | translate}}</th>
+                        <th class="col-lg-6 text-center">{{'DID_CURD_LIST_COL_CONTENT' | translate}}</th>
+                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_TIME' | translate}}</th>
+                        <th class="col-lg-2 text-center" ng-if=" !DocumentStatus">{{'DID_CURD_COL_DELETE' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in model.Detail.ListComment">
+                        <td class="text-center">
+                            {{x.User}}
+                        </td>
+                        <!--<td class="text-center">
+                            {{x.Comment}}
+                        </td>-->
+                        <td class="text-center long" data-toggle="tooltip" data-placement="top" title="{{x.Comment}}" data-original-title="Tooltip on top">
+                            <textarea class="text-center" ng-show="x.IsShowComment && !DocumentStatus" ng-model="x.Comment" style="width:100%" />
+                            <span ng-show="!x.IsShowComment || DocumentStatus">{{x.Comment}}</span>
+                        </td>
+
+                        <td class="text-center">
+                            {{x.CreatedTime | date:"MM/dd/yyyy"}}
+                        </td>
+                        <td class="text-center" ng-if=" !DocumentStatus">
+                            <i ng-if="x.IsShowDelete && !DocumentStatus" role="button" class="fa fa-minus-circle pt5" ng-click="deleteComment($index)" title="Xóa" style="color:red !important;font-size: 25px"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--End_comment-->
+    <!--Start_Received-->
+    <div class="col-lg-12">
+        <h2><u><b>{{'DID_CURD_LBL_SEND_DOCUMENT' | translate}}</b></u></h2>
+    </div>
+    <div class="col-lg-12 ">
+        <div class="col-lg-12">
+            <h2><b>{{'DID_CURD_LBL_RECIPIENT' | translate}}</b></h2>
+        </div>
+    </div>
+    <div class="col-lg-offset-2 col-lg-10 custom-col-lg-offset-2 pr-0 col-sm-12 ">
+        <div class="col-lg-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold">{{'DID_CURD_LBL_ROOM' | translate}}</span>
+                    </div>
+                    <div class="tools">
+                        <a class="fullscreen" data-container="false" title="Toàn màn hình">
+                            <i class="fas fa-arrows-alt"></i>
+                        </a>
+                        <a class="question" data-toggle="popover" data-placement="left" data-content="{{'DID_CURD_TXT_ROOM' | translate}}" data-trigger="hover" data-original-title="Hướng dẫn chọn phòng ban">
+                            <i class="fas fa-question"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="scrollbar-sm">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div id="treeDiv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                            </div>
+                            <div class="col-lg-6 tree_user">
+                                <div class="input-group pb10">
+                                    <ui-select ng-model="model1.Member" multiple theme="bootstrap" limit="4" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="{{'DID_CURD_TXT_SELECT_USER' | translate}}...">
+                                            <span ng-class="{'bold': $item.IsPermision}">
+                                                <i ng-show="$item.IsMain" class="fas fa-award"></i>
+                                                <i ng-show="$item.IsPermision && !$item.IsMain" class="fas fa-user-clock"></i>{{$item.Name}}
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="x in ListSearchMember |  filter:$select.search" ui-disable-choice="x.IsMain && !x.IsPermision">
+                                            <div ng-class="{'bold':x.IsMain && !x.IsPermision}">
+                                                {{x.Name}}<i ng-show="x.IsMain" class="fas fa-award pl20"></i>
+                                                <i ng-show="x.IsPermision && !x.IsMain" class="fas fa-user-clock pl20"></i>
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model1.Member=''" class="btn btn-default no-shadow " title="Add account to Branch">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="portlet light bordered mb-0">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-bar-chart font-green-sharp hide"></i>
+                                            <span class="caption-subject bold">{{'DID_CURD_LBL_ROLE' | translate}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body todo-project-list-content">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-12" ng-repeat="x in ListRole">
+                                                <div class="mt-checkbox-list ">
+                                                    <label class="mt-checkbox mt-checkbox-outline ">
+                                                        {{x.Name}}
+                                                        <input type="checkbox" ng-click="updateSelection($index, ListRole)" id="chkCustomer_{{x.Code}}" ng-model="x.Checked">
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 text-center" style="padding: 10px;">
+                                                <a ng-click="addMember(model1.Member)" ng-if="!DocumentStatus && !RoleStatus" class="btn btn-red br4" style="box-shadow:none;">
+                                                    <span><i class="fa fa-plus"></i> {{'DID_CURD_BTN_MEMBER' | translate}}</span>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold">{{'DID_CURD_LBL_HANDLING_DOCUMENT' | translate}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content">
+                    <div class="scrollbar-sm">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_SENDER' | translate}}</th>
+                                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_RECEIVER' | translate}}</th>
+                                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_COMMENT' | translate}}</th>
+                                        <th class="col-lg-1 text-center">{{'DID_CURD_LIST_COL_TIME' | translate}}</th>
+                                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_ROLE' | translate}}</th>
+                                        <th class="col-lg-2 text-center">{{'DID_CURD_LIST_COL_STATUS' | translate}}</th>
+                                        <th class="col-lg-1 text-center">{{'DID_CURD_LIST_COL_DELETE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in model.Detail.ListMember">
+                                        <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                            <div>{{x.AssignerName}}</div>&nbsp;<span class="group-user">{{x.AssignerGroupUserName}}</span>
+                                        </td>
+                                        <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                            <div>{{x.Name}}</div>&nbsp;<span class="group-user">{{x.GroupUserName}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <textarea ng-show="x.IsShowComment && !DocumentStatus" ng-model="x.Comment" />
+                                            <span ng-class="{'bold': x.Role=='1'}" ng-show="!x.IsShowComment || DocumentStatus">{{x.Comment}}</span>
+                                        </td>
+                                        <td class="text-center" ng-class="{'bold': x.Role=='1'}">{{x.CreatedTime | date:'dd/MM/yyyy'}}</td>
+                                        <td class="text-center" ng-class="{'bold': x.Role=='1'} ">{{x.Role=='1' ? 'Xử lý chính':x.Role=='2' ? 'Phối hợp' :'Xem để biết' }}</td>
+                                        <td class="text-center">
+                                            <span class="text-success" ng-if="x.Status=='DONE'">{{'DID_CURD_TITLE_DONE' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='SEND'">{{'DID_CURD_TITLE_SEND' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='ADD_SEND'">{{'DID_CURD_TITLE_ADD_SEND' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='SEND_COORDINATED'">{{'DID_CURD_TITLE_SEND_COORDINATED' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='UPDATED'">{{'DID_CURD_TITLE_UPDATED' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='COORDINATED'">{{'DID_CURD_TITLE_COORDINATED' | translate}}</span>
+                                            <span class="text-danger" ng-if="x.Status=='PROCESSING'">{{'DID_CURD_TITLE_PROCESSING' | translate}}</span>
+                                            <span class="text-danger" ng-if="x.Status=='NOCOORDINATED'">{{'DID_CURD_TITLE_NOCOORDINATED' | translate}}</span>
+                                            <span class="text-danger" ng-if="x.Status==null">{{'DID_CURD_TITLE_NO_REVIEW' | translate}}</span>
+                                            <span class="text-danger" ng-if="x.Status==''">{{'DID_CURD_TITLE_NO_SEND' | translate}}</span>
+                                            <span class="text-success" ng-if="x.Status=='REVIEW'">{{'DID_CURD_TITLE_REVIEW' | translate}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <i role="button" ng-show="x.IsShowDelete" class="fa fa-minus-circle" ng-click="deleteMember($index,x.Id)" title="delete" style="color:red !important;font-size: 25px"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-sm-12">
+        <h2><b>{{'DID_CURD_LBL_ACTION' | translate}}</b></h2>
+    </div>
+    <div class="col-lg-10 col-sm-12 pl25 pb20">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="text-center">{{'DID_CURD_LIST_COL_WORKERS' | translate}}</th>
+                    <th class="text-center">{{'DID_CURD_LIST_COL_ACTION' | translate}}</th>
+                    <th class="text-center">{{'DID_CURD_LIST_COL_TIME' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in ActivityData">
+                    <td class="text-center">{{x.User}}</td>
+                    <td class="text-center">
+                        <div ng-if="x.Action=='CREATED'">
+                            <span>{{'DID_CURD_TITLE_CREATED_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='UPDATED'">
+                            <span>{{'DID_CURD_TITLE_UPDATED_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='COORDINATED'">
+                            <span>{{'DID_CURD_TITLE_COORDINATED_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='REVIEW'">
+                            <span>{{'DID_CURD_TITLE_REVIEW_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='SEND'">
+                            <span class="text-success">{{'DID_CURD_TITLE_SEND_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='SEND_COORDINATED'">
+                            <span class="text-success">{{'DID_CURD_TITLE_SEND_COORDINATED_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='ADD_SEND'">
+                            <span>{{'DID_CURD_TITLE_ADD_SEND_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='PROCESSING'">
+                            <span>{{'DID_CURD_TITLE_PROCESSING_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='NOCOORDINATED'">
+                            <span>{{'DID_CURD_TITLE_NOCOORDINATED_DOC' | translate}}</span>
+                        </div>
+                        <div ng-if="x.Action=='RECOVER'">
+                            <span class="text-danger">{{'DID_CURD_TITLE_RECOVER_DOC' | translate}}</span>
+                            <i class="fas fa-ban" style="color:red"></i>
+                        </div>
+                        <div ng-if="x.Action=='DONE'">
+                            <span class="text-success">{{'DID_CURD_TITLE_DONE_DOC' | translate}}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">{{x.CreatedTime | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12 pb50">
+        <div class="btn-group pull-right actions ">
+            <a ng-click="cancel()" class="btn btn-default br4">
+                <span class=""><i class="fa fa-arrow-left"></i> {{'COM_BTN_BACK' | translate}}</span>
+            </a>
+            <a ng-if="!DocumentStatus" ng-click="submit()" class="btn btn-blue ml5 br4 ">
+                <span class=""><i class="fa fa-edit"></i> {{'COM_BTN_SAVE' | translate}}</span>
+            </a>
+            <a ng-if="!DocumentStatus" ng-click="recover()" class="btn btn-red ml5 br4 ">
+                <span class=""><i class="fas fa-ban"></i> {{'COM_BTN_RECALL' | translate}}</span>
+            </a>
+        </div>
+    </div>
+    <!--End_Received-->
+</div>

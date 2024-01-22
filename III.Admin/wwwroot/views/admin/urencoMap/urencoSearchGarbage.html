@@ -1,0 +1,68 @@
+﻿<div class="tab-pane active" ng-controller="urencoSearchGarbage" >
+        <div id="divstyle">
+            <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+                <div class="form-body pt-0">
+                    <div class="row mt-action-5 m10">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-5">
+                                    <label class="fw600 text-underline">Tìm điểm theo tuyến</label>
+                                    <div class='input-group '>
+                                        <ui-select tagging ng-keydown="($event.keyCode == 13) && reload()" ng-model="model.RouteCode" ng-change="reload()">
+                                            <ui-select-match placeholder="Tìm điểm theo tuyến">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listRoute | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.RouteCode='' && reload()" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="fw600 text-underline">Điểm cẩu rác</label>
+                                    <div class='input-group '>
+                                        <ui-select tagging ng-keydown="($event.keyCode == 13) && reload()" ng-model="model.NodeCode" on-select="changeSelect('NodeCode')">
+                                            <ui-select-match placeholder="Điểm cẩu rác">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listPark | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.NodeCode='' && reload()" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 flr">
+                                    <div class="btn-group pt10 actions d-flex">
+                                        <div class="text-center">
+                                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                                <span><i class="fa fa-search"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb5 pt3">{{'Tìm kiếm' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group p10 viewTable" >
+                                <table class="table dataTable table-hover table-striped"
+                                       datatable
+                                       dt-options="dtOptions"
+                                       dt-columns="dtColumns"
+                                       dt-instance="dtInstance"
+                                       id="tblData"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+</div>
+
+
+
+

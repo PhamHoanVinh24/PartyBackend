@@ -1,0 +1,293 @@
+﻿<style>
+    .width_90 {
+        width: 90px;
+    }
+    .tab-content {
+        width: 100%;
+        min-height: 300px;
+        /*overflow-y: scroll;
+        overflow-x: hidden;*/
+    }
+    .font-green {
+        font-weight: bold;
+        color: #4ba04b;
+    }
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title"> {{'ASSET_INVENTORY_TICKET_EDIT' | translate}}</span>
+</div>
+<div class="modal-body userFormAreaHeader" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-12 pt10">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <!--Mã  Phiếu-->
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                                        <label class="control-label require custom-title-code-bold"> {{'ASSET_INVENTORY_TICKET_CODE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <input type="text" name="TicketCode" class="form-control text-box-asset" ng-model="model.TicketCode" placeholder=" {{'ASSET_INVENTORY_TICKET_CODE' | translate}}..." ng-readonly="true" />
+                                    </div>
+                                </div>
+                                <!--Tiêu đề-->
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <i class="fa fa-comment" aria-hidden="true"></i>
+                                        <label class="control-label require custom-title-code-bold"> {{'ASSET_INVENTORY_TICKET_NAME' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <input type="text" name="Title" class="form-control text-box-asset" ng-model="model.Title" placeholder=" {{'ASSET_INVENTORY_TICKET_NAME' | translate}}..." />
+                                    </div>
+                                </div>
+                                <!--Người chịu trách  nhiệm-->
+                                <div class="form-group" ng-class="{ 'has-error': errorPerson}">
+                                    <div class="col-md-5">
+                                        <i class="fa fa-user"></i>
+                                        <label class="control-label require"> {{'ASSET_INVENTORY_TICKET_PERSON' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="model.Person" theme="bootstrap" on-select="changleSelect('Person')">
+                                                <ui-select-match placeholder=" {{'ASSET_INVENTORY_TICKET_PERSON' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in ListPerson | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Person=''" class="btn btn-default no-shadow" style="">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorPerson" class="label-color validation-message">
+                                            {{'ASSET_INVENTORY_VALIDATE_TICKET_PERSON' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--chi nhánh-->
+                                <div class="form-group" ng-class="{ 'has-error': errorBranch}">
+                                    <div class="col-md-5">
+                                        <i class="fa fa-building"></i>
+                                        <label class="control-label require"> {{'ASSET_INVENTORY_TICKET_BRANCH' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="model.Branch" theme="bootstrap" on-select="changleSelect('Branch')">
+                                                <ui-select-match placeholder=" {{'ASSET_INVENTORY_TICKET_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in ListBranch | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Branch=''" class="btn btn-default no-shadow" style="">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorBranch" class="label-color validation-message">
+                                            {{'ASSET_INVENTORY_VALIDATE_TICKET_BRANCH' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--ngày kiểm kê-->
+                                <div class="form-group">
+                                    <div class="col-md-5">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        <label class="control-label"> {{'ASSET_INVENTORY_TICKET_DATE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <div class='input-group date' id='InventoryTime'>
+                                            <input type='text' class="form-control input-date" name="InventoryTime" ng-model="model.InventoryTime" placeholder=" {{'ASSET_INVENTORY_TICKET_DATE' | translate}}..." />
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <!--Status-->
+                                <div class="form-group">
+                                    <div class="col-md-4 nowrap">
+                                        <i class="fa fa-flag"></i>
+                                        <label class="control-label require"> {{'ASSET_INVENTORY_TICKET_STATUS' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-8 pl-0">
+                                        <div class="input-group">
+                                            <ui-select ng-model="model.Status" theme="bootstrap" disabled="true">
+                                                <ui-select-match placeholder=" {{'ASSET_INVENTORY_TICKET_STATUS' | translate}}..."><i class="{{$select.selected.Logo}}"></i>{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                                                    <i class="{{x.Logo}}"></i>{{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="viewActivityStatus()" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorStatus" class="label-color validation-message">
+                                            {{'ASSET_INVENTORY_VALIDATE_TICKET_STATUS' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--Ghi chú-->
+                                <div class="form-group">
+                                    <div class="col-md-4 nowrap">
+                                        <i class="fa fa-comment"></i>
+                                        <label class="control-label"> {{'ASSET_INVENTORY_TICKET_NOTE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-8 pl-0">
+                                        <textarea name="Note" rows="3" class="form-control" ng-model="model.Note" type="text" placeholder=" {{'ASSET_INVENTORY_TICKET_NOTE' | translate}}..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!--Địa điểm kiểm kê-->
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                        <label class="control-label require"> {{'ASSET_INVENTORY_TICKET_ADRESS' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-8 pl-0">
+                                        <input type="text" name="Adress" class="form-control" ng-model="model.Adress" placeholder=" {{'ASSET_INVENTORY_TICKET_ADRESS' | translate}}..." />
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-lg-12" style="margin-top: -5px;">
+                <uib-tabset active="active">
+                    <uib-tab class="" index="1" heading="{{'ASSET_INVENTORY_ASSET' | translate}}">
+                        <div disable="tests" ng-include="'../views/admin/assetInventory/InventoryAddTable.html'"></div>
+                    </uib-tab>
+                    <uib-tab class="" index="2" heading="{{'COM_FILE' | translate}}">
+                        <div disable="tests" ng-include="'../views/admin/assetInventory/file.html'"></div>
+                    </uib-tab>
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center pr20">
+                            <a ng-click="print()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-print"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3"> {{'In phiếu' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10">
+                            <a data-dismiss="modal" ng-click="refresh()" class="btn btn-icon-only btn-circle btn-outline red-custom" style="border-radius: 30px !important;background: #e7505a;">
+                                <span><i class="glyphicon glyphicon-remove"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_DELETE' | translate}}</p>
+                        </div>
+                        <div class="btn-group pull-right actions d-flex">
+                            <div class="text-center pr20">
+                                <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom" style="border-radius: 30px !important;background: #009432;">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
+
+

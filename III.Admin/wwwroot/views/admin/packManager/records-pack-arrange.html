@@ -1,0 +1,266 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+    .mostly-customized-scrollbar::-webkit-scrollbar {
+        width: 3px;
+        height: 5px;
+        background-color: #aaa;
+    }
+
+    /* Add a thumb */
+    .mostly-customized-scrollbar::-webkit-scrollbar-thumb {
+        background: #313131;
+        width: 10px;
+    }
+    #PackLevel::placeholder {
+        color: brown;
+        opacity: 1; /* Firefox */
+    }
+
+    #PackLevel:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: brown;
+    }
+
+    #PackLevel::-ms-input-placeholder { /* Microsoft Edge */
+        color: brown;
+    }
+    .tr-height {
+        height: 43px;
+    }
+</style>
+
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title " id="modal-title"> {{'Đóng gói và xếp hồ sơ' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <div class="form-body pt5">
+            <div class="row">
+                <div class="col-lg-6 pl-0 pull-left" style="width: 48%;">
+                    <form name="editform" class="form-horizontal" method="post" ng-validate="">
+                        <div class="row">
+                            <div class="col-md-9" ng-class="{ 'has-error': errorPackType}">
+                                <label class="control-label fw600">{{'Kiểu đóng gói hồ sơ' | translate}}</label>
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.PackType" theme="bootstrap" on-select="selectChange('PackType', $item)">
+                                        <ui-select-match placeholder="{{'Kiểu đóng gói hồ sơ' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstPackType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="reset()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorPackType" class="label-color validation-message">
+                                    {{'Kiểu đóng gói hồ sơ không được để trống' | translate}}
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label fw600">{{'Bậc' | translate}}</label>
+                                        <input class="form-control" id="PackLevel" name="PackLevel" ng-model="model.PackLevel"  placeholder="{{'Bậc' | translate}}..." ng-change="selectChange('PackLevel', '')" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6" ng-class="{ 'has-error': errorPackCode}">
+                                <label class="control-label require fw600">{{'Hồ sơ cần đóng gói' | translate}}</label>
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.PackCode" theme="bootstrap" on-select="selectChange('PackCode', $item)">
+                                        <ui-select-match placeholder="{{'Hồ sơ cần đóng gói' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstRecordPack | filter: $select.search">
+                                            <div style="padding-left: {{30 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorPackCode" class="label-color validation-message">
+                                    {{'Hồ sơ cần đóng gói không được bỏ trống' | translate}}
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label fw600">{{'Đóng gói trong' | translate}}</label>
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.PackParent" theme="bootstrap" ng-disabled="true">
+                                        <ui-select-match placeholder="{{'Đóng gói trong' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstRecordsPackAll | filter: $select.search">
+                                            {{x.Title}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pr-0">
+                                <div class="btn-group pt10 actions d-flex">
+                                    <div class="text-center pr10 pull-right" ng-click="addBellow()">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa fa-arrow-down"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'Thêm xuống' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-md-12 pl-0 pr-0 pt5">
+                        <div class="table-responsive mostly-customized-scrollbar" style="height: 400px; overflow-y: auto;">
+                            <table class="table table-bordered" id="tblListProduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'STT' | translate}}</th>
+                                        <th class="col-md-4 text-center fw600 text-underline">{{'Mã & tiêu đề hồ sơ' | translate}}</th>
+                                        <th class="col-md-4 text-center fw600 text-underline">{{'Gói cha' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline" style="width: 14%;">{{'Thao tác' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="tr-height" ng-repeat="x in lstRecordPackAdded">
+                                        <td class="text-center">{{$index + 1}}</td>
+                                        <td class="text-left"><span ng-show="x.PackCode != ''">{{x.PackName}} ({{x.PackCode}})</span></td>
+                                        <td class="text-left">{{x.PackParentName}}</td>
+                                        <td class="text-center">
+                                            <button ng-show="x.PackCode != ''" title="Xóa" ng-click="delete(x.PackCode)" style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pull-left" style="width: 4%; margin-top: 24%;">
+                    <div class="btn-group pt10 actions d-flex">
+                        <div class="text-center pr10 pull-right" ng-click="moveRight()">
+                            <a class="btn btn-icon-only btn-circle btn-outline pink-custom">
+                                <span><i class="fa fa-arrow-right"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 pr-0 pull-left" style="width: 48%;">
+                    <form name="editform" class="form-horizontal" method="post" ng-validate="">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label class="control-label fw600">{{'Vị trí xếp kho' | translate}} <span class="text-danger fw400" ng-show="model.ZoneCode != ''"> ({{zoneInfo.ZoneHierachy}})</span></label>
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.ZoneCode" theme="bootstrap" on-select="selectChange('ZoneCode', $item)">
+                                        <ui-select-match placeholder="{{'Vị trí xếp kho' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treeZone | filter: $select.search">
+                                            <div style="padding-left: {{30 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ZoneCode=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="btn-group pt20 actions d-flex pull-right">
+                                    <div class="text-center pr10 pull-right" ng-click="arrangePack()">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa fa-map-marker"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'Xếp vào' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.RecordsPack" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'Đóng gói' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstRecordsPackAll | filter: $select.search">
+                                            <div style="padding-left: {{30 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="btn-group actions d-flex pull-right">
+                                    <div class="text-center pr10 pull-right" ng-click="recordsPack()">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                            <span><i class="fa fa-cubes"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'Đóng gói' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div class="table-responsive mostly-customized-scrollbar" style="height: 400px; overflow-y: auto; margin-top: 3px;">
+                            <table class="table table-bordered" id="tblListProduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'ID' | translate}}</th>
+                                        <th class="col-md-3 text-center fw600 text-underline">{{'Mã & tiêu đề hồ sơ' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'Gói cha' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'Thao tác' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="tr-height" ng-repeat="x in lstRecordPackAddedRight">
+                                        <td class="text-center">{{$index + 1}}</td>
+                                        <td class="text-left"><span ng-show="x.PackCode != ''">{{x.PackName}} ({{x.PackCode}})</span></td>
+                                        <td class="text-left">{{x.PackParentName}}</td>
+                                        <td class="text-center">
+                                            <button ng-show="x.PackCode != ''" title="Xóa" ng-click="deleteRight(x.PackCode)" style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

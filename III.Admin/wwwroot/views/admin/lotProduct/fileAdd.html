@@ -1,0 +1,91 @@
+﻿<style type="text/css">
+
+    .header-treeview {
+        padding: 0 0;
+        border-bottom: 1px solid #ccc !important;
+        background: none !important;
+    }
+
+    .scrollbar-sm {
+        max-height: 300px;
+        overflow-x: auto;
+        overflow-y: visible;
+        height: 290px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">  {{'SUP_CURD_TAB_FILE_TITLE_ADD_FILE' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addformfile" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsFile">
+            <div class="form-body pt5 pb-0" style="margin-bottom:-15px !important">
+                <div class="row">
+                    <div class="col-lg-6 pl-0">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <i class="fa fa-pagelines"></i>
+                                <label class="control-label require">{{'SUP_CURD_TAB_FILE_CURD_LBL_TITLE' | translate}}</label>
+                                <input class="form-control" ng-model="model.FileName" name="FileName" placeholder="{{'SUP_CURD_TAB_FILE_CURD_TXT_TITLE' | translate}}..." />
+                            </div>
+                        </div>
+                        <style>
+                            .input-file input {
+                                border-top-left-radius: 4px !important;
+                                border-bottom-left-radius: 4px !important;
+                            }
+                        </style>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <i class="fa fa-file"></i>
+                                <label class="control-label require">{{'SUP_CURD_TAB_FILE_CURD_LBL_FILE' | translate}}</label>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control inputFile pl30" name="File" placeholder="{{'COM_BTN_SEARCH' | translate}}..."></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                        <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <i class="fa fa-code"></i>
+                                <label class="control-label">{{'SUP_CURD_TAB_FILE_CURD_LBL_NOTE' | translate}}</label>
+                                <textarea class="form-control" ng-model="model.Desc" rows="10" placeholder="{{'SUP_CURD_TAB_FILE_CURD_TXT_NOTE' | translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="require">{{'SUP_CURD_TAB_FILE_CURD_LBL_REPOSITORY' | translate}}</label>
+                        <div class="panel panel-default no-boxshadow border" style="margin-top: 2px;">
+                            <div class="panel-heading header-treeview">
+                                <div class="actions text-center">
+                                    <div class="input-icon">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" ng-model="model1.search" class="br-n form-control" placeholder="{{'SUP_CURD_TAB_FILE_CURD_TXT_SEARCH' | translate}}..." ng-keydown="($event.keyCode == 13) && searchRepository(model1.search)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body scrollbar-sm">
+                                <div id="treeDivv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer " style="margin-top:-15px !important">
+    <div class="text-center pr10 pull-right" ng-click="submit()">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <!--<p class="text-underline fs10 mb5 pt3">Thêm mới</p>-->
+    </div>
+</div>

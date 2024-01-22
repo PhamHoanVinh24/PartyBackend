@@ -1,0 +1,217 @@
+﻿<style>
+    /*.modal-header {
+        background: #f1f1f1;
+        color: black;
+    }*/
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #documentType .tags {
+        max-height: 73px;
+        height: 73px;
+    }
+
+    tags-input .tags {
+        max-height: 50px;
+        height: 50px;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .border-qrcode {
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        height: auto;
+    }
+
+        .border-qrcode .img-thumbnail {
+            border: none;
+        }
+
+    #box .table_body .file {
+        height: 170px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert"></i>
+    <span class="modal-title " id="modal-title">{{'EDMSWM_TITLE_ADD' | translate}}</span>
+</div>
+
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10 pb20">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_CODE' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_CODE' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_DOCUMENT_CODE' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_DOCUMENT_CODE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_TOTAL' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_TOTAL' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label>{{'EDMSWM_CURD_LBL_FROM_DATE' | translate}}</label>
+                                <div class='input-group date' id='datefrom'>
+                                    <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_FROM_DATE' | translate}}...' />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_FLOOR' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_FLOOR' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_BOX_NAME' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_BOX_NAME' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_SIZE' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_SIZE' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_COIL_NUMBER' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_COIL_NUMBER' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label>{{'EDMSWM_CURD_LBL_TIME_SAVE' | translate}}</label>
+                                <div class='input-group date' id='datefrom'>
+                                    <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_TIME_SAVE' | translate}}...' />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_LINE' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_LINE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_BOX_NUMBER' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_BOX_NUMBER' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_NUMBER_ORDER' | translate}}</label>
+                                <input class="form-control" placeholder='{{'EDMSWM_CURD_TXT_NUMBER_ORDER' | translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_ROOM' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_ROOM' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_WAREHOUSE' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_WAREHOUSE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_RACK' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_RACK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="require">{{'EDMSWM_CURD_LBL_STATUS' | translate}}</label>
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMSWM_CURD_TXT_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label>{{'EDMSWM_CURD_LBL_NOTE' | translate}}</label>
+                            <textarea placeholder="{{'EDMSWM_CURD_TXT_NOTE' | translate}}" rows="4" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt20">
+                        <div class="border-qrcode">
+                            <div class="text-center">
+                                <div class="img-thumbnail">
+                                    <img src="../../../images/default/qrCode.png" class="h-80" />
+                                    <label><span class="fa fa-qrcode"></span> {{'EDMSWM_CURD_LBL_QR_CODE' | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<button ng-click="submit()" class="btn btn-red mr10" href="javascript:;">
+        <i class="fas fa-save"></i> Lưu lại
+    </button>-->
+    <div class="btn-group pull-right actions d-flex">
+        <div class="text-center" style="margin-right:30px">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

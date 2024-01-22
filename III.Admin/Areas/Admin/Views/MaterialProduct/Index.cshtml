@@ -1,0 +1,45 @@
+﻿@using ESEIM.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = ViewData["CrumbMaterialProd"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+    bool hasPermissionMaterialProductsInsert = session.HasPermission(CommonUtil.Controller_MaterialProduct, CommonUtil.Action_Insert);
+    bool hasPermissionMaterialProductsUpdate = session.HasPermission(CommonUtil.Controller_MaterialProduct, CommonUtil.Action_Update);
+    bool hasPermissionMaterialProductDelete = session.HasPermission(CommonUtil.Controller_MaterialProduct, CommonUtil.Action_Delete);
+}
+@section plugin_script {
+    <script src="~/lib/assets/global/plugins/tinymce/tinymce.min.js"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/config.tinymce.js"></script>
+    <script src="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.js"></script>
+    <script src="~/lib/assets/global/plugins/ckeditor/ckeditor.js"></script>
+    <script src="~/js/admin/cardjob/popover.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angulerjs-scroll/angular-scroll.js"></script>
+}
+@section plugin_style{
+    <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+}
+<div id="contentMain" ng-app="App_ESEIM_MATERIAL_PROD" ng-controller="Ctrl_ESEIM_MATERIAL_PROD">
+    <div ng-controller="Ctrl_ESEIM_REPOSITORY"></div>
+    <div ng-view></div>
+</div>
+<script>
+    var PERMISSION_MATERIAL_PRODUCT = {
+        Insert: @(hasPermissionMaterialProductsInsert ? "true" : "false"),
+        Update: @(hasPermissionMaterialProductsUpdate ? "true" : "false"),
+        Delete: @(hasPermissionMaterialProductDelete ? "true" : "false"),
+    };
+</script>
+<script src="~/views/admin/materialProduct/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/edmsRepository/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/supplier/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/cardJob/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/project/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/customer/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/contract/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/contractPo/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/sendRequestWorkPrice/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/attributeManager/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/materialProductAttributeMain/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/filePlugin/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/workflowPlugin/controller.js" type="text/javascript"></script>

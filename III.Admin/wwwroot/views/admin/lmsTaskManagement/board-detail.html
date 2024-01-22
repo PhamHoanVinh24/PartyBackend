@@ -1,0 +1,479 @@
+﻿<style>
+    .width-sumary-col-date {
+        width: 21%;
+    }
+
+    .width-sumary-col-card {
+        width: 30%;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+    .tab .nav-tabs li div {
+        color: black;
+        background: white;
+        border-radius: 0;
+        margin-right: -1px;
+        padding: 5.5px 20px;
+        /*border-bottom: 1px solid #d3d3d3;*/
+        font-weight: 600;
+    }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    /*.tab .nav-tabs li div:hover {
+        background: #5c9fb9;
+    }
+
+        .tab .nav-tabs li div:hover:before {
+            border-left: 15px solid #5c9fb9;
+        }
+
+    .tab .nav-tabs li:last-child div:hover:before {
+        border-left: 15px solid #5c9fb9;
+    }*/
+
+    /*.tab .nav-tabs li.active div:after,
+    .tab .nav-tabs li div:after {
+        content: "";
+        border-left: 17px solid #5c9fb9;
+        border-top: 16px solid transparent;
+        border-bottom: 17px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li.active div:before {
+        border-left: 17px solid #5c9fb9;
+    }
+
+    .tab .nav-tabs li div:before {
+        border-bottom: 15px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 15px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }*/
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    /*
+    .tab .nav-tabs li:last-child.active div:after,
+    .tab .nav-tabs li:last-child div:after {
+        content: "";
+        border-left: 19px solid #5c9fb9;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li:last-child div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li:last-child div:before {
+        border-bottom: 17px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 16px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }
+
+    .tab .nav-tabs li:last-child.active div:before {
+        border-left: 17px solid #5c9fb9 !important;
+    }*/
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .table-custom {
+        border-top: none !important;
+        border-left: #e8e2e2 1px solid !important;
+        border-right: #e8e2e2 1px solid !important;
+        border-bottom: #e8e2e2 1px solid !important;
+    }
+</style>
+<div class="board-detail-search">
+    <div class="col-lg-10" ng-show="!SearchAdvMode" style="">
+        <div class="pull-left pr10 panel-log" ng-click="navLeft()" ng-show="!showNavLeft">
+            <button class="custom-btn-nav-left">
+                <i class="fa fa-chevron-up fs12 text-white"></i>
+            </button>
+        </div>
+        <div class="pr-0 pb-1" ng-class="{'col-md-6 pt-1': !isTabSumary, 'col-md-4' : isTabSumary }">
+            <input class="form-control bold br24" ng-model="searchObj.CardName" placeholder="{{'CJ_TXT_SEARCH_CARD_TITLE' | translate}}..." ng-keydown="($event.keyCode == 13) && search()" />
+        </div>
+        <div class="pr-0 " ng-class="{'pt-1 col-md-3': !isTabSumary, 'col-md-2' : isTabSumary }">
+            <div class="input-group br24 date" id="FromDate">
+                <input class="form-control bold" ng-model="searchObj.FromDate" placeholder="{{'CJ_TXT_SEARCH_FROM_DATE' | translate}}..." ng-change="search()" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="pr-0" ng-class="{'pt-1 col-md-3': !isTabSumary, 'col-md-2' : isTabSumary }">
+            <div class="input-group br24 date" id="ToDate">
+                <input class="form-control bold" ng-model="searchObj.ToDate" placeholder="{{'CJ_TXT_SEARCH_TO_DATE' | translate}}..." ng-change="search()" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2 pr-0">
+            <div class="input-group br24">
+                <ui-select tagging ng-model="searchObj.UserId" theme="bootstrap" on-select="selectUser($item)">
+                    <ui-select-match placeholder="{{'LMS_STUDENT_V' | translate}}" placeholder1="{{'LMS_CURD_BTN_MEMBER' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                    <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                        {{x.GivenName}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="searchObj.UserId=''" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2 pr-0">
+            <div class="input-group br24">
+                <ui-select tagging ng-model="searchObj.Status" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_STATUS' | translate}}..."><b>{{$select.selected.Value}}</b></ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in CardStatus | filter: $select.search">
+                        {{x.Value}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="searchObj.Status=''" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 pr-0 pl-0" ng-show="!SearchAdvMode" style="">
+        <div class="btn-group actions d-flex">
+            <div class="text-center pr-1" style="justify-content: space-between">
+                <a data-dismiss="modal" ng-click="search()" class="fs30">
+                    <span><i class="fas fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+            <div class="text-center pr-1">
+                <a ng-click="addCardBuffer()" class="fs30">
+                    <span><i class="fas fa-tasks-alt"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3"> {{'LMS_ASSIGN' | translate}}</p> <!--LMS_BTN_ASSIGN_WORK-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="board-detail-header">
+    <div class="col-md-12 p0">
+        <div class="col-md-8">
+            <div class="board" ng-if="show.board && boardCode != null">
+                <a class="black bold fs18">{{modelDetail.BoardName}}</a>
+                <span class="badge-customer badge-customer-success">{{modelDetail.Completed}}%</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="board-detail-body" style="height:{{ViewMode == 0 ? '90%':''}};">
+    <div class="tab ml15" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <div ng-click="searchInTab(5)" aria-controls="home" role="button" data-toggle="tab">{{'CJ_TAB_ALL' | translate}} ({{CountCard.CountAll}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(1)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_TAB_PENDING' | translate}} ({{CountCard.Start}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(2)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_TAB_CREATED' | translate}} ({{CountCard.Created}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(3)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_TAB_SUCCESS' | translate}} ({{CountCard.Success}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(7)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_MSG_TAB_CLOSE' | translate}} ({{CountCard.CloseStatus}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(4)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_TAB_CANCLED' | translate}} ({{CountCard.Cancle}})</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div ng-click="searchInTab(6)" aria-controls="messages" role="button" data-toggle="tab">{{'CJ_TAB_STATUS_TRASH' | translate}} ({{CountCard.Trash}})</div>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="ViewMode == 0 && !isCalendar && !isShowDetail" class="list-card h100">
+        <div class="h100" style="overflow: auto;width:100%;position:relative">
+            <ul ui-sortable="sortableOptions" ng-model="lists" id="BoardDetailMain">
+                <!--start card-->
+                <li class="card col-md-2 p0 list" id="{{list.ListCode}}" ng-repeat="list in lists">
+                    <div class="col-md-12 p5 task-board" style="{{list.Background}}">
+                        <div class="col-md-11 p0 card-header">
+                            <div class="col-xs-1 p0">
+                                <i class="fas fa-sun" style="color: {{list.Status=='0' ? '#d35400':list.Status=='1' ? '#f1c40f' :'#2ecc71'}};"></i>
+                            </div>
+                            <div class="col-xs-10 pl5 pr5">
+                                <div class="list-header-target" ng-mouseup="editingListTitle(list.ListID)" ng-show="!acticeDrag"></div>
+                                <input id="listName_{{list.ListID}}" data-currentvalue="{{list.ListName }}" class="category-title" value="{{list.ListName.length > 25 ? list.ListName.substr(0, 25) + '...' : list.ListName}}" ng-blur="updateListName(list.ListID)" />
+
+                            </div>
+                            <span class="percent-list white" style="font-family:serif">{{list.Completed}}%</span><br />
+                        </div>
+                        <div class="col-md-1 text-right p0">
+                            <div class="col-md-12 p0">
+                                <div class="col-md-1 pull-right dropdown">
+                                    <a class="white" data-toggle="dropdown">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-toggle scrollbar-sm mh-450 of-y-a mrn5">
+                                        <li class="dropdown-header text-center pt10 fs14">
+                                            <label class="gray">{{'CJ_CURD_LBL_CHANGE_STATUS' | translate}}</label>
+                                        </li>
+                                        <li ng-class="{true: 'active'}[list.Status == 1]"><a class="bold" ng-click="changeListStatus(list.ListID, 1)">{{'CJ_CURD_BTN_CHANGE_STATUS_INITILIZE' | translate}}</a></li>
+                                        <li ng-class="{true: 'active'}[list.Status == 2]"><a class="bold" ng-click="changeListStatus(list.ListID, 2)">{{'CJ_CURD_BTN_CHANGE_STATUS_ACTION' | translate}}</a></li>
+                                        <li ng-class="{true: 'active'}[list.Status == 0]"><a class="bold" ng-click="changeListStatus(list.ListID, 0)">{{'CJ_CURD_BTN_CHANGE_STATUS_LATE' | translate}}</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li class="dropdown-header text-center pt10 fs14">
+                                            <label class="gray">{{'CJ_CURD_LBL_SORT_LIST_BY_STATUS' | translate}}</label>
+                                        </li>
+                                        <li><a class="bold" ng-click="sortListByStatus(0)">{{'CJ_CURD_BTN_SORT_BY_LATE_STATUS' | translate}}</a></li>
+                                        <li><a class="bold" ng-click="sortListByStatus(1)">{{'CJ_CURD_BTN_SORT_BY_ACTION_STATUS' | translate}}</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a class="bold" ng-click="changeListHeaderBackground(list.ListID)">{{'CJ_CURD_BTN_CHANGE_HEADER_BACKGROUND' | translate}}</a></li>
+                                        <li><a class="bold" ng-click="changeListWeightNum(list.ListID,list.WeightNum)">{{'CJ_LBL_WEIGH_NUM' | translate}} <span class="text-danger">{{list.WeightNum}}%</span></a></li>
+                                        <li><a class="bold" ng-click="changeListBeginTime(list.ListID,list.BeginTime)">{{'CJ_LBL_START_TIME' | translate}}&nbsp;<span class="text-danger">{{list.BeginTime | date:'dd/MM/yyyy' }}</span></a></li>
+                                        <li><a class="bold" ng-click="changeDeadLine(list.ListID,list.Deadline)">{{'CJ_LBL_DEADLINE' | translate}}&nbsp;<span class="text-danger">{{list.Deadline | date:'dd/MM/yyyy' }}</span></a></li>
+                                        <li class="divider"></li>
+                                        <li><a class="bold" ng-click="deleteList(list.ListID)">{{'CJ_CURD_BTN_DELETE_LIST' | translate}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl10 pr-0 list-body" style="max-height: 450px;" scroll-to-end="scrollList">
+                        <ul class="tag-content pr10 " ui-sortable="sortableCard" ng-model="list.ListCard">
+                            <li class="col-md-12 p0 task-card" id="{{card.CardCode}}" style="min-height: 0px !important; max-height: 450px;" ng-repeat="card in list.ListCard">
+                                <div class="tag-item col-md-12 mt5" role="button">
+                                    <div class="row">
+                                        <b class="pull-left pl15">
+                                            <span>#{{card.CardCode}}</span><br />
+                                            <a class="text-danger fs8 cardDetailLine" ng-click="cardChangeDeadLine(card.CardCode,list.ListCode)"><u>H/C:{{card.Deadline | date:'dd/MM/yyyy'}}</u></a>
+                                        </b>
+                                        <div class="btn-group pull-right actions d-flex">
+                                            <div class="text-center pr5">
+                                                <a class="btn btn-icon-only btn-circle btn-outline green-custom w30 h-30 pt5" ng-click="cardMember(card.CardCode)">
+                                                    <span><i class="fa fa-users fs10"></i></span>
+                                                </a>
+                                                <p class="text-underline fs8 mb5">{{'CJ_BTN_GROUP' | translate}}</p>
+                                            </div>
+                                            <div class="text-center pr5">
+                                                <a class="btn btn-icon-only btn-circle btn-outline blue-custom w30 h-30 pt5" ng-click="cardGroupUser(card.CardCode)">
+                                                    <span><i class="fas fa-warehouse fs10"></i></span>
+                                                </a>
+                                                <p class="text-underline fs8 mb5">{{'CJ_BTN_DEPARTMENT' | translate}}</p>
+                                            </div>
+                                            <div class="text-center pr5">
+                                                <a class="btn btn-icon-only btn-circle btn-outline green-custom w30 h-30 pt5" ng-click="cardRelative(card.CardCode)">
+                                                    <span><i class="fas fa-link fs10"></i></span>
+                                                </a>
+                                                <p class="text-underline fs8 mb5">{{'CJ_BTN_RELATIVE'| translate}}</p>
+                                            </div>
+                                            <div class="text-center pr5">
+                                                <a class="btn btn-icon-only btn-circle btn-outline purple-custom   w30 h-30 pt5" ng-click="cardProgress(card.CardCode)">
+                                                    <span><i class="fas fa-percent fs10"></i></span>
+                                                </a>
+                                                <p class="text-underline fs8 mb5">{{'CJ_BTN_PROGRESS' | translate}}</p>
+                                            </div>
+                                            <div class="text-center pr20">
+                                                <a class="btn btn-icon-only btn-circle btn-outline red-custom w30 h-30 pt5" ng-click="cardDetail(card.CardCode)">
+                                                    <span><i class="fa fa-edit fs10"></i></span>
+                                                </a>
+                                                <p class="text-underline fs8 mb5">{{'CJ_BTN_UPDATE'| translate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" style="color: #000 !important;" ng-model="card.CardName" ng-blur="cardName(card.CardID,card.CardName)" ng-keydown="($event.keyCode == 13) && cardName(card.CardID,card.CardName)" placeholder="{{'CJ_CURD_TXT_CARD_NAME' | translate}}..."></textarea>
+                                        </div>
+                                    </div>
+                                    <style>
+                                        .ui-select-bootstrap-height .ui-select-toggle {
+                                            border-bottom-right-radius: 4px !important;
+                                            border-top-right-radius: 4px !important;
+                                            height: 31px;
+                                            padding-top: 5px !important;
+                                        }
+                                    </style>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="fw600 text-underline text-primary">{{'CJ_CURD_LBL_SEARCH_STATUS' | translate}}:</span>&nbsp;<a class="badge-customer badge-customer-success" ng-class="{'text-danger': card.Status==''}">{{card.Status=='' ? 'Đang chờ':card.Status }} ({{card.CountCheckListDone==undefined ?'0':card.CountCheckListDone}}/{{card.CountCheckList ==undefined ?'0':card.CountCheckList}})</a>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span class="fw600">{{'CJ_CURD_LBL_COST' | translate}}:</span>&nbsp;<b ng-class="{'text-danger':card.Cost==0,'text-success':card.Cost!=0}">{{card.Cost | number: 2}}</b>&nbsp;<b class="fs7 text-success">{{card.CurrencyValue}}</b>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <span class="fw600">{{'CJ_LBL_PROGRESS' | translate}}:&nbsp;<b class="text-success">{{card.Completed}}%</b></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-show="showTask">
+                                        <div class="col-md-6">
+                                            <label class="mb-0">{{'CJ_LBL_START_TIME' | translate}}</label>
+                                            <div class="input-group date startDate">
+                                                <input ng-model="card.BeginTime" class="form-control h-30 fs10" type="text" placeholder="{{'CJ_LBL_START_TIME' | translate}}..." ng-change="cardChangeBeginTime(card.CardCode,card.BeginTime)" />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar fs11"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="mb-0">{{'CJ_LBL_END_TIME' | translate}}</label>
+                                            <div class="input-group date endDate">
+                                                <input ng-model="card.EndTime" class="form-control h-30 fs10" type="text" placeholder="{{'CJ_LBL_END_TIME' | translate}}..." ng-change="cardChangeEndTime(card.CardCode,card.EndTime)" />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar fs11"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="row" ng-show="showTask">
+                                        <div class="col-md-6">
+                                            <label class="mb-0">{{'CJ_CURD_LBL_QUANTITATIVE' | translate}}</label>
+                                            <input ng-model="card.Quantitative" class="form-control h-30" placeholder="{{'CJ_CURD_LBL_QUANTITATIVE' | translate}}..." type="text" num-thousand='true' awnum num-int='21' ng-blur="cardQuantitative(card.CardCode,card.Quantitative)" ng-keydown="($event.keyCode == 13) && CardQuantitative(card.CardCode,card.Quantitative)" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="mb-0">{{'CJ_LBL_UNIT' | translate}}</label>
+                                            <ui-select class="h-30 ui-select-bootstrap-height" ng-model="card.Unit" theme="bootstrap" ng-change="cardUnit(card.CardCode,card.Unit)">
+                                                <ui-select-match placeholder="{{'CJ_LBL_UNIT' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                                    {{x.Value}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>-->
+                                    <div class="row">
+                                        <div class="col-md-12 pr30">
+                                            <div class="w35 pull-right">
+                                                <label class="custom-switch">
+                                                    <input type="checkbox" ng-init="$scope.showTask=false" ng-click="showTask ? showTask=false : showTask=true">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="col-md-12 pr10 p0 pt5 pb10" id="bottom_{{list.ListCode}}"> </div>
+                    </div>
+
+                    <div class="col-md-12 p5 new-tag">
+                        <div ng-if="showAddCard != list.ListCode">
+                            <div class="pl5">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom w30 h-30 pt5" ng-click="openAddCard(list.ListCode)">
+                                    <span><i class="fa fa-plus fs10"></i></span>
+                                </a>
+                                <p class="text-underline fs8 mb5">{{'COM_BTN_CARD_JOB' | translate}}</p>
+                            </div>
+                        </div>
+                        <div class="list-footer" ng-if="showAddCard == list.ListCode">
+                            <div class="btn-group actions d-flex mr25">
+                                <div class="text-center">
+                                    <a ng-click="addCard(list.ListCode)" class="btn btn-icon-only btn-circle w30 h-30 pt5 btn-outline green-custom">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs8 mb5">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                                <div class="pl20">
+                                    <a data-dismiss="modal" ng-click="closeAddCard(list.ListCode)" class="btn btn-icon-only btn-circle w30 h-30 pt5 btn-outline red-custom">
+                                        <span><i class="glyphicon glyphicon-remove"></i></span>
+                                    </a>
+                                    <p class="text-underline fs8 mb5">{{'COM_BTN_CANCEL' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!--end card-->
+                <!--add list-->
+                <li class="text-center d-inline-block float-xs-none align-top" ng-if="show.board">
+                    <div class="card list col-md-12 p3" ng-if="showAddList">
+                        <div class="col-md-12 p0">
+                            <input class="form-control pull-left" ng-model="addlist.ListName" type="text" placeholder="{{'CJ_CURD_TXT_LIST_NAME' | translate}}..." />
+                        </div>
+                        <div class="col-md-12 p0 text-left" style="margin-top: 3px">
+                            <button class="btn green bold" ng-click="addList()">
+                                {{'CJ_CURD_BTN_ADD_LIST' | translate}}
+                            </button>
+                            <button class="btn btn-icon-only" ng-click="openAddList()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <a class="new-category w200 ml10" ng-click="openAddList()" ng-if="!showAddList" style="padding: 10px">
+                        <i class="fa fa-plus"></i>
+                        {{'CJ_CURD_BTN_OPEN_ADD_LIST' | translate}}
+                    </a>
+                </li>
+            </ul>
+            <ul class="list-card-pagination" uib-pagination previous-text="{{'CJ_PAGINATION_BEFORE' | translate}}" next-text="{{'CJ_PAGINATION_AFTER' | translate}}" first-text="{{'CJ_PAGINATION_FIRST' | translate}}" last-text="{{'CJ_PAGINATION_LAST' | translate}}" boundary-links="true" total-items="listAndCard.Total" ng-model="listAndCard.CurrentPage" items-per-page="listAndCard.Length" ng-click="selectPageList()"></ul>
+        </div>
+    </div>
+    <div ng-if="ViewMode == 1 && !isCalendar && !isShowDetail" class="container-fluid pr-0" ng-include="'../views/admin/cardJob/grid-card.html'" style="padding-bottom: 50px !important;"></div>
+    <div ng-if="ViewMode == 1 && isCalendar && !isShowDetail" class="container-fluid pr-0 pt5" ng-include="'../views/admin/cardJob/schedule-card.html'" style="padding-bottom: 50px !important;"></div>
+    <div ng-if="ViewMode == 0 && isCalendar && !isShowDetail" class="container-fluid pr-0 pt5" ng-include="'../views/admin/cardJob/schedule-card.html'" style="padding-bottom: 50px !important;"></div>
+</div>

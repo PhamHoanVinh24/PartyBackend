@@ -1,0 +1,343 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'PRD_QC_DETAIL_TITLE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mb5">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_PROD_EQUIP' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.keywords" theme="bootstrap" on-select="addKeyword1($select.selected.GroupCode)">
+                                    <ui-select-match placeholder="{{'PRD_QC_LBL_PROD_EQUIP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in listProduct | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ListKeywords=[];" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group" ng-class="{ 'has-error': errorListKeywords}">
+                                <div class="input-group br24 d-block" style="margin-left: 15px;margin-top: 10px;padding-right: 25px;">
+                                    <ui-select class="list-keyword br12" ng-model="model.ListKeywords" multiple theme="bootstrap" style="height: 125px;overflow: auto;border-radius: 5px;" on-select="addkeyword($item)" on-remove="removekeyword($item)">
+                                        <ui-select-match placeholder="{{'PRD_QC_LBL_PROD_EQUIP' | translate}}...">{{$item}}</ui-select-match>
+                                        <ui-select-choices repeat="keyword in model.ListKeywords">
+                                            {{keyword}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorListKeywords" class="label-color validation-message">
+                                    {{'Sản phẩm & thiết bị không được để trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="col-lg-6 mb5" ng-class="{ 'has-error': errorReceivedDate}">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_RCV_DATE' | translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" autocomplete="off"
+                                    style="height: 33px;" ng-model="model.ReceivedDate" id="ReceivedDate"
+                                    placeholder="{{'PRD_QC_LBL_RCV_DATE' | translate}}..."
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ReceivedDate=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            
+                            <span ng-show="errorReceivedDate" class="label-color validation-message">
+                                {{'Ngày nhận hàng không được để trống' | translate}}
+                            </span>
+                        </div>
+
+                        <div class="col-lg-6 mb5" ng-class="{ 'has-error': errorCheckingDate}">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_CHK_DATE' | translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" autocomplete="off"
+                                    style="height: 33px;" ng-model="model.CheckingDate" id="CheckingDate"
+                                    placeholder="{{'PRD_QC_LBL_CHK_DATE' | translate}}..."
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.CheckingDate=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCheckingDate" class="label-color validation-message">
+                                {{'Ngày kiểm hàng không được để trống' | translate}}
+                            </span>
+                        </div>
+                        <div class="col-lg-12 mb5" ng-class="{ 'has-error': errorDeliveryNo}">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_DELI_NO' | translate}}</label>
+                            <div class="input-group br24">
+                                <input class="form-control br24" ng-model="model.DeliveryNo" type="text" placeholder="{{'PRD_QC_LBL_DELI_NO' | translate}}..." />
+                            </div>
+                            <span ng-show="errorDeliveryNo" class="label-color validation-message">
+                                {{'Mã đơn hàng không được để trống' | translate}}
+                            </span>
+                        </div>
+
+                        <div class="col-lg-12 mb5" ng-class="{ 'has-error': errorFacilitySpect}">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_STANDARD' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.FacilitySpect" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'PRD_QC_LBL_STANDARD' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStandard | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FacilitySpect='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorFacilitySpect" class="label-color validation-message">
+                                {{'Tiêu chuẩn không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-lg-3" ng-class="{ 'has-error': errorQuantity}">
+                        <div class="col-lg-12">
+                            <label class="fw600 text-bold require ">{{'PRD_QC_LBL_QUAN' | translate}}</label>
+                            <div class="input-group br24">
+                                <input class="form-control br24" ng-model="model.Quantity" type="text" placeholder="{{'PRD_QC_LBL_QUAN' | translate}}..." />
+                            </div>
+                            <span ng-show="errorQuantity" class="label-color validation-message">
+                                {{'Số lượng không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3" ng-class="{ 'has-error': errorUnit}">
+                        <div class="col-lg-12">
+                            <label class="fw600 text-bold require ">{{'PRD_QC_LBL_UNIT' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'PRD_QC_LBL_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Unit='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                {{'Đơn vị tính không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-6" ng-class="{ 'has-error': errorResults}">
+                        <div class="col-lg-12">
+                            <label class="fw600 text-bold require">{{'PRD_QC_LBL_RESULT' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Results" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'PRD_QC_LBL_RESULT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStandard | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Results='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorResults" class="label-color validation-message">
+                                {{'Kết quả không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class=" col-lg-12">
+                        <div class="col-lg-11 pr10">
+                            <label class="fw600 text-bold">{{'PRD_QC_LBL_CONTENT' | translate}}</label>
+                            <div class="input-group br24">
+                                <textarea class="form-control br24" ng-model="model.Content" placeholder="{{'PRD_QC_LBL_CONTENT' | translate}}..." rows="6" />
+                            </div>
+                        </div>
+                        <div class="col-md-1" style="height: 150px;">
+                            <div class="text-center pull-right pl-2 pr10" ng-click="submit()" style="float: right; margin-top: 100px; margin-right: -40px;">
+                                <input class="btn btn-success" type="button" value="{{'COM_BTN_SAVE' | translate}}" style="width: 100px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class=" col-lg-12">
+                        <div class="col-lg-12">
+                            <label class="fw600 text-bold">{{'PRD_QC_LBL_DATASET' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /*<div class="row">
+                    <div class="form-group">
+                        <div class="btn-group actions d-flex pull-right pt10">
+                            <div class="text-center pr10">
+                                <button ng-click="submit()" class="btn btn-primary">
+                                    <p class="text-bold fs14 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div> -->
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataEditAttr">
+</table>

@@ -1,0 +1,392 @@
+﻿<style>
+    .tab .nav-tabs li a {
+        background: #428bca;
+        color: #ffffff;
+        border: 1px solid transparent;
+        height: 34px;
+        font-size: 10px;
+    }
+
+    .tab .nav-tabs li.active .Error, .tab .nav-tabs li.active .New {
+        height: 34px !important;
+        font-size: 10px !important;
+    }
+
+    
+    .tab .nav-tabs li.active .New {
+        background: #FDB813;
+        color: #ffffff;
+        border: 1px solid transparent;
+    }
+
+    .tab .nav-tabs li.active .Error {
+        background: rgba(180, 0, 0, 1);
+        color: #fff;
+        border: 1px solid transparent;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'MLP_CURE_LBL_UPLOAD_PRODUCT' | translate}}</span>
+</div>
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5">
+        <div class="portlet-body" id="modal-body">
+            <div class="row mt10">
+                <div class="col-md-12 tab">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a class="New" data-toggle="tab" href="PayrollBulkRegistration/#tabNewRecord" ng-click="selectTab('new')">{{'COM_BTN_ADD' | translate}}</a></li>
+                        <li style="margin-left:2px"><a class="New" data-toggle="tab" href="PayrollBulkRegistration/#tabUpdateRecord" ng-click="selectTab('update')">{{'COM_BTN_EDIT' | translate}}</a></li>
+                        <!--<li style="margin-left:2px"><a class="Error" data-toggle="tab" href="PayrollBulkRegistration/#tabErrorRecord" ng-click="selectTab('error')">BẢN GHI LỖI</a></li>-->
+                        <li style="margin-top: -2px;margin-left: 20px;">
+                            <!--{{progress}}-->
+                            <a class="bold" style="color: black;background: #eef1f5;"></a>
+                        </li>
+                        <li style="float: right">
+
+                            <div class="btn-group pull-right actions">
+                                <a style="margin-left: 3px" class="btn btn-circle btn-icon-only btn-default blue" ng-if="currentTab=='new'||currentTab=='update'" ng-click="saveSelectedItem()" title="{{'MLP_MSG_UPLOAD_FILE_SUCCES' | translate}}"><i class="glyphicon  glyphicon-ok"></i></a>
+                                <a style="margin-left: 3px" class="btn btn-circle btn-icon-only btn-default blue" ng-if="currentTab=='new'||currentTab=='update'" ng-click="saveAllItem()" title="{{'MLP_MSG_UPLOAD_FILE_ALL' | translate}}">
+                                    <span class="fa-stack fa-md text-success pt5">
+                                        <i class="fa fa-check fa-stack-1x" style="margin-left:4px;color:white"></i>
+                                        <i class="fa fa-check fa-inverse fa-stack-1x" style="margin-left:-3px;"></i>
+                                        <i class="fa fa-check  fa-stack-1x" style="margin-left:-4px;color:white"></i>
+                                    </span>
+                                </a>
+                                <a style="margin-left: 3px;background:rgba(180, 0, 0, 1);color:white" class="btn btn-circle btn-icon-only btn-default" ng-if="currentTab=='error'" ng-click="exportError()" title="{{'MLP_MSG_ERR_DOWLOAD' | translate}}"><i class="glyphicon glyphicon-download-alt"></i></a>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div id="tabNewRecord" class="tab-pane fade in active h-500 overflow-y-scroll">
+                    <div class="">
+                        <table class="table table-striped table-bordered table-hover table-user">
+                            <thead>
+                                <tr style="background:#428bca;color: white;">
+                                    <th class="text-center" style="width: 50px;">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" ng-click="toggleAll()" ng-model="checkAllNew" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">{{'MLP_LIST_COL_CODE_ATTRIBUTE' | translate}}</th>
+                                    <th class="text-center">{{'MLP_LIST_COL_PAGE' | translate}}</th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CATEGORY' | translate}}
+                                    </th>
+                                    <th class="text-center">{{'MLP_LIST_COL_PRICEM2_CATALOGUE' | translate}}</th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_PRICE_CATALOGUE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_UNIT' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WIDTH' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_DEEP' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WEIGTH' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_VERTICALSTROKE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_HORIZONTALSTROKE' | translate}}
+                                    </th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_NOTEE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_BACTERIA' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CHEMISTRY' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_ANTI_STATIC' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WAS' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_OUTSIDE' | translate}}
+                                    </th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CLEAN' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_MUSHROOM' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_SHOCK' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_MOVING' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_FIRE' | translate}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody ng-if="listNew.length!=0">
+                                <tr ng-repeat="item in listNew">
+                                    <td class="text-center" style="width: 50px;">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" ng-model="item.Checked" ng-click="toggleOne(item.Id)" />
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">{{ item.AttributeCode }}</td>
+                                    <td class="text-center">{{ item.Page }}</td>
+                                    <td class="text-center">{{ item.Category }}</td>
+
+                                    <td class="text-center">{{ item.PricePerM2 }}</td>
+                                    <td class="text-center">{{ item.PricePerM2 }}</td>
+                                    <td class="text-center">{{ item.Unit }}</td>
+
+                                    <td class="text-center">{{ item.Width }} </td>
+                                    <td class="text-center">{{ item.Deep }} </td>
+                                    <td class="text-center">{{ item.Weight }} </td>
+
+                                    <td class="text-center">{{ item.VerticalStroke }}</td>
+                                    <td class="text-center">{{ item.HorizontalStroke }}</td>
+                                    <td class="text-center">{{ item.Note }}</td>
+
+                                    <td class="text-center">{{ item.AntiBacteria }}</td>
+                                    <td class="text-center">{{ item.ChemicalResistance }}</td>
+                                    <td class="text-center">{{ item.Antistatic }}</td>
+                                    <td class="text-center">{{ item.Wax }}</td>
+                                    <td class="text-center">{{ item.OutSide }}</td>
+                                    <td class="text-center">{{ item.AntiFouling }}</td>
+                                    <td class="text-center">{{ item.AntiMold }}</td>
+                                    <td class="text-center">{{ item.AntiShock }}</td>
+                                    <td class="text-center">{{ item.ObjectMoving }}</td>
+                                    <td class="text-center">{{ item.FireSpread }}</td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tabUpdateRecord" class="tab-pane fade  h-500 overflow-y-scroll">
+                    <div>
+                        <table class="table table-striped table-bordered table-hover table-user">
+                            <thead>
+                                <tr style="background:#428bca;color: white;">
+                                    <th class="text-center" style="width: 50px;">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" ng-click="toggleAll()" ng-model="checkAllUpdate" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">{{'MLP_LIST_COL_CODE_ATTRIBUTE' | translate}}</th>
+                                    <th class="text-center">{{'MLP_LIST_COL_PAGE' | translate}}</th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CATEGORY' | translate}}
+                                    </th>
+                                    <th class="text-center">{{'MLP_LIST_COL_PRICEM2_CATALOGUE' | translate}}</th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_PRICE_CATALOGUE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_UNIT' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WIDTH' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_DEEP' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WEIGTH' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_VERTICALSTROKE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_HORIZONTALSTROKE' | translate}}
+                                    </th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_NOTEE' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_BACTERIA' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CHEMISTRY' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_ANTI_STATIC' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_WAS' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_OUTSIDE' | translate}}
+                                    </th>
+
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_CLEAN' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_MUSHROOM' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_SHOCK' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_MOVING' | translate}}
+                                    </th>
+                                    <th class="text-center">
+                                        {{'MLP_LIST_COL_FIRE' | translate}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in listUpdate">
+                                    <td class="text-center" style="width: 50px;">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" ng-model="item.Checked" ng-click="toggleOne(item.Id)" />
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">{{ item.AttributeCode }}</td>
+                                    <td class="text-center">{{ item.Page }}</td>
+                                    <td class="text-center">{{ item.Category }}</td>
+
+                                    <td class="text-center">{{ item.PricePerM2 }}</td>
+                                    <td class="text-center">{{ item.PricePerM2 }}</td>
+                                    <td class="text-center">{{ item.Unit }}</td>
+
+                                    <td class="text-center">{{ item.Width }} </td>
+                                    <td class="text-center">{{ item.Deep }} </td>
+                                    <td class="text-center">{{ item.Weight }} </td>
+
+                                    <td class="text-center">{{ item.VerticalStroke }}</td>
+                                    <td class="text-center">{{ item.HorizontalStroke }}</td>
+                                    <td class="text-center">{{ item.Note }}</td>
+
+                                    <td class="text-center">{{ item.AntiBacteria }}</td>
+                                    <td class="text-center">{{ item.ChemicalResistance }}</td>
+                                    <td class="text-center">{{ item.Antistatic }}</td>
+                                    <td class="text-center">{{ item.Wax }}</td>
+                                    <td class="text-center">{{ item.OutSide }}</td>
+                                    <td class="text-center">{{ item.AntiFouling }}</td>
+                                    <td class="text-center">{{ item.AntiMold }}</td>
+                                    <td class="text-center">{{ item.AntiShock }}</td>
+                                    <td class="text-center">{{ item.ObjectMoving }}</td>
+                                    <td class="text-center">{{ item.FireSpread }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<div id="tabErrorRecord" class="tab-pane fade  h-500 overflow-y-scroll">
+        <div class="">
+            <table class="table table-striped table-bordered table-hover table-user">
+                <thead>
+                    <tr style="background:#428bca;color: white;">
+                        <th class="text-center">Mã</th>
+                        <th class="text-center">Trang</th>
+                        <th class="text-center">
+                            Category
+                        </th>
+                        <th class="text-center">
+                            Chiều rộng (cm)
+                        </th>
+                        <th class="text-center">
+                            Chiều dài/Chiều dài mỗi cuộn
+                        </th>
+                        <th class="text-center">
+                            Trọng lượng/m(kg)
+                        </th>
+                        <th class="text-center">
+                            Vân dọc (cm)
+                        </th>
+                        <th class="text-center">
+                            Vân ngang (cm)
+                        </th>
+                        <th class="text-center">
+                            Ghi chú
+                        </th>
+                        <th class="text-center">
+                            E-Sekou (Giấy có độ dầy cao hơn thông thường)
+                        </th>
+                        <th class="text-center">
+                            Tiếp tục sản xuất tới năm 2021
+                        </th>
+                        <th class="text-center">
+                            Chống nấm mốc
+                        </th>
+                        <th class="text-center">
+                            Chống bám bẩn - dễ lau chùi
+                        </th>
+                        <th class="text-center">
+                            Chống vi khuẩn
+                        </th>
+                        <th class="text-center">
+                            Khử mùi
+                        </th>
+                        <th class="text-center">
+                            Kiểm soát độ ẩm
+                        </th>
+                        <th class="text-center">
+                            Bề mặt giấy cứng
+                        </th>
+                        <th class="text-center">
+                            Chống cháy lan
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in listError">
+                        <td class="text-center" style="width: 50px;">
+                            <label class="mt-checkbox mt-checkbox-outline">
+                                <input type="checkbox" ng-model="item.Checked" ng-click="toggleOne(item.Id)" />
+                                <span></span>
+                            </label>
+                        </td>
+                        <td class="text-center">{{ item.AttributeCode }}</td>
+                        <td class="text-center">{{ item.Page }}</td>
+                        <td class="text-center">{{ item.Category }}</td>
+                        <td class="text-center">{{ item.Width }} </td>
+                        <td class="text-center">{{ item.Length }}</td>
+
+                        <td class="text-center">{{ item.Weight }}</td>
+                        <td class="text-center">{{ item.VerticalStroke }}</td>
+                        <td class="text-center">{{ item.HorizontalStroke }}</td>
+                        <td class="text-center">{{ item.Note }} </td>
+                        <td class="text-center">{{ item.ESekou }}</td>
+
+                        <td class="text-center">{{ item.Sx2021 }}</td>
+                        <td class="text-center">{{ item.AntiMold }}</td>
+                        <td class="text-center">{{ item.AntiFouling }}</td>
+                        <td class="text-center">{{ item.AntiBacteria }} </td>
+                        <td class="text-center">{{ item.Deodorant }}</td>
+
+                        <td class="text-center">{{ item.HumidityControl }}</td>
+                        <td class="text-center">{{ item.HardPaperSurface }}</td>
+                        <td class="text-center">{{ item.FireSpread }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>-->
+            </div>
+    </div>
+</div>
+</div>

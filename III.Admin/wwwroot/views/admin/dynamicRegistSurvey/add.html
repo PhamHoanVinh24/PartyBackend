@@ -1,0 +1,208 @@
+﻿<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title"> {{'DNM_NEW_REGIST' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body" id="modal-body">
+    <div class="form-body pt-0 pb-0">
+        <div class="row mt-action-5">
+            <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+                <div class="col-md-12 pt-0 pl-0 pr-0">
+                    <div class="table-toolbar table_body">
+                        <div class="col-md-12">
+                            <div class="col-md-3 pl-0">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_SURVEY_CODE'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" name="SurveyCode" class="form-control br24" ng-model="model.SurveyCode" placeholder="{{'DNM_SURVEY_CODE'|translate}}..."/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9 pl-0 pr-0">
+                                <div class="form-group ">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_TITLE'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="model.Title" name="Title" placeholder="{{'DNM_TITLE'|translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-0">
+                            <div class="col-md-4">
+                                <div class="form-group" ng-class=" {'has-error': errorType}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_TYPE_TICKET'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changeData('Type')">
+                                                <ui-select-match placeholder="{{'DNM_TYPE_TICKET'| translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listTypeDynamic | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Type" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorType" class="label-color validation-message">
+                                            {{'DNM_VALIDATE_TYPE'| translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-group" ng-class=" {'has-error': errorGroupName}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_GROUP_TICKET'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24-nobtn">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.GroupName" theme="bootstrap" ng-change="changeData('GroupName')">
+                                                <ui-select-match placeholder="Bộ dữ liệu:..."><b class="bold fs14">{{$select.selected.Name}}</b></ui-select-match>
+                                                <ui-select-choices repeat="x.Name as x in lstAttrGroup | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <span ng-show="errorGroupName" class="label-color validation-message">
+                                            {{'DNM_VALIDATE_GROUP'|translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" ng-class=" {'has-error': errorRepeat}">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_REPEAT'|translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="model.Repeat" theme="bootstrap" ng-change="changeData('Repeat')">
+                                                <ui-select-match placeholder="{{'DNM_REPEAT'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listRepeatDynamic | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Repeat=''" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorRepeat" class="label-color validation-message">
+                                            {{'DNM_VALIDATE_REPEAT'|translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <div class="col-md-7 pr-0">
+                                <div class="col-md-5 pl-0">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                                            <label class="control-label bold">{{'DNM_PRIOR'|translate}}</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="text" name="Prioritized" class="form-control br24" ng-model="model.Prioritized" placeholder="{{'DNM_PRIOR'|translate}}..."/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 pr-0">
+                                    <div class="form-group" ng-class=" {'has-error': errorStatus}">
+                                        <div class="col-md-12">
+                                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                                            <label class="control-label bold">{{'DNM_STATUS'| translate}}</label>
+                                        </div>
+                                        <div class="col-md-12 pr-0">
+                                            <div class="input-group br24">
+                                                <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('')">
+                                                    <ui-select-match placeholder="{{'DNM_STATUS'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in listStatusDynamic | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pr-0">
+                                    <div class="form-group">
+                                        <div class="col-md-12 pl-0">
+                                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                            <label class="control-label custom-title-code-bold">{{'DNM_DESCRIP' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-12 pl-0 pr-0">
+                                            <textarea id="Content" class="form-control" placeholder="{{'DNM_DESCRIP' | translate}}.." ng-model="model.Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="col-md-12">
+                                    <i class="fa fa-th-list" aria-hidden="true"></i>
+                                    <label class="control-label bold">{{'Biểu tượng'|translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group input-file br24">
+                                        <i class="fa fa-upload"></i>
+                                        <input class="form-control border-left-4radius inputImageCover pl30"
+                                            style="pointer-events:none" name="ImageCover" placeholder="Biểu tượng..."
+                                            placeholder1="Tệp tin..." ng-model="ImageCover">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default btn-choose input-group-addon"
+                                                onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                            <input class="form-control input-file-image" custom-on-change-lms="loadImageCover"
+                                                onchange="$('.inputImageCover').val($(this).val().split('\').pop());"
+                                                style="display: none;" type="file">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 p0 mt20">
+                                    <div class="thumbnail input-unstyled" onclick="$('.input-file-image').click();">
+                                        <img onerror="this.src='../../../images/default/uploadimg.png'"
+                                            ng-src="{{model.ImageCover ? model.ImageCover : '../../../images/default/uploadimg.png'}}" id="imageId" class="lecture-cover-upload h-250 w250"
+                                            role="button">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-md-2 txt pull-right pt23">
+                            <div class="btn-group actions d-flex pull-right pr15">
+                                <div class="text-center pl10 margin-right-10 next" ng-click="addDynamic()">
+                                    <a class1="btn btn-icon-only btn-outline btnn" name="next">
+                                        <i class="fa-solid fa-plus fs30"></i>
+                                    </a>
+                                    <p class="text-underline btn-name mb5 pt3 ng-binding" style="white-space: nowrap;">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿<div class="modal-header no-color">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-users" style="padding-top: 7px;color:black"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_CURD_TAB_OBJECT_RELATIVE_TITLE_OBJ_RELATIVE' | translate}}</span>
+</div>
+<div class="modal-body p0 mt5" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="col-md-12">
+                <div class="col-md-12 p0">
+                    <div class="col-md-3 pl-0">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.ObjTypeCode" on-select="objTypeChange(setting.ObjTypeCode)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_OBJ_DEPENDENCY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in objTypeJC | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.ObjCode" on-select="objCodeChange(setting.ObjCode)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_OBJ_CODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in listObjWithType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.Relative" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_RELATIVE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in relative | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-2 pr-0" style="width: 12% !important">
+                        <div class="input-group">
+                            <input ng-model="setting.Weight" class="form-control" type="number" placeholder="{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}..." ng-keydown="($event.keyCode == 13) && changeWeightNum(model.WeightNum)" ng-blur="changeWeightNum(model.WeightNum)" />
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="width: 12% !important">
+                        <button class="btn btn-blue" ng-click="addDependency()">{{'COM_BTN_ADD' | translate}}</button>
+                    </div>
+                </div>
+                <div class="col-md-12 portlet light bordered mt5">
+                    <div class="portlet-body">
+                        <table id="obj-data-table" style="width: 100%" class="display"></table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="pull-left pt-1" ng-click="useDefaultSetting()" {{'COM_BTN_USE_DEFAULT_SETTING' | translate}}></a>
+    <button ng-click="submit()" class="btn red mr15 no-boxshadow" href="javascript:;" style="font-weight:bold;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>
+</div>

@@ -1,0 +1,202 @@
+﻿<style>
+    .option-input-3:checked {
+        content: "";
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_ON.png) no-repeat center;
+        display: inline-block;
+        background-position-x: 0px !important;
+        /* display: block; */
+        background-size: contain;
+    }
+    .option-input-3 {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        position: relative;
+        top: 5.333px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 19px;
+        width: 35px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+        outline: none;
+        position: relative;
+        z-index: 1;
+        text-decoration: none;
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_OFF.png) no-repeat;
+        background-size: contain;
+        margin-right: 7px;
+        border: none;
+    }
+    .table-payment {
+        /*color: #9c9c9c;
+        font-size: 12px;*/
+        border-bottom: 1px solid #d9d9d9;
+        padding-bottom: 5px;
+    }
+    .table-payment-list {
+        color: #9c9c9c;
+        padding: 15px 0;
+        border-bottom: 1px solid #d9d9d9;
+        height: 50px;
+    }
+    .sum-price {
+        height: 50px;
+        background: #f4f7f7;
+        padding-top: 15px;
+    }
+    .btn-dark-blue {
+        background: #004258;
+        color: #fff;
+        border: none;
+        left: 0;
+        right: 0;
+        color: #fff;
+        border: none;
+        height: 28px;
+        box-shadow: none !important;
+        padding: 6px 0 !important;
+        text-decoration: none;
+        font-size: 15px;
+        width: 100%;
+        text-align: center;
+        line-height: 14px;
+        outline: none;
+    }
+</style>
+<div id="purchase-points" class="tab-pane fade in active">
+    <!--<div class="student-center" style="margin-left: 0">
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-6">
+                <p class="mt-bottom-12 student-center-title">{{'ILP_SIC'| translate}}</p>
+                <div class="new-request-list">{{'ILP_PU_POINT'| translate}}</div>
+            </div>
+        </div>
+    </div>-->
+    <div class="purchase-points">
+        <div class="number-point col-md-6">
+            <p class="mt-top-14 fs18">{{'Nhập số coin'| translate}}</p>
+            <div class="row">
+                <div class="col-sm-6 col-md-6- col-xs-6">
+                    <div class="find-general-border">
+                        <span class="find-label">{{'Số coin'| translate}}</span>
+                        <div class="form-group">
+                            <input id="point-input" ng-model="model.Points" class="form-control br24" type="text" name="point-input" value="" autocomplete="off"
+                                   onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : (event.charCode >= 48 && event.charCode <= 57)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6- col-xs-6 ">
+                    <div class="find-general-border" style1="background: #f4f7f7;">
+                        <span class="find-label">{{'Giá thành'| translate}}</span>
+                        <div class="form-group">
+                            <input id="total-amount" ng-model="model.TotalAmount" class="form-control br24" type="text" name="point-input" readonly="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6- col-xs-6 pt30 mb20">
+                    <button id="confirm-point" style="background: #009dcb;" class="no-border br12 fluid-width h-30 text-white fs15 fw600 btn-dark-blue" type="button" ng-click="confirm()">{{'Xác nhận'| translate}}</button>
+                </div>
+                <div class="col-sm-6 col-md-6- col-xs-6 pt30 mb20">
+                    <button id="confirm-point" class="no-border br12 fluid-width h-30 text-white fs15 fw600 btn-dark-blue" style="background: #CECECE;" ng-click="reset()">{{'Làm lại'| translate}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-point col-md-6" style="padding-left: 33px;">
+            <p class="mt-top-14 mt-bottom-5 fs18">{{'Thanh toán'| translate}}</p>
+            <div class="row" style="padding-left:8px;">
+                <div class="col-sm-12 mt-bottom-5 table-payment">
+                    <div class="col-sm-3">
+                        <span>{{'Sản phẩm'| translate}}</span>
+                    </div>
+                    <div class="col-sm-9">
+                        <span>{{'Giá'| translate}}</span>
+                    </div>
+                </div>
+                <div id="list-payment" class="col-sm-12  table-payment-list" ng-repeat="x in cartList track by $index">
+                    <div class="col-sm-3">
+                        <span id="type-payment">{{x.Type}}</span>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="col-sm-10" id="price-payment">${{x.Price.toFixed(2)}}</div>
+                            <div class="col-sm-2 text-center" ng-click="remove($index)">
+                                <span id="remove-payment">
+                                    <!--{{'Xóa'| translate}}-->
+                                    <a type="button">
+                                        <i style="color: red; margin-top: 3px; float: right;" class="fas fa-trash-alt fs20 color-red">
+                                        </i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 sum-price">
+                    <span id="sum-price" class="sum-prices pull-right">{{TotalAmount.toFixed(2)}}</span>
+                    <span class="sum-prices pull-right">&nbsp;$</span>
+                    <span class="pull-right">{{'Số lượng'| translate}}&nbsp;&nbsp;</span>
+                </div>
+            </div>
+        </div>
+        <div class="payment-method mt-bottom-14 col-md-12" style="padding-left: 33px;">
+            <p class="mt-top-14  title-payment">{{'Phương thức thành toán'| translate}}</p>
+            <div>
+                <div class="mt-top-10 mt-bottom-8">
+                    <input type="checkbox" name="payment_paypal" id="payment_paypal" class="radio_buttons option-input-3 radio" ng-model="payWithPayPal" ng-disabled="!isCartListValid">
+                    <span>&nbsp;&nbsp;{{'Thanh toán với'| translate}} </span>
+                </div>
+                <div id="paypal-box" class="row mt-top-10" style="display: block;" ng-show="payWithPayPal" ng-class="{ 'div-disabled' : !isCartListValid}">
+                    <div class="col-md-12 mb10">
+                        <div class="" style="margin-left: 5px;">
+                            <img ng-src="/images/default/VNPay.png" ng-click="getVNPayInPut()" />
+                        </div>
+                        <div class="" style="margin-left: 5px;">
+                            <img ng-src="/images/default/Momo1.png" ng-click="getMomoPay()" />
+                        </div>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <paypal-buttons props="payPalOpts"></paypal-buttons>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <p style="font-size: 13px; color: #d29500;">
+                            <strong>{{'Ghi chú'| translate}}: </strong>
+                            {{"Paypal might take sometimes to process your payment. If you don't see the item you paid in Subscription history, please log out and log in again after a few minutes"| translate}}
+                        </p>
+                    </div>
+                    <div id="paypal-button-container"></div>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="hidden">
+                        <input type="hidden" name="cmd" value="_xclick">
+                        <input type="hidden" name="business" value="payment@innovative-knowledge.com">
+                        <input type="hidden" name="item_name" value="Subscription">
+                        <input id="paypal-price" type="hidden" name="amount" value="">
+                        <input id="item_point" type="hidden" name="item_point" value="">
+                        <input id="item-code" type="hidden password" name="item_code" value="">
+                        <input type="hidden" name="custom" value="0">
+                        <input id="return-paypal" type="hidden" name="return" value="">
+                        <input type="image" id="paypal-btn" src="/images/btn_buynowCC_LG.gif" border="0" name="submit">
+                        <img alt="" border="0" src="/images/pixel.gif" width="1" height="1">
+                    </form>
+                </div>
+                <div style="height: 50px; border-bottom:  1px solid #d9d9d9; border-top:  1px solid #d9d9d9; padding-top: 7px">
+                    <input type="checkbox" name="payment_paypal" class="radio_buttons option-input-3 radio" disabled="">
+                    <span>&nbsp;&nbsp;{{'Sử dụng thẻ tín dụng có sẵn'| translate}}</span>
+                </div>
+                <div class="mt-bottom-14">
+                    <input type="checkbox" name="payment_paypal" class="radio_buttons option-input-3 radio" disabled="">
+                    <span>&nbsp;&nbsp;{{'Sử dụng thẻ tín dụng mới'| translate}}</span>
+                </div>
+                <!--<button id="purchase-now" style="width: 100%; margin-top: 25px; height: 38px;" class="fw600 border-btn br12 btn-dark-blue" type="button" ng-click="submit()"
+                        ng-class="[{ 'button-disabled' : !orderCaptured}, { 'button-enabled' : orderCaptured}]" ng-disabled="!orderCaptured">
+                    {{'Thanh toán ngay'| translate}}
+                </button>-->
+            </div>
+        </div>
+    </div>
+</div>

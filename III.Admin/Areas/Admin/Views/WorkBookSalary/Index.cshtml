@@ -1,0 +1,55 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+@{
+    ViewData["Title"] = ViewData["WBSalary"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+<div id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+    <div ng-view></div>
+</div>
+<script src="~/views/admin/workBookSalary/controller.js" type="text/javascript"></script>
+<style>
+    .toast-icons.e-success::before {
+        content: "\e701";
+    }
+
+    .toast-icons.e-error::before {
+        content: "\e700";
+    }
+
+    .e-tab .e-content {
+        background: inherit;
+        height: 45px !important;
+    }
+</style>
+<script>
+    var toasts = [
+        { title: 'Success!', content: 'Tệp tin đã lưu thành công', cssClass: 'e-toast-success', icon: 'e-success toast-icons' },
+        { title: 'Error!', content: 'Tệp tin lưu thất bại.', cssClass: 'e-toast-danger', icon: 'e-error toast-icons' },
+    ];
+    function save() {
+        var spreadsheetObj = ej.base.getComponent(document.getElementById('spreadsheet'), 'spreadsheet');
+        var toastObj = document.getElementById('element').ej2_instances[0];
+        toastObj.target = document.body;
+        toastObj.show(toasts[0]);
+        setTimeout(function () {
+            spreadsheetObj.save();
+        }, 1000);
+    }
+
+    var addressCell = '';
+    function select(args) {
+        if (args.range != undefined) {
+            addressCell = args.range;
+        }
+    }
+
+    $('html').keyup(function (e) {
+        if (e.keyCode == 46) {
+            var addressName = "Bảng lương!" + addressCell.split(':')[0];
+            var obj = { "eventArgs": { "element": {}, "value": "0", "address": addressName, "originalEvent": { "isTrusted": true, "name": "mouseDown" } }, "action": "cellSave", "name": "actionComplete" }
+            var spreadsheetObj = ej.base.getComponent(document.getElementById('spreadsheet'), 'spreadsheet');
+            spreadsheetObj.updateAction(JSON.stringify(obj));
+        }
+    });
+</script>

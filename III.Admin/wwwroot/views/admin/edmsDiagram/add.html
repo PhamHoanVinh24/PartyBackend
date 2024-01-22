@@ -1,0 +1,125 @@
+﻿<style>
+    .modal-header {
+        background: #f1f1f1;
+        color: black;
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #documentType .tags {
+        max-height: 73px ;
+        height: 73px ;
+    }
+    tags-input .tags {
+        max-height: 50px ;
+        height: 50px ;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+    .border-qrcode{
+        border-radius:4px;
+        border:1px solid #ddd;
+        height:235px;
+    }
+    .border-qrcode .img-thumbnail{
+        border:none;
+    }
+    #box .table_body .file {
+        height: 170px;
+    }
+</style>
+<div class="modal-header pb10">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert"></i>
+    <span class="modal-title " id="modal-title">{{'EDMS_DIAGRAM_TITEL_ADD'| translate}}</span>
+</div>
+
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row pb20">
+                    <div class="col-md-9">
+                        <div class="col-md-6 pl-0">
+                            <div class="form-group">
+                                <input class="form-control" placeholder='{{'EDMS_DIAGRAM_LBL_DOCUMENT_CODE'| translate}}...' />
+                            </div>
+                            <div class="form-group">
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMS_DIAGRAM_TXT_DOCUMENT_CODE1'| translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <tags-input add-on-enter="true"  id="documentType" use-strings="true" min-length="0" placeholder="{{'EDMS_DIAGRAM_LBL_TAGS'| translate}}" ng-model="model.Tags" on-tag-added="onTagAdded($tag)"></tags-input>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pr-0">
+                            <div class="form-group">
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMS_DIAGRAM_TXT_DOCUMENT_CODE'| translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder='{{'EDMS_DIAGRAM_TXT_NUMBOX'| translate}}...' />
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <input class="form-control" placeholder='{{'EDMS_DIAGRAM_TXT_FROMDATE'| translate}}..'></>
+                                </div>
+                                <div class="col-md-6">
+                                    <input class="form-control" placeholder='{{'EDMS_DIAGRAM_TXT_TODATE'| translate}}...'></>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <ui-select tagging ng-model="model.Header.DocumentCode" theme="bootstrap" ng-change="changeSelect('DocumentCode')" on-select="changeDocument($item)">
+                                    <ui-select-match placeholder="{{'EDMS_DIAGRAM_TXT_DOCUMENT_CODE2'| translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in DispatchesData |  orderBy : '-Year' | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <textarea placeholder="Nhập mô tả" rows="4" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border-qrcode">
+                            <div class="text-center">
+                                <div class="img-thumbnail">
+                                    <img src="../../../images/default/qrCode.png" class="h-120" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+﻿<div class="portlet-body form" ng-controller="orderAssetTab">
+    <form name="addform" method="post" ng-validate="validationOptions">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="require">{{'ASSET_CRUD_WAREHOUSE' | translate}}</label>
+                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.WHS_Code" theme="bootstrap" ng-change="changeSelect('WareHouse',model.WHS_Code)">
+                            <ui-select-match placeholder="{{'ASSET_CRUD_WAREHOUSE' | translate}}"><b>{{$select.selected.WHS_Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.WHS_Code as x in lstWareHouse | filter: $select.search">
+                                {{x.WHS_Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="require">{{'ASSET_CRUD_FLOOR' | translate}}</label>
+                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.FloorCode" theme="bootstrap" ng-change="changeSelect('Floor',model.FloorCode)">
+                            <ui-select-match placeholder="{{'ASSET_CRUD_FLOOR' | translate}}"><b>{{$select.selected.FloorName}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.FloorCode as x in lstFloor | filter: $select.search">
+                                {{x.FloorName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="require">{{'ASSET_CRUD_LINE' | translate}}</label>
+                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.LineCode" theme="bootstrap" ng-change="changeSelect('Line',model.LineCode)">
+                            <ui-select-match placeholder="{{'ASSET_CRUD_LINE' | translate}}"><b>{{$select.selected.L_Text}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.LineCode as x in lstLine | filter: $select.search">
+                                {{x.L_Text}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="">{{'ASSET_CRUD_RACK' | translate}}</label>
+                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.RackCode" theme="bootstrap" ng-change="changeSelect('Rack',model.RackCode)">
+                            <ui-select-match placeholder="{{'ASSET_CRUD_RACK' | translate}}"><b>{{$select.selected.RackName}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.RackCode as x in lstRack | filter: $select.search">
+                                {{x.RackName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="table-toolbar pb15">
+                        <label class="">{{'ASSET_CRUD_POSITION' | translate}}</label>
+                        <input class="form-control bold" ng-model="model.RackPosition" placeholder="{{'ASSET_CRUD_POSITION' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-1 p-0">
+                    <div class="text-center pull-left pt20 mr10" ng-click="arrange()">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                            <span class="fs12 fa fa-plus"></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'ASSET_BTN_ARRANGE_ASSET' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="tblListProduct">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 3%;">{{'ASSET_LIST_COL_IDX' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'ASSET_LIST_COL_WAREHOUSE' | translate}}</th>
+                                <th class="col-md-2 text-center fw600 text-underline">{{'ASSET_LIST_COL_FLOOR' | translate}}</th>
+                                <th class="col-md-2 text-center fw600 text-underline">{{'ASSET_LIST_COL_LINE' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline nowrap">{{'ASSET_LIST_COL_RACK' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline nowrap">{{'ASSET_LIST_COL_POSITION' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline nowrap">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in lstPosition">
+                                <td class="text-center">{{$index+1}}</td>
+                                <td class="text-left">{{x.WHS_Name}}</td>
+                                <td class="text-left">{{x.FloorName}}</td>
+                                <td class="text-left">{{x.L_Text}}</td>
+                                <td class="text-left">{{x.RackName}}</td>
+                                <td class="text-left">{{x.RackPosition}}</td>
+                                <td class="text-center">
+                                    <button title="Xóa" ng-click="delArrange(x.Id)" style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

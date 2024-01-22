@@ -1,0 +1,1095 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    body.vertical-layout.vertical-menu.menu-expanded .content, body.vertical-layout.vertical-menu.menu-expanded .footer {
+        max-width: 100vw;
+        padding-left: 0px;
+    }
+
+    .sharp {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5%;
+        margin-left: 15%;
+    }
+
+    .p0 {
+        padding: 0px
+    }
+
+    .text-label-command {
+        color: white;
+    }
+
+    @keyframes blinker-one {
+        0% {
+            opacity: 0;
+        }
+    }
+
+    .borderless td, .borderless th {
+        border-top: none !important;
+        border-bottom: 1px solid #e7ecf1;
+    }
+
+    .act-sidebar {
+        position: fixed;
+        left: 1%;
+        max-width: 0px;
+        width: 100%;
+        top: 20%;
+        z-index: 100;
+        background: #fff;
+        transition: .5s;
+        opacity: 0;
+        visibility: hidden;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.55);
+        height: 100vh;
+    }
+
+    svg {
+        top: 0 !important;
+    }
+
+    .btn-border-black {
+        border: 1px solid #000;
+        background: #fff;
+    }
+
+    .panel-padding-left {
+        padding-left: 420px;
+    }
+
+    .svg-margin-left {
+        margin-left: 350px;
+    }
+
+    body.modal-open {
+        overflow: hidden !important;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .numberStep {
+        color: white;
+        height: 25px;
+        width: 25px;
+        padding-top: 5px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 12px;
+        float: left;
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+
+    #obj-data-table > thead > tr > th {
+        font-size: 13px !important;
+    }
+
+    #obj-data-table > tbody > tr > td {
+        font-size: 13px !important;
+    }
+
+    .board-selected {
+        color: white !important;
+        background-color: #428bca !important;
+        box-shadow: 3px 3px 3px #428bca6e;
+    }
+
+    .td-act {
+        width: 440px;
+        max-width: 440px;
+    }
+
+    .count-wf {
+        top: 0px !important;
+        font-weight: 400 !important;
+    }
+
+    @-webkit-keyframes blinkerAct {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            color: blue;
+        }
+    }
+
+    .blink-act {
+        text-decoration: blink;
+        -webkit-animation-name: blinkerAct;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+
+    /*.datepicker, .table-condensed {
+        height: 200px !important;
+        width: 200px !important;
+    }*/
+
+    .v-scroll::-webkit-scrollbar {
+        height: 5px;
+        background: #f1f1f1;
+    }
+
+    .v-scroll::-webkit-scrollbar-thumb {
+        background: #dee2e6;
+        border-radius: 5px;
+    }
+
+    .dw-310 {
+        width: 310px;
+    }
+
+    .dp-335 {
+        padding-left: 335px;
+    }
+
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+        z-index: 1032 !important;
+    }
+
+
+    @media only screen and (min-width : 1800px) {
+        .dw-310 {
+            width: calc(100% / 6) !important;
+        }
+
+        .dp-335 {
+            padding-left: calc(100% / 6 - 15px) !important;
+        }
+    }
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 1032;
+        width: calc(65% - 70px);
+        right: 70px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    .main-menu-editWorkflow {
+        position: absolute;
+        right: -20px;
+        display: flex;
+    }
+
+    .main-right-editWorkflow {
+        position: absolute;
+        right: -20px;
+        display: flex;
+    }
+
+    .label-lg {
+        font-size: 14px; /* Điều chỉnh kích thước chữ theo ý muốn */
+        font-weight: bold; /* Điều chỉnh độ đậm của chữ nếu cần */
+    }
+
+    .label-lg-content {
+        font-size: 14px; /* Điều chỉnh kích thước chữ theo ý muốn */
+    }
+
+    .toggle-content {
+        display: none;
+    }
+
+    .toggle-header {
+        cursor: pointer;
+        background-color: #EEEEEE;
+        padding-left: 10px;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+
+<div ng-show="isShowDiagram" class="parent_svg" onselectstart="javascript:return false" id="gfx_holder" style="width: 2000px; height:1500px; position: relative;">
+    <div class="milestone" style="width:1500px;height:2000px ;display:flex"></div>
+</div>
+
+<div class="main-menu-top" ng-show="!isShowListWf">
+    <div class="menu-top ">
+        <div class="create-box pl5 pt15" ng-click="showGrid()">
+            <i class="fa fa-home create-line fs28"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_HOME' | translate}}
+            </div>
+        </div>
+        <div class="create-box pl5 pt15">
+            <i class="fas fa-long-arrow-alt-left undo fs28"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_UNDO' | translate}}
+            </div>
+        </div>
+        <div class="create-box pl5 pt15">
+            <i class="fas fa-long-arrow-alt-right redo fs28"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_REDO' | translate}}
+
+            </div>
+        </div>
+        <div class="create-box pl5 pt15">
+            <i class="fas fa-list-alt list-activity fs24"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_LIST_ACT' | translate}}
+
+            </div>
+        </div>
+        <div class="create-box pl5 pt15 pr10" ng-click="createActivity()">
+            <i class="fab fa-buromobelexperte create-activity fs24"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_CREATE_ACT' | translate}}
+            </div>
+        </div>
+
+    </div>
+    <div id="canvas">
+    </div>
+    <div class="menu-top menu-3">
+        <div class="create-box pl10 pt15">
+            <i class="fab fa-buromobelexperte create-activity fs24"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_CREAE_LINE' | translate}}
+
+            </div>
+        </div>
+        <div class="create-box pl10 pt15">
+            <i class="fab fa-gg create-line fs24"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_CREAE_LINE' | translate}}
+
+            </div>
+        </div>
+        <div class="create-box pl10 pt15" ng-click="library()">
+            <i class="fa-solid fa-map fs28"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_CREAE_LINE' | translate}}
+            </div>
+        </div>
+        <div class="create-box pl10 pt15 pr10">
+            <i class="fab fa-gg create-line autoarange fs28"></i>
+            <div class="create-box__hover">
+                {{'WFAI_BTN_AUTO_RANGE' | translate}}
+            </div>
+        </div>
+        <div class="" style="width: 355px; line-height: 15px !important;">
+            <div class="col-md-12">
+                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Code" theme="bootstrap" ng-change="wfInstanceClick(model.Code)">
+                    <ui-select-match placeholder="{{'Luồng xử lý' | translate}}..."><b class="bold">#{{$select.selected.Code}}:</b><b> {{$select.selected.WfName}}</b></ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in lstWfInst | filter: $select.search">
+                        #{{x.Code}}: {{x.WfName}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="create-box" ng-click="createWfInstance()">
+            <button class="btn btn-border-black ml5">
+                <span class="fa fa-plus"></span>
+                {{'WFAI_BTN_CREATE_WFLI' | translate}}
+            </button>
+        </div>
+        <div class="create-box">
+            <button class="btn btn-border-black ml5" ng-click="showJson()">
+                <span class="fa fa-bullseye"></span>
+                {{'WFAI_BTN_SHOW_JSON' | translate}}
+            </button>
+        </div>
+        <!--<div class="create-box">
+            <button class="btn btn-border-black ml5" ng-click="showCard()">
+                <span class="fa fa-trello"></span>
+                {{'WFAI_BTN_JOB_CARD' | translate}}
+            </button>
+        </div>-->
+        <div class="create-box">
+            <button class="btn btn-border-black ml5" ng-click="showDiagram()">
+                <img style="width:15px" src="../../../images/workflowActivity/icon-wf-black.png" />
+                {{'WFAI_BTN_WFL_GRAPH' | translate}}
+            </button>
+        </div>
+        <div class="create-box">
+            <button class="btn btn-border-black ml5" ng-click="showGrid()">
+                <span class="fa fa-trello"></span>
+                {{'Danh sách' | translate}}
+            </button>
+        </div>
+
+        <div class="create-box">
+            <button class="btn btn-border-black ml5" ng-click="saveDiagram()">
+                <span class="fa fa-save"></span>
+                {{'WFAI_BTN_SAVE_WFL_GRAPH' | translate}}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="menu-right" id="zoom" ng-show="!isShowListWf">
+    <div class="create-box create-box-r">
+        <i class="fas fa-expand-arrows-alt move"></i>
+        <div class="create-box__hover create-box__hover--r">
+            {{'WFAI_BTN_MOVE_GRAPH' | translate}}
+        </div>
+    </div>
+    <div class="create-box create-box-r">
+        <i class="fas fa-expand-alt fullscreen"></i>
+        <div class="create-box__hover create-box__hover--r">
+            {{'WFAI_BTN_FULL_SCREEN' | translate}}
+        </div>
+    </div>
+    <div class="create-box create-box-r" ng-click="zoomDefault()">
+        <i class="fas fa-search-minus zoomdefault"></i>
+        <div class="create-box__hover create-box__hover--r">
+            {{'WFAI_BTN_DEFAULT_SCREEN' | translate}}
+        </div>
+    </div>
+    <div class="create-box create-box-r">
+        <i class="fas fa-plus zoomin" ng-click="zoomIn()"></i>
+        <div class="create-box__hover create-box__hover--r">
+            {{'WFAI_BTN_ZOOMIN' | translate}}
+        </div>
+    </div>
+    <div class="create-box create-box-r" ng-click="zoomOut()">
+        <i class="fas fa-minus zoomout"></i>
+        <div class="create-box__hover create-box__hover--r">
+            {{'WFAI_BTN_ZOOMOUT' | translate}}
+        </div>
+    </div>
+</div>
+
+<div class="menu-top menu-bottom" ng-show="!isShowListWf">
+    <div class="create-box">
+        <i class="fas fa-long-arrow-alt-left"></i>
+        <div class="create-box__hover">
+            {{'WFAI_BTN_UNDO' | translate}}
+
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fas fa-long-arrow-alt-right"></i>
+        <div class="create-box__hover">
+            {{'WFAI_BTN_REDO' | translate}}
+
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fab fa-buromobelexperte create-activity"></i>
+        <div class="create-box__hover">
+            {{'WFAI_BTN_UNDO' | translate}}
+
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fab fa-gg create-line"></i>
+        <div class="create-box__hover">
+            {{'WFAI_BTN_UNDO' | translate}}
+
+        </div>
+    </div>
+</div>
+
+<div class="act-sidebar" ng-show="!isShowListWf">
+    <div class="act-sidebar__title ">
+        <h3 class="act-sidebar__title--h3 accordion1">
+            <i class="fas fa-sort-amount-down"></i>  Symbols
+        </h3>
+        <i class="fa-solid fa-xmark act-sidebar__close"></i>
+    </div>
+    <div class="act-sidebar__content act__content1" ng-repeat="x in lstLibSharp">
+        <!--<b class="text-underline" ng-if="x.ListSharpLib.length > 0">{{x.TypeName}}</b>-->
+        <div class="" ng-repeat="k in x.ListSharpLib">
+            <div ng-click="creatActByLib(k.SharpCode)" id="{{k.SharpCode}}" class="sharp fs16" style="font-weight: 600;cursor: pointer;width:60%;"><i class="{{k.SharpPath}} sharpicon"></i>/i&nbsp;&nbsp;{{k.SharpName}}</div>
+        </div>
+    </div>
+    <div class="act-sidebar__content act__content2">
+    </div>
+</div>
+
+<!--end menu activity-left -->
+<pre id="json" ng-show="isShowJson && !isShowListWf" class="json_div" style="overflow:auto;position:absolute; top:6.5rem; right:10px; width:350px; height:500px;background:white;border:1px solid gray"></pre>
+
+<div class="col-md-12 mt10 pl-0 pr-0" ng-show="isShowListWf" style="margin-top: -15px;">
+    <div id="breadcrumb-container"></div>
+    <div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+        <div class="text-center pr-2">
+            <a ng-click="showSearch()" class1="btn btn-icon-only btn-circle btn-outline gold-custom">
+                <i class="fas fa-search fs25"></i>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+        </div>
+        <div class="pr-2 text-center">
+            <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="createWfInstance()">
+                <i class="fa-solid fa-plus fs25"></i>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+        </div>
+        <div class="text-center pr-2" style="margin-top: -10px;">
+            <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+                <span><i class="fas fa-question " aria-hidden="true"></i></span>
+            </a>
+        </div>
+
+    </div>
+    <div id="searchBox" ng-show="isSearch">
+        <div class="table-toolbar">
+            <div class="portlet light bordered mb5 mt10">
+                <div class="row">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <!--<div class="col-md-4">
+                        <label class="fw600 text-underline">{{'Nhóm luồng' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelSearch.WfGroup" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Nhóm luồng' | translate}}..."><b class="bold">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstWfGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelSearch.WfGroup=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>-->
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label-lg-content text-underline">{{'WFAI_MSG_STREAM_NAME_INSTANCE_CODE' | translate}}</label>
+                                <input data-ng-model="modelSearch.WfInstName" class="form-control br24" name="WfInstName" placeholder=" {{'WFAI_MSG_STREAM_NAME_INSTANCE_CODE' | translate}}..." />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw600 text-underline">{{'WFAI_MSG_STREAM_CATEGORY' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelSearch.Workflow" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'WFAI_MSG_STREAM_CATEGORY' | translate}}..."><b class="bold">{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstWF | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelSearch.Workflow=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-11 pl-0">
+                        <div class="col-md-4">
+                            <label class="fw600 text-underline">{{'WFAI_CRUD_STATUS' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select ng-model="modelSearch.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'WFAI_CRUD_STATUS' | translate}}"><b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStatusWF | filter:$select.Name| filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelSearch.Status=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="fw600 text-underline">{{'WFAI_SEARCH_FROM_DATE'| translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" ng-model="modelSearch.FromDate" placeholder="{{'WFAI_SEARCH_FROM_DATE' | translate}}..." id='fromDate' />
+                                <span class="input-group-btn ">
+                                    <button type="button" ng-click="modelSearch.FromDate='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove "></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw600 text-underline">{{'WFAI_SEARCH_TO_DATE'| translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" ng-model="modelSearch.ToDate" placeholder="{{'WFAI_SEARCH_TO_DATE' | translate}}..." id='toDate' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelSearch.ToDate='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1 h-70 pl-0 pr-0" style="">
+                        <div class="btn-group actions d-flex pull-left">
+                            <div class="text-center mt30">
+                                <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                    <span><i class="fas fa-search fs30 color-dark"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="dw-310" style="position: absolute; z-index: 10;">
+        <div class="col-md-12 pl-0 boards">
+            <div class="col-md-12 pl-0" style="padding-right: 41px">
+                <div class="col-xs-12 pt10 p0" style="line-height: 30px;">
+                    <div class="col-xs-12 pr-0" ng-class1="{'board-selected' : x.Code == groupSelect}" style="border-radius: 5px;background-color: #d6d5d55e; box-shadow: 3px 3px 3px #d6d5d5bd;">
+                        <div class="col-xs-12 ml0 pl-0 pr-0 cursor" style="height: 100%" ng-click="searchByGroup(null)">
+                            <span class="pr-1"><i class="fa fa-bars" ng-class1="{'board-selected' : x.Code == groupSelect}" style="color: green;"></i></span>
+                            <b>{{'CJ_BOARD_ALL' | translate}}</b>
+                            <div class="actions pull-right">
+                                <span class="tag bg-white border count-wf black tag-pill tag-default tag-up" style="border-color: black !important">{{statiscalWf.SumWf}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 pl-0 boards" ng-repeat="x in infoGroupWf" ng-if="x.Name != '' && x.Name != null && x.Name != undefined">
+            <div class="col-md-12 pl-0" style="padding-right: 41px">
+                <div class="col-xs-12 pt10 p0" style="line-height: 30px;">
+                    <div class="col-xs-12 pr-0" ng-class1="{'board-selected' : x.Code == groupSelect}" style="border-radius: 5px;background-color: #d6d5d55e; box-shadow: 3px 3px 3px #d6d5d5bd;">
+                        <div class="col-xs-12 ml0 pl-0 pr-0 cursor" style="height: 100%" ng-click="searchByGroup(x.Code)">
+                            <span class="pr-1"><i class="fa fa-bars" ng-class1="{'board-selected' : x.Code == groupSelect}" style="color: green;"></i></span>
+                            <b>{{x.Name}}</b>
+                            <div class="actions pull-right">
+                                <!--Chỉnh lại là tổng số luồng việc theo nhóm luồng | trước đó là luồng việc đang xử lý theo nhóm luồng-->
+                                <span class="tag bg-white border count-wf black tag-pill tag-default tag-up" style="border-color: black !important">{{x.Total}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 pr-0 pt5 v-scroll dp-335" style="height: 80vh; overflow-y: auto; overflow-x: hidden; margin-left: -17px;" id="main-table">
+        <div class="row pl-2">
+            <span class="bold">* {{'WFAI_LBL_ALL_WF' | translate}}: {{statiscalWf.SumWf}},</span>
+            <span class="text-danger bold">&nbsp; {{'WFAI_LBL_WF_PENDING' | translate}}: {{statiscalWf.PendingWf}},</span>
+            <span class="text-green bold">&nbsp; {{'WFAI_LBL_WF_SUCCED' | translate}}: {{statiscalWf.SuccedWf}}</span>
+        </div>
+        <table class="table dataTable table-hover table-striped-double"
+               datatable
+               dt-options="dtOptionsList"
+               dt-columns="dtColumnsList"
+               dt-instance="dt.dtInstanceList"
+               id="tblDataWfInstance"></table>
+    </div>
+
+    <div class="main-menu-editWorkflow" style="top:40px;width:480px;height:80vh; display:flex; background-color: #fff; border: 1px solid gray;" ng-show="isEditWorkflow">
+        <div class="portlet-body form baolo" style="width:100%; position:absolute; background:#fff;">
+            <div class="modal-header" style="background-color: #ffffff; border: 1px solid gray; padding: 5px;">
+                <div class="col-md-10 pl-0">
+                    <i class="fa fa-edit black icon-insert fs20"></i>
+                    <span class="label-lg" id="modal-title" style="vertical-align: 5px; color: black;">{{'WFAI_TITLE_EDIT_WF'|translate}}</span>
+                </div>
+                <!-- <div class="col-md-2 text-right">
+                    <i class="fa-solid fa-caret-right icon-scalet fs20 mt5" ng-click="editWorkflow()"></i>
+                </div> -->
+            </div>
+            <div class="modal-body" style="padding-bottom: 0px;">
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div id="toggleInforWf" class="toggle-header">
+                            <i ng-show="checkHiddenInforWf" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                            <i ng-show="!checkHiddenInforWf" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                            <label class="label-lg" style="vertical-align: 7px;">{{'Thông tin chung' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl30">
+                        <div id="InforWf" class="toggle-content">
+                            <div class="portlet-body form">
+                                <form name="addwfinstance" class="form-horizontal " method="post" ng-validate="validationOptionsWF">
+                                    <div class="form-body pt-0 pl-0 pr-0">
+                                        <div class="row">
+                                            <div class="col-md-10 pl25">
+                                                <div class="form-group">
+                                                    <label class="label-lg-content require">{{'WFAI_VALIDATE_NAME_STREAM_INSTANCE' | translate}}</label>
+                                                    <input data-ng-model="modelEditWf.WfInstName" class="form-control br24" name="WfInstName" placeholder=" {{'WFAI_VALIDATE_NAME_STREAM_INSTANCE' | translate}}..." />
+                                                </div>
+                                            </div>
+                                            <!--<button class="btn green-custom pull-right mr15" style="margin-top:23px;" ng-click="submit()">
+                                                <span class="fa fa-save"></span>
+                                                {{'Lưu lại' | translate}}
+                                            </button>-->
+                                            <div class="col-md-2 pr-0">
+                                                <div class="text-center mt30 pl-0 pr-0" style="width: 100%;" ng-click="submit()">
+                                                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom mt25">
+                                                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                                                    </a>
+                                                    <p class="text-underline mb-0 fs14 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="form-group pr-1 pl-1" ng-class="{'has-error' : errorWorkflowCode}">
+                                                    <label class="label-lg-content require">{{'WFAI_CRUD_WF' | translate}}</label>
+                                                    <div class="input-group br24-nobtn">
+                                                        <ui-select tagging ng-model="modelEditWf.WorkflowCode" theme="bootstrap" ng-change="changeSelect('WorkflowCode')" ng-disabled="true">
+                                                            <ui-select-match placeholder="{{'WFAI_CRUD_WF' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                                            <ui-select-choices repeat=" x.Code as x in lstWF | filter: $select.search">
+                                                                <b>{{x.Name}}</b>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                    <span ng-show="errorWorkflowCode" class="label-color validation-message">
+                                                        {{'WFAI_VALIDATE_WF' | translate}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-md-4 pr30">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group" ng-class="{'has-error' : errorStatus}">
+                                                            <label class="label-lg-content require">{{'WFAI_CRUD_STATUS' | translate}}</label>
+                                                            <div class="input-group br24-nobtn">
+                                                                <ui-select tagging ng-model="modelEditWf.Status" theme="bootstrap" ng-change="changeSelect('Status')">
+                                                                    <ui-select-match placeholder="{{'WFAI_CRUD_STATUS' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                                                    <ui-select-choices repeat=" x.Code as x in listStatusWF | filter: $select.search">
+                                                                        <b>{{x.Name}}</b>
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                            </div>
+                                                            <span ng-show="errorStatus" class="label-color validation-message">
+                                                                {{'Trạng thái không được bỏ trống' | translate}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group pl-1 pr-1" ng-class="{'has-error' : errorObjectType}">
+                                                    <label class="label-lg-content">{{'WFAI_TAB_OBJ_OPERATION' | translate}}</label>
+                                                    <div class="input-group br24-nobtn search-group">
+                                                        <ui-select tagging ng-model="modelEditWf.ObjectType" theme="bootstrap" ng-change="changeSelect('ObjectType')" ng-disabled="true">
+                                                            <ui-select-match placeholder="{{'WFAI_TAB_OBJ_OPERATION' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                                            <ui-select-choices repeat=" x.Code as x in lstObjectType | filter: $select.search">
+                                                                <b>{{x.Name}}</b>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                    <span ng-show="errorObjectType" class="label-color validation-message">
+                                                        {{'Dữ liệu hành chính không được bỏ trống' | translate}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-md-7 pr30">
+                                                <div class="form-group" ng-class="{'has-error' : errorObjectInst}">
+                                                    <label class="label-lg-content">{{'WFAI_CRUD_DETAIL' | translate}}</label>
+                                                    <div class="input-group br24-nobtn search-group">
+                                                        <ui-select tagging ng-model="modelEditWf.ObjectInst" theme="bootstrap" ng-disabled="true">
+                                                            <ui-select-match placeholder="{{'WFAI_CRUD_DETAIL' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                                            <ui-select-choices repeat=" x.Code as x in lstObjectInst | filter: $select.search">
+                                                                <b>{{x.Name}}</b>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                    <span ng-show="errorObjectInst" class="label-color validation-message">
+                                                        {{'WFAI_VALIDATE_OBJ' | translate}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group pl-1 pr-1">
+                                                    <label class="label-lg-content">{{'WFAI_CRUD_GROUP' | translate}}</label>
+                                                    <div class="input-group br24-nobtn search-group">
+                                                        <ui-select tagging ng-model="modelEditWf.WfGroup" theme="bootstrap" ng-change="changeSelect('WfGroup')">
+                                                            <ui-select-match placeholder="{{'WFAI_CRUD_GROUP' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                                            <ui-select-choices repeat=" x.Code as x in listWfGroup | filter: $select.search">
+                                                                <b>{{x.Name}}</b>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-md-4">
+                                                <div class="form-group pr-1">
+                                                    <label class="label-lg-content">{{'WFAI_CRUD_TIME_START' | translate}}</label>
+                                                    <input type="text" class="form-control br24 text-box-asset" ng-model="modelEditWf.StartTime" placeholder="{{'WFAI_CRUD_TIME_START'|translate}}..." readonly />
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-md-4">
+                                                <div class="form-group pr-2">
+                                                    <label class="label-lg-content">{{'WFAI_CRUD_TIME_END' | translate}}</label>
+                                                    <input type="text" class="form-control br24 text-box-asset" ng-model="modelEditWf.EndTime" placeholder="{{'WFAI_CRUD_TIME_END'|translate}}..." readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div id="toggleFileHistory" class="toggle-header">
+                            <i ng-show="checkHiddenFileHistory" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                            <i ng-show="!checkHiddenFileHistory" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                            <label class="label-lg" style="vertical-align: 7px;">{{'WFAI_TAB_HISTORY_FILE' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl30">
+                        <div id="FileHistory" class="toggle-content">
+                            <div ng-include="'../views/admin/workflowActivity/file-version.html'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div id="toggleCmdTo" class="toggle-header">
+                            <i ng-show="checkHiddenCmdTo" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                            <i ng-show="!checkHiddenCmdTo" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                            <label class="label-lg" style="vertical-align: 7px;">{{'WFAI_TAB_COMMAND_TO' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl30">
+                        <div id="CmdTo" class="toggle-content">
+                            <div class="col-md-12 pl-0 pr-0">
+                                <div class="form-group br24-nobtn">
+                                    <ui-select ng-model="modelCmd.LstAct" multiple theme="bootstrap" limit="100" style="width: 100%; height: 65px;">
+                                        <ui-select-match placeholder="{{'WFAI_CRUD_SELECT_ACT' | translate}}...">
+                                            <span>{{$item.Name}}</span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="x in lstActInstCmd |  filter:$select.search">
+                                            <div class="p5">{{x.Name}}</div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pl-0">
+                                <div class="form-group br24-nobtn">
+                                    <label class="label-lg-content">{{'WFAI_CRUD_COMMAND' | translate}}</label>
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCmd.CommandSymbol" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'WFAI_CRUD_COMMAND' | translate}}..."><p class="{{$select.selected.Color}} bold">{{$select.selected.Name}}</p></ui-select-match>
+                                        <ui-select-choices style="height: auto" repeat="x.Code as x in lstCommandCommon | filter: $select.search">
+                                            <span class="{{x.Color}} bold">{{x.Name}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <label class="label-lg-content">{{'COM_CRUMB_WF_NOTE' | translate}}</label>
+                                <textarea name="Note" rows="3" class="form-control br12" ng-model="modelCmd.Message" type="text" placeholder=" {{'COM_CRUMB_WF_NOTE' | translate}}..."></textarea>
+                            </div>
+                            <div class="col-md-1 mt15 pr-0">
+                                <div class="text-center mt25 pull-right">
+                                    <!--<div class="text-center pl-0 pr-0" style="width: 100%;" ng-click="add()">
+                                        <div class="btn btn-icon-only btn-circle btn-outline green-custom mt25">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </div>
+                                        <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>-->
+                                    <!--<a class="btn btn-icon-only btn-outline" ng-click="sendCommand()" style="border: 1px solid #000;">
+                                        <span><i class="fa fa-plus black"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pl5 pt5 ng-binding">{{'COM_BTN_ADD' | translate}}</p>-->
+                                </div>
+                            </div>
+                            <div class="col-md-12 pr-0 pl-0 mt10" style="margin-bottom: 0; height: 250px; overflow-y: scroll;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-3 text-center">{{'COM_CRUMB_WF_COMMAND_TAKING' | translate}}</th>
+                                            <th class="col-md-2 text-center">{{'WFAI_LIST_COL_COMMAND' | translate}}</th>
+                                            <th class="col-md-2 text-center">{{'WFAI_LIST_COL_CONFIRM' | translate}}</th>
+                                            <th class="col-md-4 text-center">{{'COM_CRUMB_WF_NOTE' | translate}}</th>
+                                            <th class="col-md-1 text-center">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in lstCmdResult">
+                                            <td><span class="bold">{{x.ActName}}</span></td>
+                                            <td>
+                                                <span class="bold green">{{x.Command}}</span>
+                                                <br /><span>Người gửi: {{x.UserSend}}</span>
+                                                <br /><span>Lúc: {{x.CmdTime}}</span>
+                                            </td>
+                                            <td>
+                                                <span class="bold green">{{x.Confirmloca}}</span>
+                                                <br /><span ng-show="x.UserConfirm !=''">Xác nhận bởi: {{x.UserConfirm}}</span>
+                                                <br /><span ng-show="x.UserConfirm !=''">Lúc: {{x.ConfirmTime}}</span>
+                                            </td>
+                                            <td>{{x.Note}}</td>
+                                            <td class="text-center pt15">
+                                                <a ng-click="deleteCmdLeader(x.Id)" class1="pull-right pr15 btn btn-icon-only btn-border-black black" style1="width: 26px; height: 26px; padding-top: 3px;padding-left: 7.3px; margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)"><i class="fa fa-trash-alt fs25 text-danger"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div id="toggleEmployee" class="toggle-header">
+                            <i ng-show="checkHiddenEmployee" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                            <i ng-show="!checkHiddenEmployee" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                            <label class="label-lg" style="vertical-align: 7px;">{{'WFAI_TAB_ASSIGN_WF' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl30">
+                        <div id="Employee" class="toggle-content">
+                            <div class="row mt10">
+                                <div class="col-md-12 mt5">
+                                    <style>
+                                        .portlet.light > .portlet-title > .caption {
+                                            padding: 0px 0;
+                                        }
+
+                                        .ui-select-choices-group-label {
+                                            font-weight: bold;
+                                            padding-left: 10px !important;
+                                            color: #515354 !important;
+                                        }
+
+                                        .table-responsive {
+                                            overflow: unset;
+                                        }
+                                    </style>
+                                    <div class="bordered mb5">
+                                        <div class="portlet-title mnh25">
+                                            <div class="caption">
+                                                <span class="caption-subject bold fs12">{{'WFAI_LBL_LIST_DEPARTMENT_GROUP_EMPL' | translate}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body todo-project-list-content">
+                                            <div class="">
+                                                <div class="table-responsive" style="height: 350px; overflow-y: scroll; overflow-x: hidden">
+                                                    <table class="table table-bordered" style="margin-bottom: 0;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="pl25 col-md-6">{{'WFAI_LIST_COL_DEPARTMENT_GROUP' | translate}}</th>
+                                                                <th class="text-center nowrap col-md-3">{{'WFAI_CRUD_ACT_INST' | translate}}</th>
+                                                                <th class="text-center nowrap col-md-3">{{'WFAI_LIST_COL_ROLE' | translate}}</th>
+                                                                <!--<th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th>-->
+                                                            </tr>
+                                                        </thead>
+                                                        <!--Người được giao-->
+                                                        <!--<tbody>
+                                                            <tr>
+                                                                <td ng-if="lstMemberAssign.length!=0" colspan="3" class="pl25">
+                                                                    <i class="fa fa-user"></i>
+                                                                    <span class="groupValue"><b>{{'WFAI_LIST_COL_ASSGINEE' | translate}}</b></span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr ng-repeat="x in lstMemberAssign">
+                                                                <td class="text-left">
+                                                                    <span class="fs14">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{x.RoleSys}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{x.DepartmentName}}</span>
+                                                                </td>
+
+                                                                <td class="text-center">
+                                                                    <div class="input-group">
+                                                                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" theme="bootstrap" on-select="changeRole(x.Role, x.UserId)">
+                                                                            <ui-select-match placeholder="{{'WFAI_CRUD_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                            <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                                                                                {{x.Name}}
+                                                                            </ui-select-choices>
+                                                                        </ui-select>
+                                                                    </div>
+                                                                </td>
+                                                                <td></td>
+                                                                <td class="text-center"><i role="button" class="fa fa-minus-circle pt5 ng-scope" ng-click="delete(x.UserId)" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px"></i></td>
+                                                            </tr>
+                                                        </tbody>-->
+                                                        <tbody>
+                                                            <tr ng-repeat-start="g in lstAssignWF" ng-show="false">
+                                                                <td ng-if="g.ActivityRole.length!=0" colspan="2" class="pl25">
+                                                                    <i class="fa fa-user"></i>
+                                                                    <!--<span class="fs14">{{g.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{g.RoleSys}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="g.DepartmentName != ''">{{g.DepartmentName}}</span>-->
+                                                                </td>
+                                                            </tr>
+                                                            <tr ng-repeat="x in g.ActivityRole">
+                                                                <td><span class="fs14">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{x.RoleSys}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{x.DepartmentName}}</span></td>
+                                                                <td class="bold">{{x.ActInstName}}</td>
+                                                                <td class="text-center">
+                                                                    <div class="input-group br24-nobtn">
+                                                                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" theme="bootstrap" on-select="changeRoleAct(x.Id, x.Role)" ng-disabled="true">
+                                                                            <ui-select-match placeholder="{{'WFAI_CRUD_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                                            <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                                                                                {{x.Name}}
+                                                                            </ui-select-choices>
+                                                                        </ui-select>
+                                                                    </div>
+                                                                </td>
+                                                                <!--<td class="text-center"><i role="button" class="fa fa-minus-circle pt5 ng-scope" ng-click="deleteAssignAct(x.Id)" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px"></i></td>-->
+                                                            </tr>
+                                                            <tr ng-repeat-end="" ng-show="false"></tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <div id="toggleObject" class="toggle-header">
+                            <i ng-show="checkHiddenObject" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                            <i ng-show="!checkHiddenObject" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                            <label class="label-lg" style="vertical-align: 7px;">{{'WFAI_TAB_OBJECT_OPERATION' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pl30">
+                        <div id="Object" class="toggle-content">
+                            <div class="row">
+                                <form name="formObjectOperation" class="form-horizontal" method="post">
+                                    <div class="col-md-12 pr-0">
+                                        <div class="col-md-12 pl-0 pr-0">
+                                            <div class="col-md-6 pl-0 br24-nobtn">
+                                                <label class="label-lg-content">{{'WFAI_CRUD_OBJ_TYPE' | translate}}</label>
+                                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelObj.ObjectType" on-select="objTypeChange(modelObj.ObjectType)" theme="bootstrap" ng-disabled="IsLock">
+                                                    <ui-select-match placeholder="{{'WFAI_CRUD_OBJ_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices style="height: auto" repeat="x.Code as x in lstObjType | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                            <div class="col-md-6 pl-0">
+                                                <label class="label-lg-content">{{'WFAI_CRUD_OBJECT' | translate}}</label>
+                                                <div class="input-group br24-nobtn">
+                                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelObj.ObjectInst" theme="bootstrap" ng-disabled="IsLock">
+                                                        <ui-select-match placeholder="{{'WFAI_CRUD_OBJECT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                        <ui-select-choices style="height: auto" repeat="x.Code as x in lstObj | filter: $select.search">
+                                                            {{x.Name}}
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 pl-0 pt5">
+                                                <label class="label-lg-content">{{'WFAI_CRUD_ACT_INST' | translate}}</label>
+                                                <div class="input-group br24-nobtn">
+                                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelObj.ActInstCode" theme="bootstrap" ng-disabled="IsLock">
+                                                        <ui-select-match placeholder="{{'WFAI_CRUD_ACT_INST' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                                        <ui-select-choices style="height: auto" repeat="x.ActInstCode as x in lstActInst | filter: $select.search">
+                                                            {{x.Title}}
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 pl-0" style="padding-top: 40px;">
+                                                <a title="Chia sẻ" class1="btn btn-border-black pull-right ml5" ng-click="shareObj()"><i class="fas fa-share-alt-square fs30 pr20"></i></a>
+                                                <a title="Thêm mới" class1="btn btn-border-black pull-right" ng-click="addObject()"><i class="fa-solid fa-plus fs30"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="table-responsive pt10" style="height: 340px; overflow-y: scroll;">
+                                    <table class="table table-bordered" style="margin-bottom: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1 text-center" style="width: 3%;">{{'WFAI_LIST_COL_INDEX' | translate}}</th>
+                                                <th class="col-md-6 text-center">{{'WFAI_LIST_COL_OBJ_PROCESSING' | translate}}</th>
+                                                <th class="col-md-3 text-center">{{'WFAI_CRUD_OBJ_NAME' | translate}}</th>
+                                                <th class="col-md-1 text-center">{{'WFAI_LIST_COL_SHARE_OBJECT' | translate}}</th>
+                                                <th class="col-md-1 text-center">{{'COM_BTN_DELETE' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in lstObjectProcess">
+                                                <td class="text-center">{{$index + 1}}</td>
+                                                <td class="" ng-show="x.ObjType != 'CARD_JOB'">
+                                                    <span class="bold text-underline" style="color:#ab7474;">{{x.ObjectCode}}</span> -- <span class="bold">{{x.ObjectName}}</span><br />
+                                                    <span>{{'WFAI_CRUD_OBJ_TYPE_WF' | translate}}: {{x.ObjTypeText}}</span><br />
+                                                    <span>{{x.Status}}</span>, &nbsp;
+                                                    <span>{{x.CreatedBy}}</span>, &nbsp;
+                                                    <span>{{x.CreatedTime}}</span>
+                                                    <span class="pull-right text-underline" ng-click="viewShareObj(x.ObjectCode, x.ObjType, x.ActInst)">{{'Xem chia sẻ' | translate}}</span>
+                                                </td>
+
+                                                <td ng-show="x.ObjType == 'CARD_JOB'">
+                                                    <span class="bold text-underline" style="color:#ab7474">#{{x.ObjectCode}}: </span>
+                                                    <span class="bold">{{x.ObjectName}}</span><br />
+                                                    <span class="badge-customer badge-customer-danger" ng-if="x.Status == 'Thẻ rác' || x.Status == 'Đóng' || x.Status == 'Đang triển khai'">{{x.Status}}</span>
+                                                    <span class="badge-customer badge-customer-success" ng-if="x.Status == 'Mới tạo' || x.Status == 'Hoàn thành'">{{x.Status}}</span>
+                                                    <span class="badge-customer badge-customer-success">{{x.CreatedBy}}</span>, &nbsp;
+                                                    <span class="badge-customer badge-customer-black">{{x.CreatedTime}}</span>
+                                                    <span class="pull-right text-underline" ng-click="viewShareObj(x.ObjectCode, x.ObjType, x.ActInst)">{{'Xem chia sẻ' | translate}}</span>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    {{x.ActTitle}}
+                                                </td>
+                                                <td class="text-center pt15">
+                                                    <label class="mt-checkbox share-object" style="margin-bottom: 0; width: 30px;display:inline; font-size:13px">
+                                                        <!--<input type="checkbox" ng-model="x.IsCheck" ng-checked="x.IsCheck" ng-change="checkObject(x.IsCheck, x.ObjectCode, x.ObjType, x.ActInst)">-->
+                                                        <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.IsCheck != true" ng-click="checkObject(true, x.ObjectCode, x.ObjType, x.ActInst)"></i>
+
+                                                        <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.IsCheck == true" ng-click="checkObject(false, x.ObjectCode, x.ObjType, x.ActInst)"></i>
+                                                        <!--<span style="padding: 10px;background: #fff !important;border: 1px solid #b9b6b6;"></span>-->
+                                                    </label>
+                                                </td>
+                                                <td class="text-center pt15">
+                                                    <a class1="pull-right pr15 btn btn-icon-only btn-border-black black" style1="width: 26px; height: 26px; padding-top: 3px;padding-left: 7.3px; margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)" ng-click="deleteObject(x.Id)"><i class="fas fa-trash-alt fs25 text-danger"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="main-right-editWorkflow" style="top:40px;width:35px;height:40px; display:flex; background-color: #cccccc;">
+        <div class="create-box create-box-r" ng-click="editWorkflow()">
+            <!-- <img src="/images/notepad/notepad/activity/left.png" ng-show="!isEditWorkflow" style="border: 2px solid gray;"/>
+            <img src="/images/notepad/notepad/activity/right.png" ng-show="isEditWorkflow" style="border: 2px solid gray;"/> -->
+            <i class="fa-solid fa-caret-right icon-scalet fs25 mt10" style="margin-left: 12px;" ng-show="isEditWorkflow"></i>
+            <i class="fa-solid fa-caret-left icon-scalet fs25 mt10" style="margin-left: 12px;" ng-show="!isEditWorkflow"></i>
+        </div>
+    </div>
+</div>

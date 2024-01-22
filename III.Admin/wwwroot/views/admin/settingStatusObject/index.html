@@ -1,0 +1,98 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body pb5">
+            <div class="row mb5">
+                <div class="col-md-3 pl-0 pr-0">
+                    <div class="form-group" ng-class="{'has-error' : errorObjectTypeCode}">
+                        <div class="col-md-12">
+                            <label class="control-label require fw600">{{'ST_STT_OBJ_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.ObjectTypeCode" theme="bootstrap" ng-change="changeSelect('ObjectTypeCode')">
+                                    <ui-select-match placeholder="{{'ST_STT_OBJ_TYPE' | translate}}..."><b><b ng-show="x.Prefix != ''">[{{$select.selected.Prefix}}] - </b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in lstObjectType | filter: $select.search">
+                                        <p><span ng-show="x.Prefix != ''">[{{x.Prefix}}] - </span>{{x.Name}}</p>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorObjectTypeCode" class="label-color validation-message">
+                                {{'ST_STT_OBJ_TYPE_CANNOT_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 pl-0">
+                    <div class="form-group" ng-class="{'has-error' : errorStatusGroupCode}">
+                        <div class="col-md-12">
+                            <label class="control-label require fw600">{{'ST_STT_OBJ_GROUP_STT' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.StatusGroupCode" theme="bootstrap" ng-change="changeSelect('StatusGroupCode')">
+                                    <ui-select-match placeholder="{{'ST_STT_OBJ_GROUP_STT' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in listGroupStatus | filter: $select.search">
+                                        <p>{{x.Name}}</p>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorStatusGroupCode" class="label-color validation-message">
+                                {{'ST_STT_OBJ_GROUP_STT_NOT_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" style="width: 14%;">
+                    <div class="btn-group mt20 actions d-flex">
+                        <div class="text-center flex-basis-100 pull-right" ng-click="add()" style="margin-left: -22px;">
+                            <a class="fs30 ">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9 nowrap pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+
+                        <div class="text-center flex-basis-100 pull-right" ng-click="save()" style="margin-left: 458px">
+                            <a class="fs30">
+                                <span><i class="fas fa-save"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9 nowrap pt3">{{'ST_STT_OBJ_ESTABLIST' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 pl-0 pr-0">
+    <div class="table-responsive" style="overflow-y: auto; height: 70vh; border: 1px solid #e6dfdf;">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <tbody>
+                <tr ng-repeat="x in listSettingStatusObject">
+                    <td class="col-md-6">
+                        <b>{{x.ObjectName}}</b>
+                    </td>
+                    <td class="col-md-6">
+                        <b>{{x.GroupName}}</b><br />
+                        (<span>{{x.ListStatus}}</span>)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,337 @@
+﻿<style>
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-registration .modal-50 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-registration .modal-50 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-registration .modal-50 {
+            width: 60%;
+        }
+    }
+
+    .portlet.light > .portlet-title > .caption {
+        padding: 0px 0;
+    }
+
+    .ui-select-choices-group-label {
+        font-weight: bold;
+        padding-left: 10px !important;
+        color: #515354 !important;
+    }
+
+    .table-responsive {
+        overflow: unset;
+    }
+
+    .text-custom {
+        font-weight: 700;
+        color: brown !important;
+    }
+
+    .tags-custom {
+        margin: 2px;
+        padding: 0 5px;
+        display: inline-block;
+        float: left;
+        font: 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+        height: auto;
+        line-height: 25px;
+        border: 1px solid #acacac;
+        border-radius: 3px;
+        background: -webkit-linear-gradient(top,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+        background: linear-gradient(to bottom,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+    }
+
+    .h-95-srcoll {
+        overflow: auto;
+        max-height: 95px !important;
+        height: 95px !important;
+    }
+
+    .boder-box-custom-scroll {
+        padding: 1px;
+        word-wrap: break-word;
+        cursor: text;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        height: 100%;
+        border-radius: 4px;
+        max-height: 200px;
+        height: 150px;
+        width: 97%;
+        margin-left: 15px;
+    }
+
+    .check-box-custom {
+        height: 25px;
+        width: 25px;
+    }
+
+
+    ._3dza {
+        margin-right: 5px;
+        padding: 2px;
+    }
+
+    ._6kld {
+        border-radius: 25px;
+        height: 40px;
+        width: 40px;
+    }
+
+    .check-color {
+        display: inline;
+        top: 12px;
+        left: 12px;
+        /*color: white;*/
+        font-size: 15px;
+        position: relative;
+    }
+
+    .close {
+        background-image: none !important;
+    }
+</style>
+<!--<link href="../../../css/admin/cardJob/board.css" rel="stylesheet" />-->
+<div class="modal-header black h-25" style="background: rgb(241, 241, 241);">
+    <span class="modal-title fas fa-users fs15">&nbsp;&nbsp;{{'MS_TITLE_EDI_MEETING_SCHE' | translate}}</span>
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form" style="min-height: 500px">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pb25 pt5">
+                <div class="row mb-0">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'MS_CRUD_TITLE' | translate}}</label>
+                            <input ng-model="model.Title" class="form-control br24 text-custom" name="Title" placeholder="{{'MS_CRUD_TITLE' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'MS_CRUD_TIME_START' | translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input ng-model="model.StartTime" ng-change="updateListAccount('startTime')" type='text' class="form-control text-custom" placeholder="{{'MS_CRUD_TIME_START' | translate}}" id="datefrom" name="StartTime" autocomplete="off" />
+                                <span class="input-group-addon start-date" ng-click="model.StartTime = ''">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'MS_CRUD_TIME_END' | translate}}</label>
+                            <div class='input-group br24 date'>
+                                <input ng-model="model.EndTime" ng-change="updateListAccount('endTime')" type='text' class="form-control text-custom" placeholder="{{'MS_CRUD_TIME_END' | translate}}" id="dateto" name="EndTime" autocomplete="off" />
+                                <span class="input-group-addon end-date" ng-click="model.EndTime = ''">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-0">
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> <!--{{'MS_CRUD_TITLE' | translate}}--> Zoom Id</label>
+                            <input ng-model="model.ZoomId" class="form-control br24 text-custom" name="ZoomId" placeholder="Zoom Id" placeholder1="{{'MS_CRUD_TITLE' | translate}}..." disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> <!--{{'MS_CRUD_TITLE' | translate}}--> Mật khẩu Zoom</label>
+                            <input ng-model="model.Password" class="form-control br24 text-custom" name="Password" placeholder="Mật khẩu Zoom" placeholder1="{{'MS_CRUD_TITLE' | translate}}..." disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'MS_HOT_KEY' | translate}}</label>
+                            <input ng-model="model.HostKey" class="form-control br24 text-custom" name="HostKey" placeholder="{{'MS_HOT_KEY' | translate}}..." disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> <!--{{'MS_CRUD_TITLE' | translate}}--> Người tạo</label>
+                            <input ng-model="model.CreatedBy" class="form-control br24 text-custom" name="CreatedBy" placeholder="Người tạo" placeholder1="{{'MS_CRUD_TITLE' | translate}}..." disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'Chọn tài khoản zoom' | translate}}</label>
+                            <div class="input-group br24" ng-class="{'has-error': errorAccountZoom}">
+                                <ui-select class="text-custom" ng-model="model.AccountZoom" theme="bootstrap" ng-change="changeSelect('AccountZoom')">
+                                    <ui-select-match placeholder="{{'Chọn tài khoản zoom' | translate}}...">{{$select.selected.AccountName}} ({{$select.selected.Email}})</ui-select-match>
+                                    <ui-select-choices repeat="x.Email as x in listAccount | filter: $select.search">
+                                        <span class="bold fs13">{{x.AccountName}}</span> <br /> <span class="text-brown fs12">({{x.Email}})</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AccountZoom=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorAccountZoom" class="label-color validation-message">
+                                {{'Vui lòng chọn tài khoản zoom' | translate}}
+                            </span>
+                            <span ng-if="listAccountUsed.length > 0" class="label-color validation-message">
+                                {{stringAccountUsed}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group col-md-12 p-0">
+                            <label> {{'MS_CRUD_NOTE' | translate}}</label>
+                            <input class="form-control br24" placeholder="{{'MS_CRUD_NOTE' | translate}}.." rows="2" ng-model="model.Comment" name="Comment" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label> {{'MS_BACKGROUND_COLOR' | translate}}</label>
+                            <input type="color" class="form-control br24 pt-0 pb-0" placeholder="{{'MS_BACKGROUND_COLOR' | translate}}.." rows="2" ng-model="model.BackgroundColor" name="BackgroundColor" />
+                        </div>
+                    </div>
+                    <!--<div class="col-md-3">
+        <div class="form-group col-md-12 p-0">
+            <label> {{'Màu nền' | translate}}</label>
+            <table cols="6" class="_3dz6 uiGrid _51mz" alignh="center" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr class="_51mx">
+                        <td role="button" tabindex="0" class="_3dz9_51m-hCent" ng-repeat="x in listColor" ng-click="selectColor(x.Id)">
+                            <div class="_3dza">
+                                <div aria-label="Candy" class="_6kld" style="background-color:{{x.BackgroundColor}};background-image:{{x.BackgroundImage}}">
+                                    <span class="check-color" ng-show="x.Check">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group col-md-12 p-0">
+                            <div class="col-md-12 p-0" ng-class="{ 'has-error': errorUserId}">
+                                <label class="require">{{'MS_CRUD_LIST_EMPLOYEE' | translate}}</label>
+                                <ui-select ng-model="model1.ListUser" multiple theme="bootstrap" class="h-70 br12" on-select="addUser($item)" on-remove="removeUser($item)">
+                                    <ui-select-match placeholder="{{'MS_CRUD_TEXT_SELECT_EMPLOYEE' | translate}}...">{{$item.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.UserName as x in listUser | filter:$select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorUserId" class="label-color validation-message">
+                                    {{'MS_VALIDATE_EMPLOYEE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'MS_CRUD_STATUS' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorType}">
+                                <ui-select tagging ng-model="model1.Status" theme="bootstrap" ng-disabled="!isUserInList" on-select="changeStatus($item)">
+                                    <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listStatus | filter: $select.search">
+                                        <span class="bold fs11">{{x.Name}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model1.Status='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="col-md-12 input-group search-group" style="padding-top: 7px;">
+                                <span class="check-box-act">
+                                    <!--<input style="-webkit-transform: scale(2);" type="checkbox" name="" value="" />-->
+                                    <span class="pull-right fs9">
+                                        <a class="fs11 pt5 text-underline ng-binding" ng-click="viewLogStatus()">Log người duyệt</a>
+                                    </span>
+                                    <label style="padding-left: 10px;" for="music">{{countUserApproved}}/{{listUserApproved.length}}</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'Tài liệu' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorType}">
+                                <ui-select tagging ng-model="model2.CmsItemCode" on-select="changeCmsItem($item)" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Chọn tài liệu' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listCmsItem | filter: $select.search" refresh="reloadCmsItem($select.search)">
+                                        <span class="bold fs11">{{x.Name}}</span>
+                                        <div class="row mt15" ng-if="$last">
+                                            <button class="btn btn-xs btn-success"
+                                                    style="width: 100%;"
+                                                    ng-click="loadMore($select, $event);"
+                                                    ng-disabled="loading">
+                                                Load more...
+                                            </button>
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model2.CmsItemCode='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                                <a class="input-group-btn wpercent5 text-center"><i class="fa fa-chevron-down fs20 color-dark" ng-click="addCmsItem(model2)"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group col-md-12 p-0">
+                            <div class="btn-group pt30 actions d-flex pull-right">
+                                <div class="text-center">
+                                    <a class1="btn btn-icon-only btn-outline btn-boder1" ng-click="submit()">
+                                        <!--<span><i class="fa fa-save"></i></span>-->
+                                        <i class="fa-solid fa-plus fs25"></i>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3 nowrap">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group col-md-12 p-0">
+                            <label class="require"> {{'Danh sách Tài liệu' | translate}}</label>
+                            <ul>
+                                <li ng-repeat="x in listRef">
+                                    <div class="col-md-12 pt10">
+                                        <div style="display: inline-block"><img class="mr5" style="width: 14px;" src="../../../images/iconDashBoard/icon_Text-Worksheet.png"></div>
+                                        <div style="display: inline-block"><a ng-click="viewCms(x.CmsItemCode)">{{x.CmsItemName}}</a></div>
+                                        <div class="pull-right">
+                                            <a title="Xóa" ng-click="deleteCmsItem(x)" style1="width: 25px; height: 25px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs20"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

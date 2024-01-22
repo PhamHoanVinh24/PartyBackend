@@ -1,0 +1,111 @@
+﻿<style type="text/css">
+    .contentMainCategory {
+        max-height: 360px;
+        overflow: auto;
+        height: 360px;
+    }
+
+    .mt-checkbox-outline > span:after {
+        left: 7px;
+        top: 2px;
+        width: 7px;
+        height: 12px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .modal-header {
+        background-color: white;
+    }
+
+    .modal-title {
+        color: black;
+    }
+
+    .fa.fa-plus-circle.icon-insert {
+        color: black;
+    }
+
+    .fad.fa-layer-plus {
+        color: #4b9bd2;
+        width: 25px;
+        height: 25px
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title"> {{'EDMSR_FILE_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addformfile" class="form-horizontal" method="post" ng-validate="validationOptionsFile">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="breadcrumb-wrapper h-20">
+                            <ol class="breadcrumb fs15 pull-left">
+                                <li class="breadcrumb-item" ng-repeat="x in breadcrumb" ng-click="selectBreadcrumbRepository($index,breadcrumb)">
+                                    <a class="" style="color: #484444">{{x.Name.length > 20 ? x.Name.substr(0, 20) + "..." : x.Name }}</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-5 pull-right p-0">
+                        <div class="form-group">
+                            <div class="btn-group pull-right actions d-flex pr15">
+                                <button class="btn default bold br24" ng-click="submit()">
+                                    <i class="fas fa-upload fs15"></i>
+                                    {{'COM_UPLOAD' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-7" ng-class="{'col-md-12' : isAllData == 'False'}">
+                            <div class="panel panel-default boder-table br-none no-boxshadow">
+                                <div class="panel-heading">
+                                    <h4 class="bold">
+                                        {{'EDMSR_TAB_FILE_CURD_LBL_CATEGORY' | translate}}
+                                        <!--<span class="text-danger fs8">&nbsp;&nbsp;&nbsp;&nbsp; {{'EDMSR_LBL_LINK_FTP' | translate}}</span>-->
+                                        <span class="badge-customer badge-customer-success position-absolute bold" style="right:25px"><i class="fa fa-check-square-o inline"></i>&nbsp;1</span>
+                                    </h4>
+                                </div>
+                                <div class="panel-body scroller-sm-fade contentMainCategory">
+                                    <div id="treeDivCategory" tree="ctr.treeInstance" js-tree="treeConfig" should-apply="true" ng-model="treeDataCategory" tree-events-obj="treeEvents"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pl-0" ng-show="isAllData == 'True'">
+                            <div class="col-md-12 p-0">
+                                <style>
+                                    #tblDataFolder_info {
+                                        display: none;
+                                    }
+                                </style>
+                                <table class="table dataTable table-hover table-striped"
+                                       datatable
+                                       dt-options="dtOptions"
+                                       dt-columns="dtColumns"
+                                       dt-instance="dtInstance"
+                                       id="tblDataDetailUpload"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex mr15">
+        <button class="btn green-custom" ng-click="submit()">
+            <i class="fa fa-save"></i>
+            {{'COM_BTN_SAVE' | translate}}
+        </button>
+    </div>
+</div>-->

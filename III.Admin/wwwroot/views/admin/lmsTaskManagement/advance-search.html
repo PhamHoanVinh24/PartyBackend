@@ -1,0 +1,101 @@
+﻿<div class="modal-header no-color">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-search fs15 pt10 black"></i>
+    <div class="modal-title black" id="modal-title">{{'CJ_CURD_TITLE_SEARCH_ADVANCE_SEARCH' | translate}}</div>
+</div>
+<div class="modal-body">
+    <form name="searchForm" ng-validate="searchValidate">
+        <div class="row">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-code"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_CARD_TITLE' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <input class="form-control" name="CardTitle" ng-model="search.CardTitle" placeholder="{{'CJ_CURD_TXT_SEARCH_CARD_TITLE' | translate}}..." />
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-user"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_MEMBER' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <ui-select class="ui-select-bootstrap-right-radius"  ng-model="search.Member" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_MEMBER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                    <ui-select-choices style="height: auto" repeat="x.Id as x in listUser | filter: $select.search">
+                        {{x.GivenName}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-calendar"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_FROM_DATE' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="input-group date" id="DateFrom">
+                    <input class="form-control" ng-model="search.Fromdate" placeholder="{{'CJ_CURD_TXT_SEARCH_FROM_DATE' | translate}}..." />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-calendar"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="input-group date" id="DateTo">
+                    <input class="form-control" ng-model="search.Todate" placeholder="{{'CJ_CURD_TXT_SEARCH_TO_DATE' | translate}}..." />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-list"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_STATUS' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <ui-select class="ui-select-bootstrap-right-radius"  ng-model="search.Status" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_STATUS' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                    <ui-select-choices style="height: auto" repeat="x.Code as x in cardStatus | filter: $select.search">
+                        {{x.Value}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-plane"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_OBJ_DEPENDENCY' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <ui-select class="ui-select-bootstrap-right-radius"  ng-model="search.ObjDependency" on-select="objDependencyChange(search.ObjDependency)" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_OBJ_DEPENDENCY' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                    <ui-select-choices style="height: auto" repeat="x.Code as x in objDependency | filter: $select.search">
+                        {{x.Value}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="col-md-4 pt5">
+                <label class="label-control"><span class="fa fa-plane"></span>&nbsp;{{'CJ_CURD_LBL_SEARCH_OBJ_CODE' | translate}}</label>
+            </div>
+            <div class="col-md-8">
+                <ui-select class="ui-select-bootstrap-right-radius"  ng-model="search.ObjCode" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_OBJ_CODE' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                    <ui-select-choices style="height: auto" repeat="x.Code as x in listObjCode | filter: $select.search">
+                        {{x.Value}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div class="col-md-12">
+        <button class="btn btn-default" ng-click="cancel()">{{'COM_BTN_CANCEL' | translate}}</button>
+        <button class="btn btn-red" ng-click="submit()">{{'COM_BTN_SEARCH' | translate}}</button>
+    </div>
+</div>

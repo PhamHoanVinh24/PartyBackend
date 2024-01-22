@@ -1,0 +1,114 @@
+﻿<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-4 ">
+            <h1 class="bold mb-0">Mua sắm tài sản</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin/Dashboard">{{'ASSET_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="/Admin/AssetProfile">Mua sắm tài sản</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 ">
+            <div class="btn-group pull-right actions">
+                <a class="btn btn-accent btnSearch">
+                    <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+                </a>
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 hidden mt10">
+        <div class="portlet-body">
+            <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'ASSET_CURD_LBL_ASSET_CODE' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.AssetCode" class="form-control" type="text" placeholder="{{'ASSET_CURD_TXT_ASSET_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AssetCode='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'ASSET_CURD_LBL_ASSET_NAME' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.AssetName" class="form-control" type="text" placeholder="{{'ASSET_CURD_TXT_ASSET_NAME' | translate}}.." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AssetName='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'ASSET_CURD_LBL_STATUS' | translate}}</label>
+                    <div class='input-group search-group'>
+                        <ui-select tagging ng-model="model.Status">
+                            <ui-select-match placeholder="{{'ASSET_CURD_TXT_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in Status | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3" style="padding-top:22px">
+                    <button ng-click="search()" class="btn btn-accent">
+                        <i class="fa fa-search"></i>
+                        {{'COM_BTN_SEARCH' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>
+

@@ -1,0 +1,114 @@
+﻿<!--style-->
+<style type="text/css">
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .list-user input {
+        border: 0 !important;
+    }
+    .form-group {
+        margin-bottom: 5px !important;
+    }
+    
+    .control-label.require::after {
+        content: '*';
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-file-excel icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'Nhập dữ liệu CC - Thẻ AT nhân viên từ excel' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-left">
+                <div class="col-md-2" style="margin-top:15px">
+                    <label class="control-label require"><i class="fa fa-file"></i>{{"Chọn tệp"|translate}}</label>
+                </div>
+                <div class="col-md-6" style="margin-top:10px">
+                    <div class="input-group input-file">
+                        <i class="fa fa-upload"></i>
+                        <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:33px" placeholder="Chọn file báo cáo..." readonly></>
+                        <span class="input-group-btn">
+                            <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browser</span>
+                            <input class="form-control hidden" id="FileItem" custom-on-change="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                        </span>
+                    </div>
+                </div>
+                <div class="btn-group pt5 pb-1 pull-right actions d-flex">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pl10 margin-right-10" ng-click="check()">
+                            <a class="btn btn-icon-only btn-outline purple-custom" style="background-color:#ffffff !important;border-color: #121312;color: #131212 !important;">
+                                <span><i class="fas fa-tasks"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'Kiểm tra' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pl10 margin-right-10" ng-click="submit()">
+                            <a class="btn btn-icon-only btn-outline green-custom" style="background-color:#ffffff !important;border-color: #121312;color: #131212 !important;">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'Lưu lại' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pl10 margin-right-10" ng-click="import()">
+                            <a class="btn btn-icon-only btn-outline green-custom" style="background-color:#ffffff !important;border-color: #121312;color: #131212 !important;">
+                                <span><i class="fa fa-file-excel"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'Import' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pl10 margin-right-10" ng-click="loadExcel()">
+                            <a class="btn btn-icon-only btn-outline green-custom" style="background-color:#ffffff !important;border-color: #121312;color: #131212 !important;">
+                                <span><i class="fa fa-file-excel"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'Mở tệp' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <table class="table dataTable table-hover table-striped" style="border:solid 1px">
+        <thead >
+            <tr>
+                <th style="width:120px ;border:solid 1px">
+                    Số hiệu
+                </th>
+                <th style="width:120px ;border:solid 1px">
+                    Tên CC - Thẻ AT
+                </th>
+                <th style="width:40px ;border:solid 1px">
+                    Mã nhân viên
+                </th>
+                <th style="width:120px ;border:solid 1px">
+                    Ngày cấp
+                </th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in Listdata">
+                <td style="width:80px ;border:solid 1px">{{item.CertNum}}</td>
+                <td style="width:80px ;border:solid 1px">{{item.CertCode}}</td>
+                <td style="width:80px ;border:solid 1px">{{item.EmployeeCode}}</td>
+                <td style="width:80px ;border:solid 1px">{{item.CertDateLicense}}</td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

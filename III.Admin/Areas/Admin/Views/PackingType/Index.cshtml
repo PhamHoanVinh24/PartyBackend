@@ -1,0 +1,21 @@
+﻿@using ESEIM.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = ViewData["CrumbProdAttrMain"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+    bool hasInsert = session.HasPermission(CommonUtil.Controller_MaterialProductGroup, CommonUtil.Action_Insert);
+    bool hasUpdate = session.HasPermission(CommonUtil.Controller_MaterialProductGroup, CommonUtil.Action_Update);
+    bool hasDelete = session.HasPermission(CommonUtil.Controller_MaterialProductGroup, CommonUtil.Action_Delete);
+}
+<div id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+    <div ng-view></div>
+</div>
+<script>
+    var PERMISSION_MATERIAL_PRODUCT_GROUP = {
+        Insert: @(hasInsert ? "true" : "false"),
+        Update: @(hasUpdate ? "true" : "false"),
+        Delete: @(hasDelete ? "true" : "false"),
+    };
+</script>
+<script src="~/views/admin/packingType/controller.js" type="text/javascript"></script>

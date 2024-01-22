@@ -1,0 +1,199 @@
+﻿<style>
+    @media(max-width:992px)
+    {
+        .modal-60{
+            width:75%!important;
+        }
+    }
+     @media (min-width:992px) and (max-width:1200px)
+    {
+        .modal-60{
+            width:70%!important;
+        }
+    }
+      @media(min-width:1201px) and (max-width:1500px)
+    {
+        .modal-60{
+            width:60%!important;
+        }
+    }
+       @media(min-width:1501px)
+    {
+        .modal-60{
+            width:50%!important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">{{'VCMM_TITLE_EDIT_WEEK_PLANS' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_CODE_PLAN' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.WpCode" name="WpCode" placeholder="Mã kế hoạch..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_WEEK' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.WeekNo" name="WeekNo" placeholder="Tuần thứ..." readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_FROM_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="Ngày bắt đầu..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label">{{'VCMM_CURD_LBL_TO_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="Ngày kết thúc..." readonly />
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-6">
+
+                </div>-->
+
+
+
+
+                <!--<div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label">Mã kế hoạch</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" ng-model="model.WpCode" name="WpCode" placeholder="Mã kế hoạch..." readonly />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fa fa-cube" aria-hidden="true"></i>
+                        <label class="control-label">Tuần</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" ng-model="model.WeekNo" name="WeekNo" placeholder="Tuần..." readonly />
+                    </div>
+                </div>-->
+                <!--<div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label class="control-label">Ngày bắt đầu</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="Ngày bắt đầu..." readonly />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label class="control-label">Ngày kết thúc</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="Ngày kết thúc..." readonly />
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    <div class="col-md-12 mt20">
+                        <label class="control-label uppercase bold">{{'VCMM_CURD_LBL_LIST_STORE_PLAN' | translate}}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.sltNode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'VCMM_CURD_TXT_SELECT_STORE' | translate}}...">{{$select.selected.Name}} - {{$select.selected.Address}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listCustomer | filter: $select.search">
+                                    {{x.Name}} - {{x.Address}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.sltNode=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-right" >
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addCustomer(model.sltNode)">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        <!--<a ng-click="addCustomer(model.sltNode)" class="btn br4 btn-green">
+                            <span class=""><i class="fa fa-plus"></i> Thêm mới</span>
+                        </a>-->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered table-striped ">
+                            <thead class="title" style="background-color:#b0bed9">
+                                <tr class="bold">
+                                    <th class="text-center col-md-2">{{'VCMM_CURD_LBL_CODE_STORE' | translate}}</th>
+                                    <th class="text-center col-md-3">{{'VCMM_TH_STORE_NAME' | translate}}</th>
+                                    <th class="text-center col-md-8">{{'VCMM_TH_STORE_ADDRES' | translate}}</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in model.list_detail">
+                                    <td class="text-center">
+                                        <label>{{x.sltNode}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label>{{x.NameNode}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label>{{x.Address}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <button title="Xoá" ng-click="deleteCustomer(x.sltNode)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pr35" style="background-color:transparent">
+    <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+        <span><i class="fa fa-close"></i></span>
+    </a>
+    <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_CANCEL' | translate}}</p>
+    <!--<button ng-click="cancel()" class="btn btn-default" style="margin-top: -35px; margin-right: 26px" href="javascript:;">
+        Đóng
+    </button>-->
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Lưu lại
+    </button>-->
+</div>

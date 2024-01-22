@@ -1,0 +1,157 @@
+﻿<!--<style>
+    .modal-footer {
+        padding-right: 25px !important;
+    }
+</style>-->
+<!--<div class="modal-header no-color">
+    <div class="modal-title black" id="modal-title"> Chi tiết kế hoạch công việc</div>
+</div>-->
+<div class="modal-header no-color">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-info-circle icon-detail black"></i>
+    <span class="modal-title black" id="modal-title">  {{'CONTRACR_MSG_TITLE_DETAILS_OF_SUPPLIERS_FOR_PRODUCTS' | translate}}: <span class="text-danger">{{modelViewProductDetail.ProductCode}}</span></span>
+</div>
+<div class="modal-body mt10" id="modal-body">
+    <div class="portlet-body form">
+
+        <div class="clearfix form-group">
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered table-striped ">
+                    <thead class="title" style="background-color:#b0bed9">
+                        <tr class="bold">
+                            <th class="text-center col-md-1">{{'CONTRACT_LIST_COL_ORDER' | translate}}</th>
+                            <th class="text-center col-md-2">{{'CONTRACT_CURD_LBL_LIST_SUPPLIER' | translate}}</th>
+                            <th class="text-center col-md-2">{{'CONTRACT_CURD_TAB_DETAIL_CURD_LBL_QUATITY' | translate}}</th>
+                            <th class="text-center col-md-2">{{'CONTRACT_CURD_TAB_DETAIL_LIST_COL_UNIT' | translate}}</th>
+                            <th class="text-center col-md-2">{{'CONTRACT_CURD_TAB_OTHER_LIST_COL_STATUS' | translate}}</th>
+                            <th class="text-center col-md-2">{{'CONTRACT_TAB_LOP_CURD_LBL_PRICE' | translate}}</th>
+                            <th class="text-center col-md-1">{{'CONTRACT_TAB_LOS_LIST_COL_CURRENCY' | translate}}</th>
+                            <!--<th class="text-center col-md-2">Tỷ trọng Bút Sơn</th>
+    <th class="text-center col-md-2">Trữ lượng trống (T)</th>
+    <th class="text-center col-md-2">Ghi chú</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in model.ListData">
+                            <td class="text-center">
+                                <label>{{$index + 1}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.SupName}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label class="bold text-success">{{x.Quantity | number}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.UnitName}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.Status}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label class="bold text-success">{{x.UnitPrice | number}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.UnitPrice != null ? x.Currency : ""}}</label>
+                            </td>
+                            <!--<td class="text-center">
+                                <label>{{x.TimePlan | date:'dd/MM/yyyy HH:mm'}}</label>  View thế này bị cộng thêm 7h
+                                <label>{{x.TimePlan}}</label>
+                            </td>-->
+                        </tr>
+                    </tbody>
+                    <!--<tfoot class="title">
+                        <tr>
+                            <th class="text-center"></th>
+                            <th class="text-center">TOTAL</th>
+                            <th class="text-center">{{model.Seq01QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq02QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq03QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq04QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq05QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq06QtyTotal}}</th>
+                            <th class="text-center">{{model.Seq07QtyTotal}}</th>
+                        </tr>
+                    </tfoot>-->
+                </table>
+            </div>
+            <div class="col-md-12 bold" ng-show="modelViewProductDetail.WarningNotData">
+                <span class="text-danger">{{'CONTRACT_VALIDATE_TXT_NO_DATA_DO_NOT_CREATE_AN_ORDER_REQUIREMENT' | translate}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal-footer pr30" style="margin-top: -40px !important">
+    <a data-dismiss="modal" class="btn btn-default " href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+</div>-->
+
+
+
+
+<!--Xử lý upload ảnh-->
+<!--<div class="col-md-4">
+    <div class="form-group">
+        <div class="col-md-12" style="margin-top:5px">
+            <div class="thumbnail " style="border: 0; box-shadow: none">
+                <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                <img src="{{model.Pic}}" ng-click="uploadImage()" id="imageId" class="rounded-circle height-150 width-150 cursor-pointer" alt="Card image" />
+            </div>
+        </div>
+    </div>
+</div>-->
+<!--Xử lý bắt điều kiện người dùng tự tạo-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorSex}">
+    <div class="col-md-12">
+        <i class="fa fa-transgender" aria-hidden="true"></i>
+        <label class="control-label require">Giới tính</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group">
+            <ui-select tagging ng-model="model.Sex" theme="bootstrap" on-select="changleSelect('Sex')">
+                <ui-select-match placeholder="Chọn giới tính...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in ListSex | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <span ng-show="errorSex" class="label-color validation-message">
+            Chọn giới tính!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị datepicker-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorBirthday}">
+    <div class="col-md-12">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <label class="control-label require">Ngày sinh</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group date" id="birthday">
+            <input type="text" class="form-control input-date" ng-model="model.Birthday" ng-readonly="isEnalePatient" name="Birthday" placeholder="Chọn ngày sinh..." ng-change="changleSelect('Birthday')" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+        <span ng-show="errorBirthday" class="label-color validation-message">
+            Ngày sinh sai định dạng!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị định dạng ngày tháng trên html combobox-->
+<!--<div class="input-group">
+    <ui-select tagging ng-model="modelSearchParent.Parent" theme="bootstrap" on-select="selectComboboxParent(modelSearchParent.Parent)" ng-disabled="isEnaleComboboxParent">
+        <ui-select-match placeholder="Tìm kiếm theo mã, tên, số điện thoại, email, facebook, địa chỉ">{{$select.selected.ParentName}} - {{$select.selected.Birthday | date: 'dd/MM/yyyy'}} - {{$select.selected.Phone}} - {{$select.selected.Email}} - {{$select.selected.Facebook}} - {{$select.selected.Address}}</ui-select-match>
+        <ui-select-choices repeat="x in ListParentCombobox | filter: $select.search">
+            {{x.ParentCode}} - {{x.ParentName}} - {{x.Birthday | date: 'dd/MM/yyyy'}} - {{x.Phone}} - {{x.Email}} - {{x.Facebook}} - {{x.Address}}
+        </ui-select-choices>
+    </ui-select>
+    <span class="input-group-btn">
+        <button type="button" ng-click="deleteComboboxParent()" class="btn btn-default no-shadow" style="">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </span>
+</div>-->

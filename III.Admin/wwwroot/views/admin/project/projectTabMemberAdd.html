@@ -1,0 +1,73 @@
+﻿<style>
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-30 {
+            width: 35%;
+        }
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'PROJECT_CURD_TAB_MEMBER_TITLE_ADD_MEMBER' | translate}}</span><span class="black bold">{{model.ContractCode}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form style="border: 0px solid #e7ecf1 !important;" name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validateOptionsProjectMember">
+            <div class="form-body" style="padding-top:0px;">
+                <div class="form-group" ng-class="{ 'has-error': errorMemberCode}">
+                    <div class="col-lg-4">
+                        <label class="control-label text-left require"><i class="fa fa-user"></i>&nbsp;{{'PROJECT_CURD_TAB_MEMBER_CURD_MEMBERCODE' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.MemberCode" theme="bootstrap" on-select="changleSelect('MemberCode')">
+                                <ui-select-match placeholder="{{'PROJECT_CURD_TAB_MEMBER_CURD_COMBO_MEMBERCODE' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorMemberCode" class="label-color validation-message">
+                            {{'PROJECT_CURD_TAB_MEMBER_CURD_VALIDATE_MEMBERCODE' | translate}}!
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <label class="control-label text-left require"> <i class="fa fa-user"></i>&nbsp;{{'PROJECT_CURD_TAB_MEMBER_CURD_LBL_POSITION' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control br24" name="Position" ng-model="model.Position" placeholder="{{'PROJECT_CURD_TAB_MEMBER_CURD_TXT_POSITION' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right pt10 actions d-flex">
+        <div class="text-center pr20">
+            <a class="" ng-click="cancel()">
+                <span><i style="--fa-primary-color: red;" class="fas fa-times fs30"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="" ng-click="submit()">
+                <span><i class="fa-solid fa-plus fs30"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>
+
+
+

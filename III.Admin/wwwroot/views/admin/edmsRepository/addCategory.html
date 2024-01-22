@@ -1,0 +1,154 @@
+﻿<style>
+    .dataTables_info {
+        font-size: 1rem !important
+    }
+
+    .panel-body {
+        padding-top: 15px !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .bold-label {
+        font-weight: 700;
+    }
+
+    .modal-header {
+        background-color: white;
+    }
+
+    .modal-title {
+        color: black;
+    }
+
+    .fa.fa-plus-circle.icon-insert {
+        color: black
+    }
+</style>
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'EDMSR_TITLE_ADD_CATEGORY' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addformCategory" method="post" ng-validate="validationOptionsCategory">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-12 form-group">
+                                <label class="control-label bold-label require"><i class="fas fa-barcode"></i>&nbsp;{{'EDMSR_CURD_LBL_CATEGORY_CODE' | translate}}</label>
+                                <div>
+                                    <input ng-model="model.CatCode" name="CatCode" class="form-control br24" type="text" placeholder="{{'EDMSR_CURD_TXT_CATEGORY_CODE' | translate}}..." />
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-12 form-group">
+                                <label class="control-label bold-label require"><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;{{'EDMSR_CURD_LBL_CATEGORY_NAME' | translate}}</label>
+                                <div>
+                                    <input type="text" class="form-control br24" ng-model="model.CatName" name="CatName" placeholder="{{'EDMSR_CURD_TXT_CATEGORY_NAME' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 form-group">
+                                <label class="control-label "><i class="fas fa-folder-open"></i>&nbsp;{{'EDMSR_CURD_LBL_CATEGORY_PARENT' | translate}}</label>
+                                <div>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.CatParent" theme="bootstrap">
+                                            <ui-select-match placeholder="{{'EDMSR_COMBO_CATEGORY_PARENT' | translate}}...">
+                                                <i ng-show="!$select.selected.HasChild" class="fa fa-folder text-info"></i>
+                                                <i ng-show="$select.selected.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                {{$select.selected.Title}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in treeDataCategory | filter: $select.search">
+                                                <div style="padding-left: {{15 * x.Level}}px">
+                                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                    {{x.Title}}
+                                                </div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.CatParent=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group">
+                                <label class="control-label "><i class="fas fa-folder-open"></i>&nbsp;{{'EDMSR_CURD_LBL_CATEGORY_MODULE_FILE_UPLOAD_DEFAULT' | translate}}</label>
+                                <div>
+                                    <input type="text" class="form-control br24" ng-model="model.ModuleFileUploadDefault" name="ModuleFileUploadDefault" placeholder="{{'EDMSR_CURD_TXT_CATEGORY_MODULE_FILE_UPLOAD_DEFAULT' | translate}}..." />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group">
+                                <label class="control-label "><i class="fas fa-folder-open"></i>&nbsp;{{'EDMSR_CURD_LBL_CATEGORY_PATH_SERVER_PHYSIC' | translate}}</label>
+                                <div>
+                                    <input type="text" class="form-control br24" ng-model="model.PathServerPhysic" name="ModuleFileUploadDefault" placeholder="{{'EDMSR_CURD_TXT_CATEGORY_PATH_SERVER_PHYSIC' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="text-center pt10">
+                            <a class="fs30" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ml5">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default boder-table br-none no-boxshadow" style="height: 440px;">
+                            <div class="panel-heading tree-header h-35">
+                                <h4 class="panel-title pull-left fw600">{{'EDMSR_TITLE_SERVER' | translate}}</h4>
+                            </div>
+                            <div class="panel-body scroller-sm-fade">
+                                <div id="treeDivRepository" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeDataRepository" tree-events-obj="treeEvents"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="breadcrumb-wrapper h-20">
+                            <ol class="breadcrumb fs15">
+                                <li class="breadcrumb-item" ng-repeat="x in breadcrumb" ng-click="selectBreadcrumbRepository($index,breadcrumb)">
+                                    <a class="" style="color:#484444">{{x.Name.length > 20 ? x.Name.substr(0, 20) + "..." : x.Name }}</a>
+                                </li>
+                                <li class="breadcrumb-item"><span class="" style="color:#484444">{{model.ListRepository[0] != null ? "(" + model.ListRepository[0].FolderName + ")" : ""}}</span></li>
+                            </ol>
+                        </div>
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblDataDetailRepository"></table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div class="modal-footer pt-0">
+    <div class="btn-group pull-right actions d-flex pr25">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>-->

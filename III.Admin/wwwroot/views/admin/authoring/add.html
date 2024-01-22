@@ -1,0 +1,64 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert"></i>
+    <span class="modal-title" id="modal-title"> {{'AUTHORING_ADD_AUTHORIZED_PERSION' |translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group" ng-class="{ 'has-error': errorToUser}">
+                    <div class="col-md-4">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <label class="control-label require">{{'AUTHORING_CURD_LBL_CHOOSE_PEOPLE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.ToUser" theme="bootstrap"  on-select="changeSelect('ToUser')">
+                                <ui-select-match placeholder="{{'AUTHORING_CURD_TXT_CHOOSE_PEOPLE' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in DispatchUsers | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToUser=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorToUser" class="label-color validation-message">
+                            {{'AUTHORING_CURD_VALIDATE_AUTHORIZED_PERSON' | translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                        <label class="control-label require">{{'AUTHORING_CURD_LBL_FROM_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="{{'AUTHORING_CURD_TXT_FROM_DATE' | translate}}..."  id="FromDate"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                        <label class="control-label require">{{'AUTHORING_CURD_LBL_TO_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="{{'AUTHORING_CURD_TXT_TO_DATE' | translate}}..."   id="ToDate"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn  btn-default " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-red mr25" href="javascript:;" >
+         {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>

@@ -1,0 +1,211 @@
+﻿<div class="modal-header " style="margin-top:100px">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'MP_MODIFY_INFO_VEHICAL ' | translate}}</div>  
+</div>
+<div class="modal-body" id="modal-body" style="margin-top:10px !important">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-md-6">
+                        <div class="form-group"  ng-class="{ 'has-error': errorLicensePlate}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">{{'MP_LICENSE_PLATES' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="CusCode" ng-model="model.LicensePlate" type="text" placeholder="{{'MP_LICENSE_PLATES' | translate}}"  />
+                                <span ng-show="errorLicensePlate" class="label-color validation-message">
+                                    {{'MP_NOT_EMPTY_SLICENT_PLATE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-home"></i> {{'MP_LABEL_GROUP' | translate}}</label> 
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.Group" class="" style="width: 100%;" ng-change="getGroup()">
+                                        <ui-select-match placeholder="{{'MP_CHOICE_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                        <ui-select-choices repeat="x.Code as x in Groups | filter:$select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <label class="control-label ">{{'MP_LABEL_BRAND' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Generic" type="text" placeholder="{{'MP_LABEL_BRAND' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <label class="control-label ">{{'MP_LABEL_ROOT' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Origin" type="text" placeholder="{{'MP_LABEL_ROOT' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                                <label class="control-label ">{{'MP_YEAR_FACTORY' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.YearManufacture" type="text" placeholder="{{'MP_YEAR_FACTORY' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorCustomType}">
+                            <label class="control-label col-md-5 text-left require"><i class="fas fa-truck"></i> {{'MP_RANGE_VEHICAL' | translate}}</label> 
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.CustomType" class="" style="width: 100%;" ng-change="getGroup()">
+                                        <ui-select-match placeholder="{{'MP_CHOICE_RANGE_VEHICAL' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                        <ui-select-choices repeat="x.Code as x in TransporterTypes | filter:$select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CustomType = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCustomType" class="label-color validation-message">
+                                    {{'MP_NOT_EMPTY_RANGE_VEHICAL' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="glyphicon glyphicon-th-list"></i>
+                                <label class="control-label ">{{'MP_PICTURE_VEHICAL' | translate}} </label> 
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <div class="col-md-12 mt5">
+                                        <div class="thumbnail " style="border: 0; box-shadow: none;background:none">
+                                            <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                            <img id="imageId" src="{{model.Image}}" ng-click="uploadImage()"
+                                                 onerror="this.src='../../../images/default/uploadimg.png'"
+                                                 class="img-circle image-upload" style="height: 200px; width: 200px;cursor: pointer" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-center" style="font-size: 17px;margin-top: -5px;">
+                                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                        <label class="control-label "></label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!--<div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-user"></i> Chủ sở hữu</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.OwnerCode" name="Owner_Code" placeholder="Nhập chủ sở hữu" />
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="fas fa-folder"></i> Category</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Category" name="Category" placeholder="Nhập category" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="fas fa-weight-hanging"></i> {{'MP_LABEL_WEIGHT' | translate}}</label> 
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.WeightItself" name="Weight_Itself" placeholder="Nhập trọng lượng" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="fas fa-weight-hanging"></i>{{'MP_LABEL_DESIGN_WEIGHT' | translate}} </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.DesignPayload" name="Design_Payload" placeholder="{{'MP_LABEL_DESIGN_WEIGHT' | translate}}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="fas fa-weight-hanging"></i>{{'MP_LABEL_WEIGHTED' | translate}} </label> 
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.PayloadPulled" name="Payload_Pulled" placeholder="{{'MP_TXT_INPUT_WEIGHTED' | translate}}" /> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="fas fa-weight-hanging"></i>{{'MP_LABEL_TOTAL_WEIGHT' | translate}} </label> 
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.PayloadTotal" name="Payload_Total" placeholder="{{'MP_TXT_INPUT_TOTAL_WEIGHT' | translate}}" /> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-menu-hamburger"></i> {{'MP_LABEL_SIZE_REGISTRY' | translate}} </label> 
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.SizeRegistry" name="Size_Registry" placeholder="{{'MP_LABEL_SIZE_REGISTRY' | translate}}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-menu-hamburger"></i> {{'MP_LABEL_USAGE_SIZE' | translate}} </label> 
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.SizeUse" name="Size_Use" placeholder="{{'MP_LABEL_INPUT_USAGE_SIZE' | translate}}" /> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-calendar"></i> {{'MP_LABEL_TIME_REGISTRY' | translate}} </label> 
+                            <div class="bs-component col-md-7">
+                                <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                    <input type="text" class="form-control" ng-model="model.RegistryDuration" placeholder="{{'MP_TXT_INPUT_TIME_REGISTRY' | translate}}" id="RegistryDuration" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.RegistryDuration = ''" class="btn btn-default no-shadow">
+                                            
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-calendar"></i> {{'MP_DURATION_INSURANCE' | translate}} </label> 
+                            <div class="bs-component col-md-7">
+                                <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                    <input type="text" class="form-control" id="InsurranceDuration" ng-model="model.InsurranceDuration" placeholder="{{'MP_INPUT_DURATION_INSURANCE' | translate}}" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.InsurranceDuration = ''" class="btn btn-default no-shadow">
+                                            
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-th-list"></i> {{' MP_LABEL_NOTE' | translate}}</label> 
+                            <div class="col-md-7">
+                                <textarea type="text" class="form-control" ng-model="model.Note" name="Note" rows="2" placeholder="Nhập ghi chú"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <a ng-click="submit()" class="btn btn-green " href="javascript:;">
+                            <i class="fas fa-save"></i>&nbsp; {{'COM_BTN_EDIT' | translate}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

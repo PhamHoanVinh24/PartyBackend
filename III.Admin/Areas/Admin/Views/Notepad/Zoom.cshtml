@@ -1,0 +1,120 @@
+﻿@model III.Admin.Controllers.NotepadController.RoomInfo;
+@{
+    ViewData["Title"] = "Meeting";
+}
+<link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.9.8/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="https://source.zoom.us/1.9.8/css/react-select.css" />
+<body>
+    <script src="https://source.zoom.us/1.9.8/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/1.9.8/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/1.9.8/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/1.9.8/lib/vendor/redux-thunk.min.js"></script>
+    <script src="https://source.zoom.us/1.9.8/lib/vendor/lodash.min.js"></script>
+    <script src="https://source.zoom.us/zoom-meeting-1.9.8.min.js"></script>
+    <script src="~/lib/notepad/socket.io.js"></script>
+    <script src="~/lib/robust/core/libraries/jquery.min.js" type="text/javascript"></script>
+
+    @Html.HiddenFor(m => m.RoomID)
+    @Html.HiddenFor(m => m.ScheduleID)
+    @Html.HiddenFor(m => m.RoomName)
+    @Html.HiddenFor(m => m.Role)
+    @Html.HiddenFor(m => m.RoomPassWord)
+    @Html.HiddenFor(m => m.UserName)
+    @Html.HiddenFor(m => m.ApiKey)
+    @Html.HiddenFor(m => m.ApiSecret)
+    <script>
+        var roomID = $('#RoomID').val();
+        var scheduleID = $('#ScheduleID').val();
+        var roomName = $('#RoomName').val();
+        var role = $('#Role').val();
+        var roomPassWord = $('#RoomPassWord').val();
+        var userName = $('#UserName').val();
+        if (roomID == null || roomID == '' || roomID == undefined) {
+            alert('Không lấy được thông tin cuộc họp');
+            window.close();
+        } else {
+            console.log('checkSystemRequirements');
+            console.log(JSON.stringify(ZoomMtg.checkSystemRequirements()));
+            var url = 'https://nodejs.s-work.vn'; //Use when run on publish
+            var socket = io.connect(url);
+            ZoomMtg.preLoadWasm();
+
+            ZoomMtg.prepareJssdk();
+
+            var API_KEY = $('#ApiKey').val();
+            var API_SECRET = $('#ApiSecret').val();
+
+
+            var meetConfig = {
+                apiKey: API_KEY,
+                apiSecret: API_SECRET,
+                meetingNumber: parseInt(roomID),
+                userName: userName,
+                passWord: roomPassWord,
+                leaveUrl: "/",
+                role: parseInt(role)
+            };
+
+
+            var signature = ZoomMtg.generateSignature({
+                meetingNumber: meetConfig.meetingNumber,
+                apiKey: meetConfig.apiKey,
+                apiSecret: meetConfig.apiSecret,
+                role: meetConfig.role,
+                success: function (res) {
+                    console.log(res.result);
+                }
+            });
+
+            ZoomMtg.init({
+                leaveUrl: '/Admin/Notepad/Zoom',
+                isSupportAV: true,
+                success: function () {
+                    socket.emit('init-zoom', { 'user': meetConfig.userName, 'room': scheduleID });
+                    ZoomMtg.join(
+                        {
+                            meetingNumber: meetConfig.meetingNumber,
+                            userName: meetConfig.userName,
+                            signature: signature,
+                            apiKey: meetConfig.apiKey,
+                            passWord: meetConfig.passWord,
+                            success: function (res) {
+                                socket.emit('join-zoom', { 'user': meetConfig.userName, 'room': scheduleID });
+                                socket.on('full-screen-to-client', function (data) {
+                                    if (data.user == meetConfig.userName && data.room == scheduleID) {
+                                        $(".full-screen-widget").click();
+                                        var element = $("[aria-label='Full Screen']");
+                                        if (element.length > 0) {
+                                            $("[aria-label='Full Screen']")[0].click();
+                                        }
+                                    }
+                                });
+                                console.log('join meeting success');
+                            },
+                            error: function (res) {
+                                console.log(res);
+                            }
+                        }
+                    );
+                },
+                error: function (res) {
+                    console.log(res);
+                }
+            });
+        }
+    </script>
+    <style>
+        .zmu-tabs__tab-bar {
+            min-width: 200px !important;
+        }
+
+        #content, .container-preview {
+            height: 100%;
+        }
+
+        .media-preview-container {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</body>

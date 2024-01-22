@@ -1,0 +1,415 @@
+﻿<style>
+
+    .btn.btn-image {
+        padding: 0px 14px 0px 0px !important;
+        background-color: transparent;
+    }
+
+        .btn.btn-image img {
+            width: 32px;
+            height: 32px;
+        }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'MP_DIV_MODIFY' | translate}}</div> 
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editForm" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">{{'MP_NPP/ĐM/CH' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="CusCode" ng-model="model.CusCode" type="text" placeholder="{{'MP_CODE_NPP' | translate}}..." ng-readonly="CustomerId !=-999" />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    {{'MP_LABEL_NOT_EMPTY_CODE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorCusName}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">{{'MP_LABEL_NAME_NNP/ĐM/CH' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="CusName" ng-model="model.CusName" type="text" placeholder="Tên NPP/Đầu mối/Cửa hàng..." />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    {{'MP_NOT_EMPTY_NAME_NNP/ĐM/CH' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa-solid fa-address-book"></i>
+                                <label class="control-label">{{'MP_LABEL_MEETING' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.SURROGATE" type="text" placeholder="{{'MP_LABEL_MEETING' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorRole}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">{{'MP_LABEL_ROLE' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group"  style="z-index: 999999999">
+                                    <ui-select tagging ng-model="model.Role" theme="bootstrap" on-select="changleSelect('Role')">
+                                        <ui-select-match placeholder="{{'MP_LABEL_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerRoles | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Role=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    {{'MP_TXT_NOT_EMPTY_ROLE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-map-marker"></i>
+                                <label class="control-label">{{'MP_LABEL_MAP' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-icon" style="margin-bottom: 0px">
+                                    <i ng-click="openMap()" class="cursor fa fa-map-marker"></i>
+                                    <input ng-click="openMap()" id="locationGPS" class="form-control" ng-model="model.GoogleMap" name="key" type="text" style="padding-left: 30px; width: 100%" onkeypress="return false;" onkeydown="return false;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorAddress}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label">{{'MP_LIST_COL_MP_ADDRESS' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <textarea style="height: 75px" id="textAreaAddress" class="form-control" ng-model="model.Address" type="text" placeholder="{{'MP_LIST_COL_MP_ADDRESS' | translate}}..."></textarea>
+                                <span ng-show="errorAddress" class="label-color validation-message">
+                                    {{'MP_LABEL_NOT_EMPTY_ADDRESS' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa-solid fa-address-book"></i>
+                                <label class="control-label">{{'MP_LABEL_TRANSFORM' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Transport" type="text" placeholder="{{'MP_LABEL_TRANSFORM' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-fax"></i>
+                                <label class="control-label">{{'MP_LABEL_FAX' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Logo" type="text" placeholder="{{'MP_LABEL_FAX' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label">{{'MP_LABEL_GROUP' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusGroup" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'MP_TXT_SELECT' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                        <ui-select-choices repeat="x.Code as x in CustomerGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusGroup=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorArea}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">{{'MP_LABEL_AREA' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Area" theme="bootstrap" on-select="changleSelect('Area')">
+                                        <ui-select-match placeholder="{{'MP_TXT_AREA' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                        <ui-select-choices repeat="x.Code as x in CustomerAreas | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Area=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorArea" class="label-color validation-message">
+                                    {{'MP_LABEL_VALIDATE_NOT_EMPTY_AREA' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!--Thêm chỗ này vào để check xem shop, Đầu mối lấy hàng từ thằng cha nào-->
+                        <!--<div class="form-group" ng-class="{ 'has-error': errorAgent}" ng-if="roleType=='SHOP'">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Chọn NPP/Đầu mối</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.InAgent" theme="bootstrap">
+                                        <ui-select-match placeholder="Chọn NPP/Đầu mối...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in InAgentForShop | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.InAgent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    Nhà phân phối/Đầu mối không được để trống!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorAgent}" ng-if="roleType=='AGENT'">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Chọn NPP</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.InAgent" theme="bootstrap">
+                                        <ui-select-match placeholder="Chọn nhà phân phối...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in InAgentForAgent | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.InAgent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    Nhà cung cấp không được để trống!
+                                </span>
+                            </div>
+                        </div>-->
+                        <!--End thêm chỗ này vào để check xem shop, Đầu mối lấy hàng từ thằng cha nào-->
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label">{{'MP_GUESS' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusType" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'MP_GUESS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerTypes | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorActivityStatus}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label require">{{'MP_STATUS' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ActivityStatus" theme="bootstrap" on-select="changleSelect('ActivityStatus')">
+                                        <ui-select-match placeholder="{{'MP_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ActivityStatus=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorActivityStatus" class="label-color validation-message">
+                                    {{'MP_NOT_EMPTY_STATUS' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-mail-reply"></i>
+                                <label class="control-label ">{{'MP_LETTER' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7  ">
+                                <input class="form-control" name="Email" ng-model="model.Email" type="email" placeholder="name@gmail.com" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorMobilePhone}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-mobile-phone"></i>
+                                <label class="control-label">{{'MP_NUMBER_PHONE' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="Mobile" ng-model="model.MobilePhone" type="text" placeholder="{{'MP_NUMBER_PHONE' | translate}}..." ng-change="changleSelect('MobilePhone')" />
+                                <span ng-show="errorMobilePhone" class="label-color validation-message">
+                                    {{'MP_NUMBER_FALSE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fas fa-user-circle"></i>
+                                <label class="control-label">{{'MP_NUMBER_ACCOUNT' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" ng-model="model.AccountBank" type="text" placeholder="{{'MP_NUMBER_ACCOUNT' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa-solid fa-address-book"></i>
+                                <label class="control-label">{{'MP_BANK' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.AddressBank" type="text" placeholder="{{'MP_BANK' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorTaxCode}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">{{'MP_CODE_VAT' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.TaxCode" name="TaxCode" type="text" placeholder="Mã số thuế..." ng-change="changleSelect('TaxCode')" />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    {{'MP_NUMBER_CODE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorIdentification}">
+                            <div class="col-md-5 ">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <label class="control-label">{{'MP_CMTND' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Identification" name="Identification" type="text" placeholder="Số CMTND..." ng-change="changleSelect('Identification')" />
+                                <span ng-show="errorIdentification" class="label-color validation-message">
+                                    {{'MP_CMTND_NUMBER' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group" ng-class="{ 'has-error': errorFax}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-fax"></i>
+                                <label class="control-label">Fax</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Fax" type="text" placeholder="Fax..." ng-change="changleSelect('Fax')" />
+                                <span ng-show="errorFax" class="label-color validation-message">
+                                    {{'MP_FAX_ERROR' | translate}}
+                                </span>
+                            </div>
+                        </div>               
+                        <!--<div class="form-group" ng-class="{ 'has-error': errorCusGroup}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Nhóm</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusGroup" theme="bootstrap" on-select="changleSelect('CusGroup')">
+                                        <ui-select-match placeholder="Nhóm NPP/Đầu mối/Cửa hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusGroup=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCusGroup" class="label-color validation-message">
+                                    Nhóm không được để trống!
+                                </span>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <a ng-click="submit()" class="btn btn-green" href="javascript:;">
+                            <i class="fas fa-save"></i>&nbsp;  {{'COM_BTN_SAVE' | translate}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row ">
+            <div class="col-md-12">
+                <uib-tabset active="active">
+                    <!--<uib-tab index="0" heading="Mô tả">
+                        <textarea ng-model="model.Description" ui-tinymce="tinymceOptions"></textarea>
+                    </uib-tab>
+                    <uib-tab index="1" heading="Liên lạc">
+                        <div ng-include="'../views/admin/customer/contact.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="2" heading="File">
+                        <div ng-include="'../views/admin/customer/file.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="3" heading="Thuộc tính mở rộng">
+                        <div ng-include="'../views/admin/customer/more.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="4" heading="Hợp đồng">
+                        <div ng-include="'../views/admin/customer/contract.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="5" heading="Hoạt động công việc">
+                        <div ng-include="'../views/admin/customer/card-job.html'"></div>
+                    </uib-tab-->
+                    <uib-tab index="6" heading=" {{'MP_LABEL_MANAGER_SOURCE' | translate}}">
+                        
+                        <div ng-include="'../views/admin/vcVendor/trade_relationship.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="7" heading="{{'MP_MANAGER_CAR' | translate}}">
+                        
+                        <div ng-include="'../views/admin/vcVendor/managerTransporter.html'"></div>
+                    </uib-tab>
+                    <!--<uib style="float: right;">
+                        <a ng-click="addCardJob()" class="btn btn-green" title="Thêm thẻ việc">
+                            <i class="fa fa-ticket"></i>
+                        </a>
+                    </uib>-->
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,246 @@
+﻿<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Profile_picture')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<!--<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="fa fa-edit"></i> Thêm mới</h3>
+</div>
+<div class="modal-body" >
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+
+                    <div class=" col-md-6" style="padding-left:10px">
+                        <div class="form-group" hidden>
+                            <label class="control-label col-md-4 text-left"  style="padding-left:0"><i class="glyphicon glyphicon-user"></i>id</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.id" name="id" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"  style="padding-left:0"><i class="fab fa-accusoft"></i> Mã dịch vụ</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.service_code" name="service_code" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left  style="padding-left:0""  style="padding-left:0"><i class="fab fa-accusoft"></i> Tên dịch vụ</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.service_name" name="service_name" />
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"  style="padding-left:0"><i class="fab fa-accusoft" aria-hidden="true"></i>&nbsp;Nhóm dịch vụ</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_group_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="Chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_group_id = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"  style="padding-left:0"><i class="fab fa-accusoft" aria-hidden="true"></i>&nbsp;Loại dịch vụ</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_type_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="Chọn loại...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.type_id as x in names2 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_type_id = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                                <i class="sprite-image-16x16"></i>
+                                <label class="control-label" for="Status"> Ảnh</label>
+                            </div>
+                            <div class="col-md-8 form-col-control ">
+                                <div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                        <img onerror="this.src='/images/default/no_image.png'" id="Profile_picture" src="{{model.illustrator_img}}" alt="holder" style="height:120px; width:120px" />
+                                    </div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                        <img onerror="this.src='/images/default/no_image.png'" id="Profile_picture1"  src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                    </div>
+                                </div>
+                                <input type="file" id="file" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.illustrator_img" name="illustrator_img" onchange="readURL(this);">
+                                <script>
+                                    $(":file").filestyle({ buttonName: "btn btn-primary" });
+                                </script>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2 text-left"  style="padding-left:10px"><i class="fas fa-sticky-note"></i> Ghi chú</label>
+                            <div class="col-md-10"  style="padding-left:3px;padding-right:10px;">
+                                <textarea type="text" class="form-control" ng-model="model.note" name="note" rows="2"></textarea>
+                            </div>
+                        </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="padding-right:15px">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-edit"></i>Lưu</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"><i class="fa fa-close"></i>Hủy</button>
+    </div>
+
+</div>-->
+
+
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'COM_BTN_ADD' | translate}}</div>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" hidden>
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>id</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.id" name="id" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fab fa-accusoft"></i> {{'RMVCS_CURD_LBL_CODE' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.service_code" name="service_code" placeholder="{{'RMVCS_CURD_TXT_CODE' | translate}}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fab fa-accusoft"></i> {{'RMVCS_CURD_LBL_NAME' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.service_name" name="service_name" placeholder="{{'RMVCS_CURD_TXT_NAME' | translate}}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fab fa-accusoft" aria-hidden="true"></i>&nbsp;{{'RMVCS_CURD_LBL_GROUP' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_group_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="{{'RMVCS_CURD_TXT_GROUP' | translate}}...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_group_id = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fab fa-accusoft" aria-hidden="true"></i>&nbsp;{{'RMVCS_CURD_LBL_TYPE' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.service_type_id" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="{{'RMVCS_CURD_TXT_TYPE' | translate}}...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.type_id as x in names2 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.service_type_id = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="sprite-image-16x16"></i>
+                                <label class="control-label" for="Status"> {{'RMVCS_CURD_LBL_IMG' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img id="Profile_picture" ng-src="{{model.illustrator_img}}" class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img class="image-default" id="Profile_picture1" style="height:120px; width:120px" />
+                                </div>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:33px" placeholder='' readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">{{'RMVCS_CURD_TXT_IMG' | translate}}</span>
+                                        <input class="form-control" id="file" files-input ng-model="model.illustrator_img" name="illustrator_img" onchange="readURL(this);" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2 text-left"><i class="fas fa-sticky-note"></i> {{'RMVCS_CURD_LBL_NOTE' | translate}}</label>
+                    <div class="col-md-10" style="padding-left:15px;padding-right:15px;">
+                        <textarea type="text" class="form-control" ng-model="model.note" placeholder="{{'RMVCS_CURD_TXT_NOTE' | translate}}" name="note" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+       {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+{{'COM_BTN_ADD' | translate}}
+    </button>
+</div>

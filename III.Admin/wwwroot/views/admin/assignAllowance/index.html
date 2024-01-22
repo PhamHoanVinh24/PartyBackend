@@ -1,0 +1,150 @@
+﻿<style>
+    #contentMainRepository {
+        max-height: 575px;
+        overflow-x: hidden;
+        overflow-y: visible;
+        height: 575px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .repository {
+        margin: -10px -5px 0 0;
+    }
+
+    .table-toolbar {
+        margin-bottom: -15px !important;
+    }
+
+    .boder-category {
+        border: 1px solid #b3b3b3 !important;
+    }
+
+    #tblData_wrapper .table-scrollable {
+        border: 1px solid #b3b3b3 !important;
+    }
+
+    .mColor {
+        color: #56046d;
+        font-weight: bold
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    tr.highlight-row {
+        background: #c7ecfc !important;
+        color: #333 !important;
+    }
+
+    .table-hover > tbody > tr.highlight-row:hover, .table-hover > tbody > tr.highlight-row:hover > td {
+        background: #c7ecfc !important;
+    }
+
+    tr.selected-row {
+        background: #c7ecfc !important;
+        color: #333 !important;
+        font-weight: bold !important;
+    }
+
+    .ui-select-toggle {
+        border-radius: 0 !important;
+        border-bottom-left-radius: 4px !important;
+        border-top-left-radius: 4px !important;
+    }
+
+    .table-hover > tbody > tr.selected-row:hover, .table-hover > tbody > tr.selected-row:hover > td {
+        background: #c7ecfc !important;
+    }
+
+    .table-resource .mt-checkbox {
+        padding-left: 18px;
+    }
+
+    .bootstrap-table table label.mt-checkbox span {
+        background: #fff !important;
+        border: 1px solid #CFCFCF !important;
+    }
+
+    .table-height-scroll {
+        border-radius: 5px;
+        display: block;
+        height: 600px;
+        max-height: 600px;
+        overflow: auto;
+        border: 1px solid #b3b3b3;
+        /*border-top: none;*/
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt10 actions d-flex pull-right" style="margin-top: -70px;">
+    <div class="pr-2">
+        <button class="btn gold-custom br4" ng-click="settingAllowance()">
+            <i class="fa fa-cogs"></i>
+            {{'AAC_BTN_SET_UP_ALLOW'| translate}}
+        </button>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('HCNS_QDDD')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div class="row mt25">
+    <div class="col-lg-5">
+        <div class="panel panel-default boder-category br-none no-boxshadow h-600" style="margin-top:2px;">
+            <div class="panel-heading tree-header" style="background: #f1f1f1 !important; height:38px !important">
+                <h4 class="panel-title pull-left bold">{{'AAC_LBL_DEPARTMENT' | translate}}</h4>
+            </div>
+            <div class="panel-body" id="contentMainRepository">
+                <div id="treeDiv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="table-responsive table-box-shadow table-height-scroll">
+            <div class="row">
+                <div class="col-md-12 m15">
+                    <div class="d-flex pl-0 pt5">
+                        <span ng-repeat="x in listTypeEmp">
+                            <label class="mt-checkbox mt-checkbox-outline fs12 p5" style="margin-right: 10px !important; display:inline">
+                                <input type="checkbox" ng-model="x.IsCheck" ng-change="loadEmployee()" />
+                                <i class="text-center ml20" style="font-style:normal;">{{x.Value}}</i>
+                                <span style="background-color: white; top: 4px;"></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered table-striped table-hover no-margin">
+                <thead>
+                    <tr class="table-header">
+                        <th width="25">#</th>
+                        <th>{{'AAC_LBL_STAFF' | translate}}</th>
+                        <th class="w-20 text-center nowrap">
+                            {{'COM_LIST_COL_ACTION' | translate}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in listEmployee">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ x.Name }}</td>
+                        <td class="text-center">
+                            <span ng-if="x.IsCheck" class="fa fa-check-circle fa-2x text-primary cursor" ng-click="check(x)"></span>
+                            <span ng-if="!x.IsCheck" class="fa fa-times-circle fa-2x text-danger cursor" ng-click="check(x)"></span>
+                            <span class="fa fa-cog fa-2x text-danger cursor pl10" ng-click="setting(x)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

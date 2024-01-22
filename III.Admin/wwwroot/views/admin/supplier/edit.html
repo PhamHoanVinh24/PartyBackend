@@ -1,0 +1,463 @@
+﻿<style>
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-70 {
+            width: 60% !important;
+        }
+    }
+
+    .btn-border-black {
+        border: 1px solid #000;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .color-white {
+        color: white;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+
+    .font-in-tab {
+        /* border-radius: 4px !important; */
+        border: 1px solid #e7ecf1;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+<div class="actions pull-right pr20" style="margin-top: -45px;">
+    <div class="text-center" ng-show="isShowHeader">
+        <a ng-click="hideHeader()" class="fs30">
+            <span><i class="fas fa-chevron-up " aria-hidden="true"></i></span>
+        </a>
+    </div>
+    <div class="text-center" style="background-color: #333;" ng-show="!isShowHeader">
+        <a ng-click="showHeaderCard()" class="fs30">
+            <span><i class="fas fa-chevron-down " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div class="portlet-body form">
+    <form ng-show="isShowHeader" name="addform" class="form-horizontal font-in-tab" method="post" ng-validate="validationOptionsSupp">
+        <div class="form-body pt-0">
+            <div class="row mt-action-5">
+                <div class="col-lg-6" ng-show="isShowHeader">
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-barcode"></i>
+                            <label class="control-label require custom-title-code-bold">{{'SUP_CURD_LBL_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control custom-title-code-bold" name="SupCode" ng-model="model.SupCode" type="text" placeholder="{{'SUP_CURD_TXT_CODE' | translate}}..." ng-readonly="ObjectSupplier.SupplierId !=''&&ObjectSupplier.SupplierId !=undefined" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require custom-title-code-bold">{{'SUP_CURD_LBL_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control custom-title-code-bold" name="SupName" ng-model="model.SupName" type="text" placeholder="{{'SUP_CURD_TXT_NAME' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-map-marker"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_MAP' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-icon" style="margin-bottom: 0px">
+                                <i ng-click="openMap()" class="cursor fa fa-map-marker"></i>
+                                <input ng-click="openMap()" id="locationGPS" class="form-control" ng-model="model.GoogleMap" name="key" type="text" style="padding-left: 30px; width: 100%" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-home"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_ADDRESS' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea style="height: 75px" name="Address" id="textAreaAddress" class="form-control" ng-model="model.Address" type="text" autocomplete="off" placeholder="{{'SUP_CURD_TXT_ADDRESS' | translate}}..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-barcode"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_TAX_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" id="tax" ng-model="model.TaxCode" name="TaxCode" type="text" placeholder="{{'SUP_CURD_TXT_TAX_CODE' | translate}}..." ng-blur="taxCodeChange(model.TaxCode)" ng-keydown="($event.keyCode == 13) && taxCodeChange(model.TaxCode)" ng-change="changleSelect('TaxCode')" />
+                            <span ng-show="errorTaxCode" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_TAXCODE' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_IDENTIFICATION' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" ng-model="model.Identification" name="Identification" type="text" placeholder="{{'SUP_CURD_TXT_IDENTIFICATION' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fas fa-user-circle"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_ACCOUNT' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" ng-model="model.AccountBank" name="AccountBank" type="text" placeholder="{{'SUP_CURD_TXT_ACCOUNT' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa-solid fa-address-book"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_BANK' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" ng-model="model.AddressBank" type="text" placeholder="{{'SUP_CURD_TXT_BANK' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" ng-class="{'col-lg-12' : !isShowHeader}">
+                    <div class="form-group" ng-class="{ 'has-error': errorArea}">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fas fa-map-marker"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_AREA' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Area" theme="bootstrap" on-select="changleSelect('Area')">
+                                    <ui-select-match placeholder="{{'SUP_CURD_COMBO_AREA' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in SupplierAreas | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingArea()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorArea" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_AREA' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorSupGroup}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fas fa-info-circle"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_GROUP' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.SupGroup" theme="bootstrap" on-select="changleSelect('SupGroup')">
+                                    <ui-select-match placeholder="{{'SUP_CURD_COMBO_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in SupplierGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingSupplierGroup()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorSupGroup" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_SUPGROUP' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorRole}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fas fa-award"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_ROLE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Role" theme="bootstrap" on-select="changleSelect('Role')">
+                                    <ui-select-match placeholder="{{'SUP_CURD_COMBO_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in SupplierRoles | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingSupplierRole()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorRole" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_SUPROLE' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorCusType}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fas fa-info-circle"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.CusType" theme="bootstrap" on-select="changleSelect('CusType')">
+                                    <ui-select-match placeholder="{{'SUP_CURD_COMBO_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in SupplierTypes | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingSupplierType()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCusType" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_SUPTYPE' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorStatus}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-flag"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status')">
+                                    <ui-select-match placeholder="{{'SUP_CURD_COMBO_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingSupplierStatus()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorStatus" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_STATUS' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-mail-reply"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_EMAIL' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" name="Email" ng-model="model.Email" type="email" placeholder="{{'SUP_CURD_TXT_EMAIL' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorMobile}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-mobile-phone"></i>
+                            <label class="control-label require">{{'SUP_CURD_LBL_PHONE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" name="Mobile" ng-model="model.Mobile" type="text" placeholder="{{'SUP_CURD_TXT_PHONE' | translate}}..." ng-change="changleSelect('Mobile')" />
+                            <span ng-show="errorMobile" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_MOBIEPHONE' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class=" form-group" ng-class="{ 'has-error': errorFax}" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-fax"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_FAX' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" ng-model="model.Fax" type="text" placeholder="{{'SUP_CURD_TXT_FAX' | translate}}..." />
+                            <span ng-show="errorFax" class="label-color validation-message">
+                                {{'SUP_CURD_VALIDATE_FAX' | translate}}!
+                            </span>
+                        </div>
+                    </div>
+                    <div class=" form-group" ng-show="isShowHeader">
+                        <div class="col-md-4 pr-0 pl-0">
+                            <i class="fa fa-globe"></i>
+                            <label class="control-label">{{'SUP_CURD_LBL_WEBSITE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" ng-model="model.Website" name="Website" type="text" placeholder="{{'SUP_CURD_TXT_WEBSITE' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center pull-right" ng-click="submit()" ng-show="isShowHeader">
+            <a class=" fs30 p-0" ng-click="add()">
+
+                <span><i class="fa-solid fa-plus"></i></span>
+
+            </a>
+
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-lg-12 ">
+            <div class="tab" role="tabpanel" style="width:100%">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <div href="#1" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'SUP_CURD_TAB_DESCRITION' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#2" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'SUP_CURD_TAB_CONTACT' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#3" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'SUP_CURD_TAB_FILE' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#4" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'SUP_CURD_TAB_MORE' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#5" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'SUP_CURD_TAB_CARD_JOB' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#6" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'Sự kiện' | translate}}</div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="1">
+                        <div style="width:96%;padding-left:15px">
+                            <textarea ng-model="model.Description" id="ckEditorItemSubject"></textarea>
+                            <!--<textarea id="WorkContent" class="form-control" style="height:100px" placeholder="{{'Nội dung công việc' | translate}}.." rows="2" ng-model="model.WorkContent" name="WorkContent"></textarea>-->
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="2">
+                        <div ng-include="'../views/admin/supplier/contact.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="3">
+                        <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="4">
+                        <div ng-include="'../views/admin/supplier/more.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="5">
+                        <div ng-include="'../views/admin/supplier/cardJob.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="6">
+                        <div ng-include="'../views/admin/supplier/supplierTabEvent.html'"></div>
+                    </div>
+                </div>
+
+                <!--<uib-tabset active="active">
+                    <uib-tab class="mt5" index="0" heading="{{'SUP_CURD_TAB_DESCRITION' | translate}}" disable="ObjectSupplier.SupplierId == ''" ng-click="chkSubTab()">
+                        <textarea ng-model="model.Description" ui-tinymce="tinymceOptions"></textarea>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="1" heading="{{'SUP_CURD_TAB_CONTACT' | translate}}" disable="ObjectSupplier.SupplierId == ''" ng-click="chkSubTab()">
+                        <div ng-include="'../views/admin/supplier/contact.html'"></div>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="2" heading="{{'SUP_CURD_TAB_FILE' | translate}}" disable="ObjectSupplier.SupplierId == ''" ng-click="chkSubTab()">
+                        <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="3" heading="{{'SUP_CURD_TAB_MORE' | translate}}" disable="ObjectSupplier.SupplierId == ''" ng-click="chkSubTab()">
+                        <div ng-include="'../views/admin/supplier/more.html'"></div>
+                    </uib-tab>
+                    <uib-tab class="mt5" index="4" heading="{{'SUP_CURD_TAB_CARD_JOB' | translate}}" disable="ObjectSupplier.SupplierId == ''" ng-click="chkSubTab()">
+                        <div ng-include="'../views/admin/supplier/cardJob.html'"></div>
+                    </uib-tab>
+
+                    <div class="text-center hidden" ng-if="permissionSupplier.AddCard">
+                        <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="addCardJob()">
+                            <span class="fa fa-trello" style="height: 16px;width: 13px;"></span>
+                        </a>
+                        <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+                    </div>
+                </uib-tabset>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

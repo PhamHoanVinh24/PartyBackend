@@ -1,0 +1,193 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+    .modal-header{
+        background-color: white;
+    }
+    .modal-title{
+        color:black;
+    }
+    .fa.fa-plus-circle.icon-insert{
+        color: black;
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'SVC_CURD_TAB_ADD_ATTR' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationAttributeOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneType}">
+                        <label class="control-label require">{{'SVC_CURD_TAB_STYLE_ZONE_OPTION' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneType" theme="bootstrap" ng-change="selectChange('ZoneType')">
+                                <ui-select-match placeholder="{{'SVC_CURD_TAB_STYLE_ZONE_OPTION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneType()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-plus" ></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneType" class="label-color validation-message">
+                            {{'SVC_CURD_TAB_STYLE_ZONE_NOT' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneGroup}">
+                        <label class="control-label require">{{'SVC_CURD_TAB_GROUP_ZONE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneGroup" theme="bootstrap" ng-change="selectChange('ZoneGroup')">
+                                <ui-select-match placeholder="{{'SVC_CURD_TAB_GROUP_ZONE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneGroup()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneGroup" class="label-color validation-message">
+                            {{'SVC_CURD_TAB_GROUP_ZONE_NOT' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label require">{{'SVC_CURD_TAB_ATTRIBUTE_LBL_CODE' | translate}}</label>
+                            <input class="form-control br24" name="ZoneAttrCode" ng-model="model.ZoneAttrCode" placeholder="{{'SVC_CURD_TAB_ATTRIBUTE_LBL_CODE' | translate}}..." ng-disabled="isEditAttribute"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'SVC_CURD_TAB_ATTRIBUTE_COL_ATTRIBUTE_NAME' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrName" ng-model="model.ZoneAttrName" placeholder="{{'SVC_CURD_TAB_ATTRIBUTE_COL_ATTRIBUTE_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'SVC_CURD_TAB_ATTRIBUTE_TXT_VALUE' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrValue" ng-model="model.ZoneAttrValue" placeholder="{{'SVC_CURD_TAB_ATTRIBUTE_TXT_VALUE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" ng-class="{ 'has-error': errorUnit}">
+                        <label class="control-label">{{'SVC_CURE_LBL_UNIT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneAttrUnit" theme="bootstrap" ng-change="selectChange('Unit')">
+                                <ui-select-match placeholder="{{'SVC_CURE_LBL_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAttrUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addAttrUnit()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorUnit" class="label-color validation-message">
+                            {{'SVC_MSG_NOT_UNIT' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-2 pl-0" ng-class="{ 'has-error': errorType}">
+                        <label class="control-label">{{'SVC_LIST_COL_DATA_TYPE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ZoneAttrType" theme="bootstrap" ng-change="selectChange('Type')">
+                                <ui-select-match placeholder="{{'SVC_LIST_COL_DATA_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAttrType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addAttrType()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorType" class="label-color validation-message">
+                            {{'SVC_LIST_COL_DATA_TYPE_NOT' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-1 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'SVC_LIST_COL_SIZE' | translate}}</label>
+                                <input class="form-control br24" name="ZoneAttrSize" ng-model="model.ZoneAttrSize" placeholder="{{'SVC_LIST_COL_SIZE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pl-0">
+                        <div class="btn-group pt20 actions d-flex" ng-if="!isEditAttribute">
+                            <div class="text-center pr10 pull-right" ng-click="submit()">
+                                <a class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group pt20 actions d-flex" ng-if="isEditAttribute">
+                            <div class="text-center pr10 pull-right" ng-click="save()">
+                                <a class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'SVC_CURD_TAB_SAVE' | translate}}</p>
+                            </div>
+                            <div class="text-center pr10 pull-right" ng-click="clear()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-times"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'SVC_CURD_TAB_CANCEL' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">{{'CJ_MODAL_TITLE_ADD_EMP' | translate}}</span>
+</div>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-8 pl-0" ng-class="{ 'has-error': errorUserId}">
+                        <label class="fw600 text-underline require">{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}"><span>{{$select.selected.GivenName}}</span></ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUsers | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUserId" class="label-color validation-message">
+                                {{'CJ_VALIDATE_EMP' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pt-2">
+                        <div class="text-center" ng-click="submit()">
+                            <div class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </div>
+                            <p class="text-underline fs9 mb5 pt3">{{'CJ_ADD_EMP_DOWN' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-md-9 text-center fw600 text-underline">{{'CJ_CURD_BTN_MEMBER' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listUserInItem">
+                                <td>{{x.GivenName}}</td>
+                                <td class="text-center">
+                                    <i role="button" ng-click="delete(x.ID)" class="fa fa-minus-circle" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

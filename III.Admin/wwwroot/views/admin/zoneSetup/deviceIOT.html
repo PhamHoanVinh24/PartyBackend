@@ -1,0 +1,157 @@
+﻿<style>
+    .formAddDefault {
+        padding-bottom: 5px !important;
+        border: 1px solid #c2cad869 !important;
+        border-radius: 4px;
+        background: #fffef66b;
+    }
+</style>
+<div ng-controller="deviceIOT">
+    <div class="table-toolbar">
+        <form name="zonedevice" class="form-horizontal ng-pristine ng-valid ng-isolate-scope" method="post" ng-validate="validationOptionsDevice">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="form-group" ng-class=" {'has-error': errorDeviceCode}">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require ng-binding">&nbsp;{{'Thiết bị' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.DeviceCode" theme="bootstrap" on-select="changeSelect('DeviceCode')">
+                                    <ui-select-match placeholder="{{'Thiết bị' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstDevice | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorDeviceCode" class="label-color validation-message ng-binding ng-hide">
+                                {{'Thiết bị không bỏ trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" ng-class=" {'has-error': errorStatus}">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require ng-binding">&nbsp;{{'Trạng thái' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changeSelect('Status')">
+                                    <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorStatus" class="label-color validation-message ng-binding ng-hide">
+                                {{'Trạng thái không bỏ trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" ng-class=" {'has-error': errorManagerId}">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label ng-binding">&nbsp;{{'Người quản lý' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.ManagerId" theme="bootstrap" on-select="changeSelect('ManagerId')">
+                                    <ui-select-match placeholder="{{'Người quản lý' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.UserName as x in lstManger | filter: $select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorManagerId" class="label-color validation-message ng-binding ng-hide">
+                                {{'Thiết bị không bỏ trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-cog"></i>
+                            <label class="control-label">&nbsp;{{'Vị trí' | translate}}</label>
+                            <input name="Position" class="form-control br24" ng-model="model.Position" type="text" placeholder="{{'Vị trí' | translate}}...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-calendar"></i>
+                            <label class="control-label">&nbsp;{{'Từ ngày' | translate}}</label>
+                            <div class='input-group date br24' id='startTime'>
+                                <input type='text' class="form-control input-date" name="BeginTime" ng-model="model.BeginTime" placeholder="{{'Từ ngày' | translate}}..." />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="col-md-12 pl-0">
+                            <i class="fa fa-calendar"></i>
+                            <label class="control-label">&nbsp;{{'Đến ngày' | translate}}</label>
+                            <div class='input-group date br24' id='endTime'>
+                                <input type='text' class="form-control input-date" name="EndTime" ng-model="model.EndTime" placeholder="{{'Đến ngày' | translate}}..." />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class=" btn-group pull-left actions d-flex mt15">
+                        <div class="text-center pl10" ng-click="addDevice()">
+                            <a class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-responsive" style="height: 350px; overflow-y: scroll;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-md-1 text-center fw600 text-underline" style="width: 5%;">{{'STT' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline">{{'Thiết bị' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline">{{'Vị trí' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline nowrap">{{'Trạng thái' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline nowrap">{{'Quản lý' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline">{{'Từ ngày' | translate}}</th>
+                    <th class="col-md-2 text-center fw600 text-underline">{{'Đến ngày' | translate}}</th>
+                    <th class="col-md-1 text-center fw600 text-underline" style="width: 5%;">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="x in lstDeviceInZone">
+                <tr>
+                    <td class="text-center">{{$index + 1}}</td>
+                    <td class="text-center text-danger bold">{{x.DeviceName}}</td>
+                    <td class="text-center">{{x.Position}}</td>
+                    <td class="text-center">{{x.Status}}</td>
+                    <td class="text-center">{{x.Manager}}</td>
+                    <td class="text-center">{{x.BeginTime}}</td>
+                    <td class="text-center">{{x.EndTime}}</td>
+                    <td class="text-center">
+                        <a title="Xóa" ng-click="deleteDeviceOutZone(x.Id)" style="width: 25px; height: 25px; padding: 0px" class="fs25"><i class="fas fa-trash"style="--fa-primary-color: red;"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

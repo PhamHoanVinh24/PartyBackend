@@ -1,0 +1,189 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .text-box-important {
+        background-color: #27ae60 !important;
+        color: #fcfdfd !important;
+        font-weight: bold;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'Thêm luồng hoạt động'|translate}}</span>
+</div>
+<div class="modal-body userFormAreaHeader" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptionsWF">
+            <div class="form-body pt5 pl-0 pr-0">
+                <div class="col-md-12">
+                    <div class="col-md-4 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold"><i class="fa fa-barcode"></i> {{'Mã luồng'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" name="WfCode" class="form-control text-box-asset" data-ng-model="model.WfCode" placeholder="{{'Mã luồng'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 pl-0 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require bold">{{'Tên luồng'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control text-box-asset" ng-model="model.WfName" name="WfName" placeholder="{{'Tên luồng'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error' : errorWfGroup}">
+                                <label class="control-label text-underline">{{'Nhóm luồng' | translate}}:</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfGroup" theme="bootstrap" ng-change="changeSelect('WfGroup')">
+                                    <ui-select-match placeholder="{{'Nhóm luồng' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstWfGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWfGroup" class="label-color validation-message">
+                                    {{'Nhóm luồng không được bỏ trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error' : errorWfType}">
+                                <label class="control-label text-underline">{{'Kiểu luồng' | translate}}:</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfType" theme="bootstrap" ng-change="changeSelect('WfType')">
+                                    <ui-select-match placeholder="{{'Kiểu luồng' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstWfType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWfType" class="label-color validation-message">
+                                    {{'Loại luồng không được bỏ trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 pl-1 pr-3">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label bold">{{'Mô tả'|translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <textarea name="WfNote" rows="3" class="form-control" ng-model="model.WfNote" type="text" placeholder="{{'Mô tả'|translate}}..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0 pull-right">
+                    <div class="btn-group actions pull-right d-flex mt25 ml15">
+                        <div class="text-center">
+                            <a ng-click="submit()" class="btn btn-icon-only  btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+</div>

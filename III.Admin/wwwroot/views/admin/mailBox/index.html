@@ -1,0 +1,179 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+
+
+</style>    
+
+<!-- Main content -->
+<div class="">
+    <div class=" col-md text-center  " style="height:47px;">
+        <!--<a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>-->
+        <div class="col-md-12" style="border: solid 1px; border-radius: 24px; background-color: #c6eeef;">
+            <div class="box-title" style="height:60px">
+                <span class="pl15 bold t-center" style="font-family: Open Sans, sans-serif; font-size:16px">
+                    <img src="../../../images/icons/CrawlerManagement.png" height="30" width="30" />&nbsp;&nbsp;{{'Quản Lí Mail' | translate}} [{{userName}}]
+                </span>
+                <div class="float-lg-right" style="margin-right: 5px;margin-top: 23px;">
+                    <a class1="btn btn-icon-only btn-outline btn-de btn-boder1" ng-click="configEvent()">
+                        <span><i class="fa-solid fa-gear fs35"></i></span>
+                    </a>
+                    <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>-->
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md " style="height:25px">
+        <!-- -->
+    </div>
+    <div class=" col-md content" style="padding-left: 0px !important;">
+      
+        <div class="">
+            <div class="col-md-3">
+                <a ng-click="SendEvent()" class="btn  br4 btn-block mb-3 bold" style=" color: #1e1b1c; background-color: #e9a7b3;">Compose</a>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title bold">Folders</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" ng-click="changeTypeMail('INBOX')">
+                                    <i class="fas fa-inbox bold"></i> Inbox
+                                    <span class="badge bg-primary text-center">{{totalMail}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" ng-click="changeTypeMail('SENT')">
+                                <a class="nav-link">
+                                    <i class="fa-solid fa-paper-plane bold"></i> Sent
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                    <i class="fa-solid fa-file-pen bold"></i> Drafts
+                                </a>
+                            </li>
+                            <li class="nav-item" ng-click="">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-filter bold"></i> Junk
+                                    <span class="badge bg-warning float-right">65</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-trash-alt bold"></i> Trash
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class=" card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Inbox</h3>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                                <i class="fas fa-square"></i>
+                            </button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" ng-click="SendMail()">
+                                    <i class="fa fa-reply"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <div class="float-right">
+                                {{currentPage}}-{{countViewMail}}/{{totalMail}}
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped" ng-show="listMail">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 bold text-center"></th>
+                                        <th class="col-md-2 bold text-left">Address</th>
+                                        <th class="col-md-2 bold text-left">User</th>
+                                        <th class="col-md-3 bold text-left">Title</th>
+                                        <th class="col-md-2 bold text-left">Date</th>
+                                        <th class="col-md-1 bold text-left">View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in listEmail">
+                                        <td>
+                                            <div class="icheck-primary">
+                                                <input type="checkbox" value="" id="check{{$index + 1}}" ng-click="selectCheck(x.Content)">
+                                                <label for="check{{$index + 1}}"></label>
+                                            </div>
+                                        </td>
+                                        <td class="mailbox-star" style="width: 1px;"><a ng-repeat="k in x.FromAddresses">{{k.Address}}</a></td>
+                                        <td class="mailbox-name"><a ng-repeat="k in x.FromAddresses">{{k.Name}}</a></td>
+                                        <td class="mailbox-subject">
+                                            <b>{{x.Subject}}</b>
+                                        </td>
+                                        <td class="mailbox-date">{{x.Date | fomartDateTime }}</td>
+
+                                        <td class="mailbox-attachment"><i ng-click="viewContentMail(x.Content)" class="fas fa-envelope-open fs25"></i><i ng-show="x.IsAttach" class="fas fa-paperclip fs25" style="margin-left: 14px;"></i></td>
+                                        <!--<td class="mailbox-attachment"><i ng-show="x.IsAttach" class="fas fa-paperclip"></i></td>
+                                    -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="mail-content" ng-show="!listMail">
+
+                            </div>
+                            <!-- /.table -->
+                        </div>
+                        <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+</div>
+<!-- /.content -->

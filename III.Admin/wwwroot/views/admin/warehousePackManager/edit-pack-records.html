@@ -1,0 +1,244 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+
+</style>
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'WPM_EDIT_PACK' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsRecordsPack">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackType}">
+                        <label class="control-label require">{{'WPM_STYPE_PACK_BTN' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap" ng-change="selectChange('PackType')">
+                                <ui-select-match placeholder="{{'WPM_STYPE_PACK_BTN' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstPackType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackType()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackType" class="label-color validation-message">
+                            {{'WPM_STYPE_PACK_BTN_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackParent}">
+                        <label class="control-label">{{'WPM_PACK_IN' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackParent" theme="bootstrap" ng-change="selectChange('PackParent')">
+                                <ui-select-match placeholder="{{'WPM_PACK_IN' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstRecordPack | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackParent=''; reset()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="text-danger fs11">{{model.PackHierarchyPath}}</span>
+                        <span ng-show="errorPackParent" class="label-color validation-message">
+                            {{'WPM_PACK_IN_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WPM_CODE_OBJ' | translate}}</label>
+                                <input class="form-control" ng-readonly="true" name="PackCode" ng-model="model.PackCode" placeholder="{{'WPM_CODE_OBJ' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WPM_TITLE' | translate}}</label>
+                                <input class="form-control" name="PackName" ng-model="model.PackName" placeholder="{{'WPM_TITLE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt10">
+                        <qrcode style="pointer-events:none" id="{{model.PackCode}}" role="button" data="{{model.PackCode}}" size="60" download></qrcode>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'WPM_QUANTITY' | translate}}</label>
+                                <input class="form-control" name="PackQuantity" ng-model="model.PackQuantity" placeholder="{{'WPM_QUANTITY' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'WPM_LABEL_DESCRIPTION' | translate}}</label>
+                                <textarea rows="5" class="form-control" name="PackLabel" ng-model="model.PackLabel" placeholder="{{'WPM_LABEL_DESCRIPTION' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="control-label">{{'WPM_POSITION_STACKING' | translate}} <span class="text-danger" ng-show="recordsPack.PackZoneLocation != ''">({{zoneInfo.ZoneHierachy}})</span></label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.PackZoneLocation" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'WPM_POSITION_STACKING' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treeZone | filter: $select.search">
+                                        <div style="padding-left: {{30 * x.Level}}px">
+                                            <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                            <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                            {{x.Title}}
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.PackZoneLocation=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class="col-md-9 pl-0 pr-0">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'WPM_MUNBER_LEVEL' | translate}}</label>
+                                        <input class="form-control" ng-readonly="true" name="PackLevel" ng-model="model.PackLevel" placeholder="{{'WPM_MUNBER_LEVEL' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group pt20 actions d-flex pl15">
+                                    <div class="text-center pr10 pull-right" ng-click="submit()">
+                                        <a class="">
+                                            <span><i class="fa-solid fa-plus fs30"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'WPM_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <div href="#Section1" aria-controls="home" role="button" data-toggle="tab">{{'WPM_FILE' | translate}}</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section2" aria-controls="profile" role="button" data-toggle="tab">
+                    {{'WPM_ATTR' | translate}}
+                </div>
+            </li>
+        </ul>
+        <div class="tab-content" style="padding-top: 10px;">
+            <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                <div ng-include="'../views/admin/packManager/records-pack-files.html'"></div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="Section2">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+
+        </div>
+    </div>
+</div>

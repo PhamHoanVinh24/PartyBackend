@@ -1,0 +1,122 @@
+﻿
+<style>
+    .numberStep {
+        color: white;
+        height: 25px;
+        width: 25px;
+        padding-top: 5px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 12px;
+        float: left;
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+</style>
+<div ng-controller="card-item-check">
+    <div class="row" style="margin-top: -5px;">
+        <form name="checklist" method="post" ng-validate="validationOptionsCheckList">
+            <div class="col-lg-12">
+                <div class="col-lg-2 pl-0">
+                    <div class="form-group">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_WORK_TYPE' | translate}}-->{{'LMS_ASSIGN_TASK' | translate}}:</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCheckList.TrainingType" on-select="changeData('TrainingType', $item)" theme="bootstrap" ng-disabled="!isAddedCard || IsLock">
+                                <ui-select-match placeholder1="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..." placeholder="{{'LMS_ASSIGN_TASK' | translate}}"><b id="TrainingType">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listTrainingType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 pl-0" ng-show="modelCheckList.TrainingType == 'VIEW_LECTURE' || modelCheckList.TrainingType == 'DO_EXERCISE'">
+                    <div class="form-group">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_WORK_TYPE' | translate}}-->{{'LMS_ASSIGN_TASK' | translate}}:</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCheckList.SubjectCode" on-select="changeData('SubjectCode', $item)" theme="bootstrap" ng-disabled="!isAddedCard || IsLock">
+                                <ui-select-match placeholder1="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..." placeholder="{{'LMS_SUBJECT' | translate}}"><b id="SubjectCode">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listSubject | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 pl-0 pr-0" ng-show="modelCheckList.TrainingType == 'VIEW_LECTURE'">
+                    <div class="form-group">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_WORK_TYPE' | translate}}-->{{'LMS_LECTURE' | translate}}:</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCheckList.LectCode" on-select="changeData('LectCode', $item)" theme="bootstrap" ng-disabled="!isAddedCard || IsLock">
+                                <ui-select-match placeholder1="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..." placeholder="{{'LMS_LECTURE' | translate}}"><b id="LectCode">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listLecture | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 pl-0 pr-0" ng-show="modelCheckList.TrainingType == 'DO_EXERCISE'">
+                    <div class="form-group">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_WORK_TYPE' | translate}}-->{{'LMS_QUIZ' | translate}}:</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCheckList.QuizCode" on-select="changeData('QuizCode', $item)" theme="bootstrap" ng-disabled="!isAddedCard || IsLock">
+                                <ui-select-match placeholder1="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..." placeholder="{{'LMS_QUIZ' | translate}}"><b id="QuizCode">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listQuiz | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 pl-0 pr-0" ng-show="modelCheckList.TrainingType == 'DO_PRACTICE'">
+                    <div class="form-group">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_WORK_TYPE' | translate}}-->{{'LMS_TEST' | translate}}:</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelCheckList.PracticeTestCode" on-select="changeData('PracticeTestCode', $item)" theme="bootstrap" ng-disabled="!isAddedCard || IsLock">
+                                <ui-select-match placeholder1="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..." placeholder="Bài kiểm tra"><b id="PracticeTestCode">{{$select.selected.Name}}</b></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listExam | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pl-0 pr-0 pt20">
+                    <div class=" actions btn-group d-flex" style="justify-content: center">
+                        <div class="text-center mt10" style="width: 60px;">
+                            <a ng-click="submit()" class1="btn btn-icon-only btn-outline btn-border-black" ng-disabled="!isAddedCard || isUpdate">
+                                <span><i class="fa-solid fa-plus fs25"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding"> {{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="height:395px; overflow-y:scroll; width:101%;">
+        <div class="col-lg-12 p0 mt5 padding-right-dashboard padding-left-dashboard" ng-repeat="check in checkList track by $index">
+            <div class="table-toolbar table_toolbar">
+                <div class="col-md-12 pr-0">
+                    <a title="{{check.ItemTitle}}" ng-click="showProgress($index)">
+                        <div class="" style="margin-right: 10px; font-size: 14px; line-height: 25px; display: inline-block ">{{$index + 1}}</div>
+                        <img src="/images/lms/Elearning_Online Lesson.svg" style="height: 30px; margin-right: 10px" ng-if="check.TrainingType == 'VIEW_LECTURE'" />
+                        <img src="/images/lms/Elearning_Online Learning-19.svg" style="height: 30px; margin-right: 10px" ng-if="check.TrainingType == 'DO_EXERCISE'" />
+                        <img src="/images/lms/Elearning_Question Answer.svg" style="height: 30px; margin-right: 10px" ng-if="check.TrainingType == 'DO_PRACTICE'" />
+                        <img src="/images/lms/Elearning_Online Test.svg" style="height: 30px; margin-right: 10px" ng-if="check.TrainingType == 'DO_EXAM'" />
+                        <div style="font-size: 14px; line-height: 25px; display: inline-block; margin-top: 5px">{{check.ItemName}}</div>
+                    </a>
+                    <div class="pull-right col-md-1 pl-0 pr-0" style="font-size: 14px; line-height: 25px; margin-top: 5px ">
+                        <div class="d-flex" style="width: 60px; justify-content: center">
+                            <a title="Xóa" ng-click="deleteCheck(check)" style1="width: 25px; height: 25px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs25 text-danger"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding-left: 80px; font-size: 10px;" ng-if="check.TrainingType == 'VIEW_LECTURE' || check.TrainingType == 'DO_EXERCISE'">
+                    {{check.SubjectName}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

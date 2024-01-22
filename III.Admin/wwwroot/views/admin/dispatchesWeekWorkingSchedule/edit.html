@@ -1,0 +1,116 @@
+﻿<!--Start-datetimepicker-->
+<link href="../../../lib/assets/global/plugins/datetimepicker/material_icons/icon.css" rel="stylesheet" />
+<!--<link href="../../../lib/assets/global/plugins/datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="../../../lib/assets/global/plugins/datetimepicker/css/pmd-datetimepicker.css" rel="stylesheet" />
+<script src="../../../lib/assets/global/plugins/datetimepicker/language/bootstrap-datepicker.vi.js"></script>
+<script src="../../../lib/assets/global/plugins/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="../../../lib/assets/global/plugins/datetimepicker/js/moment-with-locales.js"></script>-->
+<!--End-datetimepicker-->
+<style>
+    .datepicker .active, .datepicker .active:hover, .datepicker table tr td.day:hover, .datepicker table tr td.focused, .datepicker table tr td.today {
+        background: none !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit"></i>
+    <span class="modal-title" id="modal-title">{{'Sửa lịch công tác' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="form-group" ng-class="{ 'has-error': errorUserName}">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <label class="control-label require">{{'Lịch cho nhân viên' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserName" theme="bootstrap" on-select="changleSelect('UserName',$item)">
+                                    <ui-select-match placeholder="{{'Nhân viên' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in ListUserName | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorUserName" class="label-color validation-message">
+                                    {{'Chọn nhân viên!' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-4 text-lef">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <label class="control-label require">{{'Từ ngày' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input ng-model="model.FromDate" name="FromDate" class="form-control" type="text" placeholder="Từ ngày..." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" id='datefromtimepicker' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-lef">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <label class="control-label require">{{'Đến ngày' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input ng-model="model.ToDate" name="ToDate" class="form-control" type="text" autocomplete="off" placeholder="{{'Đến ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='datetotimepicker' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            <label class="control-label">{{'DWWS_CURD_TAB_MANAGER_LBL_CONTENT' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" placeholder="{{'DWWS_CURD_TAB_MANAGER_TXT_CONTENT' | translate}}.." rows="6" ng-model="model.Content" name="Content"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pt5">
+    <div class="btn-group pull-right actions d-flex">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-default" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-blue mr10" href="javascript:;">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>
+</div>-->

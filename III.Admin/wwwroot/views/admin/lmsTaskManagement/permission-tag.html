@@ -1,0 +1,118 @@
+﻿<style>
+    .border {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+        .border .btn {
+            margin: 10px 5px 10px 0;
+            background: #fff;
+            border-radius: 2px !important;
+            padding: 2px 0px 2px 5px !important;
+            min-width: 88px;
+            font-size: 13px !important;
+        }
+
+            .border .btn:hover {
+                background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+                border: none;
+            }
+
+    .right {
+        float: right;
+    }
+
+    .form-control {
+        border-radius: 4px !important;
+        background-color: #fff;
+    }
+
+    .modal-footer {
+        margin-top: -25px;
+    }
+
+    .fa-times {
+        color: #999;
+    }
+    .form-body {
+        padding: 5px!important;
+    }
+    .fa-times:hover {
+        background: #999999;
+        color: white;
+    }
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        
+    }
+    .form-check-label input {
+        margin-left: -25px;
+        margin-top: -1px;
+        position: absolute !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-cogs" style="font-size: 25px; padding-top: 10px;color:black"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_TITLE_PERMISSION_TAG' | translate}}</span>
+</div>
+<div class="modal-body p0 mt5" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label">
+                                <input class="form-control form-check-input" id="contract" ng-click="loadExecutiveObjective(0)" type="checkbox" name="inlineRadioOptions">
+                                {{'CJ_LBL_CONTRACT' | translate}}
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">                           
+                            <label class="form-check-label">
+                                <input class="form-control form-check-input" id="project" ng-click="loadExecutiveObjective(1)" type="checkbox" name="inlineRadioOptions">
+                                {{'CJ_LBL_PROJECT' | translate}}
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">                           
+                            <label class="form-check-label">
+                                <input class="form-control form-check-input" id="other" ng-click="loadExecutiveObjective(2)" type="checkbox" name="inlineRadioOptions">
+                                {{'CJ_LBL_OTHER' | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <ui-select tagging ng-model="model.Job" theme="bootstrap" on-select="selecJob(model.Job)">
+                            <ui-select-match placeholder="{{'CJ_TXT_JOB' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x in model.listJob | filter: $select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-12 border" style="min-height: 50px">
+                            <button type="button" class="btn" style="border: 1px solid #ccc" ng-repeat="x in model.listPermision">
+                                <i class="fa fa-times right" aria-hidden="true" ng-click="removeJob(x.Id)"></i>{{x.Title}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="submit()" class="btn red mr15 no-boxshadow" href="javascript:;" style="font-weight:bold;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>
+</div>
+<script>
+    $(document).on('click', '.form-check-input', function () {
+        $('.form-check-input').not(this).prop('checked', false);
+    });
+</script>

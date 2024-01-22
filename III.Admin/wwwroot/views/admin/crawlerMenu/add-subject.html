@@ -1,0 +1,306 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+    .modal-content {
+        width: 106%;
+    }
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .lecture-cover-upload {
+        background-image: url("../../../images/default/05_Title_Image.jpg");
+        background-color: #e9eef1;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    #tblDataObjectFile_wrapper .table-scrollable {
+        min-height: unset !important;
+    }
+
+    #tblDataObjectFile_info {
+        display: none;
+    }
+
+    #tblDataObjectFile_paginate {
+        display: none;
+    }
+    /*CSS form Tab*/
+
+</style>
+
+<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/DashBoard"><i class="fa fa-home"></i> Trang chủ</a></li><li class="breadcrumb-item"><a href="/Admin/LmsDashBoard">LMS</a></li><li class="breadcrumb-item">Quản lý môn học</li></ol>
+<div class="portlet-body form pb20">
+    <form name="add-subject-form" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+        <div class="form-body pt-0">
+            <div class="row">
+                <div class="col-md-3 col-lg-2 h-70 pr-0">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_SUBJECT_CODE' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <input class="form-control text-important" name="SubjectCode" ng-model="model.SubjectCode" type="text" placeholder="{{'CRAWL_SUBJECT_CODE' | translate}}..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.SubjectCode='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 h-70 pr-0">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_SUBJECT_NAME' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <input class="form-control text-important" name="Level" ng-model="model.SubjectName" type="text" placeholder="{{'CRAWL_SUBJECT_NAME' | translate}}..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.SubjectName='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-2 h-70">
+                    <label class="col-md-12 pl-0 fw600 text-underline require">{{'CRAWL_STATUS' | translate}}</label>
+                    <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorStatus}">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap" ng-change="changeType(); errorType = false">
+                            <ui-select-match placeholder="{{'CRAWL_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in listStatus | filter: $select.search">
+                                <span class="bold fs11">{{x.Name}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorStatus" class="label-color validation-message">
+                        {{'CRAWL_TYPE_NOT_EMPTY' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 pl-0">
+                    <label class="col-md-12 p-0 fw600 text-underline require">{{'CRAWLER_TIME' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <input class="form-control text-important" name="Duration" ng-model="model.Duration" type="text" placeholder="{{'CRAWLER_TIME' | translate}}..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Duration='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 p-0">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWLER_UNIT' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CRAWLER_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                <span class="bold fs11">{{x.Name}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Unit='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 h-70">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_COURSE_IMAGE' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <div class="input-group input-file">
+                            <i class="fa fa-upload"></i>
+                            <input class="form-control border-left-4radius inputImageCover pl30" style="pointer-events:none" name="ImageCover" placeholder="Ảnh môn học..." placeholder1="Tệp tin..." ng-model="ImageCover">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" custom-on-change-lms="loadImageCover" onchange="$('.inputImageCover').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 h-70">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_COURSE_VIDEO' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <div class="input-group">
+                            <input class="form-control text-important" name="VideoPresent" ng-model="model.VideoPresent" type="text" placeholder="Video môn học" placeholder1="{{'CMS_CAT_TXT_ADDCATEGORY' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="showVideo()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 h-70">
+                    <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_COURSE_FILE' | translate}}</label>
+                    <div class="col-md-12 input-group search-group">
+                        <div class="input-group input-file">
+                            <i class="fa fa-upload"></i>
+                            <input class="form-control border-left-4radius inputFileSubject pl30" style="pointer-events:none" name="FileSubject" placeholder="Tệp tin..." ng-model="FileBase">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" custom-on-change-lms="loadFileSubject" onchange="$('.inputFileSubject').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <div class="col-md-6 pl-0">
+                                <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_TEACHER' | translate}}</label>
+                                <div class="col-md-12 input-group search-group">
+                                    <div class="input-group">
+                                        <ui-select class="list-user" ng-model="model1.ListUser" multiple theme="bootstrap" style="height: 50px;overflow: auto;border-radius: 5px;">
+                                            <ui-select-match placeholder="{{'CRAWL_TEACHER' | translate}}...">{{$item.GivenName}}</ui-select-match>
+                                            <ui-select-choices repeat="x.UserName as x in listUser | filter:$select.search">
+                                                {{x.GivenName}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 p-0">
+                                <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_AUTHOR' | translate}}</label>
+                                <textarea class="form-control" placeholder="{{'CRAWL_AUTHOR' | translate}}.." rows="2" ng-model="model.Author" name="Author"></textarea>
+                            </div>
+                            <div class="col-md-12 p-0">
+                                <label class="col-md-12 pl-0 fw600 text-underline">{{'CRAWL_DESCRIPTION' | translate}}</label>
+                                <div class="col-md-12 p-0">
+                                    <textarea ng-model="model.SubjectDescription" id="ckEditorItemSubject"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" ng-show1="showDescription">
+                            <div class="thumbnail input-unstyled">
+                                <img onerror="this.src='../../../images/default/05_Title_Image.jpg'" ng-src="{{model.ImageCover}}" id="imageId" class="lecture-cover-upload h-300 w350" role="button">
+                            </div>
+                            <div class="text-center">
+                                <a ng-click="submit()" class="">
+                                    <!--<span><i class="fa fa-save"></i></span>-->
+                                    <img src="/images/default/save-button-icon_340535.png">
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form name="add-lecture-form" class="form-horizontal userFormAreaHeader mt20">
+        <div class="form-body pt-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-left">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addLecture()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptionsLecture"
+                           dt-columns="dtColumnsLecture"
+                           dt-instance="dtInstanceLecture"
+                           id="tblDataLecture"></table>
+                </div>
+                <div class="col-md-4 col-sm-8" id="contentQuiz">
+                </div>
+            </div>
+        </div>
+    </form>
+    <form name="add-quiz-form" class="form-horizontal userFormAreaHeader mt20" method="post" ng-validate="validationOptions">
+        <div class="form-body pt-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-left">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addQuiz()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptionsQuiz"
+                           dt-columns="dtColumnsQuiz"
+                           dt-instance="dtInstanceQuiz"
+                           id="tblDataQuiz"></table>
+                </div>
+                <div class="col-md-4 col-sm-8" id="contentQuiz">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

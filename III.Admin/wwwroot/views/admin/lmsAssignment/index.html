@@ -1,0 +1,167 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .wpercent5 {
+        width: 5%;
+    }
+
+    .mColor {
+        color: #56046d;
+        font-weight: bold
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 10px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+</div>
+<div id="breadcrumbIndex"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/DashBoard"><i class="fa fa-home"></i>{{'COM_CRUMB_DASH_BOARD' | translate}}</a></li><li class="breadcrumb-item"><a href="/Admin/LmsDashBoard">{{'COM_CRUMB_LMS_DASH_BOARD' | translate}}</a></li><li class="breadcrumb-item">{{'LMS_ASSIGNMENT_EXERCISE' | translate}}</li></ol></div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pr10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pb5">
+                    <div class="col-md-4 pr-0">
+                        <label class="fw600 text-underline">{{'LMS_ASSM_LBL_KEY_WORD' | translate}}</label>
+                        <div class1="br24">
+                            <input ng-model="model.Keyword" class="form-control br24" type="text" placeholder="{{'LMS_ASSM_LBL_KEY_WORD' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        </div>
+                    </div>
+                    <div class="col-md-1 pr-0">
+                        <label class="fw600 text-underline">{{'LMS_ASSM_VALIDATE_SINCE' | translate}}</label>
+                        <div class1="br24">
+                            <input type="text" autocomplete="off" class="form-control br24" placeholder="{{'LMS_ASSM_VALIDATE_SINCE' | translate}}..." ng-model="model.FromDate" id="FromDate">
+                        </div>
+                    </div>
+                    <div class="col-md-1 pr-0">
+                        <label class="fw600 text-underline">{{'LMS_ASSM_VALIDATE_TO_DATE' | translate}}</label>
+                        <div class1="br24">
+                            <input type="text" autocomplete="off" class="form-control br24" placeholder="{{'LMS_ASSM_VALIDATE_TO_DATE' | translate}}..." ng-model="model.ToDate" id="ToDate">
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'LMS_ASSM_LBL_TEACHER' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.Teacher" theme="bootstrap">
+                                <ui-select-match placeholder="{{'LMS_ASSM_LBL_TEACHER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserName as x  in listUser | filter: $select.search">
+                                    <span class="bold fs11">{{x.GivenName}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Teacher='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <label class="fw600 text-underline">{{'LMS_ASSIGNMENT_AUTHOR' | translate}}</label>
+                        <div class1="br24">
+                            <input ng-model="model.Author" class="form-control br24" type="text" placeholder="{{'LMS_ASSIGNMENT_AUTHOR' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-6">
+        <div class="fs14"><label class="mColor text-red">{{'LMS_ASSM_LBL_TOTAL_EXE ' | translate}}</label> <b>{{totalAssignments}}</b>.</div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+    <div class="col-md-6">
+        <style>
+            .fc-time {
+                display: none;
+            }
+
+            .fc-event-event-custom {
+                box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(76 175 80 / 40%);
+                border: none !important;
+                width: 92%;
+                margin-left: 4% !important;
+            }
+
+            .fc-content {
+                font-size: 12px !important;
+            }
+        </style>
+        <div class="calendar-wrap" ng-if="IsTranslate">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

@@ -1,0 +1,106 @@
+﻿<style>
+    table.footer-sticky tfoot {
+        position: sticky;
+        background: white;
+        z-index: 1;
+    }
+    table.footer-sticky tfoot {
+        inset-block-end: 0; /* "bottom" */
+    }
+</style>
+<div ng-controller="contractTabPayment">
+    <div class="row">
+        <form name="search" method="post">
+            <div class="col-md-3">
+                <div class="form-group mb5">
+                    <label>{{'CONTRACT_CURD_TAB_PAYMENT_TXT_SEARCH_PAYMENT_NAME' | translate}}</label>
+                    <input class="form-control br24" ng-model="model.PaymentName" name="Title" type="text" placeholder="{{'CONTRACT_CURD_TAB_PAYMENT_TXT_SEARCH_PAYMENT_NAME' | translate}}..." />
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="btn-group pt10 actions d-flex">
+                    <div class="text-center pr-2">
+                        <a ng-click="reload()" class="fs30">
+                            <span><i class="fas fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <div class="text-center pr-2 ">
+                        <a class=" fs30 p-0" ng-click="add()">
+
+                            <span><i class="fa-solid fa-plus"></i></span>
+
+                        </a>
+
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+
+                    <!--<div class="pr10 text-center">
+                        <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                            <span><i class="fa fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>-->
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataPaymentNew">
+    <tfoot>
+    <tr>
+    <th ng-show="isVND" colspan="1" class=""></th>
+    <th ng-show="isVND" colspan="2" class="pl10"><span> {{'FAE_LIST_COL_TOTAL_EXPENSE' | translate}} : </span><span class="text-success">{{TotalReceiptApproved | number : fractionSize}} </span></th>
+    <th ng-show="isVND" colspan="2" class="pl10">
+        {{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}} : <span class="text-danger">{{TotalExpenseApproved | number : fractionSize}}</span>
+    </th>
+    <th ng-show="isVND" colspan="1" class="pl10">
+        {{'FEA_LIST_COL_SURPLUS' | translate}} : <span class="text-danger">{{TotalSurplusApproved | number : fractionSize}}</span>
+    </th>
+    <th ng-show="isVND" colspan="1" class="pl10"><!--{{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}}-->
+    Yêu cầu thu : <span class="text-danger">{{TotalReceipt | number : fractionSize}}</span></th>
+    <th ng-show="isVND" colspan="2" class="pl10">
+    <!--{{'FEA_LIST_COL_SURPLUS' | translate}}--> Yêu cầu chi : <span class="text-danger">{{TotalExpense | number : fractionSize}}</span></th>
+    </tr>
+    </tfoot>
+                </table>
+                <!--<table class="table dataTable table-hover table-striped footer-sticky"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstanceCallback"
+                       id="tblDataPayment">
+                    <tfoot>
+                        <tr>
+                            <th ng-show="isVND" colspan="1" class=""></th>
+                            <th ng-show="isVND" colspan="2" class="pl10"><span> {{'FAE_LIST_COL_TOTAL_EXPENSE' | translate}} : </span><span class="text-success">{{TotalReceiptApproved | number : fractionSize}} </span></th>
+                            <th ng-show="isVND" colspan="2" class="pl10">
+                                {{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}} : <span class="text-danger">{{TotalExpenseApproved | number : fractionSize}}</span>
+                            </th>
+                            <th ng-show="isVND" colspan="1" class="pl10">
+                                {{'FEA_LIST_COL_SURPLUS' | translate}} : <span class="text-danger">{{TotalSurplusApproved | number : fractionSize}}</span>
+                            </th>
+                            <th ng-show="isVND" colspan="1" class="pl10">
+                    <!--{{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}}-->
+                    <!--Yêu cầu thu : <span class="text-danger">{{TotalReceipt | number : fractionSize}}</span></th>
+                <th ng-show="isVND" colspan="2" class="pl10">-->
+                    <!--{{'FEA_LIST_COL_SURPLUS' | translate}}--> <!--Yêu cầu chi : <span class="text-danger">{{TotalExpense | number : fractionSize}}</span></th>-->
+                    <!--<th ng-show="isVND" colspan="1" class=""></th>
+                <th ng-show="isVND" colspan="3" class=""></th>
+                <th ng-show="isVND" colspan="2" class="pl10">{{'CONTRACT_TAB_PAYMENT_COL_MONNEY_SUM' | translate}} : <span class="text-success">{{totalMoney | number : fractionSize}}</span></th>
+                <th ng-show="isVND" colspan="2" class="pl10">{{'CONTRACT_TAB_PAYMENT_COL_MONNEY_REVENU' | translate}} : <span class="text-success">{{totalReceipts | number : fractionSize}}</span></th>
+                <th ng-show="isVND" colspan="2" class="pl10">{{'CONTRACT_TAB_PAYMENT_COL_MONNEY_RECEIPT' | translate}} : <span class="text-danger">{{totalPaymentSlip | number : fractionSize}}</span></th>-->
+                    <!--</tr>
+                    </tfoot>
+                </table>-->
+</div>

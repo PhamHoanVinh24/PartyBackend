@@ -1,0 +1,184 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+
+    .message-center {
+        top: 13%;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title "> {{'WPM_ADD_ATTR' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackAttrType}">
+                        <label class="control-label require">{{'WPM_STYPE_PACK_BTN' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackAttrType" theme="bootstrap" ng-change="selectChange('PackAttrType')">
+                                <ui-select-match placeholder="{{'WPM_STYPE_PACK_BTN' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstPackType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackAttrType()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackAttrType" class="label-color validation-message">
+                            {{'WPM_STYPE_PACK_BTN_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorPackAttrGroup}">
+                        <label class="control-label require">{{'WPM_GROUP_PACK' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackAttrGroup" theme="bootstrap" ng-change="selectChange('PackAttrGroup')">
+                                <ui-select-match placeholder="{{'WPM_GROUP_PACK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstPackGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackAttrGroup()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackAttrGroup" class="label-color validation-message">
+                            {{'WPM_GROUP_PACK_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WPM_CODE_ATTR' | translate}}</label>
+                                <input class="form-control br24" name="PackAttrCode" ng-model="model.PackAttrCode" placeholder="{{'WPM_CODE_ATTR' | translate}}..." ng-disabled="isUpdate" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" style="width: 30%;">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WPM_NAME_ATTR' | translate}}</label>
+                                <input class="form-control br24" name="PackAttrName" ng-model="model.PackAttrName" placeholder="{{'WPM_NAME_ATTR' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'WPM_VALUE' | translate}}</label>
+                                <input class="form-control br24" name="PackAttrValue" ng-model="model.PackAttrValue" placeholder="{{'WPM_VALUE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-class="{ 'has-error': errorPackAttrUnit}">
+                        <label class="control-label">{{'WPM_UNIT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackAttrUnit" theme="bootstrap" ng-change="selectChange('PackAttrUnit')">
+                                <ui-select-match placeholder="{{'WPM_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstUnitPack | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackAttrUnit()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackAttrUnit" class="label-color validation-message">
+                            {{'WPM_UNIT_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-3 pl-0" ng-class="{ 'has-error': errorPackAttrDataType}">
+                        <label class="control-label">{{'WPM_STYPE_DATA' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.PackAttrDataType" theme="bootstrap" ng-change="selectChange('PackAttrDataType')">
+                                <ui-select-match placeholder="{{'WPM_STYPE_DATA' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstAttrDataType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addPackAttrDataType()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorPackAttrDataType" class="label-color validation-message">
+                            {{'WPM_STYPE_DATA_NOT_BLANK' | translate}}
+                        </span>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col-md-2 pl15" style="">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'WPM_SIZE' | translate}}</label>
+                                <input class="form-control br24" name="PackAttrSize" ng-model="model.PackAttrSize" placeholder="{{'WPM_SIZE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr20" ng-click="submit()">
+                                <a class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'WPM_SAVE' | translate}}</p>
+                            </div>
+                            <div class="text-center pt20 pr10" ng-click="cancelEdit()" ng-show="isUpdate">
+                                <a class="">
+                                    <span><i style="--fa-primary-color: red;" class="fas fa-times fs30"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'WPM_CANCEL' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>

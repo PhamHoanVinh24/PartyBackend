@@ -1,0 +1,273 @@
+﻿<div class="tab-pane active " ng-controller="urencoAddGarbage">
+        <div id="divstyle">
+                <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+                    <div class="form-body pt-0">
+                        <div class="row mt-action-5">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fas fa-barcode" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Mã điểm rác' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group" >
+                                                <input type="text" class="form-control" name="NodeCode" ng-model="model.NodeCode" placeholder="Mã điểm rác..." ng-change="changeQrCode()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-info" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Tên điểm rác' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="NodeName" ng-model="model.NodeName" placeholder="Tên điểm rác..." ng-change="changeQrCode()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Địa chỉ' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="Address" ng-model="model.Address" placeholder="Địa chỉ..." ng-change="changeQrCode()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Sức chứa' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="number" min="1" class="form-control" name="VolumeLimit" ng-model="model.VolumeLimit" placeholder="Sức chứa..." ng-change="changeQrCode()" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                                    <ui-select-match placeholder="{{'Đơn vị' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in listUnit">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="addCommonSettingUrencoUnit()" class="btn btn-default no-shadow  green-custom" style="">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="errorUnit" class="label-color validation-message">
+                                                Đơn vị không được để trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-info" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Tình trạng' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                                    <ui-select-match placeholder="Tình trạng...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in listStatus">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="addCommonSettingUrencoStatus()" class="btn no-shadow  green-custom" style="">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="errorStatus" class="label-color validation-message">
+                                                Trạng thái không được để trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <label class="control-label require ">{{'Dữ liệu GPS' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" disabled class="form-control" name="GpsNode" ng-model="model.GpsNode" placeholder="Vị trí GPS..." />
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="openMap()" class="btn btn-default no-shadow green-custom" style="">
+                                                        <span class="fa fa-map-marker"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fas fa-user" aria-hidden="true"></i>
+                                            <label class="control-label ">{{'Người quản lý' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <ui-select tagging ng-model="model.Manager" theme="bootstrap">
+                                                <ui-select-match placeholder="Người quản lý...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in managers | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                            <span ng-show="errorManager" class="label-color validation-message">
+                                                Người quản lý không được để trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <label class="control-label ">{{'Tuyến đường' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <ui-select tagging ng-model="model.Route" theme="bootstrap" on-select="changleSelect()">
+                                                <ui-select-match placeholder="{{'Tuyến đường' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listRoute">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span ng-show="errorRoute" class="label-color validation-message">
+                                                Tuyến đường không được để trống
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                            <label class="control-label ">{{'Lượng rác hiện tại' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="number" min="1" class="form-control" name="Used" ng-model="model.Used" placeholder="Lượng rác hiện tại..." ng-change="changeQrCode()" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <ui-select tagging ng-model="model.Unit" theme="bootstrap" ng-change="changleSelect('AETType')">
+                                                    <ui-select-match placeholder="{{'Đơn vị' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in listUnit">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="addCommonSettingUrencoUnit()" class="btn no-shadow  green-custom" style="">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="errorUnit" class="label-color validation-message">
+                                                Đơn vị không được để trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                            <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                            <label class="control-label ">{{'Ghi chú' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <textarea style="height:50px" type="text" class="form-control" ng-model="model.Note" placeholder="Ghi chú" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="col-md-5">
+                                        
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="checkbox" ng-change="changeStatus(model.parkPolygon)"  ng-model="model.parkPolygon"
+                                                       class="selector-control" >
+                                                <label for="show-poi" style="padding-left: 5px;">Vẽ đa giác</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group pt20">
+                                    <div class="col-md-12">
+                                        <div class="form-group" style=" margin-left:60px;">
+                                            <qrcode data="{{model.QrCode}}" download size="100"></qrcode>
+                                        </div>
+                                        <div class="col-md-12 text-center fs10 pl-0 pr-0">
+                                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                            <label class="control-label ">&nbsp;QR Codela</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group pt20">
+                                    <div class="form-group">
+                                        <div class="fileupload-new thumbnail mt15 pb-0" style="border:0; box-shadow: none;background:none;">
+                                            <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                            <img id="picture" style="cursor: pointer" ng-click="loadImage()" class="img-circle h-150 w150 br-n" onerror="this.src='/images/default/uploadimg.png'" ng-src="{{model.Image==null ? '/images/default/uploadimg.png' : model.Image}}" role="button" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-center fs10 pl-0 pr-0 mb15">
+                                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                        <label class="control-label ">&nbsp;Hình ảnh điểm tập kết</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12  fs10 pl10 pr-0 mb15">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        <label class="control-label ">&nbsp;Số thùng hiện tại : </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 p-0 pt15 text-center">
+                            <a><img src="../../../images/map/drawing.png" class="mw35 h-35" id="draw" /></a>
+                            <p class="text-underline fs9 mb5 pt3">{{'MS_CURD_TAB_PARKING_LBL_START_PAINT' | translate}}</p>
+                        </div>
+                        <div class="col-md-4 p-0 pt15 text-center">
+                            <a><img src="../../../images/map/Eraser.png" id="refresh" class="mw35 h-35" /></a>
+                            <p class="text-underline fs9 mb5 pt3">{{'MS_CURD_TAB_PARKING_LBL_DELETE_PAINT' | translate}}</p>
+                        </div>
+                        <div class="text-center col-md-4 pt15 p-0">
+                            <button class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                <span><i class="fa fa-save"></i></span>
+                            </button>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </form>
+        </div>
+</div>

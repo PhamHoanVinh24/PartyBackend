@@ -1,0 +1,256 @@
+﻿<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> Sửa thông tin lô hàng</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12 mt5">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-100 w100" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center  mtn20">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <label class="control-label fs10">Hình ảnh lô hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã QR Code</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.QrCode" name="QrCode" id="QrCode" placeholder="Nhập mã QR Code..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã BarCode</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.BarCode" name="Barcode" id="Barcode" placeholder="Nhập mã BarCode..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Tiêu đề</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Title" name="ProductCode" id="ProductCode" placeholder="Tiêu đề..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">Nhà cung cấp</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Supplier" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Nhà cung cấp...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Supplier=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                                <!--<input type="text" class="form-control" ng-model="model.Unit" name="Unit" placeholder="Nhập đơn vị..." />-->
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Hạn sử dụng</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="FromDate" type="text" class="form-control" ng-model="model.sExpiryDate" name="Material" placeholder="Hạn sử dụng" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Giá mua</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Cost" name="Material" placeholder="Giá mua" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">{{'CATEGORY_CURE_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'CATEGORY_CURE_TXT_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                                <!--<input type="text" class="form-control" ng-model="model.Unit" name="Unit" placeholder="Nhập đơn vị..." />-->
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Quy cách</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="Packing" type="text" class="form-control" ng-model="model.Packing" name="Material" placeholder="Quy cách" />
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <div class="d-flex">
+                            <div style="width:22%">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Quy cách</label>
+                            </div>
+                            <div style="width:78%">
+                                <input id="Packing" type="text" class="form-control" ng-model="model.Packing" name="Material" placeholder="Quy cách" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt10">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10 " style="display:inline-flex">
+                        <div style="width:22%">
+
+                        </div>
+                        <div style="width:78%;display:inline-flex">
+                            <input type='number' style="width:40px !important; padding-left:5px" ng-model="model1.x1" value="0" ng-change="x1()" />
+                            <div style="width:70px !important; margin-left:3px" class="pos">
+                                <ui-select tagging ng-model="model1.x1a" theme="bootstrap" on-select="x1()">
+                                    <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in x1as | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <input type='number' style="width:40px !important; margin-left:15px; padding-left:5px" ng-model="model1.x2" ng-change="x1()" />
+                            <div style="width:70px !important; margin-left:3px" class="pos">
+                                <ui-select tagging ng-model="model1.x2a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                    <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in x2as | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <input type='number' style="width:40px !important; margin-left:15px; padding-left:5px" ng-model="model1.x3" ng-change="x1()" />
+                            <div style="width:70px !important; margin-left:3px" class="pos">
+                                <ui-select tagging ng-model="model1.x3a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                    <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in x3as | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <input type='number' style="width:40px !important; margin-left:15px; padding-left:5px" ng-model="model1.x4" ng-change="x1()" />
+                            <div style="width:70px !important; margin-left:3px" class="pos">
+                                <ui-select tagging ng-model="model1.x4a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                    <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in x4as | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row mt30">
+            <div class="col-md-12">
+                <uib-tabset active="active" class="mb20">
+                    <!--<uib-tab index="0" heading="Mô tả">
+                        <textarea ng-model="model.Note" ui-tinymce="tinymceOptions" class="mb15"></textarea>
+                    </uib-tab>-->
+                    <!--<uib-tab index="1" heading="{{'SUP_CURD_TAB_MORE' | translate}}">
+                        <div ng-include="'../views/admin/lotProduct/more.html'"></div>
+                    </uib-tab>-->
+                    <uib-tab index="0" heading="Sản phẩm">
+                        <div ng-include="'../views/admin/lotProduct/file.html'"></div>
+                    </uib-tab>
+                    <!--<uib-tab index="1" heading="{{'SUP_CURD_TAB_CONTACT' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/contact.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="2" heading="{{'SUP_CURD_TAB_FILE' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/file.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="3" heading="{{'SUP_CURD_TAB_MORE' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/more.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="4" heading="{{'SUP_CURD_TAB_CARD_JOB' | translate}}">
+                        <div ng-include="'../views/admin/supplier/cardJob.html'"></div>
+                    </uib-tab>-->
+                    <div class="text-center pull-right" style="margin-top:-25px; margin-right:7px" ng-click="submit()">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:40px !important; height:40px !important">
+                            <span><i class="fa fa-save fs14" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                        </a>
+                        <p class="text-underline fs12 mb5 pt3">Lưu</p>
+                    </div>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>-->
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

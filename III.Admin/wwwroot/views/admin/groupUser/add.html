@@ -1,0 +1,106 @@
+﻿<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title" id="modal-title" style="line-height: 30px">{{'GUSR_LBL_ADD_GROUPUSR' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{"GUSR_LBL_ADD_GROUPUSR_CODE" | translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.GroupUserCode" name="GroupUserCode" placeholder="{{'GUSR_TXT_ADD_GROUPUSR_CODE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{"GUSR_LBL_ADD_GROUPUSR_NAME" | translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Title" name="Title" placeholder="{{'GUSR_TXT_ADD_GROUPUSR_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'GUSR_TXT_ADD_GROUPUSR_PR' | translate }}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ParentCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'GUSR_TXT_ADD_GROUPUSR_CHOOSE_PR' | translate }}...">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in treeData | filter: $select.search">
+                                    <div style="padding-left: {{15 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ParentCode=''" class="btn btn-default no-shadow" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px;height: 34px">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label">{{'GUSR_LBL_ADD_GROUPUSR_DESCR' | translate }}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <textarea type="text" class="form-control br24" ng-model="model.Description" rows="3" placeholder="{{'GUSR_TXT_ADD_GROUPUSR_DESCR' | translate }}..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require ">{{'Ưu tiên' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Priority" name="Priority" placeholder="{{'Ưu tiên' | translate}}..." onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'GUSR_LBL_ADD_GROUPUSR_TUS' | translate }}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <div class="mt-checkbox-list pt10">
+                            <label class="mt-checkbox mt-checkbox-outline mb10">
+                                {{'GUSR_TXT_ADD_GROUPUSR_SET_ACT' | translate }} / {{'GUSR_TXT_ADD_GROUPUSR_SET_DEACT' | translate }}
+                                <input type="checkbox" name="IsEnabled" ng-model="model.IsEnabled" ng-checked="model.IsEnabled" />
+                                <span><i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="x.checked != true" ng-click="updateSelection($index, entities)"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="padding-right: 15px;">
+    <div class="btn-group pull-right actions d-flex">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="fs30">
+                <span><i class="fas fa-times"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="fs30" ng-click="submit()">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,274 @@
+﻿<style>
+    #contentMainRepository {
+        max-height: 410px;
+        overflow-x: hidden;
+        overflow-y: visible;
+        height: 410px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .tree-header {
+        height: 34px;
+    }
+
+    .repository {
+        margin: -10px -5px 0 0;
+    }
+
+    .w40 {
+        width: 40px !important
+    }
+
+    table thead tr {
+        background: #ebebeb !important;
+    }
+
+    .table-toolbar {
+        margin-bottom: -15px !important;
+    }
+
+    .boder-table {
+        border: 1px solid #b3b3b3 !important;
+    }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #b3b3b3 !important;
+    }
+
+    .mColor {
+        color: #56046d;
+        font-weight: bold
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        height: 145px;
+        width: calc(75% - 50px);
+        right: 100px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a ng-click="showSearch()" class="fs30">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pt5 mb5">
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSRR_OBJECT' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.ObjectCode" theme="bootstrap" on-select="changeObject();search()">
+                                <ui-select-match placeholder="{{'EDMSRR_OBJECT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in objects | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ObjectCode='';search()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSRR_LIST' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.ObjectDetailCode" theme="bootstrap" on-select="search()">
+                                <ui-select-match placeholder="{{'EDMSRR_LIST' | translate}}">{{$select.selected.Code}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in objectDetails | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ObjectDetailCode=null;search()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSRR_CURD_LBL_SEARCH_FROM_DATE'| translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-change="search()" type="text" autocomplete="off" class="form-control" placeholder="{{'EDMSRR_CURD_TXT_SEARCH_FROM_DATE'| translate}}..." ng-model="model.FromDate" id="FromTo">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate='';search()" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSRR_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-change="search()" type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'EDMSRR_CURD_TXT_SEARCH_TO_DATE' | translate}}..." id='DateTo' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate='';search()" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSRR_CURD_LBL_SEARCH_USER' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.UserUpload" theme="bootstrap" on-select="search()">
+                                <ui-select-match placeholder="{{'EDMSRR_CURD_LBL_SEARCH_USER' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserName as x in users | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.UserUpload='';search()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-2">
+            <label class="fw600 text-underline">{{'EDMSR_CURD_LBL_SEARCH_TYPE' | translate}}</label>
+            <div class="input-group">
+                <ui-select tagging ng-model="model.FileType" theme="bootstrap" on-select="search()">
+                    <ui-select-match placeholder="{{'EDMSR_CURD_TXT_SEARCH_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in FileType | filter: $select.search">
+                        <i ng-show="x.Code==1" class="far fa-image"></i>
+                        <i ng-show="x.Code==2" class="far fa-file-word"></i>
+                        <i ng-show="x.Code==3" class="fa fa-file-excel-o"></i>
+                        <i ng-show="x.Code==4" class="fa fa-file-powerpoint-o"></i>
+                        <i ng-show="x.Code==5" class="fa fa-file-pdf-o"></i>
+                        <i ng-show="x.Code==6" class="fa fa-file-text-o"></i>
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.FileType='';search()" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>-->
+                    <div class="col-md-2">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="pr10 text-center">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+
+<div class="row" ng-show="searchByWeek==true">
+    <div class="col-lg-6" ng-controller="default">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+    <div class="col-lg-6">
+        <div class="card p10">
+            <div class="card-content">
+                <div class="card-body h-400 p15">
+                    <canvas class="chart chart-line" chart-data="searchByWeekData.data"
+                            chart-labels="searchByWeekData.labels" chart-series="searchByWeekData.series" chart-options="searchByWeekData.options"
+                            chart-dataset-override="datasetOverride"></canvas>
+                    <div class="text-center">
+                        <h2>{{'EDMSRR_LBL_CHART' | translate}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" ng-show="searchByWeek==false">
+    <div class="col-lg-6" ng-controller="result">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions1"
+               dt-columns="dtColumns1"
+               dt-instance="dtInstance1"
+               id="tblData1"></table>
+    </div>
+    <div class="col-lg-6">
+        <div class="card p10">
+            <div class="card-content">
+                <div class="card-body h-400 p15">
+                    <canvas class="chart chart-line" chart-data="searchByTime.data"
+                            chart-labels="searchByTime.labels" chart-series="searchByTime.series" chart-options="searchByTime.options"
+                            chart-dataset-override="datasetOverride"></canvas>
+                    <div class="text-center">
+                        <h2>{{'EDMSRR_LBL_CHART_TIME' | translate}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

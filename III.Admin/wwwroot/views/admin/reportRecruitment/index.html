@@ -1,0 +1,186 @@
+﻿<style>
+    .message-center {
+        top: 5%;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #chart_recruitment {
+        height: 350px !important;
+    }
+
+    .fc-content {
+        padding: 5px;
+    }
+
+    .fc-time {
+        display: none;
+    }
+</style>
+
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar" ng-show="IsTranslate">
+    <style>
+        .fc-more-popover {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @media only screen and (min-width: 992px) and (max-width: 1200px) {
+            .cus-col-3 {
+                width: 45% !important;
+            }
+        }
+
+        @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+            .cus-col-3 {
+                width: 42% !important;
+            }
+        }
+
+        @media only screen and (min-width: 1400px) and (max-width: 1500px) {
+            .cus-col-3 {
+                width: 45% !important;
+            }
+        }
+    </style>
+    <div class="row">
+        <div class="pull-right" style="margin-top: -55px;">
+            <div class="text-center pr-2">
+                <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+                    <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+                </a>
+            </div>
+            <div class="actions text-center pr15 pt15">
+                <a class="btn btn-icon-only btn-outline" style="border: 1px solid #000;" ng-click="switchDiv()">
+                    <span>
+                        <img src="../../../images/default/switch-icon.png" style="width: 30px;" />
+                    </span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'Switch' | translate}}</p>
+            </div>
+
+        </div>
+        <div class="col-md-12" id="div-calender">
+            <div class="calendar-wrap">
+                <label class="bold">
+                    <i class="fa fa-calendar"></i>&nbsp;{{'REP_TITLE_CALENDAR' | translate}}
+                </label>
+                <div ng-show="IsTranslate" id="calendar"></div>
+            </div>
+        </div>
+        <div class="col-md-12 pt15" id="div-chart">
+            <label class="bold"><i class="fa fa-chart-area"></i>&nbsp;{{'REP_TITLE_CHART' | translate}}</label>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 pl-0 pr-0" style="width: 100% !important">
+                <div class="dashboard-stat2 boxdeu notice2" style="width: 100%;">
+                    <div class="title2">
+                        <div>
+                            <h0 class="fs14 text-header-box gach">{{'REP_TITLE_NUM_USER' | translate}}</h0>
+                        </div>
+                    </div>
+                    <div class="content-row">
+                        <div class="inline-chart chart-internalids" style="max-height:500px;">
+                            <div id="chart_recruitment" class="c3" style="position: relative; max-height: 500px!important;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-controller="search">
+        <div class="row pt15">
+            <div class="col-md-2">
+                <label class="fw600 text-underline">{{'REP_SEARCH_FROMDATE'| translate}}</label>
+                <div class="input-group">
+                    <input type="text" autocomplete="off" class="form-control" placeholder="{{'REP_SEARCH_FROMDATE'| translate}}..." ng-model="model.FromDate" id="datefrom">
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="fw600 text-underline">{{'REP_SEARCH_TODATE' | translate}}</label>
+                <div class='input-group '>
+                    <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'REP_SEARCH_TODATE' | translate}}..." id='dateto' />
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="fw600 text-underline">{{'REP_SEARCH_PLANTITLE' | translate}}</label>
+                <div class="input-group search-group">
+                    <ui-select tagging ng-model="model.PlanNumber" theme="bootstrap" on-select="selectObjectType(model.ObjectType)">
+                        <ui-select-match placeholder="{{'REP_SEARCH_PLANTITLE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in lstPlan | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.PlanNumber='';" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-1 text-center">
+                <div class='input-group pt15'>
+                    <input type='checkbox' autocomplete="off" class="form-control" ng-model="model.check" ng-change="checkFunction(model.check)" />
+                </div>
+                <p class="text-underline fs9 mb5 pt3">{{'REP_TITLE_CANDIDATE_NAME' | translate}}</p>
+            </div>
+            <div class="col-md-2 nowrap">
+                <div class="btn-group pt20 actions d-flex">
+                    <div class="pr10 text-center">
+                        <a class="btn btn-icon-only btn-boder1" ng-click="search()">
+                            <span><i class="fa fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <div class="pr10 text-center">
+                        <a class="btn btn-icon-only btn-boder1" ng-click="add()">
+                            <span><i class="glyphicon glyphicon-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="showHeader">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataDetail"></table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="showDetail">
+        <div class="row" ng-controller="detailSearch">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataDetailSearch"></table>
+            </div>
+        </div>
+    </div>
+</div>

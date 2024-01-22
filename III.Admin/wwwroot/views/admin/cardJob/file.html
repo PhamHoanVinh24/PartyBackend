@@ -1,0 +1,45 @@
+﻿<div id="fileCardJob" ng-controller="fileCardJob">
+    <div class="table-toolbar pl5 pr5">
+        <form name="searchform" class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-lg-5">
+                    <label class="fs11">{{'COM_FILE' | translate}}</label>
+                    <div class="input-group br24 input-file">
+                        <i class="fa fa-upload"></i>
+                        <input class="form-control inputFile pl30" style="pointer-events:none" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                        <span class="input-group-btn">
+                            <span class="btn btn-default btn-choose input-group-addon" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                            <input class="form-control" custom-on-change-cardjob="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file" ng-disabled="IsLock || !isAceptCard">
+                        </span>
+                    </div>
+                    <span class="pull-right">
+                        <a class="text-underline fs11" ng-click="extend()" ng-disabled="IsLock || !isAceptCard">{{'COM_BTN_SETUP_DEFAULT' | translate}}</a>
+                    </span>
+                    <a class="pr15 fs11 text-underline pull-right" ng-click="fileManage()" ng-disabled="IsLock || !isAceptCard">{{'CJ_BTN_SELECT_FILE_SERVER' | translate}}</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="btn-group pt30 d-flex">
+                        <div class="text-center pr10">
+                            <a class1="btn btn-icon-only fs25 p-0" ng-click="add()" ng-disabled="IsLock || !isAceptCard || isUpdate">
+                                <span><i class="fas fa-cloud-upload fs25"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <!--<div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-outline btn-border-black" ng-click="extend()">
+                                <span><i class="fas fa-expand-arrows-alt black"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'CJ_BTN_EXTEND' | translate}}</p>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataCustomerFile"></table>
+</div>

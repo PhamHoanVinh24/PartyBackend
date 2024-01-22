@@ -1,0 +1,59 @@
+﻿<style>
+    .color-tr-table {
+        background-color: aliceblue;
+    }
+</style>
+<div class="modal-header" style="background-color:white">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit fs16 black"></i>
+    <span class="modal-title black" id="modal-title" style="width: 92%;">
+        {{chkTitle}}
+    </span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px !important;">
+    <div class="portlet-body form">
+        <div class="col-md-12 pl-0 pr-0 pt5 pb-1">
+            <button class="btn green-custom pull-left" ng-click="approveAll()">
+                <i class="fa fa-check-square fs16"></i>
+                {{'CJ_BTN_APPROVE_ALL' | translate}}
+            </button>
+        </div>
+        <div class="form-group">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1">{{'CJ_LIST_COL_STT' | translate}}</th>
+                            <th class="text-center col-md-3 nowrap">{{'CJ_LIST_COL_USER_RPT' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'CJ_LIST_COL_PROGRESS_RPT' | translate}}(%)</th>
+                            <th class="text-center col-md-2 nowrap">{{'CJ_LIST_COL_TIME_APPROVE' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'CJ_LIST_COL_APPROVE_PROGRESS' | translate}}(%)</th>
+                            <th class="text-center col-md-2 nowrap">{{'CJ_BTN_APPROVE' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in listProgress">
+                        <tr ng-class="{'color-tr-table' : !x.IsAllow}">
+                            <td class="text-center pt15">{{$index + 1}}</td>
+                            <td class="text-center pt15">{{x.GivenName}}<br />({{x.CreateTime}})</td>
+                            <td class="text-center pt15"><span class="text-green bold">{{x.ProgressFromStaff}}</span></td>
+                            <td class="text-center pt15">{{x.ApproveTime}}</td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" placeholder="{{'CJ_LIST_COL_APPROVE_PROGRESS' | translate}}" 
+                                       ng-click="enable(x.Id, x.IsAllow, x.UserAssessor)" ng-readonly="!x.IsAllow" value="{{x.ProgressFromLeader}}" 
+                                       ng-model="x.ProgressFromLeader" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="text-center" ng-show="x.UserAssessor == ''">
+                                <span class="fa fa-check-circle text-danger fs28 pt10 pTip-right btn-publish-inline" ng-click="approve(x.WorkSession, x.ProgressFromLeader,  x.IsAllow)"></span>
+                            </td>
+                            <td class="text-center" ng-show="x.UserAssessor != ''">
+                                <span class="fa fa-check-circle text-green fs28 pt10 pTip-right btn-publish-inline" ng-click="approve(x.WorkSession, x.ProgressFromLeader, x.IsAllow)" ng-disabled="x.UserAssessor != ''"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="padding: 0xp !important;">
+</div>

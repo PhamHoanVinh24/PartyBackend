@@ -1,0 +1,92 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title" id="modal-title">Cập nhật thông tin tin tức</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12 mt5">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.cat_avarta}}" class="img-circle image-upload h-200 w200" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs17 mtn20">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <label class="control-label ">Ảnh sản phẩm</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã danh mục</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.cat_code" name="cat_code" placeholder="Mã danh mục..."readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">Tiêu đề</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.cat_title" name="cat_title" placeholder="Tiêu đề..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="glyphicon glyphicon-leaf" aria-hidden="true"></i>
+                                <label class="control-label">Danh mục cha</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.cat_parent_code" class="" ui-select-required>
+                                        <ui-select-match placeholder="Tên danh mục cha...">{{$select.selected.cat_title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.id as x in treeDatacategory | filter:$select.value">
+                                            {{x.cat_title}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.cat_parent_code='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-comments"></i>
+                                <label class="control-label">Mô tả</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea rows="6" class="form-control" name="Description" ng-model="model.cat_description" placeholder="Mô tả..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Lưu lại
+    </button>
+</div>
+
+
+
+
+

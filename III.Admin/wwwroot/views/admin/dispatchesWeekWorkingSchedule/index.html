@@ -1,0 +1,278 @@
+﻿<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-lg-6">
+            <!--<h1 class="bold mb-0">{{'DWWS_TITLE_WEEK_WORKING_SCHEDULE' | translate}}</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="/Admin/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <div class=" bold text-underline" style="color:green;" href="WeekWorkingSchedule#">{{'DWWS_TITLE_WEEK_WORKING_SCHEDULE' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-lg-6">
+            <div class="btn-group pull-right actions">
+                <a ng-click="addEvent()" class="btn btn-red">
+                    <span class=""><i class="fas fa-cog"></i>&nbsp;{{'DWWS_BTN_MANAGER' | translate}}</span>
+                </a>
+                <a class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i>&nbsp;{{'DWWS_BTN_EXPORT_EXCEL' | translate}}</span>
+                </a>
+            </div>
+        </div>-->
+        <div class="col-lg-6">
+            <div class="btn-group pull-right actions d-flex">
+                <div class="text-center pull-right ml5 mr5" ng-click="addEvent()">
+                    <a class="btn btn-icon-only btn-circle btn-outline red-custom">
+                        <span><i class="fa fa-cog"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'DWWS_BTN_MANAGER' | translate}}</p>
+                </div>
+                <!--<div class="pl20 text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="export()">
+                        <span><i class="fa fa-file-excel-o"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .lich_Header {
+        background-color: #e3eef5;
+        border-right: solid 1px #C6DBFF;
+        height: 40px;
+    }
+
+    .clsnoidung {
+        min-width: 100px;
+    }
+
+    .clsthoigian {
+        width: 9%;
+        min-width: 42px;
+    }
+
+    .clschan {
+        background-color: #f4f4f4;
+    }
+
+    .tdlanhdao {
+        min-width: 62px;
+        width: 15%;
+    }
+
+    .today {
+        background: #fdf1f1 !important;
+    }
+
+    .clsdiadiem {
+        min-width: 51px;
+        width: 12%;
+    }
+
+    .clsthanhphan {
+        min-width: 38px;
+        width: 25%;
+    }
+
+    @media (min-width: 765px) {
+        .notificationText {
+            margin-bottom: -25px;
+        }
+    }
+
+
+    .fc-notification-button {
+        padding: 3px !important;
+        height: 25px !important;
+        width: 25px;
+        border-radius: 25px !important;
+        border: none;
+        color: white;
+        background: #E63C5F;
+        box-shadow: 0 2px 10px 0 rgba(255,60,95,0.45) !important;
+    }
+
+    .clscontentLich .date_right {
+        border-bottom: 1px solid #81a3d0;
+        background-color: white;
+        padding: 0;
+        border-right: 1px solid #81a3d0;
+    }
+
+    .tblChiTietLich .clsle {
+        background-color: #ecf4fe;
+    }
+
+
+    #lichDiv table tbody tr td {
+        color: #000;
+        font-family: tahoma;
+        font-size: 13px;
+        vertical-align: middle !important;
+    }
+
+    .tblChiTietLich .clschan {
+        background-color: #ffffff;
+    }
+
+    td.Lich_ChiTiet_End {
+        border-right: 1px solid #C6DBFF;
+        font: 12px Arial;
+        padding: 5px;
+        height: 40px;
+        color: #003399;
+    }
+
+    td.Lich_ChiTiet {
+        border-bottom: 1px solid #C6DBFF;
+        border-right: 1px solid #C6DBFF;
+        font: 12px Arial;
+        padding: 5px;
+        height: 40px;
+        color: #003399;
+    }
+
+    .tblChiTietLich {
+        width: 100%;
+        vertical-align: inherit !important;
+    }
+
+    .clscontentLich .date_left {
+        border-bottom: 1px solid #81a3d0;
+        background-color: white;
+        padding: 0;
+        border-left: 1px solid #81a3d0;
+        border-right: 1px solid #81a3d0;
+    }
+</style>
+
+<div class="row mb25">
+    <div class="col-md-3">
+        <label class="fw600 text-underline">{{'Nhân viên' | translate}}</label>
+        <div class="input-group search-group">
+            <ui-select tagging ng-model="modelSearch.UserName" theme="bootstrap" ng-change="reload()">
+                <ui-select-match placeholder="{{'Chọn nhân viên' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x  in ListUserName | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="modelSearch.UserName=''" class="btn btn-default no-shadow" style="">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label class="fw600 text-underline">{{'Ngày trong tuần' | translate}}</label>
+        <div class="input-group">
+            <input type="text" class="form-control date-input" placeholder="{{'Chọn ngày' | translate}}..." ng-model="modelSearch.DateWeek" ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" />
+            <span class="input-group-btn">
+                <button type="button" ng-click="modelSearch.DateWeek=''" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="btn-group pt20 actions d-flex">
+            <div class="text-center">
+                <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                    <span><i class="fa fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center pb10">
+    <h2 class="text-uppercase bold" style="font-family: -webkit-body">{{'DWWS_TITLE_WEEK_NUMBER' | translate}} {{weekNumber}}</h2>
+    <h4 class="bold notificationText">{{'DWWS_TITLE_FROM_DATE' | translate}} {{monday}} {{'DWWS_TITLE_TO_DATE' | translate}} {{saturday}}</h4>
+    <!--<div class="pull-right ">
+        <span class="bold pt5 ml5 mr5" id="notificationWeek">
+            <button type="button" class="fc-notification-button "><i class="fas fa-bell"></i></button>
+            {{'DWWS_TITLE_COUNT_EVENT_TODAY' | translate}} ({{countEventToday}})
+        </span>
+    </div>-->
+</div>
+<div class="portlet-body">
+    <div class="table-responsive">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td style="padding-left: 5px; padding-right: 5px;">
+                        <div style="margin: 20px auto 10px; width: 100%;">
+                            <div style="background: rgb(198, 219, 255) no-repeat scroll left top;
+                                        clear: both; display: block; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial;
+                                        -moz-background-inline-policy: -moz-initial; margin-bottom: 10px; font-size: 12px;
+                                        font-family: Arial;">
+
+                                <div style="clear: both; background-color: #e3eef5">
+                                    <table width="100%" border="0" cellpadding="1" cellspacing="1" style="border: 1px solid #81a3d0;">
+                                        <tbody>
+                                            <tr>
+                                                <td class="date_left text-center" valign="middle" align="left" style="border-right: solid 1px #81a3d0;width:9%;min-width:66px">
+                                                    <b>{{'DWWS_LIST_COL_DAY_DATE' | translate}}</b>
+                                                </td>
+                                                <td class="date_right" valign="middle" width="91%" align="left" style="background-color: #ffffcc; padding: 0;">
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="date_right lich_Header" valign="middle" style="min-width: 61px;width:15%;" align="center">
+                                                                    <b>{{'Nhân viên' | translate}}</b>
+                                                                </td>
+                                                                <td class="date_right lich_Header text-center" valign="middle" style="min-width: 43px;width:9%;" align="center">
+                                                                    <b>{{'DWWS_LIST_COL_TIME' | translate}}</b>
+                                                                </td>
+                                                                <td class="date_right lich_Header" valign="middle" style="min-width:100px;" align="center">
+                                                                    <b>{{'DWWS_LIST_COL_CONTENT' | translate}}</b>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="clear: both;">
+                                    <table class="clscontentLich" width="100%" border="0" cellpadding="1" cellspacing="1">
+                                        <tbody>
+                                            <tr ng-repeat="x in model">
+                                                <td class="date_left text-center" ng-class="{'today':x.Date===today}" valign="middle" style="width:9%; min-width:66px" align="left">
+                                                    <font color="#003399">
+                                                        <b>{{x.Week}}</b><br>
+                                                        <span style="font-size:11px;">{{x.Date}}</span>
+                                                    </font>
+                                                </td>
+                                                <td class="date_right" valign="middle" width="91%" align="left">
+                                                    <table class="tblChiTietLich" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                            <tr ng-repeat="y in x.Listschedules" ng-class="{'today':x.Date===today}">
+                                                                <td class="Lich_ChiTiet tdlanhdao" ng-show="y.Haschild" rowspan="{{y.Child}}" style="width:15%">{{y.User}}</td>
+                                                                <td class="Lich_ChiTiet clsthoigian text-center">{{y.TimeStart}} - {{y.TimeEnd}}</td>
+                                                                <td class="Lich_ChiTiet clsnoidung">{{y.Content}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,144 @@
+﻿<style>
+    .btn-refresh {
+        border-color: #00c5dc;
+        color: #fff !important;
+        background: #00c5dc;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'Cài đặt phân quyền'|translate}}</span>
+</div>
+<div class="modal-body userFormAreaHeader" id="modal-body">
+    <form class="form-horizontal " method="post">
+        <div class="form-body pt5 pl-0 pr-0">
+            <div class="col-md-6">
+                <div class="form-group" ng-class=" {'has-error': errorBranchCode}">
+                    <div class="col-md-12">
+                        <label class="control-label require bold"><i class="fa fa-building"></i>&nbsp;{{'Chi nhánh'|translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelFolw.BranchCode" theme="bootstrap" on-select="changeSelect('BranchCode')">
+                                <ui-select-match placeholder="{{'Chọn chi nhánh'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in listBranch | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelFolw.BranchCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorBranchCode" class="label-color validation-message">
+                            {{'Chi nhánh không được để trống!'|translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" ng-class=" {'has-error': errorDepartCode}">
+                    <div class="col-md-12">
+                        <label class="control-label require bold"><i class="fa-solid fa-building"></i>&nbsp;{{'Chọn phòng ban'|translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelFolw.DepartCode" theme="bootstrap" on-select="changeSelect('DepartCode')">
+                                <ui-select-match placeholder="{{'Chọn phòng ban'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in listDepartment | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelFolw.DepartCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorDepartCode" class="label-color validation-message">
+                            {{'Phòng ban không được để trống!'|translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" ng-class=" {'has-error': errorRole}">
+                    <div class="col-md-12">
+                        <label class="control-label require bold"><i class="fa fa-joomla"></i>&nbsp;{{'Vai trò'|translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelFolw.Role" theme="bootstrap" on-select="changeSelect('Role')">
+                                <ui-select-match placeholder="{{'Chọn vai trò'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in listRoles | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelFolw.Role=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorRole" class="label-color validation-message">
+                            {{'Vai trò không được để trống!'|translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" ng-class=" {'has-error': errorWorkFlowProperty}">
+                    <div class="col-md-12">
+                        <label class="control-label require bold"><i class="fa fa-joomla"></i>&nbsp;{{'Thuộc tính'|translate}}</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelFolw.WorkFlowProperty" theme="bootstrap" on-select="changeSelect('WorkFlowProperty')">
+                                <ui-select-match placeholder="{{'Chọn thuộc tính'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in listWorkFlowProperty | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelFolw.WorkFlowProperty=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorWorkFlowProperty" class="label-color validation-message">
+                            {{'Thuộc tính không được để trống!'|translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-4 pr-2" style="float: right;">
+                    <div class="btn-group pull-right actions d-flex mt25" style="margin-left: -15px;margin-right: -10px;">
+                        <div class="text-center pr5" style="margin-right: 3px;">
+                            <a ng-click="refresh()" class="btn btn-icon-only btn-circle btn-outline btn-refresh">
+                                <span><i class="fas fa-sync-alt"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pr5"> {{'Làm mới' | translate}}</p>
+                        </div>
+                        <div class="text-center ">
+                            <a ng-click="addWorkFlow()" class="btn btn-icon-only pull-right btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>

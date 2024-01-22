@@ -1,0 +1,24 @@
+﻿@using ESEIM.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = ViewData["CrumbLMSDocument"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_LmsDashBoard.cshtml";
+
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+
+    var isAllData = session.IsAllData;
+}
+@section plugin_script {
+    <script src="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.js"></script>
+}
+@section plugin_style{
+    <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+}
+<script>
+    var isAllData = "@(isAllData)";
+</script>
+<div id="contentMain" ng-app="App_ESEIM_REPOSITORY" ng-controller="Ctrl_ESEIM_REPOSITORY">
+    <div ng-view></div>
+</div>
+<script src="~/views/admin/lmsDocument/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/filePlugin/controller.js" type="text/javascript"></script>

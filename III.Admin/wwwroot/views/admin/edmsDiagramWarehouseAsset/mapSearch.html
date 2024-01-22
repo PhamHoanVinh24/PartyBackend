@@ -1,0 +1,131 @@
+﻿
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fas fa-search pt5 " style="line-height: 30px"></i>
+    <span class="modal-title pt10" id="modal-title "> {{'Tìm sản phẩm' | translate}}</span>
+</div>
+    <div class="modal-body pb-0" id="modal-body">
+        <div class="portlet-body form">
+            <form name="addform" method="post" ng-validate="validationOptions">
+                <div class="form-body pb20 fs11 pl-0 pr-0">
+                    <div class="row pt5 mb5">
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline">{{'Mã/Tên tài sản' | translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.AssetName" class="form-control bold" type="text" placeholder="{{'Mã/Tên tài sản' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetName='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline">{{'Trạng thái' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 pl-0">
+                            <label class="fw600 text-underline">{{'Nhóm tài sản' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.AssetGroup" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Nhóm tài sản' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstGroup | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetGroup=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0">
+                            <label class="fw600 text-underline">{{'Loại tài sản' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.AssetType" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Loại tài sản' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstType | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetType=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 pl-0">
+                            <div class="btn-group pt15 d-flex">
+                                <div class="text-center pr10">
+                                    <a class="fs30" ng-click="search()">
+                                        <span><i class="fas fa-search"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblData"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>
+
+

@@ -1,0 +1,273 @@
+<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('PAY_HIST')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pt5 mb5">
+                    <div class="col-md-12 pl-0">
+                        <div class="col-md-4">
+                            <label class="fw600 text-underline">{{'Kiểu thanh toán' | translate}}</label>
+                            <div class='input-group'>
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="modelsearch.TransactionType" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'Kiểu thanh toán' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in listType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.TransactionType='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 pr-0">
+                            <div class="col-md-6 pl-0">
+                                <label class="fw600 text-underline">{{'Từ ngày' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='text' id='StartTime' class="form-control input-date" name="StartTime" ng-model="modelsearch.StartTime" placeholder="{{'Từ ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.FromDate='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-0">
+                                <label class="fw600 text-underline">{{'Đến ngày' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='text' id='EndTime' class="form-control input-date" name="EndTime" ng-model="modelsearch.EndTime" placeholder="{{'Đến ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                    <span class="input-group-btn br24">
+                                        <button type="button" ng-click="modelsearch.EndTime='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pr-0 pl-0 pt20">
+                            <div class="btn-group actions d-flex mr5">
+                                <div class="text-center pr10 pl10">
+                                    <a data-dismiss="modal" ng-click="search()" class="fs30">
+                                        <span><i class="fas fa-search"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="portlet light bordered input-search mb5 ">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_TICKET_CODE' | translate}}</label>
+                                    <div class='input-group'>
+                                        <input ng-model="model.TicketCode" class="form-control" type="text" placeholder="{{'ASSETIMPRO_CURD_TXT_TICKET_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) &&  reloadTabHeader()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.TicketCode='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_TICKET_NAME' | translate}}</label>
+                                    <div class='input-group'>
+                                        <input ng-model="model.Title" class="form-control" type="text" placeholder="{{'ASSETIMPRO_CURD_TXT_TICKET_NAME' | translate}}.." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Title='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_FROM_DATE' | translate}}</label>
+                                    <div class='input-group date'>
+                                        <input type='text' id='StartTime' class="form-control input-date" name="StartTime" ng-model="model.FromDate" placeholder="{{'ASSETIMPRO_CURD_TXT_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_TO_DATE' | translate}}</label>
+                                    <div class='input-group date'>
+                                        <input type='text' id='ReceivedTime' class="form-control input-date" name="ReceivedTime" ng-model="model.ToDate" placeholder="{{'ASSETIMPRO_CURD_TXT_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt10">
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_BRANCH' | translate}}</label>
+                                    <div class='input-group'>
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="model.Branch" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in listOrganization | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Branch='';" class="btn btn-default no-shadow end-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_UNIT_MAINTENANCE' | translate}}</label>
+                                    <div class='input-group'>
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="model.UnitMaintenance" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_UNIT_MAINTENANCE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in listUnitMaintenance | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.UnitMaintenance='';" class="btn btn-default no-shadow end-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fw600 text-underline">{{'ASSETIMPRO_CURD_LBL_STATUS' | translate}}</label>
+                                    <div class='input-group'>
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'ASSETIMPRO_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in listStatus | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow end-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="btn-group actions d-flex mr25">
+                                        <div class="pr10">
+                                            <a data-dismiss="modal" ng-click="searchHeader()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                                <span><i class="fa fa-search"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SEARCH' | translate}}</p>
+                                        </div>
+                                        <div class="text-center pr10">
+                                            <a ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                                <span><i class="fa fa-plus"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_ADD' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataIndex">
+</table>
+
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

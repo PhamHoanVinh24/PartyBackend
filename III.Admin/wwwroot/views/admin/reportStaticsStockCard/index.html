@@ -1,0 +1,304 @@
+﻿<style>
+    .text-info {
+        color: #327ad5 !important;
+    }
+
+    .text-success {
+        color: #27a4b0 !important;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 70px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    .boder-category {
+        border: 1px solid #b3b3b3 !important;
+    }
+
+    .table-toolbar {
+        margin-bottom: -15px !important;
+    }
+
+    #tblData_wrapper .table-scrollable {
+        border: 1px solid #b3b3b3 !important;
+    }
+    .btn.btn-outline.green {
+        border-color: #1ba739 !important;
+        color: #1ba739 !important;
+        background: 0 0;
+    }
+
+    .btn.btn-outline.green:hover {
+        background-color: #fff;
+    }
+
+    .repository {
+        margin: -10px -5px 0 0;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions d-flex pt5 pb-1 pull-right" style="margin-top: -50px;">
+    <div class="text-center mt10 pr-2">
+        <a ng-click="viewTree()" class="">
+            <span><i class="fas fs30 fa-folder-tree"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'Gd cây' | translate}}</p>
+    </div>
+    <div class="text-center mt10 pr30">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="col-md-12" style="height:20px">
+                    <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+                <div class="row mb5 pt20">
+                    <div class="col-md-6">
+                        <div class=" pl-0 pr-0 pt5">
+                            <label class="fw600 text-underline"> {{'RSSC_CURD_LBL_PRODUCT' | translate}}</label>
+
+                            <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                            <div class="input-group br24 search-group">
+                                <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('ProductCode',$item)">
+                                    <ui-select-match placeholder="{{'RSSC_CURD_LBL_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListProduct | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="removeSelect('ProductCode')" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class=" pl-0 pr-0 pt5">
+                            <label class="fw600 text-underline"> {{'RSSC_CURD_LBL_STORE_CODE' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select tagging ng-model="model.StoreCode" theme="bootstrap" on-select="changleSelect('StoreCode',$item)">
+                                    <ui-select-match placeholder="{{'RSSC_CURD_LBL_STORE_CODE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in stores | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.StoreCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-3">
+        <label class="fw600 text-underline">{{'MLP_CURD_LBL_CODE_PRODUCT' | translate}}</label>
+        <div class="input-group">
+            <input ng-model="model.Code" class="form-control" type="text" placeholder="{{'MLP_CURD_LBL_CODE_PRODUCT' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.Code='';" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label class="fw600 text-underline">{{'MLP_CURD_LBL_NAME_PRODUCT' | translate}}</label>
+        <div class="input-group">
+            <input ng-model="model.Name" class="form-control" type="text" placeholder="{{'MLP_CURD_LBL_NAME_PRODUCT' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.Name='';" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>-->
+                    <!--<div class="col-md-3">
+        <label class="fw600 text-underline">{{'MLP_CURD_LBL_GROUP_PRODUCT' | translate}}</label>
+        <div class="input-group">
+            <ui-select tagging ng-model="model.Group" theme="bootstrap">
+                <ui-select-match placeholder="{{'MLP_CURD_LBL_GROUP_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in productGroups | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.Group=''" class="btn btn-default no-shadow" style="">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>-->
+                    <!--<div class="col-md-2">
+        <label class="fw600 text-underline">{{'MLP_CURD_LBL_SUPPLIES_CREATEDAY' | translate}}</label>
+        <div class="input-group">
+            <input ng-model="model.FromTo" autocomplete="off" class="form-control" type="text" placeholder="{{'MLP_CURD_TXT_SUPPLIES_CREATEDAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='FromTo' />
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.FromTo='';" class="btn btn-default no-shadow start-date">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label class="fw600 text-underline">{{'MLP_CURD_LBL_SUPPLIES_ENDDAY' | translate}}</label>
+        <div class="input-group">
+            <input ng-model="model.DateTo" autocomplete="off" class="form-control" type="text" placeholder="{{'MLP_CURD_TXT_SUPPLIES_ENDDAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='DateTo' />
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.DateTo='';" class="btn btn-default no-shadow end-date">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>-->
+                    <!--<div class="col-md-3">
+        <label class="fw600 text-underline">{{'Phiếu nhập/xuất' | translate}}</label>
+        <div class="input-group">
+            <ui-select tagging ng-model="model.ContractCode" theme="bootstrap" on-select="changleSelect('ContractCode',$item)">
+                <ui-select-match placeholder="{{'Chọn phiếu nhập/xuất' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in contracts | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.ContractCode=''" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label class="fw600 text-underline">{{'MPHS_CURD_SEARCH_LBL_CUSTOMER' | translate}}</label>
+        <div class="input-group">
+            <ui-select tagging ng-model="model.CusCode" theme="bootstrap" on-select="changleSelect('CusCode',$item)">
+                <ui-select-match placeholder="{{'MPHS_CURD_SEARCH_TXT_CUSTOMER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in customers | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.CusCode=''" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label class="fw600 text-underline">{{'MPHS_CURD_SEARCH_LBL_SUPPLIER' | translate}}</label>
+        <div class="input-group">
+            <ui-select tagging ng-model="model.SupCode" theme="bootstrap" on-select="changleSelect('SupCode',$item)">
+                <ui-select-match placeholder="{{'MPHS_CURD_SEARCH_TXT_SUPPLIER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.SupCode=''" class="btn btn-default no-shadow" style="">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label class="fw600 text-underline">{{'MPHS_CURD_SEARCH_LBL_TYPE' | translate}}</label>
+        <div class="input-group">
+            <ui-select tagging ng-model="model.Type" theme="bootstrap" on-select="changleSelect('Type',$item)">
+                <ui-select-match placeholder="{{'MPHS_CURD_SEARCH_TXT_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in listTypes | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>-->
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center">
+                                <a class="" ng-click="search()">
+                                    <span><i class="fas fs30 fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData">
+</table>
+
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

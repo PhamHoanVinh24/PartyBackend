@@ -1,0 +1,569 @@
+﻿<style>
+    .table-time-sheet {
+        width: 100%;
+        padding: 10px;
+        font-family: 'Times New Roman', Times, serif;
+        text-align: center;
+    }
+
+    .tb-no-boder {
+        border: none !important;
+    }
+
+    .tb-header {
+        font-weight: 700;
+    }
+
+    .tb-header-day td {
+        width: 23px;
+    }
+
+    .holiday {
+        background: #e64a4a;
+        color: white;
+    }
+
+    .tb-content {
+        margin-top: 10px;
+    }
+
+    .tb-row {
+        width: 45px;
+    }
+
+    .tb-row-80 {
+        width: 80px;
+    }
+
+    .tb-row-120 {
+        width: 120px;
+    }
+
+    td input {
+        border: 1px solid #fffcfc !important;
+        font-size: 12px !important;
+        font-weight: 500;
+        padding-left: 5px;
+    }
+
+    .holiday input {
+        background: #e64a4a;
+        border-color: #e64a4a !important;
+    }
+
+    .overflow-auto {
+        overflow: auto;
+    }
+    
+    .mnw2500 {
+        min-width: 2500px;
+    }
+</style>
+
+<div ng-controller="timeSheets" class="overflow-auto mb30">
+    <div class="tb-header col-md-12 row">
+        <div class="col-lg-3 pl25">
+            <label class="fw600 text-underline">{{'STK_LBL_DEPARMENT' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select ng-model="model.DepartmentId" theme="bootstrap" ng-change="changeDepartment()">
+                    <ui-select-match placeholder="{{'STK_TXT_ALL' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                    <ui-select-choices repeat="x.DepartmentCode as x in listDepartment | filter: $select.search">
+                        {{x.Title}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.DepartmentId='';_listUser=listUser" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0">
+            <label class="fw600 text-underline">{{'STK_LBL_MONTH' | translate}}</label>
+            <div class="input-group br24">
+                <input ng-model="model.Month" class="form-control" type="text" placeholder="{{'STK_LBL_MONTH' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="Month" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Month='';" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0">
+            <label class="fw600 text-underline">{{'STK_LBL_HEAD_DEPARTMENT' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select ng-model="model.UserManager" theme="bootstrap">
+                    <ui-select-match placeholder="{{'STK_TXT_ALL' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Name as x in _listUser | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.UserManager=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0">
+            <label class="fw600 text-underline">{{'STK_LBL_ESTABLISHMENT' | translate}}</label>
+            <div class="input-group br24">
+                <ui-select ng-model="model.UserCreated" theme="bootstrap">
+                    <ui-select-match placeholder="{{'STK_TXT_ALL' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Name as x in _listUser | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.UserCreated=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="btn-group pt20 actions d-flex">
+                <div class="text-center pr10">
+                    <a class="fs30" ng-click="calTimeSheet()">
+                        <span><i class="fas fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                </div>
+                <div class="text-center pl-1">
+                    <a class="fs30" ng-click="exportExcel()">
+                        <span><i class="fas fa-file-excel"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tb-content pl10 pr10 mnw2500">
+        <table border="1" class="table-time-sheet">
+            <tbody>
+                <tr>
+                    <td colspan="46" width="1172" height="50" class="bold uppercase">BẢNG CHẤM C&Ocirc;NG {{month}} NĂM {{year}}</td>
+                </tr>
+                <tr class="h-30">
+                    <td colspan="2" class="bold">Số ng&agrave;y l&agrave;m việc trong th&aacute;ng:</td>
+                    <td width="23" colspan="4" class="bold text-danger"><input class="w-70" ng-model="model.TotalWork" /></td>
+                    <td colspan="40" width="506" class="text-left pl10"><i>(điền số ng&agrave;y thực tế phải đi l&agrave;m trong th&aacute;ng theo qui định của c&ocirc;ng ty)</i></td>
+                </tr>
+                <tr class="tb-header">
+                    <td rowspan="2" width="23">TT</td>
+                    <td rowspan="2" width="155">Họ v&agrave; t&ecirc;n</td>
+                    <td colspan="31" width="713">{{month}}</td>
+                    <td colspan="13" width="281">&nbsp;</td>
+                </tr>
+                <tr class="tb-header-day">
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[0] != null && listEmployeeDetail[0].ListData[0].HoliDay }">1</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[1] != null && listEmployeeDetail[0].ListData[1].HoliDay }">2</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[2] != null && listEmployeeDetail[0].ListData[2].HoliDay }">3</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[3] != null && listEmployeeDetail[0].ListData[3].HoliDay }">4</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[4] != null && listEmployeeDetail[0].ListData[4].HoliDay }">5</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[5] != null && listEmployeeDetail[0].ListData[5].HoliDay }">6</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[6] != null && listEmployeeDetail[0].ListData[6].HoliDay }">7</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[7] != null && listEmployeeDetail[0].ListData[7].HoliDay }">8</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[8] != null && listEmployeeDetail[0].ListData[8].HoliDay }">9</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[9] != null && listEmployeeDetail[0].ListData[9].HoliDay }">10</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[10] != null && listEmployeeDetail[0].ListData[10].HoliDay }">11</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[11] != null && listEmployeeDetail[0].ListData[11].HoliDay }">12</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[12] != null && listEmployeeDetail[0].ListData[12].HoliDay }">13</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[13] != null && listEmployeeDetail[0].ListData[13].HoliDay }">14</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[14] != null && listEmployeeDetail[0].ListData[14].HoliDay }">15</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[15] != null && listEmployeeDetail[0].ListData[15].HoliDay }">16</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[16] != null && listEmployeeDetail[0].ListData[16].HoliDay }">17</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[17] != null && listEmployeeDetail[0].ListData[17].HoliDay }">18</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[18] != null && listEmployeeDetail[0].ListData[18].HoliDay }">19</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[19] != null && listEmployeeDetail[0].ListData[19].HoliDay }">20</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[20] != null && listEmployeeDetail[0].ListData[20].HoliDay }">21</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[21] != null && listEmployeeDetail[0].ListData[21].HoliDay }">22</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[22] != null && listEmployeeDetail[0].ListData[22].HoliDay }">23</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[23] != null && listEmployeeDetail[0].ListData[23].HoliDay }">24</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[24] != null && listEmployeeDetail[0].ListData[24].HoliDay }">25</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[25] != null && listEmployeeDetail[0].ListData[25].HoliDay }">26</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[26] != null && listEmployeeDetail[0].ListData[26].HoliDay }">27</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[27] != null && listEmployeeDetail[0].ListData[27].HoliDay }">28</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[28] != null && listEmployeeDetail[0].ListData[28].HoliDay }">29</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[29] != null && listEmployeeDetail[0].ListData[29].HoliDay }">30</td>
+                    <td ng-class="{ 'holiday': listEmployeeDetail[0] != null && listEmployeeDetail[0].ListData[30] != null && listEmployeeDetail[0].ListData[30].HoliDay }">31</td>
+                    <td width="33">P</td>
+                    <td width="28">CT</td>
+                    <td width="33">CT<br /> NN</td>
+                    <td width="29">NL</td>
+                    <td width="27">VR</td>
+                    <td width="25">&Ocirc;</td>
+                    <td width="35">C&Ocirc;</td>
+                    <td width="32">KL</td>
+                    <td width="39">VP</td>
+                    <td width="39">G1</td>
+                    <td width="39">G2</td>
+                    <td width="39">G3</td>
+                    <td width="39">G4</td>
+                </tr>
+                <tr ng-repeat="x in listEmployeeDetail">
+                    <td width="23" class="bold">{{$index+1}}</td>
+                    <td width="155" class="bold text-left pl5">{{x.Name}}</td>
+                    <td ng-repeat="y in x.ListData" ng-class="{ 'holiday': y.HoliDay }" class="text-left" style="width: 0.1%; min-width: 23px; padding: 0 5px">
+                        <input class="tb-row" type="text" ng-model="y.Value" ng-change="calculateFormula(x, y)" />
+                        <!--{{y.Shift != null && y.Shift.IsWorking ? 'x' : '' }}-->
+                    </td>
+                    <td>{{x.G}}</td>
+                    <td>{{x.V}}</td>
+                    <td>{{x.CTNN}}</td>
+                    <td>{{x.X}}</td>
+                    <td>{{x.VR}}</td>
+                    <td>{{x.F}}</td>
+                    <td>{{x.CO}}</td>
+                    <td>{{x.Y}}</td>
+                    <td>{{x.E}}</td>
+                    <td>{{x.E1.toFixed(2)}}</td>
+                    <td>{{x.E2.toFixed(2)}}</td>
+                    <td>{{x.E3.toFixed(2)}}</td>
+                    <td>{{x.E4.toFixed(2)}}</td>
+                </tr>
+                <tr class="tb-header">
+                    <td>&nbsp;</td>
+                    <td colspan="32">Tổng</td>
+                    <td>{{Total.P}}</td>
+                    <td>{{Total.CT}}</td>
+                    <td>{{Total.CTNN}}</td>
+                    <td>{{Total.NL}}</td>
+                    <td>{{Total.VR}}</td>
+                    <td>{{Total.O}}</td>
+                    <td>{{Total.CO}}</td>
+                    <td>{{Total.KL}}</td>
+                    <td>{{Total.VP}}</td>
+                    <td>{{Total.VP1.toFixed(2)}}</td>
+                    <td>{{Total.VP2.toFixed(2)}}</td>
+                    <td>{{Total.VP3.toFixed(2)}}</td>
+                    <td>{{Total.VP4.toFixed(2)}}</td>
+                </tr>
+                <tr>
+                    <td colspan="43" class="text-left bold"><i>Ghi ch&uacute;:&nbsp;</i></td>
+                </tr>
+                <tr class="tb-header">
+                    <td rowspan="3">&nbsp;</td>
+                    <td>Đi l&agrave;m</td>
+                    <td colspan="4" width="92">Nghỉ ph&eacute;p, nửa ng&agrave;y ph&eacute;p</td>
+                    <td colspan="4" width="92">C&ocirc;ng t&aacute;c, nửa ng&agrave;y c&ocirc;ng t&aacute;c</td>
+                    <td colspan="4" width="92">Ct&aacute;c ng&agrave;y nghỉ, nửa ng&agrave;y ct&aacute;c ng&agrave;y nghỉ</td>
+                    <td colspan="4">Nghỉ lễ</td>
+                    <td colspan="4" width="92">Việc ri&ecirc;ng, nửa ng&agrave;y việc ri&ecirc;ng</td>
+                    <td colspan="4" width="92">Nghỉ ốm, nửa ng&agrave;y ốm</td>
+                    <td colspan="4" width="92">Con ốm, nửa ng&agrave;y con ốm</td>
+                    <td colspan="4" width="102">Nghỉ kh&ocirc;ng lương, nửa ng&agrave;y kh&ocirc;ng lương</td>
+                    <td colspan="12" rowspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">X</td>
+                    <td>p</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>ct</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>ctn</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>nl</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">vr</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&ocirc;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">c&ocirc;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>o</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="23">1/2<br /> p</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">1/2<br /> ct</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">1/2<br /> ctn</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">1/2<br />vr</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">1/2<br /> &ocirc;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">1/2<br />c&ocirc;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">1/2<br /> o</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder">
+                    <td>&nbsp;</td>
+                    <td colspan="9">Lưu &yacute;: Mọi người copy k&yacute; tự từ bảng dưới l&ecirc;n bảng chấm c&ocirc;ng</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder">
+                    <td>&nbsp;</td>
+                    <td colspan="11" width="385">TRƯỞNG BỘ PHẬN</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="9" width="222">NGƯỜI LẬP</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder h-100">
+                    <td colspan="1">&nbsp;</td>
+                    <td colspan="11" class="text-center">{{model.UserManager}}</td>
+                    <td colspan="14">&nbsp;</td>
+                    <td colspan="13" class="text-center">{{model.UserCreated}}</td>
+                </tr>
+                <tr class="tb-no-boder">
+                    <td>&nbsp;</td>
+                    <td>Ghi ch&uacute;:</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder text-left">
+                    <td>&nbsp;</td>
+                    <td>P: ph&eacute;p</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="3">NL: nghỉ lễ</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="4">C&Ocirc;: nghỉ con ốm</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="4">G1: Giờ làm chính thức</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="4">G4: Giờ công tác thêm</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder text-left">
+                    <td>&nbsp;</td>
+                    <td>CT: c&ocirc;ng t&aacute;c</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="4">VR: việc ri&ecirc;ng</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="5">KL: nghỉ kh&ocirc;ng lương</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="4">G2: Giờ làm thêm</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="tb-no-boder text-left">
+                    <td>&nbsp;</td>
+                    <td width="155">CTNN: c&ocirc;ng t&aacute;c ng&agrave;y nghỉ</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="3">&Ocirc;: nghỉ ốm</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23" colspan="5">VP: ngày làm việc tại văn phòng</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td colspan="4">G3: Giờ công tác chính thức</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td width="23">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

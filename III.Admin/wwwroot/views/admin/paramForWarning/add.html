@@ -1,0 +1,175 @@
+﻿<style>
+    @media(max-width:1200px) {
+        .modal-30 {
+            width: 40% !important;
+        }
+    }
+
+    @media(min-width:1201px) and (max-width:1500px) {
+        .modal-30 {
+            width: 35% !important;
+        }
+    }
+
+    @media(min-width:1501px) {
+        .modal-30 {
+            width: 30% !important;
+        }
+    }
+</style>
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'PFW_CURD_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="form-group" ng-class="{ 'has-error': errorAETType}">
+                        <div class="input-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <label class="control-label require ">{{'PFW_CURD_LBL_AET_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.AETType" theme="bootstrap" ng-change="changleSelect('AETType')">
+                                        <ui-select-match placeholder="{{'PFW_CURD_TXT_AET_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listAetType">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.AETType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorAETType" class="label-color validation-message">
+                                    {{'PFW_CURD_VALIDATE_AET_TYPE' | translate}}
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorCatCode}">
+                        <div class="col-md-5">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require">{{'PFW_CURD_LBL_CAT_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.CatCode" theme="bootstrap" on-select="changleSelect('CatCode')">
+                                    <ui-select-match placeholder="{{'PFW_TXT_CATE' | translate}}...">
+                                        <i ng-show="$select.selected.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!$select.selected.HasChild" class="fa fa-folder text-info"></i>
+                                        {{$select.selected.Title}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listCat | filter: $select.search">
+                                        <div style="padding-left: {{15 * x.Level}}px">
+                                            <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                            <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                            {{x.Title}}
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.CatCode=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCatCode" class="label-color validation-message">
+                                {{'PFW_CURD_VALIDATE_CAT_CODE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                            <label class="control-label require"> {{'PFW_CURD_LBL_TOTAL' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group br24">
+                                <input type="text" class="form-control text-danger" ng-model="model.Total" name="Total" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" num-thousand='true' awnum num-int='21' placeholder=" {{'PFW_CURD_TXT_TOTAL' | translate}}" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Total=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                            <label class="control-label require">{{'PFW_CURD_LBL_CURRENCY' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control br24" disabled ng-model="model.Currency" name="Currency" placeholder="VNĐ..." />
+                        </div>
+                    </div>
+                    <div class="form-group b24">
+                        <div class="col-md-5">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label require">{{'PFW_CURD_LBL_FROM_TIME' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class='input-group date br24' id='FromTime'>
+                                <input type='text' class="form-control input-date" name="FromTime" ng-model="model.FromTime" placeholder="{{'PFW_CURD_TXT_FROM_TIME' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromTime=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <!--<span ng-show="errorFromTime" class="label-color validation-message">
+                                {{'PFW_CURD_VALIDATE_FROM_TIME' | translate}}
+                            </span>-->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <label class="control-label require">{{'PFW_CURD_LBL_TO_TIME' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class='input-group date br24' id='ToTime'>
+                                <input type='text' class="form-control input-date" name="ToTime" ng-model="model.ToTime" placeholder="{{'PFW_CURD_TXT_TO_TIME' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToTime=''" class="btn btn-default no-shadow end-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <!--<span ng-show="errorToTime" class="label-color validation-message">
+                                {{'PFW_CURD_VALIDATE_TO_TIME' | translate}}
+                            </span>-->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right actions d-flex">
+        <div class="fs30 pr20 text-center" ng-click="cancel()">
+            <a>
+                <span><i class="fas fa-times" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30 text-center pr20" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

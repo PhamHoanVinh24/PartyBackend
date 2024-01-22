@@ -1,0 +1,87 @@
+﻿<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link href="../../../css/admin/cardJob/default-setting.css" rel="stylesheet" />
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-cogs" style="font-size: 25px; padding-top: 10px;color:black"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_CURD_TITLE_DEFAULT_SETTING' | translate}}</span>
+</div>
+<div class="modal-body p0 mt5" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <ui-select tagging ng-model="setting.Team" on-select="teamSelect(setting.Team)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TXT_TEAM' | translate}}...">{{$select.selected.TeamName}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x in listTeam | filter: $select.search">
+                                {{x.TeamName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-6">
+                        <ui-select tagging ng-model="setting.Member" on-select="memberSelect(setting.Member)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TXT_MEMBER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x in listUser | filter: $select.search">
+                                {{x.GivenName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-12 mt5">
+                    <div class="col-md-12">
+                        <div class="col-md-12 border" style="min-height: 100px">
+                            <button type="button" class="btn" style="background-color: #4faf3e; color: #fff" ng-repeat="x in cardMember.listTeam">
+                                <i class="fa fa-times right" aria-hidden="true" ng-click="removeTeam(x.TeamCode)"></i>{{x.TeamName}}
+                            </button>
+                            <button type="button" class="btn" ng-repeat="x in cardMember.listMember">
+                                <i class="fa fa-times right" aria-hidden="true" ng-click="removeMember(x.GivenName)"></i>{{x.GivenName}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt5">
+                    <div class="col-md-3 pr-0">
+                        <ui-select tagging ng-model="setting.ObjDependency" on-select="objDependencyChange(setting.ObjDependency)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TXT_TYPE' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x in objDependency | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <ui-select tagging ng-model="setting.ObjCode" on-select="objCodeChange(setting.ObjCode)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TXT_OBJ_CODE' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in listObjCode | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <ui-select tagging ng-model="setting.Relative" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TXT_RELATIVE' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat=" x in relative | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-blue" ng-click="addDependency()">{{'COM_BTN_ADD' | translate}}</button>
+                    </div>
+                </div>
+                <div class="col-md-12 portlet light bordered mt5">
+                    <div class="portlet-body">
+                        <table id="data-table" style="width: 100%" class="display"></table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="clearData()" title="{{'CJ_BTN_CLEAR_DATA' | translate}}" class="btn btn-default bold">
+        {{'COM_BTN_DELETE' | translate}}
+    </button>
+    <button ng-click="submit()" class="btn red mr15 no-boxshadow" href="javascript:;" style="font-weight:bold;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>
+</div>

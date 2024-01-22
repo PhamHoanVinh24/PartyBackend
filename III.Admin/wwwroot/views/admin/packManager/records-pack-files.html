@@ -1,0 +1,40 @@
+﻿<div ng-controller="record-pack-files">
+    <div class="table-toolbar pl5 pr5">
+        <form name="searchform" class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-lg-5 br24-nobtn">
+                    <label class="control-label require">{{'WPM_FILE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.FileCode" theme="bootstrap" on-select="selectChange('FILE', $item)">
+                            <ui-select-match placeholder="{{'WPM_FILE' | translate}}">{{$select.selected.FileName}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listFiles | filter: $select.search">
+                                {{x.FileName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <span ng-show="model.FileCode !=''" class="text-danger fs12">{{'WPM_PATH' | translate}}: {{urlFile}}</span>
+                </div>
+                <div class="col-lg-6">
+                    <div class="btn-group pt30 d-flex">
+                        <div class="text-center pr10">
+                            <a class="" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-md-12">
+            <table class="table dataTable table-hover table-striped"
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataFile"></table>
+        </div>
+    </div>
+    
+</div>

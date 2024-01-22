@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html class="worksheet-on  ">
+
+<head>
+    <meta name="google-site-verification" content="WC9FfWNfVRyJn8pWPXTHM4uCe_p-U13-iz0dV8A6puk" />
+    <meta charset="utf-8" />
+    <meta property="og:site_name" content="Real time white board for drawing on line, share photo and capture image from webcam" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://vrobbi-nodedrawing.herokuapp.com" />
+    <meta property="fb:admins" content="100004633505284" />
+    <meta property="og:title" content="Real time whiteboard collaborative with chat in html5 and websocket" />
+    <meta property="fb:app_id" content="508864332486444" />
+    <meta name="keywords" content="lavagna collaborativa, disegnare on line, applicazione real time, multiuser whiteboard, realtime application, drawing on line, drawing game, html5, web 2.0, software, internet, image capture, webcam" />
+    <meta name="description" content="lavagna multiutente condivisa in tempo reale, multiuser whiteboard real time application, draw on line and share your draw with all on the net" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notepad and Chating</title>
+
+    <link rel='stylesheet' id='mediaelement-css' href='js/mediaelement/mediaelementplayer.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='wp-mediaelement-css' href='js/mediaelement/wp-mediaelement.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='customscrollbar-css' href='assets/css/vendor/customscrollbar.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='fontawesome-css' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-editor-css' href='assets/css/vendor/editor.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-selectBoxIt-css' href='assets/css/vendor/jquery.selectBoxIt.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='bootstrap-css' href='assets/css/vendor/bootstrap.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='zoom-style-css' href='assets/css/zoom.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-notepad-style-css' href='assets/css/styles1.css' type='text/css' media='all' />
+    <style id='iii-notepad-style-inline-css' type='text/css'>
+        @font-face {
+            font-family: "Myriad_regular";
+            src: url("/assets/fonts/MYRIADPROREGULAR.ttf");
+        }
+    </style>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.subscribers.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.chat.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.11/socket.io.js'></script>
+    <script type='text/javascript' src='js/jquery/jquery.js'></script>
+    <script type='text/javascript' src='js/jquery/jquery-migrate.min.js'></script>
+</head>
+
+<body class="worksheet-on  ">
+    <div id="cc-loading"><span></span></div>
+    <input type="hidden" class="current_url" value="index.html">
+    <div id="online-learning">
+        <div class="container-fluid">
+
+            <div id="menu-top">
+                <div class="row">
+                    <div class="nav-menu">
+                        <button type="button" class="btn">
+				<i class="fa fa-bars fa-2x"></i>
+			</button>
+                        <div class="menu">
+                            <ul class="list-group">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="notepate" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Notepate</a>
+                                    <ul class="dropdown-menu-a" id="notepate">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Camera</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Mic</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open Worksheet</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="tutoring" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Tutoring</a>
+                                    <ul class="dropdown-menu-a" id="tutoring">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Camera</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Mic</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open Worksheet</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="worksheet" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Worksheet</a>
+                                    <ul class="dropdown-menu-a" id="worksheet">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Save</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Preview</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="outside">
+                            <a href=""></a>
+                        </div>
+                    </div>
+                    <div class="logo fl">
+                        <a href="#">
+                            <img src="assets/images/normal/ik_Logo.png" />
+                        </a>
+                        <div class="tent" style="float: right;color: #fff;margin-left: 10px;margin-top: 2px">
+                            <p>iK Worksheet</p>
+                        </div>
+                    </div>
+                    <div class="actions-r">
+                        <div class="tb-register">
+                            <a href="https://iktutor.com/iklearn/en/?r=login&ref=notepad" class="tb-register-btn">
+                                <img src="assets/images/login/03_icon_n-create_account.png" />
+                                <span class="tb-register-txt">
+							Create Account						</span>
+                            </a>
+                        </div>
+                        <div class="tb-login">
+                            <a href="javascript::void(0)" class="tb-login-btn">
+                                <img src="assets/images/login/01_icon_n_login.png" />
+                                <span class="tb-login-txt">
+							Login						</span>
+                            </a>
+                            <div class="tb-login-popup hidden">
+                                <form name="tb-login-form" id="tb-login-form" method="post">
+                                    <p class="login-username">
+                                        <img src="assets/images/normal/2_ID.png" />
+                                        <input type="text" name="log" placeholder="Username (email)" id="user_login" class="input" value="" size="20" />
+                                    </p>
+                                    <p class="login-password">
+                                        <img src="assets/images/normal/3_Password.png" />
+                                        <input type="password" name="pwd" placeholder="Password:" id="user_pass" class="input" value="" size="20" />
+                                    </p>
+                                    <p class="login-submit">
+                                        <button type="button" id="tb-login-submit" class="button-primary">
+									Log In								</button>
+                                        <button type="button" id="tb-login-cancel" class="button-primary">
+									Cancel								</button>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tb-mode">
+                            <select onchange="window.location.href= this.value">
+					<option value="notepad.html">
+						Notepad					</option>
+					<option value="index.html">
+						Tutoring					</option>
+					<option value="worksheet.html" selected>
+						Worksheet					</option>
+				</select>
+                        </div>
+                        <div class="full-screen-mode full">
+                            <p>
+                                <img class="full" src="assets/images/normal/01_Icon_Full_Screen.png" />
+                                <img class="min" src="assets/images/normal/02_Icon_Min_Screen.png" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function() {
+                    //khai báo các biến cần dùng
+                    var btn = document.querySelector('.btn'),
+                        list_menu = document.querySelector('.list-group'),
+                        outside = document.querySelector('.outside'),
+                        cover = document.querySelector('.menu');
+
+                    btn.onclick = function() {
+                        outside.classList.add('ShowUp');
+                        cover.classList.add('appear-menu');
+                    }
+                    outside.onclick = function() {
+                        outside.classList.remove('ShowUp');
+                        cover.classList.remove('appear-menu');
+                    }
+
+
+                    var tilemenu = document.getElementsByClassName('dropdown-toggle'),
+                        sbmenu = document.getElementsByClassName('dropdown-menu-a');
+                    for (var i = 0; i < tilemenu.length; i++) {
+                        tilemenu[i].onclick = function() {
+
+
+                            if (this.classList[1] == 'dropdown-toggle-color') { // click vào cái đã hiện thị rồi
+
+                                this.classList.remove('dropdown-toggle-color');
+
+                                // 3 dòng dưới là cho  các đối tưởng được click ẩn đi
+                                var showsubmenu = this.getAttribute('data-toggle'),
+                                    show_elment = document.getElementById(showsubmenu);
+                                show_elment.classList.remove('show-dropdown-menu');
+                            } else { // click vào các cái còn lại
+
+                                // cho all bỏ màu chữ của class dropdown-toggle
+                                for (var k = 0; k < tilemenu.length; k++) {
+                                    tilemenu[k].classList.remove('dropdown-toggle-color');
+                                }
+                                this.classList.toggle('dropdown-toggle-color');
+
+                                // lấy về data-toggle
+                                var showsubmenu = this.getAttribute('data-toggle'),
+                                    show_elment = document.getElementById(showsubmenu);
+
+                                // cho all cac class dropdown-menu-a khác ẩn đi
+                                for (var i = 0; i < sbmenu.length; i++) {
+                                    sbmenu[i].classList.remove('show-dropdown-menu')
+                                }
+
+                                // cho  các đối tưởng được click hiện ra
+                                show_elment.classList.toggle('show-dropdown-menu');
+                            }
+                        }
+                    }
+                }, false)
+            </script>
+            <div id="menu-main">
+                <div class="row">
+
+
+                    <div class="no-padding border-r">
+
+                        <div class="row taskbar-worksheet r-taskbar">
+
+                            <div class="containerr" style="margin-bottom: -14px;margin-left: -8px; margin-right:65px; margin-top: 7px">
+
+                                <div class="select-box" id="dropdown">
+
+                                    <div class="options-container">
+
+                                        <div class="option" id="newhihi">
+                                            <input type="radio" class="radio" id="Automobiles" name="category" value="n">
+                                            <label for="Automobiles">New</label>
+                                        </div>
+
+                                        <div class="option" id="openhihi">
+                                            <input type="radio" class="radio" id="Film" name="category" value="">
+                                            <label for="Film">Open</label>
+                                        </div>
+
+
+                                        <div class="option" id="savehihi">
+                                            <input type="radio" class="radio" id="science" name="category" value="">
+                                            <label for="science">Save</label>
+                                        </div>
+
+
+                                        <div class="option" id="p">
+                                            <input type="radio" class="radio" id="Music" name="category" value="">
+                                            <label for="Music">Preview</label>
+                                        </div>
+                                    </div>
+                                    <div class="selected">
+                                        Select Action
+                                    </div>
+                                </div>
+                            </div>
+                            <!--				<div class="tutor-ws-div">-->
+                            <!--					<div class="trigger-action" id="acc">-->
+                            <!--						<span>-->
+                            <!--							-->
+                            <!--						</span>-->
+                            <!--					</div>-->
+                            <!--					<div class="list-action">-->
+                            <!--						<ul>-->
+                            <!--							<li>-->
+                            <!--								<a href="#" class="" data-type="n">-->
+                            <!--									-->
+                            <!--								</a>-->
+                            <!--							</li>-->
+                            <!--							<li>-->
+                            <!--								<a href="#" class="" data-type="e">-->
+                            <!--									-->
+                            <!--								</a>-->
+                            <!--							</li>-->
+                            <!--							<li>-->
+                            <!--								<a href="#" class="" data-type="s">-->
+                            <!--									-->
+                            <!--								</a>-->
+                            <!--							</li>-->
+                            <!--							<li>-->
+                            <!--								<a href="#" class="" data-type="p">-->
+                            <!--									-->
+                            <!--								</a>-->
+                            <!--							</li>-->
+                            <!--						</ul>-->
+                            <!--					</div>-->
+                            <!--				</div>-->
+                            <!--				<div class="block-ws">-->
+                            <!--					<select class="ws-change">-->
+                            <!--						<option value="" class="hidden">-->
+                            <!--							-->
+                            <!--						</option>-->
+                            <!--						<option value="n">-->
+                            <!--							-->
+                            <!--						</option>-->
+                            <!--						<option value="e">-->
+                            <!--							-->
+                            <!--						</option>-->
+                            <!--						<option value="s">-->
+                            <!--							-->
+                            <!--						</option>-->
+                            <!--						<option value="p">-->
+                            <!--							-->
+                            <!--						</option>-->
+                            <!--					</select>-->
+                            <!--				</div>-->
+
+
+                            <!--				<div class="block-control">-->
+                            <!--					<p class="img-height active" id="btn-ws-edit">-->
+                            <!--						<img class="white" src="-->
+                            <!--assets/images/worksheet/Mode_01_Edit_white.png"-->
+                            <!--							 alt="Save">-->
+                            <!--						<img class="dark" src="-->
+                            <!--assets/images/worksheet/Mode_01_Edit_dark.png"-->
+                            <!--							 alt="Save">-->
+                            <!--					</p>-->
+                            <!--					<p class="img-height" id="btn-ws-preview">-->
+                            <!--						<img class="white" src="-->
+                            <!--assets/images/worksheet/Mode_02_Preview_white.png"-->
+                            <!--							 alt="Save">-->
+                            <!--						<img class="dark" src="-->
+                            <!--assets/images/worksheet/Mode_02_Preview_dark.png"-->
+                            <!--							 alt="Save">-->
+                            <!--					</p>-->
+                            <!--				</div>-->
+                            <!--				<div class="block-control">-->
+                            <!--					<p class="img-height" id="btn-ws-add-single">-->
+                            <!--						<img src="-->
+                            <!--assets/images/worksheet/icon_05_Create_Single_Worksheet.png"-->
+                            <!--							 alt="AddSingleQuestion">-->
+                            <!--					</p>-->
+                            <!--					<p class="img-height" id="btn-ws-add-multi">-->
+                            <!--						<img src="-->
+                            <!--assets/images/worksheet/icon_06_Create_Multiple_Worksheet.png"-->
+                            <!--							 alt="AddMultiQuestions">-->
+                            <!--					</p>-->
+                            <!--				</div>-->
+                            <div class="block-control">
+                                <!--					<p class="img-height" id="btn-ws-open-list">-->
+                                <!--						<img src="-->
+                                <!--assets/images/worksheet/icon_Open_Worksheet_List.png"-->
+                                <!--							 alt="Undo">-->
+                                <!--					</p>-->
+                                <!--					<p class="img-height" id="btn-ws-undo">-->
+                                <!--						<img src="-->
+                                <!--assets/images/notepad/redo.png"-->
+                                <!--							 alt="Undo">-->
+                                <!--					</p>-->
+                                <!--					<p class="img-height" id="btn-ws-redo">-->
+                                <!--						<img src="-->
+                                <!--assets/images/notepad/undo.png"-->
+                                <!--							 alt="Redo">-->
+                                <!--					</p>-->
+                                <p id="btn-ws-add-type-box" class="tooltip-wrap">
+                                    <img src="assets/images/notepad/text_box.png" alt="Upload">
+                                    <span class="hidden tooltip-icon">
+																<span class="h">Text</span>
+                                    <span class="t">Insert text box on the worksheet</span>
+                                    </span>
+                                </p>
+                                <p id="btn-ws-add-image" class="tooltip-wrap">
+                                    <img src="assets/images/notepad/upload_image.png" alt="Upload">
+                                    <span class="hidden tooltip-icon">
+																<span class="h">Image</span>
+                                    <span class="t">Insert image box on the worksheet</span>
+                                    </span>
+                                </p>
+                                <p id="btn-ws-add-video" class="tooltip-wrap">
+                                    <img src="assets/images/notepad/upload_video_player.png" alt="ScreenShots">
+                                    <span class="hidden tooltip-icon">
+																<span class="h">Video</span>
+                                    <span class="t">Insert video box on the worksheet</span>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row wrapper_contend" id="wrapper">
+                <div class="col-md-8 main-content main-worksheet">
+                    <div class="w-notice">
+                        <div class="ws-notice hidden">
+                            <div class="ws-notice-inner">
+                                <div class="wsn-left">
+                                    <img src="assets/images/worksheet/Icon_Warning.png" class="" />
+                                    <p class="wsn-text"></p>
+                                    <input type="hidden" class="wsn-type" />
+                                </div>
+                                <div class="wsn-right">
+                                    <div class="wsn-btn">
+                                        <span class="wsn-btn-yes wsn-btn-only-yes">
+						Yes					</span>
+                                        <span class="wsn-btn-yes wsn-btn-ok">
+						Ok					</span>
+                                        <span class="wsn-btn-no">
+						No					</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ws-sample hidden">
+                        <div class="ws-sample-inner">
+                            <span class="sample-notice">
+			This is sample worksheet		</span>
+                            <span class="sample-close">
+			<img src="assets/images/worksheet/01_icon_Sample_Close.png" />
+		</span>
+                        </div>
+                    </div>
+
+                    <div id="w-panel" class="">
+                        <div class="ws-actions-top">
+                            <div class="ws-mode">
+                                <input type="hidden" class="ws-mode-input" value="1">
+                                <div class="btn-ws-mode practice-mode" data-type="1">
+                                    <img class="on" src="assets/images/worksheet/icon_07_Practice_ON.png">
+                                    <img class="off" src="assets/images/worksheet/icon_08_Practice_OFF.png">
+                                </div>
+                                <div class="btn-ws-mode test-mode" data-type="2">
+                                    <img class="on" src="assets/images/worksheet/icon_09_Test_ON.png">
+                                    <img class="off" src="assets/images/worksheet/icon_10_Test_OFF.png">
+                                </div>
+                            </div>
+                            <div class="ws-action">
+                                <div class="ws-clear">
+                                    <span>
+					Clear				</span>
+                                    <img src="assets/images/worksheet/icon_12_Clear_Page.png">
+                                </div>
+                                <div class="ws-delete">
+                                    <span>
+					Close				</span>
+                                    <img src="assets/images/worksheet/icon_11_Delete_Worksheet.png">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ws-title-subject">
+                            <div class="ws-title">
+                                <input type="text" name="ws-title" class="ws-title-input" placeholder="Worksheet Title:" />
+                                <input type="hidden" class="wsid" name="wsid" />
+                                <input type="hidden" class="wsstate" name="wsstate" value="1" />
+                                <input type="hidden" class="tid" name="tid" />
+                                <span class="ws-title-clear">
+				<img src="assets/images/worksheet/Title_01_Clear_Title.png" />
+			</span>
+                            </div>
+                            <div class="ws-subject">
+                                <select class="iii-select">
+				<option value="">Select Subject</option><option value="26">English: Conversation for Foreign Students</option><option value="27">English: Writing</option><option value="28">English: Reading Comprehension</option><option value="29">English: Others</option><option value="30">Math: Elementary</option><option value="31">Math: Middle School</option><option value="32">Math: High School</option><option value="33">Math: Advanced</option><option value="34">Math: Others</option><option value="35">Science: Elementary/Middle School</option><option value="36">Science: High School</option><option value="37">Science: Chemistry for High School</option><option value="38">Science: Others</option>			</select>
+                            </div>
+                        </div>
+
+                        <div class="ws-questions-number">
+                            <div class="wsq-arrow wsq-arrow-left">
+                                <img src="assets/images/worksheet/Question_03_Left_Arrow.png" />
+                            </div>
+                            <ul>
+                            </ul>
+                            <div class="wsq-actions">
+                                <div class="wsq-insert-single">
+                                    <img src="assets/images/worksheet/Pages_Single_Insert.png" />
+                                </div>
+                                <div class="wsq-insert-multi">
+                                    <img src="assets/images/worksheet/Pages_Multiple_Insert.png" />
+                                </div>
+                                <div class="wsq-delete-current">
+                                    <img src="assets/images/worksheet/Question_02_Delete.png" />
+                                </div>
+                                <div class="wsq-arrow wsq-arrow-right">
+                                    <img src="assets/images/worksheet/Question_04_Right_Arrow.png" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ws-no-worksheet">
+                            <div class="ws-no-worksheet-inner">
+                                <img src="assets/images/worksheet/No-worksheet_icon.png" />
+                                <span>
+				Currently, there is no worksheet. Create a new worksheet by selecting new from the menu			</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-panel-disable"></div>
+                    <div class="w-list hidden">
+                        <div class="w-list-inner">
+                            <div class="wls-close">
+                                <span>
+				<img src="assets/images/worksheet/Search_Close.png" />
+			</span>
+                            </div>
+                            <h3 class="w-list-title">
+                                List of Worksheets </h3>
+                            <div class="w-list-searchbox">
+                                <div class="wls-inner">
+                                    <div class="wls-ctn">
+                                        <input type="text" placeholder="Type Worksheet Name" />
+                                        <i class="wls-open-subject-list"></i>
+                                        <div class="wls-subject-list">
+                                            <ul>
+                                                <li data-value="" class="active">All Subjects</li>
+                                                <li data-value="26">
+                                                    English: Conversation for Foreign Students </li>
+                                                <li data-value="27">
+                                                    English: Writing </li>
+                                                <li data-value="28">
+                                                    English: Reading Comprehension </li>
+                                                <li data-value="29">
+                                                    English: Others </li>
+                                                <li data-value="30">
+                                                    Math: Elementary </li>
+                                                <li data-value="31">
+                                                    Math: Middle School </li>
+                                                <li data-value="32">
+                                                    Math: High School </li>
+                                                <li data-value="33">
+                                                    Math: Advanced </li>
+                                                <li data-value="34">
+                                                    Math: Others </li>
+                                                <li data-value="35">
+                                                    Science: Elementary/Middle School </li>
+                                                <li data-value="36">
+                                                    Science: High School </li>
+                                                <li data-value="37">
+                                                    Science: Chemistry for High School </li>
+                                                <li data-value="38">
+                                                    Science: Others </li>
+                                            </ul>
+                                        </div>
+                                        <div class="wls-type" data-state="all">
+                                            <span>
+							<img src="assets/images/worksheet/Search_Type_ALL.png" />
+						</span>
+                                        </div>
+                                    </div>
+                                    <button class="wls-btn">
+					Search				</button>
+                                </div>
+                            </div>
+                            <div class="w-list-listworksheet">
+                                <div class="w-list-row">
+                                    <ul class="wlr-label">
+                                        <li>
+                                            <span>
+							Name						</span>
+                                        </li>
+                                        <li>
+                                            <span>
+							Type						</span>
+                                        </li>
+                                    </ul>
+                                    <div class="wlr-content">
+                                        <div class="wlr-content-list">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ws-preview hidden">
+                        <div class="ws-preview-inner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-bg"></div>
+    <div class="user-login-form hidden">
+        <div class="userForm">
+            <div class="userForm-inner">
+                <form class="userLoginForm">
+                    <div class="user-1 form-section">
+                        <p>
+                            Login 1 </p>
+                        <label>
+								Username (email address							</label>
+                        <input type="text" name="user1" class="user1" />
+                    </div>
+
+                    <div class="user-2 form-section">
+                        <p>
+                            Login 2 </p>
+                        <label>
+								Username (email address							</label>
+                        <input type="text" name="user2" class="user2" />
+                    </div>
+                    <div class="form-section">
+                        <button type="button" class="userFormSubmit">
+								Login							</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type='text/javascript' src='js/jquery/ui/core.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/widget.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/mouse.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/draggable.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/resizable.min.js'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var mejsL10n = {
+            "language": "en-US",
+            "strings": {
+                "Close": "Close",
+                "Fullscreen": "Fullscreen",
+                "Download File": "Download File",
+                "Download Video": "Download Video",
+                "Play\/Pause": "Play\/Pause",
+                "Mute Toggle": "Mute Toggle",
+                "None": "None",
+                "Turn off Fullscreen": "Turn off Fullscreen",
+                "Go Fullscreen": "Go Fullscreen",
+                "Unmute": "Unmute",
+                "Mute": "Mute",
+                "Captions\/Subtitles": "Captions\/Subtitles"
+            }
+        };
+        var _wpmejsSettings = {
+            "pluginPath": "\/notepad\/wp-includes\/js\/mediaelement\/"
+        };
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='js/mediaelement/mediaelement-and-player.min.js'></script>
+    <script type='text/javascript' src='js/mediaelement/wp-mediaelement.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/touch-punch.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/customscrollbar.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.countdown.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/editor.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.selectBoxIt.min.js'></script>
+    <script type='text/javascript' src='assets/js/user.js'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var iii_script = {
+            "site_url": "http:\/\/localhost\/notepad\/",
+            "plugin_url": "http:\/\/localhost\/notepad\/wp-content\/plugins\/iii-notepad\/",
+            "ajax_url": "http:\/\/localhost\/notepad\/wp-admin\/admin-ajax.php",
+            "login_url": "http:\/\/localhost\/notepad\/wp-login.php",
+            "buy_time_fail": "You dont have enough point to buy time",
+            "buy_time_done": "You buy time done",
+            "empty_video_url": "Please enter video url",
+            "empty_layer": "Please chosen layer",
+            "question_title": "Question",
+            "answer_title": "Answer",
+            "multi_answer_title": "Multiple Choice  Answer",
+            "choice_text": "Choice",
+            "ws_title": "Worksheet Title:",
+            "ic_btn_video": "Insert",
+            "ic_btn_video_button": "Check",
+            "ic_btn_text": "Insert",
+            "save_question": "Save",
+            "add_other_question": "Add Another Question",
+            "ic_btn_image": "Insert",
+            "ws_notice_clear": "Do you want to clear texts and selections from the screen?",
+            "ws_notice_delete": "Do you want to save the worksheet before close?",
+            "ws_notice_question": "Do you want to delete a question page?",
+            "ws_notice_insert_video": "Youtube link is invalid",
+            "ws_notice_delete_ws_in_list_search": "Do you want be permanently remove current worksheet? ",
+            "ws_notice_save_current_sheet_open_list_sheet": "Would you like to save worksheet before leave?",
+            "ws_notice_need_login": "Please login before saving a worksheet",
+            "ws_notice_save_ws_done": "Worksheet Saved.",
+            "ws_notice_title_empty": "Title\/Subject cannot empty",
+            "ws_simple_worksheet": "This is sample worksheet"
+        };
+        /* ]]> */
+    </script>
+    <script src="http://localhost:8800/socket.io/socket.io.js"></script>
+    <script type='text/javascript' src='assets/js/worksheet.js'></script>
+</body>
+
+</html>

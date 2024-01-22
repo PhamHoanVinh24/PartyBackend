@@ -1,0 +1,176 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title"> {{'ORR_CURD_TITLE_ADD_ORR' | translate}}</span>
+</div>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsOrderRQ">
+            <div class="form-body pt0 pb-0">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ORR_CURD_LBL_ORR_TITLE' | translate}}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" ng-model="model.Title" name="Title" placeholder="{{'ORR_CURD_TXT_ORR_TITLE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fas fa-comments" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ORR_CURD_LBL_ORR_CONTENT' | translate}}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="3" name="Content" ng-model="model.Content" placeholder="{{'ORR_CURD_TXT_ORR_CONTENT' | translate}}..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorPhone}">
+                    <div class="col-md-3">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ORR_CURD_LBL_ORR_PHONE' | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" ng-model="model.Phone" name="Phone" placeholder="{{'ORR_CURD_TXT_ORR_PHONE' | translate}}..." id="Phone" />
+                        <span ng-show="errorPhone" class="label-color validation-message">
+                            {{'ORR_CURD_VALIDATE_PHONE' | translate}}!
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fas fa-at" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ORR_CURD_LBL_ORR_MAIL' | translate}}</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-model="model.Email" name="Email" placeholder="{{'ORR_CURD_TXT_ORR_MAIL' | translate}}..." ng-pattern="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" />
+                        <span class="text-danger" ng-show="addform.Email.$error.pattern">
+                            {{'ORR_CURD_VALIDATE_MAIL' | translate}}!
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fas fa-exclamation" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ORR_CURD_LBL_ORR_PRIORITY' | translate}}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label ng-repeat="x in entities" class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 15px!important;">
+                                    <input type="checkbox" ng-model="x.checked" ng-click="updateSelection($index, entities)"> {{x.name}}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ORR_CURD_LBL_ORR_REQUESTTIME' | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group date" id="requestTime">
+                            <input type="text" class="form-control " ng-model="model.RequestTime" name="RequestTime" placeholder="{{'ORR_CURD_TXT_ORR_REQUESTTIME' | translate}}..." autocomplete="off" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fab fa-google" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ORR_CURD_LBL_ORR_KEY' | translate}}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <div class="col-md-11" style="padding:0;">
+                                <input type="text" class="form-control br4" id="key" placeholder="{{'ORR_CURD_TXT_ORR_KEY' | translate}}..." ng-change="googleSearch('key')" ng-model="key" />
+                            </div>
+                            <div class="col-md-1 pl5">
+                                <div class="text-center">
+                                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addKey()">
+                                        <i class="fa fa-plus" style="padding-top:0"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example example_markup">
+                            <div class="bs-example" id="Key">
+                                <input type="text" name="Key" class="tag-input" ng-model="model.Keyword" value="" data-role="tagsinput">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <i class="fas fa-file" aria-hidden="true"></i>
+                        <label class="control-label">{{'ORR_CURD_LBL_ORR_FILE' | translate}}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group input-file">
+                            <div class="col-md-11 input-file" style="padding-left:0; padding-right:0;">
+                                <i class="fa fa-upload"></i>
+                                <input class="form-control br4 pl30 inputFile col-lg-11" placeholder="{{'ORR_CURD_TXT_ORR_FILE' | translate}}..." readonly></>
+                            </div>
+                            <div class="col-md-1 pl5">
+                                <div class="text-center">
+                                    <a class="pt-0 btn btn-icon-only btn-circle btn-outline green-custom" onclick="$(this).parent().find('input[type=file]').click();">
+                                        <i class="fa fa-upload"></i>
+                                    </a>
+                                    <input class="form-control" id="File" custom-on-change="uploadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered mb-0 mt10">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-3 text-center">{{'ORR_CURD_LBL_ORR_FILENAME'|translate}}</th>
+                                    <th class="col-lg-1 text-center">{{'ORR_LIST_COL_FILE_MASTER'|translate}}</th>
+                                    <th class="col-lg-2 text-center">{{'ORR_CURD_LBL_ORR_DOWNLOAD'|translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-if="model.ListFile.length!=0">
+                                <tr ng-repeat="x in model.ListFile">
+                                    <td class="text-center long">{{x.FileName}}</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" ng-model="x.IsMaster" ng-click="isMasterFile($index, model.ListFile)" name="isMaster" style="height:20px; width:20px" />
+                                    </td>
+                                    <td class="text-center">
+                                        <i role="button" class="fa fa-minus-circle pt5" ng-click="deleteFile($index)" title="{{'COM_BTN_DELETE'|translate}}" style="color:red !important;font-size: 25px"></i>
+                                        <a href="{{x.FilePath}}" target="_blank" download>
+                                            <i role="button" hr class="fa fa-download pl10" title="{{'ORR_CURD_LBL_ORR_DOWNLOAD'|translate}}" style="color:#147aa9!important;font-size: 25px"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-if="model.ListFile.length==0">
+                                <tr>
+                                    <td colspan="3" class="text-center">{{'COM_MSG_UNSELECTED_FILE'|translate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pt10 actions d-flex pull-right">
+        <div class="text-center pr10">
+            <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+                <span><i class="fa fa-close"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()" href="javascript:;">
+                <span><i class="fa fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

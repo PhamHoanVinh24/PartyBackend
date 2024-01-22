@@ -1,0 +1,86 @@
+﻿<div class="modal-header no-color">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fab fa-trello" style="padding-top: 7px;color:black"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_BTN_TRANS_WORK' | translate}}</span>
+</div>
+<div class="modal-body pt-0" id="modal-body">
+    <form name="addform" method="post" ng-validate="validationOptionsAddCardNormal">
+        <div class="row mt5">
+            <div class="col-md-12 p-0">
+                <div class="col-md-6 form-group" ng-class="{ 'has-error': errorBoardCode}">
+                    <label class="control-label require">{{'CJ_CURD_LBL_TITTLE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.BoardCode" theme="bootstrap" on-select="selectBoard(model.BoardCode)" ng-change="changleSelect('BoardCode')">
+                            <ui-select-match placeholder="{{'CJ_CURD_LBL_TITTLE' | translate}}...">{{$select.selected.BoardName}}</ui-select-match>
+                            <ui-select-choices group-by="'BoardTypeText'" repeat="x.BoardCode as x in listBoard | filter: $select.search">
+                                {{x.BoardName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn" ng-init="$scope.showBoard=false" ng-click="showBoard ? showBoard=false : showBoard=true">
+                            <button type="button" class="btn btn-default no-shadow">
+                                <span ng-class="{'fa-plus':!showBoard,'fa-minus-circle':showBoard}" class="fas"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorBoardCode" class="label-color validation-message">
+                        {{'CJ_VALIDATE_BOARD' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-6 form-group" ng-class="{ 'has-error': errorListCode}">
+                    <label class="control-label require">{{'CJ_CURD_LBL_LIST_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.ListCode" theme="bootstrap" on-select="changleSelect('ListCode')">
+                            <ui-select-match placeholder="{{'CJ_CURD_LBL_LIST_CODE' | translate}}...">{{$select.selected.ListName}}</ui-select-match>
+                            <ui-select-choices repeat="x.ListCode as x in lists | filter: $select.search">
+                                {{x.ListName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn" ng-init="$scope.showList=false" ng-click="showList ? showList=false : showList=true">
+                            <button type="button" class="btn btn-default no-shadow">
+                                <span ng-class="{'fa-plus':!showList,'fa-minus-circle':showList}" class="fas"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorListCode" class="label-color validation-message">
+                        {{'CJ_VALIDATE_LIST' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12 p-0">
+                <div class="col-md-6 form-group">
+                    <div class="input-group" ng-show="showBoard">
+                        <input ng-model="boardName" class="form-control" type="text" placeholder="{{'CJ_LBL_CREATE_BOARD' | translate}}..." />
+                        <span class="input-group-btn" ng-click="createdBoard(boardName)">
+                            <button type="button"  class="btn btn-default no-shadow">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <div class="input-group" ng-show="showList">
+                        <input ng-model="listName" class="form-control" type="text" placeholder="{{'CJ_LBL_CREATE_LIST' | translate}}..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="createdList(listName)" class="btn btn-default no-shadow">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label">{{'CJ_LBL_NEED_WORK' | translate}}</label>
+                    <textarea class="form-control" autofocus name="CardName" rows="4" ng-model="model.CardName" placeholder="{{'CJ_TXT_ENTER_WORK_ASSIGN' | translate}}..." />
+                </div>
+            </div>
+        </div>
+        <div class="row mt10">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-red" ng-click="submit()">
+                    {{'COM_BTN_ADD' | translate}}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

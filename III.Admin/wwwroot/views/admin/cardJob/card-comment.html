@@ -1,0 +1,42 @@
+﻿<style>
+    #commentHead {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+</style>
+<div ng-controller="card-comment">
+    <div class="col-lg-12 p0 mt5 padding-right-dashboard padding-left-dashboard pt5" style="width: 100.3%; height: 460px; overflow-y: scroll; overflow-x: hidden; ">
+        <div class="table_toolbar col-md-12 p10">
+            <div id="commentHead" class="fluid-width">
+                <input class="form-control br24 mb15" ng-keydown="($event.keyCode == 13) && addComment()" ng-blur="addComment()" ng-model="comment.Content" placeholder="{{'CJ_CURD_TXT_COMMENT' | translate}}..." ng-disabled="IsLock"/>
+            </div>
+            <div style="">
+                <div class="active-detail pl10 pr10" ng-repeat="cmt in comments">
+                    <div class="active-title" ng-if="cmt.Picture=='/images/default/no_user.png'">
+                        <span class="member-initials">
+                            <span>{{cmt.GivenName.charAt(0)}}</span>
+                        </span>
+                    </div>
+                    <div class="active-title" ng-if="cmt.Picture!='/images/default/no_user.png'">
+                        <img class="img-circle" height="32" width="32" src="{{cmt.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+                    </div>
+                    <div class="active-time" ng-init="show.editComment[cmt.Id] = false">
+                        <b>{{cmt.GivenName}}</b>
+                        <span style="color:#8c8c8c">{{cmt.CreatedTime | date: "dd/MM/yyyy 'lúc' h:mma"}}</span>
+                    </div>
+                    <div class="active-body fluid-width pull-left pl35">
+                        <textarea class="form-control" style="height: 40px" cmtid="{{cmt.Id}}" ng-blur="updateComment($event)" ng-if="show.editComment[cmt.Id]" autofocus ng-disabled="IsLock">{{cmt.CmtContent}}</textarea>
+                        <p ng-if="!show.editComment[cmt.Id]" class="wordWrap pull-left" style="width: 100%;">
+                            <span style="white-space: pre-wrap;" ng-bind-html="cmt.CmtContent"></span>
+                            <a class="pull-right" ng-click="deleteComment(cmt.Id)" ng-disabled="IsLock">{{'COM_BTN_DELETE' | translate}}</a>
+                            <a class="pull-right mr5" ng-click="show.editComment[cmt.Id] = true" ng-disabled="IsLock">{{'' | translate}}{{'CJ_CURD_LBL_UPDATE_TIME' | translate}}</a>
+                        </p>
+                        <p class="line" style="color:#8c8c8c" ng-if="cmt.UpdatedTime != null">{{'CJ_CURD_LBL_UPDATE_TIME' | translate}}: {{cmt.UpdatedTime | date: "dd/MM/yyyy 'lúc' h:mma"}} {{'CJ_CURD_LBL_UPDATE_BY' | translate}}: {{cmt.UpdatedBy}}</p>
+                    </div>
+                    <hr style="border-top: 1px solid #d6dadc; margin-top: 0 !important; float: left; width: 100%;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

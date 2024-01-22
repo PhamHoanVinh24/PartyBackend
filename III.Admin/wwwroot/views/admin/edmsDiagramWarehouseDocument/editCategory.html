@@ -1,0 +1,254 @@
+﻿<style>
+    /*.modal-header {
+        background: #f1f1f1;
+        color: black;
+    }*/
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #documentType .tags {
+        max-height: 73px;
+        height: 73px;
+    }
+
+    tags-input .tags {
+        max-height: 50px;
+        height: 50px;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .border-qrcode {
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        height: auto;
+    }
+
+        .border-qrcode .img-thumbnail {
+            border: none;
+        }
+
+    #box .table_body .file {
+        height: 170px;
+    }
+
+    .pb1 {
+        padding-bottom: 1px;
+    }
+</style>
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fas fa-map-marked-alt" style="padding-top: 15px;" ng-if="model.PAreaType == 'AREA'"></i>
+    <i class="fas fa-sort-circle-up" style="padding-top: 15px;" ng-if="model.PAreaType == 'FLOOR'"></i>
+    <i class="fas fa-line-columns" style="padding-top: 15px;" ng-if="model.PAreaType == 'LINE'"></i>
+    <i class="fas fa-cabinet-filing" style="padding-top: 15px;" ng-if="model.PAreaType == 'RACK'"></i>
+    <i class="fas fa-qrcode" style="padding-top: 15px;" ng-if="model.PAreaType == 'POSITION'"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'EDMSWM_TITLE_EDIT_FLOOR' | translate}}</span>
+</div>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" method="post" ng-validate="validationOptionsCategory">
+            <div class="form-body pt10">
+                <div class="row" style="border-bottom: 1px dashed #ccc">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6" ng-if="model.PAreaType == 'AREA'">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSDWC_CURD_LBL_WHS_CODE' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaCode" name="PAreaCode" placeholder="{{'EDMSDWC_CURD_TXT_WHS_CODE' | translate}}..." ng-change="changleSelect('PAreaCode')" ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-if="model.PAreaType == 'FLOOR'">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSDWC_CURD_LBL_FLOOR_CODE' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaCode" name="PAreaCode" placeholder="{{'EDMSDWC_CURD_TXT_FLOOR_CODE' | translate}}..." ng-change="changleSelect('PAreaCode')" ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-if="model.PAreaType == 'LINE'">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSDWC_CURD_LBL_LINE_CODE' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaCode" name="PAreaCode" placeholder="{{'EDMSDWC_CURD_TXT_LINE_CODE' | translate}}..." ng-change="changleSelect('PAreaCode')" ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-if="model.PAreaType == 'RACK'">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSDWC_CURD_LBL_RACK_CODE' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaCode" name="PAreaCode" placeholder="{{'EDMSDWC_CURD_TXT_RACK_CODE' | translate}}..." ng-change="changleSelect('PAreaCode')" ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-if="model.PAreaType == 'POSITION'">
+                                <div class="form-group">
+                                    <label class="require">{{'EDMSWM_CURD_LBL_CATEGORY_CODE' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaCode" name="PAreaCode" placeholder="{{'EDMSWM_CURD_TXT_CATEGORY_CODE' | translate}}..." ng-change="changleSelect('PAreaCode')" ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="require">{{'Tên danh mục' | translate}}</label>
+                                    <input class="form-control br24" ng-model="model.PAreaDescription" name="PAreaCode" placeholder="{{'Tên danh mục' | translate}}..." ng-disabled="lockCode" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>{{'EDMSWM_CURD_LBL_NOTE' | translate}}</label>
+                                    <textarea placeholder="{{'EDMSWM_CURD_TXT_NOTE' | translate}}" ng-model="model.Note" rows="9" class="form-control br12" ng-disabled="lockCode"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mnw125 pr15 pull-right">
+                                <div class="btn-group actions d-flex justify-content-ct">
+                                    <div class="text-center">
+                                        <a ng-click="submit()" class="fs30">
+                                            <span><i class="fa-solid fa-plus"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt20" ng-if="false">
+                        <div class="col-md-12 p-0">
+                            <div class="text-center">
+                                <div class="form-group">
+                                    <div class="col-lg-12 ">
+                                        <div class="thumbnail input-unstyled">
+                                            <img data-ng-src="data:image/png;base64,{{QR_Code}}" ng-class="QR_Code==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" class="h-120" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 text-center fs10 mtn30" ng-click="print(QR_Code)">
+                                        <label class="control-label ">
+                                            <i class="fas fs15 fa-print"></i>
+                                            {{'EDMSWM_BTN_PRINT_QR_CODE' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-0 pt10">
+                            <div class="form-group">
+                                <div class="col-lg-12 ">
+                                    <div class="thumbnail input-unstyled">
+                                        <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                        <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-120 w125" role="button" auto-load="model.Image"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 text-center fs10 mtn30">
+                                    <label class="control-label ">{{'COM_LBL_PRESENT_IMAGE' | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-if="false">
+                    <div class="mnw125 pr15 pt40 pull-right">
+                        <div class="btn-group actions d-flex justify-content-ct">
+                            <div class="text-center" ng-click="addNewAttr()">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa-solid fa-plus fs25"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_ADD_ATTR' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-if="false">
+                    <div class="col-md-12 h-250" style="overflow-y: auto">
+                        <div class="col-md-12 pt20" ng-repeat="x in listNewAttr">
+                            <div class="col-md-4 pr30 pl-0">
+                                <div class="form-group">
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <label class="control-label fw600">{{'COM_CRUMB_WF_PROPER' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <input type="text" class="form-control bold br24" ng-model="x.AttrName" name="AttrName" placeholder="{{'COM_CRUMB_WF_PROPER_NAME' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pr30">
+                                <div class="form-group">
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <label class="control-label fw600">{{'COM_CRUMB_WF_VALUE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <input type="text" class="form-control bold br24" ng-model="x.Value" name="Value" placeholder="{{'COM_CRUMB_WF_VALUE' | translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pr30">
+                                <div class="form-group">
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <label class="control-label fw600">{{'COM_CRUMB_WF_DATA_TYPE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <div class="input-group br24-nobtn">
+                                            <ui-select tagging ng-model="x.DataType" theme="bootstrap">
+                                                <ui-select-match placeholder="">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in ListATTRTYPE | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <!--<span class="input-group-btn">
+                                        <button type="button" ng-click="addCommonSettingAttrType()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pt30 text-center pr-0">
+                                <a title="Xoá" ng-click="deleteNewAtt(x.Id)" style1="width: 25px; height: 25px; padding: 0px"
+                                   class1="btn mt25 pull-right btn-icon-only btn-circle btn-outline red">
+                                    <i class="fas fa-trash-alt fs25 text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="background-color:transparent">
+    <!--<div class="btn-group pull-right actions d-flex pr25">
+        <div class="fs30" ng-click="cancel()" style="margin-right: 20px; margin-top: 18px;">
+            <a>
+                <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>-->
+</div>

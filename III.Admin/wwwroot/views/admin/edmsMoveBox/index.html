@@ -1,0 +1,126 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="bold mb-0"> {{'EDMSMB_LBL_EDMSMB' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'EDMSMB_LBL_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div href="/EDMSMoveBox" class="bold">{{'EDMSMB_LBL_EDMSMB' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-md-5 pt10">
+                <div class="form-group " ng-class="{ 'has-error': errorBoxCode}">
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.BoxCode" theme="bootstrap" on-select="changleSelect('BoxCode',$item)">
+                            <ui-select-match placeholder="{{'EDMSMB_TXT_BOX_CODE' | translate}}...">{{$select.selected.BoxCode}} - {{'EDMSMB_LBL_NUM_BOXTH' | translate}} {{$select.selected.NumBoxth}}</ui-select-match>
+                            <ui-select-choices repeat="x.BoxCode as x in ListBox | filter: $select.search">
+                                {{x.BoxCode}} - {{'EDMSMB_LBL_NUM_BOXTH' | translate}} {{x.NumBoxth}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BoxCode='';clearBox()" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorBoxCode" class="label-color validation-message">
+                        {{'EDMSMB_VALIDATE_BOX_CODE' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-9" ng-show="model.BoxCode!=''">
+                    <label class="control-label bold">{{'EDMSMB_LBL_NUM_BOXTH' | translate}}:</label> {{modelView.NumBoxth}}  |  <label class="control-label bold">{{'EDMSMB_LBL_STATUS_SECURITY' | translate}}:</label> {{modelView.StatusSecurity}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_START_TIME' | translate}}:</label> {{modelView.StartTime}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_ORG_NAME' | translate}}:</label> {{modelView.OrgName}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_TYPE_PROFILE_NAME' | translate}}:</label> {{modelView.TypeProfileName}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_BOX_LOCATION_FROM' | translate}}:</label> {{modelView.WHS_Name}} - {{modelView.FloorName}} - {{modelView.L_Text}} - {{modelView.RackName}}
+                </div>
+                <div class="col-md-3" ng-show="model.BoxCode!=''">
+                    <div class="text-center border-qrcode">
+                        <div class="img-thumbnail">
+                            <img data-ng-src="data:image/png;base64,{{QR_Code_Req}}" ng-class="QR_Code_Req==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" style="width:100%; height:100%" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 pt10">
+                <div class="form-group " ng-class="{ 'has-error': errorRackCode}">
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.RackCode" theme="bootstrap" on-select="changleSelect('RackCode',$item)">
+                            <ui-select-match placeholder="{{'EDMSMB_TXT_RACK_CODE' | translate}}...">{{$select.selected.RackCode}} - {{$select.selected.RackName}}</ui-select-match>
+                            <ui-select-choices repeat="x.RackCode as x in ListRack | filter: $select.search">
+                                {{x.RackCode}} - {{x.RackName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.RackCode='';clearRack()" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorRackCode" class="label-color validation-message">
+                        {{'EDMSMB_VALIDATE_RACK_CODE' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-9" ng-show="model.RackCode!=''">
+                    <label class="control-label bold">{{'EDMSMB_LBL_WHS_NAME' | translate}}:</label> {{modelRack.WHS_Name}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_FLOOR_NAME' | translate}}:</label> {{modelRack.FloorName}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_L_TEXT' | translate}}:</label> {{modelRack.L_Text}} <br />
+                    <label class="control-label bold">{{'EDMSMB_LBL_RACK_NAME' | translate}}:</label> {{modelRack.RackName}} <br />
+                </div>
+                <div class="col-md-3" ng-show="model.RackCode!=''">
+                    <div class="text-center border-qrcode">
+                        <div class="img-thumbnail">
+                            <img data-ng-src="data:image/png;base64,{{QR_Code_Rack}}" ng-class="QR_Code_Rack==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" style="width:100%; height:100%" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--<div class="col-md-2">
+                <div class="form-group mb5">
+                    <button ng-click="check()" type="submit" class="btn btn-accent" ng-disabled="model.BoxCode=='' || model.RackCode==''" ng-show="isShowCheck">
+                        <i class="fa fa-check"></i>
+                        {{'Kiểm tra' | translate}}
+                    </button>
+                    <button ng-click="save()" type="submit" class="btn btn-green" ng-show="isShowSave">
+                        <i class="fa fa-edit"></i>
+                        {{'Gắn lại' | translate}}
+                    </button>
+                </div>
+            </div>-->
+            <div class="col-md-2">
+                <div class="btn-group actions d-flex mb5">
+                    <div class="pl20 text-center mt10">
+                        <a ng-click="check()" title="Kiểm tra" class="btn btn-icon-only btn-circle btn-outline blue-custom " ng-disabled="model.BoxCode=='' || model.RackCode==''" ng-show="isShowCheck">
+                            <span><i class="fa fa-check"></i></span>
+                        </a>
+                        <a ng-click="save()" title="Gắn lại" class="btn btn-icon-only btn-circle btn-outline red-custom " ng-show="isShowSave">
+                            <span><i class="fa fa-edit"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>

@@ -1,0 +1,402 @@
+﻿<style>
+
+    /*-- Chart --*/
+    .c3 svg {
+        font: 10px sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .c3 path,
+    .c3 line {
+        fill: none;
+        stroke: rgba(0, 40, 100, 0.12);
+    }
+
+    .c3 text {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-size: px2rem(12px);
+    }
+
+    .c3-legend-item-tile,
+    .c3-xgrid-focus,
+    .c3-ygrid,
+    .c3-event-rect,
+    .c3-bars path {
+        shape-rendering: crispEdges;
+    }
+
+    .c3-chart-arc path {
+        stroke: #fff;
+    }
+
+    .c3-chart-arc text {
+        fill: #fff;
+        font-size: 13px;
+    }
+
+    /*-- Axis --*/
+    /*-- Grid --*/
+    .c3-grid line {
+        stroke: #f0f0f0;
+    }
+
+    .c3-grid text {
+        fill: #aaa;
+    }
+
+    .c3-xgrid,
+    .c3-ygrid {
+        stroke: #e6e6e6;
+        stroke-dasharray: 2 4;
+    }
+
+    /*-- Text on Chart --*/
+    .c3-text {
+        font-size: 12px;
+    }
+
+        .c3-text.c3-empty {
+            fill: #808080;
+            font-size: 2em;
+        }
+
+    /*-- Line --*/
+    .c3-line {
+        stroke-width: 2px;
+    }
+
+    /*-- Point --*/
+    .c3-circle._expanded_ {
+        stroke-width: 2px;
+        stroke: white;
+    }
+
+    .c3-selected-circle {
+        fill: white;
+        stroke-width: 1.5px;
+    }
+
+    /*-- Bar --*/
+    .c3-bar {
+        stroke-width: 0;
+    }
+
+        .c3-bar._expanded_ {
+            fill-opacity: 1;
+            fill-opacity: 0.75;
+        }
+
+    /*-- Focus --*/
+    .c3-target.c3-focused {
+        opacity: 1;
+    }
+
+        .c3-target.c3-focused path.c3-line, .c3-target.c3-focused path.c3-step {
+            stroke-width: 2px;
+        }
+
+    .c3-target.c3-defocused {
+        opacity: 0.3 !important;
+    }
+
+    /*-- Region --*/
+    .c3-region {
+        fill: steelblue;
+        fill-opacity: .1;
+    }
+
+    /*-- Brush --*/
+    .c3-brush .extent {
+        fill-opacity: .1;
+    }
+
+    /*-- Select - Drag --*/
+    /*-- Legend --*/
+    .c3-legend-item text {
+        fill: #545454;
+        font-size: 14px;
+    }
+
+    .c3-legend-item-hidden {
+        opacity: 0.15;
+    }
+
+    .c3-legend-background {
+        fill: transparent;
+        stroke: lightgray;
+        stroke-width: 0;
+    }
+
+    /*-- Title --*/
+    .c3-title {
+        font: 14px sans-serif;
+    }
+
+    /*-- Tooltip --*/
+    .c3-tooltip-container {
+        z-index: 10;
+    }
+
+    .c3-tooltip {
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+        font-size: 11px;
+        line-height: 1;
+        font-weight: 700;
+        color: #fff;
+        border-radius: 3px;
+        background: #212529;
+        white-space: nowrap;
+    }
+
+        .c3-tooltip th {
+            padding: 6px 6px;
+            text-align: left;
+        }
+
+        .c3-tooltip td {
+            padding: 4px 6px;
+            font-weight: 400;
+        }
+
+            .c3-tooltip td > span {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                margin-right: 8px;
+                border-radius: 50%;
+                vertical-align: baseline;
+            }
+
+            .c3-tooltip td.value {
+                text-align: right;
+            }
+
+    /*-- Area --*/
+    .c3-area {
+        stroke-width: 0;
+        opacity: 0.1;
+    }
+
+    .c3-target-filled .c3-area {
+        opacity: 1 !important;
+    }
+
+    /*-- Arc --*/
+    .c3-chart-arcs-title {
+        dominant-baseline: middle;
+        font-size: 1.3em;
+    }
+
+    .c3-chart-arcs .c3-chart-arcs-background {
+        fill: #e0e0e0;
+        stroke: none;
+    }
+
+    .c3-chart-arcs .c3-chart-arcs-gauge-unit {
+        fill: #000;
+        font-size: 16px;
+    }
+
+    .c3-chart-arcs .c3-chart-arcs-gauge-max {
+        fill: #777;
+    }
+
+    .c3-chart-arcs .c3-chart-arcs-gauge-min {
+        fill: #777;
+    }
+
+    .c3-chart-arc .c3-gauge-value {
+        fill: #000;
+        /*  font-size: 28px !important;*/
+    }
+
+    .c3-chart-arc.c3-target g path {
+        opacity: 1;
+    }
+
+    .c3-chart-arc.c3-target.c3-focused g path {
+        opacity: 1;
+    }
+
+    .c3-axis {
+        fill: #9aa0ac;
+    }
+
+    svg {
+        height: 400px !important;
+    }
+
+
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: white !important;
+        font-weight: 700;
+        background: #FF8000;
+        font-size: 12px;
+    }
+
+    .nav-tabs .nav-link, .nav-tabs a {
+        background: #428bca;
+        transition: 0.5s;
+        background-size: 200% auto;
+        border-top-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+        font-size: 12px;
+        color: white;
+        padding: 6px;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(85% - 50px);
+        right: 50px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="pr30 text-center mt10" ng-show1="!isSearch">
+        <a ng-click="showSearch()" class1="btn btn-icon-only btn-circle btn-outline gold-custom">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="portlet light bordered mb5 mt10">
+        <div class="portlet-body pb-2">
+            <div class="row">
+                <div class="col-md-12" style="height:20px">
+                    <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+                <div class="col-md-12 pt5 mb5">
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'CRPT_SEARCH_UNIT' | translate}}</label>
+                        <div class="input-group br24 search-group">
+                            <ui-select tagging ng-model="model.DepartmentCode" theme="bootstrap" on-select="changleSelect('DepartmentCode')">
+                                <ui-select-match placeholder="{{'CRPT_SEARCH_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listDepart | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.DepartmentCode=''" class="btn btn-default no-shadow start-date">
+                                    <span class="fa fa-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CRPT_SEARCH_FROM_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.FromTo" autocomplete="off" class="form-control" type="text" placeholder="{{'CRPT_SEARCH_FROM_DATE' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" id='Date' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromTo='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CRPT_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Dateto" autocomplete="off" class="form-control" type="text" placeholder="{{'CRPT_SEARCH_TO_DATE' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" id='DateTo' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Dateto='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CRPT_SEARCH_SIGNER' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Dasateto" autocomplete="off" class="form-control" type="text" placeholder="{{'CRPT_SEARCH_SIGNER' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Daasteto='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CRPT_SEARCH_NUM_DEC' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Dasateto" autocomplete="off" class="form-control" type="text" placeholder="{{'CRPT_SEARCH_NUM_DEC' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Daasteto='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center mt10 pr10">
+                                <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                    <span><i class="fas fa-search fs25 color-dark"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-row" style="height:auto">
+    <div class="inline-chart chart-internalids" style="max-height:100%;">
+        <div id="chart" class="c3" style="min-height:400px !important;position:relative"></div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-4"> <label style="font:bold;color:saddlebrown;margin-top:30px">{{'Số lượng:' | translate}} {{Count}} {{'CRPT_LBL_PERSON' | translate}}</label></div>
+    <div class="col-md-1 pull-right">
+        <div class="text-center">
+            <a class="fs30" style="background: #fff;width:50px" ng-click="Export()">
+                <i class="fas fa-file-excel"></i>
+            </a>
+            <p class="text-underline fs11 mb5 pt3">{{'CRPT_BTN_EXPORT_EXCEL' | translate}}</p>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataIndex"></table>

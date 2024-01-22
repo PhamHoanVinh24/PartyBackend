@@ -1,0 +1,248 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr20">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr20">
+        <a class="fs30" ng-click="deleteObjPrint()">
+            <span><i class="fas fa-trash-alt" style="--fa-primary-color: red;"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_DELETE' | translate}}</p>
+    </div>
+    <div class="text-center pr20">
+        <a class="fs30" ng-click="printObjPrint()">
+            <span><i class="fas fa-print"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'EDMS_QRCODE_MANAGER_PRINTING' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pb10">
+                    <div class="col-md-11">
+                        <div class="col-md-3 br24-nobtn">
+                            <label class="fw600 text-underline">{{'EDMS_QRCODE_MANAGER_LBL_WAREHOUSE'|translate}}</label>
+                            <div class="bootstrap-multiple-checkboxes input-group">
+                                <select id="warehouse-multiple-checkboxes" multiple ng-multiple="true" class="form-control" ng-model="model.ListWareHouseCode" ng-change="selectWareHouse(model.ListWareHouseCode)">
+                                    <option ng-repeat="item in QRlistWareHouse"
+                                            value="{{item.Code}}">
+                                        {{item.Name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 br24-nobtn">
+                            <label class="fw600 text-underline">{{'EDMS_QRCODE_MANAGER_FLOOR'|translate}}</label>
+                            <div class="bootstrap-multiple-checkboxes input-group">
+                                <select id="floor-multiple-checkboxes" multiple="multiple" style="width:100%" ng-model="model.ListFloorCode" ng-change="selectFloor(model.ListFloorCode)">
+                                    <option ng-repeat="item in QRlistFloor"
+                                            value="{{item.Code}}">
+                                        {{item.Code}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 br24-nobtn">
+                            <label class="fw600 text-underline">{{'EDMS_QRCODE_MANAGER_ROW'|translate}}</label>
+                            <div class="bootstrap-multiple-checkboxes input-group br24">
+                                <select id="line-multiple-checkboxes" multiple="multiple" style="width:100%" ng-model="model.ListLineCode" ng-change="selectLine(model.ListLineCode)">
+                                    <option ng-repeat="item in QRlistLine"
+                                            value="{{item.Code}}">
+                                        {{item.Code}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 br24-nobtn">
+                            <label class="fw600 text-underline">{{'EDMS_QRCODE_MANAGER_SHELF'|translate}}</label>
+                            <div class="bootstrap-multiple-checkboxes input-group br24">
+                                <select id="rack-multiple-checkboxes" multiple="multiple" style="width:100%" ng-model="model.ListRackCode">
+                                    <option ng-repeat="item in QRlistRack"
+                                            value="{{item.Code}}">
+                                        {{item.Code}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="text-center pt20 pr-2">
+                            <a class="fs30" ng-click="showSearch()">
+                                <span><i class="fas fa-search"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered" style="margin-bottom: 0;" ng-show="listObjPrint.length!=0">
+        <thead>
+            <tr>
+                <th class="text-center col-md-1">
+                    <label class="mt-checkbox mt-checkbox-outline" style="padding-left:18px">
+                        <input type="checkbox" ng-change="selectAllObjPrint(IsCheckAll)" ng-init="IsCheckAll=false" ng-model="IsCheckAll">
+                        <span class="h-20 w20"></span>
+                    </label>
+                </th>
+                <th class="text-center col-md-2">{{'COM_COL_QR_CODE' | translate}}</th>
+                <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_COL_OBJ_TYPE' | translate}}</th>
+                <th class="text-center col-md-3">{{'EDMS_QRCODE_MANAGER_COL_OBJ_NAME' | translate}}</th>
+                <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_COL_GIVEN_NAME' | translate}}</th>
+                <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_COL_DATE_CREATED' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in listObjPrint" role="button" ng-click="selectObjPrint(x)" ng-class="{'selected-item':x.IsCheck}">
+                <td class="text-center bs-checkbox">
+                    <label class="mt-checkbox mt-checkbox-outline" style="padding-left:18px">
+                        <input type="checkbox" ng-init="x.IsCheck=false" ng-model="x.IsCheck" ng-change="selectObjPrint(x)">
+                        <span class="h-20 w20"></span>
+                    </label>
+                </td>
+                <td class="text-center">
+                    <qrcode style="pointer-events:none" id="{{x.Code}}" role="button" data="{{x.Code}}" size="90" download></qrcode>
+                </td>
+                <td class="text-center">
+                    <span class="bold">{{x.TypeName}}</span>
+                </td>
+                <td class="text-center">
+                    <span>{{x.Name}}</span><br />
+                    <span>{{x.Code}}</span>
+                </td>
+                <td class="text-center">
+                    {{x.CreatedBy}}
+                </td>
+                <td class="text-center">
+                    {{x.CreatedTime | date:'dd/MM/yyyy'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="table-responsive" ng-if="listObjPrint.length==0">
+        <table class="table table-bordered" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th class="text-center col-md-1">
+                        <label class="mt-checkbox mt-checkbox-outline" style="padding-left:18px">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </th>
+                    <th class="text-center col-md-2">{{'COM_COL_QR_CODE' | translate}}</th>
+                    <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_LBL_OBJ_TYPE' | translate}}</th>
+                    <th class="text-center col-md-3">{{'EDMS_QRCODE_MANAGER_COL_OBJ_NAME' | translate}}</th>
+                    <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_COL_GIVEN_NAME' | translate}}</th>
+                    <th class="text-center col-md-2">{{'EDMS_QRCODE_MANAGER_COL_CREATD_TIME' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="h-40">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,568 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .boxGreen {
+        width: 20px;
+        height: 20px;
+        background: #2ecc71;
+        margin-right: 5px;
+    }
+
+    .boxRed {
+        width: 20px;
+        height: 20px background: #e74c3c;
+        margin-right: 5px;
+    }
+
+    .boxYellow {
+        width: 20px;
+        height: 20px;
+        background: #f1c40f;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 0px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .mt23 {
+        margin-top: 23px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #fff;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        box-shadow: 0px 5px 10px 0px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .labeladmin {
+        padding-left: 30px;
+        margin-top: 10px;
+    }
+
+    #tblFileRequest {
+        max-height: 200px;
+    }
+
+        #tblFileRequest tbody tr td {
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    #box .file-body {
+        overflow: auto;
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        z-index: 1;
+        margin-left: 36px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .btn-uploadFile {
+        height: 26px;
+        font-weight: 600;
+        color: #f5244f;
+        border-radius: 5px !important;
+        padding: 5px !important;
+    }
+
+    #btn-delete {
+        position: absolute;
+        top: 0px;
+    }
+
+    @media (min-width:768px) and (max-width:992px) {
+        .modal-funAccEntry .modal-dialog {
+            width: 85% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-funAccEntry .modal-dialog {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-funAccEntry .modal-dialog {
+            width: 70% !important;
+        }
+    }
+
+    @media(min-width:1500px) {
+        .modal-funAccEntry .modal-dialog {
+            width: 60% !important;
+        }
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .modal-body {
+        background-color: white;
+    }
+</style>
+<link rel="stylesheet" href="../../../css/admin/workflowActivity/workflow-ticket.css" />
+<div class="modal-body userFormAreaHeader" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="col-lg-12 mb10">
+                    <div ng-include="'../views/admin/workflowPlugin/wf-plugin.html'"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group" ng-class="{ 'has-error': errorAetType}">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fas fa-money-check-alt"></i>&nbsp;{{'FAE_CURD_LBL_AET_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="model.AetType" theme="bootstrap" ng-disabled="IsHide" on-select="changleSelect('AetType',$item)">
+                                        <ui-select-match placeholder="{{'FAE_CURD_TXT_AET_TYPE' | translate}}..."><b class="bold" style="color: {{$select.selected.Color}}">{{$select.selected.Name}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listAetType | filter: $select.search">
+                                            <p style="color: {{x.Color}}">{{x.Name}}</p>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn" ng-hide="IsHide">
+                                        <button type="button" ng-click="model.AetType=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorAetType" class="label-color validation-message">
+                                    {{'FAE_VALIDATE_AET_TYPE_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-lg-4">
+                        <div class="form-group" ng-class="{ 'has-error': errorStoreCode}">
+                            <div class="col-md-12">
+                                <i class="fa fa-bank" aria-hidden="true"></i>
+                                <label class="control-label">{{'FAE_CURD_ADD_ACTIVITY_STREAM' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WorkflowCat" theme="bootstrap" ng-change="loadDiagramWF(model.WorkflowCat)" disabled="true">
+                                        <ui-select-match placeholder="{{'FAE_CURD_ADD_ACTIVITY_STREAM' | translate}}..."><b class="text-brown">{{$select.selected.Name}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstWorkflow | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="col-lg-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-history" aria-hidden="true"></i>
+                                <label class="control-label">{{'FAE_CURD_ADD_ACTIVITY_STT' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.StatusTemp" theme="bootstrap" ng-change="changeStatus()">
+                                        <ui-select-match placeholder="{{'FAE_CURD_ADD_ACTIVITY_STT' | translate}}..."><p><span>{{$select.selected.CreatedBy}}</span> đã cập nhật trạng thái <span class="text-primary fw600">{{$select.selected.Name}}</span> cho hoạt động <span class="fw600 text-green">{{$select.selected.ObjectRelative}}</span><span class="fw600 text-green">[{{$select.selected.CreatedTime}}]</span></p></ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listStatusLog | filter: $select.search" ui-disable-choice="true">
+                                            <span>{{x.CreatedBy}}</span> đã cập nhật trạng thái <span class="text-primary fw600">{{x.Name}}</span> cho hoạt động <span class="fw600 text-green">{{x.ObjectRelative}} [{{x.CreatedTime | date:'dd/MM/yyyy HH:mm:ss'}}]</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i>&nbsp;{{'FAE_CURD_LBL_TITLE' | translate}} </label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.Title" name="Title" placeholder=" {{'FAE_CURD_TXT_TITLE' | translate}}..." ng-disabled="IsPermission" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorCatCode}">
+                            <div class="col-md-12 ">
+                                <label class="control-label require"><i class="fas fa-dollar-sign"></i>&nbsp; {{'FAE_CURD_LBL_LIST_FUND' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.CatCode" theme="bootstrap" ng-disabled="IsPermission" on-select="changleSelect('CatCode',$item)">
+                                        <ui-select-match placeholder="{{'FAE_CURD_TXT_LIST_FUND' | translate}}...">{{$select.selected.Title}}  </ui-select-match>
+                                        <ui-select-choices ui-disable-choice="x.HasChild" repeat="x.Code as x in treeData | filter: $select.search" style="z-index: 100">
+                                            <div style="padding-left: {{15 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CatCode=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCatCode" class="label-color validation-message">
+                                    {{'FAE_VALIDATE_CATEGORY' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" ng-class="{ 'has-error': errorTotal}">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fa-solid fa-money-bill" aria-hidden="true"></i>&nbsp;{{'FAE_CURD_LBL_TOTAL' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control text-danger br24" style="font-weight:bold" ng-model="model.Total" type="text" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="Total" placeholder="{{'FAE_CURD_LBL_TOTAL' | translate}}..." num-thousand='true' awnum num-int='21' ng-disabled="IsPermission" ng-change="changleSelect('Total')" />
+                                <span ng-show="errorTotal" class="label-color validation-message">
+                                    {{'FEA_VALIDATE_TOTAL_MAX_LENGTH' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error': errorCurrency}">
+                            <div class="col-md-12 ">
+                                <label class="control-label require"><i class="fas fa-dollar-sign"></i>&nbsp;{{'FAE_CURD_LBL_CURRENCY' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="model.Currency" theme="bootstrap" ng-disabled="IsPermission" on-select="changleSelect('Currency',$item)">
+                                        <ui-select-match placeholder="{{'FAE_CURD_TXT_CURRENCY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listCurrency | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Currency=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCurrency" class="label-color validation-message">
+                                    {{'FAE_CURD_TXT_CURRENCY_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <i class="fa fa-tag"></i>
+                                <label class="control-label">&nbsp;{{'FAE_CURD_LBL_OBJECT_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="model.ObjType" theme="bootstrap" ng-disabled="IsPermission" on-select="changleSelect('ObjType',$item)">
+                                        <ui-select-match placeholder="{{'FAE_CURD_TXT_OBJECT_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listObjType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="deleteObjType()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <i class="fa-solid fa-object-group"></i>
+                                <label class="control-label">&nbsp;{{'FEA_CURD_LBL_OBJECT' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="model.ObjCode" theme="bootstrap" ng-disabled="IsPermission" on-select="changleSelect('ObjCode',$item)">
+                                        <ui-select-match placeholder="{{'FEA_CURD_TXT_OBJECT' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}} </ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listObjCode | filter: $select.search">
+                                            {{x.Code}} - {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ObjCode=null" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fas fa-user-plus"></i>&nbsp;{{'FAE_CURD_LBL_RECEIVER' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <input type="text" class="form-control" ng-model="model.Receiptter" name="Receiptter" placeholder="{{'FAE_CURD_TXT_RECEIVER' | translate}}..." ng-disabled="IsPermission" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Receiptter=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fas fa-user-minus"></i>&nbsp;{{'FAE_CURD_LBL_PAYER' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <input type="text" class="form-control" ng-model="model.Payer" name="Payer" placeholder="{{'FAE_CURD_TXT_PAYER' | translate}}..." ng-disabled="IsPermission" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Payer=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;{{'FAE_CURD_LBL_DEADLINE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class='input-group date br24' id="DeadLine">
+                                    <input type='text' class="form-control input-date" name="DeadLine" ng-model="model.DeadLine" placeholder="{{'FAE_CURD_TXT_DEADLINE' | translate}}..." ng-disabled="IsPermission" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" ng-class="{ 'has-error': errorGender}">
+                            <div class="col-md-12">
+                                <label class="control-label"><i class="fas fa-briefcase"></i>&nbsp;{{'FEA_CURD_LBL_RELATED_REVENUE_EXPENDITURE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.AetRelative" theme="bootstrap" ng-change="changeAetRelative()" ng-disabled="IsPermission">
+                                        <ui-select-match placeholder="{{'FEA_CURD_TXT_RELATED_REVENUE_EXPENDITURE' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in listTitle | filter: $select.search">
+                                            {{x.Title}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.AetRelative=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-balance-scale"></i>
+                                <label class="control-label">&nbsp;{{'FEA_CURD_LBL_RELATED_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="model.AetRelativeType" theme="bootstrap" ng-disabled="IsPermission">
+                                        <ui-select-match placeholder="{{'FEA_CURD_TXT_RELATED_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listAetRelativeType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.AetRelativeType=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-map-marker"></i>
+                                        <label class="control-label">{{'FAE_CURD_LBL_MAP' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-icon" style="margin-bottom: 0px; z-index: 1">
+                                            <i ng-click="openMap()" class="cursor fa fa-map-marker"></i>
+                                            <input ng-click="openMap()" id="locationGPS" class="form-control br24" ng-model="model.GoogleMap" name="key" type="text" style="padding-left: 30px; width: 100%" ng-disabled="IsPermission" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-home"></i>
+                                        <label class="control-label">{{'FAE_CURD_LBL_ADDRESS' | translate}} </label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <textarea style="height: 35px" name="Address" id="textAreaAddress" class="form-control br24" ng-model="model.Address" type="text" placeholder="{{'FAE_CURD_TXT_ADDRESS' | translate}}..." ng-disabled="IsPermission"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <span>
+                                            <i class="fa fa-home"></i>
+                                            <label class="control-label">{{'FAE_CURD_LBL_LIST_FILE' | translate}}</label>
+                                        </span>
+                                        <span class="pull-right pr20">
+                                            <i class="fas fa-upload fs20" ng-click="triggerUpload()"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="boder-box" style="height: 100px; max-height: 100px; overflow: auto; border-radius: 12px;">
+                                            <div class="tags-custom" ng-repeat="x in listFundFile">
+                                                <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="removeFileReq($index)"></i><span></span> <a href="{{x.FilePath}}" download>{{x.FileName}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <label class="control-label ">{{'FAE_CURD_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea name="Note" id="Note" rows="3" class="form-control br12" ng-model="model.AetDescription" type="text" placeholder="{{'FAE_CURD_TXT_NOTE' | translate}}..." ng-disabled="IsPermission"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row pull-right">
+                        <div class="col-md-12">
+                            <div class="btn-group pt10 pb10 pr15 pull-right actions d-flex">
+                                <div class="text-center pr20" ng-show="false">
+                                    <div class="actions repository" id="tblFileRequest" ng-hide="IsPermission">
+                                        <div class="fs30">
+                                            <i class="fas fa-upload"></i>
+                                            <input type="file" class="btn-upload" custom-on-change-fund="loadFileReq" id="btn-upload-file" />
+                                        </div>
+                                        <p class="text-underline fs9 mb5 pt3">{{'FAE_BTN_UP_FILE' | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="text-center pr50">
+                                    <a data-dismiss="modal" ng-click="cancel()" class="fs30" ng-disabled="IsPermission">
+                                        <span><i class="fas fa-times" style="--fa-primary-color: red; font-size: 36px;"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_CONFIRM_CANCEL' | translate}}</p>
+                                </div>
+                                <div class="text-center">
+                                    <a ng-click="submit()" class="fs30" ng-disabled="IsPermission">
+                                        <span><i class="fa-solid fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div class="modal-footer">
+
+</div>-->

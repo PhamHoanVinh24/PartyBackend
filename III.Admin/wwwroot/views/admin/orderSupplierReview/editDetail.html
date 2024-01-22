@@ -1,0 +1,416 @@
+<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'SCG_OSR_EDIT_DETAILS' | translate}}</span>
+</div>
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding-top: 5px;">
+                <div class="row mb10">
+                    <div class="form-group col-md-8">
+                        <div class="pl30">
+                            <label class="fw600 text-bold">{{'SCG_OSR_TITLE' | translate}}:</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.TitleReview" name="TitleReview" id="TitleReview" readonly="" disabled="">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_STATUS' | translate}}:</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Status" name="Status" id="Status" readonly="" disabled="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb10">
+                    <div class="form-group col-md-8">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_CREATOR' | translate}}:</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.CreatorTicket" name="CreatorTicket" id="CreatorTicket" readonly="" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <div class="pl30">
+                            <label class="fw600 text-bold">{{'SCG_OSR_DATE' | translate}}:</label>
+                        </div>
+                        
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.DateReviewTicket" 
+                            name="DateReviewTicket" id="DateReviewTicket" readonly="" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb10">
+                    <div class="form-group col-md-12" ng-class="{ 'has-error': errorTypeCode}">
+                        <div class="pl30">
+                            <label class="  fw600 text-bold">{{'SCG_OSR_NOTE' | translate}}:</label>
+                        </div>
+                        
+                        <div class="col-lg-12" style="margin-top: -5px; padding-left: 15px; padding-right: 40px;">
+                            <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Noted" readonly="" disabled="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form name="adddetailform" class="form-horizontal userFormAreaHeader"  method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding-bottom: 20px; margin-bottom: 20px; padding-top: 5px;">
+                <div class="row mb5">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorProductCode}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_SELECT_MATERIALS' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="modeldetail.ProductCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_SELECT_MATERIALS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListProducts | filter: $select.search">
+                                       {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.ProductCode='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorProductCode" class="label-color validation-message">
+                                {{'OSR_DETAIL_VALIDATE_PRODUCTCODE_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorSupplier}" >
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_SUPPLIER' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="modeldetail.SupplierCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_SUPPLIER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListSuppliers | filter: $select.search">
+                                       {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.SupplierCode='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorSupplier" class="label-color validation-message">
+                                {{'OSR_DETAIL_VALIDATE_SUPPLIERCODE_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorSystem}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_SYSTEM' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <input  type="text" class="form-control br24" ng-model="modeldetail.QcSystem" theme="bootstrap" placeholder="{{'SCG_OSR_SYSTEM' | translate}}...">
+                            </div>
+                            <span ng-show="errorSystem" class="label-color validation-message">
+                                {{'OSR_DETAIL_VALIDATE_QCSYSTEM_BLANK' | translate}}
+                            </span>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-group col-md-3 " ng-class="{ 'has-error': errorPrice}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_PRICE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12" style="margin-top: -5px;">
+                            <div class='input-group br24 '>
+                                <input class="form-control br24"
+                                ng-model="modeldetail.Pricing" type="text" 
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="Total" placeholder="{{'SCG_OSR_PRICE' | translate}}..."
+                                num-thousand='true' awnum num-int='21'  />    
+                            </div>
+                            <span ng-show="errorPrice" class="label-color validation-message">
+                                {{validPrice | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3" style="margin-left:10px" ng-class="{ 'has-error': errorUnit}" >
+                        <div class="pl30">
+                            <label class="require fw600 text-bold ">{{'SCG_OSR_UNIT' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="modeldetail.Unit" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in Units | filter: $select.search">
+                                       {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.Unit='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                {{'OSR_DETAIL_VALIDATE_UNIT_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="form-group col-md-4" ng-class="{ 'has-error': errorPaymentMethod}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold ">{{'SCG_OSR_PAY' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="modeldetail.PaymentMethod" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_PAY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in PaymentMethods | filter: $select.search">
+                                       {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.PaymentMethod='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorPaymentMethod" class="label-color validation-message">
+                                {{'OSR_DETAIL_VALIDATE_PAYMENTMETHOD_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4 ml10" ng-class="{ 'has-error': errorDeliveryTime}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_DELIVERY_TIME' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <div class="input-group br24">
+                                    <input ng-model="modeldetail.DeliveryTime" class="form-control" type="text" placeholder="{{'SCG_OSR_DELIVERY_TIME' | translate}}..." 
+                                    ng-keydown="($event.keyCode == 13) && reload()" id='deliverytime' autocomplete="off" />
+                                </div>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.DeliveryTime='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorDeliveryTime" class="label-color validation-messages">
+                                {{'OSR_DETAIL_VALIDATE_DELIVERYTIME_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4"  ng-class="{ 'has-error': errorReputation}" >
+                        <div class="pl30">
+                            <label class="require fw600 text-bold ">{{'SCG_OSR_REPUTATION' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="modeldetail.Reputation" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_REPUTATION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in listReputation | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modeldetail.Reputation='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorReputation" class="label-color validation-messages">
+                                {{'OSR_DETAIL_VALIDATE_REPUTATION_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class="form-group col-md-9">
+                        <div class="pl30">
+                            <label class="fw600 text-bold ">{{'SCG_OSR_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea rows="6" class="form-control br24" ng-model="modeldetail.Noted" placeholder="{{'SCG_OSR_NOTE' | translate}}.."></textarea>
+                        </div>
+                    </div>
+                
+                    <div class="form-group col-md-3"  style="margin-left:10px">
+                        <div class="form-group col-md-12" ng-class="{ 'has-error': errorEvaluate}">
+                            <div class="pl30">
+                                <label class="fw600 text-bold ">{{'SCG_OSR_EVALUATE' | translate}}</label>
+                            </div>
+                            <div class="col-lg-12" style="margin-top: -5px;">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="modeldetail.ResultReview" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'SCG_OSR_EVALUATE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Name as x in listReview | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modeldetail.ResultReview='';" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12 mt20 ml150"  style="transform: translateY(35%)">
+                            <div class="btn-group actions d-flex justify-content-center"> <!-- Thay đổi lớp text-center thành justify-content-center -->
+                                <div class="col-md-12"> <!-- Thay đổi chiều rộng theo ý muốn, ví dụ: col-md-6 -->
+                                    <button ng-click="submit()" class="btn btn-success btn-block br8"> <!-- Sử dụng lớp btn-block để làm nút chiếm toàn bộ chiều rộng của cột -->
+                                        <p class="text-bold fs14 mb5 pt3">{{'SCG_OSR_SAVE' | translate}}</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

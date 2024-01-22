@@ -1,0 +1,237 @@
+<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2 " style="margin-right: 0px;">
+        <div class="text-center pr10">
+            <a ng-click="ExportExcel()" class="fs30">
+                <span><i class="fa-solid fa-file-excel" class="fs30"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'Xuất Excel' | translate}}</p>
+        </div>
+    </div>
+    <div class="text-center pr-2 " style="margin-right: 0px;">
+        <div class="text-center pr10">
+            <a ng-click="ExportPdf()" class="fs30">
+                <span><i class="fa-solid fa-file-pdf" class="fs30"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'Xuất Pdf' | translate}}</p>
+        </div>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('PAY_HIST')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pt5 mb5">
+                    <div class="col-md-12 pl-0">
+                        <div class="col-md-2">
+                            <label class="fw600 text-underline">{{'Kiểu thanh toán' | translate}}</label>
+                            <div class='input-group'>
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="modelsearch.TransactionType" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'Kiểu thanh toán' | translate}}...">{{$select.selected.ValueSet}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.CodeSet as x in listType | filter: $select.search">
+                                            {{x.ValueSet}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.TransactionType='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-md-2 pl-0">
+                                <label class="fw600 text-underline">{{'Từ ngày' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='text' id='StartTime' class="form-control input-date" name="StartTime" ng-model="modelsearch.StartTime" placeholder="{{'Từ ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.StartTime='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <label class="fw600 text-underline">{{'Đến ngày' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='text' id='EndTime' class="form-control input-date" name="EndTime" ng-model="modelsearch.EndTime" placeholder="{{'Đến ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadTabHeader()" />
+                                    <span class="input-group-btn br24">
+                                        <button type="button" ng-click="modelsearch.EndTime='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="fw600 text-underline">{{'Trạng thái' | translate}}</label>
+                                <div class='input-group'>
+                                    <div class="input-group search-group br24">
+                                        <ui-select tagging ng-model="modelsearch.Status" theme="bootstrap">
+                                            <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.ValueSet}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.CodeSet as x in listStatus | filter: $select.search">
+                                                {{x.ValueSet}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelsearch.Status='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="fw600 text-underline">{{'Khoảng tiền từ' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='number' id='MoneyFrom' class="form-control input-date" name="MoneyFrom" ng-model="modelsearch.MoneyFrom" placeholder="{{'Khoảng tiền từ' | translate}}..." />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.MoneyFrom='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <label class="fw600 text-underline">{{'Khoảng tiền đến' | translate}}</label>
+                                <div class='input-group date br24'>
+                                    <input type='number' id='MoneyTo' class="form-control input-date" name="MoneyTo" ng-model="modelsearch.MoneyTo" placeholder="{{'Khoảng tiền đến' | translate}}..." />
+                                    <span class="input-group-btn br24">
+                                        <button type="button" ng-click="modelsearch.MoneyTo='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                    </div>
+                </div>
+
+                <div class="row pt5 mb5">
+                    <div class="col-md-12 pl-0">                
+                            <div class="col-md-2">
+                                <label class="fw600 text-underline">{{'Đơn vị' | translate}}</label>
+                                <div class='input-group'>
+                                    <div class="input-group search-group br24">
+                                        <ui-select tagging ng-model="modelsearch.Currency" theme="bootstrap">
+                                            <ui-select-match placeholder="{{'Đơn vị' | translate}}...">{{$select.selected.ValueSet}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.CodeSet as x in listCurrency | filter: $select.search">
+                                                {{x.ValueSet}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelsearch.Currency='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pl-0">
+                                <label class="fw600 text-underline">{{'Người thanh toán' | translate}}</label>
+                                <div class='input-group'>
+                                    <div class="input-group search-group br24">                                        
+                                            <input type='text' id='Customer' class="form-control input-date" name="Customer" ng-model="modelsearch.Customer" placeholder="{{'Người thanh toán' | translate}}..." />                                       
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelsearch.Customer='';" class="btn btn-default no-shadow end-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pr-0 pl-0 pt20">
+                                <div class="btn-group actions d-flex mr5">
+                                    <div class="text-center pr10 pl10">
+                                        <a data-dismiss="modal" ng-click="search()" class="fs30">
+                                            <span><i class="fas fa-search"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblHistoryPayment">
+</table>
+
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

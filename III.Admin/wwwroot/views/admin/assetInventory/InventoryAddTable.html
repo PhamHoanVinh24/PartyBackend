@@ -1,0 +1,97 @@
+﻿<div ng-controller="InventoryAddTable">
+    <div class="table-toolbar">
+        <form name="addassetform" class="form-horizontal" method="post" ng-validate="validationOptionAssets">
+            <div class="form-group" style="margin-top: -10px;">
+                <div class="col-md-4">
+                    <div class="form-group br24-nobtn" ng-class="{ 'has-error': errorAssetName}">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <label class="control-label require"> {{'ASSET_INVENTORY_ASSET_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <ui-select ng-model="modelasset.AssetName" theme="bootstrap" on-select="changleSelect('AssetName')">
+                                    <ui-select-match placeholder=" {{'ASSET_INVENTORY_ASSET_NAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListAssset  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorAssetName" class="label-color validation-message">
+                                {{'ASSET_INVENTORY_ASSET_NAME' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require"> {{'ASSET_INVENTORY_ASSET_QUANTITY' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+  
+                                <input type="number" class="form-control br24 ng-pristine ng-untouched ng-valid ng-empty" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" ng-model="modelasset.Quantity" name="Quantity" placeholder=" {{'ASSET_INVENTORY_ASSET_QUANTITY' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorStatusAsset}">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <label class="control-label require"> {{'ASSET_INVENTORY_ASSET_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24">
+                                <ui-select ng-model="modelasset.StatusAsset" theme="bootstrap" on-select="changleSelect('StatusAsset')">
+                                    <ui-select-match placeholder=" {{'ASSET_INVENTORY_ASSET_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListStatusAsset  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelasset.StatusAsset=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorStatusAsset" class="label-color validation-message">
+                                {{'ASSET_INVENTORY_ASSET_STATUS' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label"> {{'ASSET_INVENTORY_TICKET_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <input type="text" class="form-control br24" ng-model="modelasset.Note" name="Note" placeholder=" {{'ASSET_INVENTORY_TICKET_NOTE' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt5">
+                    <div class="btn-group pull-right actions d-flex mt5">
+                        <div class="text-center ">
+                            <a ng-click="addasset()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt2" ng-click="addasset()" style="font-size: 12px !important;color: #428bca;"> {{'ASSET_INVENTORY_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataAssetInventory"></table>
+            </div>
+        </form>
+    </div>
+</div>
+    

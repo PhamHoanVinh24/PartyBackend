@@ -1,0 +1,170 @@
+﻿<style>
+
+    .modal-body .control-label {
+        font-size: 13px !important;
+    }
+      
+    .modal-header {
+        background-color: #ffffff;
+    }
+
+    .modal-title {
+        color: black;
+    }
+
+    .fa.fa-plus-circle.icon-insert {
+        color: black;
+    }
+</style>
+
+
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'IOT_DEVICE_ADD_ESTABLIST_IOT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal ng-pristine ng-valid ng-isolate-scope" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-6">
+                        <div class="col-md-10">
+                            <div class="fileupload fileupload-new mh15" data-provides="fileupload" id="block-upload-image" style="margin: 0 auto !important;">
+                                <div class="form-group">
+                                    <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none; ">
+                                        <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                        <img id="imageId" ng-click="loadImage()" class="h-200 w-450 br-n" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.ImageLink==null ? '../../../images/default/uploadimg.png' : model.ImageLink}}" role="button" style="border-radius: 178px;" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <a ng-click="loadImage()" class="btn btn-primary btn-block fileupload-exists" data-dismiss="fileupload">{{'IOT_DEVICE_SELECT_IMAGE' | translate}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require bold">{{'IOT_DEVICE_CODE_ESTABLIST' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0" >
+                                <input type="text" class="form-control bold br24" ng-model="model.DeviceCode" name="DeviceCode" placeholder="{{'IOT_DEVICE_CODE_ESTABLIST' | translate}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require bold">{{'IOT_DEVICE_NAME_ESTABLIST' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control bold br24" ng-model="model.DeviceName" name="DeviceName" placeholder="{{'IOT_DEVICE_NAME_ESTABLIST' | translate}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group br24-nobtn" ng-class=" {'has-error': errorDeviceGroup}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'IOT_DEVICE_GROUP_ESTABLIST' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.DeviceGroup" theme="bootstrap" on-select="changeSelect('GROUP')">
+                                        <ui-select-match placeholder="{{'IOT_DEVICE_GROUP_ESTABLIST' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstGroupIot | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorDeviceGroup" class="label-color validation-message ng-binding ng-hide">
+                                    {{'IOT_DEVICE_GROUP_EQUIPMENT_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class=" {'has-error': errorDeviceType}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'IOT_DEVICE_TYPE_ESTABLIST' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0" style="border-radius: 25px">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.DeviceType" theme="bootstrap" on-select="changeSelect('TYPE')">
+                                        <ui-select-match placeholder="{{'IOT_DEVICE_TYPE_ESTABLIST' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstTypeIot | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorDeviceType" class="label-color validation-message ng-binding ng-hide">
+                                    {{'IOT_DEVICE_TYPE_ESTABLIST_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-cog"></i>
+                                <label class="control-label">&nbsp;{{'IOT_DEVICE_READY_MADE_COMPANY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input name="DeviceManufacturer" class="form-control br24" ng-model="model.DeviceManufacturer" type="text" placeholder="{{'IOT_DEVICE_READY_MADE_COMPANY' | translate}}...">
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class=" {'has-error': errorDeviceStatus}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'IOT_DEVICE_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0" style="border-radius: 25px">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.DeviceStatus" theme="bootstrap" on-select="changeSelect('STATUS')">
+                                        <ui-select-match placeholder="{{'IOT_DEVICE_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorDeviceStatus" class="label-color validation-message ng-binding ng-hide">
+                                    {{'IOT_DEVICE_STATUS_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label">&nbsp;{{'IOT_DEVICE_DESCRIPTION' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <textarea rows="3" name="DeviceDesc" class="form-control br12" ng-model="model.DeviceDesc" type="text" placeholder="{{'IOT_DEVICE_DESCRIPTION' | translate}}..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class=" btn-group pull-right actions d-flex">
+                            <div class="fs30" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+                                <a>
+                                    <span><i class="fas fa-times pull-right h28 w28"style="--fa-primary-color: red;"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'IOT_DEVICE_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="text-center pr-2">
+                                <a class=" fs30 p-0" ng-click="add()">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'IOT_DEVICE_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

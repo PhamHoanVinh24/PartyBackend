@@ -1,0 +1,185 @@
+﻿<style>
+    .message-center {
+        padding-top: 5%;
+    }
+
+    .blue-modal {
+        background-color: #428bca !important;
+    }
+
+    .green-modal {
+        background-color: #009432 !important;
+    }
+
+    .mt-checkbox > span:after {
+        left: 6px !important;
+        top: 2px !important;
+        width: 5px;
+        height: 10px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+</style>
+<div class="modal-header no-color" ng-class="{'green-modal' : titleModalAssign==1, 'blue-modal' : titleModalAssign ==2}">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-users black" style="padding-top: 7px;"></i>
+    <!--<span class="modal-title " id="modal-title" ng-show="titleModalAssign == 1">{{'Giao việc đến học viên' | translate}}</span>-->
+    <!--<span class="modal-title " id="modal-title" ng-show="titleModalAssign == 2">{{'CJ_LBL_ASSIGN_TO_DEPARTMENT' | translate}}</span>-->
+<span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 3">{{'LMS_LBL_ASSIGN_TO_STUDENT' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pt-0" id="modal-body">
+    <div class="row mt10">
+        <!--<div class="col-md-3 pr-0 br24-nobtn">
+            <label>{{'Trụ sở - chi nhánh' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="branchSelect(model.Branch)" theme="bootstrap" ng-disabled="isInteract">
+                <ui-select-match placeholder="{{'Trụ sở - chi nhánh' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.Code as x in listBranch | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-3 pr-0 br24-nobtn">
+            <label>{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}</label>
+            <div class="d-flex">
+                <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap" ng-disabled="isInteract">
+                    <ui-select-match placeholder="{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}..."><b>{{$select.selected.Name}}<span class="text-danger" ng-show="model.Object.Name != ''">({{$select.selected.CountUser}})</span></b></ui-select-match>
+                    <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                        {{x.Name}}(<span class="text-danger">{{x.CountUser}}</span>)
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>-->
+        <div class="col-md-3 pr-0 br24-nobtn">
+            <label>{{'LMS_CLASS' | translate}}</label>
+            <div class="d-flex">
+                <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.ClassCode" on-select="classSelect(model.ClassCode)" theme="bootstrap" ng-disabled="isInteract">
+                    <ui-select-match placeholder="{{'LMS_CLASS' | translate}}..."><b>{{$select.selected.Name}}<span class="text-danger" ng-show="false">({{$select.selected.CountUser}})</span></b></ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listClass | filter: $select.search">
+                        {{x.Name}}(<span class="text-danger">{{x.Count}}</span>)
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="col-md-3 pr-0 br24-nobtn">
+            <label>{{'LMS_STUDENT' | translate}}(<span class="text-danger">{{countUser}}</span>)</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Member" on-select="memberSelect(model.Member)" theme="bootstrap" ng-disabled="isInteract">
+                <ui-select-match placeholder="{{'LMS_STUDENT' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x in listUser | filter: $select.search track by x.UserId">
+                    {{x.GivenName}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-lg-5 p-0">
+    <div class="col-lg-6 pr-0 h-100">
+        <div class="col-md-12 pl-0">
+            <div class="form-group">
+                <label class="control-label mb5 text-underline require"><!--{{'CJ_LBL_START_TIME' | translate}}-->{{'LMS_BEGIN_DATE' | translate}}:</label>
+                <div class="input-group br24 date" id="startDateMember">
+                    <input ng-model="model.BeginTime" name="BeginTime" class="form-control bold" type="text" placeholder="{{'CJ_LBL_START_TIME' | translate}}..." ng-change="changeData('BeginTime', model.BeginTime)" ng-disabled="isInteract" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 pr-0 h-100">
+        <div class="col-md-12 pl-0">
+            <div class="form-group">
+                <label class="control-label mb5 text-underline"><!--{{'CJ_LBL_END_TIME' | translate}}-->{{'LMS_END_DATE' | translate}}:</label>
+                <div class="input-group br24 date" id="endDateMember">
+                    <input ng-model="model.EndTime" class="form-control bold" type="text" ng-change="changeData('EndTime', model.EndTime) ng-disabled=" isInteract"" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="col-md-1 pl-0 pr-0 pt20">
+            <div class=" actions btn-group d-flex" style="justify-content: space-between">
+                <div class="text-center mt10" style="width: 60px;">
+                    <a ng-click="submit()" class1="btn btn-icon-only btn-outline btn-border-black">
+                        <span><i class="fa-solid fa-plus fs25"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3 ng-binding"> {{'COM_BTN_ADD' | translate}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt5">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+
+                .table-responsive {
+                    overflow: unset;
+                }
+            </style>
+            <div class="table-responsive scrollbar-sm" style="height: 350px; overflow: auto">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="pl25 width-90-per"><!--{{'CJ_DEPART_GROUP_MEMBER' | translate}}--> {{ 'LMS_STUDENT' | translate}} ({{lstAssign.length}})</th>
+                            <!--<th class="col-md-2">{{'Thời gian bắt đầu' | translate}}</th>
+                <th class="col-md-2">{{'Thời gian kết thúc' | translate}}</th>-->
+                            <!--<th class="col-md-2">{{'Tiến độ thực hiện' | translate}}</th>-->
+                            <!--<th class="text-center nowrap col-md-3">{{'CJ_COL_ROLE' | translate}}</th>-->
+                            <!--<th class="text-center wpercent10">{{'COM_BTN_DELETE' | translate}}</th>-->
+                        </tr>
+                    </thead>
+                    <!--Người được giao-->
+                    <tbody>
+                        <tr ng-repeat="x in lstAssign track by $index">
+                            <td class="text-left">
+                                <div style="width: 100%;">
+                                    <div ng-click="editAssign($index)" style="display: inline-block" class="mr10">
+                                        <span class="fs14 bold">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{'LMS_STUDENT' | translate}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{'LMS_CLASS_001' | translate}}</span> [<span class="text-green">{{x.BeginTime}}</span>, <span style="color:red">{{x.EndTime}}</span>]
+                                        <i class="fs14 ml10" style="color:cadetblue;font-family:serif">({{x.progress}}%)</i>
+                                    </div>
+                                    <button title="{{'LMS_DELETE' | translate}}" ng-click="removeMember(x)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                    <div class="actions btn-group pull-right">
+                                        <div class="text-center" ng-show="!x.showUserDetail">
+                                            <a ng-click="x.showUserDetail = true">
+                                                {{'LMS_EXPAND' | translate}}
+                                                <!--<i class="fa fa-caret-down fs45 purple-btn-info" aria-hidden="true"></i>-->
+                                            </a>
+                                        </div>
+
+                                        <div class="text-center" ng-show="x.showUserDetail">
+                                            <a ng-click="x.showUserDetail = false">
+                                                {{'LMS_ZOOM_IN' | translate}}
+                                                <!--<i class="fa fa-caret-up fs45 purple-btn-info" aria-hidden="true"></i>-->
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="x.showUserDetail == true" class="ml20">
+                                    <ul>
+                                        <li ng-repeat="y in x.listItems track by y.Id" class="pt10" style="list-style-type: disc">
+                                            <div col-md-12>
+                                                <a class="fs14" style="display: inline-block"><span>{{y.ItemTitle}}</span></a>
+                                                <i class="fs14 ml10" style="color:cadetblue;font-family:serif">({{y.ProgressAuto}}%)</i>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

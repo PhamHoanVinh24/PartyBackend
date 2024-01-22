@@ -1,0 +1,111 @@
+﻿<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-4">
+            <!--<h1 class="bold mb-0">Quản lý liên hệ</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin">{{'CONTRACT_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="/Contact">{{'CONTRACT_LBL_MANAGEMENT' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 text-right">
+            <a ng-click="search()" class="btn btn-accent">
+                <i class="fa fa-search"></i>
+                {{'CONTRACT_LBL_SEARCH' | translate}}
+            </a>
+            <a ng-click="add()" class="btn br4 btn-green">
+                <span class=""><i class="fa fa-plus"></i> {{'CONTRACT_LBL_ADD' | translate}}</span>
+            </a>
+        </div>
+    </div>
+    <div class="row pt10 mb15">
+        <div class="col-md-3">
+            <label>{{'CONTRACT_LBL_DATE' | translate}}</label>
+            <div class="input-group">
+                <input type="text" autocomplete="off" class="form-control" placeholder="Từ ngày..." ng-model="model.DateFrom" id="DateFrom">
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.DateFrom='';" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{{'CONTRACT_TAB_FILE_SEARCH_LBL_TO_DATE' | translate}}</label>
+            <div class='input-group '>
+                <input type='text' autocomplete="off" class="form-control " ng-model="model.DateTo" placeholder="Đến ngày..." id='DateTo' />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.DateTo='';" class="btn btn-default no-shadow end-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{{'CONTRACT_LBL_TELEPHONE' | translate}}</label>
+            <div class='input-group '>
+                <input type='text' autocomplete="off" class="form-control " ng-model="model.Phone" placeholder="{{'CONTRACT_LBL_TELEPHONE_NUMBER' | translate}}" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Phone='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{{'CONTRACT_LBL_MAIL' | translate}}</label>
+            <div class='input-group '>
+                <input type='text' autocomplete="off" class="form-control " ng-model="model.Email" placeholder="{{'CONTRACT_LBL_MAIL_N' | translate}}" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Email='';" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light bordered">
+    <div class="portlet-body">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

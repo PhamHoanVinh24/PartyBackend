@@ -1,0 +1,169 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2" >
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row  mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <!--<img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+                <div class="row m5">
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'FSMS_CURD_SEARCH_LBL_ACCOUNT_NUMBER' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.STK" class="form-control" type="text" placeholder="{{'FSMS_CURD_SEARCH_TXT_ACCOUNT_NUMBER' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.STK=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'FSMS_CURD_SEARCH_LBL_STATUS' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group search-group'>
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'FSMS_CURD_SEARCH_TXT_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'FSMS_CURD_SEARCH_LBL_FROM_TIME' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group date' id='Fromtime'>
+                                <input ng-model="model.FromTime" autocomplete="off" class="form-control" type="text" placeholder="{{'FSMS_CURD_SEARCH_TXT_FROM_TIME' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" id='FromTime' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromTime=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'FSMS_CURD_SEARCH_LBL_TO_TIME' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group date' id='Totime'>
+                                <input ng-model="model.ToTime" autocomplete="off" class="form-control" type="text" placeholder="{{'FSMS_CURD_SEARCH_TXT_TO_TIME' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" id='ToTime' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToTime=''" class="btn btn-default no-shadow end-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'FSMS_CURD_SEARCH_LBL_BANK' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group search-group'>
+                                <ui-select tagging ng-model="model.Bank" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'FSMS_CURD_SEARCH_TXT_BANK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listBank | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Bank='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10">
+                                <a ng-click="search()" class=" fs30">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+    <script>
+        setTimeout(function () {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            $('.table-scrollable').mousedown(function (e) {
+                isDown = true;
+                startX = e.pageX - $('.table-scrollable').offset().left;
+                scrollLeft = $('.table-scrollable').scrollLeft();
+            });
+            $('.table-scrollable').mouseleave(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mouseup(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mousemove(function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $('.table-scrollable').offset().left;
+                const walk = (x - startX) * 1; //scroll-fast
+                $('.table-scrollable').scrollLeft(scrollLeft - walk);
+                console.log(walk);
+            });
+        }, 1000);
+
+    </script>

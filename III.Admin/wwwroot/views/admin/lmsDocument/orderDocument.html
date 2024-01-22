@@ -1,0 +1,61 @@
+﻿<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <img src="../../../images/wareHouse/orderStore.png" height="30" width="30" />
+    <span class="modal-title black" id="modal-title">{{'EDMSR_TAB_FILE_CURD_ORDERING_FILE' | translate}} <span class="text-danger">{{FileName}}</span></span>
+</div>
+<button type="button" class="close-modal ng-scope" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pb20 fs11">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group br24-nobtn">
+                            <label class="require">{{'EDMSR_TAB_FILE_CURD_SEARCH_CLEVER' | translate}}: <i class="text-danger fs9">{{'EDMSR_TAB_FILE_CURD_SUGGESTION' | translate}}</i></label>
+                            <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.RackCode" theme="bootstrap" ng-change="changeRack()">
+                                <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_SEARCH_TYPING' | translate}}"><b>{{$select.selected.RackName}}&nbsp;({{$select.selected.Code}}) : </b> <i class="text-green">{{$select.selected.WHS_Name}} --> {{$select.selected.FloorName}} --> {{$select.selected.L_Text}} --> {{$select.selected.RackName}}</i></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listRackSearch | filter: $select.search">
+                                    <span class="fs11"><b>{{x.RackName}}&nbsp;({{x.Code}}) : </b><br /> <i class="text-green">{{x.WHS_Name}} --> {{x.FloorName}} --> {{x.L_Text}} --> {{x.RackName}}</i></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0">
+                        <div class="table-toolbar pb15">
+                            <label class="">{{'EDMSR_TAB_FILE_CURD_POSITION' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.RackPosition" placeholder="{{'EDMSR_TAB_FILE_CURD_POSITION' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <label class="require">{{'EDMSR_TAB_FILE_CURD_BOX' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.ObjPackCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_BOX' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.ObjPackCode as x in listPack | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="viewPack()" class="btn no-shadow btn-default" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 p-0">
+                        <div class="text-center pull-left mt25" ng-click="orderingDocument()">
+                            <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span class="fs25 fa-solid fa-plus"></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

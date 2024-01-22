@@ -1,0 +1,185 @@
+﻿<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="col-md-4 ">
+            <!--<h1 class="bold mb-0">{{'CONTRACT_LBL_CONTRACT' | translate}}</h1>-->
+            <h1 class="bold mb-0">Đặt hàng (Khách hàng)</h1>
+            
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin">{{'CONTRACT_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <!--<a href="#/customer">{{'CONTRACT_LINK_CONTRACT' | translate}}</a>-->
+                    <a href="#/contract">Đặt hàng (Khách hàng)</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div class="btn-group pull-right pt10 actions d-flex">
+                <div class="text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                        <span><i class="fa fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                </div>
+                <div class="pl20 text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                </div>
+                <div class="pl20 text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="addCardJob()">
+                        <span class="fa fa-trello"></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CARD_JOB' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <!--<img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">Từ ngày</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="Từ ngày..." autocomplete="off"  ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_LBL_SEARCH_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text"  autocomplete="off"  placeholder="{{'CONTRACT_TXT_SEARCH_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='dateto' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_CURD_LBL_CONTRACT_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ContractCode" class="form-control" type="text" placeholder="{{'CONTRACT_CURD_TXT_CONTRACT_CODE' | translate}}.." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ContractCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_CURD_LBL_STATUS' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select ng-model="model.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CONTRACT_CURD_COMBO_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListCommon | filter:{Group:'CONTRACT_STATUS'} | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_LBL_SEARCH_BUDGET_F' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.BudgetF" class="form-control" type="text" placeholder="{{'CONTRACT_TXT_SEARCH_BUDGET_F' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BudgetF=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_LBL_SEARCH_BUDGET_T' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.BudgetT" class="form-control" type="text" placeholder="{{'CONTRACT_TXT_SEARCH_BUDGET_T' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BudgetT=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_CURD_LBL_SIGNER' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Signer" class="form-control" type="text" placeholder="{{'CONTRACT_CURD_TXT_SIGNER' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Signer=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CONTRACT_CURD_LBL_CURRENCY' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select ng-model="model.Currency" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CONTRACT_CURD_COMBO_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListCommon | filter:{Group:'CURRENCY_TYPE'}  | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Currency=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label style="color:red">Hướng dẫn: Nhấn đúp chuột vào bản ghi để chỉnh sửa hợp đồng</label></div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblDataContractPoCustomer"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

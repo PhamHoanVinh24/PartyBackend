@@ -1,0 +1,541 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .line {
+        width: 50px;
+        border: 2px solid #ccc;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .form .form-body, .portlet-form .form-body {
+        padding: 0;
+    }
+
+    #cke_description .cke_inner {
+        min-height: 430px !important;
+    }
+
+        #cke_description .cke_inner div {
+            min-height: 310px !important;
+        }
+
+    .form-control {
+        font-weight: 700;
+        font-size: 12px !important;
+    }
+
+    .close {
+        background-image: none !important;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap {
+        padding: 5px 5px 9px !important;
+    }
+</style>
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color">
+    <!--<img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert black fs18"></i>
+    <span class="modal-title fs14 custom-title black" id="modal-title">{{'ACT_TITLE_INITIAL_ACT'|translate}}</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptionsActivity">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require fw600">{{'ACT_CRUD_ACT_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 title-act" ng-model="model.Title" ng-change="changeName()" name="Title" placeholder="{{'ACT_CRUD_ACT_NAME' | translate}}..." />
+                            </div>
+                            <!--<span class="text-danger pl15 fs12">{{model.ActivityCode}}</span>-->
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-10">
+                        <div class="form-group" ng-class="{'has-error' : errorStatus}">
+                            <div class="col-md-12">
+                                <label class="control-label require fw600">{{'ACT_CRUD_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap" ng-change="changeSelect('Status')">
+                                        <ui-select-match placeholder="{{'ACT_CRUD_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in lstStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <!--<span class="input-group-btn">
+                        <button type="button" ng-click="addStatus()" class="btn no-shadow btn-default" style="">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>-->
+                                </div>
+                                <span ng-show="errorStatus" class="label-color validation-message">
+                                    {{'ACT_VALIDATE_STATUS' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-2">
+                        <div class="form-group" ng-class="{'has-error' : errorStatus}">
+                            <div class="col-md-12">
+                                <label class="control-label require fw600">{{'ACT_CRUD_ACT_LEVEL' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type='number' name="ActLevel" class="form-control br24" ng-model="model.Level" placeholder="{{'ACT_CRUD_ACT_LEVEL' | translate}}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-lg-5 col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12 pl-0">
+                                    <label class="control-label require fw600">{{'ACT_CRUD_DURATION' | translate}}</label>
+                                    <input type="text" class="form-control br24" ng-model="model.Duration" name="Duration" placeholder="{{'ACT_CRUD_DURATION' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-12">
+                            <div class="form-group" ng-class="{'has-error' : errorUnit}">
+                                <label class="control-label require fw600">{{'ACT_CRUD_UNIT' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" ng-change="changeSelect('Unit')">
+                                        <ui-select-match placeholder="{{'ACT_CRUD_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in lstUnit | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addUnit()" class="btn no-shadow   btn-default" style="">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'ACT_VALIDATE_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="form-group" ng-class="{'has-error' : errorGroup}">
+                                <div class="col-md-12 pl-0">
+                                    <label class="control-label require fw600">{{'ACT_CRUD_GROUP' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Group" theme="bootstrap" ng-change="changeSelect('Group')">
+                                            <ui-select-match placeholder="{{'ACT_CRUD_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.Code as x in lstGroup | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addGroup()" class="btn no-shadow btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorGroup" class="label-color validation-message">
+                                        {{'ACT_VALIDATE_GROUP' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="form-group" ng-class="{'has-error' : errorType}">
+                                <div class="col-md-12 pr-0">
+                                    <label class="control-label require fw600">{{'ACT_CRUD_TYPE' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changeSelect('Type')">
+                                            <ui-select-match placeholder="{{'ACT_CRUD_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.Code as x in lstType | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addType()" class="btn no-shadow btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorType" class="label-color validation-message">
+                                        {{'ACT_VALIDATE_TYPE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12">
+                            <div class="form-group" ng-class="{'has-error' : errorMileStone}">
+                                <div class="col-md-12 pr-0">
+                                    <label class="control-label require fw600">{{'ACT_CRUD_MILE_STONE' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.MileStone" theme="bootstrap" ng-change="changeSelect('MileStone')">
+                                            <ui-select-match placeholder="{{'ACT_CRUD_MILE_STONE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat=" x.Code as x in lstMileStone | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addMileStone()" class="btn no-shadow btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorMileStone" class="label-color validation-message">
+                                        {{'ACT_VALIDATE_MILE_STONE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1" style="padding-top: 22px; width: 12%;">
+                        <div class="text-center pr-2">
+                            <a class1="btn btn-icon-only btn-circle btn-outline red-custom">
+                                <span><i class="fas fa-picture-o fs25" aria-hidden="true"></i></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'ACT_BTN_IMAGE' | translate}}</p>-->
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="width: 75.3%;">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label fw600">{{'ACT_CRUD_LOCATION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.Located" name="Located" placeholder="{{'ACT_CRUD_LOCATION' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="padding-top: 22px; width: 9.3%;">
+                        <div class="text-center mt10 pr-2">
+                            <a class1="btn btn-icon-only btn-circle btn-outline btn-default" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus fs25" aria-hidden="true"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab mt10" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <div href="#Section1" aria-controls="home" role="button" data-toggle="tab">{{'ACT_TAB_ASSIGN' | translate}}</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section2" aria-controls="profile" role="button" data-toggle="tab">
+                    {{'ACT_TAB_SETTING_VALUE' | translate}}
+                </div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section5" aria-controls="messages" role="button" data-toggle="tab">{{'ACT_TAB_FILE' | translate}}</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section4" aria-controls="messages" role="button" data-toggle="tab">{{'ACT_TAB_DESCRIPTION' | translate}}</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section6" aria-controls="messages" role="button" data-toggle="tab">{{'Luồng con' | translate}}</div>
+            </li>
+            <li role="presentation" class="disabled stepNext">
+                <div href="#Section7" aria-controls="messages" role="button" data-toggle="tab">{{'Vai trò mặc định' | translate}}</div>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                <div ng-include="'../views/admin/activity/assign-user-to-activity.html'"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="Section2">
+                <style>
+                    .dataTables_wrapper .table-scrollable {
+                        border: 1px solid #e7ecf1 !important;
+                    }
+
+                    .h-60 {
+                        height: 60px;
+                    }
+
+                    .pl0 {
+                        padding-left: 10px;
+                    }
+
+                    .p25 {
+                        padding-left: 25px;
+                    }
+
+                    .pt5 {
+                        padding-top: 5px;
+                    }
+
+                    .pr15 {
+                        padding-right: 10px;
+                    }
+
+                    .pr15 {
+                        padding-right: 15px;
+                    }
+
+                    .pr20 {
+                        padding-right: 20px;
+                    }
+
+                    .pr5 {
+                        padding-right: 5px;
+                    }
+
+                    .mt5 {
+                        margin-top: 5px;
+                    }
+
+                    .mt15 {
+                        margin-top: 15px;
+                    }
+
+                    .ml15 {
+                        margin-left: 20px;
+                    }
+
+                    .mt23 {
+                        margin-right: 60px;
+                    }
+
+                    .mt25 {
+                        margin-top: 25px;
+                    }
+
+                    .w-100-percent {
+                        width: 100%;
+                    }
+
+                    .w-30-percent {
+                        width: 30%;
+                    }
+
+                    .bgWhite {
+                        background: #FFF;
+                    }
+
+                    .labelbodergroup {
+                        margin-left: 24px;
+                        margin-top: -12px;
+                        position: absolute;
+                        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+                        border: 1px solid #e9dada;
+                        border-radius: 4px;
+                        font-size: 11px;
+                        padding: 3px 10px !important;
+                    }
+
+                    .table_body {
+                        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+                        border-radius: 4px !important;
+                        border: 1px solid #e9dada;
+                        padding-top: 15px;
+                        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+                        padding-bottom: 15px;
+                    }
+
+                    .text-box-important {
+                        background-color: #27ae60 !important;
+                        color: #fcfdfd !important;
+                        font-weight: bold;
+                    }
+
+                    .ui-select-match-close {
+                        color: red;
+                        margin-top: 0px !important;
+                        margin-right: 15px;
+                        line-height: 20px !important;
+                        font-size: 30px !important;
+                    }
+
+                    .ui-select-match-item {
+                        font-size: 13px !important;
+                        padding-bottom: 5px !important;
+                        padding-top: 5px !important;
+                    }
+                </style>
+                <div class="row pt5">
+                    <form name="addheader" class="form-horizontal " method="post" ng-validate="validationOptionsAttr">
+                        <div class="form-body">
+                            <div class="pt-0" style="height: 350px;">
+                                <div class="col-md-11 pr-0">
+                                    <label class="control-label fw600">{{'Bộ dữ liệu kết quả'|translate}}</label>
+                                    <ui-select ng-model="model.ListGroupData" multiple theme="bootstrap" class="h-100 mh-100 br12">
+                                        <ui-select-match placeholder="{{'Bộ dữ liệu kết quả'|translate}}...">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstAttrGroup | filter:$select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-1 pt20">
+                                    <div class="btn-group pull-right actions d-flex mt25 ml15">
+                                        <div class="text-center mt10">
+                                            <a ng-click="save()" class1="btn btn-icon-only btn-boder1">
+                                                <span><i class="fa-solid fa-plus fs25"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb8 pt5">{{'COM_BTN_SAVE' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="Section4">
+                <textarea class="form-control fs14" id="description" rows="22" ng-model="model.Desc"></textarea>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="Section5">
+                <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="Section6">
+                <div ng-include="'../views/admin/activity/nested-wf-cat.html'"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="Section7">
+                <div ng-include="'../views/admin/activity/role-default.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>

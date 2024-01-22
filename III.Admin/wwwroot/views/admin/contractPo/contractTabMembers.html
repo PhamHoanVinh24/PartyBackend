@@ -1,0 +1,60 @@
+﻿<div ng-controller="contractTabMembers">
+    <div class="row">
+        <form name="addformTabMember" method="post" ng-validate="validationOptionsTabMember">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3 form-group" ng-class="{ 'has-error': errorAssignee}">
+                        <label class="fw600 text-underline require">{{'CP_CURD_MSG_PERSON_JOB' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="model.Assignee" theme="bootstrap" on-select="changleSelect('Assignee')">
+                                <ui-select-match placeholder="{{'CP_CURD_MSG_PERSON_JOB' | translate}}">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUser  | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Assignee=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorAssignee" class="label-color validation-message">
+                            {{'CP_CURD_MSG_PERSON_JOB_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="fw600 text-underline">{{'CP_CURD_MSG_DESCRIPTION' | translate}}</label>
+                        <div class="input-group br24">
+                            <input class="form-control" name="Note" ng-model="model.Note" placeholder="{{'CP_CURD_MSG_DESCRIPTION' | translate}}..."></>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Note=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10">
+                                <a class=" fs30 p-0" ng-click="add()">
+
+                                    <span><i class="fa-solid fa-plus"></i></span>
+
+                                </a>
+
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataContractMember"></table>
+</div>

@@ -1,0 +1,110 @@
+﻿<style>
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: white !important;
+        font-weight: 700;
+        background: #FF8000;
+        font-size: 12px;
+    }
+
+    .nav-tabs .nav-link, .nav-tabs a {
+        background: #428bca;
+        transition: 0.5s;
+        background-size: 200% auto;
+        border-top-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+        font-size: 12px;
+        color: white;
+        padding: 6px;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mr15">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-12 pl-0">
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'Số & Tên quyết định' | translate}}</label>
+                        <input ng-model="model.DecisionNum" name="DecisionNum" class="form-control" type="text" placeholder="{{'Số quyết định & Tên quyết định' | translate}}..." />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'Nhân viên'| translate}}</label>
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" rows="2" ng-model="model.CodeEmployee" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Nhân viên' | translate}}...">{{$select.selected.Name}}&nbsp;-&nbsp;{{$select.selected.CodeName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in dataEmployee | filter:$select.search" refresh="reloadEmployee($select.search)">
+                                    <div>{{x.Name}}&nbsp;-&nbsp;{{x.CodeName}}</div>
+                                    <div class="row mt15" ng-if="$index == dataEmployee.length-1">
+                                        <button class="btn btn-xs btn-success"
+                                                style="width: 100%;"
+                                                ng-click="loadMore($select, $event);"
+                                                ng-disabled="loading">
+                                            Xem thêm...
+                                        </button>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CodeEmployee=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="fw600 text-underline">{{'Từ ngày' | translate}}</label>
+                        <div class="input-group ">
+                            <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'Từ ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' autocomplete="off" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="fw600 text-underline">{{'Đến ngày' | translate}}</label>
+                        <div class="input-group ">
+                            <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'Đến ngày' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='dateto' autocomplete="off" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 d-flex pt20 pull-right">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-outline btnn " ng-click="reload()">
+                                <span><i class="fa fa-search vtc"> </i></span>
+                            </a>
+                            <p class="text-underline fs13 mb5 pt3 ">{{'Tìm kiếm' | translate}}</p>
+                        </div>
+                        <div class="text-center pull-right pl-2" ng-click="add()">
+                            <a class="btn btn-icon-only btn-outline btnn" ng-click="reload()">
+                                <span><i class="glyphicon glyphicon-plus vtc" style="color:#000"> </i></span>
+                            </a>
+                            <p class="text-underline fs13 mb5 pt3 ">{{'Thêm mới' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row col-md-12 pr-0">
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataIndex1"></table>
+</div>

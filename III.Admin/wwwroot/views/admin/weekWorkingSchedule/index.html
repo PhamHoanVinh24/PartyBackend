@@ -1,0 +1,254 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<div style="margin-top: -10px;">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="btn-group pull-right actions">
+                    <a ng-click="addEvent()" class="btn btn-red br24 f-w600">
+                        <span class=""><i class="fas fa-cog"></i> Quản lý</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .lich_Header {
+            background-color: #e3eef5;
+            border-right: solid 1px #C6DBFF;
+            height: 40px;
+        }
+
+        .clsnoidung {
+            min-width: 100px;
+        }
+
+        .clsthoigian {
+            width: 9%;
+            min-width: 42px;
+        }
+
+        .clschan {
+            background-color: #f4f4f4;
+        }
+
+        .tdlanhdao {
+            min-width: 62px;
+            width: 15%;
+        }
+
+        .today {
+            background: #fdf1f1 !important;
+        }
+
+        .clsdiadiem {
+            min-width: 51px;
+            width: 12%;
+        }
+
+        .clsthanhphan {
+            min-width: 38px;
+            width: 25%;
+        }
+
+        @media (min-width: 765px) {
+            .notificationText {
+                margin-bottom: -25px;
+            }
+        }
+
+
+        .fc-notification-button {
+            padding: 3px !important;
+            height: 25px !important;
+            width: 25px;
+            border-radius: 25px !important;
+            border: none;
+            color: white;
+            background: #E63C5F;
+            box-shadow: 0 2px 10px 0 rgba(255,60,95,0.45) !important;
+        }
+
+        .clscontentLich .date_right {
+            border-bottom: 1px solid #81a3d0;
+            background-color: white;
+            padding: 0;
+            border-right: 1px solid #81a3d0;
+        }
+
+        .tblChiTietLich .clsle {
+            background-color: #ecf4fe;
+        }
+
+
+        #lichDiv table tbody tr td {
+            color: #000;
+            font-family: tahoma;
+            font-size: 13px;
+            vertical-align: middle !important;
+        }
+
+        .tblChiTietLich .clschan {
+            background-color: #ffffff;
+        }
+
+        td.Lich_ChiTiet_End {
+            border-right: 1px solid #C6DBFF;
+            font: 12px Arial;
+            padding: 5px;
+            height: 40px;
+            color: #003399;
+        }
+
+        td.Lich_ChiTiet {
+            border-bottom: 1px solid #C6DBFF;
+            border-right: 1px solid #C6DBFF;
+            font: 12px Arial;
+            padding: 5px;
+            height: 40px;
+            color: #003399;
+        }
+
+        .tblChiTietLich {
+            width: 100%;
+            vertical-align: inherit !important;
+        }
+
+        .clscontentLich .date_left {
+            border-bottom: 1px solid #81a3d0;
+            background-color: white;
+            padding: 0;
+            border-left: 1px solid #81a3d0;
+            border-right: 1px solid #81a3d0;
+        }
+    </style>
+    <div class="text-center pb10">
+        <h2 class="text-uppercase bold" style="font-family: -webkit-body">Lịch công tác tuần {{weekNumber}}</h2>
+        <h4 class="bold notificationText">Từ ngày {{monday}} đến ngày {{saturday}}</h4>
+        <div class="pull-right ">
+            <span class="bold pt5 ml5 mr5" id="notificationWeek">
+                <button type="button" class="fc-notification-button "><i class="fas fa-bell"></i></button>
+                Sự kiện hôm nay ({{countEventToday}})
+            </span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="padding-left: 5px; padding-right: 5px;">
+                            <div style="margin: 20px auto 10px; width: 100%;">
+                                <div style="background: rgb(198, 219, 255) no-repeat scroll left top;
+                                        clear: both; display: block; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial;
+                                        -moz-background-inline-policy: -moz-initial; margin-bottom: 10px; font-size: 12px;
+                                        font-family: Arial;">
+
+                                    <div style="clear: both; background-color: #e3eef5">
+                                        <table width="100%" border="0" cellpadding="1" cellspacing="1" style="border: 1px solid #81a3d0;">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="date_left text-center" valign="middle" align="left" style="border-right: solid 1px #81a3d0;width:9%;min-width:66px">
+                                                        <b>Thứ/Ngày</b>
+                                                    </td>
+                                                    <td class="date_right" valign="middle" width="91%" align="left" style="background-color: #ffffcc; padding: 0;">
+                                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="date_right lich_Header" valign="middle" style="min-width: 61px;width:15%;" align="center">
+                                                                        <b>Chủ trì</b>
+                                                                    </td>
+                                                                    <td class="date_right lich_Header" valign="middle" style="min-width: 43px;width:9%;" align="center">
+                                                                        <b>Thời gian</b>
+                                                                    </td>
+                                                                    <td class="date_right lich_Header" valign="middle" style="min-width:100px;" align="center">
+                                                                        <b>Nội dung</b>
+                                                                    </td>
+                                                                    <td class="date_right lich_Header" valign="middle" style="min-width: 78px;width:25%;" align="center">
+                                                                        <b>Tham dự</b>
+                                                                    </td>
+                                                                    <td class="date_right lich_Header" valign="middle" style="min-width: 51px; width:12%;" align="center">
+                                                                        <b>Phòng họp</b>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div style="clear: both;">
+                                        <table class="clscontentLich" width="100%" border="0" cellpadding="1" cellspacing="1">
+                                            <tbody>
+                                                <tr ng-repeat="x in model">
+                                                    <td class="date_left text-center" ng-class="{'today':x.Date===today}" valign="middle" style="width:9%; min-width:66px" align="left">
+                                                        <font color="#003399">
+                                                            <b>{{x.Week}}</b><br>
+                                                            <span style="font-size:11px;">{{x.Date}}</span>
+                                                        </font>
+                                                    </td>
+                                                    <td class="date_right" valign="middle" width="91%" align="left">
+                                                        <table class="tblChiTietLich" cellpadding="0" cellspacing="0">
+                                                            <tbody>
+                                                                <tr ng-repeat="y in x.Listschedules" ng-class="{'today':x.Date===today}">
+                                                                    <td class="Lich_ChiTiet_End tdlanhdao" ng-show="y.Haschild" rowspan="{{y.Child}}" style="width:15%">{{y.User}}</td>
+                                                                    <td class="Lich_ChiTiet clsthoigian">{{y.TimeStart}} - {{y.TimeEnd}}</td>
+                                                                    <td class="Lich_ChiTiet clsnoidung">{{y.Content}}</td>
+                                                                    <td class="Lich_ChiTiet clsthanhphan">{{y.Composition}}</td>
+                                                                    <td class="Lich_ChiTiet clsdiadiem text-center">{{y.Room}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        var ktooltips = document.querySelectorAll(".ktooltip");
+        ktooltips.forEach(function (ktooltip, index) {                // For each ktooltip
+            ktooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
+        })
+
+        function position_tooltip() {
+            // Get .ktooltiptext sibling
+            var tooltip = this.parentNode.querySelector(".ktooltiptext");
+
+            // Get calculated ktooltip coordinates and size
+            var ktooltip_rect = this.getBoundingClientRect();
+
+            var tipX = ktooltip_rect.width + 5; // 5px on the right of the ktooltip
+            var tipY = -40;                     // 40px on the top of the ktooltip
+            // Position tooltip
+            tooltip.style.top = tipY + 'px';
+            tooltip.style.left = tipX + 'px';
+
+            // Get calculated tooltip coordinates and size
+            var tooltip_rect = tooltip.getBoundingClientRect();
+            // Corrections if out of window
+            if ((tooltip_rect.x + tooltip_rect.width) > window.innerWidth) // Out on the right
+                tipX = -tooltip_rect.width - 5;  // Simulate a "right: tipX" position
+            if (tooltip_rect.y < 0)            // Out on the top
+                tipY = tipY - tooltip_rect.y;    // Align on the top
+
+            // Apply corrected position
+            tooltip.style.top = tipY + 'px';
+            tooltip.style.left = tipX + 'px';
+        }
+    </script>
+</div>

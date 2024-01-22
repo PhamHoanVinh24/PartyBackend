@@ -1,0 +1,94 @@
+﻿<!--style-->
+<style type="text/css">
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .list-user input {
+        border: 0 !important;
+    }
+
+    .form-group {
+        margin-bottom: 5px !important;
+    }
+
+    .control-label.require::after {
+        content: '*';
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'ASSET_AT_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'ASSET_AT_CURD_LBL_PARENT_ID' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <ui-select tagging ng-model="model.CatParent" theme="bootstrap">
+                            <ui-select-match placeholder="{{'ASSET_AT_CURD_TXT_PARENT_ID' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in Types | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ASSET_AT_CURD_LBL_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" ng-model="model.CatCode" name="Code" placeholder="{{'ASSET_AT_CURD_TXT_CODE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ASSET_AT_CURD_LBL_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" ng-model="model.CatName" name="Name" placeholder="{{'ASSET_AT_CURD_TXT_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'ASSET_AT_CURD_LBL_DESCRIPTON' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <textarea class="form-control" ng-model="model.Note" placeholder="{{'ASSET_AT_CURD_TXT_DESCRIPTON' | translate}}..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex">
+        <div class="pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'ASSET_AT_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="pr10">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'ASSET_AT_BTN_ADD' | translate}}</p>
+        </div>
+    </div>
+</div>

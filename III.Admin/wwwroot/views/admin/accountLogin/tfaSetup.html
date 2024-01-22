@@ -1,0 +1,66 @@
+﻿<div ng-controller="tfaSetup">
+    <div ng-show="tfaEnabled">
+        <p class="alert alert-primary">Bảo mật 2 lớp đã được kích hoạt</p>
+        <div class="">
+            <h2>Cấu hình hiện tại</h2>
+            <p>Mã QR:</p>
+            <div class="col-lg-12 ">
+                <div class="thumbnail input-unstyled">
+                    <!-- <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />-->
+                    <img ng-click="viewQrCode(imageBase64)" ng-src="data:image/png;base64, {{imageBase64}}" class="image-upload h-80" role="button" onerror="this.src = '../../../images/default/qrCode.png'" />
+                </div>
+            </div>
+            <p>Khóa bí mật:</p>
+            <pre>{{authenticatorKey}}</pre>
+
+            <button class="btn btn-info mt10 ml10" ng-click="disableTfa()">Tắt bảo mật 2 lớp</button>
+        </div>
+    </div>
+    <div ng-show="!tfaEnabled">
+        <p class="alert alert-danger">Bảo mật 2 lớp chưa được kích hoạt</p>
+        <div>
+            <div class="">
+                <h2>Bước 1</h2>
+                <p>Quét mã QR sau bằng ứng dụng Google Authenticator:</p>
+                <div class="col-lg-12 ">
+                    <div class="thumbnail input-unstyled">
+                        <!-- <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />-->
+                        <img ng-click="viewQrCode(imageBase64)" ng-src="data:image/png;base64, {{imageBase64}}" class="image-upload h-80" role="button" onerror="this.src = '../../../images/default/qrCode.png'" />
+                    </div>
+                </div>
+                <ng-container ng-if="authenticatorKey">
+                    <p>Hoặc bạn có thể nhập mã sau vào ứng dụng Google Authenticator:</p>
+                    <pre>{{authenticatorKey}}</pre>
+                </ng-container>
+            </div>
+
+            <div class="">
+                <h2>Step 2</h2>
+                <div>
+                    <form>
+                        <div class="mb-3 row">
+                            <label for="code" class="col-form-label col-sm-2">
+                                Nhập mã được sinh bởi ứng dụng Google Authenticator:
+                            </label>
+                            <div class="col-md-5">
+                                <input type="text" name="code" ng-model="model.Code" class="form-control" />
+                            </div>
+                            <!--<div class="col-md-5">
+                                <em *ngIf="validateControl('code') && hasError('code', 'required')">
+                                    Code is required
+                                </em>
+                            </div>-->
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-info mt10 ml10" ng-click="enableTfa()">
+                                    Kích hoạt bảo mật 2 lớp
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿<div ng-controller="nested-wfCat">
+    <div class="row mb5">
+        <div class="col-md-8">
+            <div class="form-group" ng-class="{'has-error' : errorMileStone}">
+                <div class="col-md-12 pl-0 pr-0">
+                    <!--<label class="control-label require fw600">{{'Luồng con' | translate}}</label>-->
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.NestedWF" theme="bootstrap" ng-change="changeSelect('MileStone')">
+                            <ui-select-match placeholder="{{'Luồng con' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat=" x.Code as x in listNestedWF | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.NestedWF = ''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorMileStone" class="label-color validation-message">
+                        {{'ACT_VALIDATE_MILE_STONE' | translate}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 pl-0">
+            <a class1="btn green-custom pull-left" ng-click="addNestedWF()">
+                <span><i class="fa-solid fa-plus pt10 fs25"></i></span>
+                <!--{{'Thêm mới' | translate}}-->
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="portlet-body todo-project-list-content pl15">
+            <div class="scrollbar-sm">
+                <div class="table-responsive" style="height: 260px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="pl25" style="width: 5%;">{{'STT' | translate}}</th>
+                                <th class="text-center" style="width: 90%;">{{'Luồng hoạt động' | translate}}</th>
+                                <th class="text-center" style="width: 5%;">{{'COM_BTN_DELETE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listWfNestedAct">
+                                <td class="text-center">{{$index + 1}}</td>
+                                <td>
+                                    <span class="fw600">{{x.WfName}}</span><br />
+                                    <span class="badge-customer badge-customer-success">{{x.WfGroup}}</span>
+                                </td>
+                                <td class="text-center"><i role="button" class="fas fa-trash-alt pt10 fs25 text-danger ng-scope" ng-click="delete(x.WfCode)" title="{{'COM_BTN_DELETE' | translate}}" style1="color:red !important;font-size: 25px"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

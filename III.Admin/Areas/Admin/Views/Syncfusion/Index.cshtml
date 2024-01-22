@@ -1,0 +1,152 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+@model ESEIM.Models.AseanDocument;
+
+@{
+    ViewData["Title"] = "Sửa tệp online";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<script>
+        var documenteditor;
+        document.addEventListener('DOMContentLoaded', function () {
+            var documenteditorElement = document.getElementById("container");
+            documenteditorElement.style.height = "665px";
+            documenteditorElement.style.width = "100%";
+
+            var container = documenteditorElement.ej2_instances[0];
+            //container.resize();
+            container.zoomFactor = 1.5;
+            container.showPropertiesPane = false;
+            documenteditor = container.documentEditor;
+            documenteditorElement.ej2_instances[0].serviceUrl = '/Admin/Syncfusion/';
+            documenteditor.serviceUrl = window.baseurl + 'api/documenteditor/';
+            var ajax = new ej.base.Ajax("@Url.Content("~/scripts/documenteditor/data-default.json")", 'GET', true);
+            function openfile() {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Admin/Syncfusion/Open",
+                    beforeSend: function (jqXHR, settings) {
+                        App.blockUI({
+                            target: "#contentMain",
+                            boxed: true,
+                            message: 'loading...'
+                        });
+                    },
+                    success: function (data) {
+                        documenteditor.open(data);
+                        App.unblockUI("#contentMain");
+                    },
+                    failure: function (errMsg) {
+                        App.toastrError(errMsg);
+                    }
+                });
+            }
+            ajax.send().then();
+            ajax.onSuccess = function (data) {
+                openfile();//open khi load trang
+                documenteditor.documentName = 'Getting Started';
+            };
+            container.documentChange = function (args) {
+
+            };
+
+           //Hàm download
+            function download(fileName, extension, buffer, downloadLink, hasDownloadAttribute) {
+                if (hasDownloadAttribute) {
+                    downloadLink.download = fileName;
+                    var dataUrl = window.URL.createObjectURL(buffer);
+                    downloadLink.href = dataUrl;
+                    var event = document.createEvent('MouseEvent');
+                    event.initEvent('click', true, true);
+                    downloadLink.dispatchEvent(event);
+                    setTimeout(function () {
+                        window.URL.revokeObjectURL(dataUrl);
+                        dataUrl = undefined;
+                    });
+                } else {
+                    if (extension !== 'docx' && extension !== 'xlsx') {
+                        var url = window.URL.createObjectURL(buffer);
+                        var isPopupBlocked = window.open(url, '_blank');
+                        if (!isPopupBlocked) {
+                            window.location.href = url;
+                        }
+                    }
+                }
+            }
+    });
+
+    //Lưu file
+    function save() {
+        documenteditor.saveAsBlob('Docx').then(function (exportedDocument) {
+            var formData = new FormData();
+            formData.append('fileUpload', exportedDocument);
+
+            var url = '/Admin/Syncfusion/Save';
+            var req = new XMLHttpRequest();
+            req.overrideMimeType("application/json");
+            req.open('POST', url, true);
+            req.onload = function () {
+                var rs = JSON.parse(req.responseText);
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                    if (rs.ID == 0) {
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 3000);
+                    }
+                } else {
+                    App.toastrSuccess(rs.Title);
+                    setTimeout(function () {
+                       window.top.close();
+                    }, 3000);
+                }
+            };
+            req.send(formData);
+        });
+    }
+
+    //Back
+    function goBack() {
+        window.location.href = "@Model.FirstPage";
+    }
+</script>
+@section ControlsSection{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group pb5 actions d-flex pull-left">
+                <button class="btn green-custom" onclick="goBack()">
+                    <i class="fa fa-arrow-circle-left"></i>
+                    Quay lại
+                </button>
+            </div>
+            <div class="btn-group pb5 actions d-flex pull-right">
+                @if (Model.Mode == 2)
+                {
+                    <button class="btn red-custom" onclick="save()">
+                        <i class="fa fa-save"></i>
+                        Lưu lại
+                    </button>
+                }
+                @* <a href="javascript:void(0)" onclick="save()" style="color: green;" class="text-underline bold pb-1">Lưu lại</a>*@
+            </div>
+
+
+        </div>
+    </div>
+    <div id="document" class="control-section" readonly="true">
+        @if (Model.IsEdit == false)
+        {
+            <ejs-documenteditorcontainer id="container" enableToolbar=true isReadOnly=false enableEditor=true enableSelection=true enableSfdtExport=true enableWordExprot=true></ejs-documenteditorcontainer>
+        }
+        else
+        {
+            <ejs-documenteditorcontainer id="container" enableToolbar=true isReadOnly=true enableEditor=false enableSelection=false enableSfdtExport=false enableWordExprot=false></ejs-documenteditorcontainer>
+        }
+    </div>
+}
+

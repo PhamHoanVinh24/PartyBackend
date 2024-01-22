@@ -1,0 +1,194 @@
+﻿<div class="modal-header no-color">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-users" style="padding-top: 7px;color:black"></i>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 1">{{'LMS_ASSIGN_TO_GROUP /LMS_ASSIGN_TO_USER' | translate}}</span>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 2">{{'LMS_ASSIGN_TO_DEPARTMENT /LMS_ASSIGN_TO_USER' | translate}}</span>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 3">{{'CJ_TITLE_ASSIGN_WORK_GROUP' | translate}}</span>
+</div>
+<div class="modal-body pt-0" id="modal-body">
+    <div class="row mt10">
+        <div class="col-md-7">
+            <label>{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}</label>
+            <div class="d-flex">
+                <ui-select style="width:80%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span>
+                    <label class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 20px!important;display:inline">
+                        <input type="checkbox" ng-model="isCheckAll" ng-change="departmentOrGroupSelectAll(isCheckAll,model.Object)">
+                        <span></span>
+                    </label>
+                    <br />
+                    <span style="display: inline-grid">
+                        <span class="text-danger fw600 fs10 pl10">{{'CJ_CHK_SELECT_ALL' | translate}}</span>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <label>{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Member" on-select="memberSelect(model.Member)" theme="bootstrap">
+                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x in listUser | filter: $select.search">
+                    {{x.GivenName}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-12 mt5">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+            </style>
+            <div class="portlet light bordered mb5">
+                <div class="portlet-title mnh25">
+                    <div class="caption">
+                        <span class="caption-subject bold fs12">{{'CJ_LIST_GROUP_DEPART_ASSIGN' | translate}} ({{cardMember.listMember.length + cardMember.listObj.length}})</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content">
+                    <div class="scrollbar-sm">
+                        <div class="table-responsive mh-200" style="overflow-y:auto">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="pl25 col-md-6">{{'CJ_DEPART_GROUP_MEMBER' | translate}}</th>
+                                        <th class="text-center nowrap col-md-3">{{'CJ_COL_ROLE' | translate}}</th>
+                                        <th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <!--Team được giao việc-->
+                                <tbody ng-if="cardMember.listTeamAssign.length!=0">
+                                    <tr>
+                                        <td colspan="3" class="pl25">
+                                            <span class="groupValue">
+                                                <i class="fa fa-users"></i>
+                                                <!--<i class="fas fa-warehouse" ng-if="memebers.IdGroup == 2"></i>-->
+                                                <b>
+                                                    {{'CJ_LBL_GROUP_ASSIGNED' | translate}}
+                                                    <!--<span>({{team.length}})</span>-->
+                                                    <span>({{cardMember.listTeamAssign.length}})</span>
+                                                </b>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="bold" style="color: #4faf3e" ng-repeat="team in cardMember.listTeamAssign">
+                                        <td class="text-center ">{{team.Name}}</td>
+                                        <td class="text-center">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="team.Responsibility" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'CJ_COL_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in RoleData | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td role="button" class="text-center "><i class="fa fa-minus-circle pt5 ng-scope" ng-click="removeObj(1,$index,team.Id)" title="{{'COM_BTN_DELETE'}}" style="color:red !important;font-size: 25px"></i></td>
+                                    </tr>
+                                </tbody>
+
+                                <!--Phòng ban được giao việc-->
+                                <tbody ng-if="cardMember.listDepartmentAssign.length!=0">
+                                    <tr>
+                                        <td colspan="3" class="pl25">
+                                            <span class="groupValue">
+                                                <i class="fas fa-warehouse"></i>
+                                                <b>
+                                                    {{'CJ_LBL_DEPARTMENT_ASSIGN' | translate}}
+                                                    <span>({{cardMember.listDepartmentAssign.length}})</span>
+                                                </b>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="bold" style="color: #4faf3e" ng-repeat="department in cardMember.listDepartmentAssign">
+                                        <td class="text-center ">{{department.Name}}</td>
+                                        <td class="text-center">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="department.Responsibility" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'CJ_COL_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in RoleData | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td role="button" class="text-center "><i class="fa fa-minus-circle pt5 ng-scope" ng-click="removeObj(2,$index,department.Id)" title="{{'COM_BTN_DELETE'}}" style="color:red !important;font-size: 25px"></i></td>
+                                    </tr>
+                                </tbody>
+
+                                <!--Người được giao-->
+                                <tbody>
+                                    <tr>
+                                        <td ng-if="cardMember.listMember.length!=0" colspan="3" class="pl25">
+                                            <i class="fa fa-user"></i>
+                                            <span class="groupValue"><b>{{'CJ_LBL_MEMBER_ASSIGN' | translate}} ({{cardMember.listMember.length}})</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="x in cardMember.listMember">
+                                        <td class="text-center">{{x.GivenName}}</td>
+                                        <td class="text-center">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Responsibility" theme="bootstrap" ng-change="roleSelect(x)">
+                                                <ui-select-match placeholder="{{'CJ_COL_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in RoleData | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td class="text-center"><i role="button" class="fa fa-minus-circle pt5 ng-scope" ng-click="removeMember(x.UserId,x.Id)" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" ng-if="ActivityData.length!=0">
+            <div class="portlet light bordered mb-0">
+                <div class="portlet-title mnh25">
+                    <div class="caption">
+                        <span class="caption-subject bold fs12">{{'CJ_LBL_ACT_MEMBER_ASSIGN' | translate}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body mh-150 pre-scrollable">
+                    <div ng-repeat="x in ActivityData" style="border-bottom: 1px solid #d6dadc;margin-bottom: 5px;padding:5px">
+                        <div class="active-title" ng-if="x.Picture=='/images/default/no_user.png'">
+                            <span class="member-initials">
+                                <span>{{x.GivenName.charAt(0)}}</span>
+                            </span>
+                        </div>
+                        <div class="active-title" ng-if="x.Picture!='/images/default/no_user.png'">
+                            <img class="img-circle" height="32" width="32" src="{{x.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+                        </div>
+
+                        <div class="active-time">
+                            <b class="ng-binding">{{x.GivenName}}</b>
+                        </div>
+                        <div class="active-body">
+                            <span>
+                                {{x.GivenName}}
+                                <span ng-if="x.Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+                                <span ng-if="x.Action=='REJECT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'LMS_ACTION_REFUSE':'LMS_ACTION_UNREFUSE'}}</span>
+                                <span ng-if="x.Action=='ACCEPT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'LMS_ACTION_AGREE':'LMS_ACTION_UNAGREE'}}</span>
+                            </span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fs10" style="color:#8c8c8c;">{{x.CreatedTime | fomartDateTime}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt10">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-drak-green w75" ng-click="submit()">
+                {{'CJ_BTN_OK' | translate}}
+            </button>
+        </div>
+    </div>
+</div>

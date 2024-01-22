@@ -1,0 +1,110 @@
+﻿<style>
+
+    /*.custom_width thead tr th {
+        width: 11% !important
+    }*/
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    .mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    #tblListPoProduct th, td {
+        white-space: nowrap;
+    }
+</style>
+<div ng-controller="addProduct">
+    <div class="form-body pt-0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group table-responsive">
+                    <div class="col-md-12 height-350">
+                        <table class="table table-striped table-bordered table-sm mb5" cellspacing="0" id="tblListPoProduct">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'RSRP_MSG_PRODUCT_CODE' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'RSRP_MSG_PRODUCT_NAME' | translate}}</th>
+                                    <th class="col-md-3 text-center fw600 text-underline">{{'RSRP_MSG_SUPPLIER' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'RSRP_MSG_ORDER_NUMBER' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'RSRP_MSG_TL_TRANSFORM' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'RSRP_MSG_TL_LOSS' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'RSRP_MSG_NK_ORDER_NUMBER' | translate}}</th>
+                                    <th class="col-md-1 text-center fw600 text-underline">{{'RSRP_MSG_UNIT' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'RSRP_MSG_DAY_EXPECTED_IMPORT' | translate}}</th>
+                                    <th class="col-md-2 text-center fw600 text-underline">{{'RSRP_MSG_NOTE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listProducts">
+                                    <td class="text-center">{{x.ProductCode}}</td>
+                                    <td class="text-center">{{x.ProductName}}</td>
+                                    <td class="text-center pl-0 pr-0">
+                                        <div class="input-group w200">
+                                            <ui-select tagging ng-model="x.SupCode" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'RSRP_MSG_SUPPLIER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="x.SupCode=''" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center bold text-primary">{{x.PoCount}}</td>
+                                    <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateConversion" ng-blur="changeRate(x)" /></td>
+                                    <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateLoss" ng-blur="changeRate(x)" /></td>
+                                    <td class="text-center bold text-primary">{{x.Quantity}}</td>
+                                    <td class="text-center">{{x.UnitName}}</td>
+                                    <td class="text-center pl-0 pr-0">
+                                        <div class='input-group date' id='ExpectedDate'>
+                                            <input type='text' class="form-control input-date" ng-model="x.sExpectedDate" placeholder="{{'RSRP_MSG_DAY_EXPECTED_IMPORT' | translate}}..." />
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center p5"><textarea rows="3" class="br4 form-control text-center" ng-model="x.Note" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-1 pull-right">
+                        <div class="btn-group actions d-flex">
+                            <div class="text-center">
+                                <a ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'RSRP_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,256 @@
+﻿<style>
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    @media(max-width:1200px)
+    {
+        .modal-70{
+            width:80%!important;
+        }
+    }
+    @media(min-width:1201px) and (max-width:1500px)
+    {
+        .modal-70{
+            width:70%!important;
+        }
+    }
+    @media(min-width:1501px)
+    {
+        .modal-70{
+            width:60%!important;
+        }
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'PSP_TITLE_EDIT_PSP' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mtn20 form-group">
+                    <div class="col-md-2">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'PSP_CURD_LBL_TITLE' | translate}}</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control br24" ng-model="model.Title" name="Title" placeholder="{{'PSP_CURD_TXT_TITLE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 pt5">
+                        <div class="form-group" ng-class="{ 'has-error': errorEffectiveDate}">
+                            <div class="col-md-4 pr-0">
+                                
+                                <label class="control-label require"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;{{'PSP_CURD_LBL_FROM_DAY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="EffectiveDate" type="text" class="form-control br24" ng-model="model.sEffectiveDate" name="EffectiveDate" placeholder="{{'PSP_CURD_TXT_FROM_DAY' | translate}}" ng-change="CheckEffectiveDate()" />
+                                <span ng-show="errorEffectiveDate" class="label-color validation-message">
+                                    {{'PSP_VALIDATE_FROM_DAY' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <label class="control-label">{{'PSP_CURD_LBL_RESPONSIBLE_PERSON' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.ResponsibleUser" theme="bootstrap" on-select="changleSelect('ResponsibleUser', $item)">
+                                        <ui-select-match placeholder="{{'PSP_CURD_TXT_RESPONSIBLE_PERSON' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listResponsibleUser | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa-solid fa-note-sticky" aria-hidden="true"></i>
+                                <label class="control-label">{{'PSP_CURD_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea rows="4" type="text" class="form-control br12" ng-model="model.Note" name="Note" placeholder="{{'PSP_CURD_TXT_NOTE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pt5">
+                        <div class="form-group" ng-class="{ 'has-error': errorExpiryDate}">
+                            <div class="col-md-4 pr-0 pl-0">
+                                
+                                <label class="control-label require"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;{{'PSP_CURD_LBL_TO_DAY' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="ExpiryDate" type="text" class="form-control br24" ng-model="model.sExpiryDate" name="ExpiryDate" placeholder="{{'PSP_CURD_TXT_TO_DAY' | translate}}" ng-change="CheckExpiryDate()" />
+                                <span ng-show="errorExpiryDate" class="label-color validation-message">
+                                    {{'PSP_VALIDATE_CURD_TO_DAY' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0 pl-0">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <label class="control-label">{{'PSP_CURD_LBL_CREATOR' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control br24" ng-model="model.GivenName" name="GivenName" placeholder="{{'PSP_CURD_TXT_CREATOR' | translate}}" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0 pl-0">
+                                <i class="fa fa-flag" aria-hidden="true"></i>
+                                <label class="control-label">{{'PSP_CURD_LBL_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status', $item)">
+                                        <ui-select-match placeholder="{{'PSP_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-group actions pt20 d-flex pull-right">
+                                <div class="col-md-6 text-center">
+                                    <a ng-click="submit()" class="">
+                                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                                <div class="col-md-10 text-center" ng-disabled="model.HeaderCode!=''">
+                                    <a ng-click="loadAll()" class="">
+                                        <span><i class="fas fs30 fa-download"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'PSP_BTN_PRICE_DEFAUL' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-include="'../views/admin/productSellPrice/product.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

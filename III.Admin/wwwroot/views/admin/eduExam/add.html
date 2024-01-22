@@ -1,0 +1,205 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+    /*CSS form Tab*/
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'LMS_PRACTICE_TEST_LBL_ADD_EXAM' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold"><i class="fa fa-barcode"></i>&nbsp;{{'Tiêu đề' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control text-important" name="Title" ng-model="model.Title" type="text" placeholder="{{'Tiêu đề' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require fw600 nowrap"><i class="fa fa-clock-o"></i>&nbsp;{{'Thời lượng(Phút)' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control fw600" name="Duration" ng-model="model.Duration" type="number" placeholder="{{'Phút' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label fw600"><i class="fa fa-sticky-note-o"></i>&nbsp;{{'Ghi chú' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" ng-model="model.Note" type="text" placeholder="{{'Ghi chú' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label bold"><i class="fa fa-list"></i>&nbsp;{{'Kế thừa bài thi' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <ui-select class="" tagging ng-model="model.ExamInheritance" theme="bootstrap" ng-change="changeSelect('ExamInheritance')">
+                                        <ui-select-match placeholder="{{'kế thừa bài thi' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in listExamInheritance | filter: $select.search">
+                                            <span class="bold fs11">{{x.Name}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ExamInheritance=''" class="btn btn-default no-shadow">
+                                            <span class="fa fa-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 p-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold"><i class="fa fa-question-circle"></i>&nbsp;{{'Câu hỏi' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group" ng-class="{ 'has-error': errorQuestion}">
+                                    <ui-select class="" tagging ng-model="model.QuestionCode" theme="bootstrap" ng-change="changeSelect('QuestionCode')" ng-disabled="id< 0">
+                                        <ui-select-match placeholder="{{'Chọn câu hỏi' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in listQuestion | filter: $select.search">
+                                            <span class="bold fs11">{{x.Name}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addQuestion()" class="btn btn-default no-shadow green-custom">
+                                            <span class="fa fa-arrow-down"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorQuestion" class="label-color validation-message">
+                                    {{'Câu hỏi không được để trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="pull-right mt25">
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center" ng-click="submit()">
+                                    <div class="btn btn-icon-only btn-boder1">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </div>
+                                    <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb15">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1" style="width: 5%;">{{'STT' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'Câu hỏi' | translate}}</th>
+                            <th class="text-center col-md-6 nowrap">{{'Nội dung' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'Thao tác' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in listDetail">
+                            <td class="text-center pt15 bold">{{$index+1}}</td>
+                            <td class="text-left pl20 text-green">{{x.Title}}</td>
+                            <td class="text-left pl20 text-green">{{x.Content}}</td>
+                            <td class="text-center nowrap">
+                                <button title="Xóa" ng-click="deleteQuestion(x.Id)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

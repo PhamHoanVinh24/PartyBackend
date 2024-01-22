@@ -1,0 +1,112 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <span class="modal-title" id="modal-title"><i class="fa fa-search"></i>&nbsp;{{'Tìm sản phẩm' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pb20 fs11 pl-0 pr-0">
+                <div class="row pt5 mb5">
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MLP_CURD_LBL_GROUP_PRODUCT' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Group" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MLP_CURD_LBL_GROUP_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in productGroups | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Group=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <label class="fw600 text-underline">{{'MLP_CURD_LBL_CODE_PRODUCT' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="model.Code" class="form-control" type="text" placeholder="{{'MLP_CURD_LBL_CODE_PRODUCT' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Code='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <label class="fw600 text-underline">{{'Catalogue' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Catalogue" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Catalogue' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listCatalogue | filter: $select.search">
+                                    {{x.Code}} - {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Catalogue=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <label class="fw600 text-underline">{{'MLP_CURD_LBL_TYPE_PRODUCT' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MLP_CURD_LBL_TYPE_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in productTypes | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MLP_CURD_LBL_SUPPLIES_STATUS' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MLP_CURD_TXT_SUPPLIES_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pl-0">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center pr10">
+                                <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                    <span><i class="fa fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

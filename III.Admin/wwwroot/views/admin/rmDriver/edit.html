@@ -1,0 +1,700 @@
+﻿<script src="../../lib/assets/global/plugins/angularjs-datatable/js/polyline.js"></script>
+<link href="../../lib/assets/global/plugins/angularjs-datatable/css/ol.css" rel="stylesheet" />
+<script src="../../lib/assets/global/plugins/angularjs-datatable/js/render_view_ol3.js"></script>
+<script>
+
+        setTimeout(function () {
+            fields_vector_source = new ol.source.Vector({});
+            var center = ol.proj.transform([105.808124, 20.991484], 'EPSG:4326', 'EPSG:3857');
+            map = new ol.Map({
+                target: $('#map')[0],
+
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM({
+                            url: 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+
+
+                        })
+                    }),
+                    new ol.layer.Vector({
+                        source: fields_vector_source
+                    })
+                ],
+
+                view: new ol.View({
+                    center: center,
+                    zoom: 15
+
+                }),
+
+                controls: ol.control.defaults({
+                    attribution: false,
+                    zoom: false,
+                })
+            });
+            var pathGG = $('#pathGG').html();
+            var id = $("#ID").html();
+            var aaa = parseInt(id);
+            if (pathGG != "" && pathGG != null) {
+                pathSourceVector = new ol.source.Vector({
+                    features: []
+                });
+                pathLayerMarker = new ol.layer.Vector({
+                    source: pathSourceVector
+                });
+                var path = polyline.decode(pathGG);
+
+                pathLayerMarker = renderLinePathLayer(path);
+                map.addLayer(pathLayerMarker);
+
+                var styles3 = [
+
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: '#64c936',
+                            width: 3
+                        }),
+                        fill: new ol.style.Fill({
+                            color: 'rgba(100, 201, 54,1)'
+                        })
+                    }),
+                ];
+
+                var iconStyleStart = new ol.style.Style({
+                    image: new ol.style.Icon(({
+                        anchor: [0.5, 26],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: 'https://i.imgur.com/pjZYQLJ.png'
+                    })),
+                    zIndex: 11
+                });
+                var iconStyleEnd = new ol.style.Style({
+                    image: new ol.style.Icon(({
+                        anchor: [0.5, 26],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: 'https://i.imgur.com/3g07NhB.png'
+                    })),
+                    zIndex: 11
+                });
+
+                var pathLenght = path.length - 1;
+                var iconFeatureStart = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.transform([parseFloat(path[0][1]), parseFloat(path[0][0])], 'EPSG:4326', 'EPSG:3857')),
+                    type: "valve"
+                });
+
+                iconFeatureStart.setId(1);
+                iconFeatureStart.setStyle(iconStyleStart);
+                var iconFeatureEnd = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.transform([parseFloat(path[pathLenght][1]), parseFloat(path[pathLenght][0])], 'EPSG:4326', 'EPSG:3857')),
+                    type: "valve"
+                });
+                iconFeatureEnd.setId(2);
+                iconFeatureEnd.setStyle(iconStyleEnd);
+                var vectorIcon = new ol.source.Vector({});
+                vectorIcon.addFeature(iconFeatureStart);
+                vectorIcon.addFeature(iconFeatureEnd);
+
+                var vectorLayer = new ol.layer.Vector({
+                    source: vectorIcon,
+                    style: styles3
+                });
+
+                map.addLayer(vectorLayer);
+                pathSource = new ol.source.Vector({});
+                debugger
+                pathSource.addFeature(renderLineStringFeature(path))
+                var field_location = pathSource.getFeatureById(aaa).getProperties();
+                console.log("" + field_location)
+                var field_extent = field_location.geometry.getExtent();
+                map.getView().fit(field_extent, map.getSize());
+                map.getView().setZoom(12)    ;
+            }
+        }, 100);
+
+</script>
+
+<script>
+        function readURL1(input) {
+
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+                    $('#Profile_picture')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        function readURL2(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+
+                    $('#License_car_image')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function readURL3(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+
+                    $('#Identification_image')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function readURL4(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+
+                    $('#Image_car')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("img").on("error", function () {
+            $(this).attr('src', '../../../    images/romooc/no_image.png'    );
+        });
+</script>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <div class="modal-title custom-title " id="modal-title"> Cập nhật thông tin tài xế</div>
+</div>
+<!--<div class="modal-body no-space" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal  form-bordered" ng-validate="validationOptions1">
+            <div class="form-body">
+                <div class=" col-md-4" style="padding-left:0">
+                    <div class="form-group" hidden>
+                        <label class="control-label  col-md-5 text-left" style="padding-left:0px;"><i class="glyphicon glyphicon-ok"></i> ID</label>
+                        <div class="col-md-7">
+
+                            <p id="ID">{{model.Id}}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-5 form-col-label text-left" style="border-left:none">
+
+                            <label class="control-label " for="Status"><i class="sprite-image-16x16"></i> Ảnh đại diện</label>
+                        </div>
+                        <div class="col-md-7 form-col-control " style="border-left:none">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img  id="Profile_picture" ng-src='{{model.Profile_Picture}}' class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img  id="Profile_picture1" ng-src='{{model.Profile_Picture1}}'  class="image-default"  style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <div>
+                                <input type="file" id="file" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Profile_Picture" name="Profile_picture" onchange="readURL1(this);">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5 form-col-label text-left" style="border-left:none">
+
+                            <label class="control-label " for="Status"><i class="sprite-image-16x16"></i> Giấy phép xe</label>
+                        </div>
+                        <div class="col-md-7 form-col-control " style="border-left:none">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img onerror="this.src='images/default/no_image.png'" id="License_car_image" ng-src='{{model.License_car_image}}' src="{{model.License_car_image}}" alt="holder" style="    height: 120px;width: 120px;" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img onerror="this.src='images/default/no_image.png'" id="License_car_image1" ng-src='{{model.License_car_image1}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <input type="file" id="file2" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.License_car_image" name="License_car_image" onchange="readURL2(this);">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group" hidden>
+                        <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Tên</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Username" name="Username" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-right:0px;"><i class="glyphicon glyphicon-ok"></i> Online</label>
+                        <div class="col-md-7">
+                            <div class="mt-checkbox-list">
+                                <label class="mt-checkbox pl30" style="margin-bottom: 0; width: 30px;display:inline">
+                                    <input type="checkbox" ng-model="model.is_Online" ng-true-value="1" ng-false-value="0"  ng-checked="model.is_Online=='1'"> Hoạt động
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" col-md-4" style="padding-left:0px">
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;padding-left:0 "><i class="glyphicon glyphicon-user"></i> Tên <strong style="color:red"> (*)</strong> </label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="Nhập tên lái xe" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;padding-left:0 "><i class="glyphicon glyphicon-earphone"></i> Số điện thoại <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Phone" name="Phone" ng-pattern="/^([0-9]{10})$/" placeholder="Nhập số điện thoại" />
+                            <span class="text-danger" ng-show="editform.Phone.$error.pattern">Số điện thoại nhập không đúng!</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;padding-left:0 "><i class="glyphicon glyphicon-menu-hamburger"></i> CMTND </label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Identification" name="Identification" placeholder="Nhập CMTND" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-asterisk"></i> Số năm KN</label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Type_Driver" name="Type_Driver" placeholder="Nhập số năm kinh nghiệm" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-envelope"></i> Email</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Email" name="Email" placeholder="Nhập email" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-user"></i> Id_Fb</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Id_Fb" name="Id_Fb" placeholder="Nhập id facebook" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-user"></i> Emei</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.emei" name="emei" placeholder="Nhập emei" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style="padding-left:0px"><i class="glyphicon glyphicon-user"></i> Mã công ty</label>
+                        <div class="col-md-7">
+                            <input type="text" disabled class="form-control" ng-model="model.Company_Code" name="Company_Code" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-4" style="padding-left: 0;padding-right:0">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-home"></i> Nhóm <strong style="color:red"> (*)</strong></label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select ng-model="model.Group" class="" style="width: 100%;" ng-change="changeGroup()">
+                                    <ui-select-match placeholder="chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                        {{x.value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-home"></i> Chọn số xe</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select ng-model="model.License_plate" class="" style="width: 100%;" name="Group">
+                                    <ui-select-match placeholder="Chọn số xe...">{{$select.selected.Code}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in romoocs | filter:$select.search">
+                                        {{x.Code}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.License_plate = ''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-4 text-left" style=" padding-right: 0px;    padding-left: 0;"><i class="glyphicon glyphicon-grain"></i> Nhãn hiệu</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.Brand" name="Brand" placeholder="Nhập nhãn hiệu" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 form-col-label text-left" style="border-left:none; padding-right: 0px;padding-left:0">
+
+                            <label class="control-label text-left" for="Status"><i class="sprite-image-16x16"></i> Hình ảnh xe</label>
+                        </div>
+                        <div class="col-md-8 form-col-control" style="border-left:none">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img onerror="this.src='images/default/no_image.png'" id="Image_car" ng-src='{{model.Image_car}}' src="{{model.Image_car}}" alt="holder" style="    height: 120px;width: 120px;" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img onerror="this.src='images/default/no_image.png'" id="Image_car1" ng-src='{{model.Image_car1}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <input type="file" disabled id="file4" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Image_car" name="Image_car" onchange="readURL4(this);">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-4 text-left" style="padding-left:0px"><i class="glyphicon glyphicon-user"></i> Ghi chú </label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="form-control" ng-model="model.Description" name="Description" rows="3" placeholder="Nhập ghi chú"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <div class="col-md-12" style=" padding-bottom: 20px;   margin-top:25px;">
+                <div class="col-md-5">
+                    <input id="startPlace" ng-model="model.Start_name" type="text" style="border-radius: 10px !important; width:91% !important" autocapitalize="off" class="form-control pac-container" placeholder="Điểm đi...">
+                </div>
+                <div class="col-md-5">
+                    <input id="endPlace" ng-model="model.End_name" type="text" style="border-radius: 10px !important; width:91% !important" autocapitalize="off" class="form-control pac-container" placeholder="Điểm đến...">
+                </div>
+                <div class="col-md-1">
+                    <button ng-click="Generate()" class="btn  btn-primary" ng-disabled="updated_by1.$invalid || updated_by2.$invalid">
+                        <i class="fa fa-floppy-o"></i>&nbspGenerate
+                    </button>
+                </div>
+                <div class="col-md-1"> </div>
+            </div>
+            <div class="col-md-12" style="padding-bottom:20px;" hidden>
+                <div class="col-md-2">
+                    <label><i class="fa fa-user" style="color:#206ca2"></i>&nbspĐiểm đầu [x1,y1]</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="" ng-model="rs2" name="updated_by1" required disabled />
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+            <div class="row" hidden>
+                <div class="col-md-2">
+                    <label><i class="fa fa-user" style="color:#206ca2"></i>&nbspĐiểm cuối [x2,y2]</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="" ng-model="rs3" name="updated_by2" required disabled />
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+            <div class="form-group" hidden>
+                <p id="pathGG">{{model.Polyline}}</p>
+            </div>
+            <div class="col-md-12" style="padding-bottom: 15px;">
+                <textarea rows="4" class="form-control" placeholder="" ng-model="model.virual_intiary" name="updated_by2"></textarea>
+            </div>
+        </div>
+        <div class="form-group pull-right">
+            <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:10px; margin-right: 20px;" ng-click="submit()"><i class="fa fa-plus"></i> Lưu</button>
+        </div>
+    </div>
+    <div class="row" style="padding:30px;">
+        <div id="map" class="map" tabindex="0"></div>
+    </div>
+</div>-->
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class=" col-md-4">
+                        <div class="form-group" hidden>
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-ok"></i> ID</label>
+                            <div class="col-md-7">
+                                <p id="ID">{{model.Id}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 form-col-label text-left">
+                                <label class="control-label " for="Status"><i class="fa fa-picture-o"></i> Ảnh đại diện</label>
+                            </div>
+                            <div class="col-md-7 form-col-control">
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img id="Profile_picture" src='{{model.Profile_Picture}}' style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Profile_picture1" ng-src='{{model.Profile_Picture1}}' class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:33px" placeholder='' readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Chọn ảnh</span>
+                                        <input class="form-control" id="file" files-input ng-model="model.Profile_Picture" name="Profile_picture" onchange="readURL1(this);" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 form-col-label text-left">
+                                <label class="control-label " for="Status"><i class="fa fa-picture-o"></i> Giấy phép xe</label>
+                            </div>
+                            <div class="col-md-7 form-col-control">
+                                <div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                        <img id="License_car_image" ng-src='{{model.License_car_image}}' class="image-default" alt="holder" style="    height: 120px;width: 120px;" />
+                                    </div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                        <img id="License_car_image1" ng-src='{{model.License_car_image1}}' class="image-default" style="height:120px; width:120px" />
+                                    </div>
+                                </div>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:33px" placeholder='' readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Chọn ảnh</span>
+                                        <input class="form-control" id="file2" files-input ng-model="model.License_car_image" name="License_car_image" onchange="readURL2(this);" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Tên</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Username" name="Username" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-ok"></i> Online</label>
+                            <div class="col-md-7">
+                                <div class="mt-checkbox-list">
+                                    <label class="mt-checkbox pl30" style="margin-bottom: 0; width: 30px;display:inline">
+                                        <input type="checkbox" ng-model="model.is_Online" ng-true-value="1" ng-false-value="0" ng-checked="model.is_Online=='1'"> Hoạt động
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left require"><i class="glyphicon glyphicon-user"></i> Tên </label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="Nhập tên lái xe" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left require"><i class="glyphicon glyphicon-earphone"></i> Số điện thoại</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Phone" name="Phone" ng-pattern="/^([0-9]{10})$/" placeholder="Nhập số điện thoại" />
+                                <span class="text-danger" ng-show="editform.Phone.$error.pattern">Số điện thoại nhập không đúng!</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-menu-hamburger"></i> CMTND </label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Identification" name="Identification" placeholder="Nhập CMTND" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-asterisk"></i> Số năm KN</label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Type_Driver" name="Type_Driver" placeholder="Nhập số năm kinh nghiệm" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-envelope"></i> Email</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Email" name="Email" placeholder="Nhập email" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Id_Fb</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Id_Fb" name="Id_Fb" placeholder="Nhập id facebook" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Emei</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.emei" name="emei" placeholder="Nhập emei" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Mã công ty</label>
+                            <div class="col-md-7">
+                                <input type="text" disabled class="form-control" ng-model="model.Company_Code" name="Company_Code" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left require"><i class="glyphicon glyphicon-home"></i> Nhóm</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.Group" class="" style="width: 100%;" ng-change="changeGroup()">
+                                        <ui-select-match placeholder="chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-home"></i> Chọn số xe</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.License_plate" class="" style="width: 100%;" name="Group">
+                                        <ui-select-match placeholder="Chọn số xe...">{{$select.selected.Code}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in romoocs | filter:$select.search">
+                                            {{x.Code}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.License_plate = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-4 text-left"><i class="glyphicon glyphicon-grain"></i> Nhãn hiệu</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Brand" name="Brand" placeholder="Nhập nhãn hiệu" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 form-col-label text-left">
+
+                                <label class="control-label text-left" for="Status"><i class="fa fa-picture-o"></i> Hình ảnh xe</label>
+                            </div>
+                            <div class="col-md-8 form-col-control">
+                                <div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                        <img id="Image_car" ng-src='{{model.Image_car}}' class="image-default" alt="holder" style="    height: 120px;width: 120px;" />
+                                    </div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                        <img id="Image_car1" ng-src='{{model.Image_car1}}' class="image-default" style="height:120px; width:120px" />
+                                    </div>
+                                </div>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height:33px" placeholder='' readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Chọn ảnh</span>
+                                        <input class="form-control" id="file4" files-input ng-model="model.Image_car" onchange="readURL4(this);" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> Ghi chú </label>
+                            <div class="col-md-8">
+                                <textarea type="text" class="form-control" ng-model="model.Description" name="Description" rows="3" placeholder="Nhập ghi chú"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" style=" padding-bottom: 20px;   margin-top:25px;">
+                        <div class="col-md-5">
+                            <input id="startPlace" ng-model="model.Start_name" type="text" style="border-radius: 10px !important; width:91% !important" autocapitalize="off" class="form-control pac-container" placeholder="Điểm đi...">
+                        </div>
+                        <div class="col-md-5">
+                            <input id="endPlace" ng-model="model.End_name" type="text" style="border-radius: 10px !important; width:91% !important" autocapitalize="off" class="form-control pac-container" placeholder="Điểm đến...">
+                        </div>
+                        <div class="col-md-1">
+                            <button ng-click="Generate()" class="btn  btn-primary" ng-disabled="updated_by1.$invalid || updated_by2.$invalid">
+                                <i class="fa fa-floppy-o"></i>&nbspGenerate
+                            </button>
+                        </div>
+                        <div class="col-md-1"> </div>
+                    </div>
+                    <div class="col-md-12" style="padding-bottom:20px;" hidden>
+                        <div class="col-md-2">
+                            <label><i class="fa fa-user" style="color:#206ca2"></i>&nbspĐiểm đầu [x1,y1]</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="" ng-model="rs2" name="updated_by1" required disabled />
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                    <div class="col-md-12" hidden>
+                        <div class="col-md-2">
+                            <label><i class="fa fa-user" style="color:#206ca2"></i>&nbspĐiểm cuối [x2,y2]</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="" ng-model="rs3" name="updated_by2" required disabled />
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                    <div class="col-md-12" hidden>
+                        <p id="pathGG">{{model.Polyline}}</p>
+                    </div>
+                    <div class="col-md-12" style="padding-bottom: 15px;">
+                        <textarea rows="4" class="form-control" placeholder="" ng-model="model.virual_intiary" name="updated_by2"></textarea>
+                    </div>
+                </div>
+                <div class="form-group pull-right">
+                    <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:10px; margin-right: 20px;" ng-click="submit()"><i class="fa fa-plus"></i> Lưu</button>
+                </div>
+                <div class="form-group" style="padding:30px;">
+                    <div id="map" class="map" tabindex="0"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,137 @@
+﻿<!--Start-datetimepicker-->
+<link href="../../lib/datetimepicker/material_icons/icon.css" rel="stylesheet" />
+<link href="../../lib/datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="../../lib/datetimepicker/css/pmd-datetimepicker.css" rel="stylesheet" />
+<script src="../../lib/datetimepicker/language/bootstrap-datepicker.vi.js" type="text/javascript"></script>
+<script src="../../lib/datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="../../lib/datetimepicker/js/moment-with-locales.js" type="text/javascript"></script>
+<!--End-datetimepicker-->
+<style>
+    .datepicker .active, .datepicker .active:hover, .datepicker table tr td.day:hover, .datepicker table tr td.focused, .datepicker table tr td.today {
+        background: none !important;
+    }
+</style>
+<div class="modal-header no-color">
+    <img class="close icon-remove" title="Close" src="/images/AppIcon/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit"></i>
+    <div class="modal-title custom-title black" id="modal-title">Sửa sự kiện</div>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <label class="control-label require">Chủ trì</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="model.Chair" name="Chair" placeholder="Chủ trì..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Chair=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <label class="control-label require">Ngày diễn ra</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" ng-model="model.CreatedTime" id="CreatedTime" name="CreatedTime" class="form-control" placeholder="Ngày diễn ra..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.CreatedTime=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <label class="control-label">Thời gian bắt đầu</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" ng-model="model.TimeStart" id="TimeStart" name="TimeStart" class="form-control" placeholder="Thời gian bắt đầu..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.TimeStart=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <label class="control-label">Thời gian kết thúc</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" ng-model="model.TimeEnd" id="TimeEnd" name="TimeEnd" class="form-control" placeholder="Thời gian kết thúc..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.TimeEnd=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fas fa-hospital-alt" aria-hidden="true"></i>
+                            <label class="control-label require">Phòng họp</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="model.Room" name="Room" placeholder="Phòng họp..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Room=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            <label class="control-label require">Thành phần tham dự</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" placeholder="Nhập thành phần tham dự..." name="Composition" rows="4" ng-model="model.Composition"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            <label class="control-label require">Nội dung</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" placeholder="Nhập nội dung.." rows="6" ng-model="model.Content" name="Content"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-default" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-blue mr10" href="javascript:;">
+        Cập nhập
+    </button>
+</div>

@@ -1,0 +1,286 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(98% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="add()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-md-12 pl-0">
+                        <div class="col-md-2">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_CODE' | translate}}</label>
+                            <div class='input-group br24'>
+                                <input ng-model="modelsearch.TicketCode" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_TICKET_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.TicketCode='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0 pr-0">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_KEY_WORD' | translate}}</label>
+                            <div class='input-group br24'>
+                                <input ng-model="modelsearch.Title" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_KEY_WORD' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.Title='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 pr-0">
+                            <div class="col-md-6 pl-0">
+                                <label class="fw600 text-underline"> {{'ASSET_CANCEL_INDEX_FROMDATE' | translate}}</label>
+                                <div class='input-group br24'>
+                                    <input ng-model="modelsearch.FromDate" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_INDEX_FROMDATE' | translate}}..." id='fromdate' ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.FromDate=''" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-0">
+                                <label class="fw600 text-underline"> {{'ASSET_CANCEL_INDEX_TODATE' | translate}}</label>
+                                <div class='input-group br24'>
+                                    <input ng-model="modelsearch.ToDate" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_INDEX_TODATE' | translate}}..." id='todate' ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="modelsearch.ToDate=''" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0 pr-0" style="width: 14%;">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_BRANCH' | translate}}</label>
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="modelsearch.Branch" theme="bootstrap">
+                                    <ui-select-match placeholder=" {{'ASSET_CANCEL_TICKET_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListBranch | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.Branch='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_PERSON' | translate}}</label>
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="modelsearch.Person">
+                                    <ui-select-match placeholder=" {{'ASSET_CANCEL_TICKET_PERSON' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListPerson | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.Person='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pr-0 pl-0 pt10">
+                            <div class="btn-group actions d-flex mr5">
+                                <div class="text-center pr10 pl10">
+                                    <a data-dismiss="modal" ng-click="search()" class="fs30">
+                                        <span><i class="fas fa-search"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="portlet light bordered input-search mb5">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12 margin-top-10">
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_CODE' | translate}}</label>
+                            <div class='input-group '>
+                                <input ng-model="model.TicketCode" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_TICKET_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.TicketCode='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_BRANCH' | translate}}</label>
+                            <div class='input-group '>
+                                <ui-select tagging ng-model="model.Branch" theme="bootstrap">
+                                    <ui-select-match placeholder=" {{'ASSET_CANCEL_TICKET_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListBranch | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Branch='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_INDEX_FROMDATE' | translate}}</label>
+                            <div class='input-group '>
+                                <input ng-model="model.FromDate" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_INDEX_FROMDATE' | translate}}..." id='fromdate' ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margin-top-10">
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_NAME' | translate}}</label>
+                            <div class='input-group '>
+                                <input ng-model="model.Title" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_TICKET_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Title='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_TICKET_PERSON' | translate}}</label>
+                            <div class='input-group '>
+                                <ui-select tagging ng-model="model.Person">
+                                    <ui-select-match placeholder=" {{'ASSET_CANCEL_TICKET_PERSON' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListPerson | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Person='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline"> {{'ASSET_CANCEL_INDEX_TODATE' | translate}}</label>
+                            <div class='input-group '>
+                                <input ng-model="model.ToDate" class="form-control" type="text" placeholder=" {{'ASSET_CANCEL_INDEX_TODATE' | translate}}..." id='todate' ng-keydown="($event.keyCode == 13) && reloadNoResetPage1()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn-group actions d-flex mr25">
+                                <div class="pr10">
+                                    <a data-dismiss="modal" ng-click="search()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                        <span><i class="fa fa-search"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3"> {{'ASSET_CANCEL_SEARCH' | translate}}</p>
+                                </div>
+                                <div class="text-center pr10">
+                                    <a ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_ADD' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>
+<div ng-include="'../views/admin/assetCancel/AssetCancel.html'"></div>
+<!--<div class="tabbable">
+    <uib-tabset active="active">
+        <div ng-include="'../views/admin/assetCancel/AssetCancel.html'"></div>
+    </uib-tabset>
+</div>-->
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

@@ -1,0 +1,162 @@
+﻿<style>
+    .modal-header {
+        background-color: white;
+    }
+
+    .modal-title {
+        color: black;
+    }
+
+    .fa.fa-search {
+        color: black;
+    }
+
+   
+</style>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <span class="modal-title" id="modal-title"><i class="fa fa-search"></i>&nbsp;{{'EDMSDWC_LBL_FIND_VOUCHERS' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptionsSearch">
+            <div class="form-body pb20 fs11 pl-0 pr-0">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_KEY_WORD' | translate}}</label>&nbsp;<span class="text-danger fs9">{{'EDMSDWC_LBL_ENTER_KEYWORD' | translate}}</span>
+                                <input class="form-control br24" ng-model="model.Content" placeholder="{{'EDMSDWC_LBL_KEY_WORD' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="col-md-3 pl-0">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_OBJECT' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.ObjectType" theme="bootstrap" on-select="selectObjectType(model.ObjectType)">
+                                        <ui-select-match placeholder="{{'EDMSDWC_LBL_OBJECT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in objects | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ObjectType='';resetObjectType()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 pl-0">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_LIST' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.ObjectCode" theme="bootstrap" on-select="selectObjectCode($item)">
+                                        <ui-select-match placeholder="{{'EDMSDWC_LBL_LIST' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listObjects | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ObjectCode='';reload()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 p-0">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_SINCE'| translate}}</label>
+                                <div class="input-group br24">
+                                    <input type="text" autocomplete="off" class="form-control" placeholder="{{'EDMSDWC_LBL_SINCE'| translate}}..." ng-model="model.FromDate" id="FromTo">
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 pl-0">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_TO_DATE' | translate}}</label>
+                                <div class='input-group br24'>
+                                    <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'EDMSDWC_LBL_TO_DATE' | translate}}..." id='DateTo' />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 pl-0">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_CREATOR' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.UserUpload" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'EDMSDWC_LBL_CREATOR' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listUser | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.UserUpload='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 pl-0">
+                            <div class="form-group">
+                                <label class="fw600 text-underline">{{'EDMSDWC_LBL_ARCHIVE' | translate}}</label>
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.WhsCode" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'EDMSDWC_LBL_ARCHIVE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listWareHouse | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.WhsCode='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 p-0">
+                            <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                <a class="fs30">
+                                    <span class="fas fa-search"></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

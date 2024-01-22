@@ -1,0 +1,91 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-lg-6">
+            <h1 class="bold mb-0">{{'DWWS_TAB_MANAGER_TITLE_WEEK_WORKING_SCHEDULE' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'DWWS_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="/Authoring">{{'DWWS_ TAB_MANAGER_LINK_WEEK_WORKING_SCHEDULE' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="text-center  pull-right ml5 mr5" ng-click="add()">
+                <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                    <span><i class="fa fa-plus"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+            </div>
+            <div class="text-center  pull-right ml5 mr5" ng-click="cancel()">
+                <a class="btn btn-icon-only btn-circle btn-outline red-custom">
+                    <span><i class="fa fa-arrow-left"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_BACK' | translate}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row pt10 mb15">
+        <div class="col-md-3">
+            <label class="fw600 text-underline">{{'Nhân viên' | translate}}</label>
+            <div class="input-group">
+                <ui-select tagging ng-model="model.UserName" theme="bootstrap" ng-change="reload()">
+                    <ui-select-match placeholder="{{'Chọn nhân viên' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x  in ListUserName | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.UserName=''" class="btn btn-default no-shadow" style="">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label class="fw600 text-underline">{{'DWWS_TAB_MANAGER_CURD_TXT_FROM_DAY' | translate}}</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="{{'Chọn ngày' | translate}}..." ng-model="model.FromDate" name="FromDate" ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="FromDate" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default start-date no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label class="fw600 text-underline">{{'DWWS_TAB_MANAGER_CURD_TXT_TO_DAY' | translate}}</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="{{'Chọn ngày' | translate}}..." ng-model="model.ToDate" name="ToDate" ng-keydown="($event.keyCode == 13) && reload()" autocomplete="off" id="ToDate" />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default end-date no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2 pt10">
+            <div class="btn-group actions d-flex">
+                <div class="text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                        <span><i class="fa fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light bordered">
+    <div class="portlet-body">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>

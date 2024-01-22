@@ -1,0 +1,92 @@
+﻿<style>
+    .date_form {
+        font-size: 13px !important;
+        margin-top: -8px !important;
+        margin-bottom: 5px !important;
+        margin-left: -15px;
+    }
+    .br24-nobtn p {
+        margin-bottom: 0px !important;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">{{'UBOF_CURD_TITLE_BUSYORFREE' | translate}}</span>
+</div>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-3" ng-class="{ 'has-error': errorUserId}">
+                        <label class="fw600 text-underline require">{{'UBOF_CURD_LBL_EMPLOYEES' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'UBOF_CURD_LBL_EMPLOYEES' | translate}}"><p>{{$select.selected.Name}}</p></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUser | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUserId" class="label-color validation-message">
+                                {{'UBOF_CURD_VALIDATE_EMPLOYEES' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-12 pl-0 pr-0"></div>
+                        <label class="fw600 text-underline date_form control-label require">{{'UBOF_CURD_LBL_FROM_DATE' | translate}}</label>
+                        <div class="form-group col-md-12 pl-0 pr-0">
+                            <div class="input-group br24 date" id="From">
+                                <input ng-model="model.StartTime" name="StartTime" class="form-control" type="text" placeholder="{{'UBOF_CURD_TXT_FROM_DATE' | translate}}..." />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline date_form control-label require">{{'UBOF_CURD_LBL_TO_DATE' | translate}}</label>
+                        <div class="form-group col-md-12 pl-0 pr-0">
+                            <div class="input-group br24 date" id="To">
+                                <input ng-model="model.EndTime" name="EndTime" class="form-control" type="text" placeholder="{{'UBOF_CURD_TXT_TO_DATE' | translate}}..." />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-class="{ 'has-error': errorStatus}">
+                        <label class="fw600 text-underline require">{{'UBOF_CURD_LBL_STATUS' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.Status" theme="bootstrap" ng-change="changeSelect('Status')">
+                                <ui-select-match placeholder="{{'UBOF_CURD_LBL_STATUS' | translate}}"><p>{{$select.selected.Name}}</p></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorStatus" class="label-color validation-message">
+                                {{'UBOF_CURD_VALIDATE_STATUS' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-2 pt-1">
+                    <div class="col-md-10">
+                        <label class="fw600">{{'UBOF_CURD_LBL_NOTE' | translate}}</label>
+                        <textarea class="form-control" rows="4" ng-model="model.Note" placeholder="{{'UBOF_CURD_LBL_NOTE' | translate}}..."></textarea>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 3%">
+                        <div class="text-center pull-right pt-1">
+                            <a class="fs30" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

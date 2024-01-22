@@ -1,0 +1,418 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<div class="modal-header" style="background-color: white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="color:black"></i>
+    <span class="modal-title" id="modal-title" style="color:black">{{'CMSDM_MSG_LBL_EDIT_CATEGORIES' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">{{'CMSDM_MSG_LBL_TITLE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" name="Title" ng-model="model.title" type="text" placeholder="{{'CMSDM_MSG_LBL_TITLE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">{{'CMSDM_MSG_LBL_LINK' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" name="Alias" ng-model="model.alias" type="text" placeholder="{{'CMSDM_MSG_LBL_LINK' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorCatId}">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">{{'CMSDM_MSG_LBL_CATEGORIES' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.cat_id" theme="bootstrap" on-select="changeSelect('cat_id')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_CATEGORIES' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.id as x  in listCategory | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span ng-show="errorCatId" class="label-color validation-message">
+                                        {{'Danh mục không được bỏ trống' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMSDM_MSG_LBL_DATE_SUBMITTED' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='date-post'>
+                                    <input class="form-control" name="DatePost" ng-model="model.date_post" placeholder="{{'CMSDM_MSG_LBL_DATE_SUBMITTED' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'CMSDM_MSG_LBL_LANGUAGE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.language" theme="bootstrap" on-select="changleSelect('CaseWorker')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_LANGUAGE' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.code as x in listLanguage | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.language='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'CMSDM_MSG_LBL_DISPLAY_FONT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.display" theme="bootstrap" on-select="changleSelect('CaseWorker')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_DISPLAY_FONT' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.code as x in listDisplay | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.display='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">{{'CMSDM_MSG_LBL_TAGS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" name="ProjectCode" ng-model="model.tag" type="text" placeholder="{{'CMSDM_MSG_LBL_TAGS' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label">{{'CMSDM_MSG_LBL_DESCRIPTION' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea name="Note" rows="5" class="form-control br24" ng-model="model.intro_text" type="text" placeholder="{{'CMSDM_MSG_LBL_DESCRIPTION' |translate}}..." ng-disabled="IsPermission"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">{{'CMSDM_MSG_LBL_SIGNAL_NUMBER' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" name="IndexNumber" ng-model="model.index_number" type="text" placeholder="{{'CMSDM_MSG_LBL_SIGNAL_NUMBER' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label require col-md-4 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMSDM_MSG_LBL_ABSTRACT' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='date-birthday'>
+                                    <input type='text' class="form-control input-date" name="Summary" ng-model="model.summary" placeholder="{{'CMSDM_MSG_LBL_ABSTRACT' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'CMSDM_MSG_LBL_AGENCY_ISSUED' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.agency_issued" theme="bootstrap" on-select="changleSelect('CaseWorker')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_AGENCY_ISSUED' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.code as x in listAgencyIssued | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.agency_issued ='' ;" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'CMSDM_MSG_LBL_TEXT_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.type_document" theme="bootstrap" on-select="changleSelect('CaseWorker')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_TEXT_TYPE' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.code as x in listTypeDocument | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.type_document='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'CMSDM_MSG_LBL_FIELD' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.field" theme="bootstrap" on-select="changleSelect('CaseWorker')">
+                                        <ui-select-match placeholder="{{'CMSDM_MSG_LBL_FIELD' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.code as x in listField | filter: $select.search">
+                                            {{x.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.field='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMSDM_MSG_LBL_DATE_ISSUED' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='releaseDate'>
+                                    <input class="form-control input-date" name="ReleaseDate" ng-model="model.release_date" placeholder="{{'CMSDM_MSG_LBL_DATE_ISSUED' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMSDM_MSG_LBL_EFFECTIVE_DATE' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='effectiveDate'>
+                                    <input class="form-control input-date" name="EffectiveDate" ng-model="model.effective_date" placeholder="{{'CMSDM_MSG_LBL_EFFECTIVE_DATE' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMSDM_MSG_LBL_NOT_EFFECTIVE_DATE' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='expiryDate'>
+                                    <input class="form-control input-date" name="ExpiryDate" ng-model="model.expiry_date" placeholder="{{'CMSDM_MSG_LBL_NOT_EFFECTIVE_DATE' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">{{'CMSDM_MSG_LBL_SIGNATURE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.signer" type="text" placeholder="{{'CMSDM_MSG_LBL_SIGNATURE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">{{'CMSDM_MSG_LBL_REPLACEMENT_OF_TEXT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.replace_document" type="text" placeholder="{{'CMSDM_MSG_LBL_REPLACEMENT_OF_TEXT' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <div class="btn-group actions d-flex">
+                                <div class="pr10">
+                                    <a data-dismiss="modal" ng-click="cancel()" class="fs30">
+                                        <span><i class="fas fa-times" style="color: red"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                                </div>
+                                <div class="text-center pl20" ng-click="submit()">
+                                    <a class="fs30">
+                                        <span><i class="fas fa-edit"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--<div class="row">
+        <div class="col-md-12">
+            <uib-tabset active="active">
+                <uib-tab class="mt5" index="0" heading="{{'CMSDM_MSG_LBL_DESCRIPTION' | translate}}" disable="Object.SupplierId == ''" ng-click="chkSubTab()">
+                    <textarea ng-model="model.full_text" ui-tinymce="tinymceOptions"></textarea>
+                </uib-tab>
+                <uib-tab class="mt5" index="1" heading="{{'CMSDM_MSG_TAB_IMAGE' | translate}}">
+                    <div ng-include="'../views/admin/cmsDocument/image.html'"></div>
+                </uib-tab>
+                <uib-tab class="mt5" index="2" heading="{{'CMSDM_MSG_TAB_ATTACHED_FILES' | translate}}">
+                    <div ng-include="'../views/admin/cmsDocument/file.html'"></div>
+                </uib-tab>
+
+            </uib-tabset>
+        </div>
+    </div>-->
+
+
+    <div class="row">
+        <div class="col-lg-12 " style="width: 100%">
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist" ng-click="chkSubTab()">
+                    <li role="presentation" class="active">
+                        <div href="#1" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CMSDM_MSG_LBL_DESCRIPTION' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#2" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CMSDM_MSG_TAB_IMAGE' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#3" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CMSDM_MSG_TAB_ATTACHED_FILES' | translate}}</div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="1">
+                        <textarea ng-model="model.full_text" ui-tinymce="tinymceOptions"></textarea>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="2">
+                        <div disable="tests" ng-include="'../views/admin/cmsDocument/image.html'" ng-class="{'disabled-element' : ContractCode =='' }"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade " id="3">
+                        <div ng-include="'../views/admin/cmsDocument/file.html'"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,181 @@
+﻿<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'RMJNC_CURD_LBL_ADD' | translate}}</div>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require">{{'RMJNC_CURD_LBL_CODE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.cat_code" name="StoreCode" placeholder="{{'RMJNC_CURD_TXT_CODE' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label require">{{'RMJNC_CURD_LBL_TITLE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.cat_title" name="StoreName" placeholder="{{'RMJNC_CURD_TXT_TITLE' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="far fa-comment" aria-hidden="true"></i>
+                            <label class="control-label">{{'RMJNC_CURD_LBL_DESCRIPTION' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea rows="3" class="form-control" name="Description" ng-model="model.cat_description" placeholder="{{'RMJNC_CURD_TXT_DESCRIPTION' | translate}}..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="glyphicon glyphicon-leaf" aria-hidden="true"></i>
+                            <label class="control-label">{{'RMJNC_CURD_LBL_MAIN_CATEGORY' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <ui-select ng-model="model.cat_parent_code" class="" ui-select-required>
+                                <ui-select-match placeholder="{{'RMJNC_CURD_TXT_MAIN_CATEGORY' | translate}}...">{{$select.selected.cat_code}}</ui-select-match>
+                                <ui-select-choices repeat="x.id as x in treeDatacategory | filter:$select.value">
+                                    {{x.cat_code}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" for="Status"><i class="sprite-image-16x16"></i> {{'RMJNC_CURD_LBL_IMG' | translate}}</label>
+                        <div class="col-md-8 form-col-control ">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="Image" ng-src='{{model.cat_avarta}}' class="image-default" style="height:120px; width:145px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Image1" ng-src='{{model.cat_avarta1}}' class="image-default" style="height:120px; width:145px" />
+                                </div>
+                            </div>
+                            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.cat_avarta" name="cat_avarta" onchange="readURL(this);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+       {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green  mr5" href="javascript:;">
+     {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>
+<script>
+    function readURL(input) {
+        //  $(this).parent().parent().parent().find('.form-control').html($(this).val());
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+
+
+<!--<script>
+    function readURL(input) {
+        //  $(this).parent().parent().parent().find('.form-control').html($(this).val());
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="glyphicon glyphicon-plus" style="font-size: 18px;color: #e9edf0;"></i> Thêm mới danh mục</h3>
+</div>
+<div class="modal-body no-space" id="modal-body">
+
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class=" col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left pr-0"><i class="glyphicon glyphicon-th-large"></i> Mã danh mục</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.cat_code" name="cat_code" placeholder="Nhập mã danh mục" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" style="padding-right:0"><i class="glyphicon glyphicon-tint"></i> Tiêu đề</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.cat_title" name="cat_title" placeholder="Nhập tiêu đề" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" style="padding-right:0"><i class="glyphicon glyphicon-screenshot"></i> Mô tả</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.cat_description" name="cat_description" placeholder="Nhập mô tả" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left pr-0"> <i class="glyphicon glyphicon-leaf"></i> Danh mục cha</label>
+                        <div class="col-md-8 form-col-control">
+                            <ui-select ng-model="model.cat_parent_code" class="" ui-select-required>
+                                <ui-select-match placeholder="Tên danh mục cha...">{{$select.selected.cat_code}}</ui-select-match>
+                                <ui-select-choices repeat="x.id as x in treeDatacategory | filter:$select.value">
+                                    {{x.cat_code}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left" for="Status"><i class="sprite-image-16x16"></i> Ảnh</label>
+                        <div class="col-md-8 form-col-control ">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="Image" ng-src='{{model.cat_avarta}}' src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Image1" ng-src='{{model.cat_avarta1}}' src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                </div>
+                            </div>
+                            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.cat_avarta" name="cat_avarta" onchange="readURL(this);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:15px;" ng-click="submit()"><i class="fa fa-plus"></i> Lưu</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;  margin-top:15px;margin-right:20px;" ng-click="cancel()"><i class="fa fa-close"></i> Đóng</button>
+    </div>
+</div>-->

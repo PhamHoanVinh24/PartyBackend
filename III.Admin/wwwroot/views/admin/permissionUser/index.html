@@ -1,0 +1,463 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6 ">
+        <!--<h1 class="bold mb-0">{{'ADM_PER_EMP_LINK_ADM_MAN' | translate}}</h1>-->
+        <ul class="breadcrumb-title">
+            <li>
+                <i class="fa fa-home " style="color:green;"></i>
+                <a class=" bold text text-underline" style="color:green;" href="/Admin/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+                <span class="" style="color:green;">&gt;</span>
+            </li>
+            <!--<li>
+                <a href="#">Admin</a>
+                <span>&gt;</span>
+            </li>-->
+            <li>
+                <a class=" bold text-underline" style="color:green;" href="/Permission">{{'ADM_PER_EMP_LBL_PER_EMP' | translate}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="mb10 pt5">
+    <div class="row mb10">
+        <div class="col-md-4">
+            <div class="input-group search-group">
+                <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeAccount()">
+                    <ui-select-match placeholder="{{'ADM_PER_EMP_COMBO_ACC' | translate}}...">
+                        {{$select.selected.UserName}} - {{$select.selected.FullName}}
+                    </ui-select-match>
+                    <ui-select-choices refresh="fetchAccount($select)"
+                                       refresh-delay="300"
+                                       repeat="user.UserId as user in listUsers | filter: $select.search">
+                        {{user.UserName}} - {{user.FullName}}
+                        <div ng-if="$index == listUsers.length - 1 && showButtonLoadMore">
+                            <button class="btn btn-xs btn-success"
+                                    style="width: 100%; margin-top: 5px;"
+                                    ng-click="fetchAccount($select, $event);"
+                                    ng-disabled="loading">
+                                Load more...
+                            </button>
+                        </div>
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="clearSearchAccount();" class="btn btn-default no-shadow">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <!--<div class='input-group date control-datetime'>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar">
+                </span>
+            </span>
+            <input type='text' class="form-control" placeholder="Expired date ..." ng-model="item.ExpiredDate" name="ExpiredDate" readonly="" />
+            <span class="input-group-btn">
+                <button type="button" ng-click="item.ExpiredDate = null" class="btn btn-default no-shadow start-date">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>-->
+    </div>
+    <div class="">
+        <!--<button type="button" class="btn btn-default btn-sm" ng-click="backToList()">
+            <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;
+            Back to list
+        </button>-->
+        &nbsp;&nbsp;&nbsp;
+        <span>
+            {{'ADM_PER_EMP_LBL_PER_EMP_ACCOUNT' | translate}}: <b ng-bind="UserInfo.UserName"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            {{'ADM_PER_EMP_LBL_PER_EMP_NAME' | translate}}: <b ng-bind="UserInfo.GivenName"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            {{'ADM_PER_EMP_LBL_PER_EMP_EMAIL' | translate}}: <b ng-bind="UserInfo.Email"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            {{'ADM_PER_EMP_LBL_PER_EMP_EMP_CODE' | translate}}: <b ng-bind="UserInfo.EmployeeCode"></b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        </span>
+        <span>
+            {{'ADM_PER_EMP_LBL_PER_EMP_BRANCH' | translate}}: <b ng-bind="UserInfo.BranchName"></b>
+        </span>
+        <span ng-show="UserInfo.IsExceeded != null">
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <label class="mt-checkbox">
+                <input type="checkbox" ng-model="UserInfo.IsExceeded" />
+                <span></span>
+                <b>Exceeded permission</b>
+            </label>
+        </span>
+    </div>
+</div>
+<div class="todo-ui row" ng-show="showBlockPermission == true">
+    <style>
+        label.mt-checkbox span {
+            background: #fff !important;
+            border: 1px solid #CFCFCF !important;
+        }
+
+        .ui-select-toggle {
+            border-radius: 0 !important;
+            border-bottom-left-radius: 4px !important;
+            border-top-left-radius: 4px !important;
+        }
+
+        .table-height-scroll {
+            display: block;
+            height: 375px;
+            overflow: auto;
+            border: 1px solid #e7ecf1;
+        }
+
+        .table-height-scroll1 {
+            display: block;
+            height: 468px !important;
+            overflow: auto;
+            margin-bottom: 0 !important;
+        }
+
+        .table-height-scroll2 {
+            display: block;
+            height: 410px !important;
+            overflow: auto
+        }
+
+        .block-tree-branch {
+            height: 469px;
+            overflow: auto;
+            border: 1px solid #e7ecf1;
+        }
+
+        .ui-select-match-text > span {
+            width: 80% !important;
+            overflow: hidden !important;
+            text-overflow: "…" !important;
+            position: absolute !important;
+        }
+
+        .table-function .mt-checkbox {
+            padding-left: 18px;
+        }
+
+        tr.highlight-row {
+            background: #c7ecfc !important;
+            color: #333 !important;
+        }
+
+        .table-hover > tbody > tr.highlight-row:hover, .table-hover > tbody > tr.highlight-row:hover > td {
+            background: #c7ecfc !important;
+        }
+
+        tr.selected-group {
+            background: #c7ecfc !important;
+            color: #333 !important;
+            font-weight: bold !important;
+        }
+
+        .table-hover > tbody > tr.selected-group:hover, .table-hover > tbody > tr.selected-group:hover > td {
+            background: #c7ecfc !important;
+        }
+
+        tr.highlight-row td select,
+        tr.selected-group td select {
+            color: #333 !important;
+        }
+
+        tr.selected-group a {
+            /*color: #333 !important;*/
+        }
+
+        .count-highlight {
+            color: #c7ecfc;
+        }
+
+        .count-selected {
+            color: #c7ecfc;
+        }
+
+        .control-datetime {
+            width: 230px;
+        }
+
+        @media only screen and (min-width : 992px) {
+            .res-pa-h0 {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+
+        .todo-ui .portlet.light {
+            padding: 5px 12px 15px;
+            margin-bottom: 5px;
+        }
+
+            .todo-ui .portlet.light > .portlet-title > .caption {
+                padding: 7px 0;
+            }
+
+            .todo-ui .portlet.light > .portlet-title {
+                min-height: 40px;
+            }
+
+            .todo-ui .portlet.light .portlet-body {
+                padding-top: 0px;
+            }
+
+        tr.selected-row {
+            background: #c7ecfc !important;
+            color: #333 !important;
+            font-weight: bold !important;
+        }
+
+        .table-hover > tbody > tr.selected-row:hover, .table-hover > tbody > tr.selected-row:hover > td {
+            background: #c7ecfc !important;
+        }
+
+        .portlet.light > .portlet-title > .caption {
+            color: #333;
+        }
+    </style>
+    <div class="col-md-4">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="">
+                            <div class="input-group">
+                                <ui-select ng-model="model.AppCode" class="" style="width: 100%;" ng-change="changeApplication()">
+                                    <ui-select-match placeholder="{{'ADM_PER_EMP_COMBO_APP' | translate }}...">{{'ADM_PER_EMP_LBL_APP' | translate }}: {{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listApplication | filter:$select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="clearApplication();" class="btn btn-default no-shadow">
+                                        <span class="fa fa-times"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="portlet-body todo-project-list-content">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{'ADM_PER_EMP_TXT_DEPT' | translate }}..." ng-model="txtGroupUserName" name="txtGroupUserName" ng-keydown="($event.keyCode == 13) && searchGroupUser()" />
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="clearSearchGroupUser();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="searchGroupUser();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id="contentMainTree2">
+                    <div class="table-scrollable table-height-scroll1">
+                        <table class="table table-bordered table-hover table-condensed table-groupuser">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <label class="mt-checkbox" style="padding-left: 18px !important;">
+                                            <input type="checkbox" ng-model="selectAllGroup" ng-click="clickSelectAllGroup(selectAllGroup)" /><span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">
+                                        {{'ADM_PER_EMP_LIST_COL_DEPT' | translate }}
+                                        <!--<span class="count-selected" title="Count all checked">({{ getCountGroupUserLength() }})</span>&nbsp;-->
+                                        <span class="" title="Count all highlight">({{ getCountGroupUserHighlight() }})</span>
+                                    </th>
+                                    <!--<th class="text-center">Role</th>-->
+                                    <th class="text-center">{{'ADM_PER_EMP_LIST_COL_PERMISSION' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in listGroupUsers" ng-class="{'selected-group': selectedGroup[$index], 'highlight-row': item.IsChecked}">
+                                    <td class="text-center">
+                                        <label class="mt-checkbox" style="padding-left: 18px !important;" ng-class="{'mt-checkbox-disabled': item.IsMain}">
+                                            <input type="checkbox" ng-model="item.IsChecked" ng-click="clickSelectOneGroup($index, item)" ng-disabled="item.IsMain" /><span></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <span ng-click="showUserPermission(item, $index)" ng-bind-html="trustAsHtml(item.Title)">
+                                            {{ item.Title }} <span ng-show="item.IsMain"><b>(Main)</b></span>
+                                        </span>
+                                        <span class="text-center" style="display: block; margin-top: 6px; margin-bottom: 3px;">
+                                            <select ng-model="item.RoleId" ng-change="changeRoleOfGroup(item)" ng-disabled="item.IsMain">
+                                                <option value="">--- {{'ADM_PER_EMP_LBL_ROLE' | translate }} ---</option>
+                                                <option ng-repeat="role in listRoles" value="{{ role.Id }}" ng-selected="{{ role.Id == item.RoleId }}">{{ role.Title | limitTo: 40 }}{{role.Title.length > 40 ? '...' : ''}}</option>
+                                            </select>
+                                        </span>
+                                    </td>
+                                    <!--<td>
+                                        <select ng-model="item.RoleId" ng-change="changeRoleOfGroup(item)" ng-disabled="item.IsMain">
+                                            <option value="">--- {{'ADM_PER_EMP_LBL_ROLE' | translate }} ---</option>
+                                            <option ng-repeat="role in listRoles" value="{{ role.Id }}" ng-selected="{{ role.Id == item.RoleId }}">{{ role.Title | limitTo: 40 }}{{role.Title.length > 40 ? '...' : ''}}</option>
+                                        </select>
+                                    </td>-->
+                                    <td class="text-center">
+                                        <a href="javascript:;" class="" ng-click="showUserPermission(item, $index)">{{'ADM_PER_EMP_LBL_SHOW' | translate }}</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 res-pa-h0">
+        <div class="portlet light bordered">
+            <!-- PROJECT HEAD -->
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject bold uppercase">
+                        {{"ADM_PER_EMP_LBL_RESOURCE" | translate }}&nbsp;
+                        <span>({{ getCountResourceLength() }})</span>
+                    </span>
+                </div>
+                <div class="pull-right">
+                    <a ng-click="saveResource()" title="{{'COM_BTN_SAVE' | translate }}" data-toggle="modal" class="btn btn-circle btn-icon-only btn-default green-custom">
+                        <i class="fa fa-floppy-o"></i>
+                    </a>
+                    <a ng-click="clearAllResource()" title="{{'ADM_PER_EMP_LBL_HIDDEN_CURRENT_RESOURCE' | translate }}" class="btn btn-circle btn-icon-only red-custom">
+                        <i class="fa fa-eye-slash"></i>
+                    </a>
+                    <a ng-click="refreshResource()" title="{{'ADM_PER_EMP_LBL_REFRESH_RESOURCE' | translate }}" class="btn btn-circle btn-icon-only btn-default blue-custom">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- end PROJECT HEAD -->
+            <div class="portlet-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{'ADM_PER_EMP_TXT_RESOURCE_CODE_NAME' | translate }}..." ng-model="txtResourceApi" name="txtResourceApi" ng-keydown="($event.keyCode == 13) && searchResource()" />
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="clearSearchResource();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="searchResource();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id="contentMainTree3">
+
+                    <div class="table-scrollable table-height-scroll1">
+                        <table class="table table-bordered table-hover table-function">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <label class="mt-checkbox" ng-show="model.Resources.length > 0">
+                                            <input type="checkbox" ng-model="selectAll" ng-click="selectAllResource(selectAll)" /><span></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">{{'ADM_PER_EMP_LIST_COL_RESOURCE_NAME' | translate }}</th>
+                                    <th class="text-center">{{'ADM_PER_EMP_LIST_COL_RESOURCE_DESCRIPTION' | translate }}</th>
+                                    <th class="text-center">{{'ADM_PER_EMP_LIST_COL_RESOURCE_API' | translate }}</th>
+                                    <th class="text-center">{{'ADM_PER_EMP_LIST_COL_RESOURCE_EXPRIRED_DATE' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in model.Resources">
+                                    <td colspan="6" ng-if="item.IsFunction">
+                                        {{'ADM_PER_EMP_LBL_FUNC' | translate }}: <b>{{ item.FunctionName }}</b>
+                                    </td>
+                                    <td class="text-center" ng-if="!item.IsFunction">
+                                        <button type="button" class="btn btn-icon-only green" style="margin-right: 0px !important" ng-class="{ green: item.HasPermission, red: !item.HasPermission}" ng-click="selectOneResource(item)">
+                                            <i class="fa fa-check" ng-class="{ 'fa-check': item.HasPermission, 'fa-remove': !item.HasPermission }"></i>
+                                        </button>
+                                    </td>
+                                    <td ng-if="!item.IsFunction">{{ item.Title}}</td>
+                                    <td ng-if="!item.IsFunction">{{ item.Description }}</td>
+                                    <td ng-if="!item.IsFunction">{{ item.Api }}</td>
+                                    <td class="text-center" ng-if="!item.IsFunction">
+                                        <div class='input-group date control-datetime'>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar">
+                                                </span>
+                                            </span>
+                                            <input type='text' class="form-control" placeholder="{{'ADM_PER_EMP_TXT_RESOURCE_EXPRIRED_DATE' | translate }}..." ng-model="item.ExpiredDate" ng-init="item.ExpiredDate = item.ExpiredDate == null ? null : (item.ExpiredDate | cmdate: 'MM/dd/yyyy HH:mm')" ng-change="changeExpiredDate(item, $index)" name="ExpiredDate" readonly="" />
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="item.ExpiredDate = null;changeExpiredDate(item, $index)" class="btn btn-default no-shadow start-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" id="contentMainTree1">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject bold uppercase">
+                        {{'ADM_PER_EMP_LBL_PER_EMP_BRANCH' | translate }}&nbsp;
+                        <span>({{ getCountBranchReferenceLength() }})</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="portlet-body todo-project-list-content">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{'ADM_PER_EMP_LBL_PER_EMP_BRANCH' | translate }}..." ng-model="txtBranchName" name="txtBranchName" ng-keydown="($event.keyCode == 13) && searchBranch()" />
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="clearSearchBranch();" class="btn btn-default no-shadow" title="Clear search">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn pb5">
+                            <button type="button" ng-click="searchBranch();" class="btn blue" title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="contentMainTreeBranch" class="block-tree-branch">
+                    <table class="table table-hover table-condensed">
+                        <tbody>
+                            <tr ng-repeat="item in listBranchReference" ng-class="{ 'selected-row': item.IsChecked }">
+                                <td class="text-center bs-checkbox" style="width: 34px;">
+                                    <label class="mt-checkbox" style="padding-left: 18px;" ng-class="{'mt-checkbox-disabled': item.IsMain}">
+                                        <input type="checkbox" ng-model="item.IsChecked" ng-click="clickSelectOneBranchRef(item, 0)" ng-disabled="item.IsMain" /><span></span>
+                                    </label>
+                                </td>
+                                <td nowrap ng-click="clickSelectOneBranchRef(item, 1)">
+                                    {{ item.Ord == 1 ? "&nbsp;&nbsp;&nbsp;&nbsp;" : item.Ord != 0 ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : "" }}
+                                    <i class="icon-lg fa " ng-class="item.Ord > 1 ? 'fa-folder icon-state-warning' : 'fa-folder-open icon-state-info'"></i>&nbsp;
+                                    {{ item.OrgName }}&nbsp;<span ng-show="item.IsMain"><b>(Main)</b></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<div id="treeDivBranch" class="block-tree-branch" js-tree="treeConfigBranch" should-apply="applyModelChanges()" ng-model="treeDataBranch" tree="treeInstance" tree-events-obj="treeEventsObjBranch"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

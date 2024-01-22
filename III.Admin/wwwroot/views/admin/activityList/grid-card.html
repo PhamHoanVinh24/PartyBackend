@@ -1,0 +1,40 @@
+﻿<style>
+    .table {
+        border-spacing: 0 5px !important;
+        border-collapse: separate;
+    }
+</style>
+<div ng-controller="grid-card-listActivity">
+    <table class="table dataTable table-hover"
+           datatable
+           dt-options="dtOptionsActivity"
+           dt-columns="dtColumnsActivity"
+           dt-instance="dtInstanceActivity"
+           id="tblDataActivity"></table>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+        });
+    }, 1000);
+</script>

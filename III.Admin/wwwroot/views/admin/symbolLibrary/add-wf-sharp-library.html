@@ -1,0 +1,144 @@
+﻿ <style>
+    .btn-save {
+        background-color: #ffffff;
+        color: black;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        padding-top: 10px !important;
+        padding-bottom: 5px !important;
+        border: 1px solid black;
+    }
+
+    #upload_link {
+        text-decoration: none;
+    }
+
+    #upload {
+        display: none
+    }
+
+    .image {
+        display: flex;
+        justify-content: space-around;
+        border-radius: 5px;
+        background: #EEEEEE;
+        border: 1px solid #d4d4d4;
+    }
+    .modal-header{
+        background-color:white;
+    }
+    .modal-title{
+        color:black;
+    }
+    .fa.fa-plus-circle.icon-insert{
+        color:black
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'SYB_CURD_LIBRARY_SYMBOL'|translate}}</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label require">{{'SYB_CURD_OBJECTCODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.SharpCode" name="SharpCode" placeholder="{{'SYB_CURD_OBJECTCODE'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label require">{{'SYB_CURD_OBJECTNAME'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.SharpName" name="SharpName" placeholder="{{'SYB_CURD_OBJECTNAME'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <div class="form-group" ng-class="{'has-error' : errorType}">
+                            <div class="col-md-12 pr-5">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label require">{{'SYB_CURD_OBJECT_TYPE'|translate}}</label>
+                                <div class="input-group br24-nobtn">
+                                    <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.SharpType" theme="bootstrap" ng-change="changeSelect('Type')">
+                                        <ui-select-match placeholder="{{'SYB_CURD_OBJECT_TYPE'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in lstTypeLib | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorType" class="label-color validation-message">
+                                    {{'SYB_VALIDATE_OBJECT_TYPE'|translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9 pr-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label bold">{{'SYB_CURD_OBJECT_JSONDATA'|translate}}</label>
+                            </div>
+                            <div class="col-md-12 pr-0">
+                                <textarea style="height: 120px !important;" name="SharpData" rows="3" class="form-control br12 JsonData" ng-model="model.SharpData" value="" type="text" ng-change="SharpDataChange()"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-3">
+                        <div class="form-group">
+                            <div class="col-md-6 pl-0">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label bold">{{'SYB_CURD_OBJECT_SHOW'|translate}}</label>
+                            </div>
+                            <div class="col-md-6 pr-0">
+                                <input id="upload" accept=".png,.jpg,.jpeg,.gif,.tif" custom-on-change-sumbol="attrfile" type="file" />
+                                <a ng-click="loadfile()" class="control-label bold pull-right">{{'SYB_CURD_OBJECT_UPLOAD_FILE' |translate}}</a>
+                            </div>
+                            <div class="col-md-12 pr-0 ShowImage image">
+                                <img id="imageId" style="height:120px !important;width:80%" ng-click="loadfile()" class="h-300 w-450 br-n" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.gallery==null ? '../../../images/default/uploadimg.png' : model.gallery}}" role="button" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pr-3">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label bold">{{'SYB_CURD_OBJECT_DESCRIPTION'|translate}}</label>
+                            </div>
+                            <div class="col-md-12 pr-0">
+                                <textarea name="SharpDesc" rows="3" class="form-control br12" ng-model="model.SharpDesc" type="text" placeholder="{{'SYB_CURD_OBJECT_DESCRIPTION'|translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center pr-0 pull-right">
+                            <a class="fs30" title="Lưu lại" ng-click="submit()">
+                                <i class="fa-solid fa-plus"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pl5 pt5 ng-binding">{{'COM_BTN_SAVE' |translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

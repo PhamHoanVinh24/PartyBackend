@@ -1,0 +1,164 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(88% - 50px);
+        right: 70px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2" ng-if="PERMISSION_EDMSWareHouseProfileVouchersDocument.Insert">
+        <a class="" ng-click="add()">
+            <span><i class="fa-solid fa-plus fs30 pt20"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2" style="padding-top: 7px;">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs30" aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10 ">
+            <div class="portlet-body">
+                <div class="row pb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-1 pr-0">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_CODE' | translate}}</label>
+                        <div class="br24">
+                            <input ng-model="model.WHS_Code" class="form-control br24 ng-pristine ng-untouched ng-valid ng-empty" type="text" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_CODE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_NAME' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.WHS_Name" class="form-control" type="text" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.WHS_Name='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_AREASQUARE' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.WHS_AreaSquare" theme="bootstrap" on-select="changleSelect('Area')">
+                                <ui-select-match placeholder="{{'EDMSWHPV_CURD_TXT_WHS_AREASQUARE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in CustomerAreas | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.WHS_AreaSquare='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_ADDRESS' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.WHS_ADDR_Text" class="form-control" type="text" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_ADDRESS' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.WHS_ADDR_Text='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_NOTE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.WHS_Note" class="form-control" type="text" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_NOTE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.WHS_Note='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'EDMSWHPV_CURD_LBL_WHS_KEY' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.WHS_Tags" class="form-control" type="text" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_KEY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.WHS_Tags='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10">
+                                <a class="fs30" ng-click="reload()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"> <label class="text-danger">{{'EDMSWHPV_CURD_LBL_INSTRUCTIONS_BOUBLE_CLICK_EDIT_RECORD' | translate}}</label></div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+    <script>
+        setTimeout(function () {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            $('.table-scrollable').mousedown(function (e) {
+                isDown = true;
+                startX = e.pageX - $('.table-scrollable').offset().left;
+                scrollLeft = $('.table-scrollable').scrollLeft();
+            });
+            $('.table-scrollable').mouseleave(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mouseup(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mousemove(function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $('.table-scrollable').offset().left;
+                const walk = (x - startX) * 1; //scroll-fast
+                $('.table-scrollable').scrollLeft(scrollLeft - walk);
+                console.log(walk);
+            });
+        }, 1000);
+
+    </script>

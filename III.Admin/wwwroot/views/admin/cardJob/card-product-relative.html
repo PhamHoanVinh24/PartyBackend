@@ -1,0 +1,55 @@
+﻿<div ng-controller="card-product-relative">
+    <div class="form-group d-flex br24-nobtn">
+        <ui-select class="ui-select-bootstrap-right-radius pr5" ng-model="product.ProductCode" theme="bootstrap" style="width:75%" ng-disabled="IsLock || !isAceptCard  ">
+            <ui-select-match placeholder="{{'CJ_TXT_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+            <ui-select-choices repeat="x.Code as x in listProduct | filter: $select.search">
+                {{x.Name}}
+            </ui-select-choices>
+        </ui-select>
+        <input class="form-control br24 mr5" type="text" ng-model="product.Quantity" placeholder="{{'CJ_CURD_LBL_QUANTITY' | translate}}" num-thousand='true' awnum num-int='21' style="width:25%" ng-disabled="IsLock || !isAceptCard " />
+    </div>
+    <div class="form-group d-flex">
+        <div class="col-md-9 pl-0">
+            <div class="input-group br24" style="width:70%">
+                <ui-select class="ui-select-bootstrap-right-radius" ng-model="product.Activity" theme="bootstrap" ng-disabled="IsLock || !isAceptCard ">
+                    <ui-select-match placeholder="{{'CJ_TXT_ACTIVITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listActivityProduct | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="addProductActivity()" class="btn no-shadow btn-border-black-grey" style="">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3 pr-0 pull-right">
+            <button ng-click="addProduct()" title="{{'COM_BTN_SAVE' | translate}}" class="btn btn-default btn-icon-only transparent no-border no-shadow ml15 pull-right" style1="background: linear-gradient(to bottom,#659be0,#659be0 );color: white; width: 60%; border-radius: 5px;" ng-disabled="IsLock || !isAceptCard ">
+                <i class="fa fa-chevron-down" style="color: #183153"></i>
+            </button>
+        </div>
+    </div>
+    <b class="fs10">{{'CJ_LBL_LIST_PRODUCT' | translate}} ({{listCardProduct.length}})</b>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-bordered table-striped mb-0">
+            <tbody ng-if="listCardProduct.length!=0">
+                <tr ng-repeat="x in listCardProduct">
+                    <td>
+                        <a class="fs12">{{x.ProductCode}} - {{x.ProductName}} ({{x.Quantity}})</a><br />
+                        <span class="gray fs10">{{x.CreatedTime | fomartDateTime}} - {{x.CreatedBy}} - <a ng-click="deletedProduct(x.ID)">{{'COM_BTN_DELETE' | translate}}</a></span>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="listCardProduct.length==0">
+                <tr>
+                    <td>
+                        <div class="col-md-12">
+                            <span class="text-danger fs10">{{'CJ_LBL_NO_PRODUCT' | translate}}...</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿<div ng-controller="managerTransporter">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <!--<a class="btn btn-accent btnSearch">
+                    <i class="fa fa-search"></i>Tìm kiếm
+                </a>-->
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'MP_ADD_NEW' | translate}}</span> 
+                </a>
+            </div>
+        </div>
+        <div class="portlet light bordered input-search mb5 hidden">
+            <div class="portlet-body">
+                <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />
+                <div class="row pt5 mb5">
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MP_LABEL_CODE_GUESS' | translate}}</label> 
+                        <div class="input-group">
+                            <input ng-model="model.CustomerCode" class="form-control" type="text" placeholder="{{'MP_LABEL_CODE_GUESS' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerCode='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MP_LIST_COL_MP_CUSNAME' | translate}}</label> 
+                        <div class="input-group">
+                            <input ng-model="model.CustomerName" class="form-control" type="text" placeholder="{{'MP_LIST_COL_MP_CUSNAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerName='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{' MP_NUMBER_PHONE' | translate}}</label> 
+                        <div class="input-group">
+                            <input ng-model="model.CustomerPhone" class="form-control" type="text" placeholder="{{' MP_NUMBER_PHONE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerPhone='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MP_LETTER' | translate}}</label> 
+                        <div class="input-group">
+                            <input ng-model="model.CustomerEmail" class="form-control" type="text" placeholder="{{'MP_LETTER' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerEmail='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MP_GROUP_GUESS' | translate}}</label> 
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CustomerGroup" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MP_GROUP_GUESS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in CustomerGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerGroup='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'MP_LIST_COL_MP_ISACTIVE ' | translate}}</label> 
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CustomerActivityStatus" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MP_ALL_STATUSS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CustomerActivityStatus='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{' MP_LIST_COL_MP_ADDRESS' | translate}}</label> 
+                        <div class="input-group">
+                            <input ng-model="model.Address" id="Address" class="form-control" type="text" placeholder="{{' MP_LIST_COL_MP_ADDRESS' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Address='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt25">
+                        <button ng-click="search()" class="btn btn-accent">
+                            <i class="fa fa-search"></i>
+                            {{'COM_BTN_SEARCH ' | translate}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions1"
+           dt-columns="dtColumns1"
+           dt-instance="dtInstance1"
+           id="tblDataIndex12"></table>
+</div>

@@ -1,0 +1,119 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 600;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .table-responsive th {
+        font-size: 13px !important;
+        text-align: center;
+    }
+
+    .table-responsive tbody tr td:first-child {
+        font-size: 13px !important;
+        font-weight: 600;
+        text-align:left!important;
+    }
+
+    .table-responsive tbody tr td:nth-child(2) {
+        text-align: left !important;
+    }
+
+    .table-responsive tbody tr td {
+        text-align: center !important;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addAttr()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'Thuộc tính vùng' | translate}}</p>
+    </div>
+</div>
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt5 mt10">
+        <div class="portlet-body">
+            <div class="row mb5">
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Kiểu vùng' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.ZoneType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Kiểu vùng' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listZoneType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ZoneType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Vùng lưu trữ' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ZoneCode" theme="bootstrap" on-select="changeZone($item)">
+                            <ui-select-match placeholder="{{'Vùng lưu trữ' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listZone | filter: $select.search">
+                                <div style="padding-left: {{30 * x.Level}}px">
+                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                    {{x.Title}}
+                                </div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ZoneCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Bậc' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.ZoneLevel" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Bậc' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listZoneLevel | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ZoneLevel=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10 pull-right" ng-click="search()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10 pull-right" ng-click="add()">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-click="my_tree_handler(branch)" expand-level="4" icon-leaf="fas fa-map-marker-alt"></tree-grid>
+</div>

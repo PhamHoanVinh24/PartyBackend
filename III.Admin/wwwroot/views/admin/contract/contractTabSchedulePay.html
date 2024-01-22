@@ -1,0 +1,128 @@
+﻿<style>
+    @media (min-width:762px) {
+        #contractTabSchedulePay .n15 {
+            margin-right: -15px;
+        }
+    }
+</style>
+<div ng-controller="contractTabSchedulePay" id="contractTabSchedulePay">
+    <div class="table-toolbar">
+        <form name="addform" method="post" ng-validate="validationOptionsContractSchedulePay">
+            <div class="row ">
+                <div class="col-md-1">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_LBL_TIMES' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" name="PayTimes" ng-model="model.PayTimes" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_LBL_PERCENT' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Percentage" name="Percentage" type="text" num-thousand='true' awnum num-int='21' placeholder="{{'CONTRACT_LBL_PERCENT' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_LBL_THE_VALUE_OF_MONEY' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Money" name="Money" type="text" num-thousand='true' awnum num-int='21' placeholder="{{'CONTRACT_LBL_THE_VALUE_OF_MONEY' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_LBL_INTEND_TIME' | translate}}</label>
+                        <div class='input-group br24'>
+                            <input type='text' class="form-control " ng-model="model.sEstimateTime" placeholder="{{'CONTRACT_LBL_INTEND_TIME' | translate}}..." id='estimateDate' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.sEstimateTime=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_LBL_INTEND_CONDITION' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Condition" name="Condition" type="text" placeholder="{{'CONTRACT_LBL_INTEND_CONDITION' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group ">
+                        <label class="fs11">{{'CONTRACT_LBL_INTEND_MASS' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Quantity" name="Quantity" type="text" num-thousand='true' awnum num-int='21' placeholder="{{'CONTRACT_LBL_INTEND_MASS' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group n15">
+                        <label class="fs11">{{'CONTRACT_TAB_EXT_LIST_COL_NOTE' | translate}}</label>
+                        <div class="br24">
+                            <input class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="model.Note" name="Note" type="text" placeholder="{{'CONTRACT_TAB_EXT_LIST_COL_NOTE' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group actions pt20 d-flex">
+                        <div class="mr10 pr-0" ng-show="isAdd==true">
+                            <a class=" fs30 p-0" ng-click="add()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-2" ng-show="isAdd==false">
+                            <a class=" fs30 p-0" ng-click="close()">
+                                <span><i class="fas fa-times" style="color: red"></i></span>
+
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'CONTRACT_BTN_CLOSED' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-0" ng-show="isAdd==false">
+                            <a class=" fs30 p-0" ng-click="save()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">
+                                {{'COM_BTN_SAVE' | translate}}
+                            </p>
+                        </div>
+                        <!--<div class="text-center" ng-show="isAdd==true">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="col-md-3" ng-show="isAdd==false">
+        <a class="btn btn-icon-only btn-circle btn-outline red-custom " ng-click="close()">
+            <span><i class="fa fa-close"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3 " style="margin-left:8px">{{'CONTRACT_BTN_CLOSED' | translate}}</p>
+    </div>
+    <div class="col-md-4" ng-show="isAdd==false">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom " ng-click="save()">
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3 ml10">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataSchedulePay"></table>
+</div>

@@ -1,0 +1,125 @@
+﻿
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'EDMSR_LBL_EDIT_SERVER' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editformRepository" class="form-horizontal" method="post" ng-validate="validationOptionsRepository">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;{{'EDMSR_LBL_SERVER_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input ng-model="model.ReposName" name="ReposName" class="form-control br24" type="text" placeholder="{{'EDMSR_LBL_SERVER_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;Kiểu kho lưu trữ</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changleSelect('Type')">
+                                <ui-select-match placeholder="{{'Chọn kiểu' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in RepoType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorType" class="label-color validation-message">
+                            {{'Loại không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="model.Type == 'SERVER'">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-link" aria-hidden="true"></i>&nbsp;{{'EDMSR_LBL_SERVER' | translate}}</label>
+                    </div>
+                    <div class="col-md-8" ng-if="model.Type == 'SERVER'">
+                        <input type="text" class="form-control br24" ng-model="model.Server" name="Server" placeholder="{{'EDMSR_LBL_SERVER' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group" ng-if="model.Type == 'SERVER'">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-user" aria-hidden="true"></i>&nbsp;{{'EDMSR_CURD_LBL_ACCOUNT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Account" name="Account" placeholder="{{'EDMSR_CURD_TXT_ACCOUNT' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group" ng-if="model.Type == 'SERVER'">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-unlock" aria-hidden="true"></i>&nbsp;{{'EDMSR_LBL_PASS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control br24" ng-model="model.PassWord" name="PassWord" placeholder="{{'EDMSR_TXT_PASS' | translate}}..." />
+                    </div>
+                </div>
+                <!--<div class="form-group" ng-if="model.Type == 'SERVER'">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label require"><i class="fas fa-unlock" aria-hidden="true"></i>&nbsp;{{'Địa chỉ vật lý' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="model.PathPhysic" name="PathPhysic" placeholder="Địa chỉ vật lý..." />
+                    </div>
+                </div>-->
+                <div class="form-group" ng-if="model.Type == 'DRIVER'">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label"><i class="fas fa-sort-numeric-up" aria-hidden="true"></i>&nbsp;{{'EDMSR_CURD_LBL_GOOGLE_ACCOUNT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Token" theme="bootstrap" ng-change="changleSelect('Token')">
+                                <ui-select-match placeholder="{{'Chọn tài khoản liên kết' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listGoogleApiToken | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Token=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorToken" class="label-color validation-message">
+                            {{'Tài khoản liên kết không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 pr-0">
+                        <label class="control-label"><i class="fas fa-comment" aria-hidden="true"></i>&nbsp;{{'EDMSR_CURD_LBL_DESCRITION' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea rows="4" class="form-control br24" ng-model="model.Desc" name="Desc" placeholder="{{'EDMSR_CURD_LBL_DESCRITION' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pt-0">
+    <div class=" btn-group pull-right actions d-flex">
+        <div class="fs30 pr20" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+            <a>
+                <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

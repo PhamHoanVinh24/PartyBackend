@@ -1,0 +1,104 @@
+﻿<style>
+    .br4 {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+</style>
+
+<div ng-controller="product">
+    <div class="table-toolbar">
+        <form name="Productform" class="form-horizontal" method="post" ng-validate="validationOptionsProduct">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label require">Catalogue/Danh mục sản phẩm</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('ProductCode',$item)">
+                            <ui-select-match placeholder="Sản phẩm...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class=" col-md-3 pl-0 form-group ml-0 mr-0">
+                    <label class="control-label require">Số lượng</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" name="Quantity" id="Quantity" class="form-control input-date br4" ng-model="model.Quantity" placeholder="Số lượng..." />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class=" col-md-3 pl-0 form-group ml-0 mr-0">
+                    <label class="control-label require">Giá</label>
+                    <div class='input-group'>
+                        <input id="Cost" name="Cost" class="form-control input-date br4"style="font-weight: bold" ng-model="model.Cost" placeholder="Giá..." num-thousand='true' awnum num-int='21'/>
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-md-12 text-danger fs10">*Tìm sản phẩm con theo quy tắc: Tên danh mục - Mã danh mục_Mã sản phẩm</label>
+                <label class="col-md-12 text-danger fs10">*Tìm sản phẩm hoàn thiện theo quy tắc: Thành phẩm_Tên sản phẩm - Mã sản phẩm</label>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">Thuế</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" id="Tax" class="form-control input-date br4" ng-model="model.Tax" placeholder="%" />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <label class="control-label">Chiết khấu</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="form-control input-date br4" ng-model="model.Discount" placeholder="%" />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <label class="control-label">Hoa hồng</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="form-control input-date br4" ng-model="model.Commission" placeholder="%" />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 pl-0">
+                    <label class="control-label">Lưu ý</label>
+                    <div class='input-group'>
+                        <input type='text' class="form-control input-date br4" ng-model="model.Note" placeholder="Lưu ý..." />
+                        <span class="input-group-btn">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 mt20">
+                    <a ng-show="isEdit==false" ng-disabled="LotProductCode==''" ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <a ng-show="isEdit==true" ng-click="close()" class="btn btn-icon-only btn-circle btn-outline red-custom ">
+                        <span><i class="fa fa-close"></i></span>
+                    </a>
+                    <a ng-show="isEdit==true" ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>

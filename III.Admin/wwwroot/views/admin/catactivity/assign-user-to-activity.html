@@ -1,0 +1,96 @@
+﻿<style>
+    .mt-checkbox > span:after {
+        left: 6px !important;
+        top: 2px !important;
+        width: 5px;
+        height: 10px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+</style>
+<div ng-controller="assign-member">
+    <div class="row">
+        <div class="col-md-3" style="width: 20%;">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorBranch}">
+                    <label class="control-label">{{'Trụ sở - chi nhánh' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="changeSelect('Branch', model.Branch)" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Trụ sở - chi nhánh' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                        <ui-select-choices style="height: auto" repeat="x.Code as x in lstBranch | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorBranch" class="label-color validation-message">
+                    Chi nhánh không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3" style="width: 20%;">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorObject}">
+                    <label class="control-label">{{'Phòng ban/Nhóm' | translate}}</label>
+                    <div class="d-flex">
+                        <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Phòng ban/Nhóm' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <span ng-show="errorObject" class="label-color validation-message">
+                    Phòng ban/Nhóm không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorUserId}">
+                    <label class="control-label">{{'Nhân viên' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserId" on-select="changeSelect('UserId')" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Nhân viên' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                        <ui-select-choices style="height: auto" repeat="x.UserId as x in listUser | filter: $select.search">
+                            {{x.GivenName}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorUserId" class="label-color validation-message">
+                    Nhân viên không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="form-group" ng-class="{'has-error' : errorRole}">
+                    <label class="control-label">{{'Vai trò' | translate}}</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Role" on-select="changeSelect('Role')" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span ng-show="errorRole" class="label-color validation-message">
+                    Vai trò không được bỏ trống
+                </span>
+            </div>
+        </div>
+        <div class="col-md-1" style="padding-top: 22px; width: 9.3%;">
+            <button class="btn green-custom" ng-click="submit()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                {{'Thêm xuống' | translate}}
+            </button>
+        </div>
+
+    </div>
+    <div class="pt10">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataAssign"></table>
+    </div>
+</div>

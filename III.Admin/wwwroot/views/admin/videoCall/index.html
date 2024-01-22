@@ -1,0 +1,145 @@
+﻿<div class="table-toolbar">
+    <div>
+        <div class="col-md-12 col-xs-12 mt10" id="header">
+            <div class="row text-logo">
+                <img src="~/images/videoCall/logo.png">
+            </div>
+            <div class="login">
+                <div class="avatar">
+                    <img class="img-circle" style="width:25px;height:25px" onerror="this.src='img/no_image.png'" src="~/images/videoCall/avatar.png" alt="avatar">
+                </div>
+                <div class="user">
+                    <a href="#" class="user_name">{{user.GivenName}}</a>|
+                    <a href="#" ng-click="logOut()" class="logout">  Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="row pt60">
+            <!--start left-->
+            <div class="col-md-3">
+                <div class="sidebar" style="height:725px">
+                    <div class="video">
+                        <iframe style=" width:100% ;height:auto" src="https://www.youtube.com/embed/LnJkm_hahxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="history">
+                        <p class="remote">REMOTE INFO :</p>
+                        <div class="scroller-sm-fade" style="height:150px; width:100%; overflow:auto">
+                            <!-- <div style="width:100%; height:200px; background:#d4d4d4" id="logView"></div>-->
+                            <div class="tab2" ng-repeat="x in logs">
+                                <div class="bold">{{x.content}}</div>
+                                <div class="clock"><img src="img/time_icon_1072075.png"> {{x.time}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="videocall pull-left">
+                        <div class="close" style="z-index: 999;">
+                            <img src="img/close.png" ng-click="closeVideo()" data-toggle="popover" data-placement="top" data-html="true" data-content="Kết thúc cuộc gọi">
+                        </div>
+                        <div class="imgcall">
+                            <div id="videoView" style="background:#941616"></div>
+                        </div>
+                        <div style="text-align:center; height:50px; line-height:50px">
+                            <img ng-click="scanSupporter1()" style="width:30px; height:30px; cursor:pointer" src="~/images/videoCall/mayquay.png" data-toggle="popover" data-placement="top" data-html="true" data-content="Gọi hỗ trợ" data-trigger="hover">
+                            <img style="cursor:pointer; width:30px; height:30px; border: 1px #d4d4d4 solid;background: #fff;padding: 7px;border-radius:50%;-moz-border-radius:50%;-webkit-border-radius:50%;" src="~/images/videoCall/voice.png" data-toggle="popover" data-placement="top" data-html="true" data-content="Tắt mic" data-trigger="hover">
+                            <img ng-click="closeVideo()" style="cursor:pointer; width:30px; height:30px;border: 1px solid;background: #f5392e;padding: 7px;border-radius:50%;-moz-border-radius:50%;-webkit-border-radius:50%;" src="~/images/videoCall/endcall.png" data-toggle="popover" data-placement="top" data-html="true" data-content="Kết thúc cuộc gọi" data-trigger="hover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end left-->
+            <!--start body-->
+
+            <div class="col-md-6 mbody">
+                <div class="row">
+                    <div class="search pb5 mtn10">
+                        <div class="col-md-9 col-sm-9">
+                            <div class="input-group">
+                                <input ng-keydown="($event.keyCode == 13) && searchProduct();($event.keyCode == 13) && sendSearchValue()" style="border-radius: 40px 0px 0px 40px;" ng-model="searchValue" class="form-control" type="text" placeholder="Sản phẩm cần tìm..." autocomplete="off" id='datefrom' />
+                                <span class="input-group-btn ">
+                                    <button type="button" class="btn btn-default no-shadow start-date noBorderLeft" style="border-radius: 0px 40px 40px 0px; margin-left:0px !important" ng-click="searchProduct();sendSearchValue()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <img style="float:right; margin-left:5px" ng-click="scanSkype()" src="~/images/videoCall/Skype-Icon.png" alt="Skype" class="call-button" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Gọi skpye" data-trigger="hover">
+                            <img style="float:right" ng-click="scanSupporter()" src="~/images/videoCall/call.png" alt="" id="call-button" class="call-button" data-toggle="popover" data-placement="bottom" data-html="true" data-content="{{callTitle}}" data-trigger="hover">
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="Featured-prd">
+                            <img class="img-thumbnail1 img-fluid" ng-src="{{currentImg}}" style="width:100%; height:100%" alt="image" onerror="this.src='~/images/videoCall/no_image.png'">
+                            <div class="bg-opacity">
+                                <h2>Tên sản phẩm:{{currentProductName}}</h2>
+                                <span>Giá bán:{{currentCost | number}}</span><br>
+                                <span>Xuất xứ:Nhật Bản</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end body-->
+            <!--start right-->
+            <div class="col-md-3">
+                <div class=" mTab">
+                    <button id="TabGroup" ng-click="changeTab('group',false)" class="btn btn-outline-secondary active rounded-pill-left border-left-0 border" type="button" value="">Nhóm SP</button>
+                    <button id="TabProduct" ng-click="changeTab('product',false)" class="btn btn-outline-secondary  rounded-pill-left border-left-0 border" type="button" value="">Sản phẩm</button>
+                </div>
+                <div class="row cl1 scroller-sm-fade" style="margin-top:7px !important; ">
+                    <div class="panel-body1" id="product">
+                        <div class="product scroller-sm-fade">
+                            <div style="font-size:10px; padding:10px; position:absolute" ng-if="currentCatelogue==null||products.length==0">{{notification}}</div>
+                            <div style="float: left;height: auto;padding: 5px;background: #fff;padding-bottom: 40px;" ng-if="currentCatelogue!=null">
+                                <div ng-repeat="x in products" class="box-product">
+                                    <div class="rating">
+                                        <span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span>
+                                    </div>
+
+                                    <div class="img-product">
+                                        <a>
+                                            <img class="img-responsive" ng-click="onClickImage1(x.ProductCode)" ng-src="{{host}}{{x.PathImg}}" onerror="this.src='img/no_image.png'">
+                                        </a>
+                                    </div>
+
+                                    <div class="content" ng-click="onClickImage1(x.ProductCode)">
+                                        <a href="JavaScript:void(0);" ng-click="onClickImage1(x.ProductCode)" style="color:black">
+                                            {{x.ProductName}}
+                                        </a>
+                                        <p> $ {{x.Cost | number}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="navibar">
+                                <div style="padding-left: 12%;width: auto; text-align: center;">
+                                    <ul id="pagination-demo" class="pagination-sm"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body1" id="groupProduct">
+                        <div class="scroller-sm-fade" id="treeDiv" tree="ctr.treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                    </div>
+
+                </div>
+            </div>
+            <!--end right-->
+
+
+        </div>
+    </div>
+</div>
+<div id="overlay" class="none " ng-if="isViewer">
+    <div class="content">
+        <div class="container" style="background:#ffffff; height:95%; margin-top:10px;">
+            <video controls autoplay ng-if="isVideo" style="margin-top:10px; width:100%">
+                <source src="{{url}}" type="video/mp4">
+            </video>
+            <iframe id="iiframe" src="{{url}}" style="width:100%; height:97%;margin-top:10px" ng-if="isDocument"></iframe>
+            <img src="{{url}}" style="width:100%; height:97%;margin-top:10px" ng-if="isImage" />
+        </div>
+    </div>
+    <i class="fas fa-sync isync" aria-hidden="true" ng-click="refresh(true)"></i>
+    <i class="fa fa-times iclose" aria-hidden="true" ng-click="closeViewer(true)"></i>
+</div>

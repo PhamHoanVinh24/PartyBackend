@@ -1,0 +1,120 @@
+﻿<style>
+    .portlet {
+        box-shadow: none !important;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-info-circle icon-insert" style="color:#707070"></i>
+    <span class="modal-title" id="modal-title"> {{"AUTHORING_TITLE_TEXT_INFORMATION" | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="form-group">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold fs15">{{"AUTHORING_CURD_LBL_ATTACHMENTS" | teansslate}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content mb20">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-10 text-center">{{"AUTHORING_LIST_COL_FILE_NAME" | translate}}</th>
+                                <th class="col-lg-2 text-center">{{"AUTHORING_LIST_COL_DOWNLOAD" | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in model.Detail.ListFile">
+                                <td class="text-center long">{{x.FileName}}</td>
+                                <td class="text-center">
+                                    <a href="{{x.Source}}" target="_blank" download>
+                                        <i role="button" hr class="fa fa-download pl10 pt5" title="Tải xuống" style="color:#147aa9!important;font-size: 25px"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-bar-chart font-green-sharp hide"></i>
+                        <span class="caption-subject bold fs15">{{"AUTHORING_CURD_LBL_DISPATCH_PROCESSING_ACTIVITIES" |translate}}</span>
+                    </div>
+                    <div class="pull-right">
+                        <a ng-click="exportFlow()" title="Xuất luồng xử lý ra excel" class="btn btn-circle btn-icon-only btn-success">
+                            <i class="glyphicon glyphicon-download-alt"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2 text-center">{{"AUTHORING_LIST_COL_CARRIER_PERSION" |translate}}</th>
+                                <th class="col-lg-2 text-center">{{"AUTHORING_LIST_COL_RECEIVER" |translate}}</th>
+                                <th class="col-lg-2 text-center">{{"AUTHORING LIST_COL_OPINION"| translate}}</th>
+                                <th class="col-lg-1 text-center">{{"AUTHORING_LIST_COL_TIME" |translate}}</th>
+                                <th class="col-lg-2 text-center">{{"AUTHORING_LIST_COL_ROLE" |translate}}</th>
+                                <th class="col-lg-2 text-center">{{"AUTHORING_LIST_COL_STATUS" | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in model.Detail.ListMember">
+                                <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                    <div>{{x.AssignerName}}</div>&nbsp;<span class="group-user">{{x.AssignerGroupUserName}}</span>
+                                </td>
+                                <td class="text-center" ng-class="{'bold': x.Role=='1'}">
+                                    <div>{{x.Name}}</div>&nbsp;<span class="group-user">{{x.GroupUserName}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-class="{'bold': x.Role=='1'}">{{x.Comment}}</span>
+                                </td>
+                                <td class="text-center " ng-class="{'bold': x.Role=='1'}">{{x.CreatedTime | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center " ng-class="{'bold': x.Role=='1'}">{{x.Role=='1' ? 'Xử lý chính':x.Role=='2' ? 'Phối hợp' :'Xem để biết' }}</td>
+                                <td class="text-center">
+                                    <div ng-if="(x.Role=='3' || x.Role=='1' || !x.IsShowAction)">
+                                        <span class="text-success" ng-if="x.Status=='DONE'">{{"AUTHORING_ST_TXT_DONE" | translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='SEND'">{{"AUTHORING_ST_TXT_SEND" |translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='ADD_SEND'">{{"AUTHORING_ST_TXT_ADD_SEND" |translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='SEND_COORDINATED'">{{"AUTHORING_ST_TXT_SEND_COORDINATED" | translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='UPDATED'">{{"AUTHORING_ST_TXT_UPDATED" | translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='COORDINATED'">{{AUTHORING_ST_TXT_UCOORDINATED"" | translate}}</span>
+                                        <span class="text-danger" ng-if="x.Status=='PROCESSING'">{{"AUTHORING_ST_TXT_PROCESSING" | translate}}</span>
+                                        <span class="text-danger" ng-if="x.Status=='NOCOORDINATED'">{{"AUTHORING_ST_TXT_NOCOORDINATED" | translate}}</span>
+                                        <span class="text-danger" ng-if="x.Status==null">{{"AUTHORING_ST_TXT_NOT_YET_SEEN" | translate}}</span>
+                                        <span class="text-danger" ng-if="x.Status==''">{{"AUTHORING_ST_TXT_NOT_DELIVERED" | translate}}</span>
+                                        <span class="text-success" ng-if="x.Status=='REVIEW'">{{"AUTHORING_ST_TXT_REVIEW" | translate}}</span>
+                                    </div>
+                                    <div ng-if="x.IsShowAction && x.Role =='2'" class="status">
+                                        <div ng-if="x.Status=='SEND_COORDINATED'">
+                                            <span class="text-success">{{"AUTHORING_ST_TXT_SEND_COORDINATED" | translate}}</span>
+                                        </div>
+                                        <div ng-if="x.Status!='SEND_COORDINATED'">
+                                            <ui-select tagging ng-model="x.Status" theme="bootstrap">
+                                                <ui-select-match placeholder="Trạng thái...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in StatusActivity | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                </td>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-default mr5" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CLOSE' | translate}}
+    </a>
+</div>

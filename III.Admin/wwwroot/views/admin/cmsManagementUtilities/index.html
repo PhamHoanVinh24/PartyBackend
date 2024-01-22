@@ -1,0 +1,115 @@
+﻿<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="#">{{'COM_CRUMB_MANAGER_CONTENT' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:green;" href="/Admin/CMSManagementUtilities">{{'CMSMGUL_MSG_LBL_UTILITY_MANAGEMENT' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <!--<label class="fw600 text-underline">{{'Tình trạng' | translate}}</label>-->
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.trash" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Tình trạng' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listTrash | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.trash='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!--<label class="fw600 text-underline">{{'chuyên mục' | translate}}</label>-->
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.publish" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Chuyên mục' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listPublished | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.publish='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <style>
+                    .pl20.text-center {
+                        float: left;
+                    }
+                </style>
+                <div class="col-md-3">
+                    <!--<label class="fw600 text-underline">{{'AA_CURD_LBL_SEARCH_ACTTITLE' | translate}}</label>-->
+                    <div class="pl20 text-center">
+                        <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                            <span><i class="fa fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <div class="pl20 text-center">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()" style="right:5px">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                </div>              
+                <div class="col-md-12">        
+                    <div class="btn-group pull-right pt10 actions d-flex">                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

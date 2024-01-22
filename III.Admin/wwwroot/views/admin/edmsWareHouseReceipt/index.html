@@ -1,0 +1,157 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-4 ">
+            <h1 class="bold mb-0">{{'EDWHR_TITLE_RECEIPT' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">{{'EDWHR_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div class="bold">{{'EDWHR_TITLE_RECEIPT' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-8">
+            <div class="btn-group pull-right actions">
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>
+                <a class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> {{'EDWHR_BTN_EXPORT_EXCEL' | translate}}</span>
+                </a>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mt5 p10">
+        <div class="portlet-body">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHB_CURD_LBL_SEARCH_CODE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control" placeholder="{{'EDWHB_CURD_TXT_SEARCH_CODE' | translate}}..." ng-model="model.RcTicketCode" ng-keydown="($event.keyCode == 13) && reload()">
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.RcTicketCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_CURD_LBL_SEARCH_WAREHOUSE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" on-select="reload()">
+                            <ui-select-match placeholder="{{'EDWHR_CURD_TXT_SEARCH_WAREHOUSE' | translate}}...">{{$select.selected.WHS_Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.WHS_Code as x in listWareHouse | filter: $select.search">
+                                {{x.WHS_Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WHS_Code=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_CURD_LBL_SEARCH_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'EDWHR_CURD_TXT_SEARCH_FROM_DATE' | translate}}..." id='FromTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'EDWHR_CURD_TXT_SEARCH_TO_DATE' | translate}}..." id='DateTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_LIST_COL_ENTER_PEOPLE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.WHS_User" theme="bootstrap" on-select="reload()">
+                            <ui-select-match placeholder="{{'EDWHR_LIST_COL_TXT_ENTER_PEOPLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listWareHouseUser | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WHS_User='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_CURD_LBL_SEARCH_BRANCH' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.BrCode" theme="bootstrap" on-select="reload()">
+                            <ui-select-match placeholder="{{'EDWHR_CURD_TXT_SEARCH_BRANCH' | translate}}...">{{$select.selected.OrgName}}</ui-select-match>
+                            <ui-select-choices repeat="x.OrgAddonCode as x in listBranch | filter: $select.search">
+                                {{x.OrgName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BrCode='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHR_CURD_LBL_SEARCH_USER' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Staff" theme="bootstrap" on-select="reload()">
+                            <ui-select-match placeholder="{{'EDWHR_CURD_TXT_SEARCH_USER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listStaffBranch | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Staff='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()" href="javascript:;">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>
+</div>
+<table class="table dataTable  table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

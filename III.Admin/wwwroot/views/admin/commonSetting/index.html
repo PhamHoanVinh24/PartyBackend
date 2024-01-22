@@ -1,0 +1,376 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .tabbable {
+        overflow: hidden;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .tab-content.panel {
+        border-top: none;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    li {
+        margin-top: 5px;
+    }
+
+    .tab-common .nav-tabs > li.active > a {
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .nav-tabs .nav-link, .nav-tabs a {
+        line-height: 15px;
+    }
+
+    .tab-common .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        padding-top: 15px;
+        margin-top: -5px;
+    }
+
+    .tab-common .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: black !important;
+        font-weight: 700;
+        background: #ffffff;
+    }
+
+    .tab-common .nav-tabs .nav-link, .nav-tabs a {
+        background: #ffffff;
+        transition: 0.5s;
+        background-size: 200% auto;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        font-size: 14px;
+        color: black;
+        padding: 10px;
+    }
+
+        .tab-common .nav-tabs .nav-link, .nav-tabs a:hover {
+            color: black !important;
+        }
+
+    .nav-tabs {
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: -webkit-box;
+        display: -moz-box;
+    }
+
+        .nav-tabs > li {
+            float: none;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            width: 1px;
+            height: 11px;
+            background-color: #F5F5F5;
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background-color: #eaeaea;
+        }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+
+
+            /*.tab .nav-tabs li:last-child {
+
+                border-right: 0px solid #ddd;
+
+            }
+
+
+
+            .tab .nav-tabs li:first-child div {
+
+                border-left: 1px solid #ddd;
+
+            }*/
+
+
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+
+                font-weight: 600;
+            }
+
+
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<div ng-show="IsTranslate">
+    <div class="tabbable">
+        <div class="row">
+            <div class="col-md-12 tab-common">
+                <uib-tabset active="active" ng-show="isAll && isEmployee && isContract && isProject && isSupplier && isCustomer
+                        && isService && isAsset && isPayment && isCardJob && isPublish && isWarehouse && isFund
+                        && isCMS && isCardRoleAssign && isWF">
+                    <uib-tab index="0" heading="{{'COM_SET_CURD_MSG_SUM_IT_UP' | translate}}" ng-if="isAll">
+                        <div ng-include="'../views/admin/CommonSetting/total.html'"></div>
+                    </uib-tab>
+                    <uib-tab ng-repeat="x in groupData track by $index" index="$index + 1" heading="{{x.Name}}" ng-iff="isAll" select="setSettingMainGroup(x.Code)">
+                        <div ng-include="'../views/admin/CommonSetting/group.html'"></div>
+                    </uib-tab>
+                    <!--<uib-tab index="1" heading="{{'COM_SET_CURD_TAB_EMPLOYEE' | translate}}" ng-if="isEmployee">
+                        <div ng-include="'../views/admin/CommonSetting/employee.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="2" heading="{{'COM_SET_CURD_TAB_CONTRACT' | translate}}" ng-if="isContract">
+                        <div ng-include="'../views/admin/CommonSetting/contract.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="3" heading="{{'COM_SET_CURD_TAB_PRỌJECT' | translate}}" ng-if="isProject">
+                        <div ng-include="'../views/admin/CommonSetting/project.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="4" heading="{{'COM_SET_CURD_TAB_SUPPLIER' | translate}}" ng-if="isSupplier">
+                        <div ng-include="'../views/admin/CommonSetting/supplier.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="5" heading="{{'COM_SET_CURD_TAB_CUSTOMER' | translate}}" ng-if="isCustomer">
+                        <div ng-include="'../views/admin/CommonSetting/customer.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="6" heading="{{'COM_SET_CURD_TAB_SERVICE' | translate}}" ng-if="isService">
+                        <div ng-include="'../views/admin/CommonSetting/service.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="7" heading="{{'COM_SET_CURD_TAB_ASSET' | translate}}" ng-if="isAsset">
+                        <div ng-include="'../views/admin/CommonSetting/asset.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="8" heading="{{'COM_SET_CURD_TAB_PAYMENT' | translate}}" ng-if="isPayment">
+                        <div ng-include="'../views/admin/CommonSetting/payment.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="9" heading="{{'COM_SET_CURD_TAB_CARD_JOB' | translate}}" ng-if="isCardJob">
+                        <div ng-include="'../views/admin/CommonSetting/cardjob.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="10" heading="{{'COM_SET_CURD_TAB_PUBLISH' | translate}}" ng-if="isPublish">
+                        <div ng-include="'../views/admin/CommonSetting/publish.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="11" heading="{{'COM_SET_CURD_TAP_WAREHOUSE' | translate}}" ng-if="isWarehouse">
+                        <div ng-include="'../views/admin/CommonSetting/warehouse.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="12" heading="{{'COM_SET_CURD_TAB_FUND' | translate}}" ng-if="isFund">
+                        <div ng-include="'../views/admin/CommonSetting/fund.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="13" heading="{{'COM_SET_CURD_TAB_CONTENT_MAN' | translate}}" ng-if="isCMS">
+                        <div ng-include="'../views/admin/CommonSetting/cms.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="14" heading="{{'Thông báo' | translate}}" ng-if="isNotification">
+                        <div ng-include="'../views/admin/CommonSetting/notificationCard.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="15" heading="{{'Vai trò thẻ việc' | translate}}" ng-if="isCardRoleAssign">
+                        <div ng-include="'../views/admin/CommonSetting/card-role-assign.html'"></div>
+                    </uib-tab>-->
+                    <!--<uib-tab index="16" heading="{{'Luồng' | translate}}" ng-if="isWF">
+                        <div ng-include="'../views/admin/CommonSetting/workflow.html'"></div>
+                    </uib-tab>-->
+                </uib-tabset>
+            </div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="isAll && !isEmployee &&  !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/employee.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/employee.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll &&!isEmployee && isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/contract.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/project.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/supplier.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/customer.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/service.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/asset.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/payment.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/cardjob.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && isPublish && !isWarehouse && !isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/publish.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && isWarehouse && !isFund
+             && !isCMS && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/warehouse.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && isFund && !isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/fund.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && isCMS
+             && !isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/cms.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund && !isCMS
+             && isNotification && !isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/notificationCard.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund
+             && !isCMS && !isNotification && isCardRoleAssign && !isWF">
+            <div ng-include="'../views/admin/CommonSetting/card-role-assign.html'"></div>
+        </div>
+
+        <div class="col-md-12 pr-0 pl-0" ng-if="!isAll && !isEmployee && !isContract && !isProject && !isSupplier && !isCustomer
+             && !isService && !isAsset && !isPayment && !isCardJob && !isPublish && !isWarehouse && !isFund
+             && !isCMS && !isNotification && !isCardRoleAssign && isWF">
+            <div ng-include="'../views/admin/CommonSetting/workflow.html'"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

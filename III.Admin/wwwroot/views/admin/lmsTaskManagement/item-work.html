@@ -1,0 +1,194 @@
+﻿<style>
+    tags-input .tags .tag-item .remove-button {
+        margin: 0 0 0 5px;
+        padding: 0;
+        border: none;
+        background: 0 0;
+        cursor: pointer;
+        vertical-align: middle;
+        font: 700 16px Arial,sans-serif;
+        color: #ea1818;
+    }
+
+    @-webkit-keyframes blinkerAct {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            color: blue;
+        }
+    }
+
+    .blink-act {
+        text-decoration: blink;
+        -webkit-animation-name: blinkerAct;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+</style>
+<div class="modal-header" style="background-color:white">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-bar-chart icon-edit fs16 black"></i>
+    <span class="modal-title black" id="modal-title" style="width: 92%;">
+        {{'Báo cáo tiến độ và duyệt' | translate}}
+    </span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px !important;">
+    <div class="portlet-body form">
+        <form name="itemWork" class="form-horizontal" method="post" ng-validate="validationOptionsItemWork">
+            <div class="form-body p-0">
+                <div class="row">
+                    <div class="col-md-3 ml-2">
+                        <div class="form-group">
+                            <label class="control-label mb5 fw600">{{'Thời gian' | translate}}:</label>
+                            <div class="input-group date" id="sessionTime">
+                                <input ng-model="sessionTime" name="sessionTime"
+                                       class="form-control bold" type="text"
+                                       placeholder="{{'Thời gian' | translate}}..."
+                                       ng-change="changeData('sessionTime', sessionTime)" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ml-1">
+                        <div class="form-group">
+                            <label class="control-label mb5 fw600">{{'Ca làm việc' | translate}}:</label>
+                            <div class="input-group">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="shiftCode" ng-change="changeData('shiftCode', shiftCode)" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Ca làm việc' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listShift | filter: $select.search">
+                                        <b>{{x.Name}}</b>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="text-danger mt40 text-underline fw600">{{shift}}</label>
+                    </div>
+                    <div class="col-md-3 pr-0" style="width: 29%;">
+                        <div class="btn-group mt15 actions d-flex pull-right">
+                            <div class="text-center" ng-show="!editSessionWork">
+                                <a ng-click="submit()" class="btn btn-icon-only btn-outline btn-border-black">
+                                    <span><i class="fa fa-save black"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+
+                            <div class="text-center mr10" ng-show="editSessionWork">
+                                <a ng-click="approveSessionWork()" class="btn btn-icon-only btn-outline btn-border-black">
+                                    <span><i class="fa fa-save black"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                            <div class="text-center" ng-show="editSessionWork">
+                                <a ng-click="cancelApprove()" class="btn btn-icon-only btn-outline btn-border-black">
+                                    <span><i class="fa fa-remove black"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" style="max-height: 200px; overflow-y: scroll;">
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-md-4 nowrap">{{'Đầu mục việc' | translate}}</th>
+                                <th class="text-center col-md-2 nowrap">{{'Tiến độ báo' | translate}} (%)</th>
+                                <th class="text-center col-md-2 nowrap">{{'Xác nhận' | translate}} (%)</th>
+                                <th class="text-center col-md-4 nowrap">{{'Ghi chú' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listReportItem">
+                                <td class="fw600 pt15">
+                                    {{x.Name}}
+                                    <br />
+                                    <input class="form-control border-left-4radius inputFileItemResult pl30" style="pointer-events:none; display: none;" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                                    <a ng-click="setItemForFile(x.Code)" class="mt5 text-underline fw400 pull-right text-green"  onclick="$(this).parent().find('input[type=file]').click();">Tải tệp</a>
+                                    <input class="form-control" custom-on-change-customer="loadFileResult" id="{{x.Code}}" onchange="$('.inputFileItemResult').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" class="form-control bold" placeholder="{{'Tiến độ báo' | translate}}"
+                                           ng-click="" ng-model="x.Staff"
+                                           onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" class="form-control bold" placeholder="{{'Xác nhận' | translate}}"
+                                           ng-click="" ng-model="x.Leader" ng-readonly="!isApprove"
+                                           onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control" placeholder="{{'Ghi chú' | translate}}"
+                                           ng-click="" value="10" ng-model="x.Note" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label class="control-label fw600">{{'Mô tả' | translate}}</label>
+                        <textarea class="form-control" placeholder="{{'Mô tả' | translate}}" ng-model="model.Desc" style="height:75px" />
+                    </div>
+                </div>
+                <div class="row">
+                    <a ng-click="extend()" class="text-underline mr-2 mt5 mb10 pull-right text-green">Đường dẫn mặc định</a>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblDataFileResult"></table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive" style="max-height: 200px; overflow-y: scroll;">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1" style="width: 5%;">{{'CJ_LIST_COL_STT' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'Phiên' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'Nhân viên báo' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'Tiến độ báo' | translate}}(%)</th>
+                            <th class="text-center col-md-1 nowrap">{{'Tiến độ duyệt' | translate}}(%)</th>
+                            <th class="text-center col-md-3 nowrap">{{'Thời gian báo' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in listItemActivity">
+                        <tr>
+                            <td class="text-center pt15">{{$index + 1}}</td>
+                            <td class="text-center pt15">
+                                <a ng-click="getItemSessionWork(x.Session)" class="bold text-underline">{{x.Session}}</a>
+                                <img class="blink-act" ng-show="x.IsApproveAll" src="../../../images/default/green-blink.png" style="width: 15px;" />
+                            </td>
+                            <td class="text-center">{{x.UserReport}}</td>
+                            <td class="text-center">{{x.PercentReport}}</td>
+                            <td class="text-center">{{x.PercentApprove}}</td>
+                            <td class="text-center">{{x.TimeReport}}</td>
+                            <td class="text-center nowrap">
+                                <button title="Xóa" ng-click="delReportResult(x.Id, x.CreatedBy)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+</div>

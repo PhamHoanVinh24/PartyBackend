@@ -1,0 +1,169 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 600;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .table-responsive th {
+        font-size: 13px !important;
+        text-align: center;
+    }
+
+    /*.table-responsive tbody tr td:first-child {
+        font-size: 13px !important;
+        font-weight: 600;
+        text-align:left!important;
+    }*/
+
+    .table-responsive tbody tr td:nth-child(2) {
+        text-align: left !important;
+    }
+
+    .table-responsive tbody tr td {
+        text-align: center !important;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="packRecords()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'Thêm hồ sơ' | translate}}</p>
+    </div>
+
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addPackAttr()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'Thuộc tính' | translate}}</p>
+    </div>
+</div>
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt5 mt10">
+        <div class="portlet-body">
+            <div class="row mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Kiểu đóng gói (cuốn, thùng ...)' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Kiểu đóng gói (cuốn, thùng ...)' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label class="control-label fw600 text-underline">{{'Bậc' | translate}}</label>
+                        <input class="form-control" name="PackAttrCode" ng-model="model.PackAttrCode" placeholder="{{'Bậc' | translate}}..." />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fw600 text-underline">{{'Mã & tên hồ sơ cụ thể' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Mã & tên hồ sơ cụ thể' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10 pull-right" ng-click="search()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-map-marker"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'Sơ đồ' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Nơi xếp đặt (kho, lầu, dãy)' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Nơi xếp đặt (kho, lầu, dãy)' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label class="control-label fw600 text-underline">{{'Bậc' | translate}}</label>
+                        <input class="form-control" name="PackAttrCode" ng-model="model.PackAttrCode" placeholder="{{'Bậc' | translate}}..." />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fw600 text-underline">{{'Đối tượng xếp đặt cụ thể' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Đối tượng xếp đặt cụ thể' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10 pull-right" ng-click="search()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-filter"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'Lọc' | translate}}</p>
+                        </div>
+
+                        <div class="text-center pr10 pull-right" ng-click="packRecordsArrange()">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-cube"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'Đóng gói & xếp' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" expand-level="4" icon-leaf="fas fa-map-marker-alt"></tree-grid>
+</div>

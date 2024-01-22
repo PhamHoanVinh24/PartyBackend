@@ -1,0 +1,98 @@
+﻿<style>
+    .form-horizontal .form-group {
+        margin-right: -0px !important;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title  " id="modal-title"> {{'NTC_EDIT_NOTIFICATION' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pr-0 pt-0">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label class="control-label require custom-title-code-bold">{{'NTC_CURD_LBL_CODE' | translate}}</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.NotifyCode" name="NotifyCode" placeholder="{{'NTC_CURD_TXT_CODE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.NotifyCode='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label class="control-label require custom-title-code-bold">{{'NTC_CURD_LBL_NAME' | translate}}</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.Title" name="Title" placeholder="{{'NTC_CURD_TXT_NAME' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Title='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                    <div class="col-md-12">
+                        <label class="control-label require">{{'NTC_CURD_LBL_STATUS' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status')">
+                                <ui-select-match placeholder="{{'NTC_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in statusData | filter:$select.name | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorStatus" class="label-color validation-message">
+                            {{'NTC_MSG_STATUS' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>{{'NTC_CURD_LBL_CONTENT' | translate}}</label>
+                        <textarea rows="3" class="form-control " ng-model="model.Content" type="text" placeholder="{{'NTC_CURD_TXT_CONTENT' | translate}}..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorContract}">
+                    <div class="col-md-12">
+                        <label class="control-label require">{{'NTC_CURD_LBL_CONTRACT' | translate}}</label>
+                        <ui-select ng-model="model1.contractCode" multiple theme="bootstrap" class="" style="width: 100%;" on-select="changleSelect('Contract')">
+                            <ui-select-match placeholder="{{'NTC_CURD_TXT_CONTRACT' | translate}}...">{{$item.Code}}-{{$item.Name}}</ui-select-match>
+                            <ui-select-choices repeat="  x.Code as x in contractData | filter:$select.ContractCode| filter:$select.search">
+                                {{x.Code}} - {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorContract" class="label-color validation-message">
+                            {{'NTC_MSG_CONTRACT' | translate}}
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>
+</div>

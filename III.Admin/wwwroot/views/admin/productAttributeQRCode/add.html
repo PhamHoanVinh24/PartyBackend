@@ -1,0 +1,110 @@
+﻿<style>
+    .areaQRCode{
+        max-height:280px;
+        overflow:auto;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title"> {{'PAQRC_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-10 pl-0">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="require">{{'PAQRC_LBL_OBJ_TYPE' | translate}}</label>
+                                <div class="input-group" ng-class="{ 'has-error': errorObjType}">
+                                    <ui-select tagging ng-model="model.OBJ_Type" theme="bootstrap" on-select="changeObjType(model.OBJ_Type)">
+                                        <ui-select-match placeholder="{{'PAQRC_TXT_OBJ_TYPE' | translate}}">{{$select.selected.OBJ_Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.OBJ_Code as x in listObjType | filter:$select.search">
+                                            {{x.OBJ_Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.OBJ_Type=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorObjType" class="label-color validation-message">
+                                    {{'PAQRC_VALIDATE_OBJ_TYPE' | translate}} 
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-class="{ 'has-error': errorObjCode}">
+                            <label class="require">{{'PAQRC_LBL_OBJ_CODE' | translate}}</label>
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.OBJ_Code" theme="bootstrap" on-select="changeObjCode(model.OBJ_Code)">
+                                    <ui-select-match placeholder="{{'PAQRC_TXT_OBJ_CODE' | translate}}">{{$select.selected.OBJ_Code}}</ui-select-match>
+                                    <ui-select-choices repeat="x.OBJ_Code as x in listObjCode | filter:$select.search">
+                                        {{x.OBJ_Code}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.OBJ_Code=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorObjCode" class="label-color validation-message">
+                                {{'PAQRC_VALIDATE_OBJ_CODE' | translate}} 
+                            </span>
+                        </div>
+                        <div class="col-md-2">
+                            <a ng-click="submit()" class="btn btn-green mt23">
+                                <i class="fa fa-plus"></i>
+                                {{'PAQRC_BTN_CREATE_QRCODE' | translate}}
+                            </a>
+                        </div>
+                        <div class="col-md-12 pl-0">
+                            <label class="text-danger">{{guideMsg}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="img-thumbnail">
+                            <img width="80" height="80" data-ng-src="data:image/png;base64,{{QRCode}}" ng-class="QRCode==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row areaQRCode height-250 boder-box mt5">
+                    <div class="table-toolbar file-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center fw600 text-underline width-50" colspan="1">STT</th>
+                                    <th class="text-center fw600 text-underline" colspan="1">{{'PAQRC_COL_QR_CODE' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="5">{{'PAQRC_COL_OBJ_CODE' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="1">{{'COM_BTN_DELETE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listQRCode">
+                                    <td class="text-center" colspan="1">{{$index+1}}</td>
+                                    <td class="text-center" colspan="1">
+                                        <img src="data:image/png;base64,{{x.QRCode}}" width="50" height="50" />
+                                    </td>
+                                    <td class="text-center" colspan="5">{{x.ObjCode}}</td>
+                                    <td class="text-center" colspan="1">
+                                        <i role="button" class="fa fa-minus-circle" ng-click="removeQRCode($index)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="background-color:transparent">
+    <div class="form-group">
+        <a class="btn btn-red" style="padding: 7px 25px;" ng-click="print(QRCode)">
+            <span class=""><i class="fas fa-print"></i> {{'PAQRC_BTN_PRINT_QR_CODE' | translate}}</span>
+        </a>
+    </div>
+</div>

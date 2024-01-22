@@ -1,0 +1,116 @@
+﻿<style type="text/css">
+    
+    .ui-select-multiple.ui-select-bootstrap {
+        padding: 5px !important;
+    }
+
+    .ui-select-search {
+        padding-bottom: 5px;
+    }
+
+    .ui-select-match-item {
+        border-radius: 5px !important;
+    }
+
+    .close {
+        background-image: none !important;
+    }
+
+    .btn-share {
+        border: 1px solid black;
+        border-radius: 5px;
+        background: white;
+        border: 1px solid black;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        margin-top: -3px !important;
+        opacity: 1;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-share-alt mt10"></i>
+    <span class="fw600" id="modal-title"> {{'COM_LBL_SHARE_TITLE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="row p10">
+            <div class="col-md-10">
+                <div class="form-group" ng-class="{'has-error': errorStatus }">
+                    <label class="control-label text-underline require">{{'Nhân viên' | translate}}:</label>
+                    <div class="input-group">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserName" theme="bootstrap" on-select="changeUser($item)">
+                            <ui-select-match placeholder="{{'Nhân viên' | translate}}..."><p id="status">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listUser | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-share bold pull-right mt20" ng-click="share()">
+                <i class="fa fa-share-alt"></i>
+                {{'COM_BTN_SHARE' | translate}}
+            </button>
+        </div>
+        <div class="row">
+            <div class="table-responsive" style="height: 300px; overflow-y: scroll;">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%;">{{'STT' | translate}}</th>
+                            <th class="text-center" style="width: 75%;">{{'Nhân viên' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'Quyền đọc' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'Quyền ghi' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'Quyền xóa' | translate}}</th>
+                            <th class="text-center"style="width: 5%;">{{'Thao tác' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in lstUserSharePermission">
+                            <td class="text-center">{{$index + 1}}</td>
+                            <td class="">
+                                <span>{{x.Name}}</span><br />
+                                <span class="badge-customer badge-customer-success">{{x.DepartmentName}}</span>
+                            </td>
+                            <td class="text-center">
+                                <button ng-show="x.Permission.Read == false" class="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 0, false)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-times" style="color: #ffffff"></i>
+                                </button>
+                                <button ng-show="x.Permission.Read == true" class="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 0, true)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button ng-show="x.Permission.Write == false" class="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 1, false)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-times" style="color: #ffffff"></i>
+                                </button>
+                                <button ng-show="x.Permission.Write == true" class="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 1, true)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button ng-show="x.Permission.Delete == false" class="btn btn-circle btn-icon-only red" ng-click="updatePermission(x, 2, false)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-times" style="color: #ffffff"></i>
+                                </button>
+                                <button ng-show="x.Permission.Delete == true" class="btn btn-circle btn-icon-only green" ng-click="updatePermission(x, 2, true)" style="padding: 0px; width: 25px; height: 25px">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button title="Xoá" ng-click="deleteShare(x.Code)" style="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class="btn btn-icon-only btn-circle btn-outline red">
+                                    <i class="fa fa-trash fs10" style="color: white;"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+</div>

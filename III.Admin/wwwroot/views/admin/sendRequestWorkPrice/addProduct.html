@@ -1,0 +1,160 @@
+﻿<style>
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    #formProduct .help-block {
+        font-size: 9px !important;
+    }
+
+    #tblListPoProduct th {
+        white-space: nowrap;
+    }
+
+    input.largerCheckbox {
+        width: 25px;
+        height: 25px;
+    }
+
+    .reqNew {
+        background: blanchedalmond !important;
+    }
+</style>
+<div ng-controller="addProduct">
+    <div>
+        <form name="forms.addform" method="post" ng-validate="validationProductOptions">
+            <div id="formProduct">
+                <div class="col-md-5">
+                    <div class="form-group" ng-class="{ 'has-error': errorProductCode}">
+                        <label class="control-label require fs9">{{'SRWP_CURD_LBL_PRODUCT' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ProductCode" theme="bootstrap" ng-disabled="isDisableProductCode" ng-change="changeProduct()" on-select="changleSelect('ProductCode',$item)">
+                                <ui-select-match placeholder="{{'SRWP_CURD_TXT_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorProductCode" class="label-color validation-message fs9">
+                            {{'SRWP_VALIDATE_PRODUCT_NO_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorSupCode}">
+                        <label class="control-label require fs9">{{'SRWP_CURD_LBL_SUPPLIER' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.SupCode" theme="bootstrap" ng-disabled="isDisableSupCode" on-select="changleSelect('SupCode', $item)">
+                                <ui-select-match placeholder="{{'SRWP_CURD_LBL_SUPPLIER' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in Suppliers | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorSupCode" class="label-color validation-message fs9">
+                            {{'SRWP_VALIDATE_SUPP_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-2 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_UNIT' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Unit" theme="bootstrap" ng-disabled="isDisableSupCode" on-select="changleSelect('Unit', $item)">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in units | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorUnit" class="label-color validation-message fs9">
+                            {{'CP_VALIDATE_UNIT_NO_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>-->
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'SRWP_CURD_LBL_PRICE' | translate}}</label>
+                        <input class="form-control br24 bold" ng-model="model.Price" name="Price" type="text" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" num-thousand='true' awnum num-int='21' placeholder="{{'SRWP_CURD_TXT_PRICE' | translate}}..." ng-change="changeQuantityPrice()" />
+                        <span ng-show="errorPrice" class="label-color validation-message fs9">
+                            {{'SRWP_VALIDATE_COST_NON_NEGA' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="control-label require fs9">{{'SRWP_CURD_LBL_QUANTITY' | translate}}</label>
+                        <input class="form-control br24 bold" ng-model="model.Quantity" type="text" name="Quantity" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" placeholder="{{'SRWP_CURD_TXT_QUANTITY' | translate}}..." ng-change="changeQuantityPrice()" />
+                    </div>
+                </div>
+                <!--<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'CP_CURD_LBL_PRODUCT_TYPE' | translate}}</label>
+                        <input type="text" class="form-control" ng-disabled="isDisableProductType" ng-model="model.ProductTypeName" name="ProductTypeName" placeholder="{{'CP_CURD_TXT_PRODUCT_TYPE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-4 pl-0">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'CP_CURD_LBL_CATALOGUE' | translate}}</label>
+                        <input type="text" class="form-control" ng-disabled="isDisableCatalogue" ng-model="model.Catalogue" name="Catalogue" placeholder="{{'CP_CURD_TXT_CATALOGUE' | translate}}..." />
+                    </div>
+                </div>-->
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'SRWP_CURD_LBL_NOTE' | translate}}</label>
+                        <input class="form-control br24" ng-model="model.Note" type="text" placeholder="{{'SRWP_CURD_LBL_NOTE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pt10" ng-if="isAdd==true">
+                            <a class=" fs30 p-0" ng-click="add()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pt10" ng-if="isAdd==false">
+                            <a ng-click="close()" class="fs30">
+                                <span><i class="fas fa-times"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center pl10 pt10" ng-if="isAdd==false">
+                            <a class=" fs30 p-0" ng-click="save()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-12 mt5">
+            <table class="table dataTable table-hover table-striped"
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataProduct"></table>
+        </div>
+    </div>
+</div>

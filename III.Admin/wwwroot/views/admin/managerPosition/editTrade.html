@@ -1,0 +1,89 @@
+﻿<div class="modal-header " style="margin-top:150px">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'MP_SOURCE' | translate}} </div> 
+
+</div>
+<div class="modal-body" id="modal-body" style="margin-top:10px !important">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-md-12">
+                        <div class="form-group" ng-if="model1.Role!='DISTRIBUTOR'">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">{{'MP_LABEL_CHOICE_DISTRIBUTOR' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Seller" theme="bootstrap" on-select="changleSelect('distributor')">
+                                        <ui-select-match placeholder="{{'MP_NPP' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                        <ui-select-choices repeat="x.Seller as x in Distributors | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Seller=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="model1.Role=='DISTRIBUTOR'||(model1.Role!='DISTRIBUTOR'&&model.Seller!='')">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">{{'MP_BRAND' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Brand" theme="bootstrap" on-select="changleSelect('Area')" ng-if="Role='DISTRIBUTOR'">
+                                        <ui-select-match placeholder="{{'MP_BRAND' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in Brands | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Brand=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"  ng-show="model1.Role=='DISTRIBUTOR'||(model1.Role!='DISTRIBUTOR'&&model.Seller!='')">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">{{'MP_LABEL_CHOICE_ITEM' | translate}}</label> 
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('Area')">
+                                        <ui-select-match placeholder="{{'MP_LABEL_CHOICE_ITEM' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in Products | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <a ng-click="submit()" class="btn btn-green " href="javascript:;">
+                            <i class="fa fa-plus"></i>&nbsp; {{'MP_ADD_NEW ' | translate}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

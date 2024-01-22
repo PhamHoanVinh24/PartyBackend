@@ -1,0 +1,67 @@
+﻿<style>
+    .first-col-sticky {
+        position: sticky !important;
+        left: 0px;
+        z-index: 20 !important;
+        background: white !important;
+    }
+</style>
+<div ng-controller="file-plugin">
+    <div class="table-toolbar">
+        <div class="table-toolbar">
+            <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+                <div class="form-group">
+                    <div class="col-lg-5">
+                        <!--<label class="control-label fw600">{{'FILE_PLUG_FILE' | translate}}</label>-->
+                        <div class="input-group h-50 input-file br24">
+                            <i class="fa fa-upload"></i>
+                            <input class="form-control border-left-4radius inputFile pl30" style="pointer-events:none" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-choose" style="margin-top: 6px" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" custom-on-change-supplier="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                            </span>
+                            <div class="btn-group pt20 d-flex">
+                                <div class="text-center ml10 mt10">
+                                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="extend()">
+                                        <i class="fas fa-folder-tree fs15" style="--fa-primary-color: #fee490"></i>
+                                    </a>
+                                    <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_UP_FILE' | translate}}</p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--<span class="pull-right">
+        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="extend()">
+            <i class="fas fa-folder-tree fs15" style="--fa-primary-color: #fee490"></i>
+        </a>-->
+                        <!--<a class="text-underline text-green fs14" ng-click="extend()">{{'COM_BTN_SETUP_DEFAULT' | translate}}</a>-->
+                        <!--</span>-->
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center">
+                                <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                    <span><i class="fas fa-upload fs25"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_UP_FILE' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="dropzone">
+        <div>
+            <label class="text-danger fs11">{{'FILE_PLUG_FILE_PATH' | translate}}: {{currentPath}}</label>
+        </div>
+        <div ngf-drop="uploadFile($files)" ngf-multiple="true">
+            <table class="table dataTable table-hover table-striped"
+                datatable
+                dt-options="dtOptions"
+                dt-columns="dtColumns"
+                dt-instance="dtInstance"
+                id="tblDataObjectFile">
+            </table>
+        </div>
+    </div>
+</div>

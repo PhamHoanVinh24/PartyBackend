@@ -1,0 +1,108 @@
+﻿<style>
+    tags-input .tags .tag-item .remove-button {
+        margin: 0 0 0 5px;
+        padding: 0;
+        border: none;
+        background: 0 0;
+        cursor: pointer;
+        vertical-align: middle;
+        font: 700 16px Arial,sans-serif;
+        color: #ea1818;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title " id="modal-title">{{'CJ_BTN_RPT_PROGRESS' | translate}} </span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="itemWork" class="form-horizontal" method="post" ng-validate="validationOptionsItemWork">
+            <div class="form-body pt-0 pb-0">
+                <div class="row">
+                    <div class="col-lg-2 pt-2">
+                        <label class="text-danger bold text-underline">{{model.WorkSession}}</label>
+                    </div>
+                    <div class="col-lg-10 pt-1">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ChkListCode" on-select="changeItemWork($item)" theme="bootstrap" ng-disabled="isDisabled" >
+                            <ui-select-match placeholder="{{'CJ_BTN_CHECK_ITEM' | translate}}...">{{$select.selected.Text}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listCardItemCheck | filter: $select.search">
+                                {{x.Text}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-lg-12">
+                        <tags-input style="height:75px" add-on-enter="true" use-Strings="true" name="Tags" placeholder="{{'CJ_LBL_ADD_TAG' | translate}}..."  min-length="0" ng-model="model.Tags" on-tag-added="onTagAdded($tag)" on-tag-clicked="tagClick($tag)" on-tag-removed="tagRemoved($tag)" ng-disabled="isDisabled"></tags-input>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-lg-6">
+                        <label class="control-label mt5 require">{{'CJ_LBL_START_TIME' | translate}}</label>
+                        <div class="input-group date" id="startDate">
+                            <input ng-model="model.StartTime" class="form-control" name="StartTime" type="text" placeholder="{{'CJ_LBL_START_TIME' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="control-label mt5 require">{{'CJ_LBL_END_TIME' | translate}}</label>
+                        <div class="input-group date" id="endDate">
+                            <input ng-model="model.EndTime" class="form-control" name="EndTime" type="text" placeholder="{{'CJ_LBL_END_TIME' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-lg-6">
+                        <label class="control-label mt5 require">{{'CJ_LBL_PROGRESS' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="model.ProgressFromStaff" class="form-control" name="ProgressFromStaff" type="text" placeholder="{{'CJ_LBL_PROGRESS' | translate}}..."  />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default no-shadow">
+                                    <span>%</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="control-label mt5">{{'CJ_LBL_LEADER_EXAM' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="model.ProgressFromLeader" class="form-control" name="ProgressFromLeader" type="text" placeholder="{{'CJ_LBL_LEADER_EXAM' | translate}}..." ng-keydown="($event.keyCode == 13) && changeWeightNum(model.WeightNum)" ng-blur="changeWeightNum(model.WeightNum)" ng-disabled="checkRole"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default no-shadow">
+                                    <span>%</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-lg-12">
+                        <textarea  class="form-control" placeholder="{{'CJ_TXT_NOTE' | translate}}" ng-model="model.NoteFromLeader" style="height:75px" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group actions d-flex pr-1 pull-right">
+        <!--<div class="text-center pr10">
+            <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+                <span><i class="fa fa-trash-o"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_DELETE' | translate}}</p>
+        </div>-->
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()" href="javascript:;">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

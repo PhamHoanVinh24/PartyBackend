@@ -1,0 +1,120 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-store" style="padding-top:10px;font-size:20px"></i>
+    <span class="modal-title " id="modal-title">{{'EDWHR_TITLE_SORT_WAREHOUSE_IMPORT_BILL' | translate}}</span>
+</div>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="orderform"  method="post" ng-validate="validationOptionsOrderBox">
+            <div class="form-body">
+                <div class="row">
+                    <div class=" col-md-4">
+                        <label class="control-label require">Tầng</label>
+                        <ui-select ng-model="model.FloorCode" theme="bootstrap" on-select="selectFloor(model.FloorCode)" ng-change="changleSelect('FloorCode')">
+                            <ui-select-match placeholder="{{'Chọn tầng' | translate}}...">{{$select.selected.FloorName}}</ui-select-match>
+                            <ui-select-choices repeat="x.FloorCode as x in listFoor | filter: $select.search">
+                                {{x.FloorName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorFloorCode" class="label-color validation-message">
+                            {{'Tầng yêu cầu bắt buộc' | translate}}!
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label require">Dãy</label>
+                        <ui-select ng-model="model.LineCode" theme="bootstrap" on-select="selectLine(model.LineCode)" ng-change="changleSelect('LineCode')">
+                            <ui-select-match placeholder="{{'Chọn dãy' | translate}}...">{{$select.selected.L_Text}}</ui-select-match>
+                            <ui-select-choices repeat="x.LineCode as x in listLine | filter: $select.search">
+                                {{x.L_Text}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorLineCode" class="label-color validation-message">
+                            {{'Dãy yêu cầu bắt buộc' | translate}}!
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label require">Kệ</label>
+                        <ui-select ng-model="model.RackCode" theme="bootstrap" on-select="selectRack()" ng-change="changleSelect('RackCode')">
+                            <ui-select-match placeholder="{{'Chọn kệ' | translate}}...">{{$select.selected.RackName}}</ui-select-match>
+                            <ui-select-choices repeat="x.RackCode as x in listRack | filter: $select.search">
+                                {{x.RackName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorRackCode" class="label-color validation-message">
+                            {{'Kệ yêu cầu bắt buộc' | translate}}!
+                        </span>
+                    </div>
+                </div>
+                <div class="row pb10">
+                    <div class="col-md-11">
+                        <label class="control-label">
+                            <span>Tìm nơi xếp</span>
+                            <span class="text-danger">* Gõ kệ => Gõ dãy => Gõ tầng => Gõ kho *</span>
+                        </label>
+                        <ui-select ng-model="searchPosition" theme="bootstrap" on-select="selectPosition($item)">
+                            <ui-select-match placeholder="{{'Tìm nơi xếp' | translate}}...">{{$select.selected.RackName}}</ui-select-match>
+                            <ui-select-choices repeat="x.RackCode as x in listPosion | filter: $select.search">
+                                {{x.RackName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="text-center pt25">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="orderBox()">
+                                <span class="fs12 ng-binding">Xếp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light bordered mb5">
+                            <div class="portlet-title mnh25">
+                                <div class="caption">
+                                    <span class="caption-subject bold fs12">Danh sách thùng ({{listBox.length}})</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body todo-project-list-content">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" style="margin-bottom: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center col-md-1"></th>
+                                                <th class="text-center col-md-5">{{'Thùng' | translate}}</th>
+                                                <th class="text-center col-md-2">{{'Trạng thái' | translate}}</th>
+                                                <th class="text-center col-md-2">{{'Vị trí' | translate}}</th>
+                                                <th class="text-center col-md-2">{{'QR Code' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in listBox" ng-click="selectBox(x)" ng-class="{'selected-item':x.IsCheck}">
+                                                <td class="text-center bs-checkbox">
+                                                    <label class="mt-checkbox mt-checkbox-outline" style="padding-left:18px">
+                                                        <input type="checkbox" ng-init="x.IsCheck=false" ng-model="x.IsCheck">
+                                                        <span></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span>Thùng số {{x.NumBoxth}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span ng-class="{'text-success':x.IsStored,'text-danger':!x.IsStored}">{{x.IsStored ? 'Đã xếp kho' : 'Chưa xếp kho'}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-control" placeholder="Vị trí..." ng-model="x.RackPosition" type="text" />
+                                                </td>
+                                                <td class="text-center">
+                                                    <img src='data:image/png;base64,{{x.QR_Code}}' height="40" width="40" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

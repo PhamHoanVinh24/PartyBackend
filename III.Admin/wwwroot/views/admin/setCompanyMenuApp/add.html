@@ -1,0 +1,125 @@
+﻿<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Thêm mới danh mục' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'Caption danh mục' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.MenuCaption" name="MenuCaption" id="MenuCaption" placeholder="{{'Nhập caption danh mục' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'Tiêu đề danh mục' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Title" name="Title" placeholder="{{'Nhập tiêu đề danh mục' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorMenuParent}">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label">{{'Danh mục cha' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.MenuParent" theme="bootstrap" on-select="changleSelect('MenuParent')">
+                                        <ui-select-match placeholder="{{'Chọn danh mục cha' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                        <!--<ui-select-choices repeat="x.Code as x in listMenuParent | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>-->
+                                        <ui-select-choices repeat="x.Code as x in treeData | filter: $select.search">
+                                            <div style="padding-left: {{15 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.MenuParent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorMenuParent" class="label-color validation-message">
+                                   {{'Danh mục cha ...' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'Hành động' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Action" name="Action" placeholder="{{'Nhập hành động' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorPin}">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PIN' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Pin" theme="bootstrap" on-select="changleSelect('Pin')">
+                                        <ui-select-match placeholder="{{'Chọn PIN công ty' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listPin | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <!--<span class="input-group-btn">
+                                        <button type="button" ng-click="model.Pin=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>-->
+                                </div>
+                                <span ng-show="errorPin" class="label-color validation-message">
+                                    {{'PIN không được để trống ...' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'Thứ tự ưu tiên' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number" min="1" class="form-control" ng-model="model.Priority" name="Priority" placeholder="{{'Nhập thứ tự ưu tiên' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label ">{{'Ghi chú' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea type="text" class="form-control" ng-model="model.Note" rows="5" placeholder="{{'Nhập ghi chú' | translate}}..." name="Note"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+       {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>

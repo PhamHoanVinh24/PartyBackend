@@ -1,0 +1,35 @@
+﻿<div class="modal-header" style="background-color: #f1f1f1">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-flag icon-insert black"></i>
+    <span class="modal-title black" id="modal-title"> {{'ORR_TITLE_EDIT_STATUS' | translate }} </span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsReminder">
+            <div class="form-body">
+                <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                    <div class="col-md-4">
+                        <i class="fas fa-info-circle"></i>
+                        <label class="control-label require"> {{'ORR_CURD_LBL_STATUS' | translate }}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Status" ng-change="changleSelect('Status')" theme="bootstrap">
+                            <ui-select-match placeholder=" {{'ORR_CURD_LBL_STATUS' | translate }}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in statusData | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span ng-show="errorStatus" class="label-color validation-message">
+                            {{'ORR_VALIDATE_STATUS' | translate }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="submit()" class="btn btn-red mr25" href="javascript:;">
+        {{'COM_BTN_SAVE' | translate }}
+    </button>
+</div>

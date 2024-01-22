@@ -1,0 +1,2654 @@
+﻿<style>
+    .floor {
+        margin-right: 10px;
+        width: auto;
+        padding: 8px !important;
+    }
+
+    .draw2d_ResizeHandle {
+        display: none !important;
+    }
+
+    tspan {
+        font-weight: bolder;
+    }
+
+    /*.parent_svg {
+       background: url(https://d4.violet.vn/uploads/blogs/735961/layout/forum_10.gif) repeat center top ;
+    }*/
+    .portlet {
+        margin-bottom: 0px !important;
+    }
+
+    .menu-2 {
+        display: flex
+    }
+
+    .menu-top i:not(.caret) {
+        margin: 4px 0 0 0;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        height: 40px;
+        border-radius: 3px;
+        transition: .3s;
+        line-height: 40px !important;
+        position: relative;
+    }
+
+    .menu-top {
+        height: 50px;
+        box-shadow: 0px 0px 10px 0px rgba(135, 135, 135, 1);
+        border-radius: 5px;
+        text-align: center;
+        line-height: 50px;
+        background: #fff;
+        margin-left: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+    }
+
+    .menu-top i:not(.caret):hover {
+        background-color: #999;
+        box-shadow: 0 0 5px 0 rgba(255, 204, 0, 1);
+    }
+
+    .create-box i {
+        font-size: 26px;
+    }
+
+    .create-box {
+        position: relative;
+    }
+
+    .create-box__hover {
+        position: absolute;
+        width: 90px;
+        font-size: 12px;
+        left: -30%;
+        top: 135%;
+        background: #656565;
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        /*transition: .3s;*/
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .create-box__hover:after {
+        position: absolute;
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #656565;
+        left: 20%;
+        transform: translateY(-55%)rotate(45deg);
+    }
+
+    .create-box:hover .create-box__hover {
+        opacity: 1;
+        visibility: visible;
+        z-index: 1;
+    }
+
+    .menu {
+        position: relative;
+    }
+
+    .menu2 {
+        right: 120px;
+        position: absolute;
+        z-index: 10000;
+        bottom: 30px;
+    }
+
+    path.draw2d_shape_basic_Line {
+        stroke-width: 8px;
+    }
+
+    ellipse {
+        stroke-width: 10px;
+        stroke: #999;
+    }
+
+    .parent_svg {
+        background: url(https://d4.violet.vn/uploads/blogs/735961/layout/forum_10.gif) repeat center top !important;
+        display: block;
+        border-radius: 5px;
+        padding: 0px 0px 0px 15px !important;
+        margin-top: 10px;
+    }
+
+    .row {
+        margin-bottom: -6px
+    }
+
+    .jsonhide {
+        display: none;
+    }
+
+    rect.draw2d_shape_basic_Rectangle {
+        display: none !important;
+    }
+
+    rect.value {
+        display: block !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    html body .content .content-wrapper {
+        height: 100%;
+        overflow: hidden !important;
+    }
+
+    div#contentMain {
+        height: 100%;
+        overflow: scroll;
+        width: 100%;
+    }
+
+    /*  body{
+        overflow:hidden;
+    }
+    ul.page-sidebar-menu.page-header-fixed.page-sidebar-menu-hover-submenu{
+        overflow:scroll;
+    }*/
+    .ui-select-placeholder {
+        color: #000 !important;
+        font-size: larger;
+        font-weight: 600;
+    }
+
+    .btn-floor {
+        width: auto;
+        padding: 8px !important;
+        background: white !important;
+        color: black !important;
+        /*font-weight: 700!important;*/
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+<style>
+    .checkbox {
+        width: 25px;
+        height: 25px
+    }
+
+    .checkbox1 {
+        width: 30px;
+        height: 30px
+    }
+
+    div#modal-body {
+        min-height: 250px;
+    }
+
+    div>.pl30 {
+        display: flex
+    }
+
+    .name {}
+
+    .showhide {
+        border1-bottom: 1px solid #000;
+    }
+
+    .ocenter {
+        padding-bottom: 10px;
+        border1-bottom: 1px solid #000;
+    }
+
+    .bt {
+        margin-left: 10px;
+        margin-right: 10%
+    }
+
+    .baolo {
+        box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+    }
+
+    .checkbox1 {
+        box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    }
+
+    .shadow {
+        -webkit-filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .7));
+        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .7));
+    }
+
+    .menu-3 {
+        width: 1000px;
+        visibility: hidden;
+        background: white;
+        z-index: 10;
+        position: absolute;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    .option-input-3:checked {
+        content: "";
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_ON.png) no-repeat center;
+        display: inline-block;
+        background-position-x: 0px !important;
+        /* display: block; */
+        background-size: contain;
+    }
+
+    .option-input-3 {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        position: relative;
+        top: 5.333px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 19px;
+        width: 35px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+        outline: none;
+        position: relative;
+        z-index: 1;
+        text-decoration: none;
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_OFF.png) no-repeat;
+        background-size: contain;
+        margin-right: 7px;
+        border: none;
+    }
+
+    .block-control {
+        padding-right: 14px;
+        position: relative;
+    }
+
+    .block-control::after {
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 24px;
+        background: #605e5c;
+        right: 0;
+        top: 9px;
+    }
+
+    .block-tool-btn {
+        height: 40px;
+    }
+
+    .tooltip-wrap {
+        cursor: pointer;
+    }
+
+    #listIconSVG .tooltip-wrap:hover {
+        background: #eee;
+    }
+
+    .tooltip-wrap:hover,
+    .tooltip-wrap.show-tt {
+        background: #1b1b1b;
+        position: relative;
+    }
+
+    .tooltip-wrap.show-tt .tooltip-icon {
+        display: block !important;
+        visibility: visible !important;
+        z-index: 1000;
+    }
+
+    .tooltip-icon {
+        position: absolute;
+        background: #1b1b1b;
+        left: 0;
+        top: 100%;
+        min-width: 140px;
+        padding: 0 14px !important;
+        text-align: left;
+    }
+
+    .tooltip-icon>span {
+        display: block !important;
+        width: 100%;
+        padding: 0 !important;
+        line-height: 20px !important;
+        margin: 10px 0 2px;
+    }
+
+    .tooltip-icon>span.t {
+        margin-top: 2px;
+        margin-bottom: 10px;
+        color: #c8c8c8 !important;
+    }
+
+    .tooltip-icon>span.h {
+        color: #fff !important;
+        font-weight: bold;
+    }
+
+    #menu-main p:first-child {
+        padding-left: 16px;
+    }
+
+    #menu-main p.active {
+        background: #1b1b1b;
+    }
+
+    #menu-main p {
+        vertical-align: top;
+        margin: 0;
+        height: 40px;
+        border: none;
+        /* background: green; */
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 11px;
+    }
+
+    #menu-main p,
+    #menu-main span {
+        display: inline-block;
+    }
+
+    #menu-main img,
+    .sidebar-left img {
+        height: 18px;
+        width: auto !important;
+        cursor: pointer;
+    }
+
+    #menu-main {
+        background: #323130;
+        position: relative;
+        z-index: 1;
+    }
+
+    .tool-submenu {
+        position: absolute;
+        /* top: 80px; */
+        /*left: 16%;*/
+        /*padding: 5px 10px;*/
+        height: 40px;
+        width: 100%;
+        /*border:1px solid #909090;*/
+        background: #232222;
+        z-index: 1;
+        box-shadow: 1px 1px 1px #909090;
+        left: 0;
+    }
+
+    .tool-submenu {
+        opacity: 0.9;
+    }
+
+    #quizs-body,
+    #grids-body,
+    #colors-body,
+    #erasers-body,
+    #pencils-body,
+    #menu2-body,
+    #listobj-body,
+    #shape-body {
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .icon-layer {
+        list-style: none;
+        padding-right: 20px;
+        vertical-align: inherit;
+        /* margin-top: 13px; */
+    }
+
+    .icon-layer {
+        display: inline-block;
+    }
+
+    #pencils-body,
+    #menu2-body,
+    #shape-body li span {
+        padding-right: 30px;
+    }
+
+    #pencils-body,
+    #menu2-body,
+    #shape-body span {
+        line-height: 35px !important;
+    }
+
+
+
+    #menu-main span {
+        line-height: 40px;
+        padding-right: 16px;
+        font-family: Myriad_regular;
+        font-size: 13px;
+        color: #989898;
+        z-index: 1000;
+    }
+
+    .icon-layer {
+        margin-top: 0 !important;
+    }
+
+    #grids-body li:not(:first-child),
+    #colors-body li:not(:first-child),
+    #erasers-body li:not(:first-child):not(:last-child),
+    #pencils-body li:not(:first-child),
+    #menu2-body li:not(:first-child),
+    #listobj-body li:not(:first-child),
+    #shape-body li:not(:first-child) {
+        margin-top: 3px;
+        display: flex !important;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        border-radius: 50%;
+        padding: 0;
+    }
+
+    .btn-eraser-clear {
+        border-left: 1px solid grey;
+        padding-left: 16px;
+    }
+
+    #layers-body p {
+        font-size: 13px;
+        font-family: Myriad_regular;
+        vertical-align: super;
+        background: transparent;
+        color: #989898;
+    }
+
+    #layers-body li {
+        /* height: 40px; */
+        display: inline-block;
+        padding-right: 15px;
+        vertical-align: middle;
+    }
+
+    #layers-body li:nth-child(3) {
+        border-right: 1px solid grey;
+    }
+
+    #layers-body .active img {
+        background: #ff0000;
+        border-radius: 20%;
+    }
+
+    #layers-body li:nth-child(4) {
+        padding-left: 10px !important;
+    }
+
+    .block-layer-new {
+        /* width: 76px; */
+        position: relative;
+        padding: 18px 0;
+        text-align: center;
+    }
+
+    .menu-bottom {
+        /*height: 50px;
+        box-shadow: 0px 0px 10px 0px rgba(135, 135, 135, 1);*/
+        border-radius: 5px;
+        text-align: center;
+        line-height: 50px;
+        background: #fff;
+        /*margin-left: 2rem;*/
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+    }
+
+    #edit-menu {
+        display: block;
+        opacity: 1;
+        padding: 0;
+    }
+
+    #edit-menu li {
+        margin-left: 10px;
+        width: calc(100% - 20px);
+    }
+
+    #edit-menu li>div {
+        height: 65px;
+    }
+
+    #path-menu li a,
+    #path-menu-mic li a,
+    #path-menu-camera li a,
+    #path-menu-file li a,
+    #sub-menu li a,
+    #sub-menu-textbox li a,
+    #sub-menu-camera li a,
+    #sub-menu-file li a,
+    #sub-menu-mic li a,
+    #edit-menu li a,
+    #edit-menu-camera li a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 20px;
+        color: #000;
+        background: #fff;
+    }
+
+    .nhap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 20px;
+        color: #000;
+        background: #fff;
+    }
+
+    input[type="color"] {
+        writing-mode: horizontal-tb !important;
+    }
+
+    input[type="color" i] {
+        appearance: auto;
+        inline-size: 50px;
+        block-size: 27px;
+        cursor: default;
+        box-sizing: border-box;
+        background-color: buttonface;
+        color: buttontext;
+        border-width: 1px;
+        border-style: solid;
+        border-color: buttonborder;
+        border-image: initial;
+        padding: 1px 2px;
+    }
+
+    input {
+        text-rendering: auto;
+        color: fieldtext;
+        letter-spacing: normal;
+        word-spacing: normal;
+        line-height: normal;
+        text-transform: none;
+        text-indent: 0px;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        appearance: auto;
+        -webkit-rtl-ordering: logical;
+        cursor: text;
+        background-color: field;
+        margin: 0em;
+        padding: 1px 2px;
+        border-width: 2px;
+        border-style: inset;
+        border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+        border-image: initial;
+    }
+
+    input[type="file"] {
+        display: block;
+    }
+
+    .inputfile {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 40px;
+        height: 45px;
+        opacity: 0;
+        padding: 14px 0;
+        cursor: pointer;
+    }
+
+    .input-sm {
+        height: 30px;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    #edit-menu li>div.ui-select-choices-row {
+        height: unset !important;
+    }
+</style>
+
+<div class="table-toolbar">
+    <div class="portlet light input-search mt5 p10" ng-show="showSearch">
+        <div class="portlet-body">
+            <div class="row d-flex pt5" style="background-color:white">
+                <div class="col-md-12 pl-0 flex-grow-full d-flex">
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="form-group">
+                            <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_WAREHOUSE' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.AreaCode" theme="bootstrap"
+                                    on-select="changeArea($item)">
+                                    <ui-select-match class="bold" placeholder="Khu vực"><b
+                                            class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listArea | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addArea()"
+                                        class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_FLOOR' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.FloorCode" theme="bootstrap"
+                                            on-select="changeFloor($item)">
+                                            <ui-select-match class="bold" placeholder="Tầng"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listFloor | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addFloor()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_LINE' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.LineCode" theme="bootstrap"
+                                            on-select="changeLine($item)">
+                                            <ui-select-match class="bold" placeholder="Dẫy"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listLine | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addLine()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_RACK' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.RackCode" theme="bootstrap"
+                                            on-select="changeRack($item)">
+                                            <ui-select-match class="bold" placeholder="Kệ"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listRack | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addRack()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_POSITION' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.PositionCode" theme="bootstrap"
+                                            on-select="changePosition($item)">
+                                            <ui-select-match class="bold" placeholder="Vị trí"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listPosition | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addPosition()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-8">
+                    <div class="btn btn-icon-only btn-outline floor bold" ng-class="{'btn-floor':!x.Active,'blue-custom':x.Active}" ng-repeat="x in listFloor" ng-click="chooseFloor(x)">
+                        <span>{{x.Name}}</span>
+                    </div>
+                </div>-->
+                <div class="col-md-1 flex-basis-150 d-flex justify-content-sb">
+                    <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="exportExcel()">
+                        <a class="fs30">
+                            <span class="fa-solid fa-file-excel"></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                    </div>
+                    <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="drawObject()">
+                        <a class="fs30">
+                            <span class="fas fa-search"></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mnw800 pull-right menu2">
+        <div class="menu-top menu-2">
+            <div class="create-box" ng-click="zoomout()">
+                <i class="fas fa-search-minus"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_ZOOMOUT' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="zoomin()">
+                <i class="fas fa-search-plus"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_ZOOMIN' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="hidejson()">
+                <i class="fas fa-eye-slash"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_HIDE_J' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="group()">
+                <i class="fas fa-object-group"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_GROUP' | translate}}-->
+                    Group
+                </div>
+            </div>
+            <div class="create-box" ng-click="ungroup()">
+                <i class="fas fa-object-ungroup"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_UNGROUP' | translate}}-->
+                    Ungroup
+                </div>
+            </div>
+            <div class="create-box" ng-click="toggleLock()">
+                <i class="fa-solid fa-lock" ng-if="!isLockObject"></i>
+                <i class="fa-solid fa-lock-open" ng-if="isLockObject"></i>
+                <div class="create-box__hover">
+                    Lock
+                </div>
+            </div>
+            <div class="create-box" ng-click="editArea()"
+                ng-if="wareHouseCode != '' && wareHouseCode != null && (floorCode == '' || floorCode == null)">
+                <i class="fa-solid fa-pen-to-square" style="color: #478cae;"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Edit Area
+                </div>
+            </div>
+            <div class="create-box" ng-click="editFloor()"
+                ng-if="floorCode != '' && floorCode != null && (lineCode == '' || lineCode == null)">
+                <i class="fa-solid fa-pen-to-square" style="color: #478cae;"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Edit Floor
+                </div>
+            </div>
+            <div class="create-box" ng-click="editLine()"
+                ng-if="lineCode != '' && lineCode != null && (rackCode == '' || rackCode == null)">
+                <i class="fa-solid fa-pen-to-square" style="color: #478cae;"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Edit Line
+                </div>
+            </div>
+            <div class="create-box" ng-click="editRack()"
+                ng-if="rackCode != '' && rackCode != null && (positionCode == '' || positionCode == null)">
+                <i class="fa-solid fa-pen-to-square" style="color: #478cae;"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Edit Rack
+                </div>
+            </div>
+            <div class="create-box" ng-click="editPosition()" ng-if="positionCode != '' && positionCode != null">
+                <i class="fa-solid fa-pen-to-square" style="color: #478cae;"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Edit Position
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteArea()"
+                ng-if="wareHouseCode != '' && wareHouseCode != null && (floorCode == '' || floorCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete Area
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteFloor()"
+                ng-if="floorCode != '' && floorCode != null && (lineCode == '' || lineCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete Floor
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteLine()"
+                ng-if="lineCode != '' && lineCode != null && (rackCode == '' || rackCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete Line
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteRack()"
+                ng-if="rackCode != '' && rackCode != null && (positionCode == '' || positionCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete Rack
+                </div>
+            </div>
+            <div class="create-box" ng-click="deletePosition()" ng-if="positionCode != '' && positionCode != null">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete Position
+                </div>
+            </div>
+            <div class="create-box" ng-click="showFullText()">
+
+                <!--<i class="fas fa-search-plus"></i>-->
+                <input type="checkbox" name="fullText" id="fullText" class="radio_buttons option-input-3 radio"
+                    ng-model="isTextFull" ng-click="changeTextFull(isTextFull)">
+                <span>&nbsp;&nbsp;PARTIAL TEXT / FULL TEXT </span>
+                <div class="create-box__hover">
+
+                    <!--{{'EDMSDWC_LBL_FULL_TEXT' | translate}}-->
+                    Display text
+                </div>
+            </div>
+            <div class="create-box" ng-click="saveShapeData()">
+                <i class="fas fa-save"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_SAVE' | translate}}
+                </div>
+            </div>
+            <!--<div class="create-box" ng-click="mapSearch()">
+                <i class="fas fa-search-location"></i>
+                <div class="create-box__hover">
+
+                    {{'EDMSDWC_LBL_SEARCH' | translate}}
+                </div>
+            </div>-->
+        </div>
+    </div>
+    <div id="menu-main" taskbar-notepad>
+        <div class="block-control fl" style="padding: 5px; text-align:left">
+            <div class="block-tool-btn"
+                style="height: unset; overflow: hidden; display: inline-flex; flex-wrap: wrap; width: calc(100% - 150px);">
+                <p id="moveObject" class="tool-btn tooltip-wrap active" data-layer="1">
+                    <img src="/images/notepad/notepad/move.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Move tool</span>
+                        <span class="t">Move Object</span>
+                    </span>
+                </p>
+                <p id="drwToggleDrawMode" data-name="pencil" class="tool-btn tooltip-wrap" data-layer="1">
+                    <img src="/images/notepad/notepad/pen.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Pen tool</span>
+                        <span class="t">Draw on the screen</span>
+                    </span>
+                </p>
+                <p class="tool-btn tooltip-wrap" data-name="eraser" id="change-eraser">
+                    <img src="/images/notepad/notepad/eraser.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Eraser tool</span>
+                        <span class="t">Eraser lines and image from screen</span>
+                    </span>
+                </p>
+                <p class="tool-btn tooltip-wrap" data-name="color" id="change-color">
+                    <img src="/images/notepad/notepad/color/top/black.png" alt="Colors">
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Color tool</span>
+                        <span class="t">Select a line color</span>
+                    </span>
+                </p>
+                <p class="block-layer-new tool-btn tooltip-wrap" data-name="layer" id="add-layer">
+                    <img src="/images/notepad/notepad/layers.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Layer tool</span>
+                        <span class="t">Create, delete and manage the layers</span>
+                    </span>
+                </p>
+                <p class="block-grid tool-btn tooltip-wrap" data-name="grid" id="icon-grid">
+                    <img src="/images/notepad/notepad/grids.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Grids tool</span>
+                        <span class="t">Triggers guidelines and change background colors</span>
+                    </span>
+                </p>
+                <!-- thêm đói tượng -->
+                <p id="shapeMode" class="tool-btn tooltip-wrap" data-name="shape">
+                    <img src="/images/notepad/notepad/shapes_basic_shares_yellow-512.png" />
+                    <span class="hidden tooltip-icon"></span>
+                </p>
+                <p id="textMode" class="add-image tool-btn tool-nosubmenu tooltip-wrap">
+                    <img src="/images/notepad/notepad/text_box.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Text tool</span>
+                        <span class="t">Create text on the screen</span>
+                    </span>
+                </p>
+                <p id="normal-addimage" class="add-image tool-btn tool-nosubmenu tooltip-wrap active" data-layer="1">
+                    <img src="/images/notepad/notepad/upload_image.png" />
+                    <input id="imageMode" class="form-control inputfile input-sm" multiple type="file" style="left:320px; height: 30px;">
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Image tool</span>
+                        <span class="t">Insert images from the local drive</span>
+                    </span>
+                </p>
+                <p id="quiz-addimage" class="add-image tooltip-wrap" style="display: none;">
+                    <img src="/images/notepad/notepad/upload_image.png" />
+                    <input id="dndItem" class="form-control inputfile input-sm" type="file" multiple>
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Create Quiz</span>
+                        <span class="t">Upload dnd item</span>
+                    </span>
+                </p>
+                <p id="icon-video" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/upload_video_player.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Video</span>
+                        <span class="t">Insert video from the Youtube</span>
+                    </span>
+                </p>
+                <!-- attach file -->
+                <p id="icon-attach-file" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/attach-file.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">File</span>
+                        <span class="t">Open file</span>
+                    </span>
+                </p>
+                <!-- microphone record -->
+                <p id="icon-mic" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/microphone.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Speaker</span>
+                        <span class="t">Speaker Record</span>
+                    </span>
+                </p>
+                <!-- camera record -->
+                <p id="icon-camera" class="tooltip-wrap tool-btn tool-nosubmenu" style="position: relative;">
+                    <img src="/images/notepad/notepad/camera.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Camera</span>
+                        <span class="t">Camera Record</span>
+                    </span>
+                    <small id="camera-mark"
+                        style="position: absolute; top: 19px; left: 18px; width: 4px; height: 4px; background: red; border-radius: 50%; display: none;"></small>
+                </p>
+                <!-- take camera photo -->
+                <p id="icon-takephoto" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/takephoto.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Take Photo</span>
+                        <span class="t">Take a photo</span>
+                    </span>
+                </p>
+                <!-- take screenshot -->
+                <p id="icon-screenshot" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/screen-shot.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Screen Shot</span>
+                        <span class="t">Take a screenshot</span>
+                    </span>
+                </p>
+                <!-- connect objects -->
+                <p id="icon-cover" class="tooltip-wrap tool-btn">
+                    <img src="/images/notepad/notepad/cover.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Connect Object</span>
+                        <span class="t">Choose, Connect Objects</span>
+                    </span>
+                </p><!-- group objects -->
+                <p id="icon-group" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/group1.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Group</span>
+                        <span class="t">Group Active Objects</span>
+                    </span>
+                </p><!-- ungroup objects -->
+                <p id="icon-ungroup" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/ungroup1.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Ungroup</span>
+                        <span class="t">Ungroup Active Object</span>
+                    </span>
+                </p>
+                <p id="icon-save" class="tooltip-wrap tool-btn tool-nosubmenu hidden">
+                    <img src="/images/notepad/notepad/save.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Save</span>
+                        <span class="t">This layer will save</span>
+                    </span>
+                </p>
+                <p id="upload-file" class="add-image tooltip-wrap tool-btn tool-nosubmenu" data-layer="1">
+                    <img src="/images/notepad/notepad/add-file.png" />
+                    <input id="icon-load-canvas" accept=".zip, .json" class="form-control inputfile input-sm"
+                        type="file" style="left:700px; height: 30px;">
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Load canvas</span>
+                        <span class="t">Insert canvas from the local drive</span>
+                    </span>
+                </p>
+                <p id="icon-load" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/load-layer.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Load Layer</span>
+                        <span class="t">Load layer saved</span>
+                    </span>
+                </p>
+                <p id="createLatex" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/latex.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Load Latex</span>
+                        <span class="t">Load a Latex</span>
+                    </span>
+                </p>
+
+                <p id="omegaSymbol" class="tooltip-wrap tool-btn">
+                    <img src="/images/notepad/notepad/omega.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Load Symbol</span>
+                        <span class="t">Load a Symbol</span>
+                    </span>
+                </p>
+
+                <p id="zoomIn" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/zoom-in.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Zoom in</span>
+                        <span class="t c-zoom">Current zoom: 100%</span>
+                    </span>
+                </p>
+
+                <p id="zoomOut" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/zoom-out.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Zoom out</span>
+                        <span class="t c-zoom">Current zoom: 100%</span>
+                    </span>
+                </p>
+
+                <p id="svg" class="tooltip-wrap tool-btn">
+                    <img src="/images/notepad/notepad/svg.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Load SVG</span>
+                        <span class="t">Load a SVG</span>
+                    </span>
+                </p>
+
+                <p class="block-quiz tool-btn tooltip-wrap" id="quiz" data-name="quiz">
+                    <img src="/images/notepad/notepad/puzzle.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Quiz</span>
+                        <span class="t">Create, do and save quiz</span>
+                    </span>
+                </p>
+
+                <p class="block-line tool-btn tooltip-wrap" id="lines" data-name="lines">
+                    <img src="/images/notepad/notepad/line.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Lines</span>
+                        <span class="t">Choose type of line</span>
+                    </span>
+                </p>
+
+                <p id="reset" class="tooltip-wrap tool-btn">
+                    <img src="/images/notepad/notepad/redo.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Reset</span>
+                        <span class="t">Reset the canvas to original position</span>
+                    </span>
+                </p>
+
+                <p id="icon-save-api" class="tooltip-wrap tool-btn tool-nosubmenu hidden">
+                    <img src="/images/notepad/notepad/save.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Save</span>
+                        <span class="t">This worksheet will be saved</span>
+                    </span>
+                </p>
+
+                <p id="icon-export" class="tooltip-wrap tool-btn tool-nosubmenu">
+                    <img src="/images/notepad/notepad/icons8-export-64.png" />
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Export pdf</span>
+                        <span class="t">Export to pdf file</span>
+                    </span>
+                </p>
+
+                <p id="menu2" class="tool-btn tooltip-wrap" data-name="menu2">
+                    <img src="/images/notepad/notepad/unview-answer.png" />
+                    <span class="hidden tooltip-icon"></span>
+                </p>
+            </div>
+            <div class="block-tool-btn"
+                style="height: 40px; overflow: hidden; width: 50px; float: right; display: inline-flex;">
+                <p id="icon-search" class="tooltip-wrap tool-btn">
+                    <i class="fa-solid fa-chevron-up fs20 text-white" ng-if="fullscreen" ng-click="checkFullScreen()"></i>
+                    <i class="fa-solid fa-chevron-down fs20 text-white" ng-if="!fullscreen" ng-click="checkFullScreen()"></i>
+                    <span class="hidden tooltip-icon">
+                        <span class="h">Toggle search</span>
+                        <!--<span class="t">Export to pdf file</span>-->
+                    </span>
+                </p>
+            </div>
+            <div class="hinden listobj-class style1-popup-eraser tool-submenu">
+                <ul id="listobj-body">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="list-object">
+                        </a>
+                        <ul class="dropdown-menu-a list-object" id="list-object">
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="hidden pencil-class style1-popup-pencil tool-submenu">
+                <ul id="pencils-body">
+                    <li class="icon-layer close-popup-pencil">
+                        <span style="line-height: 0;" class="icon-layer close-popup-pencil">
+                            Pen
+                        </span>
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5 active" data-pencil="Pencil">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/pen.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Circle">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/circle.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Spray">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/spray.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Pattern">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/pattern.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Hline">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/hline.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Vline">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/vline.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Square">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/square.png" />
+                    </li>
+                    <li class="icon-layer drawing-mode-selector hr5" data-pencil="Diamond">
+                        <img style="width: 20px;height: 20px" src="/images/notepad/notepad/diamond.png" />
+                    </li>
+                    <li style="width: fit-content;">
+                        <span style="line-height: 0; color: white;" id="drawing-line-width-label">
+                            1.67%
+                        </span>
+                    </li>
+                    <li style="width: 150px; z-index: 100;">
+                        <input type="range" value="1" min="0" max="60" id="drawing-line-width"
+                            ng-click="drawingLineWidthEl()">
+                    </li>
+                    <li style="margin-left: 20px;">
+                        <span style="line-height: 0; color: white;">
+                            Color
+                        </span>
+                    </li>
+                    <li style="margin-top: 10px;">
+                        <input type="color" value="#000608" id="drawing-color" style="height: 20px;"
+                            ng-click="drawingColorEl()">
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden  hello close-class style1-popup-close">
+                <div class="col-md-9 text-popup-close">
+                    No layer is selected
+                </div>
+                <div class="col-md-3 no-padding">
+                    <button type="button" class="red-btn scel-btn close-popup-close">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            <div class="hidden eraser-class style1-popup-eraser tool-submenu">
+                <ul id="erasers-body">
+                    <li class="icon-layer close-popup-eraser">
+                        <span>
+                            Eraser
+                        </span>
+                    </li>
+                    <li class="icon-layer btn-eraser active" data-eraser="30">
+                        <img style="width: 5px;height: 5px;" src="/images/notepad/notepad/eraser/1.png" />
+                    </li>
+                    <li class="icon-layer btn-eraser" data-eraser="50">
+                        <img style="width: 8px;height: 8px;" src="/images/notepad/notepad/eraser/1.png" />
+                    </li>
+                    <li class="icon-layer btn-eraser" data-eraser="70">
+                        <img style="width: 11px;height: 11px;" src="/images/notepad/notepad/eraser/1.png" />
+                    </li>
+                    <li class="icon-layer btn-eraser" data-eraser="90">
+                        <img style="width: 14px;height: 14px;" src="/images/notepad/notepad/eraser/1.png" />
+                    </li>
+                    <li class="icon-layer btn-eraser" data-eraser="100">
+                        <img style="width: 18px;height: 18px;" src="/images/notepad/notepad/eraser/1.png" />
+                    </li>
+                    <li class="icon-layer btn-eraser-clear border1-bottom">
+                        <img src="/images/notepad/notepad/eraser-all.png" />
+                    </li>
+
+                </ul>
+            </div>
+            <div class="hidden color-class style1-popup-color tool-submenu">
+                <ul id="colors-body">
+                    <li class="icon-layer close-popup-color">
+                        <span>
+                            Color
+                        </span>
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#ffffff" data-image-url="white.png">
+                        <img src="/images/notepad/notepad/color/white.png" />
+                    </li>
+                    <li class="icon-layer btn-color active" data-color="#000000" data-image-url="black.png">
+                        <img src="/images/notepad/notepad/color/black.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#0000FF" data-image-url="blue.png">
+                        <img src="/images/notepad/notepad/color/blue.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#FF0000" data-image-url="red.png">
+                        <img src="/images/notepad/notepad/color/red.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#008000" data-image-url="green.png">
+                        <img src="/images/notepad/notepad/color/green.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#C500AF" data-image-url="redPurple.png">
+                        <img src="/images/notepad/notepad/color/light_purple.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#FF8D15" data-image-url="orange.png">
+                        <img src="/images/notepad/notepad/color/orange.png" />
+                    </li>
+                    <li class="icon-layer btn-color" data-color="#8E3AFF" data-image-url="purple.png">
+                        <img src="/images/notepad/notepad/color/purple.png" />
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden layer-class style1-popup-layer tool-submenu">
+                <ul id="layers-body">
+                    <li class="close-popup-layer">
+                        <p id="layer-span">
+                            Layers
+                        </p>
+                    </li>
+                    <li class="icon-layer btn-add-layer">
+                        <img src="/images/notepad/notepad/layer/add.png" />
+                    </li>
+                    <li class="icon-layer btn-delete-layer border1-bottom">
+                        <img src="/images/notepad/notepad/layer/delete.png" />
+                    </li>
+                    <!-- vuong -->
+                    <li class="icon-layer icon-selector active" data-cnt="1" data-id="1">
+                        <img src="/images/notepad/notepad/layer/layer-1.png" />
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden grid-class style1-popup-grid tool-submenu">
+                <ul id="grids-body">
+                    <li class="icon-layer close-popup-grid">
+                        <span>
+                            Grid
+                        </span>
+                    </li>
+                    <li class="icon-layer btn-color-grid active" data-color="#ffffff">
+                        <img src="/images/notepad/notepad/grid/white.png" />
+                    </li>
+                    <li class="icon-layer btn-color-grid" data-color="#dddddd">
+                        <img src="/images/notepad/notepad/grid/gray.png" />
+                    </li>
+                    <li class="icon-layer btn-color-grid" data-color="#fffdbf">
+                        <img src="/images/notepad/notepad/grid/yellow.png" />
+                    </li>
+                    <li class="icon-layer btn-color-grid border1-bottom" data-color="#d1fffe">
+                        <img src="/images/notepad/notepad/grid/blue.png" />
+                    </li>
+                    <li class="icon-layer btn-grid" data-grid="1">
+                        <img src="/images/notepad/notepad/grid/type1.png" />
+                    </li>
+                    <li class="icon-layer btn-grid" data-grid="2">
+                        <img src="/images/notepad/notepad/grid/type2.png" />
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden shape-class style1-popup-shape tool-submenu">
+                <ul id="shape-body">
+                    <li class="icon-layer close-popup-shape">
+                        <span style="line-height: 0;" class="icon-layer close-popup-shape">Geometric</span>
+                    </li>
+
+                    <li id="iconTriange" class="block-layer-new tooltip-wrap" ng-click="initTriangle()">
+                        <img src="/images/notepad/normal/triangle.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconCricle" class="block-layer-new tooltip-wrap" ng-click="initCircle()">
+                        <img src="/images/notepad/normal/circle.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconElipse" class="block-layer-new tooltip-wrap" ng-click="initEclipse()">
+                        <img src="/images/notepad/normal/oval.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconRect" class="block-layer-new tooltip-wrap" ng-click="initReact()">
+                        <img src="/images/notepad/normal/rectangle.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconRoundedRect" class="block-layer-new tooltip-wrap" ng-click="initRoundedRect()">
+                        <img src="/images/notepad/normal/rectangle-rounded.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconArrowRightArrow" class="block-layer-new tooltip-wrap" ng-click="initRightArrow()">
+                        <img src="/images/notepad/normal/arrow-right.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconTurnLeftArrow" class="block-layer-new tooltip-wrap" ng-click="initTurnLeftArrow()">
+                        <img src="/images/notepad/normal/arrow-left.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconTwoWayArrow" class="block-layer-new tooltip-wrap" ng-click="initTwoWayArrow()">
+                        <img src="/images/notepad/normal/arrow-twoway.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconStar" class="block-layer-new tooltip-wrap" ng-click="initStar()">
+                        <img src="/images/notepad/normal/star.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconPolygon" class="block-layer-new tooltip-wrap" ng-click="initPolygon()">
+                        <img src="/images/notepad/normal/hexagon.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconTrapezoid" class="block-layer-new tooltip-wrap" ng-click="initTrapezoid()">
+                        <img src="/images/notepad/normal/trapezoid.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconPolygen" class="block-layer-new tooltip-wrap" ng-click="initPolygen()">
+                        <img src="/images/notepad/normal/pallalegram.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconArrowTo" class="block-layer-new tooltip-wrap" ng-click="initArrowTo()">
+                        <img src="/images/notepad/normal/chevron.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconHeart" class="block-layer-new tooltip-wrap" ng-click="initHeart()">
+                        <img src="/images/notepad/normal/heart-outline.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li id="iconArc" class="block-layer-new tooltip-wrap" ng-click="initArc()">
+                        <img src="/images/notepad/normal/arc.png" />
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="icon-layer close-popup-layper" style="width: fit-content;">
+                        <span style="line-height: 0;" class="icon-layer close-popup-layper">Connect</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden menu2-class style1-popup-menu2 tool-submenu">
+                <ul id="menu2-body">
+                    <li class="icon-layer close-popup-menu2">
+                        <span style="line-height: 0;" class="icon-layer close-popup-menu2">View</span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="zoomout()" style="margin-left: 20px;">
+                        <i class="fas fa-search-minus fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="zoomin()" style="margin-left: 20px;">
+                        <i class="fas fa-search-plus fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="hidejson()" style="margin-left: 20px;">
+                        <i class="fas fa-eye-slash fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="group()" style="margin-left: 20px;">
+                        <i class="fas fa-object-group fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="ungroup()" style="margin-left: 20px;">
+                        <i class="fas fa-object-ungroup fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="toggleLock()" style="margin-left: 20px;">
+                        <i class="fa-solid fa-lock fa-xl" style="color: #fff;" ng-if="!isLockObject"></i>
+                        <i class="fa-solid fa-lock-open fa-xl" style="color: #fff;" ng-if="isLockObject"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="showFullText()"
+                        style="margin-left: 20px; width: 240px; color: #fff;">
+                        <input type="checkbox" name="fullText" id="fullText" class="radio_buttons option-input-3 radio"
+                            ng-model="isTextFull" ng-click="changeTextFull(isTextFull)"
+                            style="margin-bottom: 8px; color: #fff;"><span style="color: #fff;">&nbsp;&nbsp;PARTIAL TEXT
+                            / FULL TEXT </span>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                    <!--<li class="block-layer-new tooltip-wrap" ng-click="saveShapeData()" style="margin-left: -10px;">
+                        <i class="fas fa-save fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>-->
+
+                    <li class="block-layer-new tooltip-wrap" ng-click="mapSearch()" style="margin-left: 20px;">
+                        <i class="fas fa-search-location fa-xl" style="color: #fff;"></i>
+                        <span class="hidden tooltip-icon"></span>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="hidden np-sheet-info"></div>
+            <div class="hidden screenshot-class style1-popup-screenshot">
+                <p class="name-popup">
+                    Capture Images
+                </p>
+                <ul>
+                    <li class="item-screenshot" style=" padding-right: 20px">
+                        <input type="checkbox" class="checkbox-style" id="screenshot-check" value="" />
+                    </li>
+                    <li class="item-screenshot" style=" width: 100px;">
+                        <form method="get">
+                            <select class="select-box-it form-control" id="select-screenshot">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="8">8</option>
+                                <option value="20">20</option>
+                                <option value="60">60</option>
+                                <option value="120">120</option>
+                                <option value="300">300</option>
+                                <option value="600">600</option>
+                            </select><span class="style-sec">Sec.</span>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="hidden quiz-class style1-popup-layer tool-submenu">
+                <ul id="quizs-body">
+                    <li class="icon-layer close-popup-quiz">
+                        <span style="margin-left: 16px;">
+                            Quiz
+                        </span>
+                    </li>
+                    <li class="icon-layer">
+                        <select id="quiz-type">
+                            <option value="quiz-1">Select Object</option>
+                            <option value="quiz-2">Input Object</option>
+                            <option value="quiz-3">Match Object</option>
+                            <!-- <option value="quiz-4">relational puzzles</option>
+                                              <option value="quiz-5">and logic puzzles</option> -->
+                        </select>
+                    </li>
+                    <li class="icon-layer">
+                        <p id="quiz-create" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/create-quiz.png">
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Create Quiz</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer" style="color: #ccc;">
+                        <p class="tooltip-wrap input-container">
+                            <input id="quiz-input-file" type="file" name="quiz-file" accept=".json">
+                            <label for="quiz-input-file" style="color: #aaa; margin: 0;">
+                                <img src="/images/notepad/notepad/add-file.png" />
+                            </label>
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Choose a file</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer">
+                        <p id="open-quiz-modal" class="tooltip-wrap" style="display: block;">
+                            <img src="/images/notepad/notepad/pen.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Text content</span>
+                                <span class="t">Input text content</span>
+                            </span>
+                        </p>
+                        <p id="create-table-empty" class="tooltip-wrap" style="display: none;">
+                            <img src="/images/notepad/notepad/pen.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Text content</span>
+                                <span class="t">Input text content</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer">
+                        <p id="quiz-answer" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/create-answer.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Answer</span>
+                            </span>
+                        </p>
+
+                    </li>
+                    <li class="icon-layer">
+                        <p id="quiz-view-answer" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/unview-answer.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">View Answer</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer">
+                        <p id="quiz-doquiz" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/edit.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Do Quiz</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer">
+                        <p id="quiz-check" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/check.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Check</span>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="icon-layer hidden">
+                        <p id="quiz-save" class="tooltip-wrap">
+                            <img src="/images/notepad/notepad/save.png" />
+                            <span class="hidden tooltip-icon">
+                                <span class="h">Save Quiz</span>
+                            </span>
+                        </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="hidden lines-class style1-popup-layer tool-submenu">
+
+                <!-- line type 1 simple line -->
+                <p id="simple-line" class="draw-line">
+                    <img src="/images/notepad/notepad/arrow-trend-up-no-background.png" />
+                </p>
+
+                <!-- line type 2 multiple line -->
+                <p id="multiple-line" class="draw-line">
+                    <img src="/images/notepad/notepad/line.png" />
+                </p>
+
+                <!-- line type 3 waving line -->
+                <p id="waving-line" class="draw-line hidden">
+                    <img src="/images/notepad/notepad/waveline5.png" />
+                </p>
+
+                <!-- line type 4 dash line -->
+                <p id="dash-line" class="draw-line">
+                    <img src="/images/notepad/notepad/vline.png" />
+                </p>
+
+                <!-- line type 5 curve line -->
+                <p id="curve-line" class="draw-line">
+                    <img src="/images/notepad/notepad/icon-curve.png" />
+                </p>
+
+                <!-- line type 6 dot line -->
+                <p id="dot-line" class="draw-line">
+                    <img src="/images/notepad/notepad/dotlineGraph.png" />
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="parent_svg" onselectstart="javascript:return false" id="gfx_holder_svg"
+        style="overflow: hidden; width: 100%; height: 840px; position: relative;" width={{widthCanvas}} height="840"
+        fabric-canvas="">
+        <canvas id="c"></canvas>
+    </div>
+    <pre id="json" class="json_div jsonhide"
+        style="overflow: auto; position: absolute; top: 125px; right: 120px; width: 350px; height: 500px; background: white; border: 1px solid gray">
+    </pre>
+</div>
+
+<div class="portlet-body form baolo menu-3" ng-show1="setMap"
+    style="width:655px; position: absolute; top: 178px; background: #fff; left: 30%;" id="menu-object">
+    <div class="col-md-12">
+        <div id="edit-form" style="z-index: 10;">
+            <div class="container">
+                <div class="btn-toolbar btn-group">
+                    <div class="group btn-group latex" style="margin-left: -20px;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-link" data-toggle="dropdown" style="font-size: 20px;">
+                                <i class="fa fa-font fa-2xl" aria-hidden="true"></i>
+                            </button>
+                            <ul id='font' class="dropdown-menu" role="menu">
+                                <li ng-repeat="font in listFont" ng-click="changeFont(font)"><a>{{font}}</a></li>
+                            </ul>
+                        </div>
+                        <button id="align" type="button" class="btn btn-link" style="font-size: 20px;"
+                            ng-click="alignText()"><i class="fa fa-align-center" aria-hidden="true"></i></button>
+                    </div>
+
+                    <div class="group btn-group">
+                        <div class="btn-group">
+                            <button id="current-size-textbox" type="button" class="btn btn-link" data-toggle="dropdown">
+                                <span style="font-size: 20px;">Auto</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul id='size-textbox' class="dropdown-menu" role="menu">
+                                <li ng-repeat="size in listSize" ng-click="changeFontSize(size)"><a>{{size}}</a></li>
+                            </ul>
+                        </div>
+
+                        <button id="bold" type="button" class="btn btn-link latex" style="font-size: 20px;"
+                            ng-click="boldText()"><i class="fa fa-bold fa-2xl" aria-hidden="true"></i></button>
+                        <button id="italic" type="button" class="btn btn-link latex" style="font-size: 20px;"
+                            ng-click="italicText()"><i class="fa fa-italic fa-2xl"
+                                aria-hidden="true"></i></span></button>
+                        <button id="underline" type="button" class="btn btn-link latex" style="font-size: 20px;"
+                            ><i class="fa fa-underline fa-2xl"
+                                aria-hidden="true"></i></button>
+
+                    </div>
+
+                    <div class="group btn-group">
+                        <button id="menuMore-textbox" type="button" data-toggle="dropdown" class="btn btn-link"
+                            style="font-size: 20px;" ng-click="openSubMenu()">
+                            <i class="fa fa-bars fa-2xl"></i>
+                        </button>
+                        <ul id="sub-menu" class="dropdown-menu" role="menu"
+                            style="max-width: 320px; height: 335px;overflow: auto;">
+
+                            <li id="sub-menu-lineStyle">
+                                <a>
+                                    <span>Line Style</span>
+                                    <select id="lineStyle">
+                                        <option value="solid" ng-click="updateLineStyle(solid)" selected>Solid</option>
+                                        <option value="dash" ng-click="updateLineStyle(dash)">Dash</option>
+                                    </select>
+                                </a>
+                            </li>
+                            <li id="sub-menu-objBlink">
+                                <a>
+                                    <span>Blink object</span>
+                                    <button id="objBlink" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content; padding: 2px 10px;"
+                                        ng-model="isObjectBlink"
+                                        ng-click="changeObjectBlink(isObjectBlink)">OFF</button>
+                                </a>
+                            </li>
+                            <li id="sub-menu-textId">
+                                <a>
+                                    <span>Object Code</span>
+                                    <input id="objectCode" type="text">
+                                </a>
+                            </li>
+                            <li id="sub-menu-replaceImg">
+                                <a class="input-container">
+                                    <span>Replace Image</span>
+                                    <input id="replaceImg" type="file" accept="image/*">
+                                    <label for="replaceImg" style="color: #aaa; margin: 0;">
+                                        No image available
+                                    </label>
+                                </a>
+                            </li>
+                            <li id="sub-menu-textColor">
+                                <div class="nhap">
+                                    <span>Text color</span>
+                                    <input type="color" ng-model="fontColor" ng-change="changeFontColor(fontColor)">
+                                </div>
+                            </li>
+                            <li id="sub-menu-borderColor">
+                                <div class="nhap">
+                                    <span>Border color</span>
+                                    <input type="color" ng-model="borderColor"
+                                        ng-change="changeBorderColor(borderColor)">
+                                </div>
+                            </li>
+                            <li id="sub-menu-borderColor">
+                                <div class="nhap">
+                                    <span>Background color</span>
+                                    <input type="color" ng-model="backgroundColor"
+                                        ng-change="changeBackgroundColor(backgroundColor)">
+                                </div>
+                            </li>
+                            <li id="sub-menu-borderWidth">
+                                <a>
+                                    <span>Border width</span>
+                                    <input type="number" value="1" min="1" max="10" ng-model="borderWidth"
+                                        ng-change="changeBorderWidth(borderWidth)">
+                                </a>
+                            </li>
+                            <li id="sub-menu-curve">
+                                <a>
+                                    <span>Curve</span>
+                                    <input type="number" value="0" min="0" ng-model="curveValue"
+                                        ng-change="changeCurve(curveValue)">
+                                </a>
+                            </li>
+                            <li id="sub-menu-shadow">
+                                <a>
+                                    <span>Shadow</span>
+                                    <button id="objShadow" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content; padding: 2px 10px;"
+                                        ng-click="changeShadowObject()">
+                                        Off
+                                    </button>
+                                </a>
+                            </li>
+
+                            <li id="sub-menu-fixed" style="display: block">
+                                <a>
+                                    <span>Fixed</span>
+                                    <button id="objFixed" type="button" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content; padding: 2px 10px;"
+                                        ng-click="fixed()">
+                                        Off
+                                    </button>
+                                </a>
+                            </li>
+                            <li id="sub-menu-vessel" style="display: none">
+                                <a>
+                                    <span>Vessel</span>
+                                    <button id="objVessel" type="button" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content; padding: 2px 10px;">
+                                        On
+                                    </button>
+                                </a>
+                            </li>
+                            <li id="sub-menu-bring">
+                                <a>
+                                    <span>Bring to</span>
+                                    <button id="objBring" type="button" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content; padding: 2px 10px;"
+                                        ng-click="changeBringTo()">
+                                        Front
+                                    </button>
+                                </a>
+                            </li>
+                            <li id="sub-menu-background">
+                                <a>
+                                    <span>Background</span>
+                                    <button id="bgToggle" type="button" class="btn btn-default"
+                                        style="width: fit-content; height: fit-content;" ng-click="bgToggle()">
+                                        On
+                                    </button>
+                                </a>
+                            </li>
+                            <hr style="margin: 10px 0;">
+                            <li>
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 6px;">
+                                    <span>Object Select</span>
+                                    <div
+                                        style="width: 30%; display: flex; justify-content: space-between; align-items: center;">
+                                        <input id="objSelect" type="checkbox" style="margin: 0;">
+                                        <span id="objSelectDropDown"><i class="fa fa-chevron-down"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <ul id="objSelectList" style="display: none; border-top: 1px solid #999;">
+                                    <li>
+                                        <a>
+                                            <span>Status</span>
+                                            <button id="toggleObjStatus" type="button" class="btn btn-danger"
+                                                style="width: fit-content; height: fit-content; padding: 0 8px;">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span>Color Selected</span>
+                                            <input id="colorSelected" type="color" value="#ffffff">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span>Color Unselected</span>
+                                            <input id="colorUnselected" type="color" value="#ffffff">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="input-container">
+                                            <span>Sound Selected</span>
+                                            <input id="soundSelected" type="file" accept="audio/*">
+                                            <label for="soundSelected" style="color: #aaa; margin: 0;">
+                                                selected.mp3
+                                            </label>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="input-container">
+                                            <span>Sound Unselected</span>
+                                            <input id="soundUnselected" type="file" accept="audio/*">
+                                            <label for="soundUnselected" style="color: #aaa; margin: 0;">
+                                                unselected.mp3
+                                            </label>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <hr style="margin: 10px 0;">
+                            <li>
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 6px;">
+                                    <span>Object Input</span>
+                                    <div
+                                        style="width: 30%; display: flex; justify-content: space-between; align-items: center;">
+                                        <input id="objInput" type="checkbox" style="margin: 0;">
+                                        <span id="objInputDropDown"><i class="fa fa-chevron-down"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <ul id="objInputList" style="display: none; border-top: 1px solid #999;">
+                                    <li>
+                                        <a class="input-container">
+                                            <span>Sound Typing</span>
+                                            <input id="soundTyping" type="file" accept="audio/*">
+                                            <label for="soundTyping" style="color: #aaa; margin: 0;">
+                                                typing.mp3
+                                            </label>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <hr style="margin: 10px 0;">
+                            <li>
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 6px;">
+                                    <span>Object Snap</span>
+                                    <div
+                                        style="width: 30%; display: flex; justify-content: space-between; align-items: center;">
+                                        <input id="objSnap" type="checkbox" style="margin: 0;">
+                                        <span id="objSnapDropDown"><i class="fa fa-chevron-down"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <ul id="objSnapList" style="display: none; border-top: 1px solid #999;">
+                                    <li>
+                                        <a class="input-container">
+                                            <span>Sound Snap</span>
+                                            <input id="soundSnap" type="file" accept="audio/*">
+                                            <label for="soundSnap" style="color: #aaa; margin: 0;">
+                                                snap.mp3
+                                            </label>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <hr style="margin: 10px 0;">
+                            <li>
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 6px;">
+                                    <span>Object Control</span>
+                                    <div
+                                        style="width: 30%; display: flex; justify-content: space-between; align-items: center;">
+                                        <input id="objControl" type="checkbox" style="margin: 0;">
+                                        <span id="objControlDropDown"><i class="fa fa-chevron-down"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <ul id="objControlList" style="display: none; border-top: 1px solid #999;">
+                                    <li>
+                                        <a>
+                                            <span>Angle</span>
+                                            <input id="objAngle" type="number" value="0" min="0">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="group btn-group" ng-if="activeObject.name != 'textbox'">
+                        <button type="button" class="btn btn-link" data-toggle="dropdown" style="font-size: 20px;"
+                            ng-click="toggleObjectProperty()">
+                            <i class="fa fa-pen-to-square fa-2xl" aria-hidden="true"></i>
+                        </button>
+                        <ul id="edit-menu" class="dropdown-menu" role="menu"
+                            style="width: 300px; height: 335px;overflow: auto;" ng-show="showObjectProperty">
+
+                            <li id="edit-menu-warehouse">
+                                <div class="form-group" style="width: 100%;">
+                                    <label class="fw600 text-underline">
+                                    {{'EDMSWM_CURD_LBL_LIST_WAREHOUSE' | translate}}
+                                    </label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="modelMap.AreaCode" theme="bootstrap"
+                                            on-select="changeAreaMap($item)">
+                                            <ui-select-match class="bold" placeholder="Khu vực"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listAreaMap | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelMap.AreaCode = '';changeAreaMap()"
+                                                class="btn btn-default no-shadow start-date">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li id="edit-menu-floor">
+                                <div class="form-group" style="width: 100%;">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_FLOOR' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="modelMap.FloorCode" theme="bootstrap"
+                                            on-select="changeFloorMap($item)">
+                                            <ui-select-match class="bold" placeholder="Tầng"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listFloorMap | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelMap.FloorCode = '';changeFloorMap()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li id="edit-menu-line">
+                                <div class="form-group" style="width: 100%;">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_LINE' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="modelMap.LineCode" theme="bootstrap"
+                                            on-select="changeLineMap($item)">
+                                            <ui-select-match class="bold" placeholder="Dãy"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listLineMap | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelMap.LineCode = '';changeLineMap()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li id="edit-menu-rack">
+                                <div class="form-group" style="width: 100%;">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_RACK' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="modelMap.RackCode" theme="bootstrap"
+                                            on-select="changeRackMap($item)">
+                                            <ui-select-match class="bold" placeholder="Kệ"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listRackMap | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="modelMap.RackCode = ''; changeRackMap()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li id="edit-menu-position">
+                                <div class="form-group" style="width: 100%;">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_POSITION' |
+                                        translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="modelMap.PositionCode" theme="bootstrap"
+                                            on-select="changePositionMap($item)">
+                                            <ui-select-match class="bold" placeholder="Vị trí"><b
+                                                    class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices
+                                                repeat="x.Code as x in listPositionMap | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button"
+                                                ng-click="modelMap.PositionCode = ''; changePositionMap()"
+                                                class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                            <!--<hr>-->
+                            <li id="edit-menu-action" style="margin-top: 10px">
+                                <a>
+                                    <div class="create-box flex-basis-50" ng-click="saveMapping()"
+                                        style="margin-left: 150px;">
+                                        <i class="fas fa-floppy-disk"></i>
+                                    </div>
+                                    <div class="create-box flex-basis-50" ng-click="deleteObject()"
+                                        style="margin-left: 50px;">
+                                        <i class="fas fa-trash-alt" style="color: red"></i>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="group btn-group">
+                        <button id="" type="button" class="btn btn-link latex" style="font-size: 22px;"
+                            ng-click="objectDetail()"><i class="fa fa-info-circle"></i></button>
+                        <button id="" type="button" class="btn btn-link latex" style="font-size: 20px;"
+                            ng-click="cloneObj()"><i class="fa fa-clone"></i></button>
+                        <button id="" type="button" class="btn btn-link latex" style="font-size: 20px; color: red;"
+                            ng-click="cancel()"><i class="fa fa-times"></i></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mic-popup-class hidden device-popup" id="mic-popup"
+    style="width:300px; position: absolute; top: 178px; background: #fff; left: 40%;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <button id="mic-record" type="button" class="btn btn-success">
+            <i class="fa fa-microphone" aria-hidden="true"></i>
+        </button>
+        <button id="mic-upload" type="button" class="btn btn-success">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        </button>
+        <button id="mic-close" type="button" class="btn btn-danger">X</button>
+    </div>
+    <input id="mic-file" class="hidden" type="file" name="mic-file" accept="audio/*">
+    <audio id="micRecorded" src="" controls crossorigin="anonymous"></audio>
+
+    <div class="edit-form-svg">
+        <div class="btn-toolbar btn-group">
+            <div class="group btn-group">
+                <div class="btn-group">
+                    <button id="current-size-mic" type="button" class="btn btn-link" data-toggle="dropdown">
+                        <span>Auto</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul id='size-mic' class="dropdown-menu" role="menu">
+                        <li value="4"><a>4</a></li>
+                        <li value="8"><a>8</a></li>
+                        <li value="10"><a>10</a></li>
+                        <li value="12"><a>12</a></li>
+                        <li value="14"><a>14</a></li>
+                        <li value="18"><a>18</a></li>
+                        <li value="24"><a>24</a></li>
+                        <li value="32"><a>32</a></li>
+                        <li value="48"><a>48</a></li>
+                        <li value="64"><a>64</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="group btn-group">
+                <button id="pathMover-mic" type="button" class="btn btn-link" data-toggle="dropdown">
+                    <img src="/images/notepad/notepad/wavy-line.png" style="width: 28px; height: 28px;">
+                </button>
+                <ul id="path-menu-mic" class="dropdown-menu"
+                    style="display: block; visibility: hidden; min-width: 220px;" role="menu">
+                    <li>
+                        <a>
+                            <span>Create Path</span>
+                            <button id="pathCreate-mic" type="button" class="btn btn-default"
+                                style="width: fit-content; height: fit-content;">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Object Path</span>
+                            <input id="pathObj-mic" value="Empty" type="text"
+                                style="margin: 0; padding: 4px 8px; width: 80px; font-size: 12px; border-radius: 4px;"></input>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Repeat</span>
+                            <!-- <label for="pathMovingRepeat"></label> -->
+                            <input id="pathMovingRepeat-mic" type="checkbox" style="margin: 0; cursor: pointer;">
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Speed</span>
+                            <input id="pathMovingSpeed-mic" type="number" min="1" max="100" value="1"
+                                style="margin: 0; cursor: pointer;">
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Mode</span>
+                            <div id="pathMovingMode-mic"
+                                style="position: relative; padding: 4px; border: 1px solid #999; border-radius: 15px;">
+                                <span style="margin-right: 4px;">ON</span>
+                                <span>OFF</span>
+                                <span id="pathMovingMark-mic"
+                                    style="position: absolute; top: 1px; left: 1px; height: 94%; width: 48%; border-radius: 15px; background: #aaa; transition: all 0.2s ease; visibility: inherit;"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="group btn-group">
+                <button id="menuMore-mic" type="button" class="btn btn-link" data-toggle="dropdown">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <ul id="sub-menu-mic" class="dropdown-menu"
+                    style="display: block; visibility: hidden; min-width: 280px;" role="menu">
+                    <li id="sub-menu-mic-objBlink">
+                        <a>
+                            <span>Blink object</span>
+                            <button id="objBlink-mic" class="btn btn-default"
+                                style="width: fit-content; height: fit-content; padding: 2px 10px;">OFF</button>
+                        </a>
+                    </li>
+                    <li id="sub-menu-mic-textColor">
+                        <div class="nhap">
+                            <span>Text color</span>
+                            <input type="color" ng-model="colorTextMic" ng-change="changeFontColorMic(colorTextMic)">
+                        </div>
+                        <!-- <a>
+                            <span>Text color</span>
+                            <input id="textColor-mic" type="color" value="#000000">
+                        </a> -->
+                    </li>
+                    <li id="sub-menu-mic-borderColor">
+                        <div class="nhap">
+                            <span>Border color</span>
+                            <input type="color" ng-model="borderColorMic" ng-change="changeBorderColorMic(borderColorMic)">
+                        </div>
+                        <!-- <a>
+                            <span>Border color</span>
+                            <input id="borderColor-mic" type="color" value="#000000">
+                        </a> -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="pathBtns-mic" style="position: absolute; visibility: hidden; top: 120px; right: 10px;">
+        <button id="pathToggleDrawing-mic" type="button" class="btn btn-success"
+            style="width: fit-content; height: fit-content;"></button>
+        <button id="closePathDrawMode-mic" type="button" class="btn btn-danger"
+            style="width: fit-content; height: fit-content;">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+    <ul class="list" style="margin-top: 10px;"></ul>
+</div>
+
+<div class="camera-popup-class device-popup hidden" id="camera-popup"
+    style="width:300px; position: absolute; top: 178px; background: #fff; left: 40%;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <button id="camera-record" type="button" class="btn btn-success">
+            <i class="fa fa-video-camera" aria-hidden="true"></i>
+        </button>
+        <button id="camera-upload" type="button" class="btn btn-success">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        </button>
+        <button id="camera-close" type="button" class="btn btn-danger">X</button>
+    </div>
+    <input id="camera-file" class="hidden" type="file" name="camera-file" accept="video/*">
+    <video id="cameraRecorded" width="300" controls crossorigin="anonymous"></video>
+    <video id="cameraRecording" width="300" style="display: none;"></video>
+
+    <div class="edit-form-svg">
+        <div class="btn-toolbar btn-group">
+            <div class="group btn-group">
+                <div class="btn-group">
+                    <button id="current-size-camera" type="button" class="btn btn-link" data-toggle="dropdown">
+                        <span>Auto</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul id='size-camera' class="dropdown-menu" role="menu">
+                        <li value="4"><a>4</a></li>
+                        <li value="8"><a>8</a></li>
+                        <li value="10"><a>10</a></li>
+                        <li value="12"><a>12</a></li>
+                        <li value="14"><a>14</a></li>
+                        <li value="18"><a>18</a></li>
+                        <li value="24"><a>24</a></li>
+                        <li value="32"><a>32</a></li>
+                        <li value="48"><a>48</a></li>
+                        <li value="64"><a>64</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="group btn-group">
+                <button id="pathMover-camera" type="button" class="btn btn-link" data-toggle="dropdown">
+                    <img src="/images/notepad/notepad/wavy-line.png" style="width: 28px; height: 28px;">
+                </button>
+                <ul id="path-menu-camera" class="dropdown-menu"
+                    style="display: block; visibility: hidden; min-width: 220px;" role="menu">
+                    <li>
+                        <a>
+                            <span>Create Path</span>
+                            <button id="pathCreate-camera" type="button" class="btn btn-default"
+                                style="width: fit-content; height: fit-content;">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Object Path</span>
+                            <input id="pathObj-camera" value="Empty" type="text"
+                                style="margin: 0; padding: 4px 8px; width: 80px; font-size: 12px; border-radius: 4px;"></input>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Repeat</span>
+                            <!-- <label for="pathMovingRepeat"></label> -->
+                            <input id="pathMovingRepeat-camera" type="checkbox" style="margin: 0; cursor: pointer;">
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Speed</span>
+                            <input id="pathMovingSpeed-camera" type="number" min="1" max="100" value="1"
+                                style="margin: 0; cursor: pointer;">
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>Moving Mode</span>
+                            <div id="pathMovingMode-camera"
+                                style="position: relative; padding: 4px; border: 1px solid #999; border-radius: 15px;">
+                                <span style="margin-right: 4px;">ON</span>
+                                <span>OFF</span>
+                                <span id="pathMovingMark-camera"
+                                    style="position: absolute; top: 1px; left: 1px; height: 94%; width: 48%; border-radius: 15px; background: #aaa; transition: all 0.2s ease; visibility: inherit;"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="group btn-group">
+                <button id="menuMore-camera" type="button" class="btn btn-link" data-toggle="dropdown">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <ul id="sub-menu-camera" class="dropdown-menu"
+                    style="display: block; visibility: hidden; min-width: 280px;" role="menu">
+                    <li id="sub-menu-objBlink-camera">
+                        <a>
+                            <span>Blink object</span>
+                            <button id="objBlink-camera" class="btn btn-default"
+                                style="width: fit-content; height: fit-content; padding: 2px 10px;">OFF</button>
+                        </a>
+                    </li>
+                    <li id="sub-menu-textColor-camera">
+                        <div class="nhap">
+                            <span>Text color</span>
+                            <input type="color" ng-model="colorTextMic" ng-change="changeFontColorMic(colorTextMic)">
+                        </div>
+                        <!-- <a>
+                            <span>Text color</span>
+                            <input id="textColor-camera" type="color" value="#000000">
+                        </a> -->
+                    </li>
+                    <li id="sub-menu-borderColor-camera">
+                        <div class="nhap">
+                            <span>Border color</span>
+                            <input type="color" ng-model="borderColorMic" ng-change="changeBorderColorMic(borderColorMic)">
+                        </div>
+                        <!-- <a>
+                            <span>Border color</span>
+                            <input id="borderColor-camera" type="color" value="#000000">
+                        </a> -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="pathBtns-camera" style="position: absolute; visibility: hidden; top: 120px; right: 10px;">
+        <button id="pathToggleDrawing-camera" type="button" class="btn btn-success"
+            style="width: fit-content; height: fit-content;"></button>
+        <button id="closePathDrawMode-camera" type="button" class="btn btn-danger"
+            style="width: fit-content; height: fit-content;">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+    <ul class="list" style="margin-top: 10px;"></ul>
+</div>
+
+<script>
+    // var contentMain = document.getElementById('contentMain');
+    // var parent_svg = document.getElementsByClassName('parent_svg');
+    // if (parent_svg && parent_svg.length > 0) {
+    //     const height = contentMain.clientHeight - 150;
+    //     const width = contentMain.clientWidth - 80;
+    //     parent_svg[0].setAttribute('height', height);
+    //     parent_svg[0].style.height = `${height}px`;
+    //     parent_svg[0].setAttribute('width', width);
+    //     parent_svg[0].style.width = `${width}px`;
+    // }
+    // var parent_svg = document.getElementsByClassName('parent_svg');
+    // var contentMain = document.getElementById('contentMain');
+    // if (parent_svg && parent_svg.length > 0) {
+    //     let height = contentMain.clientHeight - 150;
+    //     let width = contentMain.clientWidth - 80;
+    //     parent_svg[0].setAttribute('height', height);
+    //     parent_svg[0].style.height = `${height}px`;
+    //     parent_svg[0].setAttribute('width', width);
+    //     parent_svg[0].style.width = `${width}px`;
+    // }
+</script>
+
+<!-- <div class="portlet-body form baolo" ng-show="setMap" style="width:50%;position:absolute;top:148px;background:#fff;left:30%;">
+    <div class="modal-header white-custom" style="border-bottom: 1px solid #EFEFEF;">
+        <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+        </button>
+        <span class="modal-title fs13 bold" id="modal-title"> {{'Đối tượng' | translate}}</span>
+    </div>
+    <div class="col-md-12">
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_WAREHOUSE' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="modelMap.WhsCode" theme="bootstrap" on-select1="changeWareHouse($item)">
+                            <ui-select-match class="bold" placeholder="Kho hồ sơ"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listWareHouse | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addArea()" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_FLOOR' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="modelMap.FloorCode" theme="bootstrap" on-select="changeFloor($item)">
+                            <ui-select-match class="bold" placeholder="Tầng"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listFloor | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelMap.FloorCode = ''" class="btn no-shadow  btn-default" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_LINE' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="modelMap.LineCode" theme="bootstrap" on-select="changeLine($item)">
+                            <ui-select-match class="bold" placeholder="Dẫy"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listLine | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelMap.LineCode = ''" class="btn no-shadow  btn-default" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_RACK' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="modelMap.RackCode" theme="bootstrap" on-select="changeRack($item)">
+                            <ui-select-match class="bold" placeholder="Kệ"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listRack | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelMap.RackCode = ''" class="btn no-shadow  btn-default" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_POSITION' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="modelMap.PositionCode" theme="bootstrap" on-select="changePosition($item)">
+                            <ui-select-match class="bold" placeholder="Vị trí"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listPosition | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelMap.PositionCode = ''" class="btn no-shadow  btn-default" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-bottom d-flex menu-3" style="flex-wrap:wrap" id="menu-object">
+            <div class="create-box flex-basis-135">
+                <input type="checkbox" name="front" id="front" class="radio_buttons option-input-3 radio" ng-model="isObjectFront" ng-click="changeFrontBack(isObjectFront)">
+                <span>&nbsp;&nbsp;FRONT / BACK </span>
+                <div class="create-box__hover">
+                    Front / Back
+                </div>
+            </div>
+            <div class="create-box flex-basis-150">
+                <div class="input-group br24-nobtn">
+                    <ui-select ng-model="fontSize" theme="bootstrap" ng-change="changeFontSize(fontSize)">
+                        <ui-select-match placeholder="Size..."><b class="text-brown">{{$select.selected}}</b></ui-select-match>
+                        <ui-select-choices repeat="x as x in listSize | filter: $select.search">
+                            {{x}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="create-box__hover">
+                    Size
+                </div>
+            </div>
+            <div class="create-box flex-basis-200">
+                <input type="color" ng-model="fontColor" ng-change="changeFontColor(fontColor)">
+                <div class="create-box__hover">
+                    Font color
+                </div>
+                <span>&nbsp;&nbsp;FONT COLOR </span>
+            </div>
+            <div class="create-box flex-basis-200">
+                <input type="color" ng-model="backgroundColor" ng-change="changeBackgroundColor(backgroundColor)">
+                <div class="create-box__hover">
+                    Background
+                </div>
+                <span>&nbsp;&nbsp;BACKGROUND </span>
+            </div>
+            <div class="create-box flex-basis-135" ng-click="blink()">
+
+                <input type="checkbox" name="fullText" id="fullText" class="radio_buttons option-input-3 radio" ng-model="isObjectBlink" ng-click="changeObjectBlink(isObjectBlink)">
+                <span>&nbsp;&nbsp;BLINK </span>
+                <div class="create-box__hover">
+
+                    Blink
+                </div>
+            </div>
+            <div class="create-box flex-basis-50" ng-click="objectDetail()">
+                <i class="fas fa-info-circle"></i>
+                <div class="create-box__hover">
+                    Info
+                </div>
+            </div>
+            <div class="create-box flex-basis-50" ng-click="objectDetail()">
+                <i class="fas fa-clone"></i>
+                <div class="create-box__hover">
+                    Clone
+                </div>
+            </div>
+            <div class="create-box flex-basis-50" ng-click="objectDetail()">
+                <i class="fas fa-floppy-disk"></i>
+                <div class="create-box__hover">
+                    Save
+                </div>
+            </div>
+            <div class="create-box flex-basis-50" ng-click="deleteObject()">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    Delete
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script src="https://unpkg.com/fabric@latest/dist/fabric.js" crossorigin></script>
+<script src="/../../lib/eduComposeEngine/js/shapes.fabric.js"></script>

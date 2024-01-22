@@ -1,0 +1,136 @@
+﻿<style>
+    #roleUserAssign > .ui-select-bootstrap > .ui-select-choices {
+        top: 0px !important;
+    }
+
+    .check-box-creator > span:after {
+        left: 8px !important;
+        top: 4px !important;
+    }
+</style>
+<div ng-controller="assign-member">
+    <div class="row">
+        <div class="col-md-6 br24-nobtn">
+            <label class="control-label fw600">{{'ACT_CRUD_BRANCH' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="changeSelect('Branch', model.Branch)" theme="bootstrap">
+                <ui-select-match placeholder="{{'ACT_CRUD_BRANCH' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.Code as x in lstBranch | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-6">
+            <label class="control-label fw600">{{'ACT_CRUD_DEPARTMENT_GROUP' | translate}}</label>
+            <div class="d-flex br24-nobtn">
+                <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap">
+                    <ui-select-match placeholder="{{'ACT_CRUD_DEPARTMENT_GROUP' | translate}}..."><b>{{$select.selected.Name}}(<span class="text-danger">{{$select.selected.CountUser}}</span>)</b></ui-select-match>
+                    <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                        {{x.Name}}(<span class="text-danger">{{x.CountUser}}</span>)
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="col-md-6 br24-nobtn mt5">
+            <label class="control-label fw600">{{'ACT_CRUD_EMPLOYEE' | translate}}(<span class="text-danger">{{listUser.length}}</span>)</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserId" on-select="submit($item)" theme="bootstrap">
+                <ui-select-match placeholder="{{'ACT_CRUD_EMPLOYEE' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.UserId as x in listUser | filter: $select.search">
+                    {{x.GivenName}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-6 br24-nobtn mt5">
+            <label class="control-label fw600">{{'Người được giao' | translate}}</label> <!--ACT_CRUD_CREATOR-->
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Creator" on-select="addCreator($item)" theme="bootstrap">
+                <ui-select-match placeholder="{{'Người được giao' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.ID as x in listCreator | filter: $select.search">
+                    {{x.GivenName}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-12 mt5">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+
+                .table-responsive {
+                    overflow: unset;
+                }
+            </style>
+            <div class="portlet light bordered mb5">
+                <div class="portlet-title mnh25">
+                    <div class="caption">
+                        <span class="caption-subject bold fs12">{{'ACT_LBL_LIST_EMPLOYEE' | translate}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body todo-project-list-content">
+                    <div class="scrollbar-sm">
+                        <div class="table-responsive" style="height: 260px; overflow-y: scroll;">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="pl25 col-md-6">{{'ACT_LIST_COL_EMPLOYEE' | translate}}</th>
+                                        <th class="col-md-2">{{'ACT_LIST_COL_STATUS' | translate}}</th>
+                                        <th class="text-center nowrap col-md-3">{{'ACT_LIST_COL_ROLE' | translate}}</th>
+                                        <th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th> <!--COM_BTN_DELETE-->
+                                    </tr>
+                                </thead>
+                                <!--Người được giao-->
+                                <tbody>
+                                    <tr>
+                                        <td ng-if="lstMemberAssign.length!=0" colspan="4" class="">
+                                            <i class="fa fa-user"></i>
+                                            <span class="groupValue"><b>{{'ACT_LIST_COL_ASSIGNER' | translate}} ({{lstMemberAssign.length}})</b></span>
+                                        </td>
+                                    </tr>
+                                    <!--<tr ng-repeat="x in listCreator">
+                                        <td class="text-left"><span class="fs14 fw700">{{x.GivenName}}</span></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <label class="mt-checkbox check-box-creator mt-checkbox-outline fs12">
+                                                <input type="checkbox" ng-model="x.Approve" ng-change="updateCreatorManager(x.ID, x.Approve)">
+                                                <span style="border: 1px solid #888;padding: 10px;top: -5px;left: -5px;"></span>
+                                            </label>
+                                        </td>
+                                    </tr>-->
+                                    <tr ng-repeat="x in lstMemberAssign">
+                                        <td class="text-left">
+                                            <span class="fs14">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span ng-if="x.RoleSys != ''" class="badge-customer badge-customer-warning"> {{x.RoleSys}} ,&nbsp;</span><span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{x.DepartmentName}}</span>
+                                        </td>
+                                        <td class="text-center br24-nobtn">
+                                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Status" on-select="changeStatus(x.Id, x.Status)" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'ACT_CRUD_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in lstStatusAssign | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group br24-nobtn" id="roleUserAssign">
+                                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" theme="bootstrap" on-select="changeRole(x.Id, x.Role, x.UserName)">
+                                                    <ui-select-match placeholder="{{'ACT_CRUD_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in lstRole | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </td>
+                                        <td class="text-center"><i role="button" class="fas fa-trash-alt pt10 fs25 text-danger ng-scope" ng-click="delete(x.Id, x.UserName)" title="{{'COM_BTN_DELETE' | translate}}" style1="color:red !important;font-size: 25px"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

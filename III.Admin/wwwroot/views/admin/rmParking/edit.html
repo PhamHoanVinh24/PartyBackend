@@ -1,0 +1,414 @@
+﻿<script>
+        function readURL(input) {
+            //alert('fine');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+                    $('#Profile_picture')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+            }
+</script>
+<!--<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="glyphicon glyphicon-edit" style="font-size: 18px;color: #e9edf0;"></i>&nbsp; Cập nhật thông tin đầu kéo</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions1">
+            <div class="form-body">
+                <div class=" col-md-6" style="padding-left:0">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="fa fa-car"></i> Số xe <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="Nhập số xe" ng-model="model.License_Plate" name="Code" ng-pattern="/(^[0-9]{1,2}[A-Za-z]-[0-9][0-9][0-9][0-9]$)|(^[0-9]{1,2}[A-Za-z]-[0-9]{1,3}[.][0-9][0-9]$)/" />
+                            <span class="text-danger" ng-show="editform.Code.$error.pattern">Biển số xe nhập không đúng!</span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-home"></i> Nhóm <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select ng-model="model.Group" class="" style="width: 100%;" ng-change="getGroup()">
+                                    <ui-select-match placeholder="Chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                        {{x.value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"> <i class="glyphicon glyphicon-user"></i> Romooc <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-8 form-col-control">
+                            <div class="bs-component">
+                                <div class="input-group " style="    width: 100%;">
+                                    <ui-select multiple reset-search-input="true" ng-model="orderItem.items" theme="bootstrap" ng-disabled="ctrl.disabled" close-on-select="false" ui-select-required ng-click="checkGroup()">
+                                        <ui-select-match placeholder="Chọn danh sách romooc">{{$item.LisencePlate}}</ui-select-match>
+                                        <ui-select-choices repeat="x.LisencePlate as x in treeDataRomooc | propsFilter:{LisencePlate : $select.search} ">
+                                            <div ng-bind-html="(x.LisencePlate) | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-home"></i> Thương hiệu </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="Nhập thương hiệu" ng-model="model.Generic" name="Generic" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-flag"></i> Xuất xứ </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.Origin" name="Origin" placeholder="Nhập xuất xứ"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-adjust"></i> Năm sản xuất </label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" ng-model="model.Year_Manufacture" name="Year_Manufacture" placeholder="Nhập năm sản xuất" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="col-md-4 control-label text-left" for="Status"><i class="sprite-image-16x16"></i> Ảnh</label>
+                        <div class="col-md-8 form-col-control">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                    <img onerror="this.src='images/DefaultImages/no_image.png'" id="Profile_picture" ng-src='{{model.Image}}' src="{{model.Image}}" alt="holder" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img onerror="this.src='images/DefaultImages/no_image.png'" id="Profile_picture1" ng-src='{{model.Image1}}' src="images/default/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <div class="input-group input-file">
+                                <i class="fa fa-upload"></i>
+                                <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30"  placeholder='' readonly></>
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Chọn ảnh</span>
+                                    <input class="form-control" id="file" files-input ng-model="model.Image" name="Image" onchange="readURL(this);" style="display: none;" type="file">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-6" style="padding-left:0">
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-user"></i> Chủ sở hữu</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Owner_Code" name="Owner_Code" placeholder="Nhập chủ sở hữu"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-tint"></i> Category</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Category" name="Category" placeholder="Nhập category" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-tower"></i> Trọng lượng  </label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Weight_Itself" name="Weight_Itself" placeholder="Nhập trọng lượng"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-copyright-mark"></i> Tải trọng thiết kế </label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Design_Payload" name="Design_Payload" placeholder="Nhập tải trọng thiết kế"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-copyright-mark"></i> Tải trọng đã tải </label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Payload_Pulled" name="Payload_Pulled" placeholder="Nhập tải trọng đã tải"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-copyright-mark"></i> Tổng tải </label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Payload_Total" name="Payload_Total" placeholder="Nhập tổng tải"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-menu-hamburger"></i> Kích thước đăng ký</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Size_Registry" name="Size_Registry" placeholder="Nhập kích thước đăng ký" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-menu-hamburger"></i> Kích thước sử dụng</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Size_Use" name="Size_Use" placeholder="Nhập kích thước sử dụng"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-calendar"></i> Thời gian đăng ký</label>
+                        <div class="bs-component col-md-7">
+                            <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                <input type="text" class="form-control" ng-model="model.Registry_Duration" name="Registry_Duration" placeholder="Nhập thời gian đăng ký" id="datetimepicker1" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Registry_Duration = undefined" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+
+                        </div>
+                        <script>
+                            $('#datetimepicker1').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-calendar"></i> Thời hạn bảo hiểm</label>
+                        <div class="bs-component col-md-7">
+                            <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                <input type="text" class="form-control" ng-model="model.Insurrance_Duration" name="Insurrance_Duration" placeholder="Nhập thời hạn bảo hiểm" id="datetimepicker2" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Insurrance_Duration = undefined" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+
+                        </div>
+                        <script>
+                            $('#datetimepicker2').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left" style="padding-left:0"><i class="glyphicon glyphicon-th-list"></i> Ghi chú </label>
+                        <div class="col-md-7">
+                            <textarea type="text" class="form-control" ng-model="model.Note" name="Note" rows="2" placeholder="Nhập ghi chú"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:15px;" ng-click="submit()"><i class="fa fa-plus"></i> Cập nhật</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;  margin-top:15px;margin-right:20px;" ng-click="cancel()"><i class="fa fa-close"></i> Đóng</button>
+    </div>
+</div>-->
+
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <div class="modal-title custom-title " id="modal-title">Sửa mới đầu kéo</div>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left require"><i class="fa fa-car"></i> Số xe </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Nhập số xe" ng-model="model.License_Plate" name="Code" ng-pattern="/(^[0-9]{1,2}[A-Za-z]-[0-9][0-9][0-9][0-9]$)|(^[0-9]{1,2}[A-Za-z]-[0-9]{1,3}[.][0-9][0-9]$)/" />
+                                <span class="text-danger" ng-show="editform.Code.$error.pattern">Biển số xe nhập không đúng!</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left require"><i class="glyphicon glyphicon-home"></i> Nhóm </label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.Group" class="" style="width: 100%;" ng-change="getGroup()">
+                                        <ui-select-match placeholder="Chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left require"> <i class="glyphicon glyphicon-user"></i> Romooc</label>
+                            <div class="col-md-8 form-col-control">
+                                <div class="bs-component">
+                                    <div class="input-group " style="    width: 100%;">
+                                        <ui-select multiple reset-search-input="true" ng-model="orderItem.items" theme="bootstrap" ng-disabled="ctrl.disabled" close-on-select="false" ui-select-required ng-click="checkGroup()">
+                                            <ui-select-match placeholder="Chọn danh sách romooc">{{$item.LisencePlate}}</ui-select-match>
+                                            <ui-select-choices repeat="x.LisencePlate as x in treeDataRomooc | propsFilter:{LisencePlate : $select.search} ">
+                                                <div ng-bind-html="(x.LisencePlate) | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-home"></i> Thương hiệu </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Nhập thương hiệu" ng-model="model.Generic" name="Generic" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-flag"></i> Xuất xứ </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Origin" name="Origin" placeholder="Nhập xuất xứ" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-adjust"></i> Năm sản xuất </label>
+                            <div class="col-md-8">
+                                <input type="number" class="form-control" ng-model="model.Year_Manufacture" name="Year_Manufacture" placeholder="Nhập năm sản xuất" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-md-4 control-label text-left" for="Status"><i class="sprite-image-16x16"></i> Ảnh</label>
+                            <div class="col-md-8 form-col-control">
+                                <div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto;   float:left">
+                                        <img onerror="this.src='../../../images/romooc/no_image.png'" id="Profile_picture" ng-src='{{model.Image}}' src="{{model.Image}}" alt="holder" style="height:120px; width:120px" />
+                                    </div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                        <img onerror="this.src='../../../images/romooc/no_image.png'" id="Profile_picture1" ng-src='{{model.Image1}}' src="images/default/no_image.png" style="height:120px; width:120px" />
+                                    </div>
+                                </div>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" placeholder='' readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Chọn ảnh</span>
+                                        <input class="form-control" id="file" files-input ng-model="model.Image" name="Image" onchange="readURL(this);" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Chủ sở hữu</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Owner_Code" name="Owner_Code" placeholder="Nhập chủ sở hữu" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-tint"></i> Category</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Category" name="Category" placeholder="Nhập category" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-tower"></i> Trọng lượng  </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Weight_Itself" name="Weight_Itself" placeholder="Nhập trọng lượng" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-copyright-mark"></i> Tải trọng thiết kế </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Design_Payload" name="Design_Payload" placeholder="Nhập tải trọng thiết kế" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-copyright-mark"></i> Tải trọng đã tải </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Payload_Pulled" name="Payload_Pulled" placeholder="Nhập tải trọng đã tải" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-copyright-mark"></i> Tổng tải </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Payload_Total" name="Payload_Total" placeholder="Nhập tổng tải" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-menu-hamburger"></i> Kích thước đăng ký</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Size_Registry" name="Size_Registry" placeholder="Nhập kích thước đăng ký" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-menu-hamburger"></i> Kích thước sử dụng</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Size_Use" name="Size_Use" placeholder="Nhập kích thước sử dụng" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-calendar"></i> Thời gian đăng ký</label>
+                            <div class="bs-component col-md-7">
+                                <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                    <input type="text" class="form-control" ng-model="model.Registry_Duration" name="Registry_Duration" placeholder="Nhập thời gian đăng ký" id="datetimepicker1" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Registry_Duration = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <script>
+/**/
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-calendar"></i> Thời hạn bảo hiểm</label>
+                            <div class="bs-component col-md-7">
+                                <div class="input-group date pick-date" data-date="1996-01-01T00:00:00Z">
+                                    <input type="text" class="form-control" ng-model="model.Insurrance_Duration" name="Insurrance_Duration" placeholder="Nhập thời hạn bảo hiểm" id="datetimepicker2" style="border-top-right-radius: 0px !important;border-bottom-right-radius:0px !important" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Insurrance_Duration = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <script>
+                          URCE */
+/* BEGIN EXTERNAL SOURCE */
+/**/
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-th-list"></i> Ghi chú </label>
+                            <div class="col-md-7">
+                                <textarea type="text" class="form-control" ng-model="model.Note" name="Note" rows="2" placeholder="Nhập ghi chú"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Lưu lại
+    </button>
+</div>

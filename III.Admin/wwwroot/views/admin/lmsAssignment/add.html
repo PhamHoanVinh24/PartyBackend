@@ -1,0 +1,362 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+    /*CSS form Tab*/
+    /*Flexible Reponsive Form*/
+    .row-flex {
+        display: flex;
+    }
+    @media (min-width: 544px) {
+        .row-flex {
+            flex-direction: column;
+        }
+    }
+    /*Flexible Reponsive Form*/
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'LMS_ASSM_LBL_ADD_EXAM' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-2 col-lg-1 h-70 mnw150 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_CODE_EXAM' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control text-important" name="Code" ng-model="model.PracticeTestCode" type="text" placeholder="{{'LMS_ASSM_LBL_CODE_EXAM' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2 h-70 mnw250 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_HEADER' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control text-important" name="Title" ng-model="model.PracticeTestTitle" type="text" placeholder="{{'LMS_ASSM_LBL_HEADER' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-1 h-70 mnw125 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_DURATION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control fw600" name="Duration" ng-model="model.Duration" type="number" placeholder="{{'LMS_ASSM_LBL_DURATION' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-1 h-70 mnw150 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'LMS_ASSM_LBL_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                            <span class="bold fs11">{{x.Name}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Unit='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-1 h-70 mnw150 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_LEVEL' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control fw600" name="Level" ng-model="model.Level" placeholder="{{'LMS_ASSM_LBL_LEVEL' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-1 h-70 mnw150 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_PASS_LESSON' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control fw600" name="MarkPass" ng-model="model.MarkPass" type="number" placeholder="{{'LMS_ASSM_LBL_PASS_LESSON' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 mnw100 h-70 text-center pr-0">
+                        <label class="col-md-12 pl-0 control-label fw600 nowrap pr-0 text-center"><!--{{'CMS_ITEM_NOTE' | translate}}-->{{'LMS_ASSM_LBL_SHOW_RESULT' | translate}}</label>
+                        <button ng-show="model.ViewResult" ng-click="changeFlag('ViewResult')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline green-custom mt5"><i class="fa fa-check"></i></button>
+                        <button ng-show="!model.ViewResult" ng-click="changeFlag('ViewResult')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red-custom mt5"><i class="fa fa-remove"></i></button>
+                    </div>
+                    <div class="col-md-1 mnw100 h-70 text-center pr-0">
+                        <label class="col-md-12 pl-0 control-label fw600 nowrap pr-0 text-center"><!--{{'CMS_ITEM_NOTE' | translate}}-->{{'LMS_ASSM_LBL_REDO_LESSON' | translate}}</label>
+                        <button ng-show="model.Rework" ng-click="changeFlag('Rework')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline green-custom mt5"><i class="fa fa-check"></i></button>
+                        <button ng-show="!model.Rework" ng-click="changeFlag('Rework')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red-custom mt5"><i class="fa fa-remove"></i></button>
+                    </div>
+                    <div class="col-md-1 mnw100 h-70 text-center pr-0">
+                        <label class="col-md-12 pl-0 control-label fw600 nowrap pr-0 text-center"><!--{{'CMS_ITEM_NOTE' | translate}}-->{{'LMS_ASSM_LBL_SEQUENTIALLY' | translate}}</label>
+                        <button ng-show="model.WorkSequence" ng-click="changeFlag('WorkSequence')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline green-custom mt5"><i class="fa fa-check"></i></button>
+                        <button ng-show="!model.WorkSequence" ng-click="changeFlag('WorkSequence')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red-custom mt5"><i class="fa fa-remove"></i></button>
+                    </div>
+                    <div class="col-md-1 mnw100 h-70 text-center pr-0">
+                        <label class="col-md-12 pl-0 control-label require fw600 nowrap pr-0 text-center"><!--{{'CMS_ITEM_NOTE' | translate}}-->{{'LMS_ASSM_MSG_DISPLAY' | translate}}</label>
+                        <button ng-show="model.IsPublished" ng-click="changeFlag('IsPublished')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline green-custom mt5"><i class="fa fa-check"></i></button>
+                        <button ng-show="!model.IsPublished" ng-click="changeFlag('IsPublished')" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red-custom mt5"><i class="fa fa-remove"></i></button>
+                    </div>
+                    <div class="col-md-2 col-lg-1 h-70 mnw200 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_SUBJECT' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group search-group">
+                                    <ui-select tagging ng-model="model.Subject" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'LMS_ASSM_LBL_SUBJECT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in listSubject | filter: $select.search">
+                                            <span class="bold fs11">{{x.Name}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Category='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2 h-70 mnw250 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require bold">{{'LMS_ASSM_LBL_DESCRIPTION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control text-important" name="Description" ng-model="model.Description" type="text" placeholder="{{'LMS_ASSM_LBL_DESCRIPTION' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right mt20 mr15 mnw75 h-50 wpercent10">
+                        <div class="btn-group actions d-flex">
+                            <div class="text-center">
+                                <a ng-click="submit()" class="">
+                                    <!--<span><i class="fa fa-save"></i></span>-->
+                                    <img style="width:100%; height:100%;" src="/images/default/save-button-icon_340535.png">
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form name="addDetail" class="form-horizontal" method="post" ng-validate1="validationOptions">
+        <div class="form-body pt-0">
+            <div class="row">
+                <div class="col-md-10 col-lg-5 h-70 mnw300 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require bold"><i class="fa fa-question-circle"></i>&nbsp;{{'LMS_ASSM_LBL_QUESTION' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group" ng-class="{ 'has-error': errorQuestion}">
+                                <ui-select tagging ng-model="modelQst.QuestCode" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'LMS_ASSM_LBL_CHOOSE_QUESTION' | translate}}...">{{$select.selected.Content}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listQuestion | filter: $select.search" refresh="reloadQuestion($select.search)">
+                                        <span class="bold fs11">{{x.Content}}</span>
+                                        <div class="row mt15" ng-if="$last">
+                                            <button class="btn btn-xs btn-success"
+                                                    style="width: 100%;"
+                                                    ng-click="loadMore($select, $event);"
+                                                    ng-disabled="loading">
+                                                Load more...
+                                            </button>
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelQst.QuestCode='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorQuestion" class="label-color validation-message">
+                                {{'LMS_ASSM_LBL_QUES_NOT_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 mnw125 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require bold">{{'LMS_ASSM_LBL_DURATION' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control fw600" name="Duration" ng-model="modelQst.Duration" type="number" placeholder="{{'LMS_ASSM_LBL_DURATION' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 mnw150 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require bold">{{'LMS_ASSM_LBL_UNIT' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group search-group">
+                                <ui-select tagging ng-model="modelQst.Unit" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'LMS_ASSM_LBL_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                        <span class="bold fs11">{{x.Name}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelQst.Unit='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 mnw125 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require bold">{{'LMS_ASSM_LBL_ORDER' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control fw600" name="Order" ng-model="modelQst.Order" type="number" placeholder="{{'LMS_ASSM_LBL_ORDER' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-lg-1 h-70 mnw100 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require bold">{{'LMS_ASSM_LBL_POINT' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control fw600" name="Order" ng-model="modelQst.Mark" type="number" placeholder="{{'LMS_ASSM_LBL_POINT' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-right mt20 mr30 mnw75 h-50 wpercent10">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center">
+                            <a ng-click="addQuestion()" class="">
+                                <!--<span><i class="fa fa-save"></i></span>-->
+                                <img style="width:100%; height:100%;" src="/images/default/save-button-icon_blue.png">
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12 mb15">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1" style="width: 5%;">{{'LMS_ASSM_LBL_STT' | translate}}</th>
+                            <th class="text-center col-md-8 nowrap">{{'LMS_ASSM_LBL_CONTENT' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'LMS_ASSM_LBL_DURATION' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'LMS_ASSM_LBL_POINT' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'LMS_ASSM_LBL_OPERATION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in listDetail">
+                            <td class="text-center pt15 bold">{{x.Order}}</td>
+                            <td class="text-left pl20">{{x.Content}}</td>
+                            <td class="text-center pl20">{{x.Duration}} {{x.Unit == null || x.Unit == '' ? 'LMS_ASSIGNMENT_TYPE_MINUTE' : x.UnitName}}</td>
+                            <td class="text-center pl20">{{x.Mark}}</td>
+                            <td class="text-center nowrap">
+                                <button title="Xóa" ng-click="deleteQuestion(x.Id)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

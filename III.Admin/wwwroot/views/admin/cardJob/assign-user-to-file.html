@@ -1,0 +1,59 @@
+﻿<div class="modal-header" style="background-color: white;">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert black"></i>
+    <span class="modal-title black pt-1" id="modal-title">{{'CJ_LBL_PERMISSION_FILE' | translate}}</span>
+</div>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addStaff" class="form-horizontal" method="post">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-6 pl-0" ng-class="{ 'has-error': errorUserId}">
+                        <label class="fw600 text-underline require">{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUsers | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUserId" class="label-color validation-message">
+                                {{'CJ_VALIDATE_EMP' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pt20 col-md-6 pr-0">
+                        <button class="btn btn-red br4" ng-click="submit()">
+                            <i class="fa fa-plus"></i>
+                            {{'CJ_ADD_EMP_DOWN'| translate}}
+                        </button>
+
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <div class="mh-300" style="overflow-y: scroll;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-9 text-center fw600 text-underline">{{'CJ_CURD_BTN_MEMBER' | translate}}</th>
+                                    <th class="col-md-3 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listUserFile">
+                                    <td>{{x.GivenName}}</td>
+                                    <td class="text-center">
+                                        <i role="button" ng-click="delete(x.Id)" class="fa fa-minus-circle" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

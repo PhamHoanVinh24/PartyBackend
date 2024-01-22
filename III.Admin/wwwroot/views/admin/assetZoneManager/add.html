@@ -1,0 +1,173 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Thêm vùng' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneType}">
+                        <label class="control-label require">{{'Kiểu vùng(Kho, vùng, dãy, kệ)' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.ZoneType" theme="bootstrap" ng-change="selectChange('ZoneType')">
+                                <ui-select-match placeholder="{{'Kiểu vùng(Kho, vùng, dãy, kệ)' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneType()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneType" class="label-color validation-message">
+                            {{'Kiểu vùng không được để trống' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4" ng-class="{ 'has-error': errorZoneGroup}">
+                        <label class="control-label require">{{'Nhóm vùng(Loại 1,...)' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.ZoneGroup" theme="bootstrap" ng-change="selectChange('ZoneGroup')">
+                                <ui-select-match placeholder="{{'Nhóm vùng(Loại 1,...)' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addZoneGroup()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorZoneGroup" class="label-color validation-message">
+                            {{'Nhóm vùng không được để trống' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label">{{'Cấp bậc trên' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.ZoneParent" theme="bootstrap" on-select="changeZone($item)">
+                                <ui-select-match placeholder="{{'Cấp bậc trên' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listZoneParent | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ZoneParent=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="text-danger bold fs11">{{model.ZoneHierachy}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'Mã vùng' | translate}}</label>
+                                <input class="form-control" name="ZoneCode" ng-model="model.ZoneCode" placeholder="{{'Mã vùng' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label require">{{'Tên vùng' | translate}}</label>
+                                <input class="form-control" name="ZoneName" ng-model="model.ZoneName" placeholder="{{'Tên vùng' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt10">
+                        <qrcode style="pointer-events:none" id="{{model.ZoneCode}}" role="button" data="{{model.ZoneCode}}" size="60" download></qrcode>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'Số lượng' | translate}}</label>
+                                <input class="form-control" name="ZoneQuantity" ng-model="model.ZoneQuantity" type="number" min="1" placeholder="{{'Số lượng' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'Nhãn mô tả' | translate}}</label>
+                                <textarea class="form-control" name="ZoneLabel" ng-model="model.ZoneLabel" placeholder="{{'Nhãn mô tả' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label">{{'SVG' | translate}}</label>
+                                <textarea class="form-control" name="SVG" ng-model="model.SvgIconData" placeholder="{{'Dữ liệu SVG' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pt10">
+                        <div class="thumbnail text-center pt10 pb1" style="box-shadow: none;background:none">
+                            <input id="image" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                            <img id="imageId" ng-click="uploadImage()" class="img-circle-no image-upload" style="height: 100px; width: 100px;cursor: pointer" />
+                            <label class="pt10"><span class="fa fa-file-image-o"></span> {{'Ảnh' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1 pl-0 pull-right">
+                        <div class="btn-group actions d-flex pl15">
+                            <div class="text-center pr10 pull-right" ng-click="submit()">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span><i class="fa fa-save"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>

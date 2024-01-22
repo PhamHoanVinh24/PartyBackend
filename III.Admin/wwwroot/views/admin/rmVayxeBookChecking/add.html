@@ -1,0 +1,124 @@
+﻿
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="fa fa-plus"></i> {{'RMVBC_TITLE_ADD' | translate}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class=" col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-scroll"></i> {{'RMVBC_CURD_LBL_TITLE_CHK' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.title_chk" name="FirstName" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-scroll"></i> {{'RMVBC_CURD_LBL_BOOK_CHK_CODE' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.book_chk_code" name="LastName" />
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-truck"></i> {{'RMVBC_CURD_LBL_NAME_CAR_NUMBER' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.License_plate" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="{{'RMVBC_CURD_TXT_NAME_CAR_NUMBER' | translate}}">{{$select.selected.Name_car}}-{{$select.selected.License_plate}}</ui-select-match>
+                                        <ui-select-choices repeat="x.License_plate as x in treeData | filter:$select.search">
+                                            {{x.Name_car}}-  {{x.License_plate}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.License_plate = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-folder"></i>{{'RMVBC_CURD_LBL_BLOCK_ID' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.block_id" name="LastName" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-warehouse"></i> {{'RMVBC_CURD_LBL_NUM_CHK' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="tel" class="form-control"  ng-model="model.num_chk" name="Phone" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-warehouse"></i> {{'RMVBC_CURD_LBL_CHK_NEXT_CHK_TIME' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" >
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" type="text" ng-model="model.next_chk_time" id="datetimepicker2">
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.next_chk_time = undefined" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <script>
+                                    $('#datetimepicker2').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+
+                                </script>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> {{'RMVBC_CURD_LBL_APPROVER_ID' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.approver_id" name="LastName" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-exclamation"></i> {{'RMVBC_CURD_LBL_ADD_STATUS' | translate}}</label>
+                            <div class="col-md-8 form-col-control" style="border-left:none">
+                                <div class="bs-component ">
+                                    <div class="col-md-6">
+                                        <label>
+                                            <input type="radio" ng-model="model.status" value="1">
+                                            {{'RMVBC_CURD_LBL_ADD_ST_UNFINISHED' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>
+                                            <input type="radio" ng-model="model.status" value="2">
+                                            {{'RMVBC_CURD_LBL_ADD_ST_FINISH' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-sticky-note"></i> {{'RMVBC_CURD_LBL_NOTE' | translate}}</label>
+                            <div class="col-md-8 form-col-control" style="border-left:none">
+                                <textarea rows="3" class="form-control"  ng-model="model.note" name="LastName">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group" style="padding-right:15px;padding-top:15px">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-plus"></i>{{'COM_BTN_ADD'| translate}}</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"><i class="fa fa-close"></i>{{'COM_BTN_CANCEL' | translate}}</button>
+    </div>
+   
+</div>

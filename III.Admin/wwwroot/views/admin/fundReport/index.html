@@ -1,0 +1,268 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row  mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FR_LBL_FROM_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group date'>
+                                <input ng-model="model.FromDate" id='Fromtime' autocomplete="off" class="form-control" type="text" placeholder="{{'FR_TXT_FROM_DATE' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FR_LBL_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class='input-group date'>
+                                <input ng-model="model.ToDate" id='Totime' autocomplete="off" class="form-control" type="text" placeholder="{{'FR_TXT_TO_DATE' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                        <span class="fa fa-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <label class="fw600 text-underline">{{'FR_LBL_AET_TYPE' | translate}}</label>
+                        <div class='input-group search-group br24'>
+                            <ui-select tagging ng-model="model.AetType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FR_TXT_AET_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAetType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.AetType='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-0">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <label class="fw600 text-underline">&nbsp;{{'FR_LBL_CAT_PARENT' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group search-group br24">
+                                    <ui-select ng-model="model.CatParent" theme="bootstrap" ng-change="ChangSelect($select.selected.Code)">
+                                        <ui-select-match placeholder="{{'FR_TXT_CAT_PARENT' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treeData | filter: $select.search">
+                                            <div style="padding-left: {{30 * x.Level}}px">
+                                                <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                {{x.Title}}
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CatParent=''" class="btn btn-default no-shadow catParent">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group actions d-flex pt20">
+                            <div class="text-center pr10">
+                                <a ng-click="search()" class=" fs30">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row pb40">
+        <!--  Start report 1-->
+        <div class="col-md-12">
+
+            <div class="card" style="padding:15px">
+                <div class="card-header pb20">
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <span>
+                                <label class="fw600 text-success">{{'FR_LBL_TOTAL_RECEIPET' | translate}} : </label>
+                                <label class="fw600 text-danger">{{ model.totalReceipt | number : fractionSize}}</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card-footer">
+                            <h4 class="card-title">VND</h4>
+                        </div>
+                    </div>
+                    <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="card-body h-400">
+                        <canvas id="bar-branch" class="chart chart-bar"
+                                chart-data="dataReceipt" chart-labels="labelsReceipt" chart-options="optionsReceipt" chart-series="seriesReceipt"></canvas>
+                    </div>
+                    <h2 class="text-center" style="padding-top :10px">{{'FR_TXT_CHART_REAL' | translate}} </h2>
+                </div>
+                <div class="col-md-3 pull-right">
+                    <span>
+                        <label class="fw600 text-success">{{'FR_LBL_TOTAL_RECEIPET_PLAN' | translate}} : </label>
+                        <label class="fw600 text-danger">{{ model.totalReceiptPlan | number : fractionSize}}</label>
+                    </span>
+                </div>
+                <div class="card-content">
+                    <div class="card-body h-400">
+                        <canvas id="bar-branch" class="chart chart-bar"
+                                chart-data="dataReceiptPlan" chart-labels="labelsReceiptPlan" chart-options="optionsReceipt" chart-series="seriesReceipt"></canvas>
+                    </div>
+                    <h2 class="text-center" style="padding-top :10px">{{'FR_TXT_CHART_COLLECT' | translate}} </h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card" style="padding:15px">
+                <div class="card-header pb20">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!--<div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <ui-select ng-model="model.CatCodeExpense" theme="bootstrap">
+                                            <ui-select-match placeholder="{{'FR_TXT_CAT_CODE_EXPENSE' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+
+                                            <ui-select-choices repeat="x.Code as x in listCatChildrentExpense | filter: $select.search">
+                                                <div style="padding-left: {{30 * x.Level}}px">
+                                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                                    {{x.Title}}
+                                                </div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.CatCodeExpense=''" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="col-md-1">
+                            <!--<div class="btn-group actions d-flex">
+                                <div class="text-center">
+                                    <a ng-click="search()" class=" btn btn-icon-only btn-circle btn-outline purple-custom">
+                                        <span><i class="fa fa-search"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <span>
+                                <label class="fw600 text-success">{{'FR_LBL_TOTAL_EXPENSE' | translate}} : </label>
+                                <label class="fw600 text-danger">{{model.totalExpense | number : fractionSize}}</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card-footer">
+                            <h4 class="card-title">VND</h4>
+                        </div>
+                    </div>
+                    <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content ">
+                    <div class="card-body h-400">
+                        <canvas id="bar-branch" class="chart chart-bar"
+                                chart-data="dataExpense" chart-labels="labelsExpense" chart-options="optionsExpense" chart-series="seriesExpense"></canvas>
+                    </div>
+                    <h2 class="text-center" style="padding-top :10px">{{'FR_TXT_CHART_EXPENSE' | translate}}</h2>
+                </div>
+                <div class="col-md-3 pull-right">
+                    <span>
+                        <label class="fw600 text-success">{{'FR_LBL_TOTAL_EXPENSE_PLAN' | translate}} : </label>
+                        <label class="fw600 text-danger">{{ model.totalExpensePlan | number : fractionSize}}</label>
+                    </span>
+                </div>
+                <div class="card-content ">
+                    <div class="card-body h-400">
+                        <canvas id="bar-branch" class="chart chart-bar"
+                                chart-data="dataExpensePlan" chart-labels="labelsExpensePlan" chart-options="optionsExpense" chart-series="seriesExpense"></canvas>
+                    </div>
+                    <h2 class="text-center" style="padding-top :10px">{{'FR_TXT_CHART_EXPECT_EXPENSE' | translate}}</h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 pull-right">
+            <label class="fw600 text-success"> {{'FR_LBL_TOTAL_REVENUE' | translate}} : </label><span class="fw600 text-danger">{{ model.totalRevenue | number : fractionSize}}</span>
+
+        </div>
+    </div>

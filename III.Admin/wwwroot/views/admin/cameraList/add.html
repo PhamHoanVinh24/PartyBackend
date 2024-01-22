@@ -1,0 +1,162 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Thêm hệ thống camera' | translate}}</span>
+</div>
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal ng-pristine ng-valid ng-isolate-scope" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-6">
+                        <div class="col-md-12">
+                            <div class="fileupload fileupload-new mh15" data-provides="fileupload" id="block-upload-image" style="margin: 0 auto !important;">
+                                <div class="form-group">
+                                    <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none;">
+                                        <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                        <img id="imageId" ng-click="loadImage()" class="h-300 w-450 br-n" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.ImageLink==null ? '../../../images/default/uploadimg.png' : model.ImageLink}}" role="button" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <a ng-click="loadImage()" class="btn btn-primary btn-block fileupload-exists" data-dismiss="fileupload">Chọn ảnh</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require ">{{'Mã vị trí hệ thống' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control" ng-model="model.RoomId" name="RoomId" placeholder="{{'Mã vị trí hệ thống' | translate}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require ">{{'Tên vị trí hệ thống' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control" ng-model="model.RoomName" name="RoomName" placeholder="{{'Tên vị trí hệ thống' | translate}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-sort-numeric-down"></i>
+                                <label class="control-label require ">{{'Số lượng tổng' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="number" class="form-control" ng-model="model.CameraQuantity" min="1" name="CameraQuantity" placeholder="{{'Số lượng tổng' | translate}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label ">{{'Ghi chú' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control" ng-model="model.Note" placeholder="{{'Ghi chú' | translate}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require ">{{'Thông tin đăng nhập' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control" ng-model="model.LoginInformation" name="LoginInformation" placeholder="{{'Thông tin đăng nhập' | translate}}">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class=" {'has-error': errorDepartment}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'Đơn vị trực thuộc' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.DepartmentCode" theme="bootstrap" on-select="changleSelect('Department')">
+                                        <ui-select-match placeholder="{{'Đơn vị trực thuộc' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in Departmentdata | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorDepartment" class="label-color validation-message ng-binding ng-hide">
+                                    {{'Vui lòng chọn phân xưởng chịu trách nhiệm' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-free-code-camp"></i>
+                                <label class="control-label require">&nbsp;{{'Số series ổ cứng' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input name="Series" class="form-control" ng-model="model.Series"  type="text" placeholder="{{'Số series ổ cứng' | translate}}...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <label class="control-label ">&nbsp;{{'Tình trạng ổ cứng' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class='input-group date' id="endtime">
+                                    <input type='text' class="form-control input-date" name="DiskStatus" ng-model="model.DiskStatus" placeholder="{{'Tình trạng ổ cứng' | translate}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require">&nbsp;{{'Dung lượng ổ cứng' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input name="Capacity" class="form-control" ng-model="model.Capacity" min="1" type="number" placeholder="{{'Dung lượng ổ cứng' | translate}}...">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class=" {'has-error': errorStatus}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'Có lưu dữ liệu' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.DiskSaveable" theme="bootstrap" on-select="changleSelect('Status')">
+                                        <ui-select-match placeholder="{{'Có lưu dữ liệu' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in status | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorStatus" class="label-color validation-message ng-binding ng-hide">
+                                    {{'Trạng thái không được để trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" btn-group pull-right actions d-flex">
+                            <div class="text-center pl10 margin-right-10" ng-click="cancel()">
+                                <a class="btn btn-icon-only btn-noboder btn-outline">
+                                    <span><i class="fa fa-remove"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="text-center pl10" ng-click="submit()">
+                                <a class="btn btn-icon-only btn-noboder btn-outline">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

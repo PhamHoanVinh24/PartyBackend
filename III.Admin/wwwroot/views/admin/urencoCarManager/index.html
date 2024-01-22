@@ -1,0 +1,151 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home" style="color:black;"></i>
+                    <a class=" bold text text-underline" style="color:black;" href="#">{{'UCM_TITLE_HOME' | translate}}</a>
+                    <span class="" style="color:black;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:black;" href="/Admin/AssetAllocation">{{'UCM_TITLE_HEADER_PAGE' | translate}}</a>
+                </li>
+            </ul>
+            <div class="btn-group actions pt5 pb-1 pull-right d-flex">
+                <div class="">
+                    <button class="btn green-custom br4" ng-click="add()">
+                        <i class="fa fa-plus"></i>
+                        {{'COM_BTN_ADD'| translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-4 pr-0">
+                    <div class="col-md-6 pl-0">
+                        <label class="fw600 text-underline">{{'UCM_LBL_CAR_PLATE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelsearch.CarPlate" theme="bootstrap">
+                                <ui-select-match placeholder="{{'UCM_LBL_CAR_PLATE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listCar | filter:$select.Name| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelsearch.CarPlate=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <label class="fw600 text-underline">{{'UCM_LBL_DRIVER' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelsearch.Driver" theme="bootstrap">
+                                <ui-select-match placeholder="{{'UCM_LBL_DRIVER' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listDriver | filter:$select.Name| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelsearch.Driver=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 pl-0 pr-0">
+                    <div class="col-md-6 pl-0">
+                        <label class="fw600 text-underline">{{'UCM_LBL_ROUTE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelsearch.Router" theme="bootstrap" >
+                                <ui-select-match placeholder="{{'UCM_LBL_ROUTE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listRoute | filter:$select.Name| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelsearch.Router=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <label class="fw600 text-underline">{{'UCM_LBL_BRANCH' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="modelsearch.Branch" theme="bootstrap">
+                                <ui-select-match placeholder="{{'UCM_LBL_BRANCH' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listBranch | filter:$select.Name| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelsearch.Branch=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0">
+                    <div class="col-md-6 pl-0">
+                        <label class="control-label fw600 text-underline">{{'UCM_LBL_START_TIME' | translate}}</label>
+                        <div class="input-group">
+                            <div class='input-group date'>
+                                <input ng-model="modelsearch.StartTime" id='datefrom' class="form-control" type="text" placeholder="{{'UCM_TXT_CHOOSE_TIME' | translate}}" ng-keydown="($event.keyCode == 13) && reloadNoResetPage()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.StartTime=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <label class="control-label fw600 text-underline">{{'UCM_LBL_END_TIME' | translate}}</label>
+                        <div class="input-group">
+                            <div class='input-group date'>
+                                <input ng-model="modelsearch.EndTime" id='dateto' class="form-control" type="text" placeholder="{{'UCM_TXT_CHOOSE_TIME' | translate}}" ng-keydown="($event.keyCode == 13) && reloadNoResetPage()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelsearch.EndTime=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt-1 pl30">
+                    <div class="btn-group actions  d-flex">
+                        <div class="text-center pr10 pull-right" ng-click="reloadNoResetPage()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reloadNoResetPage()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tabbable ">
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataDetail"></table>
+</div>
+
+

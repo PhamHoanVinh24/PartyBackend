@@ -1,0 +1,246 @@
+﻿<style>
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'ALCP_TITLE_EDIT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="pl15 pr15">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label class="control-label">{{'ALCP_CURD_LBL_SERVICE_CAT_CODE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.AllowanceCatCode" theme="bootstrap" on-select="changleSelect('AllowanceCode', $item)" ng-disabled="isEdit">
+                                <ui-select-match placeholder="{{'ALCP_CURD_TXT_SERVICE_CAT_CODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAllowance | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-md-7 pl-0">
+                        <label class="control-label">{{'ALCP_CURD_LBL_OBJ_CODE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ObjectCode" theme="bootstrap" on-select="changleSelect('ObjectCode', $item)" ng-disabled="isDisableObjectCode || isEdit">
+                                <ui-select-match placeholder="{{'ALCP_CURD_TXT_OBJ_CODE' | translate}}..">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listCondition | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addCommonSettingObjectCode()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 pl-0 pr-0">
+                        <div class="col-md-6">
+                            <label class="control-label">{{'ALCP_CURD_LBL_OBJ_FROM_VALUE' | translate}}</label>
+                            <div class='input-group'>
+                                <input num-thousand='true' awnum num-int='21' ng-model="model.ObjFromValue" class="form-control bold" placeholder="{{'ALCP_CURD_TXT_OBJ_FROM_VALUE' | translate}}..." ng-disabled="isDisableFromValue" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ObjFromValue=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pl-0">
+                            <label class="control-label">{{'ALCP_CURD_LBL_OBJ_TO_VALUE' | translate}}</label>
+                            <div class='input-group'>
+                                <input num-thousand='true' awnum num-int='21' ng-model="model.ObjToValue" class="form-control bold" placeholder="{{'ALCP_CURD_TXT_OBJ_TO_VALUE' | translate}}.." ng-disabled="isDisableToValue" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ObjToValue=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <label class="control-label">{{'ALCP_CURD_TXT_UNIT' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('Unit',$item)" ng-disabled="isDisableUnit">
+                                <ui-select-match placeholder="{{'ALCP_CURD_TXT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnitValue | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addCommonSettingUnit()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0">
+                        <label class="control-label">{{'ALCP_CURD_TXT_PRICE' | translate}}</label>
+                        <div class='input-group bold'>
+                            <input num-thousand='true' awnum num-int='21' class="br4 form-control input-date" ng-model="model.Price" placeholder="{{'ALCP_CURD_TXT_PRICE' | translate}}..." ng-disabled="isDisablePrice" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0">
+                        <label class="control-label">{{'ALCP_CURD_TXT_CURRENCY' | translate}}</label>
+                        <div class="input-group bold">
+                            <ui-select tagging ng-model="model.Currency" theme="bootstrap" on-select="changleSelect('Currency',$item)" ng-disabled="isDisableCurrency">
+                                <ui-select-match class="bold" placeholder="{{'ALCP_CURD_TXT_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices class="bold" repeat="x.Code as x in listCurrency | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="btn-group actions pull-right pt15 d-flex ml-2">
+                        <div class="mr15 pr-0" ng-if="isEdit==false">
+                            <button class="btn green-custom custom-width-button" ng-click="add()" style="border-radius: 0px !important">
+                                <i class="fa fa-plus"></i>
+                                {{'COM_BTN_ADD' | translate}}
+                            </button>
+                        </div>
+                        <div class="mr15 pr-0" ng-if="isEdit==true">
+                            <button class="btn green-custom " ng-click="save()" style="border-radius: 0px !important">
+                                <i class="fa fa-save"></i>
+                                {{'COM_BTN_SAVE' | translate}}
+                            </button>
+                            <button class="btn red-custom ml5" ng-click="close()" style="border-radius: 0px !important">
+                                <i class="fa fa-close"></i>
+                                {{'COM_BTN_CANCEL' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt10">
+                    <div class="col-md-12">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblData"></table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

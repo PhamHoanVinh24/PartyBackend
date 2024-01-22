@@ -1,0 +1,364 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 50px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .image-upload {
+        background-image: url(../../../images/default/uploadimg.png);
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-size: auto 100%;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+        float: left;
+        width: 100%;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex" style="margin-top: -50px;">
+    <!--<div class="text-center pr-2" ng-show="!isSearch">
+        <a class="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="text-center pr-2 mt10">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="col-md-12" style="height:20px">
+                    <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+                <div class="row pt5 mb5">
+                    <div class="col-md-8">
+                        <label class="fw600 text-underline">{{'MEXIP_LBL_ID'|translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.Id" theme="bootstrap" on-select="changleSelect('unit')" ng-change="getFloorInStore()">
+                                <ui-select-match placeholder="{{'MEXIP_TXT_ID'|translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in products | filter:&nbsp;$select.search">
+                                    {{x.Title}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Id=''; reset()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <label class="text-danger fs11">* {{'MEXIP_LBL_NOTE_LE'|translate}}</label><br />
+                        <label class="text-danger fs11">* {{'MEXIP_LBL_NOTE_PO'|translate}}</label>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pull-left pt35 d-flex">
+                            <div class="text-center">
+                                <a class="" ng-click="search()">
+                                    <span><i class="fas fa-search fs30"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" ng-if="showInfo">
+    <div class="row text-center fs30">
+        <label class="bold text-dark">{{'MEXIP_LBL_INFO_PRODUCT'|translate}}</label>
+    </div>
+    <div class="row portlet light bordered">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="thumbnail input-unstyled text-center mb-0 p-0">
+                        <img ng-click="viewQrCode(productInfo.QrCode)" src="data:image/png;base64,{{productInfo.QrCode}}" class=" image-upload h-80" role="button">
+                        <label class="control-label bold">QrCode</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="thumbnail input-unstyled text-center mb-0">
+                        <img ng-click="viewBarCode(productInfo.BarCode)" src="data:image/png;base64, {{productInfo.BarCode}}" class=" image-upload h-50 w150" role="button">
+                        <label class="control-label bold">BarCode</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_PRODUCT_QR_CODE'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.ProductQrCode}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_PRODUCT_NAME'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.ProductName}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_PRODUCT_TYPE'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.ProductType}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_LOT_PRODUCT_CODE'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.LotProductCode}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'Kho'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.StoreCode}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'Số lượng trong kho'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.QuantityInStock|number}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_TICKET_IMP_CPDE'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.TicketImpCode}}</label>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <label class="control-label bold">{{'MEXIP_LBL_TICKET_EXP_CODE'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.TicketExpCode}}</label>
+                </div>
+            </div>-->
+            <!--<div class="row" ng-click="locateProduct()" type="button">
+                <div class="col-md-12">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <label class="control-label bold underline">{{'MEXIP_LBL_RACK_NAME'|translate}}:&nbsp;</label>
+                    <label class="control-label text-dark bold">{{productInfo.Position}}</label>
+                    <a>(Click để xem sơ đồ)</a>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+    <div class="tab" role="tabpanel">
+        <ul class=" nav nav-tabs ui-tabs-scrollable scroll-nav" ng-class="{'show-drop-down': !hideDropDown}" role="tablist">
+            <li role="presentation" class="active">
+                <div href="#Position" aria-controls="home" role="button" data-toggle="tab">
+                    {{'Vị trí' | translate}}
+                </div>
+            </li>
+            <li role="presentation" class="stepNext">
+                <div href="#History" aria-controls="home" role="button" data-toggle="tab">
+                    {{'Lịch sử' | translate}}
+                </div>
+            </li>
+            <li role="presentation" class="stepNext">
+                <div href="#File" aria-controls="home" role="button" data-toggle="tab">
+                    {{'Danh sách file' | translate}}
+                </div>
+            </li>
+        </ul>
+        <div class="tab-content pt10">
+            <div role="tabpanel" class="tab-pane fade in active" id="Position">
+                <div class="table-responsive" style="min-height: 500px">
+                    <table class="table table-bordered" id="tblListPosition">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'STT' | translate}}</th>
+                                <!--<th class="col-md-3 text-center fw600 text-underline">{{'MIS_LIST_COL_CODE_PRODUCT' | translate}}</th>
+                        <th class="col-md-2 text-center fw600 text-underline">{{'MIS_LIST_COL_NAME_PRODUCT' | translate}}</th>-->
+                                <th class="col-md-2 text-center fw600 text-underline">{{'Vị trí' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'Số lượng' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 5%">{{'Thứ tự' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline">{{'Thuộc tính' | translate}}</th>
+                                <!--<th class="col-md-1 text-center fw600 text-underline nowrap">{{'MIS_LIST_COL_ACTION_MIS' | translate}}</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in lstPosition">
+                                <td class="text-center">{{$index+1}}</td>
+                                <!--<td class="text-left">{{x.ProductQrCode}}</td>
+                        <td class="text-left">{{model.ProductName}}</td>-->
+                                <td class="text-left" ng-click="locateProduct(x.Position)">
+                                    {{x.Position}}&nbsp;<a>(Click để xem sơ đồ)</a>
+                                </td>
+                                <td class="text-center">{{x.Quantity|number}}</td>
+                                <td class="text-center">{{x.ProductNo}}</td>
+                                <td class="text-center">{{x.GattrFlatCode}}</td>
+                                <!--<td class="text-center">
+                            <a title="Xóa" ng-click="deleteOrder(x.Id)" style="width: 25px; height: 25px; padding: 0px;" class=""><i style="--fa-primary-color: red;" class="fa-solid fa-trash  fs25"></i></a>
+                        </td>-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="History">
+                <div class="table-responsive" style="min-height: 500px">
+                    <table class="table table-bordered" id="tblListHistory">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'STT' | translate}}</th>
+                                <th class="col-md-2 text-center fw600 text-underline" style="width: 5%">{{'Kiểu' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline">{{'Tên phiếu [Vị trí cũ]' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline">{{'Vị trí' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'Số lượng' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline" style="width: 5%">{{'Thứ tự' | translate}}</th>
+                                <th class="col-md-1 text-center fw600 text-underline">{{'Thuộc tính' | translate}}</th>
+                                <!--<th class="col-md-1 text-center fw600 text-underline nowrap">{{'MIS_LIST_COL_ACTION_MIS' | translate}}</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in lstHistory">
+                                <td class="text-center">{{$index+1}}</td>
+                                <td class="text-center">
+                                    <b ng-if="x.Type === 'IMPORT_RETURN'">
+                                        Nhập trả về
+                                    </b>
+                                    <b ng-if="x.Type === 'EXPORT_PARTIAL'">
+                                        Xuất linh kiện
+                                    </b>
+                                    <b ng-if="x.Type === 'ARRANGE_IMP'">
+                                        Xếp sản phẩm tồn kho
+                                    </b>
+                                    <b ng-if="x.Type === 'EXPORT_FULL'">
+                                        Xuất sản phẩm
+                                    </b>
+                                    <b ng-if="x.Type === 'REARRANGE'">
+                                        Xếp lại sản phẩm
+                                    </b>
+                                </td>
+                                <td class="text-center">
+                                    <div ng-if="x.Type === 'IMPORT_RETURN'">{{x.TicketNameImpReturn}}</div>
+                                    <div ng-if="x.Type === 'EXPORT_PARTIAL'">{{x.TicketNameExportPartial}}</div>
+                                    <div ng-if="x.Type === 'ARRANGE_IMP'">{{x.TicketNameImpArrange}}</div>
+                                    <div ng-if="x.Type === 'EXPORT_FULL'">{{x.TicketNameExportFull}}</div>
+                                    <div ng-if="x.Type === 'REARRANGE'">{{x.MappingCodeOld}}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div ng-if="x.Type !== 'EXPORT_FULL'">{{x.MappingCode}}</div>
+                                    <div ng-if="x.Type === 'EXPORT_FULL'">{{x.MappingCodeOld}}</div>
+                                </td>
+                                <td class="text-center">
+                                    {{x.Quantity|number}}
+                                </td>
+                                <td class="text-center">{{x.ProductNo}}</td>
+                                <td class="text-center">{{x.GattrFlatCode}}</td>
+                                <!--<td class="text-center">
+                            <a title="Xóa" ng-click="deleteOrder(x.Id)" style="width: 25px; height: 25px; padding: 0px;" class=""><i style="--fa-primary-color: red;" class="fa-solid fa-trash  fs25"></i></a>
+                        </td>-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="File">
+                <div style="height: 500px; overflow-y: auto; overflow-x: hidden" ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="!showInfo">
+    <div class="row text-center fs30">
+        <label class="bold text-dark">{{'Chọn sản phẩm trong kho để truy xuất thông tin'|translate}}</label>
+    </div>
+</div>

@@ -1,0 +1,275 @@
+﻿<style>
+    .ui-select-match-close{
+        background-image:none;
+    }
+    .mt-checkbox {
+        margin-bottom: 0px !important;
+    }
+</style>
+<div style="margin: 50px 0px 0px 5px;" id="detailDocument">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-md-5">
+                <h1>Thông tin văn bản</h1>
+                <ul class="breadcrumb-title">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="#">Trang chủ</a>
+                        <span>&gt;</span>
+                    </li>
+                    <!--<li>
+                        <a href="#/customer">Vào sổ văn bản</a>
+                        <span>&gt;</span>
+                    </li>-->
+                    <li>
+                        <div href="#/customer">Thông tin văn bản</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7">
+                <div class="btn-group pull-right actions">
+                    <a ng-click="cancel()" class="btn btn-default br4">
+                        <span class=""><i class="fa fa-arrow-left"></i> Quay lại</span>
+                    </a>
+                    <a ng-click="moveDocument()" class="btn btn-green br4">
+                        <span><i class="fas fa-retweet"></i> Chuyển xử lý</span>
+                    </a>
+                    <a ng-click="edit()" class="btn btn-print br4">
+                        <span><i class="fas fa-sync-alt"></i> Hiệu chỉnh</span>
+                    </a>
+                    <a ng-click="delete()" class="btn btn-red br4">
+                        <span><i class="fa fa-print"></i> Xóa</span>
+                    </a>
+                    <a ng-click="print('detailDocument')" class="btn btn-print br4">
+                        <span><i class="fa fa-print"></i> In phiếu xử lý</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <h1 style="margin-bottom:-10px"><b>Công khai văn bản</b></h1>
+    </div>
+    <hr>
+    <div class="col-md-12 mb10">
+        <h2><u><b>Thông tin cơ bản</b></u></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="form-group">
+                <b class=" require">Sổ văn bản:</b><span>&nbsp;{{model.DocumentName}}</span>
+            </div>
+            <div class="form-group">
+                <b class="require">Sổ/ký hiệu:</b><span>&nbsp;{{model.DocumentSymbol}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Ngày đến:</b><span>&nbsp;{{model.FromDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Trích yếu:</b><span>&nbsp;{{model.Note}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Lĩnh vực:</b><span>&nbsp;{{model.DocumentZone}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Người ký:</b><span>&nbsp;{{model.SignUser}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Tính chất văn bản:</b><span>&nbsp;{{model.Confidentiality}}</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <b class=" require">Sổ đến: {{model.DocumentNumber}}</b>
+            </div>
+            <div class="form-group">
+                <b class=" ">Cơ quan ban hành: {{model.Origanization}}</b>
+            </div>
+            <div class="form-group">
+                <b class="">Ngày ban hành:</b><span>&nbsp;{{model.PromulgateDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+
+            <div class="form-group">
+                <b class="">Loại văn bản:</b><span>&nbsp;{{model.DocumentType}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Chức vụ:</b><span>&nbsp;{{model.Position}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Phương thức nhận:</b><span>&nbsp;{{model.GetMothod}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Đơn vị tiếp quản:</b><span>&nbsp;{{model.UnitEditor}}</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <b class="">Người nhập:</b><span>&nbsp;{{model.CreatedBy}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Hồi báo văn bản đi:</b>
+            </div>
+            <div class="form-group">
+                <b class="">Cần trả lời bằng VB đi:</b><span>&nbsp;{{model.IsReply==true?"Có":"Không"}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Hạn trả lời:</b><span>&nbsp;{{model.ExperiedReply | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Văn bản cần phải xử lý:</b><span>&nbsp;{{model.IsProcess==true?"Có":"Không"}}</span>
+            </div>
+            <div class="form-group">
+                <b class="">Tình trạng trả lời:</b><span>&nbsp;{{model.ReplyStatus}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <h2><u><b>Danh sách tệp đính kèm</b></u></h2>
+        <div class="col-lg-offset-3 col-md-9">
+            <a>AA.txt</a>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <h2><u><b>Ý kiến đóng góp</b></u></h2>
+        <div class="col-lg-offset-3 col-md-9">
+            <label>Chưa có ý kiến đóng góp</label>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h2><u><b>Quá trình xử lý</b></u></h2>
+        <div class="col-lg-offset-3 col-md-9">
+            <label>Chưa có thông tin xử lý văn bản</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <h2><u><b>Chuyển xử văn bản</b></u></h2>
+            </div>
+            <div class="col-md-12 pb20">
+                <div class="col-md-3">
+                    <h2><b>Ý kiến xử lý</b></h2>
+                </div>
+                <div class="col-md-9">
+                    <textarea rows="3" class="form-control" ng-model="model1.Comment" type="text" placeholder="Ý kiến xử lý..." autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 pb20">
+                <div class="col-md-3">
+                    <h2><b>Người nhận xử lý</b></h2>
+                </div>
+                <div class="col-md-9">
+                    <div class="col-md-12 pt15" style="border:1px solid #ccc;border-radius:4px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <i>Người dùng trong nhóm</i>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 pb10" ng-show="UserInGroupData.length !=0">
+                                <div class="col-md-6" ng-repeat="x in UserInGroupData">
+                                    <div class="mt-checkbox-list pb-0 mb-0">
+                                        <label class="mt-checkbox mt-checkbox-outline ">
+                                            {{x.Name}}
+                                            <input type="checkbox" id="UserInGroup_{{x.Id}}" ng-model="x.Selected">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-show="UserInGroupData.length ==0" style="padding: 10px 0px 10px 30px;">
+                               <span class="text-danger">Không có người dùng trong nhóm</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <i>Nhóm người dùng khác</i>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 pb15">
+                                <div class="col-md-6" ng-repeat="x in AllDepartment">
+                                    <div class="mt-checkbox-list pb-0 mb-0">
+                                        <label class="mt-checkbox mt-checkbox-outline ">
+                                            {{x.Title}}
+                                            <input type="checkbox" id="chkCustomer_{{x.GroupUserId}}" ng-model="x.Selected">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 pb20">
+                <div class="col-md-3">
+                    <h2><b></b></h2>
+                </div>
+                <div class="col-md-9">
+                    <textarea rows="3" class="form-control" ng-model="model1.Reason" type="text" placeholder="Lý do..." autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 ">
+                <div class="col-md-3">
+                    <h2><b>Hạn xử lý</b></h2>
+                </div>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input ng-model="model1.DeadLine" class="form-control" type="text" placeholder="Hạn xử lý..." id='DeadLine'/>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model1.DeadLine=''" class="btn btn-default no-shadow">
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <h2><u><b>Danh sách người phối hợp xử lý</b></u></h2>
+            </div>
+            <div class="col-md-12 pb20">
+                <div class="col-md-3">
+                    <h2><b>Người phối hợp</b></h2>
+                </div>
+                <div class="col-md-9">
+                    <ui-select ng-model="model1.Coordinate" multiple theme="bootstrap" class="" style="width: 100%;">
+                        <ui-select-match placeholder="Người phối hợp xử lý...">{{$item.GivenName}}</ui-select-match>
+                        <ui-select-choices repeat="x.Id as x in UserData | filter:$select.search">
+                            {{x.GivenName}} 
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <h2><u><b>Danh sách người nhận văn bản tham khảo</b></u></h2>
+            </div>
+            <div class="col-md-12 pb20">
+                <div class="col-md-3">
+                    <h2><b>Người nhận</b></h2>
+                </div>
+                <div class="col-md-9">
+                    <ui-select ng-model="model1.Received" multiple theme="bootstrap" class="" style="width: 100%;">
+                        <ui-select-match placeholder="Người nhận...">{{$item.GivenName}}</ui-select-match>
+                        <ui-select-choices repeat="  x.Id as x in UserData | filter:$select.search">
+                            {{x.GivenName}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

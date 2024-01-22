@@ -1,0 +1,77 @@
+﻿<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-users" style="padding-top: 7px;color:black"></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_CURD_TAB_OBJECT_RELATIVE_TITLE_OBJ_RELATIVE' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body p0 mt5" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="col-md-12">
+                <div class="col-md-12 p0">
+                    <div class="col-md-2 pl-0 br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.ObjTypeCode" on-select="objTypeChange(setting.ObjTypeCode)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_OBJ_DEPENDENCY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in objTypeJC | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pl-0 br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.ObjCode" on-select="objCodeChange(setting.ObjCode)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_OBJ_CODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in listObjWithType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <!--<span class="input-group-btn">
+                            <button type="button" ng-click="addObject(setting.ObjTypeCode)" class="btn no-shadow green-custom" style="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>-->
+                    </div>
+                    <div class="col-md-3 pl-0 br24-nobtn" style="width: 15%;">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.Relative" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_TAB_OBJECT_RELATIVE_TXT_RELATIVE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in relative | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3 pl-0 pr-0 br24-nobtn" style="width: 23%;">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="setting.ItemCode" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_BTN_WORK_ITEM' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices style="height: auto" repeat="x.Code as x in listItemChecks | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-2 pr-0" style="width: 10% !important">
+                        <div class="input-group">
+                            <input ng-model="setting.Weight" class="form-control br24" type="text" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" placeholder="{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="width: 10% !important">
+                        <div class="text-center mt10">
+                            <a data-dismiss="modal" ng-click="addDependency()" class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa-solid fa-plus fs25 color-cf-blue"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 portlet light bordered mt5">
+                    <div class="portlet-body">
+                        <table id="obj-data-table" style="width: 100%" class="display"></table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<button ng-click="submit()" class="btn red mr15 no-boxshadow" href="javascript:;" style="font-weight:bold;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>-->
+</div>

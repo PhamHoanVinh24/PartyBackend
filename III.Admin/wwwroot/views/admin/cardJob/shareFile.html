@@ -1,0 +1,112 @@
+﻿<style type="text/css">
+    
+    .ui-select-multiple.ui-select-bootstrap {
+        padding: 5px !important;
+    }
+
+    .ui-select-search {
+        padding-bottom: 5px;
+    }
+
+    .ui-select-match-item {
+        border-radius: 5px !important;
+    }
+
+    .close {
+        background-image: none !important;
+    }
+
+    .btn-share {
+        border: 1px solid black;
+        border-radius: 5px;
+        background: white;
+        border: 1px solid black;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        margin-top: -3px !important;
+        opacity: 1;
+    }
+</style>
+
+<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-share-alt black mt10"></i>
+    <span class="fw600 black" id="modal-title"> {{'COM_LBL_SHARE_TITLE' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="row p10">
+            <div class="col-md-10">
+                <div class="form-group" ng-class="{'has-error': errorStatus }">
+                    <label class="control-label text-underline require">{{'COM_FP_SHARE_EMPLOYEE' | translate}}:</label>
+                    <div class="input-group br24-nobtn">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.UserName" theme="bootstrap" on-select="changeUser($item)">
+                            <ui-select-match placeholder="{{'COM_FP_SHARE_EMPLOYEE' | translate}}..."><p id="status">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listUser | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <a class="bold pull-left mt35" ng-click="share()">
+                <i class="fas fa-share-alt fs25"></i>
+                <!--{{'COM_BTN_SHARE' | translate}}-->
+            </a>
+        </div>
+        <div class="row">
+            <div class="table-responsive" style="height: 300px; overflow-y: scroll;">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%;">{{'STT' | translate}}</th>
+                            <th class="text-center" style="width: 75%;">{{'COM_FP_SHARE_EMPLOYEE' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'COM_FP_PERMISSION_READ' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'COM_FP_PERMISSION_WRITE' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'COM_FP_PERMISSION_DELETE' | translate}}</th>
+                            <th class="text-center" style="width: 5%;">{{'COM_LIST_COL_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in lstUserSharePermission">
+                            <td class="text-center">{{$index + 1}}</td>
+                            <td class="">
+                                <span>{{x.Name}}</span><br />
+                                <span class="badge-customer badge-customer-success">{{x.DepartmentName}}</span>
+                            </td>
+                            <td class="text-center pt10">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Read != true"
+                                   ng-click="updatePermission(x, 0, false)"></i>
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Read == true"
+                                   ng-click="updatePermission(x, 0, true)"></i><br />
+                            </td>
+                            <td class="text-center pt10">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Write != true"
+                                   ng-click="updatePermission(x, 1, false)"></i>
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Write == true"
+                                   ng-click="updatePermission(x, 1, true)"></i><br />
+                            </td>
+                            <td class="text-center pt10">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Delete != true"
+                                   ng-click="updatePermission(x, 2, false)"></i>
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.Permission.Delete == true"
+                                   ng-click="updatePermission(x, 2, true)"></i><br />
+                            </td>
+                            <td class="text-center pt10">
+                                <a title="Xoá" ng-click="deleteShare(x.Code)" style1="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class1="btn btn-icon-only btn-circle btn-outline red">
+                                    <i class="fas fa-trash-alt fs25 text-danger" style="color: white;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+</div>

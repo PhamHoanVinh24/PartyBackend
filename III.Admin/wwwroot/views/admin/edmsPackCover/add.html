@@ -1,0 +1,92 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title"> {{'EDMS_ADD_RACK_PACK' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="col-md-6 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require"><i class="fas fa-barcode"></i>&nbsp;{{'EDMS_CRUD_PACK_CODE' | translate}}</label>
+                            <input ng-model="model.ObjPackCode" name="ObjPackCode" class="form-control" type="text" placeholder="{{'EDMS_CRUD_PACK_CODE' | translate}}..." readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_NAME' | translate}}</label>
+                            <input ng-model="model.Name" name="Name" class="form-control" type="text" placeholder="{{'EDMS_CRUD_PACK_NAME' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_SIZE' | translate}}</label>
+                            <input ng-model="model.SpecSize" name="SpecSize" class="form-control" type="text" placeholder="{{'EDMS_CRUD_PACK_SIZE' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_WEIGHT' | translate}}</label>
+                            <input ng-model="model.Weight" name="Weight" class="form-control" type="text" placeholder="{{'EDMS_CRUD_PACK_WEIGHT' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_VALIDATE_PACK_WEIGHT_UNIT' | translate}}</label>
+                            <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.Unit" theme="bootstrap">
+                                <ui-select-match placeholder="{{'EDMS_VALIDATE_PACK_WEIGHT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pl-0">
+                <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_DESCRIPTION' | translate}}</label>
+                <textarea ng-model="model.Description" name="Description" rows="3" class="form-control" placeholder="{{'EDMS_CRUD_PACK_DESCRIPTION' | translate}}..." />
+            </div>
+            <div class="col-md-6 pl-0">
+                <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_JSONDATA' | translate}}</label>
+                <textarea ng-model="model.ShapeData" name="ShapeData" rows="3" class="form-control" type="text" placeholder="{{'EDMS_CRUD_PACK_JSONDATA' | translate}}..." />
+            </div>
+            <div class="col-md-12 pl-0">
+                <label class="control-label"><i class="fas fa-info-circle"></i>&nbsp;{{'EDMS_CRUD_PACK_RACK_INFO' | translate}}: <i class="text-danger fs9">{{'EDMS_NAME_SHELF_CABINET_WAREHOUSE_FLOOR_RANGE' | translate}}</i></label>
+                <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.Located" theme="bootstrap">
+                    <ui-select-match placeholder="{{'EDMS_CRUD_PACK_RACK_INFO' | translate}}"><b>{{$select.selected.RackName}}&nbsp;({{$select.selected.Code}}) : </b> <i class="text-green">{{$select.selected.WHS_Name}} --> {{$select.selected.FloorName}} --> {{$select.selected.L_Text}} --> {{$select.selected.RackName}}</i></ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listRackSearch | filter: $select.search">
+                        <span class="fs11"><b>{{x.RackName}}&nbsp;({{x.Code}}) : </b><br /> <i class="text-green">{{x.WHS_Name}} --> {{x.FloorName}} --> {{x.L_Text}} --> {{x.RackName}}</i></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex mr25 mt20">
+        <div class="pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>
+

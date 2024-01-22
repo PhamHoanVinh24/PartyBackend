@@ -1,0 +1,34 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-info-circle icon-edit"></i>
+    <span class="modal-title" id="modal-title">{{'Thông tin chi tiết luồng' | translate}}</span>
+</div>
+<div class="modal-body p-0" id="modal-body">
+    <div class="col-md-12 mb5 p10 d-flex" style="border-radius: 10px;background: whitesmoke;">
+        <div style="width: {{100/lstActArranged.length}}%; margin: auto;" ng-repeat="x in lstActArranged">
+            <div class="col-md-12 pl-0 pr-0" ng-repeat="k in x">
+                <a title="{{k.ActName}}" ng-click="editInstAct(k.Id, k.ObjectCode)" class="fw600 pull-left" ng-if="k.ActName.length > 25">
+                    <div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+                                     'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                     'act-pending': (!k.IsLock && k.ActStatus == 'Đang xử lý'),
+                                     'act-success': (!k.IsLock && (k.ActStatus == 'Duyệt hoàn thành và đi tiếp' || k.ActStatus == 'Duyệt và kết thúc' )),
+                                     'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>{{k.ActName.substr(0,25)}}...
+                </a>
+                <a title="{{k.ActName}}" ng-click="editInstAct(k.Id, k.ObjectCode)" class="fw600 pull-left" ng-if="k.ActName.length <= 25">
+                    <div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+                                     'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                     'act-pending': (!k.IsLock && k.ActStatus == 'Đang xử lý'),
+                                     'act-success': (!k.IsLock && (k.ActStatus == 'Duyệt hoàn thành và đi tiếp' || k.ActStatus == 'Duyệt và kết thúc' )),
+                                     'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>{{k.ActName}}
+                </a>
+                <br />
+                <span ng-show="k.IsInstance" ng-class="{'badge-customer-lock' : k.IsLock,
+                                  'badge-customer-pause' : (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                  'badge-customer-warning' : (!k.IsLock && k.ActStatus == 'Đang xử lý'),
+                                  'badge-customer-success' : (!k.IsLock && (k.ActStatus == 'Duyệt hoàn thành và đi tiếp' ||k.ActStatus == 'Duyệt và kết thúc')),
+                                  'badge-customer-danger' : (!k.IsLock && k.ActStatus == 'Hủy bỏ')}"
+                      class="badge-customer act-label fs10">{{k.ActStatus}}</span>
+            </div>
+        </div>
+    </div>
+</div>

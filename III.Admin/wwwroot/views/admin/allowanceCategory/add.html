@@ -1,0 +1,154 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+</style>
+<div class="modal-header" style="background-color: white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="color: black"></i>
+    <span class="modal-title" id="modal-title" style="color: black"> {{'ALC_TITLE_ADD_CATEGORY' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <i class="fas fa-list" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{'ALC_CURE_LBL_GROUP' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Group" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ALC_CURE_TXT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addCommonSettingGroup()" class="btn no-shadow">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'ALC_CURD_LBL_ALLOWANCE_CAT_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Code" name="Code" id="Code" placeholder="{{'ALC_CURD_TXT_ALLOWANCE_CAT_CODE' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'ALC_CURD_LBL_ALLOWANCE_CAT_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Name" name="Name" placeholder="{{'ALC_CURD_TXT_ALLOWANCE_CAT_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i>
+                                <label class="control-label">{{'ALC_CRUD_COL_EXCEL' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.ExcelColumn" name="ExcelColumn" placeholder="{{'ALC_CRUD_COL_EXCEL' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-calculator" aria-hidden="true"></i>
+                                <label class="control-label">{{'ALC_CRUD_EXPRESSION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24" ng-model="model.Expression" name="Expression" placeholder="{{'ALC_CRUD_EXPRESSION' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr-0 mt30">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="mt-checkbox mt-checkbox-outline fs12 p5" style="margin-right: 10px !important; display:inline">
+                                    <input type="checkbox" ng-model="model.Base">
+                                    <b class="text-center ml20">{{'ALC_CURD_ALLOWANCE_BASE' | translate}}</b>
+                                    <span style="background-color: white; top: 4px;"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label">{{'ALC_CRUD_DEFAULT_VALUE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control br24 bold" ng-model="model.DefaultValue" placeholder="{{'ALC_CRUD_DEFAULT_VALUE' | translate}}..." ng-disabled="model.Base==false" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label custom-title-code-bold">{{'ALC_CURE_LBL_ACTION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea type="text" class="form-control custom-title-code-bold" rows="6" ng-model="model.Note" placeholder="{{'ALC_CURE_TXT_ACTION' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class=" pull-right">
+                                <div class="btn-group actions d-flex">
+                                    <div class="text-center pr10" ng-click="cancel()">
+                                        <div class="fs30">
+                                            <span><i class="fas fa-times" style="color: red"></i></span>
+                                        </div>
+                                        <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                                    </div>
+                                    <div class="text-center" ng-click="submit()">
+                                        <div class="fs30">
+                                            <span><i class="fa-solid fa-plus color-cf-blue"></i></span>
+                                        </div>
+                                        <p class="text-underline fs9 mb-0  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,164 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Mã/tên phiếu' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Code" class="form-control" type="text" placeholder="{{'Mã/tên phiếu' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Code=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="fw600 text-underline">{{'Kiểu xuất'|translate}}</label>
+                    </div>
+                    <div class="col-md-12  pl-0">
+                        <div class="input-group search-group">
+                            <ui-select tagging ng-model="modelAttr.AttrUnit" theme="bootstrap" on-select="changleSelect('AttrUnit')" ng-disabled="isDisabledUnit">
+                                <ui-select-match placeholder="{{'Kiểu xuất'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in ListATTRUNIT | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelAttr.AttrUnit=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="fw600 text-underline">{{'Người xuất'|translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <div class="input-group search-group">
+                            <ui-select tagging ng-model="modelAttr.AttrUnit" theme="bootstrap" on-select="changleSelect('AttrUnit')" ng-disabled="isDisabledUnit">
+                                <ui-select-match placeholder="{{'Người xuất'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in ListATTRUNIT | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelAttr.AttrUnit=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <label class="fw600 text-underline">{{'Người nhận' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Code" class="form-control" type="text" placeholder="{{'Người nhận' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Code=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pl-0">
+                    <div class="col-md-12 pl-0">
+                        <label class="fw600 text-underline">{{'Trạng thái'|translate}}</label>
+                    </div>
+                    <div class="col-md-12 pl-0">
+                        <div class="input-group search-group">
+                            <ui-select tagging ng-model="modelAttr.AttrUnit" theme="bootstrap" on-select="changleSelect('AttrUnit')" ng-disabled="isDisabledUnit">
+                                <ui-select-match placeholder="{{'Trạng thái'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat=" x.Code as x in ListATTRUNIT | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelAttr.AttrUnit=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="btn-group actions pt20 d-flex">
+                        <div class="text-center pull-right" ng-click="search()">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!--<div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>-->
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

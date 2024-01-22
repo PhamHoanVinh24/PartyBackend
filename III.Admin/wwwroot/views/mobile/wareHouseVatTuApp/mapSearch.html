@@ -1,0 +1,184 @@
+﻿<style>
+    .text-underline {
+        font-size: 10px;
+    }
+
+    .width100 {
+        width: 100%;
+        float: left;
+    }
+
+    .width90 {
+        width: 90%;
+        float: left;
+    }
+
+    .width10 {
+        width: 10%;
+        float: left;
+    }
+
+    .ui-select-toggle {
+        height: 30px !important;
+        padding: 4px 10px !important;
+    }
+
+    .ui-select-match-text {
+        padding-top: 3px !important;
+    }
+
+    span {
+        font-size: 12px !important;
+        padding: 0px !important;
+    }
+
+    .btnClose {
+        width: 30px;
+        height: 30px;
+        background: none;
+        border-top: 1px solid #d2d2d2;
+        border-right: 1px solid #d2d2d2;
+        border-bottom: 1px solid #d2d2d2;
+        border-left: 0px solid #d2d2d2;
+    }
+
+    .btnsearch {
+        height: 35px;
+        width: 35px;
+        color: green;
+        background: no-repeat;
+        border: 1px solid #d2d2d2;
+        border-radius: 6px;
+    }
+
+    .inputProduct {
+        height: 30px;
+        border: 1px solid #d2d2d2;
+        padding-left: 10px;
+    }
+
+    th {
+        font-size: 12px;
+    }
+
+    td {
+        font-size: 11px;
+    }
+    .modal-content {
+        float: left;
+        width: 100%;
+    }
+</style>
+<div class="modal-header" style="padding:5px;width: 100%;float: left;">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <span style="margin: 6px;float: left;" class="modal-title" id="modal-title"><i class="fa fa-search"></i>&nbsp;{{'Tìm sản phẩm' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body" style="width: 100%;float: left;">
+    <div class="portlet-body">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div>
+                <label class="fw600 text-underline">{{'Nhóm sản phẩm' | translate}}</label>
+                <div class="width100">
+                    <ui-select tagging ng-model="model.Group" theme="bootstrap" class="width90">
+                        <ui-select-match placeholder="{{'Nhóm sản phẩm' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in productGroups | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="width10">
+                        <button type="button" class="btnClose" ng-click="model.Group=''">
+                            <div class="glyphicon glyphicon-remove"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="fw600 text-underline">{{'Mã/Tên sản phẩm' | translate}}</label>
+                <div class="width100">
+                    <input class="width90 inputProduct" ng-model="model.Code" type="text" placeholder="{{'Mã/Tên sản phẩm' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    <div class="width10">
+                        <button type="button" class="btnClose" ng-click="model.Code='';">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <label class="fw600 text-underline">{{'Catalogue' | translate}}</label>
+                <div>
+                    <ui-select class="width90" tagging ng-model="model.Catalogue" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Catalogue' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listCatalogue | filter: $select.search">
+                            {{x.Code}} - {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="width10">
+                        <button type="button" class="btnClose" ng-click="model.Catalogue=''" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <label class="fw600 text-underline">{{'Loại sản phẩm' | translate}}</label>
+                <div class="width100">
+                    <ui-select class="width90" tagging ng-model="model.Type" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Loại sản phẩm' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in productTypes | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="width10">
+                        <button type="button" class="btnClose" ng-click="model.Type=''" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="width:82%; float:left">
+                <label class="fw600 text-underline">{{'Trạng thái' | translate}}</label>
+                <div class="width100">
+                    <ui-select class="width90" tagging ng-model="model.Status" theme="bootstrap">
+                        <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="width10">
+                        <button type="button" class="btnClose" ng-click="model.Status=''" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="width: 15%; float: right; text-align:center;margin-top: 20px">
+                <button class="btnsearch" ng-click="search()">
+                    <span style="font-size:18px !important"><i class="fa fa-search"></i></span>
+                </button>
+                <div style="font-size:10px">{{'Tìm kiếm' | translate}}</div>
+            </div>
+        </form>
+        <div class="row" style="float:left; width:100%">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

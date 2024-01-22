@@ -1,0 +1,326 @@
+﻿<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 27px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #009432;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+        width: 60px;
+        height: 27px;
+        margin-top: 7px;
+        background-color: #5d5c58;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    /*.mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }*/
+
+    .headerTab {
+        margin-top: -10px;
+        background: #cccccc;
+        padding-left: -8px;
+        margin-left: -21px;
+        margin-right: -21px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .openlog {
+        cursor: pointer
+    }
+
+    .btnSwitch {
+        width: 35px;
+        float: left;
+        padding-top: 2px;
+    }
+</style>
+<div class="modal-header" style="position:relative; background-color: white" >
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert " style="color: black"></i>
+    <!--<span class="modal-title" id="modal-title">{{'CONTRACT_CURD_TITLE_ADD_CONTRACT' | translate}}</span>-->
+    <span class="modal-title" id="modal-title" style="color: black">{{'SRIP_TITLE_ADD'|translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="position-absolute zindex-3 position-right-0 d-flex">
+        <div class="col-md-12" style="right:50px;">
+            <div class="btnSwitch">
+                <label class="switch" ng-click="checkAdd()">
+                    <input type="checkbox" ng-model="isTex" ng-change="ShowHeader()" ng-disabled="!isAdded">
+                    <span class="slider round"></span>
+                </label>
+                <span class="fs9 nowrap text-underline pl10">Chuyển tab</span>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body form mt5" ng-show="isShowHeader==true">
+        <form class="form-horizontal" name="forms.addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row headerTab">
+                    <div class="col-md-11">
+                        <label class="bold pt15 pb15">{{'SRIP_LBL_INFO_REQ'|translate}} : {{model.Title}}</label>
+                        <div class="text-center pull-right pr10">
+                            <a class="fs30" ng-click="addCardJob()">
+                                <span><i class="fas fa-tasks-alt"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+                        </div>
+                        <div class="text-center pull-right pr10" ng-show="isShowHeader==true">
+                            <a ng-click="submit()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-barcode pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require custom-title-code-bold">{{'SRIP_LBL_REQCODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" ng-model="model.ReqCode" type="text" name="ReqCode" placeholder="{{'SRIP_LBL_REQCODE'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-info-circle pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require custom-title-code-bold">{{'SRIP_LBL_TITLE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" ng-model="model.Title" type="text" name="Title" placeholder="{{'SRIP_LBL_TITLE'|translate}}..." readonly />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label"> {{'SRIP_LBL_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24 mBorder">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'SRIP_LBL_STATUS' | translate}}...">
+                                            <b class="{{$select.selected.Icon}}"></b>{{$select.selected.Name}}
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in status  | filter: $select.search">
+                                            <i class="{{x.Icon}}"></i>{{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addCommonSettingWHStatus()" class="btn no-shadow" style="">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                    <!--<span class="input-group-btn">
+                                    <button type="button" ng-click="activity()" class="btn btn-default no-shadow">
+                                        <span class="fas fa-history"></span>
+                                    </button>
+                                </span>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-info-circle pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require">{{'SRIP_LBL_SCREATED_TIME'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group br24 date' id='CreatedTime'>
+                                    <input type='text' class="form-control input-date" autocomplete="off" name="CreatedTime" ng-model="model.sCreatedTime" placeholder="{{'SRIP_LBL_SCREATED_TIME'|translate}}..." readonly />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pt15">
+                        <label class="bold "><u>{{'SRIP_LBL_INFO_CUS'|translate}}</u></label>
+                    </div>
+                </div>
+                <div class="row mt5">
+                    <div class="col-md-12">
+                        <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">{{'SRIP_LBL_CUS_CODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24 mBorder">
+                                    <ui-select tagging ng-model="model.CusCode" theme="bootstrap" ng-change="changeCustomer()" ng-disabled="true">
+                                        <ui-select-match placeholder="{{'CONTRACT_CURD_COMBO_CUSTOMER_CODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in Customers | filter: $select.search">
+                                            {{x.Code}} - {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <!--<span class="input-group-btn">
+                                    <button type="button" ng-click="model.CusCode='';resetCustomer()" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>-->
+                                </div>
+                                <span ng-show="errorCusCode" class="label-color validation-message">
+                                    {{'SRIP_MSG_ERR_CUS_CODE' | translate}}! |
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label ">{{'SRIP_LBL_CUS_ADDRESS'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.CusAddress" type="text" placeholder="{{'SRIP_LBL_CUS_ADDRESS'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label ">{{'SRIP_LBL_ZIPCODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.CusZipCode" type="text" placeholder="{{'SRIP_LBL_ZIPCODE'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-phone"></i>
+                                <label class="control-label ">{{'SRIP_LBL_MOBLIE_PHONE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.CusMobilePhone" type="text" placeholder="{{'SRIP_LBL_MOBLIE_PHONE'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label">{{'SRIP_LBL_PERSON_IN_CHANGE'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.CusPersonInCharge" type="text" placeholder="{{'SRIP_LBL_PERSON_IN_CHANGE'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-envelope"></i>
+                                <label class="control-label ">{{'SRIP_LBL_EMAIL'|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24" ng-model="model.CusEmail" type="text" placeholder="{{'SRIP_LBL_EMAIL'|translate}}..." readonly />
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                        <div class="pull-right mr15 user-mt">
+                            <div class="btn-group pull-right actions d-flex">
+                                <div class="pl20 text-center">
+                                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div ng-controller="addProduct">
+        <div class="portlet-body form mt5" ng-show="isShowDetail==true">
+            <form class="form-horizontal userFormAreaHeader" ng-validate="validationOptions">
+                <div class="form-body pt-0">
+                    <div class="row headerTab">
+                        <div class="col-md-11">
+                            <label class="bold pt15 pb15">{{'SRIP_LBL_INFO_CT'|translate}} : {{model.Title}}</label>
+                            <div class="text-center pull-right">
+                                <a class="fs30" ng-click="addCardJob()">
+                                    <span><i class="fas fa-tasks-alt"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+                            </div>
+                            <div class="text-center pull-right pr10">
+                                <a ng-click="save()" class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row mt10" ng-show="isShowDetail==true">
+            <div ng-include="'../views/admin/sendRequestImportProduct/addProduct.html'"></div>
+        </div>
+    </div>
+</div>

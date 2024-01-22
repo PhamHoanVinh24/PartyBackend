@@ -1,0 +1,165 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+@model ESEIM.Models.AseanDocument;
+@{
+    ViewData["Title"] = "Sửa tệp online";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Syncfusion.EJ2
+<style>
+    .app-content {
+        width: 100%;
+    }
+</style>
+
+<link href="~/lib/assets/global/plugins/ej2/material.css" rel="stylesheet" />
+<script src="~/lib/assets/global/plugins/ej2/ej2.min.js"></script>
+
+<script>
+        var documenteditor;
+        document.addEventListener('DOMContentLoaded', function () {
+            var documenteditorElement = document.getElementById("container");
+            documenteditorElement.style.height = "84vh";
+            documenteditorElement.style.width = "100%";
+
+            var container = documenteditorElement.ej2_instances[0];
+            container.showPropertiesPane = false;
+            documenteditor = container.documentEditor;
+            documenteditorElement.ej2_instances[0].serviceUrl = '/WordViewer/';
+            documenteditor.serviceUrl = window.baseurl + 'api/documenteditor/';
+            var ajax = new ej.base.Ajax("@Url.Content("~/scripts/documenteditor/data-default.json")", 'GET', true);
+
+            documenteditor.zoomFactor = 1.5;
+
+            function openfile() {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/WordViewer/Open",
+                    beforeSend: function (jqXHR, settings) {
+                        App.blockUI({
+                            target: "#contentMain",
+                            boxed: true,
+                            message: 'loading...'
+                        });
+                    },
+                    success: function (data) {
+                        documenteditor.open(data);
+                        App.unblockUI("#contentMain");
+                    },
+                    failure: function (errMsg) {
+                        App.toastrError(errMsg);
+                    }
+                });
+            }
+            ajax.send().then();
+            ajax.onSuccess = function (data) {
+                openfile();//open khi load trang
+                documenteditor.documentName = 'Getting Started';
+            };
+            container.documentChange = function (args) {
+
+            };
+
+           //Hàm download
+            function download(fileName, extension, buffer, downloadLink, hasDownloadAttribute) {
+                if (hasDownloadAttribute) {
+                    downloadLink.download = fileName;
+                    var dataUrl = window.URL.createObjectURL(buffer);
+                    downloadLink.href = dataUrl;
+                    var event = document.createEvent('MouseEvent');
+                    event.initEvent('click', true, true);
+                    downloadLink.dispatchEvent(event);
+                    setTimeout(function () {
+                        window.URL.revokeObjectURL(dataUrl);
+                        dataUrl = undefined;
+                    });
+                } else {
+                    if (extension !== 'docx' && extension !== 'xlsx') {
+                        var url = window.URL.createObjectURL(buffer);
+                        var isPopupBlocked = window.open(url, '_blank');
+                        if (!isPopupBlocked) {
+                            window.location.href = url;
+                        }
+                    }
+                }
+            }
+        });
+
+    //Lưu file
+    function save() {
+        var isSuccess = false;
+        documenteditor.saveAsBlob('Docx')
+            .then(function (exportedDocument) {
+                debugger
+                var formData = new FormData();
+                formData.append('fileUpload', exportedDocument);
+                var url = '/WordViewer/Save';
+                var req = new XMLHttpRequest();
+                req.overrideMimeType("application/json");
+                req.open('POST', url, true);
+                req.onload = function () {
+                    var rs = JSON.parse(req.responseText);
+                    if (rs.Error) {
+                        isSuccess = true;
+                        App.toastrError(rs.Title);
+                        if (rs.ID == 0) {
+                            setTimeout(function () {
+                                window.top.close();
+                            }, 3000);
+                        }
+                    } else {
+                        isSuccess = true;
+                        App.toastrSuccess(rs.Title);
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 3000);
+                    }
+                };
+                req.send(formData);
+            })
+            .catch(function (error) {
+                App.toastrError("Vui lòng xóa các đối tượng đặc biệt trong tệp tin");
+            });
+        //if (!isSuccess) {
+        //    App.toastrError("Vui lòng xóa các đối tượng đặc biệt trong tệp tin");
+        //}
+    }
+
+    //Back
+    function goBack() {
+        window.location.href = "@Model.FirstPage";
+    }
+    $(".menu-toggle").addClass("hidden");
+</script>
+
+@section ControlsSection{
+    <div class="row mb5">
+        <div class="btn-group pt10 actions d-flex pull-right" style="margin-top: -25px;">
+            <div class="text-center pr-2">
+                <a onclick="goBack()" class="text-underline">
+                    Quay lại
+                </a>
+            </div>
+            @if (Model.Mode == 2)
+            {
+                <div class="text-center pr-2">
+                    <a onclick="save()" class="text-underline">
+                        Lưu lại
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="document" class="control-section" readonly="true">
+        @if (Model.IsEdit == false)
+        {
+            <ejs-documenteditorcontainer id="container" enableToolbar=true isReadOnly=false enableEditor=true enableSelection=true enableSfdtExport=true enableWordExprot=true></ejs-documenteditorcontainer>
+        }
+        else
+        {
+            <ejs-documenteditorcontainer id="container" enableToolbar=true isReadOnly=true enableEditor=false enableSelection=false enableSfdtExport=false enableWordExprot=false></ejs-documenteditorcontainer>
+        }
+    </div>
+    <ejs-scripts></ejs-scripts>
+}
+

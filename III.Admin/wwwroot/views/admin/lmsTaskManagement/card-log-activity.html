@@ -1,0 +1,130 @@
+﻿<div ng-controller="card-log-activity" style="border: 1px solid lightgray; border-radius: 4px; ">
+    <div class="portlet-body pre-scrollable br4 pt-1 pb-1 pl10" style="background: #fde6e6;" ng-show="!isViewLog && ActivityData.length == 0">
+        <span class="text-danger">Chưa có hoạt động trên thẻ việc</span>
+    </div>
+    <div class="portlet-body pre-scrollable br4 pt-1 pb-1 pl10" style="background: #fde6e6;" ng-show="!isViewLog && ActivityData.length > 0">
+        <div class="active-title" ng-if="ActivityData[0].Picture=='/images/default/no_user.png'">
+            <span class="member-initials">
+                <span>{{ActivityData[0].GivenName.charAt(0)}}</span>
+            </span>
+        </div>
+
+        <div class="active-title" ng-if="ActivityData[0].Picture!='/images/default/no_user.png'">
+            <img class="img-circle" height="32" width="32" src="{{ActivityData[0].Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+        </div>
+
+        <div class="active-time">
+            <b class="ng-binding">{{ActivityData[0].GivenName}}</b>
+            <span ng-if="ActivityData[0].Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_ITEM_CREATE' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ITEM' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_CREATE_CMT' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='CMT'" class="text-danger blink">{{'CL_LBL_LOG_DEL_CMT' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='FILE'" class="text-success blink">{{'CJ_LBL_LOG_UPLOAD_FILE' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='FILE'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_FILE' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_RPT_PROGRESS' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='ITEMWORK'" class="text-warning blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ITEMWORK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROGRESS' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='LEADER' && ActivityData[0].IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_EVALUATE_PROGRESS' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='SUBITEM'" class="text-danger blink">{{'CL_LBL_DEL_SUB_ITEM' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='SUBITEM'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SUB_ITEM' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='SUBITEM'" class="text-success">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ADDR'" class="text-success blink">{{'CJ_LBL_LOG_ADD_ADDRESS' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ADDR'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ADDRESS' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='PROD'" class="text-success blink">{{'CJ_LBL_LOG_ADD_PROD' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='PROD'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROD' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='CARDLINK'" class="text-success blink">{{'CJ_LBL_LOG_ADD' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='CARDLINK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='SER'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SER' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='SER'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_SER' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ADD_MEMBER'" class="text-success blink">{{'Đã thêm' | translate}}</span>
+            <span ng-if="ActivityData[0].Action=='DEL' && ActivityData[0].IdObject =='DEL_MEMBER'" class="text-danger blink">{{'Đã xóa' | translate}}</span>
+
+            <span ng-if="ActivityData[0].Action=='REJECT'" class="blink" ng-class="{'text-danger': ActivityData[0].IsCheck}">{{ActivityData[0].IsCheck ?'đã từ chối':'đã bỏ từ chối'}}</span>
+            <span ng-if="ActivityData[0].Action=='ACCEPT'" class="blink" ng-class="{'text-danger': !ActivityData[0].IsCheck}">{{ActivityData[0].IsCheck ?'đã đồng ý':'đã bỏ đồng ý'}}</span>
+        </div>
+
+        <div class="active-body">
+            <p class="mb5" ng-if="ActivityData[0].ChangeDetails.length > 40">{{ActivityData[0].ChangeDetails.substr(0, 40)}}...</p>
+            <p class="mb5" ng-if="ActivityData[0].ChangeDetails.length <= 40">{{ActivityData[0].ChangeDetails}}</p>
+            <p class="mb5" ng-class="{'ml35' : ActivityData[0].ChangeDetails != null}">{{ActivityData[0].CreatedTime}}</p>
+        </div>
+    </div>
+    <div class="pull-right mr5" style="margin-top: -20px;" ng-show="!isViewLog">
+        <a role="button" ng-click="viewLogActUser()"><span class="fa fa-angle-down fs30"></span> </a>
+    </div>
+    <div class="portlet-body pre-scrollable pt-1 pb-1 pl10" style="max-height: 185px;" ng-show="isViewLog">
+        <div ng-repeat="x in ActivityData" style="border-bottom: 1px dotted #d6dadc;margin-bottom: 5px;">
+            <div class="active-title" ng-if="x.Picture=='/images/default/no_user.png'">
+                <span class="member-initials">
+                    <span>{{x.GivenName.charAt(0)}}</span>
+                </span>
+            </div>
+
+            <div class="active-title" ng-if="x.Picture!='/images/default/no_user.png'">
+                <img class="img-circle" height="32" width="32" src="{{x.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+            </div>
+
+            <div class="active-time">
+                <b class="ng-binding">{{x.GivenName}}</b>
+                <span ng-if="x.Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+                <span ng-if="x.Action=='ADD' && x.IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_ITEM_CREATE' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='ITEMCHECK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ITEM' | translate}}</span>
+                <span ng-if="x.Action=='UPDATE' && x.IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_CREATE_CMT' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='CMT'" class="text-danger blink">{{'CL_LBL_LOG_DEL_CMT' | translate}}</span>
+                <span ng-if="x.Action=='UPDATE' && x.IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='FILE'" class="text-success blink">{{'CJ_LBL_LOG_UPLOAD_FILE' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='FILE'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_FILE' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_RPT_PROGRESS' | translate}}</span>
+                <span ng-if="x.Action=='UPDATE' && x.IdObject =='ITEMWORK'" class="text-warning blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='ITEMWORK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROGRESS' | translate}}</span>
+                <span ng-if="x.Action=='LEADER' && x.IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_EVALUATE_PROGRESS' | translate}}</span>
+
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='SUBITEM'" class="text-danger blink">{{'CL_LBL_DEL_SUB_ITEM' | translate}}</span>
+                <span ng-if="x.Action=='ADD' && x.IdObject =='SUBITEM'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SUB_ITEM' | translate}}</span>
+                <span ng-if="x.Action=='UPDATE' && x.IdObject =='SUBITEM'" class="text-success">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='ADDR'" class="text-success blink">{{'CJ_LBL_LOG_ADD_ADDRESS' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='ADDR'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ADDRESS' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='PROD'" class="text-success blink">{{'CJ_LBL_LOG_ADD_PROD' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='PROD'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROD' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='CARDLINK'" class="text-success blink">{{'CJ_LBL_LOG_ADD' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='CARDLINK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='SER'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SER' | translate}}</span>
+                <span ng-if="x.Action=='DELETE' && x.IdObject =='SER'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_SER' | translate}}</span>
+
+                <span ng-if="x.Action=='ADD' && x.IdObject =='ADD_MEMBER'" class="text-success blink">{{'Đã thêm' | translate}}</span>
+                <span ng-if="x.Action=='DEL' && x.IdObject =='DEL_MEMBER'" class="text-danger blink">{{'Đã xóa' | translate}}</span>
+
+                <span ng-if="x.Action=='REJECT'" class="blink" ng-class="{'text-danger': x.IsCheck}">{{x.IsCheck ?'đã từ chối':'đã bỏ từ chối'}}</span>
+                <span ng-if="x.Action=='ACCEPT'" class="blink" ng-class="{'text-danger': !x.IsCheck}">{{x.IsCheck ?'đã đồng ý':'đã bỏ đồng ý'}}</span>
+            </div>
+
+            <div class="active-body">
+                <p class="mb5">{{x.ChangeDetails}}</p>
+                <p class="mb5" ng-class="{'ml35' : x.ChangeDetails != null}">{{x.CreatedTime}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="pull-right mr5" style="margin-top: -20px;z-index: 10;position: absolute;right: 15px;" ng-show="isViewLog">
+        <a role="button" ng-click="viewLogActUser()"><span class="fa fa-angle-up fs30"></span></a>
+    </div>
+</div>

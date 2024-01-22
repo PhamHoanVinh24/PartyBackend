@@ -1,0 +1,115 @@
+﻿<style>
+    .log-title {
+        font-weight: 600;
+        margin-bottom: 10px;
+        background: #95a5a6;
+        color: white;
+        padding: 5px;
+    }
+
+    .log-content {
+        margin-bottom: 10px;
+        margin-left: 15px;
+    }
+
+    .text-change {
+        color: #2980b9;
+    }
+
+    .text-updateBy {
+        color: #27ae60;
+    }
+
+    .log-classic {
+        padding: 5px;
+    }
+
+    .object-relative {
+        margin-left: 5px;
+        font-style: italic;
+        color: #8e44ad;
+    }
+
+    .btn-switch {
+        position: absolute;
+        top: 2px;
+        right: 0px;
+        z-index: 10;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-history icon-edit"></i>
+    <span class="modal-title" id="modal-title">{{'Thông tin log' | translate}}</span>
+</div>
+<div class="modal-body h-400 p-0" id="modal-body">
+    <div class="btn-switch">
+        <a class="" style="color: #337ab7;" ng-click="changeMode()">
+            <span ng-if="mode == 1">
+                <i class="fas fa-toggle-on fs35"></i>
+            </span>
+            <span ng-if="mode == 0">
+                <i class="fas fa-toggle-off fs35"></i>
+            </span>
+        </a>
+    </div>
+    <div class="log-classic" ng-if="mode!==1">
+        <div ng-repeat="x in obj.data">
+            <div class="log-data">
+                <div class="log-title"><span class="fa fa-history"></span>&nbsp; {{ x.Type }}</div>
+                <div class="log-content">
+                    <div ng-repeat="item in x.Data">
+                        <div class="log-other" ng-show="x.Type=='Theo dõi thay đổi phiếu' && x.Data.length>0">
+                            <span class="fa fa-check-circle" ng-class="{'text-green':item.NewValue!='','text-danger':item.NewValue==''}"></span>
+                            <span class="bold text-change">[{{item.DateChanged}}]</span>
+                            <span class="bold text-updateBy">{{item.UpdatedBy}}</span>
+                            <span class="" ng-show="item.NewValue!=''">đã chỉnh sửa <span class="bold text-green">{{ item.OldValue }}</span> thành <span class="bold text-danger">{{ item.NewValue}}</span></span>
+                            <span class="text-danger" ng-show="item.NewValue==''">đã xóa <span class="bold">{{ item.OldValue }}</span></span>
+                        </div>
+                        <div class="log-other" ng-show="x.Type!='Theo dõi thay đổi phiếu' && x.Type!='Theo dõi thay đổi trạng thái' && x.Type!='Theo dõi thay đổi đơn vị quản lý' && x.Data.length>0">
+                            <span class="fa fa-check-circle text-green"></span>
+                            <span class="bold text-change">[{{item.CreatedTime |date:'dd/MM/yyyy HH:mm:ss'}}]</span>
+                            <span class="bold text-updateBy">{{item.CreatedBy}}</span>
+                            <span>
+                                đã cập nhật <span class="bold text-green">{{ item.Name }}</span>
+                            </span><br />
+                            <span class="object-relative" ng-show="item.ObjectRelative!=null">
+                                - Đối tượng liên quan : {{item.ObjectRelative}}
+                            </span>
+                        </div>
+                        <div class="log-other" ng-show="x.Type=='Theo dõi thay đổi đơn vị quản lý' && x.Data.length>0">
+                            <span class="fa fa-check-circle text-green"></span>
+                            <span class="bold text-change">[{{item.CreatedTime |date:'dd/MM/yyyy HH:mm:ss'}}]</span>
+                            <span class="bold text-updateBy">{{item.CreatedBy}}</span>
+                            <span>
+                                đã cập nhật đơn vị quản lý <span class="bold text-green">{{ item.Name }}</span>
+                            </span><br />
+                            <span class="object-relative" ng-show="item.ObjectRelative!=null">
+                                - Đối tượng liên quan : {{item.ObjectRelative}}
+                            </span>
+                        </div>
+                        <div class="log-status" ng-show="x.Type=='Theo dõi thay đổi trạng thái' && x.Data.length>0">
+                            <span class="fa fa-check-circle text-green"></span>
+                            <span class="bold text-change">[{{item.CreatedTime |date:'dd/MM/yyyy HH:mm:ss'}}]</span>
+                            <span class="bold text-updateBy">{{item.CreatedBy}}</span>
+                            <span>
+                                đã cập nhật trạng thái <span class="bold text-green">{{ item.Name }}</span>
+                            </span><br />
+                            <span class="object-relative" ng-show="item.ObjectRelative!=null">
+                                - Đối tượng liên quan : {{item.ObjectRelative}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="log-code" ng-if="mode===1">
+        <div ng-jsoneditor="onLoad" ng-model="obj.data" options="obj.options" class="h-400"></div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,271 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+            <h1 class="bold mb-0">{{'VCMM_CURD_LBL_CONSUMPTION' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin/VCChart">{{'VCMM_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="#">{{'VCMM_LINK_MARKET_MANAGEMENT' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <!--<li>
+                    <a href="#">Báo cáo</a>
+                    <span>&gt;</span>
+                </li>-->
+                <li>
+                    <div>{{'VCMM_CURD_LBL_CONSUMPTION' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-6">
+            <div class="btn-group pull-right actions">
+                <a class="btn btn-accent btnSearch">
+                    <i class="fa fa-search"></i>
+                    Tìm kiếm
+                </a>-->
+        <!--<a ng-click="add()" class="btn btn-green">
+            <i class="fa fa-plus"></i>
+            Thêm mới
+        </a>-->
+        <!--<a ng-click="export()" class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> Xuất excel</span>
+                </a>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mb5">
+        <div class="portlet-body">
+            <!-- <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_AREAS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Area" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_AREAS_ALL' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListArea | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Area='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+                    <label class="fw600 text-underline">Nhân viên</label>
+                    <div class="input-group">
+                        <input ng-model="model.Staff" class="form-control" type="text" placeholder="Nhân viên..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Staff=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>-->
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_DISTRIBUTOR_AGENCY_STORE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CustomerName" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_DISTRIBUTOR_AGENCY_STORE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listCustomer | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerName=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_TIME' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.DateSearch" class="form-control" type='text' id="datesearch" placeholder="{{'VCMM_CURD_TXT_SELECT_MONTH' | translate}}..." onkeypress="return false;" ng-change="reload()" autocomplete="off" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DateSearch='';reload()" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline"> {{'VCMM_CURD_LBL_SPECIES' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_SELECT_SPECIES' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListProduct | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductCode='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_TRADEMARK' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.BrandCode" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_TRADEMARK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in ListBrand | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BrandCode='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <!--<div class="col-md-4 form-group">
+                    <label class="col-md-3 pt5 control-label bold row">Month</label>
+                    <div class="col-md-6 input-group date">
+                        <input type='text' id="FromDateIncentive" class="form-control" placeholder="Select month..." ng-model="model1.FromDateIncentive" onkeypress="return false;" ng-change="searchIncentive(model1.FromDateIncentive)" />
+                    </div>
+                </div>-->
+                <!--<div class="col-md-3" style="padding-top:23px">
+                    <button class="btn btn-accent" ng-click="reload()">
+                        <i class="fa fa-search"></i>
+                        Tìm kiếm
+                    </button>
+                </div>-->
+                <div class="col-md-6">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10">
+                            <a ng-click="export()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-file-excel-o"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXEL' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData">
+    <tfoot>
+        <tr>
+            <th colspan="1" class=""></th>
+            <th colspan="1" class=""></th>
+            <th colspan="1" class=""></th>
+            <th colspan="4" class="text-danger">{{'VCMM_CURD_LBL_TOTAL' | translate}}</th>
+            <th colspan="1" class=""><span class="text-success">{{totalConsumpMonthly | number : fractionSize}}</span></th>
+        </tr>
+    </tfoot>
+</table>
+
+
+
+
+
+
+<!--<div class="portlet-body" style="    padding: 10px;">
+    <div class="table-toolbar" style="padding-bottom: 15px;">
+        <div class="col-md-12">
+            <div class="btn-group pull-right actions">
+                <a ng-click="export()" class="btn btn-info br4">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> Xuất excel</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-12" style="padding:0">
+            <div class="col-md-2" style="padding-left:0">
+                <label class="labelSearch"> NPP/Đại lý/Cửa hàng</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="NPP/Đại lý/Cửa hàng..." ng-model="model.CustomerName" />
+                </div>
+            </div>
+
+            <div class="col-md-2" style="padding-left:0">
+                <label class="labelSearch"> Khu vực</label>
+                <div class="input-group">
+                    <select ng-model="model.Area" tabindex="-1" aria-hidden="true" ng-change="reload()"
+                            class="form-control select2-multiple select2-hidden-accessible">
+                        <option value="">Tất cả khu vực</option>
+                        <option ng-repeat="x in ListArea" value="{{x.Code}}">{{x.Name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Area=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-2" style="padding-left:0">
+                <label class="labelSearch"> Sản phẩm</label>
+                <div class="input-group">
+                    <select ng-model="model.ProductCode" tabindex="-1" aria-hidden="true" ng-change="reload()"
+                            class="form-control select2-multiple select2-hidden-accessible">
+                        <option value="">Tất cả sản phẩm</option>
+                        <option ng-repeat="x in ListProduct" value="{{x.Code}}">{{x.Name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-2" style="padding-left:0">
+                <label class="labelSearch"> Thương hiệu</label>
+                <div class="input-group">
+                    <select ng-model="model.BrandCode" tabindex="-1" aria-hidden="true" ng-change="reload()"
+                            class="form-control select2-multiple select2-hidden-accessible">
+                        <option value="">Tất cả hãng SX</option>
+                        <option ng-repeat="x in ListBrand" value="{{x.Code}}">{{x.Name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.BrandCode=''" class="btn btn-default no-shadow">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-2" style="padding-left:0">
+                <label class="labelSearch"> Nhân viên</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Nhân viên..." ng-model="model.Staff" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" style="margin-top: 26px; border-radius:5px !important;" ng-click="reload()"><i class="fa fa-search"></i> Tìm kiếm </button>
+            </div>
+            <div class="clearfix mb15"></div>
+        </div>
+
+    </div>
+    <div class="col-md-12" style="padding:10px; background:white">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tbldata"></table>
+    </div>
+</div>-->

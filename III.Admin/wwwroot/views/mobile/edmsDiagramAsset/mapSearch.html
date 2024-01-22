@@ -1,0 +1,197 @@
+﻿<style>
+    .text-underline {
+        font-size: 10px;
+    }
+
+    .width100 {
+        width: 100%;
+        float: left;
+    }
+
+    .width90 {
+        width: 90%;
+        float: left;
+    }
+
+    .width10 {
+        width: 10%;
+        float: left;
+    }
+
+    .ui-select-toggle {
+        height: 30px !important;
+        padding: 4px 10px !important;
+    }
+
+    .ui-select-match-text {
+        padding-top: 3px !important;
+    }
+
+    span {
+        font-size: 12px !important;
+        padding: 0px !important;
+    }
+
+    .btnClose {
+        width: 30px;
+        height: 30px;
+        background: none;
+        border-top: 1px solid #d2d2d2;
+        border-right: 1px solid #d2d2d2;
+        border-bottom: 1px solid #d2d2d2;
+        border-left: 0px solid #d2d2d2;
+    }
+
+    .btnsearch {
+        height: 35px;
+        width: 35px;
+        color: green;
+        background: no-repeat;
+        border: 1px solid #d2d2d2;
+        border-radius: 6px;
+    }
+
+    .inputProduct {
+        height: 30px;
+        border: 1px solid #d2d2d2;
+        padding-left: 10px;
+    }
+
+    th {
+        font-size: 12px;
+    }
+
+    td {
+        font-size: 11px;
+    }
+
+    .modal-content {
+        float: left;
+        width: 100%;
+    }
+    .ui-select-placeholder{
+        font-weight: 500 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <span class="modal-title" id="modal-title"><i class="fa fa-search"></i>&nbsp;{{'Tìm tài sản' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pb20 fs11 pl-0 pr-0">
+                <div>
+                    <label class="fw600 text-underline">{{'Mã/Tên tài sản' | translate}}</label>
+                    <div class="input-group">
+                        <input class="inputProduct" style="width: 100%;" ng-model="model.AssetName" type="text" placeholder="{{'Mã/Tên tài sản' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <div class="input-group-btn">
+                            <button type="button" class="btnClose" ng-click="model.AssetName='';">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div>
+                    <label class="fw600 text-underline">{{'Trạng thái' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btnClose">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="fw600 text-underline">{{'Nhóm tài sản' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.AssetGroup" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Nhóm tài sản' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstGroup | filter: $select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AssetGroup=''" class="btnClose">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="width:82%; float:left">
+                    <label class="fw600 text-underline">{{'Loại tài sản' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.AssetType" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Loại tài sản' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstType | filter: $select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AssetType=''" class="btnClose">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="width: 15%; float: right; text-align:center;margin-top: 20px">
+                    <button class="btnsearch" ng-click="search()">
+                        <span style="font-size:18px !important"><i class="fa fa-search"></i></span>
+                    </button>
+                    <div style="font-size:10px">{{'Tìm kiếm' | translate}}</div>
+                </div>
+            </div>
+        </form>
+        <div class="row mt30">
+            <div class="col-md-12">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>
+
+

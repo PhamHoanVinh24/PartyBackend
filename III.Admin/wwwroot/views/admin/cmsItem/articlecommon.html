@@ -1,0 +1,220 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+</style>
+
+<div class="modal-body h-300" id="modal-body" style="overflow-y: auto; overflow-x: hidden;">
+    <div class="portlet-body form" ng-controller="articlecommon">
+        <form name="addCSAform" class="form-horizontal " method="post" ng-validate="validationOptionsCSA">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                                        <label class="control-label require">{{'CMS_ITEM_CURD_LBL_CODESET' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" name="CodeSet" class="form-control br24" data-ng-model="model.CodeSet" placeholder="{{'CMS_ITEM_CURD_LBL_CODESET' | translate}}..." ng-readonly="read" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-pencil-square"></i>
+                                        <label class="control-label require">{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control br24" ng-model="model.Title" name="Title" placeholder="{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}..." />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 ">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-keyboard-o"></i>
+                                        <label class="control-label require">{{'CMS_ITEM_CURD_LBL_VALUE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="model.ValueSet" name="ValueSet" placeholder="{{'CMS_ITEM_CURD_LBL_VALUE' | translate}} ..." />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                                        <label class="control-label require">{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" name="Type" class="form-control" data-ng-model="model.Type" placeholder="{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}..." ng-readonly="read" />
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="form-group" ng-class=" {'has-error': errorType}">
+                                <div class="col-md-2">
+                                    <label class="control-label require"><i class="fa fa-user"></i>{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.Type" theme="bootstrap" on-select="changleSelect('type')">
+                                            <ui-select-match placeholder="{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x  in listtTypeCMA | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <span ng-show="errorType" class="label-color validation-message">
+                                        {{'CMS_ITEM_NOT_EMPTY' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10 pr-0">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label ">{{'CMS_ITEM_NOTE' | translate}}</label>
+                                <textarea name="Note" rows="3" class="form-control br12" ng-model="model.GroupNote" type="GroupNote" placeholder="{{'CMS_ITEM_NOTE' | translate}}..."></textarea>
+                            </div>
+                            <div class="col-md-2 pr-2">
+                                <div class="btn-group pt15 actions pull-right d-flex mt25 ml15">
+                                    <!--<div class="mr10 pr-0">
+                                        <button class="btn green-custom custom-width-button" ng-click="addCSA()" style="border-radius: 0px !important">
+                                            <i class="fa fa-save"></i>
+                                            {{'COM_BTN_SAVE' | translate}}
+                                        </button>
+                                    </div>-->
+                                    <div class="text-center mt10">
+                                        <a ng-click="addCSA()" class1="btn btn-icon-only  btn-circle btn-outline green-custom">
+                                            <i class="fa-solid fa-plus" style="color: cornflowerblue; font-size: 30px; cursor: pointer"></i>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataArticle"></table>
+    </div>
+    <div class="row pt5">
+        <div class="col-md-12">
+            <form name="activity" class="form-horizontal " method="post">
+                <div class="form-body pt-0 pl-0 pr-0">
+                    <div class="row pt5">
+                        <div class="col-md-12 pl-0 pr-0" id="box">
+                            <div class="table-toolbar table_body">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <h3 class="modal-title mt5" id="modal-title">Ảnh chi tiết</h3>
+</div>
+<div class="modal-body" id="modal-body" >
+    <div id="carousel-simple" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-simple" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-simple" ng-repeat="x in model.nextImgs" data-slide-to="1"></li>
+
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner text-center" role="listbox">
+
+            <div class="item active" ng-repeat="x in model.fisrtImg">
+                <div class="img-thumbnail">
+                    <img src="{{x.Path}}" alt="" onerror='this.src="../../../images/default/no_image.png"' style="width:auto;height:400px">
+                </div>
+            </div>
+            <div class="item" ng-repeat="x in model.nextImgs">
+                <div class="img-thumbnail">
+                    <img src="{{x.Path}}" alt="" onerror='this.src="../../../images/default/no_image.png"' style="width:auto;height:400px">
+                </div>
+            </div>
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" style="line-height:370px" href="#carousel-simple" role="button" data-slide="prev">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </a>
+        <a class="right carousel-control" style="line-height:370px" href="#carousel-simple" role="button" data-slide="next">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.multi-item-carousel .item').each(function () {
+        var next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        if (next.next().length > 0) {
+            next.next().children(':first-child').clone().appendTo($(this));
+        } else {
+            $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+    });
+</script>

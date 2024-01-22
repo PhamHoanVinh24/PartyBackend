@@ -1,0 +1,443 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .no-selected-row {
+        opacity: 0.5;
+        background: #CFCFCF;
+    }
+
+    tr.highlight-row {
+        background: #c7ecfc !important;
+        color: #333 !important;
+    }
+
+    .table-hover > tbody > tr.highlight-row:hover, .table-hover > tbody > tr.highlight-row:hover > td {
+        background: #c7ecfc !important;
+    }
+
+    tr.selected-row {
+        background: #c7ecfc !important;
+        color: #333 !important;
+        font-weight: bold !important;
+    }
+
+    .ui-select-toggle {
+        border-radius: 0 !important;
+        border-bottom-left-radius: 4px !important;
+        border-top-left-radius: 4px !important;
+    }
+
+    .table-hover > tbody > tr.selected-row:hover, .table-hover > tbody > tr.selected-row:hover > td {
+        background: #c7ecfc !important;
+    }
+
+    .count-highlight {
+        color: #333;
+    }
+
+    .count-selected {
+        color: #333;
+    }
+
+    .block-table-group > .fixed-table-container {
+        height: 462px;
+        padding-bottom: 30px;
+    }
+
+    .block-table-function > .fixed-table-container {
+        height: 505px;
+        padding-bottom: 30px;
+    }
+
+    .block-table-resource > .fixed-table-container {
+        height: 544px;
+        padding-bottom: 30px;
+    }
+
+    .block-table-group .fixed-table-body tbody td:hover,
+    .block-table-function .fixed-table-body tbody td:hover {
+        cursor: pointer;
+    }
+
+    .table-height-scroll {
+        display: block;
+        height: 462px;
+        overflow: auto;
+        border: 1px solid #e7ecf1;
+    }
+
+    .table-height-scroll1 {
+        display: block;
+        height: 544px !important;
+        overflow: auto;
+        margin-bottom: 0 !important;
+    }
+
+    /*.table-height-scroll2 {
+            display: block;
+            height: 375px !important;
+            overflow: hidden;
+        }*/
+
+    .table-height-scroll2 {
+        overflow: auto;
+        height: 375px !important;
+        border: 1px solid #e7ecf1;
+    }
+
+    .table-resource .mt-checkbox {
+        padding-left: 18px;
+    }
+
+    .bootstrap-table table label.mt-checkbox span {
+        background: #fff !important;
+        border: 1px solid #CFCFCF !important;
+    }
+
+    @media only screen and (min-width : 992px) {
+        .res-pa-h0 {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+
+    .todo-ui .portlet.light {
+        padding: 5px 12px 15px;
+        margin-bottom: 5px;
+    }
+
+        .todo-ui .portlet.light > .portlet-title > .caption {
+            padding: 7px 0;
+        }
+
+        .todo-ui .portlet.light > .portlet-title {
+            min-height: 40px;
+        }
+
+        .todo-ui .portlet.light .portlet-body {
+            padding-top: 0px;
+        }
+
+    .portlet.light > .portlet-title > .caption {
+        color: #333;
+    }
+
+    .btn-choose-custom {
+        font-size: 10px !important;
+        width: 25px;
+        height: 25px;
+        padding: 5px !important;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        line-height: 1.42857;
+        vertical-align: middle;
+        border-top: 1px solid #e7ecf1;
+    }
+
+    .treegrid-indent {
+        width: 16px;
+        height: 16px;
+        display: none;
+        position: relative;
+    }
+</style>
+<div class="text-center pr-2" style="float: right; margin-top: -49px;">
+    <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+        <span><i class="fas fa-question " aria-hidden="true"></i></span>
+    </a>
+</div>
+<div class="mb10 pt5 hidden">
+    <input type="checkbox" class="make-switch" data-size="small" data-on-text="<i class='fa fa-unlock'></i>" data-off-text="<i class='fa fa-lock'></i>" data-on-color="success" data-off-color="danger" name="LockChecked" ng-model="lockCheckGroupUser" ng-change="changeLockCheckGroup()" title="Lock / Unlock function" />
+    <span class="text-danger">{{'ADM_PERMISSION_GUIDE_LBL_LOCK' | translate}}</span> / <span class="text-success">{{'ADM_PERMISSION_GUIDE_LBL_UNLOCK' | translate}}</span>
+</div>
+
+<div class="todo-ui row">
+    <div id="contentMainGroupUser" ng-class="{'col-md-4':hideResource,'col-md-3':!hideResource}">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject bold uppercase">{{'ADM_PERMISSION_LBL_ROLE' | translate}} / {{'ADM_PERMISSION_TXT_USER_GROUP' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="portlet-body todo-project-list-content">
+                <div class="form-group">
+                    <div class="input-group br24">
+                        <ui-select ng-model="model.RoleId" on-select="changeRole($item)">
+                            <ui-select-match placeholder="{{'ADM_PERMISSION_COMBO_ROLE' | translate}}...">Vai trò : {{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in listRoles | filter:$select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.RoleId = '';changeRole();" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="mb10">
+                    <div class="input-group br24">
+                        <input type="text" class="form-control" placeholder="{{'ADM_PERMISSION_TXT_USER_GROUP' | translate}}..." ng-model="model.SearchGroup" name="SearchGroup" ng-keydown="($event.keyCode == 13) && SearchGroupUser()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="SearchGroupUser();" class="btn btn-default no-shadow">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="bootstrap-table block-table-group">
+                    <div class="fixed-table-container">
+                        <div class="fixed-table-header">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bs-checkbox" style="width: 34px; padding: 5px 0;">
+                                            <label class="mt-checkbox" style="padding-left: 18px;" title="Select All" ng-show="listGroupUser.length > 0 && lockCheckGroupUser">
+                                                <input type="checkbox" ng-model="selectAllGroupUser" ng-change="clickSelectAllGroupUser(selectAllGroupUser)" /><span></span>
+                                            </label>
+                                        </th>
+                                        <th class="text-center" style="padding: 5px 0;">
+                                            {{'ADM_PERMISSION_TXT_USER_GROUP' | translate}}&nbsp;
+                                            <span class="" title="Count all highlight">({{ getCountGroupUserHighlight() }})</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="fixed-table-body">
+                            <table class="table table-hover table-condensed">
+                                <tbody>
+                                    <tr ng-repeat="item in listGroupUser" ng-class="{ 'selected-row': item.IsChecked, 'highlight-row': item.IsEnabled }">
+                                        <td class="text-center bs-checkbox" style="width: 34px;">
+                                            <label class="mt-checkbox" style="padding-left: 18px;">
+                                                <input type="checkbox" ng-model="item.IsChecked" ng-click="clickSelectOneGroupUser(item, 0)" /><span></span>
+                                            </label>
+                                        </td>
+                                        <td nowrap ng-click="clickSelectOneGroupUser(item, 1)">
+                                            <div style="padding-left: {{15 * item.Level}}px">
+                                                <i ng-show="item.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="!item.HasChild" class="fa fa-folder text-info"></i>
+                                                {{item.Title}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="contentMainAppFunc" ng-class="{'col-md-8 pr25':hideResource,'col-md-5':!hideResource}">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <!--<span class="caption-subject bold uppercase">{{'ADM_PERMISSION_LBL_APP' | translate}} / {{'ADM_PERMISSION_LBL_FUNC' | translate}}</span>-->
+                <span class="caption-subject bold uppercase">{{'ADM_PER_EMP_LBL_FUNC_SYSTEM' | translate}}</span>
+                </div>
+
+                <div class="pull-right">
+                    <i ng-show="!hideResource" ng-click="hideResource = true" class="fas fa-chevron-right showtree pull-left h28 w28 mt10 fs30" role="button" title="Ẩn tìm kiếm"></i>
+                    <i ng-show="hideResource" ng-click="hideResource = false" class="fas fa-chevron-left tree pull-right h28 w28  mt10 fs30" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+
+                <div class="pull-right mr10" ng-show="hideResource && showSelectPermission && model.Resources.length > 0">
+                    <a ng-click="saveResource()" title="{{'COM_BTN_SAVE' | translate }}" data-toggle="modal" class="btn btn-circle btn-icon-only btn-default blue" ng-show="showSelectPermission">
+                        <i class="fa fa-floppy-o"></i>
+                    </a>
+                    <a ng-click="refreshResource()" title="Refresh" class="btn btn-circle btn-icon-only btn-default">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="portlet-body todo-project-list-content">
+                <div class="row" ng-if="isSubAdmin">
+                    <div class="col-md-2">
+                        <button class="btn btn-boder-gray" ng-click="addRoleTemp()">
+                            <i class="fa fa-arrow-right"></i>
+                            Phân quyền
+                        </button>
+                    </div>
+                    <div class="col-md-8 text-center mt5">
+                        <span class="text-brown" ng-show="listRoleTemps.length == 0">[ Vai trò trống ]</span>
+                        <span class="text-brown" ng-show="listRoleTemps.length > 0">[ {{labelListRoleTemps}} ]</span>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-boder-gray pull-right" ng-click="clearRoleTemp()" ng-show="listRoleTemps.length > 0">
+                            <i class="fa fa-trash"></i>
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+                <div class="row pt5">
+                    <div class="col-md-12">
+                        <div class="form-group mb10">
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.Function" class="" ng-change="changeFunction()">
+                                    <ui-select-match placeholder="{{'ADM_PERMISSION_COMBO_FUNC' | translate }}...">Chức năng : {{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x in ddlFunction | filter:$select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="clearFunction();" class="btn btn-default no-shadow">
+                                        <span class="fa fa-times"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bootstrap-table block-table-function">
+                    <div class="fixed-table-container">
+                        <div class="fixed-table-header">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bs-checkbox" style="width: 34px; padding: 5px 0;"></th>
+                                        <th class="text-center bs-checkbox" style="width: 34px; padding: 5px 0;">
+                                            <label class="mt-checkbox" style="padding-left: 18px;" title="Select All" ng-show="listFunction.length > 0">
+                                                <input type="checkbox" ng-model="selectAllFunction" ng-change="clickSelectAllFunction(selectAllFunction)" ng-disabled="isSubAdmin" /><span></span>
+                                            </label>
+                                        </th>
+                                        <th class="text-center" style="padding: 5px 0;">
+                                            {{'ADM_PERMISSION_LBL_FUNC' | translate}}&nbsp;
+                                            <span>({{ getCountFunctionLength() }})</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="fixed-table-body">
+                            <table class="table treeData table-hover table-condensed">
+                                <tbody ng-if="!isSubAdmin">
+                                    <tr ng-repeat="item in listFunction" ng-class="{'selected-row': item.IsChecked}" ng-show="item.IsVisible">
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="item.IsVisible && !item.IsExpand && item.HasChild"><span class="icon-chevron-right" ng-click="expandNode(item)"></span></td>
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="item.IsVisible && item.IsExpand && item.HasChild"><span class="icon-chevron-down" ng-click="collapseNode(item)"></span></td>
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="!item.HasChild"></td>
+                                        <td class="text-center bs-checkbox" style="width: 34px;">
+                                            <label class="mt-checkbox" style="padding-left: 18px;">
+                                                <input type="checkbox" ng-model="item.IsChecked" ng-change="clickSelectOneFunction(item, 0)" /><span></span>
+                                            </label>
+                                        </td>
+                                        <td nowrap ng-click="clickSelectOneFunction(item, 1)">
+                                            <div style="padding-left: {{15 * (item.Ord-1)}}px">
+                                                <i ng-show="item.Ord == 1" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="item.Ord != 1" class="fa fa-folder text-info"></i>
+                                                <span ng-show="item.Ord == 1" class="bold fs14 text-brown">{{item.Title}}</span>
+                                                <span ng-show="item.Ord != 1" class="">{{item.Title}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-if="isSubAdmin">
+                                    <tr ng-repeat="item in listFunction" ng-class="{'selected-row': item.IsChecked,'no-selected-row': !item.IsChecked}" ng-show="item.IsVisible">
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="item.IsVisible && !item.IsExpand && item.HasChild"><span class="icon-chevron-right" ng-click="expandNode(item)"></span></td>
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="item.IsVisible && item.IsExpand && item.HasChild"><span class="icon-chevron-down" ng-click="collapseNode(item)"></span></td>
+                                        <td class="text-center" style="border-left: none;width: 34px;" ng-show="!item.HasChild"></td>
+                                        <td class="text-center bs-checkbox" style="width: 34px;">
+                                            <label class="mt-checkbox" style="padding-left: 18px;">
+                                                <input type="checkbox" ng-model="item.IsChecked" ng-disabled="true" /><span></span>
+                                            </label>
+                                        </td>
+                                        <td nowrap>
+                                            <div style="padding-left: {{15 * (item.Ord-1)}}px">
+                                                <i ng-show="item.Ord == 1" class="fa fa-folder-open icon-state-warning"></i>
+                                                <i ng-show="item.Ord != 1" class="fa fa-folder text-info"></i>
+                                                <span ng-show="item.Ord == 1" class="bold fs14 text-brown">{{item.Title}}</span>
+                                                <span ng-show="item.Ord != 1" class="">{{item.Title}}</span>
+                                                <a ng-click="change('UNCHECK',item)" class="btn btn-circle btn-icon-only btn-choose-custom green-custom pull-right" ng-show="item.IsCheckedTemp && item.IsChecked">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                                <a ng-click="change('CHECK',item)" class="btn btn-circle btn-icon-only btn-choose-custom red-custom pull-right" ng-show="!item.IsCheckedTemp && item.IsChecked">
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 pr25" id="contentMainResourceApi" ng-show="!hideResource">
+        <div class="portlet light bordered">
+            <!-- PROJECT HEAD -->
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                    <span class="caption-subject bold uppercase">
+                        {{"ADM_PERMISSION_LBL_RESOURCE" | translate }}&nbsp;
+                        <span>({{ getCountResourceLength() }})</span>
+                    </span>
+                </div>
+                <div class="pull-right" ng-show="!hideResource && showSelectPermission && model.Resources.length > 0">
+                    <a ng-click="saveResource()" title="{{'COM_BTN_SAVE' | translate }}" data-toggle="modal" class="btn btn-circle btn-icon-only btn-default blue" ng-show="showSelectPermission">
+                        <i class="fa fa-floppy-o"></i>
+                    </a>
+                    <a ng-click="refreshResource()" title="Refresh" class="btn btn-circle btn-icon-only btn-default">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- end PROJECT HEAD -->
+            <div class="portlet-body">
+                <div class="">
+                    <div class="table-scrollable table-height-scroll1">
+                        <table class="table table-bordered table-hover table-resource">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <label class="mt-checkbox mt-checkbox-outline" ng-show="showSelectPermission && model.Resources.length > 0">
+                                            <input type="checkbox" ng-model="selectAll" ng-change="selectAllResource(selectAll)" /><span style="border: 1px solid #CFCFCF !important;"></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">{{'ADM_PERMISSION_LIST_COL_RESOURCE_NAME' | translate }}</th>
+                                    <th class="text-center">{{'ADM_PERMISSION_LIST_COL_RESOURCE_DESCRIPTION' | translate }}</th>
+                                    <th class="text-center">{{'ADM_PERMISSION_LIST_COL_RESOURCE_API' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in model.Resources" ng-click="checked(item)">
+                                    <td colspan="4" ng-if="item.IsFunction">
+                                        Chức năng: <b>{{ item.FunctionName }}</b>
+                                    </td>
+                                    <td class="text-center" ng-if="!item.IsFunction">
+                                        <button type="button" class="btn btn-icon-only green" style="margin-right: 0px !important" ng-class="{ green: item.HasPermission, red: !item.HasPermission}" ng-click="selectOneResource(item)" ng-show="showSelectPermission">
+                                            <i class="fa fa-check" ng-class="{ 'fa-check': item.HasPermission, 'fa-remove': !item.HasPermission }"></i>
+                                        </button>
+                                    </td>
+                                    <td ng-if="!item.IsFunction">{{ item.Title}}</td>
+                                    <td ng-if="!item.IsFunction">{{ item.Description }}</td>
+                                    <td ng-if="!item.IsFunction">{{ item.Api }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

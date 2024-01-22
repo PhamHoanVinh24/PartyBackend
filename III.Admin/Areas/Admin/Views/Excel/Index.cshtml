@@ -1,0 +1,108 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+
+@{
+    ViewData["Title"] = "EXCEL";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<style>
+    .toast-icons.e-success::before {
+        content: "\e701";
+    }
+
+    .toast-icons.e-error::before {
+        content: "\e700";
+    }
+
+    .e-tab .e-content {
+        background: inherit;
+        height: 45px !important;
+    }
+</style>
+@{
+    var viewBag = ViewBag.DefaultData;
+}
+
+<link href="~/lib/assets/global/plugins/ej2/material.css" rel="stylesheet" />
+<script src="~/lib/assets/global/plugins/ej2/ej2.min.js"></script>
+
+@section ControlsSection{
+    <div class="row mb5">
+        <div class="btn-group pt10 actions d-flex pull-right" style="margin-top: -25px;">
+            <div class="text-center pr-2">
+                <a onclick="goBack()" class="text-underline">
+                    Quay lại
+                </a>
+            </div>
+            @if (Model.Mode == 2)
+            {
+                <div class="text-center pr-2">
+                    <a onclick="save()" class="text-underline">
+                        Lưu lại
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="control-section" style="width: 100%; height: calc(100vh - 150px)">
+        <ejs-spreadsheet id="spreadsheet" openUrl="Excel/OpenFromLocal" saveUrl="Excel/Save" created="onCreated" actionComplete="actionComplete"></ejs-spreadsheet>
+    </div>
+    <ejs-toast id="element" content="Save success">
+        <e-toast-position X="Right" Y="Top"></e-toast-position>
+    </ejs-toast>
+    <ejs-scripts></ejs-scripts>
+}
+<script src="~/lib/signalr/signalr.js"></script>
+<script>
+    var toasts = [
+        { title: 'Thành công!', content: 'Tệp tin đã lưu thành công', cssClass: 'e-toast-success', icon: 'e-success toast-icons' },
+        { title: 'Lỗi!', content: 'Tệp tin lưu thất bại.', cssClass: 'e-toast-danger', icon: 'e-error toast-icons' },
+    ];
+    function onCreated() {
+        var spreadsheetObj = ej.base.getComponent(document.getElementById('spreadsheet'), 'spreadsheet');
+        var request = new XMLHttpRequest();
+        request.responseType = "blob";
+        request.onload = () => {
+            var file = new File([request.response], "excel.xlsx");
+            spreadsheetObj.open({ file: file });
+        }
+        request.open("GET", ("@viewBag.FilePath"));
+        request.send();
+    }
+
+    function save() {
+        var spreadsheetObj = ej.base.getComponent(document.getElementById('spreadsheet'), 'spreadsheet');
+        var toastObj = document.getElementById('element').ej2_instances[0];
+        toastObj.target = document.body;
+        toastObj.show(toasts[0]);
+        setTimeout(function () {
+            spreadsheetObj.save();
+        }, 1000);
+    }
+
+    var connection = new signalR.HubConnectionBuilder().withUrl('/scheduleHub').build();
+
+    connection.on('ReceiveData', (data, dataUpdate) => {
+        if (data === "@viewBag.FileCode") {
+            var spreadsheetObj = ej.base.getComponent(document.getElementById('spreadsheet'), 'spreadsheet');
+            spreadsheetObj.updateAction(dataUpdate);
+        }
+    });
+    connection.start().then(() => {
+        console.log('server connected!!!');
+    }).catch((err) => console.log(err));
+
+    function actionComplete(args) {
+        if (args.action !== 'import') {
+            var fileCode = "@viewBag.FileCode";
+            connection.send('SendClientData', fileCode, JSON.stringify(args));
+        }
+    }
+    function goBack() {
+        window.location.href = "@Model.FirstPage";
+    }
+    $(".menu-toggle").addClass("hidden");
+</script>
+
+

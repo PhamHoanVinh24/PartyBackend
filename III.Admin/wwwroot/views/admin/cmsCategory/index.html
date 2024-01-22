@@ -1,0 +1,209 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(65% - 50px);
+        right: 50px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .tree {
+        width: 50%;
+    }
+
+    .treegrid-expander {
+        display: none;
+    }
+
+    .right-position {
+        padding-right: 7px;
+    }
+
+    .mnw-780 .modal-dialog {
+        min-width: 780px;
+    }
+
+    tr.active {
+        background-color: #cccddf !important;
+    }
+
+    .title-cat {
+        width: 100%;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 5px 0px;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="pr-2 text-center mt10">
+        <a ng-click="showSearch()" class1="btn btn-icon-only btn-circle btn-outline gold-custom">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+
+    <div class="pr-2 text-center mt10">
+        <a ng-click="add()" class1="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa-solid fa-plus fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mt10">
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="fw600 text-underline">{{'CMS_CAT_LBL_CATEGORYNAME' | translate}}</label>
+                            <div class="input-group br24">
+                                <input type="text" class="form-control" placeholder="{{'CMS_CAT_LBL_CATEGORYNAME' | translate}}..." ng-model="model.categoryName" name="CurrencyCode" ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.categoryName=''" class="btn btn-default no-shadow" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px;height: 34px">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw600 text-underline">{{'CMS_CAT_LBL_GROUPNAME' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select ng-model="model.extra_field_group" theme="bootstrap" ng-disabled="isGroupLocked">
+                                    <ui-select-match placeholder="{{'CMS_CAT_LBL_GROUPNAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in listGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.extra_field_group='';" class="btn btn-default no-shadow end-date" ng-disabled="isGroupLocked">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <!--<label class="fw600 text-underline">{{'FAE_CURD_SEARCH_LBL_STATUS' | translate}}</label>-->
+                            <label class="fw600 text-underline">{{'CMS_CAT_LBL_PUBLISH' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select ng-model="model.published" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'CMS_CAT_LBL_PUBLISH' | translate}}...">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.code as x in listPublished | filter: $select.search">
+                                        {{x.name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.published='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex pull-right">
+                            <div class="text-center mt10 pr-2">
+                                <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                    <span><i class="fas fa-search fs25 color-dark"></i></span>
+                                </a>
+                            </div>
+                            <!--<div class="pl20 text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>-->
+                        </div>
+                    </div>
+                    <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="tree" tree-grid="" ng-model="listCms">
+    <tbody>
+        <!--<tr role="button"><td ng-click="addCmsCategory()"><img src="/images/icons/create_folder_icon.png" style="height:18px; margin-right: 10px" />Thêm danh mục</td></tr>--> <!--USRMAN_ADD_CMS_CAT-->
+        <tr class="item-cms pt10 pb10 treegrid-{{x.Id}} treegrid-parent-{{x.ParentId}}" ng-click="mark(x)" ng-class="{'active' : x.IsMarked == true}" ng-repeat="x in listCms" style="padding-left: {{x.Level * 20}}px" role="button">
+            <td class="title-cat">
+                <i class="fa fa-hand-o-right text-primary" ng-if="x.Level == 0"></i>
+                <!--<i ng-click="expand(x)" class="pt5" ng-class="{'fa fa-caret-up pull-right right-position': x.IsExpand,
+                                               'fa fa-caret-down pull-right right-position': !x.IsExpand}">
+    </i>-->
+                <span ng-click="expand(x)" ng-dblclick="edit(x.Id)">{{x.Title}} </span>
+                <span class="pull-right mr50" ng-click="add()"><img src="/images/icons/create_item_icon.png" style="height:18px" /></span>
+                <span class="cursor glyphicon glyphicon-ban-circle text-danger fs20 pTip-right btn-publish-inline pull-right mr50" ng-click="publish(x.Id)" ng-if="x.Published != true"></span>
+                <span class="cursor glyphicon glyphicon-ok-sign text-success fs20 pTip-right btn-publish-inline pull-right mr50" ng-click="publish(x.Id)" ng-if="x.Published == true"></span>
+                <!--<span ng-show="k.IsShow" class="d-flex pt5 pb5" ng-class="{'active' : markId == k.id}" ng-repeat="k in x.ListCmsItem" style="width: 100%;" dnd-draggable1="k" dnd-effect-allowed1="copyMove" dnd-type1="'item'" dnd-moved1="x.ListCmsItem.splice($index, 1)">
+        <i class="fa fa-file-text-o text-primary pt3 pl30"></i>&nbsp;
+        <a class="fs13 fw400 cms-item-link" ng-class="{'cms-item-link-active' : markId == k.id}">
+            <span ng-dblclick="editCmsItem(k.id)" ng-click="viewContent(k.id, x.Id)">{{k.title}}</span>
+            <i class="fas fa-copy pt3 pl10" style="color: #15aabf" ng-click="copyCmsItem(k.id)"></i>
+        </a>
+    </span>-->
+                </
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!--<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>-->
+<script>
+    //setTimeout(function () {
+    //    $('.tree').treegrid({
+    //        expanderExpandedClass: 'fa fa-caret-up pull-right pt5',
+    //        expanderCollapsedClass: 'fa fa-caret-down pull-right pt5'
+    //    });
+
+    //    $('.tree').treegrid('collapseAll');
+    //}, 1000);
+    //setTimeout(function () {
+    //    let isDown = false;
+    //    let startX;
+    //    let scrollLeft;
+
+    //    $('.table-scrollable').mousedown(function (e) {
+    //        isDown = true;
+    //        startX = e.pageX - $('.table-scrollable').offset().left;
+    //        scrollLeft = $('.table-scrollable').scrollLeft();
+    //    });
+    //    $('.table-scrollable').mouseleave(function () {
+    //        isDown = false;
+    //    });
+    //    $('.table-scrollable').mouseup(function () {
+    //        isDown = false;
+    //    });
+    //    $('.table-scrollable').mousemove(function (e) {
+    //        if (!isDown) return;
+    //        e.preventDefault();
+    //        const x = e.pageX - $('.table-scrollable').offset().left;
+    //        const walk = (x - startX) * 1; //scroll-fast
+    //        $('.table-scrollable').scrollLeft(scrollLeft - walk);
+    //        console.log(walk);
+    //    });
+    //}, 1000);
+
+</script>

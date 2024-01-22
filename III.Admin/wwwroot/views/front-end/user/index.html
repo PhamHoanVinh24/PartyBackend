@@ -1,0 +1,1487 @@
+<style>
+    .br24 {
+        border-radius: 24px ;
+    }
+
+    .form-control {
+        font-size: 13px;
+    }
+
+    .mt-15 {
+        margin-top: 15px;
+    }
+    .fs-18 {
+        font-size: 15px;
+    }
+    ul {
+        list-style: none;
+        padding-left: 0px;
+    }
+    li {
+        padding-top: 5px;
+        font-size: 15px;
+        border-bottom: 1px solid #000;
+    }
+    table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-70 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-70 {
+            width: 60%;
+        }
+    }
+
+    .btn-border-black {
+        border: 1px solid #000;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .color-white {
+        color: white;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="portlet-body form row" style="margin-top: 15px">
+    <div name="addForm" class="form-horizontal userFormAreaHeader col-lg-8 col-left" method="post" ng-validate="validationOptionsCustomer">
+        <div class="form-body pt-0">
+            <div class="row" >
+                <div class="input-file" style="width: 400px;">
+                    <form name="addData" class="form-horizontal" method="post" ng-validate="validationOptions" style="display: flex;">
+                        <div class="col-md-8">
+                            <div class="form-group flex-grow-full">                                            
+                                <div class="input-group input-file br24" >
+                                    <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" style="height: 34px !important" placeholder="Chọn tệp" readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browser</span>
+                                        <input class="form-control hidden input-custom" id="FileItem" custom-on-change="FileItem" name="FileItem" onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)" type="file">
+                                    </span>
+                                </div>
+                                <!-- <a class="pr15 fs11 text-underline pull-right" ng-click="chooseFileServer()">Chọn file từ server'</a> -->
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 200px;">
+                            <div class="text-cente pl10 pt10 margin-right-10 openExcel" ng-click="uploadFile()" ng-class="{'disabled-element': !openExcel}">
+                                <a class="">
+                                    <span><i class="fas fa-upload fs30"></i></span>
+                                </a>
+                                <!--<p class="text-underline mb-0 btn-name pt3">{{'Nhập excel' | translate}}</p>-->
+                            </div>
+                        </div>
+                        <div class="tab-content pt10" style="display: none;">
+                            <div role="tabpanel" class="tab-pane fade in active" id="Word">
+                                <textarea id="defaultRTE">
+                                </textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-action-5">
+                <div class=" ml-15">
+                    <div class="toggle-header" ng-click="showInfor=!showInfor">
+                        <i ng-show="showInfor" class="fa fa-caret-down"></i>
+                        <i ng-show="!showInfor" class="fa fa-caret-right"></i>
+                        <label>Thông tin sơ yếu lý lịch</label>
+                    </div>
+                    <div class="row mt-15" style="padding-left: 15px; font-size: 13px;" ng-show="showInfor">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-barcode"></i>
+                                    <label class="control-label require custom-title-code-bold">Mã hồ sơ</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.Nation" type="text" placeholder="Mã hồ sơ" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.FirstName" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Ngày sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.DateofBird" type="text" placeholder="Ngày sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-venus-mars"></i>
+                                    <label class="control-label require custom-title-code-bold">Giới tính</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.Sex" type="text" placeholder="Giới tính" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fas fa-phone"></i>
+                                    <label class="control-label require custom-title-code-bold">Số điện thoại</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.Phone" type="text" placeholder="Số điện thoai" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+    
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fas fa-envelope"></i>
+                                    <label class="control-label require custom-title-code-bold">Email</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="email@gmail.com" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.PlaceofBirth" type="text" placeholder="Nơi sinh" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.HomeTown" type="text" placeholder="Quê quán" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-home"></i>
+                                    <label class="control-label require custom-title-code-bold">Địa chỉ thường trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Địa chỉ thường trú" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Địa chỉ tạm trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Địa chỉ tạm trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Công việc hiện tại</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Công việc hiện tại" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-globe"></i>
+                                    <label class="control-label require custom-title-code-bold">Quốc tịch</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quốc tịch" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-plus-square"></i>
+                                    <label class="control-label require custom-title-code-bold">Tôn giáo</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tôn giáo" />
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-barcode"></i>
+                                    <label class="control-label require custom-title-code-bold">Mã tài khoản</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Id tài khoản" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên khai sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên khai sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fas fa-phone"></i>
+                                    <label class="control-label require custom-title-code-bold">Sdt liên lạc</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Sdt liên lạc" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Trình độ</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Trình độ" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Bằng cấp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Bằng cấp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Trường tốt nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Trường tốt nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Giáo dục nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Giáo dục nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Ngoại ngữ</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Ngoại ngữ" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Tiếng dân tộc thiểu số</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tiếng dân tộc thiểu số" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Lý luận chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Lý luận chính trị" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <label class="control-label require custom-title-code-bold">Tin học</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Tin học" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi tạo</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi tạo" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi tạo</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi tạo" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="toggle-header" style="display: flex; justify-content: space-between;" ng-click="showFamily=!showFamily">
+                        <div>
+                            <i ng-show="showFamily" class="fa fa-caret-down"></i>
+                            <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+                            <label>Lý lịch gia đình</label>
+                        </div>
+                        <div style="font-size: 20px;"><i class="fa fa-plus"></i></div>
+                    </div>
+                    <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily">
+                        <div class="toggle-header" style="display: flex; justify-content: space-between;" ng-click="showFamily1=!showFamily1">
+                            <div>
+                                <i ng-show="showFamily1" class="fa fa-caret-down"></i>
+                                <i ng-show="!showFamily1" class="fa fa-caret-right"></i>
+                                <label class="fs-18">Thông tin của bố</label>
+                            </div>
+                            <div style="font-size: 20px; color: red;"><i class="fa fa-times"></i></div>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showFamily1">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold br24" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1965- hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                        <li>
+                                            1975- hoạt động chính trị tại Tp.HCM
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" style="display: flex; justify-content: space-between;" ng-click="showFamily2=!showFamily2">
+                            <div>
+                                <i ng-show="showFamily2" class="fa fa-caret-down"></i>
+                                <i ng-show="!showFamily2" class="fa fa-caret-right"></i>
+                                <label class="fs-18">Thông tin của mẹ</label>
+                            </div>
+                            <div style="font-size: 20px; color: red;"><i class="fa fa-times"></i></div>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showFamily2">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold br24" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1965- hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                        <li>
+                                            1975- hoạt động chính trị tại Tp.HCM
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" style="display: flex; justify-content: space-between;" ng-click="showFamily3=!showFamily3">
+                            <div>
+                                <i ng-show="showFamily3" class="fa fa-caret-down"></i>
+                                <i ng-show="!showFamily3" class="fa fa-caret-right"></i>
+                                <label class="fs-18">Thông tin của anh(chị) em</label>
+                            </div>
+                            <div style="font-size: 20px; color: red;"><i class="fa fa-times"></i></div>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showFamily3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold br24" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1965- hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội hoạt động chính trị tại Hà Nội 1965- hoạt động chính trị tại Hà Nội
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                        <li>
+                                            1975- hoạt động chính trị tại Tp.HCM
+                                            <span style="float: right;"><i class="fa fa-times"></i></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toggle-header" ng-click="showWorkingProcess=!showWorkingProcess">
+                        <i ng-show="showWorkingProcess" class="fa fa-caret-down"></i>
+                        <i ng-show="!showWorkingProcess" class="fa fa-caret-right"></i>
+                        <label>Lịch sử bản thân</label>
+                    </div>
+                    <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showWorkingProcess">
+                        <div class="toggle-header" ng-click="showWorkingProcess1=!showWorkingProcess1">
+                            <i ng-show="showWorkingProcess1" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess1" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Lịch sử bản thân</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess1">
+                            <div class="form-group">
+                                <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="col-md-4 pr-0">
+                                        <i class="fa fa-calendar"></i>
+                                        <label class="control-label require custom-title-code-bold">Từ ngày</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="col-md-4 pr-0">
+                                        <i class="fa fa-calendar"></i>
+                                        <label class="control-label require custom-title-code-bold">Đến ngày</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2 pr-0">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Nội dung</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Nội dung..." ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+
+                            <div class="list-item">
+                                <table>
+                                    <tr>
+                                      <th>Từ ngày</th>
+                                      <th>Đến ngày</th>
+                                      <th>Nội dung</th>
+                                      <th>Xoá bỏ</th>
+                                    </tr>
+                                    <tr>
+                                      <td>9-2016</td>
+                                      <td>6-2019</td>
+                                      <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                      <td>
+                                        <i class="fa fa-times"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                        <td>9-2016</td>
+                                        <td>6-2019</td>
+                                        <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <td>
+                                          <i class="fa fa-times"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>9-2016</td>
+                                        <td>6-2019</td>
+                                        <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <td>
+                                          <i class="fa fa-times"></i>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess2=!showWorkingProcess2">
+                            <i ng-show="showWorkingProcess2" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess2" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Những công tác và chức vụ đã qua</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess2">
+                            <div class="form-group">
+                                <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="col-md-4 pr-0">
+                                        <i class="fa fa-calendar"></i>
+                                        <label class="control-label require custom-title-code-bold">Từ ngày</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="col-md-4 pr-0">
+                                        <i class="fa fa-calendar"></i>
+                                        <label class="control-label require custom-title-code-bold">Đến ngày</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2 pr-0">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Nội dung</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Làm việc gì, ở đâu..." ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2 pr-0">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Chức vụ</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Chức vụ" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <table>
+                                    <tr>
+                                      <th>Từ ngày</th>
+                                      <th>Đến ngày</th>
+                                      <th>Nội dung</th>
+                                      <th>Chức vụ</th>
+                                      <th>Xoá bỏ</th>
+                                    </tr>
+                                    <tr>
+                                      <td>9-2016</td>
+                                      <td>6-2019</td>
+                                      <td>Công an xã</td>
+                                      <td>Đại đội trưởng</td>
+                                      <td>
+                                        <i class="fa fa-times"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                        <td>9-2016</td>
+                                        <td>6-2019</td>
+                                        <td>Công an huyện</td>
+                                        <td>Đại đội trưởng</td>
+                                        <td>
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>9-2016</td>
+                                        <td>6-2019</td>
+                                        <td>Công an tỉnh</td>
+                                        <td>Đại đội trưởng</td>
+                                        <td>
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess3=!showWorkingProcess3">
+                            <i ng-show="showWorkingProcess3" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess3" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Đặc điểm lịch sử</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="br24" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1954- hoạt động chính trị tại địa phương
+                                        </li>
+                                        <li>1975- hoạt động chính trị tại Tp.HCM</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess3=!showWorkingProcess3">
+                            <i ng-show="showWorkingProcess3" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess3" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Khen thưởng</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="br24" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1954- hoạt động chính trị tại địa phương
+                                        </li>
+                                        <li>1975- hoạt động chính trị tại Tp.HCM</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess3=!showWorkingProcess3">
+                            <i ng-show="showWorkingProcess3" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess3" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Kỷ luật</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="br24" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1954- hoạt động chính trị tại địa phương
+                                        </li>
+                                        <li>1975- hoạt động chính trị tại Tp.HCM</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess3=!showWorkingProcess3">
+                            <i ng-show="showWorkingProcess3" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess3" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Những lớp dào tạo và bồi dưỡng đã qua</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="br24" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1954- hoạt động chính trị tại địa phương
+                                        </li>
+                                        <li>1975- hoạt động chính trị tại Tp.HCM</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle-header" ng-click="showWorkingProcess3=!showWorkingProcess3">
+                            <i ng-show="showWorkingProcess3" class="fa fa-caret-down"></i>
+                            <i ng-show="!showWorkingProcess3" class="fa fa-caret-right"></i>
+                            <label class="fs-18">Đi nước ngoài</label>
+                        </div>
+                        <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm sinh</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-calendar-o"></i>
+                                    <label class="control-label require custom-title-code-bold">Năm mất</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0">
+                                    <i class="fa fa-map-marker"></i>
+                                    <label class="control-label require custom-title-code-bold">Quê quán</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa-solid fa-map"></i>
+                                    <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi cư trú" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-users"></i>
+                                    <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nghề nghiệp" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="br24" style="display: table;border-collapse: separate;">
+                                        <input class="form-control custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Quá trình công tác" />
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>      
+                                            1954- hoạt động chính trị tại địa phương
+                                        </li>
+                                        <li>1975- hoạt động chính trị tại Tp.HCM</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 pr-0 ">
+                                    <i class="fa fa-user"></i>
+                                    <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toggle-header" ng-click="showDegree=!showDegree">
+                        <i ng-show="showDegree" class="fa fa-caret-down"></i>
+                        <i ng-show="!showDegree" class="fa fa-caret-right"></i>
+                        <label>Người giới thiệu</label>
+                    </div>
+                    <div class="mt-15" style="padding-left: 20px;font-size: 13px;" ng-show="showDegree">
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require custom-title-code-bold">Họ và tên</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require custom-title-code-bold">Ngày sinh</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Ngày sinh" ng-readonly="CustomerId !=''" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require custom-title-code-bold">Giới tính</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Giới tính" ng-readonly="CustomerId !=''" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require custom-title-code-bold">Số điện thoại</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Số điện thoai" ng-readonly="CustomerId !=''" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0 ">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require custom-title-code-bold">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="email" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 pr-0 ">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require custom-title-code-bold">Tài khoản</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tài khoản" />
+                            </div>
+                        </div><div class="form-group">
+                            <div class="col-md-4 pr-0 ">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require custom-title-code-bold">Mật khẩu</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Mật khẩu" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 ml-10 col-right">
+        <div class="title"><h2>Thông tin phê duyệt</h2></div>
+        <div class="toggle-header" ng-click="showFamily=!showFamily">
+            <i ng-show="showFamily" class="fa fa-caret-down"></i>
+            <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+            <label>Bí thư duyệt</label>
+        </div>
+        <div class="" style="padding-left: 20px;" ng-show="showFamily">
+            
+        </div>
+        <div class="toggle-header" ng-click="showFamily=!showFamily">
+            <i ng-show="showFamily" class="fa fa-caret-down"></i>
+            <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+            <label>Bí thư duyệt</label>
+        </div>
+        <div class="" style="padding-left: 20px;" ng-show="showFamily">
+            
+        </div>
+        <div class="toggle-header" ng-click="showFamily=!showFamily">
+            <i ng-show="showFamily" class="fa fa-caret-down"></i>
+            <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+            <label>Bí thư duyệt</label>
+        </div>
+        <div class="" style="padding-left: 20px;" ng-show="showFamily">
+            
+        </div>
+        <div class="toggle-header" ng-click="showFamily=!showFamily">
+            <i ng-show="showFamily" class="fa fa-caret-down"></i>
+            <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+            <label>Bí thư duyệt</label>
+        </div>
+        <div class="" style="padding-left: 20px;" ng-show="showFamily">
+            
+        </div>
+    </div>
+</div>
+<style>
+    .nav-tabs {
+        margin-bottom: 0px;
+    }
+    .toggle-header{
+        margin:1px;
+        padding:10px;
+        background-color:gainsboro
+    }
+</style>

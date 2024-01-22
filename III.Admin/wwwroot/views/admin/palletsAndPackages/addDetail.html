@@ -1,0 +1,238 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'PAUP_ADDNEW_ITEM' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mb5">
+                    <div class="form-group col-lg-8" ng-class="{'has-error' : errorQuantityImp}">
+                        <label class="fw600 text-underline">{{'SCP_TXT_TITLE' | translate}}</label>
+                        <div class='mr5'>
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty br24" ng-model="modelHeader.TicketTitle" placeholder="{{'Tiêu đề' | translate}}..."/>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4 ml20" ng-class="{ 'has-error': errorTypeCode}">
+                        <label class="fw600 text-underline">{{'SCP_LBL_STATUS' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="modelHeader.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Trạng thái' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.Status='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="form-group col-lg-6">
+                        <label class="fw600 text-underline">{{'SCP_COL_CREATED_BY' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="modelHeader.TicketCreator" theme="bootstrap">
+                                <ui-select-match placeholder="{{'SCP_COL_CREATED_BY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listEmployee | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.TicketCreator='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6 ml20">
+                        <label class="fw600 text-underline">{{'SCP_COL_CREATED_TIME' | translate}}</label>
+                        <div class="input-group br24">
+                            <input class="form-control" type="text" placeholder="{{'SCP_COL_CREATED_TIME' | translate}}..." ng-model="modelHeader.TicketTimeCreator" id="TicketCreateTime" ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.TicketTimeCreator=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="form-group col-lg-6">
+                        <label class="fw600 text-underline">{{'PAUP_IMPLEMENTER' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="modelHeader.Packager" theme="bootstrap">
+                                <ui-select-match placeholder="{{'PAUP_IMPLEMENTER' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listEmployee | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.Packager='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6 ml20">
+                        <label class="fw600 text-underline">{{'PAUP_DATE_IMPLEMENT' | translate}}</label>
+                        <div class="input-group br24">
+                            <input class="form-control" type="text" placeholder="{{'PAUP_DATE_IMPLEMENT' | translate}}..." ng-model="modelHeader.PackagerTime" id="ExecuteTime" ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.PackagerTime=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-md-12" style="height: 100%;">
+                        <div class="form-group" ng-class="{'has-error' : errorQuantityImp}">
+                            <label class="fw600 text-underline">{{'SCP_LBL_NOTE' | translate}}</label>
+                            <div class="input-group br24">
+                                <textarea class="form-control br24" ng-model="modelHeader.Noted" placeholder="{{'Ghi chú' | translate}}..." rows="6" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="btn-group actions pull-right d-flex pt15">
+                        <div class="text-center pr10">
+                            <a ng-click="submit()" class="fs30">
+                                <span><i class="fa-solid fa-floppy-disk"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

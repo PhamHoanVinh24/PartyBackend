@@ -1,0 +1,95 @@
+﻿<style>
+    .tag-wareHouseFile .tags {
+        height: 75px;
+        max-height: 75px;
+    }
+
+    tags-input .host {
+        position: relative;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height: 0;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <span class="modal-title" id="modal-title"><i class="fa fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_TITLE' | translate}}  <span class="text-danger" title="{{FileName}}">{{FileName.length > 30 ? FileName.substr(0, 30) + " ..." : FileName}}</span></span>
+</div>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body p15 fs11 pt-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label"><i class="fa fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_NOTE' | translate}}</label>
+                            <input class="form-control" ng-model="model.Subject" placeholder="{{'EDMSR_TAB_FILE_CURD_NOTE' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class=""><i class="fa fa-list"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_GROUP' | translate}}</label>
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Group" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_GROUP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingMetaGroup()" class="btn no-shadow  green-custom" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class=""><i class="fa fa-list"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_TYPE' | translate}}</label>
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'EDMSR_TAB_FILE_CURD_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingMetaType()" class="btn no-shadow  green-custom" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label pl-0"><i class="fa fa-key"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_LBL_TAG' | translate}}</label>
+                            <tags-input add-on-blur="true" add-on-enter="true" class="tag-wareHouseFile" use-strings="true" min-length="0" placeholder="{{'EDMSR_TAB_FILE_CURD_LBL_TAG' | translate}}" ng-model="model.KeyWord"></tags-input>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label pl-0"><i class="fa fa-info-circle"></i>&nbsp;{{'EDMSR_TAB_FILE_CURD_HASHTAG' | translate}}</label>
+                            <tags-input add-on-blur="true" add-on-enter="true" class="tag-wareHouseFile" use-strings="true" min-length="0" placeholder="{{'EDMSR_TAB_FILE_CURD_HASHTAG' | translate}}" ng-model="model.HashTag"></tags-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer mt70 mr10">
+    <div class="btn-group actions d-flex pull-right">
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="save()" href="javascript:;">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>
+
+
+

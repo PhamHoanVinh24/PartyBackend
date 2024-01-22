@@ -1,0 +1,184 @@
+﻿<style>
+
+    /*.custom_width thead tr th {
+        width: 11% !important
+    }*/
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    /*.mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }*/
+</style>
+<div ng-controller="contractTabService">
+    <div class="row" style="margin-top:-10px">
+        <div class="col-md-8">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Dịch vụ</label>
+                    <div class="input-group">
+                        <ui-select ng-disabled="isAdd==false" ng-model="model.ServiceCode" theme="bootstrap" ng-change="changeService()">
+                            <ui-select-match placeholder="Chọn dịch vụ">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in services | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button ng-disabled="isAdd==false"  type="button" ng-click="model.ServiceCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 " style="margin-bottom:-10px">
+                <label class="mt-checkbox mt30"><input type="checkbox" ng-model="isExtend" ng-click="changeExtend()" /><span></span>Mở rộng</label>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Ràng buộc</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.ServiceCondition" theme="bootstrap" ng-change="changeCondition()" ng-disabled="isExtend==false">
+                            <ui-select-match placeholder="Ràng buộc">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in serviceConditions | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ServiceCondition=''" class="btn btn-default no-shadow" ng-disabled="isExtend==false">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Giá trị ràng buộc</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.Range" theme="bootstrap" ng-change="filterCost()" ng-disabled="isExtend==false">
+                            <ui-select-match placeholder="Giá trị ràng buộc">{{$select.selected.ConditionRange}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in serviceCost | filter: $select.search">
+                                {{x.ConditionRange}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Range=''" class="btn btn-default no-shadow" ng-disabled="isExtend==false">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Giá</label>
+                    <input style="width:130px" type="text" num-thousand='true' awnum num-int='21' class="form-control" ng-model="model.Cost" name="Code" placeholder="Giá..." />
+                </div>
+            </div>
+            <div class="col-md-1" style="margin-left: 30px; width: 100px;">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Số lượng</label>
+                    <input type="number" min="1" class="form-control" ng-model="model.Quantity" name="Code" placeholder="Số lượng..." />
+                </div>
+            </div>
+            <div class="col-md-1" style="width: 150px">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Đơn vị</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.Unit" theme="bootstrap">
+                            <ui-select-match placeholder="Đơn vị">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in units | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1" style="width: 100px">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Tiền tệ</label>
+                    <div class="input-group mBorder">
+                        <ui-select ng-model="model.Currency" theme="bootstrap">
+                            <ui-select-match placeholder="Tiền tệ">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in currencys | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <!--<span class="input-group-btn">
+                            <button type="button" ng-click="model.Currency=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 " style="width: 100px;">
+                <div class="form-group">
+                    <label class="control-label require fs9 " style="font-size:9px !important">Thuế</label>
+                    <input type="number" min="1" class="form-control " ng-model="model.Tax" name="Code" placeholder="%" />
+                </div>
+            </div>
+            <div class="col-md-2 " style="padding-right:25px">
+                <div class="col-md-12" ng-show="isAdd==true">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom mt15" ng-click="add()">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                </div>
+                <div class="col-md-6" ng-show="isAdd==false">
+                    <a class="btn btn-icon-only btn-circle btn-outline red-custom mt15" ng-click="close()">
+                        <span><i class="fa fa-close"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3 " style="margin-left:8px">Đóng</p>
+                </div>
+                <div class="col-md-6" ng-show="isAdd==false">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom mt15" ng-click="save()">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3 ml10">Lưu</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!--<div class="col-md-5">-->
+            <!--Member list-->
+            <label class="control-label require fs9 " style="font-size:9px !important">Chi tiết dịch vụ</label>
+            <div class="col-lg-12 groupUser" style="height:100px; overflow-y:scroll; border:#c2cad8 solid 1px; border-radius:4px">
+                <button type="button" class="btn" ng-repeat="x in serviceDetails" ; style="height:35px; border:1px solid #c2cad8; border-radius:4px !important; margin-top:5px">
+                    {{x.Name}}|{{x.ConditionRange}}<i style="color:red; font-size:10px;margin-left: 10px;font-size: 20px;" class="fa fa-times float-right" aria-hidden="true" ng-click="removeserviceDetails($index)"></i>
+                </button>
+            </div>
+            <!--</div>-->
+        </div>
+
+    </div>
+    <div class="custom_width mt5">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataService"></table>
+    </div>
+</div>

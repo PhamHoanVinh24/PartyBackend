@@ -1,0 +1,166 @@
+﻿<style>
+    .thumbnail {
+        border: 0px solid !important;
+    }
+
+    @media (max-width:992px) {
+        .modal-60 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-60 {
+            width: 60%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-60 {
+            width: 50%;
+        }
+    }
+    .font-in-tab {
+        /* border-radius: 4px !important; */
+        border: 1px solid #e7ecf1;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: white:
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'CS_CURD_TITLE_EDIT_CS' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal font-in-tab" method="post" ng-validate="validationOptionsContact">
+            <div class="form-body pt-0 pb-0">
+                <div class="row mb15">
+                    <div class="col-md-4 pl15">
+                        <div class="form-group mb-0">
+                            <i class="fa fa-paper-plane"></i>
+                            <label class="control-label require">{{'CS_CURD_LBL_CS_CONTACTNAME' | translate}}</label>
+                            <input class="form-control br24" name="ContactName" ng-model="model.ContactName" placeholder="{{'CS_CURD_TXT_CS_CONTACTNAME' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-mail-forward"></i>
+                            <label class="control-label require">{{'CS_CURD_LBL_CS_EMAIL' | translate}}</label>
+                            <input class="form-control br24" name="Email" ng-model="model.Email" placeholder="{{'CS_CURD_TXT_CS_EMAIL' | translate}}" />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-paperclip"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_POSITION' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Title" name="Title" placeholder="{{'CS_CURD_TXT_CS_POSITION' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-map-marker"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_ADDRESS' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Address" name="Address" placeholder="{{'CS_CURD_TXT_CS_ADDRESS' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-phone"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_TELEPHONE' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Telephone" name="Telephone" placeholder="{{'CS_CURD_TXT_CS_TELEPHONE' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-mobile-phone"></i>
+                            <label class="control-label require">{{'CS_CURD_LBL_CS_MOBIEPHONE' | translate}}</label>
+                            <input class="form-control br24" name="Mobile" ng-model="model.MobilePhone" placeholder="{{'CS_CURD_TXT_CS_MOBIEPHONE' | translate}}...." />
+                        </div>
+                        <div class="form-group mb-0" ng-class=" {'has-error': errorSuppCode}">
+                            <i class="fas fa-user"></i>
+                            <label class="control-label require">{{'CS_CURD_LBL_SUPPCODE' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select tagging ng-model="model.SuppCode" theme="bootstrap" ng-change="changeSelect('SuppCode')">
+                                    <ui-select-match placeholder="{{'CS_CURD_TXT_SUPPCODE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listSupplier | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorSuppCode" class="label-color validation-message">
+                                    {{'CS_CURD_VALIDATE_SUPPCODE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pl20">
+                        <div class="form-group mb-0">
+                            <i class="fa fa-fax"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_FAX' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Fax" name="Fax" placeholder="{{'CS_CURD_TXT_CS_FAX' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-facebook"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_FACEBOOK' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Facebook" name="Facebook" placeholder="{{'CS_CURD_TXT_CS_FACEBOOK' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-google-plus"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_GOOGLEPLUS' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.GooglePlus" name="GooglePlus" placeholder="{{'CS_CURD_TXT_CS_GOOGLEPLUS' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-twitter"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_TWITTER' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Twitter" name="Twitter" placeholder="{{'CS_CURD_TXT_CS_TWITTER' | translate}}..." />
+                        </div>
+                        <div class="form-group mb-0">
+                            <i class="fa fa-skype"></i>
+                            <label class="control-label">{{'CS_CURD_LBL_CS_SKYPE' | translate}}</label>
+                            <input class="form-control br24" ng-model="model.Skype" name="Skype" placeholder="{{'CS_CURD_TXT_CS_SKYPE' | translate}}..." />
+                        </div>
+                        <div class=" form-group mb-0" style="padding-top:7px">
+                            <i class="fa fa-code"></i>
+                            <label class="control-labl">{{'CS_CURD_LBL_CS_NOTE' | translate}}</label>
+                            <textarea class="form-control br12" ng-model="model.Note" style="margin-top:-5px; height:98px" name="Note" placeholder="{{'CS_CURD_TXT_CS_NOTE' | translate}}..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-0 pt25">
+                            <div class="thumbnail input-unstyled" style="cursor:pointer">
+                                <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img id="image" ng-click="loadImage()" class="img-circle h-200 w200" role="button" src="/images/default/uploadimg.png" alt="Hình ảnh" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center" style="margin-top: -20px;">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <label class="control-label ">{{'CS_CURD_LBL_CS_IMAGE' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="btn-group actions d-flex" style="padding-top:120px;justify-content:center">
+                            <div class="text-center pr20">
+                                <a data-dismiss="modal" ng-click="cancel()" class="fs30">
+                                    <span><i class=" fas fa-times " style="--fa-primary-color: red;"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="text-center">
+                                <a class=" fs30 p-0" ng-click="submit()">
+
+                                    <span><i class="fa-solid fa-plus"></i></span>
+
+                                </a>
+
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr15" href="javascript:;">
+        {{'COM_BTN_EDIT' | translate}}
+    </button>-->
+</div>
+

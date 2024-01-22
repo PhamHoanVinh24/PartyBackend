@@ -1,0 +1,154 @@
+﻿<style>
+    .list-group {
+        max-height: 133px;
+        overflow-y: auto;
+        z-index: 9999;
+        position: absolute;
+        border: 1px solid #ddd;
+        margin-top: 55px;
+        margin-left: 15px;
+    }
+
+    .list-group-item {
+        padding: 0.25rem 1.25rem !important;
+        border: none !important;
+    }
+    .modal-header{
+        background-color:white;
+    }
+    .modal-title{
+        color:black;
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <img style="width: 18px; margin-top: 5px; filter: invert(1);" src="/images/default/key_word_icon.png" alt="Key word icon" />
+    <span class="modal-title" id="modal-title"> {{'SEARCH_CT_FILE_SETUP_DATASET' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="form-body pt-0 pb-0">
+        <div class="row mt-action-5">
+            <form name="addforms" class="form-horizontal" method="post" ng-validate="validationOptions">
+                <div class="col-md-12 pt-0 pl-0 pr-0">
+                    <div class="table-toolbar table_body">
+                        <div class="col-md-12 p-0">
+                            <div class="col-md-3 pr-0">
+                                <div class="form-group ">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'SEARCH_CT_FILE_KEY_WORD'|translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="model.KeyWord" name="Name" placeholder="{{'SEARCH_CT_FILE_KEY_WORD'|translate}}..." ng-keyup="change(model.KeyWord)" ng-blur="outUser()" ng-click="inUser()" autocomplete="off" />
+                                    </div>
+                                    <ul class="list-group" id="user-packing">
+                                        <li class="list-group-item" ng-repeat="Value in listKeyWordNew" ng-click="addKeyWord(Value)">{{Value}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group" ng-class=" {'has-error': errorUnit}">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'SEARCH_CT_FILE_UNIT'|translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="model.Unit" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'SEARCH_CT_FILE_UNIT'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in lstUnitKeyWord | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="addCommonSettingUnit()" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorUnit" class="label-color validation-message">
+                                            {{'SEARCH_CT_FILE_GROUP_NOT_BLANK'|translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 pl-0">
+                                <div class="form-group" ng-class=" {'has-error': errorGroup}">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'SEARCH_CT_FILE_DATASETS'|translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="model.Group" theme="bootstrap" ng-disabled="isUpdate" ng-change="reload()">
+                                                <ui-select-match placeholder="{{'SEARCH_CT_FILE_DATASETS'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in lstGroupKeySearch | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="addCommonSettingGroup()" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorGroup" class="label-color validation-message">
+                                            {{'SEARCH_CT_FILE_DATASETS_NOT_BLANK'|translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <div class="form-group" ng-class=" {'has-error': errorType}">
+                                    <div class="col-md-12">
+                                        <label class="control-label require">{{'SEARCH_CT_FILE_TYPE_DATA'|translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group br24">
+                                            <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                                <ui-select-match placeholder="{{'SEARCH_CT_FILE_TYPE_DATA'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat=" x.Code as x in lstTypeKeyWord | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="addCommonSettingType()" class="btn btn-default no-shadow">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="errorType" class="label-color validation-message">
+                                            {{'SEARCH_CT_FILE_GROUP_NOT_BLANK'|translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1 nowrap mt20 text-center">
+                                <div class="pull-right" ng-show="!isUpdate">
+                                    <a class="fs30" ng-click="submit()">
+                                        <span><i class="fa-solid fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_ADD' | translate}}</p>
+                                </div>
+                                <div class="pull-right" ng-show="isUpdate">
+                                    <a class="btn btn-icon-only btn-outline btn-circle green-custom" ng-click="submit()">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>

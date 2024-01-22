@@ -1,0 +1,422 @@
+﻿@{
+    ViewData["Title"] = "Edit Meeting";
+}
+@section plugin_script {
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+}
+@section plugin_style{
+    <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+    <link href="~/lib/assets/global/plugins/ui-select/select.css" rel="stylesheet" type="text/css" />
+}
+
+@{
+    var meetingID = ViewData["MeetingId"];
+}
+
+<head>
+    <style>
+        .mfp-content {
+            background: #fff;
+            width: 60% !important;
+        }
+
+        .mfp-close-btn-in .mfp-close {
+            color: #33333300;
+            width: 29px;
+            height: 28px;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: bold
+        }
+
+        .icon-insert {
+            font-size: 15px;
+        }
+
+        .mfp-container {
+            text-align: center;
+            position: absolute;
+            width: 60% !important;
+            height: 100%;
+            left: 20% !important;
+            top: -20% !important;
+        }
+
+        .tags-custom {
+            margin: 2px;
+            padding: 0 5px;
+            display: inline-block;
+            float: left;
+            font: 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+            /*height: 26px;*/
+            height: auto;
+            line-height: 25px;
+            border: 1px solid #acacac;
+            border-radius: 3px;
+            background: -webkit-linear-gradient(top,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+            background: linear-gradient(to bottom,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+        }
+
+        .h-95-srcoll {
+            overflow: auto;
+            max-height: 95px !important;
+            height: 95px !important;
+        }
+
+        .boder-box-custom-scroll {
+            padding: 1px;
+            word-wrap: break-word;
+            cursor: text;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            height: 100%;
+            border-radius: 4px;
+            max-height: 200px;
+            height: 150px;
+            width: 95%;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-header">
+        <img class="icon-remove" title="Close" src="/images/default/close.png" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-dismiss="modal" />
+        <i class="fa fa-edit icon-insert"></i>
+        <span class="modal-title" id="modal-title">Sửa meeting</span>
+    </div>
+    <div class="modal-body pb-0" id="modal-body">
+        <div class="portlet-body">
+            <div class="col-md-12 pt5 mb5 p-0">
+                <div class="form-group">
+                    <input id="meetingID" value="@meetingID" hidden/>
+                    <div class="col-md-12">
+                        <i class="fa fa-info"></i>
+                        <label class="fw600 require">Tiêu đề cuộc họp</label>
+                        <div class="input-group">
+                            <input id="meetingTopic" class="form-control" type="text" placeholder="Tiêu đề cuộc họp..." ng-keydown="($event.keyCode == 13) && reload()" readonly />
+                            <span class="input-group-btn">
+                                <button type="button" onclick="$('#meetingTopic').val('');" class="btn btn-default no-shadow" disabled="disabled">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        <div class="col-md-12 mt10">
+                            <i class="fa fa-list"></i>
+                            <label class="fw600 require">Danh sách tài khoản zoom</label>
+                            <div class="input-group">
+                                <div id="listUserZoom"></div>
+                                <span class="input-group-btn">
+                                    <button type="button" onclick="deleteUserZoom()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="form-group">
+                    <div class="col-md-10 mt10">
+                        <i class="fa fa-list"></i>
+                        <label class="fw600 require">Danh sách tài khoản cho phép join meeting</label>
+                        <div class="input-group">
+                            <div id="listUserSystemn"></div>
+                            <span class="input-group-btn">
+                                <button type="button" onclick="addUserMeeting()" class="btn btn-default no-shadow">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt40 p-0">
+                        <input type="checkbox" id="checkAll" onclick="checkAll()" />&nbsp;&nbsp; <span class="fw600">Tất cả</span>
+                    </div>
+                </div>
+                <div class="col-md-12 boder-box-custom-scroll h-95-srcoll mt10" style="border:1px solid #ccc;">
+                    <div id="listUserMeeting"></div>
+                </div>
+                <div class="col-md-12 mt10">
+                    <div class="form-group pull-right text-center">
+                        <button onclick="editMeeting()" class="btn btn-primary"><span class="fa fa-plus"></span>&nbsp;Lưu lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var meetingID ='';
+
+    var htmlUserZoom = "";
+    var listUserZoom = [];
+
+    var htmlUserSystem = "";
+    var listUserSystem = [];
+
+    var listUserJoinMeeting = [];
+
+    function loadUserZoom() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Meeting/GetListUserZoom",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listUserZoom = data;
+                htmlUserZoom = htmlUserZoom + '<select id="idUserZoom" class="form-control""><option value="">-- Chọn tất cả --</option >';
+                for (var y in data) {
+                    htmlUserZoom = htmlUserZoom + "<option value=" + data[y].UserId + ">" + data[y].AccountName + "</option >"
+                }
+                htmlUserZoom = htmlUserZoom + '</select>';
+                $('#listUserZoom').append(htmlUserZoom);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadUser() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/User/GetListUser",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listUserSystem = data;
+                htmlUserSystem = htmlUserSystem + '<select id="idUser" class="form-control""><option value="">-- Chọn tất cả --</option >';
+                for (var y in data) {
+                    htmlUserSystem = htmlUserSystem + "<option value=" + data[y].UserId + ">" + data[y].GivenName + "</option >"
+                }
+                htmlUserSystem = htmlUserSystem + '</select>';
+                $('#listUserSystemn').append(htmlUserSystem);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function deleteUserZoom() {
+        $('#listUserZoom').empty();
+        $('#listUserZoom').append(htmlUserZoom);
+    }
+
+    function addUserMeeting() {
+        var checkAll = listUserJoinMeeting.find(function (element) {
+            if (element.UserId == 0) return true;
+        });
+
+        if (checkAll != null && checkAll != null) {
+            App.toastrError('Đã chọn tất cả thành viên');
+            return;
+        }
+
+        var userId = $('#idUser').val();
+        var user = listUserSystem.find(function (element) {
+            if (element.UserId == userId) return true;
+        });
+
+        if (user !== null && user !== undefined) {
+            var obj = {
+                UserId: user.UserId,
+                UserName: user.UserName,
+                GivenName: user.GivenName
+            };
+
+            var check = listUserJoinMeeting.find(function (element) {
+                if (element.UserId == userId) return true;
+            });
+
+            if (check === null || check === undefined) {
+                listUserJoinMeeting.push(obj);
+                initTableUser();
+            } else {
+                App.toastrError('Người dùng đã có trong danh sách');
+            }
+        }
+    }
+    function checkAll() {
+        if ($('#checkAll').is(":checked")) {
+            $('#listUserMeeting').html('');
+            var obj = {
+                UserId: 0,
+                UserName: 'ALL',
+                GivenName: 'Tất cả'
+            };
+
+            listUserJoinMeeting = [];
+            listUserJoinMeeting.push(obj);
+            initTableUser();
+        } else {
+            $('#listUserMeeting').html('');
+            listUserJoinMeeting = [];
+        }
+    }
+    function initTableUser() {
+        var table = "";
+        if (listUserJoinMeeting.length > 0) {
+            for (var i = 0; i < listUserJoinMeeting.length; i++) {
+                table += "<button type='button' class='tags-custom'>";
+                table += "<i class='fa fa-times pull-right ic-remove' aria-hidden='true' onclick='removeUser(" + i + ")'></i><span>" + listUserJoinMeeting[i].GivenName + "</span>";
+                table += "</button>";
+            }
+            $('#listUserMeeting').html('');
+            $('#listUserMeeting').append(table);
+        } else {
+            $('#listUserMeeting').html('');
+        }
+    }
+    function removeUser(index) {
+        if (index >= 0) {
+            if (listUserJoinMeeting[index].UserId === 0) {
+                $("#checkAll").prop("checked", false);
+            }
+
+            listUserJoinMeeting.splice(index, 1);
+            initTableUser();
+        }
+    }
+
+    function editMeeting() {
+        var API_KEY = 'o6EIJCatTZm3t4v0qThsoQ';
+        var API_SECRET = 'qwfleud1ZHN6IjzkXoI8ce5Qfnx49zh2mRHE';
+        var TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6Im82RUlKQ2F0VFptM3Q0djBxVGhzb1EiLCJleHAiOjE4OTM0NzQwMDAsImlhdCI6MTU4Njc4MTIzNn0.LJKFD_xbwqX4A_w4mfAFK0SN2I7WNaaQYlyGuWThPGI';
+        var USER_ID = 'K8tvmoYzSr2OGRODSs_cEg';
+        var topic = $('#meetingTopic').val();
+        var body = {
+            topic: topic,
+            type: 2,
+            //start_time: "string [date-time]",
+            //duration: "integer",
+            //timezone: "string",
+            password: '',
+            //agenda: '',
+            //recurrence: {
+            //    type: "integer",
+            //    repeat_interval: "integer",
+            //    weekly_days: "string",
+            //    monthly_day: "integer",
+            //    monthly_week: "integer",
+            //    monthly_week_day: "integer",
+            //    end_times: "integer",
+            //    end_date_time: "string [date-time]"
+            //},
+            settings: {
+                host_video: true,
+                participant_video: true,
+                //cn_meeting: '',
+                //in_meeting: '',
+                join_before_host: true,
+                //mute_upon_entry: '',
+                //watermark: '',
+                //use_pmi: '',
+                approval_type: 2,
+                //registration_type: 1,
+                //audio: '',
+                //auto_recording: '',
+                //enforce_login: false,
+                //enforce_login_domains: '',
+                //alternative_hosts: '',
+                //global_dial_in_countries: [
+
+                //],
+                //registrants_email_notification: ''
+            }
+        };
+        var dataBody = JSON.stringify(body);
+        var obj = {
+            RoomID: meetingID,
+            Token: TOKEN,
+            Data: dataBody,
+            ListUserMeeting: listUserJoinMeeting
+        };
+
+        if (topic == '' || topic == undefined || topic == null) {
+            App.toastrError('Vui lòng nhập tiêu đề cuộc họp');
+            return;
+        }
+
+        if (listUserJoinMeeting.length === 0) {
+            App.toastrError('Danh sách người join meeting trống');
+            return;
+        }
+
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Meeting/EditMeeting",
+            contentType: "application/json",
+            dataType: "JSON",
+            data: JSON.stringify(obj),
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (rs) {
+                App.unblockUI("#contentMain");
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                } else {
+                    App.toastrSuccess(rs.Title);
+                    location.reload('')
+                }
+            },
+            failure: function (errMsg) {
+                App.unblockUI("#contentMain");
+                alert(errMsg);
+            }
+        });
+    };
+
+    function initLoad() {
+        meetingID = $('#meetingID').val();
+        
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Meeting/GetMeetingDetail?meetingId=" + meetingID,
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                
+                $('#meetingTopic').val(data.Object.RoomName);
+                listUserJoinMeeting = JSON.parse(data.Object.ListUserAccess);
+                for (var i = 0; i < listUserJoinMeeting.length; i++) {
+                    if (listUserJoinMeeting[i].UserName === 'ALL') {
+                        $("#checkAll").prop("checked", true);
+                        break;
+                    }
+                }
+                initTableUser();
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+
+    function init() {
+        loadUserZoom();
+        loadUser();
+        initLoad();
+    };
+    init();
+</script>

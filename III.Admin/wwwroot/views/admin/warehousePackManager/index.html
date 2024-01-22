@@ -1,0 +1,201 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 600;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .table-responsive th {
+        font-size: 13px !important;
+        text-align: center;
+    }
+
+    /*.table-responsive tbody tr td:first-child {
+        font-size: 13px !important;
+        font-weight: 600;
+        text-align:left!important;
+    }*/
+
+    .table-responsive tbody tr td:nth-child(2) {
+        text-align: left !important;
+    }
+
+    .table-responsive tbody tr td {
+        text-align: center !important;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(80% - 50px);
+        right: 75px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'WPM_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="packRecords()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'WPM_ADD' | translate}}</p>
+    </div>
+
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="addPackAttr()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'WPM_ATTR' | translate}}</p>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-md-4">
+                        <label class="fw600 text-underline">{{'WPM_STYPE_PACK' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'WPM_STYPE_PACK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label fw600 text-underline">{{'WPM_LEVEL' | translate}}</label>
+                            <input class="form-control br24" name="PackAttrCode" ng-model="model.PackAttrCode" placeholder="{{'WPM_LEVEL' | translate}}..." />
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="fw600 text-underline">{{'WPM_CODE_NAME_SPEC' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'WPM_CODE_NAME_SPEC' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10 pull-right" ng-click="search()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-map"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'WPM_DIAGRAM' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="fw600 text-underline">{{'WPM_PLACE_OF_ARRANGEMENT' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'WPM_PLACE_OF_ARRANGEMENT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label fw600 text-underline">{{'WPM_LEVEL' | translate}}</label>
+                            <input class="form-control br24" name="PackAttrCode" ng-model="model.PackAttrCode" placeholder="{{'WPM_LEVEL' | translate}}..." />
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="fw600 text-underline">{{'WPM_PLACE_OBJ' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.PackType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Đối tượng xếp đặt cụ thể' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListZoneType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PackType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10 pull-right" ng-click="search()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-filter"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'WPM_FILTER' | translate}}</p>
+                            </div>
+
+                            <div class="text-center pr10 pull-right" ng-click="packRecordsArrange()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-cube"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'WPM_PACK_PLACE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="table-responsive">
+        <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" expand-level="4" icon-leaf="fas fa-map-marker-alt"></tree-grid>
+    </div>

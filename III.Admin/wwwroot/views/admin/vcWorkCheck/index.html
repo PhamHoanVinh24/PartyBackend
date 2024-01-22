@@ -1,0 +1,162 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+            <h1 class="bold mb-0">{{'VCMM_CURD_LBL_EMPLOYEE_CHECKIN_CHECKOUT' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin/VCChart">{{'VCMM_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="#">{{'VCMM_LINK_MARKET_MANAGEMENT' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div>{{'VCMM_CURD_LBL_EMPLOYEE_CHECKIN_CHECKOUT' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-6">
+            <div class="btn-group pull-right actions">
+                <a class="btn btn-accent btnSearch">
+                    <i class="fa fa-search"></i>
+                    Tìm kiếm
+                </a>
+                <a ng-click="add()" class="btn btn-green">
+                    <i class="fa fa-plus"></i>
+                    Thêm mới
+                </a>
+                <a ng-click="export()" class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> Xuất excel</span>
+                </a>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mb5 ">
+        <div class="portlet-body">
+            <!--<img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+            <div class="row pt5 mb5">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_CODE_PLAN' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.WpCode" class="form-control" type="text" placeholder="{{'VCMM_CURD_TXT_CODE_PLAN' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WpCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+        <label class="fw600 text-underline">Nhân viên</label>
+        <div class="input-group">
+            <input ng-model="model.Name" class="form-control" type="text" placeholder="Nhân viên..." ng-keydown="($event.keyCode == 13) && reload()" />
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.Name=''" class="btn btn-default no-shadow" style="">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>-->
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_EMPLOYEES' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.UserName" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_SELECT_EMPLOYEES' | translate}}">{{$select.selected.GivenName}}</ui-select-match>
+                            <ui-select-choices repeat="x.UserName as x in allStaff | filter: $select.search">
+                                {{x.GivenName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.UserName='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_DISTRIBUTOR_AGENCY_STORE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CustomerName" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_DISTRIBUTOR_AGENCY_STORE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listCustomer | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CustomerName=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_CHECK_IN' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'VCMM_CURD_TXT_CHECK_IN' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='FromDate' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_CHECK_OUT' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'VCMM_CURD_TXT_CHECK_OUT' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='ToDate' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'VCMM_CURD_LBL_STATUS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Checkout" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in CheckoutStatuss | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Checkout='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="pl20 text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="export()">
+                                <span><i class="fa fa-file-excel-o"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXEL' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <span class="text-danger">{{'VCMM_LBL_DOUBLE_CLICK_VIEW_DETAIL_IMAGE' | translate}}</span>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

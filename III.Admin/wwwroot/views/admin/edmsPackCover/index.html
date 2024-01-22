@@ -1,0 +1,126 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt10 actions d-flex pull-right" ng-show="IsTranslate" style="margin-top: -45px;">
+    <!--<div class="text-center pr-2">
+        <a ng-click="showSearch()" class="btn btn-icon-only btn-circle btn-outline gold-custom">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="portlet light bordered input-search mb5" style="margin-top: 20px;">
+        <div class="portlet-body pb10 pt5">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-md-1 pt5">
+                        <label class="fw600 text-underline">{{'EDMS_SEARCH_PACK_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="input-group">
+                            <input type='text' autocomplete="off" class="form-control bold" ng-model="model.Name" placeholder="{{'EDMS_SEARCH_PACK_NAME' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Name='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="col-md-4 pt5">
+                        <label class="fw600 text-underline">{{'EDMS_SEARCH_PACK_FROMDATE'| translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <div class="input-group">
+                            <input type="text" autocomplete="off" class="form-control bold" placeholder="{{'EDMS_SEARCH_PACK_FROMDATE'| translate}}..." ng-model="model.FromDate" id="FromTo">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="col-md-4 pt5">
+                        <label class="fw600 text-underline">{{'EDMS_SEARCH_PACK_TODATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <div class='input-group '>
+                            <input type='text' autocomplete="off" class="form-control bold" ng-model="model.ToDate" placeholder="{{'EDMS_SEARCH_PACK_TODATE' | translate}}..." id='DateTo' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="btn-group actions d-flex">
+                        <div class="pr10 text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptionsPackCover"
+               dt-columns="dtColumnsPackCover"
+               dt-instance="dtInstancePackCover"
+               id="tblDataPackCover"></table>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

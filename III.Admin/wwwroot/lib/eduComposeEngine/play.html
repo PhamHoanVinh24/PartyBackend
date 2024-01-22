@@ -1,0 +1,202 @@
+﻿<!--<!DOCTYPE html>-->
+<!--<html class="  notepad-on">-->
+<!--<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-site-verification" content="WC9FfWNfVRyJn8pWPXTHM4uCe_p-U13-iz0dV8A6puk" />
+    <meta charset="utf-8" />
+    <meta property="og:site_name" content="Real time white board for drawing on line, share photo and capture image from webcam" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://vrobbi-nodedrawing.herokuapp.com" />
+    <meta property="fb:admins" content="100004633505284" />
+    <meta property="og:title" content="Real time whiteboard collaborative with chat in html5 and websocket" />
+    <meta property="fb:app_id" content="508864332486444" />
+    <meta name="keywords" content="lavagna collaborativa, disegnare on line, applicazione real time, multiuser whiteboard, realtime application, drawing on line, drawing game, html5, web 2.0, software, internet, image capture, webcam" />
+    <meta name="description" content="lavagna multiutente condivisa in tempo reale, multiuser whiteboard real time application, draw on line and share your draw with all on the net" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
+<!--<title>Notepad and Chating</title>-->
+<!-- CSS -->
+<!--<link rel='stylesheet' id='mediaelement-css' href='assets/css/mediaelementplayer.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-mediaelement-css' href='js/mediaelement-and-player.min.js' type='text/css' media='all' />
+<link rel='stylesheet' id='customscrollbar-css' href='assets/css/customscrollbar.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='fontawesome-css' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='iii-editor-css' href='assets/css/editor.css' type='text/css' media='all' />
+<link rel='stylesheet' id='iii-selectBoxIt-css' href='assets/css/jquery.selectBoxIt.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrap-css' href='assets/css/bootstrap.min.css' type='text/css' media='all' />
+-->
+<!--css cho login-->
+<!--<link rel='stylesheet' href='assets/css/login.css' type='text/css' media='all' />
+<style id='iii-notepad-style-inline-css' type='text/css'>
+    @font-face {
+        font-family: "Myriad_regular";
+        src: url("assets/fonts/MYRIADPROREGULAR.ttf");
+    }
+</style>-->
+<!-- JS HEAD -->
+<!--<script type='text/javascript' src='/lib/eduComposeEngine/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='/lib/eduComposeEngine/js/jquery/jquery-migrate.min.js'></script>-->
+<!-- STYLE -->
+<!--<style>
+        #show-test-tool1 {
+            float: right;
+            position: absolute;
+            top: 100px;
+            left: 0;
+            display: block;
+            z-index: 99999;
+        }
+
+        #join_meeting {
+            margin-top: 5px;
+        }
+    </style>
+</head>-->
+<style>
+    #wrapper {
+        height: 90vh;
+    }
+</style>
+<body class="notepad-on">
+    <!--<link rel='stylesheet' id='iii-notepad-style-css' href='assets/css/styles1.css' type='text/css' media='all' />-->
+    <!-- LOADING -->
+    <div id="cc-loading"><span></span></div>
+
+    <!-- INPUT CURENT URL -->
+    <input type="hidden" class="current_url" value="index.html">
+
+    <select id="quiz-type" style="display: none">
+        <option value="quiz-1">Select Object</option>
+        <option value="quiz-2">Input Object</option>
+        <option value="quiz-3">Match Object</option>
+        <!-- <option value="quiz-4">relational puzzles</option>
+        <option value="quiz-5">and logic puzzles</option> -->
+    </select>
+    <!-- ONLINE LEARNING -->
+    <div id="online-learning">
+        <div class="container-fluid">
+            <div style="position: absolute; right: 20px; top: 20px; z-index: 12; background: white">
+                <div class="text-center" id="quiz-hint" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-lightbulb" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Hint</p>
+                </div>
+                <div class="text-center" id="quiz-next" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-paper-plane" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Next</p>
+                </div>
+                <div class="text-center" id="quiz-zoom-in" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-plus" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Zoom In</p>
+                </div>
+                <div class="text-center" id="quiz-zoom-out" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-minus" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Zoom Out</p>
+                </div>
+                <div class="text-center" id="quiz-group" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-object-group" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Group</p>
+                </div>
+                <div class="text-center" id="quiz-ungroup" style="cursor: pointer; padding-right: 20px">
+                    <i class="fas fa-object-ungroup" style="font-size: 25px;"></i>
+                    <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+                    <p style="line-height: 10px; text-decoration: underline; font-size: 9px; margin-bottom: 5px; padding-top: 3px">Ungroup</p>
+                </div>
+            </div>
+            <!-- DRAWING -->
+            <div class="row wrapper_contend" id="wrapper">
+
+                <div class="col-12 main-content main-notepad">
+                    <div id="cursors">
+
+                    </div>
+                    <div id="panel" class="panel">
+                        <canvas id="canvas_draw" style="position: relative; z-index: 10; top: 0; bottom: 0;"></canvas>
+                        <svg height="100" width="100" class="hidden" id="port-id">
+                            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-bg"></div>
+
+
+    <!--<script type='text/javascript' src='/lib/eduComposeEngine/js/html2canvas.svg.js'></script>-->
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--<script src="https://kit.fontawesome.com/5a36b217b0.js" crossorigin="anonymous"></script>-->
+    <!--<script type='text/javascript' src='js/jquery/ui/core.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/widget.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/mouse.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/draggable.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/resizable.min.js'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var mejsL10n = {
+            "language": "en-US",
+            "strings": {
+                "Close": "Close",
+                "Fullscreen": "Fullscreen",
+                "Download File": "Download File",
+                "Download Video": "Download Video",
+                "Play\/Pause": "Play\/Pause",
+                "Mute Toggle": "Mute Toggle",
+                "None": "None",
+                "Turn off Fullscreen": "Turn off Fullscreen",
+                "Go Fullscreen": "Go Fullscreen",
+                "Unmute": "Unmute",
+                "Mute": "Mute",
+                "Captions\/Subtitles": "Captions\/Subtitles"
+            }
+        };
+        var _wpmejsSettings = {
+            "pluginPath": "\/notepad\/wp-includes\/js\/mediaelement\/"
+        };
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='js/mediaelement/mediaelement-and-player.min.js'></script>
+    <script type='text/javascript' src='js/mediaelement/wp-mediaelement.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/touch-punch.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/customscrollbar.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.countdown.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/editor.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.selectBoxIt.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/html2canvas.min.js'></script>-->
+    <!--<script type='text/javascript'>
+
+        /* <![CDATA[ */
+        var iii_script = {
+            "site_url": "http:\/\/localhost\/notepad\/",
+            "plugin_url": "http:\/\/localhost\/notepad\/wp-content\/plugins\/iii-notepad\/",
+            "ajax_url": "http:\/\/localhost\/notepad\/wp-admin\/admin-ajax.php",
+            "buy_time_fail": "You dont have enough point to buy time",
+            "buy_time_done": "You buy time done",
+            "empty_video_url": "Please enter video url",
+            "empty_layer": "Please chosen layer",
+            "points": " points"
+        };
+        var iii_variable = {
+            "time_ranger": "1800"
+        };
+                                /* ]]> */
+    </script>
+    <script src="js/semantic.js"></script>
+    <script src="https://unpkg.com/fabric@latest/dist/fabric.js" crossorigin></script>
+    <script src="js/shapes.fabric.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>-->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js"></script> -->
+    <!--<script type='text/javascript' src='assets/js/classes.js'></script>-->
+    <script type='text/javascript' src='/lib/eduComposeEngine/assets/js/notepad.js'></script>
+    <!-- <script type='text/javascript' src='assets/js/EduClass.js'></script> -->
+
+</body>

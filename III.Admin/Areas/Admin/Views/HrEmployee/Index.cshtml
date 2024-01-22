@@ -1,0 +1,67 @@
+﻿@using ESEIM.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = ViewData["CrumbHrEployee"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+
+    var sessionLanguage = HttpContextAccessor.HttpContext.Session;
+    byte[] value;
+    var idObject = 0;
+    if (sessionLanguage.IsAvailable)
+    {
+        var boolValue = sessionLanguage.TryGetValue("IdObject", out value);
+        if (boolValue)
+        {
+            byte[] temp = new byte[4];
+            if (BitConverter.IsLittleEndian)
+            {
+                temp = Enumerable.Reverse(value).ToArray();
+            }
+            idObject = BitConverter.ToInt32(temp, 0);
+        }
+    }
+
+    bool hasPermissionHrInsert = session.HasPermission(CommonUtil.Controller_HREmployee, CommonUtil.Action_Insert);
+    bool hasPermissionHrUpdate = session.HasPermission(CommonUtil.Controller_HREmployee, CommonUtil.Action_Update);
+    bool hasPermissionHrDelete = session.HasPermission(CommonUtil.Controller_HREmployee, CommonUtil.Action_Delete);
+}
+
+@section plugin_script {
+    <script src="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.js"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/tinymce.min.js"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/config.tinymce.js"></script>
+    <script src="~/lib/assets/global/plugins/angulerjs-scroll/angular-scroll.js"></script>
+    <script src="~/js/admin/cardjob/popover.js" type="text/javascript"></script>
+}
+@section plugin_style{
+    <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+}
+<div id="contentMain" ng-app="App_ESEIM_HR_EMPLOYEE" ng-controller="Ctrl_ESEIM_HR_EMPLOYEE">
+    <div ng-controller="Ctrl_ESEIM_REPOSITORY"></div>
+    <div ng-view></div>
+</div>
+<script>
+    var PERMISSION_HR= {
+        Insert: @(hasPermissionHrInsert ? "true" : "false"),
+        Update: @(hasPermissionHrUpdate ? "true" : "false"),
+        Delete: @(hasPermissionHrDelete ? "true" : "false"),
+    };
+    var idObject = @idObject;
+</script>
+<script src="~/views/admin/hrEmployee/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/edmsRepository/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/supplier/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/cardJob/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/project/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/customer/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/contract/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/contractPo/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/sendRequestWorkPrice/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/attributeManager/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/materialProduct/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/filePlugin/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/workflowPlugin/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/workflowActivity/controller.js" type="text/javascript"></script>
+<script src="~/views/admin/payDecision/controller.js" type="text/javascript"></script>

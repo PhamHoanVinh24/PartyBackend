@@ -1,0 +1,138 @@
+﻿<div ng-controller="contractTabProductHis">
+    <!--<div class="row">
+        <form name="addformTabProduct" class="form-horizontal" method="post" ng-validate="validationOptionsTabProduct">
+            <div class="row col-md-12">
+                <div class="col-md-5 pr-0" ng-class="{ 'has-error': errorProductCode}">
+                    <label class="control-label require fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_PRODUCT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select ng-disabled="isAdd==false" ng-model="model.ProductCode" theme="bootstrap" ng-change="changeProduct()">
+                            <ui-select-match placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button ng-disabled="isAdd==false" type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorProductCode" class="label-color validation-message">
+                        {{'CONTRACT_TAB_LOP_VALIDATE_PRODUCT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_PRICE_OPTION' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.PriceOption" theme="bootstrap" ng-change="filterPrice()">
+                            <ui-select-match placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_PRICE_OPTION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in priceOption | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PriceOption=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group" ng-class="{ 'has-error': errorUnitPrice}">
+                        <label class="control-label require fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_PRICE' | translate}}</label>
+                        <input type="text" num-thousand='true' awnum num-int='21' class="form-control bold" ng-model="model.UnitPrice" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="UnitPrice" placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_PRICE' | translate}}..." ng-change="changleSelect('UnitPrice')" />
+                        <span ng-show="errorUnitPrice" class="label-color validation-message">
+                            {{'CONTRACT_CURD_VALIDATE_PRICE' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="" ng-class="{ 'has-error': errorQuantity}">
+                        <label class="control-label require fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_AMOUNT' | translate}}</label>
+                        <input type="text" num-thousand='true' awnum num-int='21' class="form-control" ng-model="model.Quantity" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="Quantity" placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_AMOUNT' | translate}}..." ng-change="changleSelect('Quantity')" />
+                        <span ng-show="errorQuantity" class="label-color validation-message">
+                            {{'CONTRACT_CURD_VALIDATE_QUANTITY' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="col-md-3" ng-class="{ 'has-error': errorUnit}">
+                    <label class="control-label require fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_UNIT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select ng-model="model.Unit" theme="bootstrap" ng-change="changleSelect('Unit')">
+                            <ui-select-match placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in units | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CONTRACT_TAB_LOP_VALIDATE_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group" ng-class="{ 'has-error': errorTax}">
+                        <label class="control-label fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_TAX' | translate}}</label>
+                        <input type="text" num-thousand='true' awnum num-int='21' id="Tax" class="form-control" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" ng-model="model.Tax" name="Tax" placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_TAX' | translate}}" ng-change="changleSelect('Tax')" />
+                        <span ng-show="errorTax" class="label-color validation-message">
+                            {{'CONTRACT_CURD_VALIDATE_BUDGET_EXCLUDE_TAX'|translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label fs11">{{'CONTRACT_TAB_LOP_CURD_LBL_NOTE' | translate}}</label>
+                    <input type="text" class="form-control" ng-model="model.Note" name="Code" placeholder="{{'CONTRACT_TAB_LOP_CURD_TXT_NOTE' | translate}}..." />
+                </div>
+                <div class="col-md-3 pull-right text-center">
+                    <div class="btn-group mr10 pull-right">
+                        <div ng-show="isShowImpProduct==true">
+                            <a class="btn btn-icon-only btn-circle btn-outline blue-custom mt10" ng-click="impProduct()">
+                                <span><i class="fa fa-download"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_IMPORT' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group mr10 pull-right">
+                        <div ng-show="isAdd==true">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom mt10" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group mr10 pull-right">
+                        <div ng-show="isAdd==false">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom mt10" ng-click="save()">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group mr10 pull-right">
+                        <div ng-show="isAdd==false">
+                            <a class="btn btn-icon-only btn-circle btn-outline red-custom mt10" ng-click="close()">
+                                <span><i class="fa fa-close"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CLOSE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-12 fs11"> <label style="color:red">{{'CONTRACT_CURD_LBL_NOTE_DOUBLE_CLICK'|translate}}</label></div>
+    </div>-->
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataProductDetailHis"></table>
+</div>

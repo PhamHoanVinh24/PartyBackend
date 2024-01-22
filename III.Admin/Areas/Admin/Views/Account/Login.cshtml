@@ -1,0 +1,211 @@
+﻿@using ESEIM.Utils
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ILanguageService LanguageService
+@inject IParameterService ParameterService
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IViewLocalizer Localizer
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+    var listLanguage = LanguageService.GetListLanguages();
+    var curlLanguage = listLanguage.FirstOrDefault(x => x.Culture == requestCulture.RequestCulture.UICulture.Name);
+}
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Log in";
+}
+<link href="~/lib/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/admin/site/login.css" rel="stylesheet" />
+<link href="~/css/admin/site/helper.css" rel="stylesheet" />
+<link href="~/lib/assets/global/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="~/lib/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" />
+@*<link rel="stylesheet" type="text/css" href="~/lib/robust/css/bootstrap.css">*@
+@*<link href="~/lib/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+@*<link href="~/lib/assets/global/plugins/bootstrap/css/BootstrapXL.css" rel="stylesheet" type="text/css" />*@
+<link href="~/lib/robust/fonts/flag-icon-css/css/flag-icon.css" rel="stylesheet" />
+<script src="~/lib/robust/core/libraries/jquery.min.js" type="text/javascript"></script>
+<script src="~/lib/assets/global/plugins/bootstrap-toastr/toastr.js"></script>
+<script src="/lib/assets/global/scripts/app.js" type="text/javascript"></script>
+<script src="~/js/admin/site.js"></script>
+<script src="~/js/admin/login.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="shortcut icon" href="~/swork.ico" />
+<div class="col-md-12 login-text-app pt-2">
+    <span class="pull-left pr30"
+          style="font-family: Stencil;color:white;font-size:25px;padding-right: 5px;padding-top: 20px;">
+        Smart work
+    </span>
+    <a title="Hướng dẫn sử dụng" class="pull-left mt15" href="/UserManualFrontEnd">
+        <i class="fa fa-question-circle fs40" style="color: white;"></i>
+    </a>
+    <ul class="clearfix text-muted text-sm-center mb-0 px-2 fs15 pull-right pt30" style="color: white; padding-right: 5px;">
+        <li class="dropdown dropdown-language nav-item mr15" style="top: 0px;">
+            <a id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle nav-link none-hover" style="padding-bottom: 0px; padding-top: 5px;">
+                <i class="flag-icon @curlLanguage.Icon fs20"></i>
+            </a>
+            <span class="selected-language black fs12" style="margin-right:20px; line-height: 24px">@curlLanguage.DisplayName</span>
+            <div aria-labelledby="dropdown-flag" class="dropdown-menu">
+                @{
+                    foreach (var lang in LanguageService.GetListLanguages())
+                    {
+                        <a class="dropdown-item" onclick="onRedirect('@lang.Culture')">
+                            <span class="flag-icon @lang.Icon"></span> @lang.DisplayName
+                        </a>
+                    }
+                }
+            </div>
+        </li>
+    </ul>
+    <div class="pull-right pt10" style="width: 300px">
+        <div class="col-md-12">
+            @if (ViewData?.ModelState[""]?.Errors?.Any() == true)
+            {
+                <div asp-validation-summary="All" class="text-danger alert alert-danger" style="color: red !important;"></div>
+            }
+        </div>
+    </div>
+</div>
+<div class="wapter ">
+    @*<div class="col-md-12 app-bottom pt10" id="app-mobile">
+            <div class="col-lg-12 pt10 text-center">
+                <span class="login-text-app">Ứng dụng điều hành công việc</span>
+                <div>
+                    <a class="" href="https://play.google.com/store/apps/details?id=com.iii.SmartWork" target="_blank">
+                        <img src="~/images/logo/android.png" style="height: 6%; width: 45%;" />
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-12 pt10 text-center">
+                <div>
+                    <a class="" href="https://apps.apple.com/us/app/id1460091619" target="_blank" role="button">
+                        <img src="~/images/logo/iphone.png" style="height: 6%; width: 45%;" />
+                    </a>
+                </div>
+            </div>
+        </div>*@
+    <div id="login_panel" class="login_panel" role="form" style="display: block; box-shadow: 0 0 35px #0a2c40de">
+        <div class="login_inner_container" role="main">
+            <div id="true_inner" class="inner_container cred">
+                @*<div class="text-center" style="padding-right: 45px; padding-top: 10px;">
+                        <span class="login-text-app fs30">DSS</span>
+                    </div>*@
+                <div class="text-center">
+                    <img src="~/images/logo/logo.png" class="img-thumbnail logo_swork" style="margin-left:-35px;" />
+                </div>
+                <section>
+                    <form asp-controller="Admin/Account" asp-action="Login" asp-route-returnurl="@ViewData["returnUrl"]" method="post" class="form-horizontal">
+                        <div class="form-group ">
+                            <div class="col-md-12">
+                                <i class="fa fa-user icon"></i>
+                                <input asp-for="Username" id="UserName" placeholder="Tài khoản" class="form-control login_textfield" autocomplete="off" />
+                                @*<span asp-validation-for="Username" class="text-danger"></span>*@
+                            </div>
+                        </div>
+                        <div class="form-group mbd1">
+                            <div class="col-md-12">
+                                <i class="fa fa-lock icon"></i>
+                                <input asp-for="Password" id="Password" placeholder="Mật khẩu" class="form-control login_textfield" autocomplete="off" />
+                                <a><i class="fa fa-eye check-icon" id="ShowPassword" aria-hidden="true"></i></a>
+                                <a><i class="fa fa-eye-slash check-icon hidden" id="HidePassword" aria-hidden="true"></i></a>
+                                @*<span asp-validation-for="Password" class="text-danger"></span>*@
+                            </div>
+                        </div>
+                        @*<div class="form-group mb5 mt15">
+                                <div class="col-md-8">
+                                    <i class="fa fa-lock icon"></i>
+                                    <input asp-for="OTP" id="OTP" placeholder="Nhập mã OTP" class="form-control login_textfield" autocomplete="off" />
+                                    <span asp-validation-for="OTP" class="text-danger"></span>
+                                </div>
+                                <div class="text-center col-md-4 p-0">
+                                    <a onclick="config.sendOTP()" class="btn btn-send-otp fs11  mt0  border-radius-15 pt10">Lấy mã OTP</a>
+                                </div>
+                            </div>*@
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-login fsd1 col-md-11 mt0 ml15 border-radius-15 mt10">@Localizer["LN_LOGIN"]</button>
+                        </div>
+                        <div class="form-group" style="display:flex">
+                            <div class="col-md-6 text-center">
+                                <div class="checkbox-default pt0 fsd2 mb10 pull-right">
+                                    <input id="checkbox5" type="checkbox" style="display:none">
+                                    <label for="checkbox5">
+                                        @Localizer["LN_REMEMBER_PASSWORD"]
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/Admin/Account/ForgotPassword" id="forget-password" class="forget-password fsd2">@Localizer["LN_FORGOT_PASSWORD"] ?</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 app-bottom pt10">
+        <div class="col-lg-4 pt10 text-center">
+            @*<span class="login-text-app">Ứng dụng điều hành công việc</span>
+                <div>
+                    <a class="" href="https://play.google.com/store/apps/details?id=com.iii.Swork" target="_blank"><img src="~/images/logo/android.png" /></a>
+                    <a class="pl15" href="https://apps.apple.com/us/app/id1460091619" target="_blank" role="button"><img src="~/images/logo/iphone.png" /></a>
+                </div>*@
+        </div>
+        <div class="col-lg-4 text-center pt10" id="magicEye">
+            <div class="qr-block p20" style="margin: auto;background: white;">
+                <a role="button"><img style="max-width: 100%" src="~/images/logo/qrcode_smartwork2.png" /></a>
+            </div>
+            <span class="login-text-app mtd1">@Localizer["LN_MAGIC_EYE_SOFTWARE"]</span>
+            <div>
+                <a role="button"><img class="window-logo" src="~/images/logo/windows.png" /></a>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center pt10" id="supportOnline">
+            @*<span class="login-text-app">Ứng dụng Support Online</span>
+                <div>
+                    <a role="button"><img src="~/images/logo/iphone.png" /></a>
+                    <a class="pl15" role="button"><img src="~/images/logo/android.png" /></a>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="position:fixed; bottom:0px;">
+    <p class="clearfix text-muted text-sm-center mb-0 px-2 fs15 pull-right" style="color:white;padding-right: 5px;"><span class="float-md-left d-xs-block d-md-inline-block" style="font-size:13px; ">Copyright by 3i  &copy;  2020 </span><span class="float-md-right d-xs-block d-md-inline-block" style="font-size:13px;"></span></p>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+<script>
+    var paraAction = 0;
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var curPath = url.pathname;
+    function onRedirect(culture) {
+        var returnUrl = "";
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+
+        returnUrl = "~" + url.pathname + url.hash;
+        window.location.href = "/Admin/Language/SetCulture?culture=" + culture + "&returnUrl=" + returnUrl;
+    }
+    $(function () {
+        $("#ShowPassword").on('click', function () {
+            $("#Password").attr("type", "text");
+            $("#ShowPassword").addClass("hidden");
+            $("#HidePassword").removeClass("hidden");
+        });
+        $("#HidePassword").on('click', function () {
+            $("#Password").attr("type", "password");
+            $("#ShowPassword").removeClass("hidden");
+            $("#HidePassword").addClass("hidden");
+        });
+
+    });
+</script>

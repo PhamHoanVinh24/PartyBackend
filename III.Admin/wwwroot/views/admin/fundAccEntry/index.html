@@ -1,0 +1,253 @@
+﻿<style>
+    .breadcrumb>li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 75px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    tbody {
+        min-height: 600px;
+        height: 600px;
+    }
+
+    .actName {
+        /* display: block;
+    max-width: 70px; */
+        padding-right: 10px;
+    }
+    table tfoot {
+         position: sticky;
+        background: white;
+        z-index: 1;
+     }
+    table tfoot {
+          inset-block-end: 0; /* "bottom" */
+      }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2 pt3">
+        <a class="fs30" ng-click="add()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 ">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2 pt3">
+        <a class="fs30" ng-click="export()">
+            <span><i class="fas fa-file-excel"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 ">{{'COM_BTN_EXCEL' | translate}}</p>
+    </div>
+    <div class="text-center pr-2" style="float: right;">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row  mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()"
+                            style="margin-top:9px !important; margin-right:5px !important; font-size:25px"
+                            class="fas fa-times  pull-right h28 w28  close-input-search" role="button"
+                            title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <!--<div class="col-md-12">
+                        <i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-in-line" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>-->
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FAE_CURD_LBL_SEARCH_FROM_DATE' | translate}}</label>
+                        <div class="input-group  br24">
+                            <div class="input-group date" id="FromTime">
+                                <input ng-model="model.FromTime" autocomplete="off" class="form-control" type="text"
+                                    placeholder="{{'FAE_CURD_TXT_SEARCH_FROM_DATE' | translate}}..."
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromTime=''"
+                                        class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 ">
+                        <label class="fw600 text-underline">{{'FAE_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <div class="input-group date" id="ToTime">
+                                <input ng-model="model.ToTime" autocomplete="off" class="form-control" type="text"
+                                    placeholder="{{'FAE_CURD_TXT_SEARCH_TO_DATE' | translate}}..."
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToTime=''"
+                                        class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FAE_CURD_SEARCH_LBL_TYPE' | translate}}</label>
+                        <div class='input-group search-group br24'>
+                            <ui-select tagging ng-model="model.AetType" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FAE_CURD_SEARCH_TXT_TYPE' | translate}}">
+                                    {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listAetType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.AetType='';"
+                                    class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FAE_CURD_SEARCH_LBL_STATUS' | translate}}</label>
+                        <div class="input-group search-group">
+                            <ui-select ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FAE_CURD_SEARCH_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listsearchStatus | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>-->
+                    <div class="col-md-2 pr-0">
+                        <label class="fw600 text-underline">{{'FAE_CURD_SEARCH_LBL_FAE' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select ng-model="model.IsPlan" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FAE_CURD_SEARCH_TXT_FAE' | translate}}...">
+                                    {{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listPlan | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.IsPlan='';"
+                                    class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'FEA_LBL_CATEGORY' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.CatCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FEA_LBL_CATEGORY' | translate}}...">
+                                    {{$select.selected.Title}} </ui-select-match>
+                                <ui-select-choices ui-disable-choice="x.HasChild"
+                                    repeat="x.Code as x in treeData | filter: $select.search" style="z-index: 100">
+                                    <div style="padding-left: {{15 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CatCode=''" class="btn btn-default no-shadow"
+                                    style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group pull-right actions d-flex pt20">
+                            <div class="text-center pr10">
+                                <a ng-click="search()" class=" fs30">
+                                    <span><i class="fas fa-search "></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'FAE_VALIDATE_GUIDE' | translate}}</label></div>
+</div>
+<table class="table dataTable table-hover table-striped" datatable dt-options="dtOptions" dt-columns="dtColumns"
+    dt-instance="dtInstance" id="tblData">
+    <tfoot>
+        <tr>
+            <th colspan="1" class=""></th>
+            <th colspan="2" class="pl10"><span> {{'FAE_LIST_COL_TOTAL_EXPENSE' | translate}} : </span><span class="text-success">{{TotalReceiptApproved | number : fractionSize}} </span></th>
+            <th colspan="2" class="pl10">
+                {{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}} : <span class="text-danger">{{TotalExpenseApproved | number : fractionSize}}</span>
+            </th>
+            <th colspan="1" class="pl10">
+                {{'FEA_LIST_COL_SURPLUS' | translate}} : <span class="text-danger">{{TotalSurplusApproved | number : fractionSize}}</span>
+            </th>
+            <th colspan="1" class="pl10"><!--{{'FAE_LIST_COL_TOTAL_RECEIPT' | translate}}--> Yêu cầu thu : <span class="text-danger">{{TotalReceipt | number : fractionSize}}</span></th>
+            <th colspan="2" class="pl10"><!--{{'FEA_LIST_COL_SURPLUS' | translate}}--> Yêu cầu chi : <span class="text-danger">{{TotalExpense | number : fractionSize}}</span></th>
+        </tr>
+    </tfoot>
+</table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

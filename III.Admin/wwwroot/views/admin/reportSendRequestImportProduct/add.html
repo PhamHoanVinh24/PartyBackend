@@ -1,0 +1,312 @@
+﻿<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 27px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #006732;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+        width: 60px;
+        height: 27px;
+        margin-top: 7px;
+        background-color: #fd78c0;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    .headerTab {
+        margin-top: -6px;
+        background: #cccccc;
+        padding-left: -8px;
+        margin-left: -21px;
+        margin-right: -21px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        font-size: 14px;
+        cursor: pointer
+    }
+
+    .openlog {
+        cursor: pointer
+    }
+
+    .btnSwitch {
+        width: 35px;
+        float: left;
+        padding-top: 2px;
+    }
+</style>
+<div class="modal-header" style="position:relative">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <!--<span class="modal-title" id="modal-title">{{'RSRP_CURD_TITLE_ADD_CONTRACT' | translate}}</span>-->
+    <span class="modal-title" id="modal-title">{{'RSRP_MSG_ADD_IMP_RQ' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="position-fixed zindex-3 position-right-0">
+        <div class="col-md-12" style="right:50px;">
+            <div class="btnSwitch">
+                <label class="switch">
+                    <input type="checkbox" ng-model="isTex" ng-click="ShowHeader()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body form mt5" ng-show="isShowHeader==true">
+        <form class="form-horizontal userFormAreaHeader" name="forms.addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row headerTab">
+                    <div class="col-md-12"><label class="bold">{{'RSRP_MSG_IMP_RQ_INFOR' | translate}} {{model.ReqCode}}</label></div>
+                </div>
+            </div>
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-barcode pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require custom-title-code-bold">{{'RSRP_LBL_RQ_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control custom-title-code-bold" ng-model="model.ReqCode" type="text" name="ReqCode" placeholder="{{'RSRP_TXT_RQ_CODE' | translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-info-circle pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require custom-title-code-bold">{{'RSRP_LBL_TITLE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control custom-title-code-bold" ng-model="model.Title" type="text" name="Title" placeholder="{{'RSRP_TXT_TITLE' | translate}}" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorPoCode}">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-barcode pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require">{{'RSRP_LBL_CONTRACT_ORDER_NO' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group mBorder">
+                                    <ui-select tagging ng-model="model.PoCode" theme="bootstrap" on-select="changleSelect('PoCode', $item)" ng-disabled="IsDisablePoCode">
+                                        <ui-select-match placeholder="{{'RSRP_TXT_CHOOSE_CONTRACT_ORDER_NO' | translate}}">{{$select.selected.Name}} ({{$select.selected.Quantity}})</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listPo | filter: $select.search">
+                                            {{x.Name}}<span class="bold text-danger">&nbsp;({{x.Quantity}})</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorPoCode" class="label-color validation-message">
+                                    {{'RSRP_MSG_CHOOSE_CONTRACT_ORDER_NO' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label"> {{'RSRP_LBL_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group mBorder">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'RSRP_TXT_IMP_RQ_STATUS' | translate}}...">
+                                            <span><i class="{{$select.selected.Icon}}"></i>{{$select.selected.Name}}</span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in status  | filter: $select.search">
+                                            <i class="{{x.Icon}}"></i>{{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addCommonSettingWHStatus()" class="btn no-shadow  green-custom" style="">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                    <!--<span class="input-group-btn">
+                                        <button type="button" ng-click="activity()" class="btn btn-default no-shadow">
+                                            <span class="fas fa-history"></span>
+                                        </button>
+                                    </span>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 d-flex pr-0">
+                                <i class="fa fa-info-circle pt10 pr5" aria-hidden="true"></i>
+                                <label class="control-label text-left require">{{'RSRP_LBL_CREATED_DATE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date' id='TimeTicketCreate'>
+                                    <input type='text' class="form-control input-date" autocomplete="off" name="TimeTicketCreate" ng-model="model.TimeTicketCreate" placeholder="{{'RSRP_TXT_CREATED_DATE' | translate}}" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pt15">
+                        <label class="bold "><u>{{'RSRP_LBL_CUSTOMER_CONSTRUCT_INFOR' | translate}}</u></label>
+                    </div>
+                </div>
+                <div class="row mt5">
+                    <div class="col-md-12">
+                        <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">{{'RSRP_LBL_CUSTOMER_CONSTRUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group mBorder">
+                                    <ui-select tagging ng-model="model.CusCode" theme="bootstrap" ng-change="changeCustomer()" ng-disabled="true">
+                                        <ui-select-match placeholder="{{'RSRP_CURD_COMBO_CUSTOMER_CODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in Customers | filter: $select.search">
+                                            {{x.Code}} - {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <!--<span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusCode='';resetCustomer()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>-->
+                                </div>
+                                <span ng-show="errorCusCode" class="label-color validation-message">
+                                    {{'RSRP_MSG_BUYER_NOTBLANK' | translate}}! |
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label ">{{'RSRP_MSG_ADDRESS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusAddress" type="text" placeholder="{{'RSRP_TXT_ADDRESS' | translate}}" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label ">{{'RSRIP_LBL_ZIP_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusZipCode" type="text" placeholder="{{'RSRIP_LBL_ZIP_CODE' | translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-phone"></i>
+                                <label class="control-label ">{{'RSRP_LBL_NUMBER_PHONE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusMobilePhone" type="text" placeholder="{{'RSRP_TXT_NUMBER_PHONE' | translate}}" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">{{'RSRP_LBL_PERSON_IN_CHARGE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusPersonInCharge" type="text" placeholder="{{'RSRP_TXT_PERSON_IN_CHARGE' | translate}}" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-envelope"></i>
+                                <label class="control-label ">{{'RSRIP_LBL_EMAIL' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusEmail" type="text" placeholder="{{'RSRIP_LBL_EMAIL' | translate}}..." readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right mr15 user-mt">
+                                <div class="btn-group pull-right actions d-flex">
+                                    <div class="text-center">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                            <span><i class="fa fa-save"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'RSRP_BTN_SAVE' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="portlet-body form mt5" ng-show="isShowDetail==true">
+        <form class="form-horizontal userFormAreaHeader" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row headerTab">
+                    <div class="col-md-12"><label class="bold">{{'RSRP_MSG_PRD_DETAILS_INFOR_RQ_IMP' | translate}} {{model.ReqCode}}</label></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row mt10" ng-show="isShowDetail==true">
+        <div ng-include="'../views/admin/sendRequestImportProduct/addProduct.html'"></div>
+    </div>
+</div>

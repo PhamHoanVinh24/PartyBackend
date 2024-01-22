@@ -1,0 +1,113 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'ADA_MSG_ADD_APP' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pb-0">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ADA_CURD_LBL_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" ng-model="model.AppCode" name="AppCode" placeholder="{{'ADA_CURD_TXT_CODE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ADA_CURD_LBL_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-model="model.AppTitle" name="AppTitle" placeholder="{{'ADA_CURD_TXT_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ADA_CURD_LBL_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group date" id="appDate">
+                            <input type="text" class="form-control " ng-model="model.AppDate" name="AppDate" placeholder="{{'ADA_CURD_TXT_DATE' | translate}}..." autocomplete="off" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'ADA_CURD_LBL_LINK' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="model.LinkChplay" name="LinkChplay" placeholder="{{'ADA_CURD_TXT_LINK' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-image" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ADA_CURD_LBL_IMG' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group input-file">
+                            <i class="fa fa-upload"></i>
+                            <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30"   placeholder='{{'ADA_CURD_TXT_IMG' | translate}}...' readonly></>
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-choose"  onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                <input class="form-control" id="fileIconApp" name="UploadIcon" accept="image/x-png,image/gif,image/jpeg" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                    <div class="col-md-4">
+                        <i class="fa fa-flag"></i>
+                        <label class="control-label require">{{'ADA_CURD_LBL_STATUS' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('Status')">
+                                <ui-select-match placeholder="{{'ADA_CURD_LBL_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorStatus" class="label-color validation-message">
+                            {{'ADA_MSG_STATUS' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label">{{'ADA_CURD_LBL_NOTE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea  name="Note" rows="5" class="form-control" ng-model="model.Note" type="text" placeholder="{{'ADA_CURD_TXT_NOTE' | translate}}..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+       {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+       {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>
+
+

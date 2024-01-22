@@ -1,0 +1,106 @@
+﻿<div class="modal-header" style="font-family: 'Open Sans', sans-serif !important; background-color: white">
+    <i class="fas fa-users fs15 pt5" style="color: black"></i>
+    <span class="modal-title pl-0" style="color: black">
+        &nbsp;&nbsp;{{'STS_LBL_LIST_EMP_IN_DATE' | translate}} {{date}}
+        [{{'STS_LBL_NUM_REGIS' | translate}}: {{numRegis}},
+        {{'STS_LBL_NUM_LATE_QUIT_EMP' | translate}}: {{numLate}},
+        {{'STS_LBL_NUM_SHIFT_REAL' | translate}}: {{numReal}}]
+    </span>
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pb25 pt5">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr style="background-color: #f3f2f2;">
+                                    <th class="text-center">{{'STS_LIST_COL_INDEX' | translate}}</th>
+                                    <th class="text-center col-md-1">{{'STS_LIST_COL_FULL_NAME' | translate}}</th>
+                                    <th class="text-center col-md-2">{{'STS_LIST_COL_DEPARTMENT' | translate}}</th>
+                                    <th class="text-center col-md-1">{{'STS_LIST_COL_PHONE_NUMBER' | translate}}</th>
+                                    <th class="text-center col-md-2">{{'STS_LIST_COL_CALENDAR_WORKING' | translate}}</th>
+                                    <th class="text-center col-md-3">{{'STS_LIST_COL_LATE' | translate}}</th>
+                                    <th class="text-center col-md-3">{{'STS_LIST_COL_SHIFT_WORKING' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listMember">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td class="text-center">
+                                        <b>{{x.FullName}}</b><br />
+                                    </td>
+                                    <td class="text-center">
+                                        <span ng-if="x.Department!=''">
+                                            {{x.Department}}
+                                        </span>
+                                        <span class="text-danger" ng-if="x.Department==''">
+                                            {{'STS_LBL_EMPTY' | translate}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span ng-if="x.Phone!=''">
+                                            {{x.Phone}}
+                                        </span>
+                                        <span class="text-danger" ng-if="x.Phone==''">
+                                            {{'STS_LBL_EMPTY' | translate}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="col-md-12" ng-show="x.Morning != ''">
+                                            <label class="pull-left">{{'STS_LBL_MORNING' | translate}}:</label>
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn pull-right" ng-class="{'green':x.Morning=='True','red':x.Morning=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Morning=='True','fa-times':x.Morning=='False'}"></i>
+                                            </button>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12 pt5" ng-show="x.Afternoon != ''">
+                                            <label class="pull-left">{{'STS_LBL_AFTERNOON' | translate}}:</label>
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn pull-right" ng-class="{'green':x.Afternoon=='True','red':x.Afternoon=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Afternoon=='True','fa-times':x.Afternoon=='False'}"></i>
+                                            </button>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12 pt5" ng-show="x.Evening != ''">
+                                            <label class="pull-left">{{'STS_LBL_EVENING' | translate}}:</label>
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn pull-right" ng-class="{'green':x.Evening=='True','red':x.Evening=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Evening=='True','fa-times':x.Evening=='False'}"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="col-md-12" ng-show="x.Status == 'Đến muộn'">
+                                            <label class="pull-left">{{'STS_LBL_LATE' | translate}}: </label>
+                                            <span class="text-danger">{{x.ActionTime}}</span>
+                                        </div>
+                                        <div class="col-md-12 pt5" ng-show="x.Status == 'Báo nghỉ'">
+                                            <label class="pull-left">{{'STS_LBL_QUIT' | translate}}: </label>
+                                            <span class="text-danger">{{x.ActionTime}}</span>
+                                        </div>
+                                        <div class="col-md-12 pt5" ng-show="x.Status == 'Nghỉ việc'">
+                                            <label class="pull-left">{{'STS_LBL_QUIT_JOB' | translate}}: </label>
+                                            <span class="text-danger">{{x.ActionTime}}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center" ng-if="x.ChkInTime != '' && x.ChkOutTime !=''">
+                                        [<span class="text-success">{{x.ChkInTime}}</span> : <span class="text-danger">{{x.ChkOutTime}}</span>]
+                                    </td>
+                                    <td class="text-center" ng-if="x.ChkInTime != '' && x.ChkOutTime ==''">
+                                        [<span class="text-success">{{x.ChkInTime}}</span>]
+                                    </td>
+                                    <td class="text-center" ng-if="x.ChkInTime == '' && x.ChkOutTime ==''">
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

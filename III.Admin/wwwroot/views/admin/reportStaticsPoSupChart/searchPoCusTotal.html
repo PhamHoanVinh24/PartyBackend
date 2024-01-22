@@ -1,0 +1,91 @@
+﻿<style>
+    .blockElement {
+        z-index: 4000 !important;
+    }
+
+    .blockOverlay {
+        z-index: 4000 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-search icon-insert"></i>
+    <span class="modal-title" id="modal-title">{{'RSPSC_MSG_SEARCH_REVENUE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="forms.searchform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsSearchPoCusTotal">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa-solid fa-calendar"></i>
+                        <label class="control-label require ">{{'RSPSC_CURD_LBL_SEARCH_FROM_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="{{'RSPSC_CURD_TXT_SEARCH_FROM_DATE' | translate}}..." id="FromTo" autocomplete="off" />
+                            <span class="input-group-addon start-date" ng-click="model.FromDate=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa-solid fa-calendar"></i>
+                        <label class="control-label require ">{{'RSPSC_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="{{'RSPSC_CURD_TXT_SEARCH_TO_DATE' | translate}}..." id="DateTo" autocomplete="off" />
+                            <span class="input-group-addon end-date" ng-click="model.ToDate=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label fs9">{{'RSPSC_CURD_LBL_PRODUCT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('ProductCode',$item)">
+                                <ui-select-match placeholder="{{'RSPSC_CURD_TXT_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.ProductCode=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                        <!--<span ng-show="errorProductCode" class="label-color validation-message fs9">
+                            {{'CP_VALIDATE_PRODUCT_NO_BLANK' | translate}}
+                        </span>-->
+                    </div>
+                </div>
+                <div class="from-group">
+                    <span class="text-danger">{{'RSPSC_CURD_LBL_NOTE_SEARCH_LIMIT' | translate}}</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex">
+        <div class="pr10 text-center">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'RSPSC_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                <span><i class="fa fa-search"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'RSPSC_BTN_SEARCH' | translate}}</p>
+        </div>
+    </div>
+</div>

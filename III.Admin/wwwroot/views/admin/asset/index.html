@@ -1,0 +1,374 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .font-in-tab {
+        /* border-radius: 4px !important; */
+        border: 1px solid #e7ecf1;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .color-search {
+        color: brown;
+    }
+
+    .warehouse > .ui-select-container > .ui-select-match > span {
+        background-color: #4dbb4d;
+    }
+
+        .warehouse > .ui-select-container > .ui-select-match > span > span {
+            color: #fff !important;
+        }
+
+    .warehouse-btn {
+        background-color: #4dbb4d !important;
+        box-shadow: none !important;
+    }
+
+    .color-white {
+        color: white;
+    }
+
+    .warehouse-btn::placeholder {
+        color: #fff !important;
+        opacity: 1; /* Firefox */
+    }
+
+    .warehouse-btn:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #fff !important;
+    }
+
+    .warehouse-btn::-ms-input-placeholder { /* Microsoft Edge */
+        color: #fff !important;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(88% - 50px);
+        right: 70px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .first-col-sticky {
+        position: sticky;
+        left: 0px;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class=" fs30 p-0" ng-click="add()">
+
+            <span><i class="fa-solid fa-plus"></i></span>
+
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs30" aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt15">
+            <div class="portlet-body">
+                <div class="row mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                    <div class="col-md-2">
+
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="fw600 text-underline">{{'ASSET_SEARCH_CODE_NAME_ASSET' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class='input-group br24 '>
+                                <input ng-model="model.AssetCode" class="form-control color-search bold" type="text" placeholder="{{'ASSET_SEARCH_CODE_NAME_ASSET' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetCode=''" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="fw600 text-underline">{{'ASSET_CURD_COMBO_ASSET_GROUP' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="model.AssetGroup" ng-change="reload()">
+                                    <ui-select-match placeholder="{{'ASSET_CURD_COMBO_ASSET_GROUP' | translate}}"><b class="color-search">{{$select.selected.Title}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstAssetGroup | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetGroup='';reload()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="fw600 text-underline">{{'ASSET_CURD_COMBO_ASSET_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="model.AssetType" ng-change="reload()">
+                                    <ui-select-match placeholder="{{'ASSET_CURD_COMBO_ASSET_TYPE' | translate}}"><b class="color-search">{{$select.selected.Title}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstAssetType | filter: $select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.AssetType='';reload()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="fw600 text-underline">{{'ASSET_CURD_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="model.Status" ng-change="reload()">
+                                    <ui-select-match placeholder="{{'ASSET_CURD_TXT_STATUS' | translate}}"><b class="color-search">{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in Status | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status='';reload()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0">
+                        <label class="control-label fw600 text-underline">{{'ASSET_SEARCH_FROM_DATE' | translate}}</label>
+                        <div class="input-group">
+                            <div class='input-group date br24'>
+                                <input ng-model="model.FromDate" id='FromDate' class="form-control color-search bold" type="text" placeholder="{{'ASSET_SEARCH_FROM_DATE' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pl-0 pr-3">
+                        <label class="control-label fw600 text-underline">{{'ASSET_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="input-group">
+                            <div class='input-group date br24'>
+                                <input ng-model="model.ToDate" id='ToDate' class="form-control color-search bold" type="text" placeholder="{{'ASSET_SEARCH_TO_DATE' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt5 mb5">
+                    <div class="col-md-2">
+                        <div class="col-md-12 pl-0 pr-0">
+                            <label class="fw600 text-underline">{{'ASSET_SEARCH_MANAGER_ID' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pl-0 pr-0">
+                            <div class='input-group search-group br24'>
+                                <ui-select tagging ng-model="model.ManagerId" ng-change="reload()">
+                                    <ui-select-match placeholder="{{'ASSET_SEARCH_MANAGER_ID' | translate}}"><b class="color-search">{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstManager | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ManagerId='';reload()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <label class="control-label fw600 text-underline">{{'ASSET_LIST_COL_WAREHOUSE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" on-select="changeSelect('WHS', $item)">
+                                        <ui-select-match placeholder="{{'ASSET_LIST_COL_WAREHOUSE' | translate}}..."><b class="color-white">{{$select.selected.WHS_Name}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.WHS_Code as x in lstWareHouse | filter: $select.search">
+                                            {{x.WHS_Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn ">
+                                        <button type="button" ng-click="model.WHS_Code=''; reload()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <label class="control-label fw600 text-underline">{{'ASSET_LIST_COL_FLOOR' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="model.FloorCode" theme="bootstrap" on-select="changeSelect('FLS', $item)">
+                                        <ui-select-match placeholder="{{'ASSET_LIST_COL_FLOOR' | translate}}..."><b class="color-white">{{$select.selected.FloorName}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.FloorCode as x in lstFloor | filter: $select.search">
+                                            {{x.FloorName}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn ">
+                                        <button type="button" ng-click="model.FloorCode='';reload()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <label class="control-label fw600 text-underline">{{'ASSET_CRUD_LINE' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="model.LineCode" theme="bootstrap" on-select="changeSelect('LINE', $item)">
+                                        <ui-select-match placeholder="{{'ASSET_CRUD_LINE' | translate}}..."><b class="color-white">{{$select.selected.L_Text}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.LineCode as x in lstLine | filter: $select.search">
+                                            {{x.L_Text}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn ">
+                                        <button type="button" ng-click="model.LineCode='';reload()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 pr-0">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0">
+                                <label class="control-label fw600 text-underline">{{'ASSET_CRUD_RACK' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <div class="input-group search-group br24">
+                                    <ui-select tagging ng-model="model.RackCode" theme="bootstrap" on-select="changeSelect('RACK', $item)">
+                                        <ui-select-match placeholder="{{'ASSET_CRUD_RACK' | translate}}..."><b class="color-white">{{$select.selected.RackName}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.RackCode as x in lstRack | filter: $select.search">
+                                            {{x.RackName}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn ">
+                                        <button type="button" ng-click="model.RackCode='';reload()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1" style="width: 11%;">
+                        <div class="form-group">
+                            <div class="col-md-12 pl-0 nowrap">
+                                <label class="control-label fw600 text-underline">{{'ASSET_CRUD_POSITION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <input type="text" class="form-control bold br24" ng-model="model.RackPosition" placeholder="{{'ASSET_CRUD_POSITION' | translate}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pull-right pl-0" style="width: 5%;">
+                        <div class="btn-group actions " style="margin-top:15px;">
+                            <div class="text-center pt10 pr10">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

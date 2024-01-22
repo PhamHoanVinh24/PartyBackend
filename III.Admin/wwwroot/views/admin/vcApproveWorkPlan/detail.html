@@ -1,0 +1,173 @@
+﻿<!--<style>
+    .modal-footer {
+        padding-right: 25px !important;
+    }
+</style>-->
+<!--<div class="modal-header no-color">
+    <div class="modal-title black" id="modal-title"> Chi tiết kế hoạch công việc</div>
+</div>-->
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-info-circle icon-detail"></i>
+    <div class="modal-title " id="modal-title">Chỉnh sửa danh sách các cửa hàng phải đi trong kế hoạch</div>
+</div>
+<div class="modal-body mt10 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="clearfix form-group">
+            <div class="col-md-9">
+                <div class="form-group " ng-class="{ 'has-error': errorCusCode}">
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CusCode" theme="bootstrap" on-select="changleSelect('CusCode',$item)">
+                            <ui-select-match placeholder="{{'VCMM_CURD_TXT_SELECT_STORE' | translate}}...">{{$select.selected.CusName}} - {{$select.selected.Address}}</ui-select-match>
+                            <ui-select-choices repeat="x.CusCode as x in ListCusCode | filter: $select.search">
+                                {{x.CusName}} - {{x.Address}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CusCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorCusCode" class="label-color validation-message">
+                        {{'VCMM_VALIDATE_CHOOSE_STORE' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group mb5">
+                    <!--<button ng-click="submit()" id="btnAddFile" type="submit" class="btn btn-green">
+                        <i class="fa fa-plus"></i>
+                        Thêm
+                    </button>-->
+                    <div class="btn-group pull-right actions d-flex">
+                        <div class="text-center pr10">
+                            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb-0 pt3">Thêm</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered table-striped ">
+                    <thead class="title" style="background-color:#b0bed9">
+                        <tr class="bold">
+                            <th class="text-center col-md-1">{{'VCMM_TH_ORDERING' | translate}}</th>
+                            <th class="text-center col-md-2">{{'VCMM_TH_EMPLOYEE' | translate}}</th>
+                            <th class="text-center col-md-2">{{'VCMM_TH_DISTRIBUTOR_AGENCY_STORE' | translate}}</th>
+                            <th class="text-center col-md-6">{{'VCMM_TH_STORE_ADDRES' | translate}}</th>
+                            <th class="text-center col-md-1">{{'VCMM_TH_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in model1.ListData">
+                            <td class="text-center">
+                                <label>{{x.No}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.Staff}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.CustomerName}}</label>
+                            </td>
+                            <td class="text-center">
+                                <label>{{x.CustomerAddress}}</label>
+                            </td>
+                            <td class="text-center">
+                                <button title="Xoá" ng-click="deleteCustomer(x.Id)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer pr30" style="margin-top: -40px !important">
+    <!--<a data-dismiss="modal" class="btn btn-default " href="javascript:;" ng-click="cancel()">
+        Đóng
+    </a>-->
+    <!--<button ng-click="submit()" class="btn blue no-boxshadow" href="javascript:;" style="font-weight:bold">
+        Lưu lại
+    </button>-->
+    
+        <div class="btn-group pull-right actions d-flex">
+            <div class="text-center pr10" style="padding-top: 15px;">
+                <a ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                    <span><i class="fa fa-close"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CLOSE' | translate}}</p>
+            </div>
+        </div>
+    
+</div>
+
+
+
+
+<!--Xử lý upload ảnh-->
+<!--<div class="col-md-4">
+    <div class="form-group">
+        <div class="col-md-12" style="margin-top:5px">
+            <div class="thumbnail " style="border: 0; box-shadow: none">
+                <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                <img src="{{model.Pic}}" ng-click="uploadImage()" id="imageId" class="rounded-circle height-150 width-150 cursor-pointer" alt="Card image" />
+            </div>
+        </div>
+    </div>
+</div>-->
+<!--Xử lý bắt điều kiện người dùng tự tạo-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorSex}">
+    <div class="col-md-12">
+        <i class="fa fa-transgender" aria-hidden="true"></i>
+        <label class="control-label require">Giới tính</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group">
+            <ui-select tagging ng-model="model.Sex" theme="bootstrap" on-select="changleSelect('Sex')">
+                <ui-select-match placeholder="Chọn giới tính...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in ListSex | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <span ng-show="errorSex" class="label-color validation-message">
+            Chọn giới tính!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị datepicker-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorBirthday}">
+    <div class="col-md-12">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <label class="control-label require">Ngày sinh</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group date" id="birthday">
+            <input type="text" class="form-control input-date" ng-model="model.Birthday" ng-readonly="isEnalePatient" name="Birthday" placeholder="Chọn ngày sinh..." ng-change="changleSelect('Birthday')" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+        <span ng-show="errorBirthday" class="label-color validation-message">
+            Ngày sinh sai định dạng!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị định dạng ngày tháng trên html combobox-->
+<!--<div class="input-group">
+    <ui-select tagging ng-model="modelSearchParent.Parent" theme="bootstrap" on-select="selectComboboxParent(modelSearchParent.Parent)" ng-disabled="isEnaleComboboxParent">
+        <ui-select-match placeholder="Tìm kiếm theo mã, tên, số điện thoại, email, facebook, địa chỉ">{{$select.selected.ParentName}} - {{$select.selected.Birthday | date: 'dd/MM/yyyy'}} - {{$select.selected.Phone}} - {{$select.selected.Email}} - {{$select.selected.Facebook}} - {{$select.selected.Address}}</ui-select-match>
+        <ui-select-choices repeat="x in ListParentCombobox | filter: $select.search">
+            {{x.ParentCode}} - {{x.ParentName}} - {{x.Birthday | date: 'dd/MM/yyyy'}} - {{x.Phone}} - {{x.Email}} - {{x.Facebook}} - {{x.Address}}
+        </ui-select-choices>
+    </ui-select>
+    <span class="input-group-btn">
+        <button type="button" ng-click="deleteComboboxParent()" class="btn btn-default no-shadow" style="">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </span>
+</div>-->

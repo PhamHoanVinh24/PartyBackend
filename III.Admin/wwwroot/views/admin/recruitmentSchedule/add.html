@@ -1,0 +1,136 @@
+﻿<style>
+    .modal-body {
+        padding-bottom: 0px !important;
+    }
+
+    .ui-select-multiple .ui-select-match-item {
+        padding: 5px !important;
+        font-size: 13px !important;
+    }
+
+    .close {
+        color: red;
+        width: 23px !important;
+    }
+
+    .ui-select-match-close {
+        margin-top: 0px !important;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        font-size: 30px !important;
+    }
+</style>
+<div class="modal-header no-color">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-plus-circle fs18 black icon-insert"></i>
+    <span class="modal-title custom-title black" id="modal-title">{{'Thêm lịch phỏng vấn' | translate}}</span>
+</div>
+
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="form-group pt10">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            <label class="control-label fw600 require">{{'Ứng viên' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control br24" placeholder="{{'Ứng viên' | translate}}.." rows="2" ng-model="model.Content" name="Content"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-md-4 text-left">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <label class="control-label fw600 require">{{'Thành phần tham dự PV' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select class="list-user br24" ng-model="model1.ListUser" multiple theme="bootstrap" style="height: 85px;overflow: auto;border-radius: 5px;">
+                                    <ui-select-match placeholder="{{'Thành phần tham dự PV' | translate}}...">{{$item.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.UserName as x in listUser | filter:$select.search">
+                                        {{x.GivenName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <label class="control-label require fw600">{{'WWS_CRUD_START_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24 date" id="startDate">
+                                <input type="text" ng-model="model.StartDate" name="StartDate" class="form-control" placeholder="{{'WWS_CRUD_START_DATE' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default no-shadow">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <label class="control-label require fw600">{{'WWS_CRUD_END_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group br24 date" id="endDate">
+                                <input type="text" ng-model="model.EndDate" name="EndDate" class="form-control " placeholder="{{'WWS_CRUD_END_DATE' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default no-shadow">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            <label class="control-label fw600">{{'Địa điểm' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control br24" placeholder="{{'Địa điểm' | translate}}.." rows="2" ng-model="model.Location" name="Location"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 text-left">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            <label class="control-label fw600">{{'Kết quả' | translate}}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control br24" placeholder="{{'Kết quả' | translate}}.." rows="2" ng-model="model.Result" name="Result"></textarea>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="btn-group actions d-flex">
+                            <div class="pr10">
+                                <a data-dismiss="modal" ng-click="cancel()" class="fs30">
+                                    <span><i class="fas fa-times"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="text-center pl20" ng-click="submit()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-edit"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

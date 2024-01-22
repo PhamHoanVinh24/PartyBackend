@@ -1,0 +1,173 @@
+﻿<div ng-controller="assetDetail">
+    <div class="table-toolbar">
+        <form name="addformAsset" class="form-horizontal" method="post" ng-validate="validationOptionsAssetAttribute">
+            <div class="form-group" style="margin-top: -10px;">
+                <div class="col-md-4">
+                    <div class="form-group" ng-class="{ 'has-error': errorAssetCode}">
+                        <div class="col-md-12">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                            <label class="control-label require">{{'ASSET_RC_MSG_ASSET' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="modelAsset.AssetCode" theme="bootstrap" ng-change="changleSelect('AssetCode')">
+                                    <ui-select-match placeholder="{{' ASSET_RC_MSG_ASSET' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in modelAsset.listAsset | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorAssetCode" class="label-color validation-message">
+                                {{'ASSET_VALIDATE_ASSET_NOT_NULL' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label require">{{'ASSET_RC_TXT_NUMB' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="br24">
+                                <input type="number" class="form-control br24" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control" ng-model="modelAsset.Quantity" name="Quantity" placeholder="{{'ASSET_RC_TXT_NUMB' | translate}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <label class="control-label">&nbsp;{{'ASSET_RC_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select ng-model="modelAsset.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'ASSET_RC_LBL_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in modelAsset.listStatusAsset  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label">{{'ASSET_RC_LBL_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <input type="text" class="form-control br24" ng-model="modelAsset.Note" placeholder="{{'ASSET_RC_LBL_NOTE' | translate}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt5">
+                    <div class="btn-group pull-right actions d-flex mt25">
+                        <div class="text-center ">
+                            <a class=" fs30 p-0" ng-click="addAsset()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3" ng-click="addAsset()" style="font-size: 12px !important;color: #428bca;"> {{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataAssetRecalled"></table>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div ng-controller="assetDetail">
+    <form name="addformAsset" method="post" ng-validate="validationOptionsAssetAttribute">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-12" id="box">
+                    <div class="table-toolbar table_body">
+                        <div class="col-md-12">
+                            <div class="col-md-3 form-group" ng-class="{ 'has-error': errorAssetCode}">
+                                <label class="require">{{'ASSET_RC_MSG_ASSET' | translate}}</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelAsset.AssetCode" theme="bootstrap" ng-change="changleSelect('AssetCode')">
+                                    <ui-select-match placeholder="{{'ASSET_RC_MSG_ASSET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in modelAsset.listAsset| filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorAssetCode" class="label-color validation-message">
+                                    {{'ASSET_VALIDATE_ASSET_NOT_NULL' | translate}}
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="require">{{'ASSET_RC_TXT_NUMB' | translate}}</label>
+                                    <input type="number" name="Quantity" class="form-control" placeholder="{{'ASSET_RC_TXT_NUMB1' | translate}}..." ng-model="modelAsset.Quantity" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="require">{{'ASSET_RC_TXT_VALUE' | translate}}</label>
+                                    <input type="number" class="form-control" name="Price" placeholder="{{'ASSET_RC_TXT_VALUE1' | translate}}..." ng-model="modelAsset.CostValue" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="">{{'ASSET_RC_LBL_STATUS' | translate}}</label>
+                                <div class='input-group'>
+                                    <ui-select tagging ng-model="modelAsset.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'ASSET_RC_LBL_STATUS' | translate}} ...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in modelAsset.listStatusAsset | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label class="">{{'ASSET_RC_LBL_NOTE' | translate}}</label>
+                                    <textarea class="form-control" placeholder="{{'ASSET_RC_LBL_NOTE' | translate}}..." ng-model="modelAsset.Note"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group actions pt20">
+                                    <div class="text-center">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addAsset()">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <style>
+                        .exist-item {
+                            background-color: #fcc7d8;
+                        }
+                    </style>
+                    <div class="table-responsive">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblDataDetail"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>-->

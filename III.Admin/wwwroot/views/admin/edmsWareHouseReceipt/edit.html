@@ -1,0 +1,537 @@
+﻿<style>
+    /*.modal-header {
+        background: #f1f1f1;
+        color: black;
+    }*/
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .colorstyle {
+        background-color: #eef1f5;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-body {
+        overflow: auto;
+        max-height: 105px;
+        height: 95px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    .border-qrcode .file-header {
+        z-index: 1;
+        margin-left: 19px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 200px;
+        height: 180px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        overflow: auto;
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        z-index: 1;
+        margin-left: 15px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest {
+        max-height: 60px;
+    }
+
+        #tblFileRequest tbody tr td {
+            max-width: 115px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    #tblFileBox tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media(min-width:768px) and (max-width:992px) {
+        .modal-60 {
+            width: 75% !important;
+        }
+    }
+
+    @media(min-width:992px) and (max-width:1200px) {
+        .modal-60 {
+            width: 75% !important;
+        }
+    }
+
+    @media(min-width:1200px) and (max-width:1400px) {
+        .modal-60 {
+            width: 65% !important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <span class="modal-title text-limit" id="modal-title">
+        {{'EDWHR_TITLE_EDIT_RECEIPT' | translate}} : <span>{{model.RcTicketCode}}</span>
+    </span>
+</div>
+
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row pb20">
+                    <div class="col-lg-9 ">
+                        <div class="col-md-6 pl-0">
+                            <div class="form-group">
+                                <label>{{'EDWHR_CURD_LBL_REQUEST_IMPORT' | translate}}</label>
+                                <div style="margin-bottom:-15px;display:flex">
+                                    <ui-select tagging ng-model="model.RqId" theme="bootstrap" style="width:60%" ng-change="changeRequest(model.RqId)">
+                                        <ui-select-match placeholder="{{'EDWHR_CURD_TXT_REQUEST_IMPORT' | translate}}">{{$select.selected.RqTicketCode}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Id as x in listRequest | filter: $select.search">
+                                            {{x.RqTicketCode}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <div class="mt-checkbox-list pt10 pl10">
+                                        <label class="mt-checkbox mt-checkbox-outline mb10">
+                                            {{'EDWHR_CURD_LBL_REQUEST' | translate}}
+                                            <input type="checkbox" name="IsEnabled" ng-model="IsEnabledRequest" ng-click="checkedRequest(model.RqId)" ng-checked="IsEnabledRequest" />
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorBrCode}">
+                                <label class="require">{{'EDWHR_CURD_LBL_BRANCH_UNIT' | translate}} </label>
+                                <ui-select tagging ng-model="model.BrCode" theme="bootstrap" ng-change="changeSelect('BRANCH',model.BrCode)" ng-disabled="modelDisable.BrCode">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_TXT_BRANCH_UNIT' | translate}}">{{$select.selected.OrgCode}} - {{$select.selected.OrgName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.OrgAddonCode as x in listBranch | filter:$select.search">
+                                        {{x.OrgCode}} - {{x.OrgName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorBrCode" class="label-color validation-message">
+                                    {{'Chi nhánh/Đơn vị không được để trống' | translate}}!
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{'EDWHR_CURD_LBL_DOCUMENT_TYPE' | translate}}</label>
+                                <div class="col-lg-12 boder-box h-100-srcoll colorstyle">
+                                    <button type="button" class="tags-custom" ng-repeat="x in listDocTypeAll">
+                                        <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="removeDocType($index)"></i><span></span> {{x.text}}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>{{'EDMSSRP_CURD_LBL_DESCRIBE' | translate}}</label>
+                                <textarea ng-model="model.Note" placeholder="{{'EDWHR_CURD_TXT_DESCRIPTION' | translate}}" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pr-0 pl-0">
+                            <div class="form-group" ng-class="{ 'has-error': errorWHSUser}">
+                                <label class="require">{{'EDWHR_CURD_LBL_ENTER_PEOPLE' | translate}}</label>
+                                <ui-select tagging ng-model="model.WHS_User" theme="bootstrap" ng-change="changeSelect('WAREHOUSE_USER',model.WHS_User)">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_LBL_ENTER_PEOPLE' | translate}} ...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listWareHouseUser| filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWHSUser" class="label-color validation-message">
+                                    {{'Người nhập kho không được để trống' | translate}}!
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorWHSCode}">
+                                <label class="require">{{'EDWHR_CURD_LBL_TO_WAREHOUSE' | translate}}</label>
+                                <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" ng-change="changeSelect('WAREHOUSE',model.WHS_Code)" ng-disabled="modelDisable.WHS_Code">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_TXT_TO_WAREHOUSE' | translate}}...">{{$select.selected.WHS_Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.WHS_Code as x in listWareHouse | filter:$select.search">
+                                        {{x.WHS_Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorWHSCode" class="label-color validation-message">
+                                    {{'Kho không được để trống' | translate}}!
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="require">{{'EDWHR_CURD_LBL_NUMBER_BOX' | translate}}</label>
+                                <input ng-model="model.NumBox" class="form-control" placeholder="{{'EDWHR_CURD_LBL_NUMBER_BOX' | translate}}..." readonly />
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="require">{{'EDWHR_CURD_LBL_FORM_DATE' | translate}}</label>
+                                        <div class='input-group date' id='dateFrom'>
+                                            <input class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="{{'EDWHR_CURD_TXT_FORM_DATE' | translate}}..." />
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="require">{{'EDWHR_CURD_LBL_TO_DATE' | translate}}</label>
+                                        <div class='input-group date' id='dateTo'>
+                                            <input class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="{{'EDWHR_CURD_TXT_TO_DATE' | translate}}..." />
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': errorPersonSender}">
+                                <label class="require">{{'EDWHR_CURD_LBL_SEND_PEOPLE' | translate}}</label>
+                                <ui-select tagging ng-model="model.PersonSender" theme="bootstrap" ng-change="changeSelect('PERSONSENDER',model.PersonSender)">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_LBL_SEND_PEOPLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStaffBranch | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorPersonSender" class="label-color validation-message">
+                                    {{'Người gửi không được để trống' | translate}}!
+                                </span>
+                            </div>
+                        </div>
+
+                        <!--<div class="col-md-6 pl-0 pr-0">
+                            <label>{{'EDMSSRP_CURD_LBL_DESCRIBE' | translate}}</label>
+                            <textarea ng-model="model.Note" placeholder="{{'EDWHR_CURD_TXT_DESCRIPTION' | translate}}" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="require">{{'EDWHR_CURD_LBL_TO_WAREHOUSE' | translate}}</label>
+                            <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" ng-change="changeSelect('WAREHOUSE_RECIPT',model.WHS_Code)">
+                                <ui-select-match placeholder="{{'EDWHR_CURD_TXT_TO_WAREHOUSE' | translate}}...">{{$select.selected.WHS_Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.WHS_Code as x in listWareHouse | filter:$select.search">
+                                    {{x.WHS_Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>-->
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="border-qrcode">
+                            <div class="text-center">
+                                <div class="img-thumbnail">
+                                    <img data-ng-src="data:image/png;base64,{{QR_Code_Req}}" ng-class="QR_Code_Req==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" width="100" height="100" />
+                                </div>
+                                <!--<a class="btn btn-print-qrCode" ng-click="print(model.QR_Code)">
+                                    <b><i class="fas fa-print"></i>&nbsp; Print</b>
+                                </a>-->
+                            </div>
+                            <label class="file-header"><span>{{'EDWHR_CURD_LBL_LIST_UPLOAD_FILE' | translate}}</span></label>
+                            <div class="table-toolbar file-body">
+                                <table class="table table-bordered" id="tblFileRequest">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_NAME_FILE' | translate}}</th>
+                                            <th class="col-md-1 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in model.ListFileReceipt">
+                                            <td class="text-center"><a title="{{x.FileName}}" ng-click="viewFile(x.FilePath)">{{x.FileName}}</a></td>
+                                            <td class="text-center">
+                                                <i role="button" class="fa fa-minus-circle" ng-click="removeFileRec($index)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center" style="padding-left:70px;">
+                                    <div class="btn btn-icon-only btn-circle btn-outline green-custom text-center">
+                                        <i class="fas fa-upload"></i>
+                                        <input type="file" id="FileRec" class="btn-upload" custom-on-change="loadFileRec" />
+                                    </div>
+                                    <p class="text-underline fs9 mb5 pt3">{{'EDMSSRP_BTN_DOWLOADING_FILE' | translate}}</p>
+                                </div>
+                                <div class="pl20 text-center mr30" ng-click="print(QR_Code_Req)">
+                                    <a class="btn btn-icon-only btn-circle btn-outline blue-custom">
+                                        <span><i class="fa fa-print"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'EDMSSRP_CURD_BTN_PRINTING' | translate}}</p>
+                                </div>
+                            </div>
+                            <!--<div class="text-center">
+                                <button class="btn btn-default br4">
+                                    <i class="fas fa-print"></i>
+                                    {{'EDWHR_BTN_PRINTING' | translate}}
+                                </button>
+                                <input id="fileReq" type="file" class="imageFileReq" style="display:none" />
+                                <button class="btn btn-default br4" style="height: 34px;">
+                                    <label>
+                                        <i class="fas fa-upload"></i>{{'EDWHR_BTN_UPLOAD_FILE' | translate}}
+                                        <input type="file" style="display: none" custom-on-change="loadFileRec">
+                                    </label>
+                                </button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="box">
+                        <label class="labelbodergroup"><b>{{'EDMSSRP_CURD_LBL_BOX_DOCCUMENT' | translate}}</b></label>
+                        <div class="table-toolbar table_body">
+                            <div class="col-md-3">
+                                <label class="require">{{'EDWHR_CURD_LBL_BOX_CODE' | translate}}</label>
+                                <input ng-model="model.Box.BoxCode" class="form-control" placeholder="{{'EDWHR_CURD_TXT_BOX_CODE' | translate}}..." readonly />
+                                <label class="require">{{'EDWHR_CURD_LBL_DOCUMENT_TYPE' | translate}}</label>
+                                <ui-select tagging ng-model="model.Box.TypeProfile" theme="bootstrap" ng-change="changeSelect('DOCUMENTTYPE',model.Box.TypeProfile)">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_TXT_DOCUMENT_TYPE' | translate}} ...">{{$select.selected.ValueSet}}</ui-select-match>
+                                    <ui-select-choices repeat="x.SettingID as x in listDocumentType| filter: $select.search">
+                                        {{x.ValueSet}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <label class="require">{{'EDWHR_CURD_LBL_LIST' | translate}}</label>
+                                <div class="col-lg-12 boder-box-custom">
+                                    <button type="button" class="tags-custom" ng-repeat="x in listDocTypes">
+                                        <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="removeDocType($index)"></i><span>{{x.text}}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="require">{{'EDWHR_CURD_LBL_BOX_NUMBER_BOX' | translate}}</label>
+                                <input ng-model="model.Box.NumBoxth" ng-blur="changeBoxNumber(model.Box.NumBoxth)" class="form-control" placeholder="{{'EDWHR_CURD_LBL_BOX_NUMBER_BOX' | translate}}..." readonly />
+                                <label class="require">{{'EDWHR_CURD_LBL_PACKING_STAFF' | translate}}</label>
+                                <ui-select tagging ng-model="model.Box.PackingStaff" theme="bootstrap" ng-change="changeSelect('PACKING_STAFF',model.Box.PackingStaff)">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_TXT_PACKING_STAFF' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStaffBranch| filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <label class="require">{{'EDWHR_CURD_LBL_LIST' | translate}}</label>
+                                <div class="col-lg-12 boder-box-custom">
+                                    <button type="button" class="tags-custom" ng-repeat="x in listUsers">
+                                        <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="removeUser($index)"></i><span></span> {{x.text}}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="require">{{'EDWHR_CURD_LBL_STORAGE_TIME' | translate}}</label>
+                                <input class="form-control" type="text" ng-model="modelShow.StoragePeriod" placeholder="{{'EDWHR_CURD_TXT_STORAGE_TIME' | translate}}..." readonly />
+                                <label class="">{{'EDWHR_CURD_LBL_TIME_ARISES_FROM' | translate}}</label>
+                                <div class='input-group date' id='dateArisesFrom'>
+                                    <input class="form-control" ng-model="model.Box.StartTime" placeholder="{{'EDWHR_CURD_TXT_TIME_ARISES_FROM' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                                <label class="">{{'EDWHR_CURD_LBL_TIME_ARISES_TO' | translate}}</label>
+                                <div class='input-group date' id='dateArisesTo'>
+                                    <input class="form-control" ng-model="model.Box.EndTime" placeholder="{{'EDWHR_CURD_TXT_TIME_ARISES_TO' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                                <label class="require">{{'EDWHR_CURD_LBL_STORAGE_DATE' | translate}}</label>
+                                <div class='input-group date' id='dateStorage'>
+                                    <input class="form-control" ng-model="model.Box.StorageTime" placeholder="{{'EDWHR_CURD_TXT_STORAGE_DATE' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                                <label>{{'EDWHR_CURD_LBL_CONFIDENTIALITY' | translate}}</label>
+                                <ui-select tagging ng-model="model.Box.StatusSecurity" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'EDWHR_CURD_TXT_CONFIDENTIALITY' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listSercurity| filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center pb15">
+                                    <div class="img-thumbnail">
+                                        <img data-ng-src="data:image/png;base64,{{QR_Code_Box}}" ng-class="QR_Code_Box==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" class="h-70" />
+                                    </div>
+                                </div>
+                                <label class="file-header"><span>{{'EDWHR_CURD_LBL_LIST_UPLOAD_FILE' | translate}}</span></label>
+                                <div class="table-toolbar file-body">
+                                    <table class="table table-bordered" id="tblFileBox">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_NAME_FILE' | translate}}</th>
+                                                <th class="col-md-1 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in listFileBox">
+                                                <td class="text-center"><a title="{{x.FileName}}" ng-click="viewFile(x.FilePath)">{{x.FileName}}</a></td>
+                                                <td class="text-center">
+                                                    <i role="button" class="fa fa-minus-circle" ng-click="removeFileBox($index)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="btn-group actions d-flex mt10" style="margin-left:20%;">
+                                    <div class="col-md-12 p-0">
+                                        <div class="text-center col-md-4 p-0" ng-if="!isEditBox">
+                                            <a class="btn btn-icon-only btn-circle btn-outline green-custom text-center" ng-click="addBox()">
+                                                <i class="fas fa-plus"></i>
+                                            </a>
+                                            <p class="text-underline fs9 mb5 pt3">{{'EDMSSRP_BTN_ADD' | translate}}</p>
+                                        </div>
+                                        <div class="text-center col-md-4 p-0" ng-if="isEditBox">
+                                            <a ng-click="editBox()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                                <span><i class="fa fa-pencil"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                                        </div>
+                                        <div class="text-center col-md-4 p-0">
+                                            <div class="btn btn-icon-only btn-circle btn-outline green-custom text-center pt10">
+                                                <i class="fas fa-upload"></i>
+                                                <input type="file" id="FileBox" class="btn-upload" custom-on-change="loadFileBox" />
+                                            </div>
+                                            <p class="text-underline fs9 mb5 pt3">{{'EDMSSRP_BTN_DOWLOADING_FILE' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--<div class="text-center">
+                                    <button class="btn btn-default br4" ng-click="addBox()" style="width:60px;padding-left:3px;">
+                                        <i class="fas fa-plus"></i>{{'EDWHR_BTN_ADD' | translate}}
+                                    </button>
+                                    <button class="btn btn-default br4" ng-click="editBox()" style="width:60px;padding-left:6px;">
+                                        <i class="fa fa-pencil"></i>Sửa
+                                    </button>
+                                    <button class="btn btn-default br4" style="height: 34px;width:65px;padding-left:3px;">
+                                        <label>
+                                            <i class="fas fa-upload"></i>{{'EDWHR_BTN_UPLOAD_FILE' | translate}}
+                                            <input type="file" style="display: none" custom-on-change="loadFileBox">
+                                        </label>
+                                    </button>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="tblBoxRequest">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_CODE' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_QR_CODE' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_UNIT' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'EDWHR_LIST_COL_STORAGE_TIME' | translate}}</th>
+                                        <th class="col-md-3 text-center fw600 text-underline">{{'EDWHR_LIST_COL_DOCUMENT_TYPE' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'EDWHR_LIST_COL_TIME_ARISES' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'EDWHR_LIST_COL_DELETE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="{{x.Id}}" ng-repeat="x in listBoxTemp" ng-click="editItem(x)">
+                                        <td class="text-center">
+                                            <span title="{{x.BoxCode}}">{{x.BoxCode.length > 10 ? x.BoxCode.substr(0, 10) +'...' : x.BoxCode}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <img src='data:image/png;base64,{{x.QR_Code}}' height="40" width="40" />
+                                        </td>
+                                        <td class="text-center">{{x.BranchName}}</td>
+                                        <td class="text-center">{{x.StoragePeriod}}</td>
+                                        <td class="text-center">{{x.TypeProfileName}}</td>
+                                        <td class="text-center">
+                                            {{x.StartTime}} - {{x.EndTime}}
+                                        </td>
+                                        <td class="text-center">
+                                            <i role="button" class="fa fa-minus-circle" ng-click="removeItem($index,x)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <!--<label class="labelbodergroup"><b>{{'EDWHR_CURD_LBL_SELECTED_WAREHOUSE' | translate}}</b></label>-->
+                        <div class="table-toolbar table_body">
+                            <div class="col-md-12">
+                                <!--<span>Hộp 89, Số 4, Dãy 6, Lầu 2, Kho Quang Trung&nbsp;&nbsp;</span>-->
+                                <a ng-click="orderBox()"><u>{{'EDWHR_ENTER_SORT_WARE_HOUSE' | translate}}</u> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,255 @@
+﻿<style>
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-registration .modal-50 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-registration .modal-50 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-registration .modal-50 {
+            width: 60%;
+        }
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header black" style="background: rgb(241, 241, 241);">
+    <span class="modal-title fas fa-users fs15">&nbsp;&nbsp;{{'STRE_TITLE_CALENDAR_MANAGEMENT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pb25 pt10">
+                <div class="form-group mb-0">
+                    <div class="col-md-4 pt10">
+                        <label> {{'STRE_CURD_LBL_MEMBER' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="model.MemberId" theme="bootstrap" on-select="selectMember(model.MemberId)">
+                                <ui-select-match placeholder="{{'STRE_TXT_ALL' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in listUser | filter: $select.search">
+                                    <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />
+                                    <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.MemberId=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt10">
+                        <label> {{'STRE_TXT_SEARCH_FROM_DATE' | translate}}</label>
+                        <div class='input-group date br24' id="datefrom">
+                            <input ng-model="model.FromDate" type='text' class="form-control" placeholder="{{'STRE_TXT_SEARCH_FROM_DATE' | translate}}"  autocomplete="off" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt10">
+                        <label> {{'STRE_TXT_SEARCH_TO_DATE' | translate}}</label>
+                        <div class='input-group date br24' id="dateto">
+                            <input ng-model="model.ToDate" type='text' class="form-control" placeholder="{{'STRE_TXT_SEARCH_TO_DATE' | translate}}"  autocomplete="off" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group  pt1 actions d-flex" style="margin-top:20px;">
+                            <div class="text-center" ng-if="model.MemberId==''">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3 nowrap">{{'COM_BTN_SEARCH' | translate}}</p>
+                            </div>
+                            <div class="text-center" ng-if="model.MemberId!=''">
+                                <a class="fs30" ng-click="registration()">
+                                    <span><i class="fas fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3 nowrap">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label ng-repeat="x in schedule" class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 15px!important;">
+                            <input type="checkbox" ng-model="x.checked" ng-change="updateSelection($index, entities)"> {{x.name}}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="model.MemberId!=''">
+                    <div class="col-md-4">
+                        <style>
+                            #inforMemeber {
+                                max-height: 320px;
+                                border: 1px solid #ddd;
+                            }
+
+                                #inforMemeber .header {
+                                    background: #32c5d2;
+                                    height: 35px;
+                                    margin-left: 0;
+                                    margin-right: 0;
+                                    color: #ffffff;
+                                    padding: 5px;
+                                    font-size: 18px;
+                                    font-weight: bold;
+                                }
+                        </style>
+                        <div id="inforMemeber">
+                            <div class="row header">
+                                <span>{{'STRE_LIST_COL_INFO' | translate}}</span>
+                            </div>
+                            <div class="body" style="padding:10px">
+                                <span class="fs12">
+                                    {{'STRE_CURD_TAB_LIST_LIST_COL_FULLNAME' | translate}}:&nbsp;
+                                    <b class="text-danger">{{detailMember.GivenName}}</b>
+                                </span><br />
+                                <span class="fs12" style="word-break: break-word;">
+                                    {{'STRE_LBL_EMAIL' | translate}}:&nbsp;
+                                    <b ng-if="detailMember.Email!=null">{{detailMember.Email}}</b>
+                                    <b ng-if="detailMember.Email==null">{{'STRE_LBL_EMTY' | translate}}</b>
+                                </span><br />
+                                <span class="fs12">
+                                    {{'STRE_CURD_LBL_PHONE_NUMBER' | translate}}:&nbsp;
+                                    <b ng-if="detailMember.PhoneNumber!=null">{{detailMember.PhoneNumber}}</b>
+                                    <b ng-if="detailMember.PhoneNumber==null">{{'STRE_LBL_EMTY' | translate}}</b>
+                                </span><br />
+                                <span class="fs12">
+                                    {{'STRE_LBL_TYPE_WORK' | translate}}:&nbsp;
+                                    <b ng-if="detailMember.TypeWork!=null">{{detailMember.TypeWork}}</b>
+                                    <b ng-if="detailMember.TypeWork==null">{{'STRE_LBL_EMTY' | translate}}</b>
+                                </span><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dt.dtInstance"
+                               id="tblData"></table>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="model.MemberId==''">
+                    <div class="col-md-6">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptionsTotal"
+                               dt-columns="dtColumnsTotal"
+                               dt-instance="dt.dtInstanceTotal"
+                               id="tblDataTotal"></table>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-responsive" ng-if="listMember.length!=0">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">{{'STRE_LIST_COL_MEMBER' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_MORNING' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_AFTERNOON' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_EVENING' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in listMember">
+                                        <td class="text-center">{{x.GivenName}}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn" ng-click="changeStatusFrameTime(x.Id,1)" ng-class="{'green':x.Morning=='True','red':x.Morning=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Morning=='True','fa-times':x.Morning=='False'}"></i>
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn" ng-click="changeStatusFrameTime(x.Id,2)" ng-class="{'green':x.Afternoon=='True','red':x.Afternoon=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Afternoon=='True','fa-times':x.Afternoon=='False'}"></i>
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-circle btn-icon-only h-25 w25 pn" ng-click="changeStatusFrameTime(x.Id,3)" ng-class="{'green':x.Evening=='True','red':x.Evening=='False'}">
+                                                <i class="fa" ng-class="{'fa-check':x.Evening=='True','fa-times':x.Evening=='False'}"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive" ng-if="listMember.length==0">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">{{'STRE_LIST_COL_MEMBER' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_MORNING' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_AFTERNOON' | translate}}</th>
+                                        <th class="text-center">{{'STRE_CURD_TAB_LIST_LIST_COL_EVENING' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="h-40">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <i class="text-danger fs12">{{'STRE_MSG_TIP' | translate}}</i>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

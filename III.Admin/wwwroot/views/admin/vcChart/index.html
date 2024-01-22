@@ -1,0 +1,339 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="bold mb-0">{{'VCMM_CURD_LBL_DATASHEET' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/Admin/VCChart">{{'VCMM_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div>{{'VCMM_CURD_LBL_DATASHEET' | translate}}</div>
+                </li>
+            </ul>
+            <!--<div class="pull-right">
+                <a ng-click="add()" class="btn btn-helper">
+                    <i class="fas fa-question-circle"></i>Hướng dẫn
+                </a>
+            </div>-->
+        </div>
+    </div>
+</div>
+<div class="row pb40">
+    <div class="col-md-12">
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_PERCENTAGE' | translate}}</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchWorkProgress()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchWorkProgress()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-body h-400 p15">
+                    <canvas id="lineWorkProgress" class="chart chart-line" chart-data="workProgress.data"
+                            chart-labels="workProgress.labels" chart-series="workProgress.series" chart-options="optionsWorkProgress"
+                            chart-dataset-override="datasetOverride"></canvas>
+                    <div class="text-center">
+                        <h2><b>1. {{'VCMM_CURD_LBL_PROGRESS_COMPLETING_WORK' | translate}}</b>&nbsp;<span ng-show="workProgress.user!=''" class="text-danger">{{'VCMM_CURD_LBL_EMPLOYEES' | translate}} {{workProgress.user}}</span></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_TONS' | translate}}</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchTotalCanImp()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchTotalCanImp()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar-totalCanImp" class="chart chart-bar"
+                            chart-data="totalCanImp.data" chart-labels="totalCanImp.labels" chart-options="optionsTotalCanImp" chart-series="totalCanImp.series" chart-click="totalCanImpClick"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>2. {{'VCMM_CURD_LBL_AVAILABLE_RESERVES' | translate}}</b>
+                            <label class="bold">{{'VCMM_CURD_LBL_IN_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{totalCanImp.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_TONS' | translate}}</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchConsumption()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchConsumption()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content" id="barConsumption">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar_consumption" class="chart chart-bar"
+                            chart-data="consumption.data" chart-labels="consumption.labels" chart-options="optionsConsumption" chart-series="consumption.series" chart-colors="consumption.colours" chart-click="consumptionClick"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>3. {{'VCMM_CURD_LBL_CONSUMPTION' | translate}}</b>
+                            <label class="bold">{{'VCMM_CURD_LBL_OF' | translate}}</label>
+                            <label class="bold text-success">{{consumption.trademark.Name}}</label>
+                            <label class="bold" ng-show="consumption.species.Name!=''">
+                                {{'VCMM_CURD_LBL_SPECIES' | translate}}&nbsp;
+                                <label class="bold text-success">{{consumption.species.Name}}</label>
+                            </label>
+                            <label class="bold">{{'VCMM_CURD_LBL_IN_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{consumption.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_TONS' | translate}}</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchInventory()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchInventory()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content" id="barInventory">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar-inventory" class="chart chart-bar"
+                            chart-data="inventory.data" chart-labels="inventory.labels" chart-options="optionsInventory" chart-series="inventory.series" chart-colors="inventory.colours" chart-click="inventoryClick"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>4. {{'VCMM_CURD_LBL_INVENTORY_AREA' | translate}}</b>
+                            <label class="bold">{{'VCMM_CURD_LBL_OF' | translate}}</label>
+                            <label class="bold text-success">{{inventory.trademark.Name}}</label>
+                            <label class="bold" ng-show="inventory.species.Name!=''">
+                                {{'VCMM_CURD_LBL_SPECIES' | translate}}&nbsp;
+                                <label class="bold text-success">{{inventory.species.Name}}</label>
+                            </label>
+                            <label class="bold">{{'VCMM_CURD_LBL_END_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{inventory.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_BUY_CONST' | translate}} VNĐ</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchBuyCost()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchBuyCost()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-body p15 h-400">
+                    <canvas id="bar-buyCost" class="chart chart-bar"
+                            chart-data="buyCost.data" chart-labels="buyCost.labels" chart-options="optionsBuyCost" chart-series="buyCost.series"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>5. {{'VCMM_CURD_LBL_BUY_CONST' | translate}}</b>&nbsp;
+                            <label class="bold" ng-show="buyCost.store!=''">của cửa hàng&nbsp;<span class="text-danger">{{buyCost.store}}&nbsp;</span></label><br />
+                            <label class="bold" ng-show="buyCost.species!=''">chủng loại&nbsp;<span class="text-danger">{{buyCost.species}}</span></label>
+                            <label class="bold" ng-show="buyCost.month!=''">trong tháng&nbsp;<span class="text-danger">{{buyCost.month}}</span></label><br />
+                            <!--<label class="bold" ng-show="buyCost.time=='' && buyCost.store!=''"><span class="text-danger">trong thời điểm mới nhất</span></label>-->
+                            <!--<label class="bold" ng-show="buyCost.time!=''">trong thời điểm&nbsp;<span class="text-danger">{{buyCost.time}}</span></label>-->
+                        </h2>
+                        </
+                        </
+                        </
+                        </
+                        </
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p10">
+            <div class="card-header pb20">
+                <h4 class="card-title">{{'VCMM_CURD_LBL_TONS' | translate}}</h4>
+                <a class="heading-elements-toggle"><i class="ft-more-horizontal font-medium-3"></i></a>
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchInputInMonth()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchInputInMonth()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content" id="barInputInMonth">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar-inputInMonth" class="chart chart-bar"
+                            chart-data="inputInMonth.data" chart-labels="inputInMonth.labels" chart-options="optionsInputInMonth" chart-series="inputInMonth.series" chart-colors="inputInMonth.colours" chart-click="inputInMonthClick"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>6. {{'VCMM_CURD_LBL_QUANTITY_IMPORT' | translate}}</b>
+                            <label class="bold">{{'VCMM_CURD_LBL_OF' | translate}}</label>
+                            <label class="bold text-success">{{inputInMonth.trademark.Name}}</label>
+                            <label class="bold" ng-show="inputInMonth.species.Name!=''">
+                                {{'VCMM_CURD_LBL_SPECIES' | translate}}&nbsp;
+                                <label class="bold text-success">{{inputInMonth.species.Name}}</label>
+                            </label>
+                            <label class="bold"> {{'VCMM_CURD_LBL_IN_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{inputInMonth.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p10">
+            <div class="card-header pb20">
+
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchProportion()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchProportion()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content" id="barDoughnut">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar-doughnut" class="chart chart-pie"
+                            chart-data="proportion.data" chart-labels="proportion.labels" chart-options="optionsProportion" chart-series="proportion.series" chart-colors="proportion.colours"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>7. {{'VCMM_CURD_LBL_DIAGRAM_CEMENT' | translate}}</b>
+                            <label class="bold" ng-show="proportion.store!=''">{{'VCMM_CURD_LBL_OF' | translate}}</label>
+                            <label class="bold text-success" ng-show="proportion.store!=''">{{proportion.store}}</label>
+                            <label class="bold" ng-show="proportion.area!=''">
+                                {{'VCMM_CURD_LBL_AREA' | translate}}&nbsp;
+                                <label class="bold text-success">{{proportion.area}}</label>
+                            </label>
+                            <label class="bold"> {{'VCMM_CURD_LBL_IN_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{proportion.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p10">
+            <div class="card-header pb20">
+                <!--<div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a title="Tìm kiếm" ng-click="searchProportionProductGroup()"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </div>-->
+                <div class="col-md-4 pull-right">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center">
+                            <a ng-click="searchProportionProductGroup()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content" id="barProportionProductGroup">
+                <div class="card-body h-400 p15">
+                    <canvas id="bar-proportionProductGroup" class="chart chart-pie"
+                            chart-data="proportionProductGroup.data" chart-labels="proportionProductGroup.labels" chart-options="optionsProportionProductGroup" chart-series="proportionProductGroup.series" chart-colors="proportionProductGroup.colours"></canvas>
+                    <div class="text-center">
+                        <h2>
+                            <b>8. {{'VCMM_CURD_LBL_DIAGRAM_SEGMENTATION_BUILD' | translate}}</b>
+                            <label class="bold text-success">{{'VCMM_CURD_LBL_BUT_SON' | translate}}</label>
+                            <label class="bold" ng-show="proportionProductGroup.store!=''">{{'VCMM_CURD_LBL_STORE' | translate}}</label>
+                            <label class="bold text-success" ng-show="proportionProductGroup.store!=''">{{proportionProductGroup.store}}</label>
+                            <label class="bold" ng-show="proportionProductGroup.area!=''">
+                                {{'VCMM_CURD_LBL_AREA' | translate}}&nbsp;
+                                <label class="bold text-success">{{proportionProductGroup.area}}</label>
+                            </label>
+                            <label class="bold">{{'VCMM_CURD_LBL_IN_MONTH' | translate}}</label>
+                            <label class="bold text-success">{{proportionProductGroup.month}}</label>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

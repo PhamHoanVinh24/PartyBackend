@@ -1,0 +1,97 @@
+﻿<div class="table-toolbar">
+    <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="col-md-12 pl-0 pr-0 d-flex">
+            <div class="col-md-3 pl-0" ng-class="{'has-error' : errorNoParent}">
+                <label class="control-label require">{{'Thứ tự' | translate}}</label>
+                <div class="d-flex">
+                    <div class='mr5 flex-grow-full'>
+                        <input class="form-control br24" ng-model="model.ProductNo" placeholder="{{'No' | translate}}..." />
+                        <span ng-show="errorNoParent" class="label-color validation-message">
+                            {{'Thứ tự không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-100 flex-no-shrink" style=" margin-right: 25px; margin-top: 13px;" ng-click="print()">
+                <a class="">
+                    <span><i class="fas fs30 fa-print"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'In QrCode' | translate}}</p>
+            </div>
+            <div class="text-center pull-right pl-2 pt10 flex-basis-100 flex-no-shrink" style=" margin-right: 25px; margin-top: 13px;" ng-click="generate()">
+                <a class="">
+                    <span><i style="--fa-primary-color: green; margin-right: 13px;" class="fa-solid fa-layer-group pl10 fs30"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">
+                    {{'Sinh' | translate}}
+                </p>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-responsive" style="min-height: 500px">
+    <table class="table table-bordered" id="tblListQrCodes">
+        <thead>
+            <tr>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">
+                    <label class="mt-checkbox"><input type="checkbox" ng-model="selectAll" ng-change="toggleAll()" /><span></span></label>
+                </th>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'STT' | translate}}</th>
+                <th class="col-md-3 text-center fw600 text-underline" style="width: 5%">{{'Qr Code' | translate}}</th>
+                <th class="col-md-2 text-center fw600 text-underline">{{'Mã SP' | translate}}</th>
+                <th class="col-md-1 text-center fw600 text-underline" style="width: 1%">{{'Thao tác' | translate}}</th>
+            </tr>
+        </thead>
+        <tfoot class="dataTables_wrapper">
+            <tr>
+                <td colspan="6">
+                    <div class="dataTables_paginate paging_full_numbers">
+                        <ul class="pagination">
+                            <li class="paginate_button first"
+                                ng-class="{disabled: currentPage == 0}"
+                                ng-click="firstPage()">
+                                <a>First</a>
+                            </li>
+                            <li class="paginate_button previous"
+                                ng-class="{disabled: currentPage == 0}">
+                                <a ng-click="prevPage()">Previous</a>
+                            </li>
+                            <li class="paginate_button"
+                                ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                <a ng-bind="n + 1">1</a>
+                            </li>
+                            <li class="paginate_button next"
+                                ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                <a ng-click="nextPage()">Next</a>
+                            </li>
+                            <li class="paginate_button last"
+                                ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                <a ng-click="lastPage()">Last</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr ng-repeat="x in pagedItems[currentPage]">
+                <td class="text-center">
+                    <label class="mt-checkbox"><input type="checkbox" ng-model="x.Selected" ng-click="toggleOne(x)" /><span></span></label>
+                </td>
+                <td class="text-center">{{x.Index + 1}}</td>
+                <td class="text-center"><img src='data:image/png;base64,{{x.QrCode}}' ng-click="viewQrCode(x.QrCode)" height="40" width="40" /></td>
+                <td class="text-center">
+                    <input ng-model="x.ProductCode" class="form-control br24" placeholder="{{'Nhập mã SP' | translate}}..." />
+                </td>
+                <td class="text-center">
+                    <a title="Lưu" ng-click="saveQr(x)"
+                       style="width: 25px; height: 25px; padding: 0px;" class="">
+                        <i class="fa-solid fa-floppy-disk fs25 mt10"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

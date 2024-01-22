@@ -1,0 +1,144 @@
+﻿<style type="text/css">
+    .ui-select-match-close {
+        background-image: none;
+    }
+    @media(max-width:1200px)
+    {
+        .modal-35{
+            width:50%!important;
+        }
+    }
+    @media(min-width:1201px) and (max-width:1500px)
+    {
+        .modal-35{
+            width:40%!important;
+        }
+    }
+    @media(min-width:1501px)
+    {
+        .modal-35{
+            width:35%!important;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'FCRE_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{'FCRE_CURD_LBL_CAT_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.CatCode" name="CatCode" placeholder="{{'FCRE_CURD_TXT_CAT_CODE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CatCode='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{'FCRE_CURD_LBL_CAT_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='input-group'>
+                            <input type="text" class="form-control custom-title-code-bold" ng-model="model.CatName" name="CatName" placeholder="{{'FCRE_CURD_TXT_CAT_NAME' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CatName='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'FCRE_CURD_LBL_CAT_PARENT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CatParent" theme="bootstrap">
+                                <ui-select-match placeholder="{{'FCRE_TXT_CAT_PARENT' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in treeData | filter: $select.search">
+                                    <div style="padding-left: {{30 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.CatParent=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group " ng-class="{ 'has-error': errorCatType}">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'FCRE_CURD_LBL_CAT_TYPE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.CatType" theme="bootstrap" on-select="changleSelect('CatType')">
+                                <ui-select-match placeholder="{{'FCRE_CURD_TXT_CAT_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listTypeFund | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addCommonSettingCatType()" class="btn no-shadow  green-custom" style="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorCatType" class="label-color validation-message">
+                            {{'FCRE_VALIDATE_CAT_TYPE_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">{{'FCRE_CURD_LBL_NOTE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control" ng-model="model.Note" rows="4" name="Mô tả" placeholder="{{'FCRE_CURD_TXT_NOTE' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer pt-0">
+    <div class="btn-group pull-right actions d-flex">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-cente">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

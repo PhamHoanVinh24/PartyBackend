@@ -1,0 +1,246 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title " id="modal-title">{{'MSB_CURD_TITLE_ADD_BATCH' | translate}}</div>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_CODE_BATCH' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Code" name="Code" placeholder="{{'MSB_CURD_TXT_MSB_CODE_BATCH' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_NAME_BATCH' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="{{'MSB_CURD_TXT_MSB_NAME_BATCH' | translate}}..." />
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': errorProductCode}">
+                            <div class="col-md-4">
+                                <i class="fab fa-product-hunt"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_NAME_PRODUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('ProductCode')">
+                                    <ui-select-match placeholder="{{'MSB_CURD_TXT_MSB_NAME_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ProductData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorProductCode" class="label-color validation-message">
+                                    <!--Tên sản phẩm không được để trống-->
+                                    {{'MSB_CURD_VALIDATE_NAME_PRODUCT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorStoreId}">
+                            <div class="col-md-4">
+                                <i class="fas fa-info-circle"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_NAME_WAREHOUSE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <ui-select tagging ng-model="model.StoreId" theme="bootstrap" on-select="changleSelect('StoreId')">
+                                    <ui-select-match placeholder="{{'MSB_CURD_TXT_MSB_NAME_WAREHOUSE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in StoreData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorStoreId" class="label-color validation-message">
+                                    {{'MSB_CURD_VALIDATE_NAME_WAREHOUSE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorStoreId}">
+                            <div class="col-md-4">
+                                <i class="fab fa-speakap"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_AMOUNT' | translate}}</label>
+                            </div>
+                            <div class="col-md-3 form-group mr-0 ml-0">
+                                <input type="text" class="form-control" ng-model="model.Quantity" name="Quantity" placeholder="{{'MSB_CURD_TXT_MSB_AMOUNT' | translate}}..." num-thousand='true' awnum num-int='21' ng-change="totalAmount()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label require">{{'MSB_CURD_LBL_MSB_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-3 form-group mr-0 ml-0" ng-class="{ 'has-error': errorUnit}">
+                                <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('Unit')">
+                                    <ui-select-match placeholder="--{{'MSB_CURD_TXT_MSB_UNIT' | translate}}--">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in UnitData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'MSB_CURD_VALIDATE_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <i class="fas fa-dollar-sign"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_TAX' | translate}}</label>
+                            </div>
+                            <div class="col-md-3 form-group mr-0 ml-0">
+                                <input type="text" class="form-control" ng-model="model.Vat" name="Vat" placeholder="{{'MSB_CURD_TXT_MSB_TAX' | translate}}" num-thousand='true' awnum num-int='21' ng-change="totalAmount()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_SALE' | translate}}</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" ng-model="model.Sale" name="Sale" placeholder="{{'MSB_CURD_TXT_MSB_SALE' | translate}}" num-thousand='true' awnum num-int='21' ng-change="totalAmount()" />
+                            </div>
+                        </div>
+                        <div class="row mb5">
+                            <div class="col-md-4">
+                                <i class="fas fa-dollar-sign"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_UNIT PRICE' | translate}}</label>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" ng-model="model.Cost" name="Cost" placeholder="{{'MSB_CURD_TXT_MSB_UNIT PRICE' | translate}}" num-thousand='true' awnum num-int='21' ng-change="totalAmount()" />
+                            </div>
+                            <div class="col-md-3 form-group ml-0" ng-class="{ 'has-error': errorCurrency}">
+                                <ui-select tagging ng-model="model.Currency" theme="bootstrap" on-select="changleSelect('Currency')">
+                                    <ui-select-match placeholder="{{'MSB_CURD_TXT_MSB_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in CurrencyData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorCurrency" class="label-color validation-message">
+                                    {{'MSB_CURD_VALIDATE_CURRENCY' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-align-justify"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_BARCODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Barcode" name="Barcode" placeholder="{{'MSB_CURD_TXT_MSB_BARCODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-dollar-sign"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_TOTAL VALUE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Total" name="Totalt" placeholder="{{'MSB_CURD_TXT_MSB_TOTAL VALUE' | translate}}..." num-thousand='true' awnum num-int='21' disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-user"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_SUPPLIER' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <ui-select tagging ng-model="model.SupplierId" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'MSB_CURD_TXT_MSB_SUPPLIER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in SupplierData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-truck"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_ORIGIN' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <ui-select tagging ng-model="model.Madein" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'MSB_CURD_TXT_MSB_ORIGIN' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in OriginData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-tag"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_PACKING' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Packing" name="Packing" placeholder="{{'MSB_CURD_TXT_MSB_PACKING' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_DATE OF MANUFACTURE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date' id='DateProduce'>
+                                    <input type='text' class="form-control input-date" ng-model="model.DateProduce" placeholder="{{'MSB_CURD_TXT_MSB_DATE OF MANUFACTURE' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_EXPIRATION DATE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date' id='DateExpire'>
+                                    <input type='text' class="form-control input-date" ng-model="model.DateExpire" placeholder="{{'MSB_CURD_TXT_MSB_EXPIRATION DATE' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorStoreId}">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label require">&nbsp;{{'MSB_CURD_LBL_MSB_DATE_CREATED' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date' id='DateReiceive'>
+                                    <input type='text' class="form-control input-date" name="DateReiceive" ng-model="model.DateReiceive" placeholder="{{'MSB_CURD_TXT_MSB_DATE_CREATED' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-comment"></i>
+                                <label class="control-label ">&nbsp;{{'MSB_CURD_LBL_MSB_DESCRIBE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea type="text" class="form-control" ng-model="model.Description" rows="6" placeholder="{{'MSB_CURD_TXT_MSB_DESCRIBE' | translate}}..." name="Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>
+

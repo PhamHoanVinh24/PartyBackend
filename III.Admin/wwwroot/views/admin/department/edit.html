@@ -1,0 +1,117 @@
+﻿<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title" id="modal-title" style="line-height: 30px">{{'ADM_DEPARTMENT_CURD_TITLE_EDIT_DEPT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{"ADM_DEPARTMENT_CURD_LBL_DEPT_CODE" | translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.DepartmentCode" name="DepartmentCode" placeholder="{{'ADM_DEPARTMENT_CURD_TXT_DEPT_CODE' | translate}}..." readonly />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require custom-title-code-bold">{{"ADM_DEPARTMENT_CURD_LBL_DEPT_NAME" | translate}}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Title" name="Title" placeholder="{{'ADM_DEPARTMENT_CURD_TXT_DEPT_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ADM_DEPARTMENT_CURD_LBL_DEPT_PARENT' | translate }}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <div class="input-group br24">
+                            <!--<ui-select ng-model="model.ParentCode" class="" style="width: 100%;">
+                <ui-select-match placeholder="{{'G_USERS_PARENT' | translate }}...">{{$select.selected.Title}}</ui-select-match>
+                <ui-select-choices repeat="x.Id as x in treeData | filter:$select.search">
+                    {{x.Title}}
+                </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+                <button type="button" ng-click="model.ParentCode = undefined" class="btn btn-default no-shadow">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>-->
+                            <ui-select tagging ng-model="model.ParentCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ADM_DEPARTMENT_CURD_COMBO_DEPT_PARENT' | translate }}...">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in treeData | filter: $select.search">
+                                    <div style="padding-left: {{15 * x.Level}}px">
+                                        <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                        <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                        {{x.Title}}
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ParentCode=''" class="btn btn-default no-shadow" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px;height: 34px">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label">{{'ADM_DEPARTMENT_CURD_LBL_DEPT_DESCIPTION' | translate }}</label>
+                    </div>
+                    <div class="col-md-8 pl-0">
+                        <textarea type="text" class="form-control br24" ng-model="model.Description" rows="3" placeholder="{{'ADM_DEPARTMENT_CURD_TXT_DEPT_DESCIPTION' | translate }}..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ADM_DEPARTMENT_CURD_LBL_DEPT_STATUS' | translate }}</label>
+                    </div>
+                    <div class="col-md-5 pl-0">
+                        <div class="mt-checkbox-list pt10">
+                            <label class="mt-checkbox mt-checkbox-outline mb10">
+                                {{'ADM_DEPARTMENT_LIST_LBL_DEPT_ACTIVE' | translate }} / {{'ADM_DEPARTMENT_LIST_LBL_DEPT_INACTIVE' | translate }}
+                                <input type="checkbox" name="IsEnabled" ng-model="model.IsEnabled" ng-checked="model.IsEnabled" />
+                                <span><i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="x.checked != true" ng-click="updateSelection($index, entities)"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt-1">
+                        <div class="modal-footer" style="padding-right: 15px;">
+                            <div class="pull-right actions d-flex ">
+                                <div class="fs30 pr20" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+                                    <a>
+                                        <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                                </div>
+                                <div class="fs30" ng-click="submit()">
+                                    <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                                        <span><i class="fa-solid fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-include="'../views/admin/department/jTableHrEmp.html'"></div>
+        </form>
+    </div>
+</div>
+<!--<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>-->

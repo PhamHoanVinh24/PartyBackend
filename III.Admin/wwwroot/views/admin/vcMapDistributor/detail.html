@@ -1,0 +1,131 @@
+﻿<style>
+
+    .tableFix {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+        .tableFix thead, .tableFix tbody, .tableFix tr, .tableFix td, .tableFix th {
+            display: block;
+        }
+
+            .tableFix tr:after {
+                content: ' ';
+                display: block;
+                visibility: hidden;
+                clear: both;
+            }
+
+            .tableFix thead th {
+                height: 30px;
+                /*text-align: left;*/
+            }
+
+        .tableFix tbody {
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .tableFix thead {
+            /* fallback */
+        }
+
+
+            .tableFix tbody td, .tableFix thead th {
+                float: left;
+            }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert white"></i>
+    <span class="modal-title  white" id="modal-title">{{'MS_TITTLE_DETAILS' | translate}} </span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <div class="col-md-12 " style="padding:0">
+            <table class="table">
+                <tbody>
+                    <tr style="height:30px">
+                        <!--{{'MS_LBL_CODE_CUSTOMER' | translate}}-->
+                        <td style="font-weight:bold;font-size: 17px; line-height:30px">Mã khách hàng: </td>
+                        <td colspan="3" style="font-weight:bold;font-size: 17px;color:red; line-height:30px"> {{model.CusCode}} </td>
+                    </tr>
+                    <tr style="height:30px">
+                        <!--{{'MS_LBL_NAME_CUSTOMER' | translate}}-->
+                        <td style="font-weight:bold;font-size: 17px; line-height:30px">Tên khách hàng: </td>
+                        <td colspan="3" style="font-weight:bold;font-size: 17px;color:red; line-height:30px"> {{model.CusName}}</td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td style="font-weight:bold;font-size: 17px; line-height:30px">Số điện thoại: </td>
+                        <td colspan="3" style="font-weight:bold;font-size: 17px;color:red; line-height:30px"> {{data.Customer.MobilePhone}}</td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td style="font-weight:bold;font-size: 17px; line-height:30px">Địa chỉ: </td>
+                        <td colspan="3" style="font-weight:bold;font-size: 17px;color:red; line-height:30px"> {{data.Customer.Address}}</td>
+                    </tr>
+                   
+                    <tr style="height:30px">
+                        <td style="font-weight:bold; line-height:30px">
+                            <img src="{{model.Image}}" onerror='this.src="../../../images/default/no_image.png"' style="width:100px; height:100px" />
+                        </td>
+                        <td colspan="3">
+                            <table class="table" style="margin-top:10px;  width:200px" border="0">
+                                <tbody>
+                                    <tr style="height:20px">
+                                        <td style="font-weight:bold; line-height:20px" class="no-border">{{'MS_LBL_REGION' | translate}}: </td>
+                                        <td style="color:green;  line-height:20px" colspan="3" class="no-border"> {{model.AreaTxt}} </td>
+                                    </tr>
+                                    <tr style="height:20px">
+                                        <td style="font-weight:bold; line-height:20px" class="no-border">{{'MS_LBL_GROUP' | translate}}: </td>
+                                        <td style="color:green;  line-height:20px" colspan="3" class="no-border">{{model.CusGroupTxt}} </td>
+                                    </tr>
+                                    <!--<tr style="height:20px">
+                                        <td style="font-weight:bold; line-height:20px" class="no-border">{{'MS_LBL_ROLE' | translate}}: </td>
+                                        <td style="color:green;  line-height:20px" colspan="3" class="no-border">{{model.RoleTxt}} </td>
+                                    </tr>-->
+                                    <tr style="height:20px">
+                                        <td style="font-weight:bold; line-height:20px" class="no-border">{{'MS_LBL_TYPE' | translate}}: </td>
+                                        <td style="color:green;  line-height:20px" colspan="3" class="no-border"> {{model.CusTypeTxt}} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tableFix">
+                <div class="table-responsive ">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr  style="padding-right:17px">
+                                <th style="width:15%"><b>Mã chủng loại</b></th>
+                                <th style="width:25%"><b>Chủng loại</b></th>
+                                <th style="width:15%"><b>Thương hiệu</b></th>
+                                <th style="width:15%"><b>Logo</b></th>
+                                <th style="width:15%"><b>Giá bán</b></th>
+                                <th style="width:15%"><b>Tồn kho</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in data.listCare">
+                                <td style="width:15%">{{item.ProductCode}}</td>
+                                <td style="width:25%">{{item.ProductName}}</td>
+                                <td style="width:15%">{{item.Brand}}</td>
+                                <td style="width:15%"><img src="{{item.BrandLogo}}" width="auto" height="30px" /></td>
+                                <td style="width:15%">{{item.SaleCost}}</td>
+                                <td style="width:15%">{{item.Instock}}</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+</div>

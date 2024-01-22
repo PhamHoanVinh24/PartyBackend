@@ -1,0 +1,131 @@
+﻿<div class="portlet-body" ng-controller="detail">
+    <form name="detailform" method="post" ng-validate="validationDetailOptions">
+        <div class="row pt5 mb5">
+            <div class="col-md-12 pl-0">
+                <div class="col-lg-3 txt" ng-class="{ 'has-error': errorPosition}">
+                    <i class="fas fa-user-circle fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'PR_DETAIL_POSITION' | translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="Position" ng-model="model.Position" type="text" placeholder="{{'PR_DETAIL_POSITION' | translate}}..." ng-disabled="isEditDetail"/>
+                    </div>
+                </div>
+                <div class="col-md-2 txt" >
+                    <i class="fas fa-info-circle fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_AGE'| translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="Age" ng-model="model.Age" type="text" placeholder="{{'PR_DETAIL_AGE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-2 txt" ng-class="{ 'has-error': errorGender}">
+                    <i class="fas fa-male fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'PR_DETAIL_GENDER'| translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.Gender" theme="bootstrap" ng-change="changeSelect('Gender')">
+                            <ui-select-match placeholder="{{'PR_DETAIL_GENDER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listGender | filter: $select.search">
+                                <div>{{x.Name}}</div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Gender=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorGender" class="label-color validation-message">
+                        {{'PR_DETAIL_GENDER_MSG_NOT_EMPTY' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2 txt">
+                    <i class="fas fa-university fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_LEVEL'| translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.Level" theme="bootstrap">
+                            <ui-select-match placeholder="{{'PR_DETAIL_LEVEL' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listLevel | filter: $select.search">
+                                <div>{{x.Name}}</div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Level=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 txt">
+                    <i class="fas fa-graduation-cap fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_SPECIALIZE'| translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.Specialize" theme="bootstrap">
+                            <ui-select-match placeholder="{{'PR_DETAIL_SPECIALIZE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listSpecialize | filter: $select.search">
+                                <div>{{x.Name}}</div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Specialize=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mt15 pl-0">
+                <div class="col-md-2 txt">
+                    <i class="fas fa-cubes fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_TIER'| translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="Tier" ng-model="model.Tier" type="text" placeholder="{{'PR_DETAIL_TIER' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-1 txt pl-0">
+                    <label class="fw600 text-underline require nowrap"><i class="fas fa-users fs16 pr5"></i>{{'PR_DETAIL_QUANTITY'| translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="Quantity" ng-model="model.Quantity" type="number" placeholder="{{'PR_DETAIL_QUANTITY' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-2 txt">
+                    <i class="fas fa-info-circle fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_YEAR_OF_EXPERIENCE'| translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="YearOfExperience" ng-model="model.YearOfExperience" type="number" placeholder="{{'PR_DETAIL_YEAR_OF_EXPERIENCE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-4 txt">
+                    <i class="fas fa-map-marker fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'PR_DETAIL_LOCAL'| translate}}</label>
+                    <div class="input-group">
+                        <input class="form-control br24" name="Local" ng-model="model.Local" type="text" placeholder="{{'PR_DETAIL_LOCAL' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-2 txt pull-right pt15">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center pl10 margin-right-10 next" ng-click="cancel()">
+                            <a class="fs30" name="next">
+                                <i class="fas fa-window-close fs25 vtc" aria-hidden="true"></i>
+                            </a>
+                            <p class="text-underline fs11 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center pl10 next" ng-click="save()">
+                            <a class="fs30" name="next">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs11 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-card">
+                <div class="row">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblDataDetail"></table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

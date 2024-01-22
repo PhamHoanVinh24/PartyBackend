@@ -1,0 +1,179 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">Thêm mới dự án</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">Mã dự án</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="ProjectCode" ng-model="model.ProjectCode" type="text" placeholder="Mã dự án..." ng-readonly="ProjectCode !=''" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">Tên dự án</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="ProjectTitle" ng-model="model.ProjectTitle" type="text" placeholder="Tên dự án..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorCurrency}">
+                            <div class="col-md-4">
+                                <i class="fas fa-info-circle"></i>
+                                <label class="control-label require">Đơn vị</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Currency" theme="bootstrap" on-select="changleSelect('Currency')">
+                                        <ui-select-match placeholder="Đơn vị...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in projectUnit | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Currency='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCurrency" class="label-color validation-message">
+                                    Đơn vị không được để trống
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="far fa-money-bill-alt"></i>
+                                <label class="control-label require">Số tiền</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="Budget" ng-model="model.Budget" type="text" placeholder="Số tiền..." num-thousand='true' awnum num-int='21' />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-language"></i>
+                                <label class="control-label">Ngôn ngữ</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.PrjSkillKeyword" theme="bootstrap">
+                                        <ui-select-match placeholder="Ngôn ngữ...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in projectLanguage | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.PrjSkillKeyword='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label require">Từ ngày </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date'>
+                                    <input type='text' id='FromTo' class="form-control input-date" name="FromTo" ng-model="model.StartTime" placeholder="Từ ngày..." autocomplete="off" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.StartTime='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label require">Đến ngày</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date'>
+                                    <input type='text' id='DateTo' class="form-control input-date" name="DateTo" ng-model="model.EndTime" placeholder="Đến ngày..." autocomplete="off" />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.EndTime='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cogs"></i>
+                                <label class="control-label">Thiết lập</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="Email" ng-model="model.PrjMode" type="text" placeholder="Thiết lập" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cogs"></i>
+                                <label class="control-label">Thiết lập ưu tiên</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" name="Email" ng-model="model.SetPriority" type="text" placeholder="Thiết lập ưu tiên" num-thousand='true' awnum num-int='21' />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorPrjStatus}">
+                            <div class="col-md-4">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label require">Trạng thái</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.PrjStatus" theme="bootstrap" on-select="changleSelect('PrjStatus')">
+                                        <ui-select-match placeholder="Trạng thái...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in projectStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.PrjStatus='';" class="btn btn-default no-shadow start-date">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorPrjStatus" class="label-color validation-message">
+                                    Trạng thái không được để trống
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <a ng-click="submit()" class="btn btn-green " href="javascript:;">
+                            <i class="fa fa-plus"></i>&nbsp;Thêm mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

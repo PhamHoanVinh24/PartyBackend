@@ -1,0 +1,379 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    /*.mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }*/
+
+    .headerTab {
+        margin-top: -6px;
+        background: #cccccc;
+        padding-left: -8px;
+        margin-left: -21px;
+        margin-right: -21px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        font-size: 14px;
+        cursor: pointer
+    }
+
+        .openlog {
+            cursor: pointer
+        }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <!--<span class="modal-title" id="modal-title">{{'CONTRACT_CURD_TITLE_ADD_CONTRACT' | translate}}</span>-->
+    <span class="modal-title" id="modal-title">Cập nhật đơn đặt hàng</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form mt5" >
+        <form class="form-horizontal userFormAreaHeader" name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row headerTab" ng-click="hideOrShowHeader()">
+                    <div class="col-md-12"><label class="bold">Thông tin header</label></div>
+                </div>
+            </div>
+            <div class="form-body pt-0"  ng-if="isShowHeader==true">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="bold "><u>Thông tin người mua</u></label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="bold green"><u>Thông tin nhà cung cấp</u></label>
+                    </div>
+                </div>
+                <div class="row mt5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ">Người mua</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.BuyerCode" theme="bootstrap" ng-change="changeCustomer()">
+                                        <ui-select-match placeholder="{{'CONTRACT_CURD_COMBO_CUSTOMER_CODE' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in Customers | filter: $select.search">
+                                            {{x.Code}} - {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.BuyerCode='';resetCustomer()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCusCode" class="label-color validation-message">
+                                    {{'CONTRACT_CURD_VALIDATE_CUSTOMER_CODE' | translate}}! |
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label ">Địa chỉ</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusAddress" type="text" placeholder="Địa chỉ..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label ">Zipcode</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusZipCode" type="text" placeholder="Zipcode..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-phone"></i>
+                                <label class="control-label ">Số điện thoại</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusMobilePhone" type="text" placeholder="Số điện thoại..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">Người phụ trách</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusPersonInCharge" type="text" placeholder="Người phụ trách..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-envelope"></i>
+                                <label class="control-label ">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.CusEmail" type="text" placeholder="Email..." readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ">Nhà cung cấp</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.SupCode" theme="bootstrap" ng-change="changeSupplier()">
+                                        <ui-select-match placeholder="Chọn nhà cung cấp...">{{$select.selected.Code}} - {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in Suppliers | filter: $select.search">
+                                            {{x.Code}} - {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.SupCode='';resetSupplier()" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCusCode" class="label-color validation-message">
+                                    {{'CONTRACT_CURD_VALIDATE_CUSTOMER_CODE' | translate}}! |
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label ">Địa chỉ</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.SupAddress" type="text" placeholder="Địa chỉ..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle"></i>
+                                <label class="control-label ">Zipcode</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.SupZipCode" type="text" placeholder="Zipcode..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-phone"></i>
+                                <label class="control-label ">Số điện thoại</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.SupMobilePhone" type="text" placeholder="Số điện thoại..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">Người phụ trách</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.SupPersonInCharge" type="text" placeholder="Người phụ trách..." readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-envelope"></i>
+                                <label class="control-label ">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.SupEmail" type="text" placeholder="Email..." readonly/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt5">
+                    <div class="col-md-6"><label class="bold  "><u>Thông tin PO</u></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label ">Mã PO</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.PoCusCode" type="text" placeholder="Mã PO..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label ">Tiêu đề</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.PoTitle" type="text" placeholder="Tiêu đề..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-calendar"></i>
+                                <label class="control-label ">Ngày đặt hàng</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date' id='DateOfOrder'>
+                                    <input type='text' class="form-control input-date" ng-model="model.sDateOfOrder" placeholder="Ngày đặt hàng..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">Người đặt hàng</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.OrderBy" type="text" placeholder="Người đặt hàng..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">Người mua</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.Buyer" type="text" placeholder="Người mua..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-envelope"></i>
+                                <label class="control-label ">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.Email" type="text" placeholder="Email..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label"> {{'Trạng thái' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap" class="width-90-per">
+                                        <ui-select-match placeholder="{{'Trạng thái đơn đặt hàng' | translate}}...">
+                                            <span><i class="{{$select.selected.Icon}}"></i>{{$select.selected.Name}}</span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in status  | filter: $select.search">
+                                            <i class="{{x.Icon}}"></i>{{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="activity()" class="btn btn-default no-shadow">
+                                            <span class="fas fa-history"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label ">Địa chỉ</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.ShippingAdd" type="text" placeholder="Địa chỉ giao hàng..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label ">Người gửi</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.Consigner" type="text" placeholder="Người gửi hàng..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-phone"></i>
+                                <label class="control-label ">Số điện thoại</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="model.Mobile" type="text" placeholder="Số điện thoại..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-sticky-note"></i>
+                                <label class="control-label ">Chính sách TT</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea rows="2" class="form-control" ng-model="model.PaymentTerm" type="text" placeholder="Chính sách thanh toán..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-sticky-note"></i>
+                                <label class="control-label ">Ghi chú</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea rows="2" class="form-control" ng-model="model.Noted" type="text" placeholder="Ghi chú..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-sticky-note"></i>
+                                <label class="control-label ">Ý kiến</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea rows="2" class="form-control" ng-model="model.Confirm" type="text" placeholder="Ý kiến..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 pull-right">
+                                <a class="control-label text-primary text-underline" ng-click="activity()">Xem log ý kiến</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right mr15 user-mt">
+                                <div class="btn-group pull-right actions d-flex">
+                                    <div class="pl20 text-center">
+                                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                            <span><i class="fa fa-save"></i></span>
+                                        </a>
+                                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="portlet-body form mt5">
+        <form class="form-horizontal userFormAreaHeader" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row headerTab">
+                    <div class="col-md-12">
+                        <div class="col-md-6" ng-click="hideOrShowHeader()"><label class="bold">Thông tin chi tiết sản phẩm</label></div>
+                        <div class="col-md-6 pull-right " ng-click="openLog()"><label class="bold pull-right openlog">Theo dõi log</label></div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="row mt10"  ng-if="isShowHeader==false">
+        <div  ng-include="'../views/admin/contractPo/addProduct.html'"></div>
+    </div>
+</div>

@@ -1,0 +1,180 @@
+﻿
+<style>
+    .modal-footer {
+        padding-right: 25px !important;
+    }
+</style>
+
+<div class="modal-header no-color">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit"></i>
+    <span class="modal-titleblack" id="modal-title"> Chỉnh sửa tiêu chuẩn</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require">Mã tiêu chuẩn</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.PrCode" name="PrCode" placeholder="Nhập mã tiêu chuẩn..." readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label require">Tên tiêu chuẩn</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.PrName" name="PrName" placeholder="Nhập tên tiêu chuẩn..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <label class="control-label require">Giá trị</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.PrValue" name="PrValue" placeholder="Nhập giá trị..." />
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorPrGroup}">
+                        <div class="col-md-4">
+                            <i class="fa fa-cubes" aria-hidden="true"></i>
+                            <label class="control-label require">Nhóm tiêu chuẩn</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.PrGroup" theme="bootstrap" on-select="changleSelect('PrGroup')" disabled="disabled">
+                                    <ui-select-match placeholder="Chọn nhóm tiêu chuẩn...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListPrGroup | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.PrGroup=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorPrGroup" class="label-color validation-message">
+                                Chọn nhóm tiêu chuẩn!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <i class="fa-info-circle" aria-hidden="true"></i>
+                            <label class="control-label">Điều kiện</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.PrCriterial" name="PrCriterial" placeholder="Nhập điều kiện..." />
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label ">Mô tả</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control" ng-model="model.Note" rows="3" placeholder="Nhập mô tả..." name="Note"></textarea>
+                    </div>
+                </div>-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn  btn-default " href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn blue no-boxshadow mr25" href="javascript:;" style="font-weight:bold;margin-right:25px">
+        Chỉnh sửa
+    </button>-->
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="pr10 text-center">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EDIT' | translate}}</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Xử lý upload ảnh-->
+<!--<div class="col-md-4">
+    <div class="form-group">
+        <div class="col-md-12" style="margin-top:5px">
+            <div class="thumbnail " style="border: 0; box-shadow: none">
+                <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                <img src="{{model.Pic}}" ng-click="uploadImage()" id="imageId" class="rounded-circle height-150 width-150 cursor-pointer" alt="Card image" />
+            </div>
+        </div>
+    </div>
+</div>-->
+<!--Xử lý bắt điều kiện người dùng tự tạo-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorSex}">
+    <div class="col-md-12">
+        <i class="fa fa-transgender" aria-hidden="true"></i>
+        <label class="control-label require">Giới tính</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group">
+            <ui-select tagging ng-model="model.Sex" theme="bootstrap" on-select="changleSelect('Sex')">
+                <ui-select-match placeholder="Chọn giới tính...">{{$select.selected.Name}}</ui-select-match>
+                <ui-select-choices repeat="x.Code as x in ListSex | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <span ng-show="errorSex" class="label-color validation-message">
+            Chọn giới tính!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị datepicker-->
+<!--<div class="form-group" ng-class="{ 'has-error': errorBirthday}">
+    <div class="col-md-12">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <label class="control-label require">Ngày sinh</label>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group date" id="birthday">
+            <input type="text" class="form-control input-date" ng-model="model.Birthday" ng-readonly="isEnalePatient" name="Birthday" placeholder="Chọn ngày sinh..." ng-change="changleSelect('Birthday')" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+        <span ng-show="errorBirthday" class="label-color validation-message">
+            Ngày sinh sai định dạng!
+        </span>
+    </div>
+</div>-->
+<!--Hiển thị định dạng ngày tháng trên html combobox-->
+<!--<div class="input-group">
+    <ui-select tagging ng-model="modelSearchParent.Parent" theme="bootstrap" on-select="selectComboboxParent(modelSearchParent.Parent)" ng-disabled="isEnaleComboboxParent">
+        <ui-select-match placeholder="Tìm kiếm theo mã, tên, số điện thoại, email, facebook, địa chỉ">{{$select.selected.ParentName}} - {{$select.selected.Birthday | date: 'dd/MM/yyyy'}} - {{$select.selected.Phone}} - {{$select.selected.Email}} - {{$select.selected.Facebook}} - {{$select.selected.Address}}</ui-select-match>
+        <ui-select-choices repeat="x in ListParentCombobox | filter: $select.search">
+            {{x.ParentCode}} - {{x.ParentName}} - {{x.Birthday | date: 'dd/MM/yyyy'}} - {{x.Phone}} - {{x.Email}} - {{x.Facebook}} - {{x.Address}}
+        </ui-select-choices>
+    </ui-select>
+    <span class="input-group-btn">
+        <button type="button" ng-click="deleteComboboxParent()" class="btn btn-default no-shadow" style="">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </span>
+</div>-->

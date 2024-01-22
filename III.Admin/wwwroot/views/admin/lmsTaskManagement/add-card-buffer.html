@@ -1,0 +1,534 @@
+﻿<link href="../../../css/admin/cardJob/card.css" rel="stylesheet" />
+<link href="../../../css/admin/cardJob/card-form.css" rel="stylesheet" />
+<style>
+    .custom-btn-show-info {
+        border: 1px solid transparent;
+        transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+        padding-left: 30px;
+        padding-right: 30px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        margin-right: -17px;
+        background-color: #acb3b9;
+        box-shadow: 2px 2px 5px #acb3b9;
+        padding-top: 0px;
+    }
+
+    .panel-log {
+        position: fixed;
+        right: -26px;
+        transform: rotate( 90deg );
+        top: 77px;
+        z-index: 100;
+    }
+
+    .panel-header {
+        position: fixed;
+        right: 34%;
+        top: 50px;
+    }
+
+    .tab-margin {
+        margin-top: -20px;
+    }
+
+    .purple-btn-info {
+        color: purple !important;
+    }
+
+    /*.close-modal {
+        z-index: 9990;
+        position: absolute;
+        padding: 0px;
+        border-radius: 50px;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        display: block;
+        width: 50px;
+        height: 50px;
+        text-indent: -9999px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border-color: #ff5ca1;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/XKHq6urW1tb////w8PDV1dXp6elDeZ9WAAAAEHRSTlMACkZ5FnA+QUAZSXMHFT8XTiEbVAAAAAFiS0dEEwy7XJYAAAAHdElNRQflDAEGMgLw4uMaAAAAAW9yTlQBz6J3mgAAATNJREFUSMe1l9tygzAMRM21kAtdMO3/f2ohTDpQJFn1Jvtmxmdk2UZehSCqKCv8qiqL4Fbd4KSmdqEtFLVJ9AOGOhPtkVCvs5cUC1w09ppmgauI3jzoqtuZvXtZ4J4dV4r9HxbI2Ctl1xxndNTuxJJ346w+M+Fj2l0O3BGBn6GHPHggAm+h61x4rS1CzcE4HcfTKExq5FWPMc778RyjRC91Uvg6xQO9sHESphWhlNKZ9/Qc/yzkqTJUSNAqiyoANq2zS9KwaYvV4Q0zWQN+0CZrwRttsG+DmWUzG8Ycle+SUNeT+jGcv+SXMK3wFoNvKWWyDFEFMOTCtvGy1fLPjW3cNHWveGK5x52yFZyh4awUZ+Io+8gZV84y+05MNetcm5AydHaDYtqyIYmu+sxvyh7ytYM/qPe1AtpYDhcAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMTItMDFUMDY6NTA6MDIrMDA6MDDiIsyiAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTEyLTAxVDA2OjUwOjAyKzAwOjAwk390HgAAAABJRU5ErkJggg==);
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==);
+    }*/
+
+    .h-70 {
+        height: 70px;
+    }
+
+    ._3dza {
+        margin-right: 5px;
+        padding: 2px;
+    }
+
+    ._6kld {
+        border-radius: 25px;
+        height: 40px;
+        width: 40px;
+    }
+
+    .check-color {
+        display: inline;
+        top: 12px;
+        left: 12px;
+        /*color: white;*/
+        font-size: 15px;
+        position: relative;
+    }
+</style>
+<style>
+    #info {
+        border: 1px solid #ffdede;
+        box-shadow: 0px 1px 0px 1px rgb(197, 214, 224) !important;
+    }
+
+    .font-in-tab {
+        /* border-radius: 4px !important; */
+        border: 1px solid #e7ecf1;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    tags-input .tags {
+        height: 60px;
+        max-height: 60px;
+        border-radius: 24px;
+    }
+
+    .nav-tabs {
+        margin-bottom: 0px !important;
+    }
+
+
+    @media (max-width:1200px) {
+        .modal-60 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-60 {
+            width: 60% !important;
+        }
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .tab-content {
+        border: 1px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        /*border-bottom-width: 0px !important;*/
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<!--<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'LMS_ADD_ASSIGNMENT' | translate}}</span>
+</div>-->
+<div class="modal-header header d-flex pt10" style="background:#f1f1f1">
+    <div class="col-md-12 pl-0">
+        <div class="col-md-1 text-danger text-underline pl-0">#{{CardCode}}</div>
+        <div class="col-md-11">
+            <div class="category-detail-header" ng-mouseup="editingCardetailHeaderAuto(model.CardID)" ng-show="!acticeDetailDrag"></div>
+            <input class="category-title black bg-white pl10 br24 fs18" id="card_000000" style="width: 100%" type="text" data-currentvalue="{{cardName}}" value="{{cardName}}" ng-keydown="($event.keyCode == 13) && $event.target.blur()" ng-blur="changeData('CardName', model.CardID)" ng-disabled="IsLock" />
+        </div>
+        <div class="col-md-12 pl-0 fs12">
+            <span class="gray">Board <i class="text-danger">{{completeBoard  | number : fractionSize}}%,</i></span>
+            <span class="gray">List <i class="text-danger">{{completeList  | number : fractionSize}}%,</i></span>
+            <span class="gray">{{'CJ_LBL_MODAL_HEADER' | translate}} <i class="text-success">{{model.Completed  | number : fractionSize}}%,</i></span>
+
+            <span class="active-time">
+                (<b class="ng-binding">{{ActivityData[0].GivenName}}</b>
+                <span ng-if="ActivityData[0].Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_ITEM_CREATE' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ITEM' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='ITEMCHECK'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_CREATE_CMT' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='CMT'" class="text-danger blink">{{'CL_LBL_LOG_DEL_CMT' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='CMT'" class="text-success blink">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='FILE'" class="text-success blink">{{'CJ_LBL_LOG_UPLOAD_FILE' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='FILE'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_FILE' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_RPT_PROGRESS' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='ITEMWORK'" class="text-warning blink">{{'LMS_LOG_UPDATE_PROGRESS' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ITEMWORK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROGRESS' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='LEADER' && ActivityData[0].IdObject =='ITEMWORK'" class="text-success blink">{{'CJ_LBL_LOG_EVALUATE_PROGRESS' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='SUBITEM'" class="text-danger blink">{{'CL_LBL_DEL_SUB_ITEM' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='SUBITEM'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SUB_ITEM' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='SUBITEM'" class="text-success">{{'CJ_LBL_LOG_UPDATE' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ADDR'" class="text-success blink">{{'CJ_LBL_LOG_ADD_ADDRESS' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='ADDR'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_ADDRESS' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='PROD'" class="text-success blink">{{'CJ_LBL_LOG_ADD_PROD' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='PROD'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_PROD' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='CARDLINK'" class="text-success blink">{{'CJ_LBL_LOG_ADD' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='CARDLINK'" class="text-danger blink">{{'CJ_LBL_LOG_DEL' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='SER'" class="text-success blink">{{'CJ_LBL_LOG_ADD_SER' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DELETE' && ActivityData[0].IdObject =='SER'" class="text-danger blink">{{'CJ_LBL_LOG_DEL_SER' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='ADD' && ActivityData[0].IdObject =='ADD_MEMBER'" class="text-success blink">{{'LMS_ADDED' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='DEL' && ActivityData[0].IdObject =='DEL_MEMBER'" class="text-danger blink">{{'LMS_DELETED' | translate}}</span>
+                <span ng-if="ActivityData[0].Action=='UPDATE' && ActivityData[0].IdObject =='UPDATE_MEMBER'" class="text-danger blink">{{'LMS_LOG_UPDATE_USER' | translate}}</span>
+
+                <span ng-if="ActivityData[0].Action=='REJECT'" class="blink" ng-class="{'text-danger': ActivityData[0].IsCheck}">
+                    <span ng-if="ActivityData[0].IsCheck">{{'LMS_ACTION_REFUSE' | translate}}</span>
+                    <span ng-if="!ActivityData[0].IsCheck">{{'LMS_ACTION_UNREFUSE' | translate}}</span>
+                </span>
+                <span ng-if="ActivityData[0].Action=='ACCEPT'" class="blink" ng-class="{'text-danger': !ActivityData[0].IsCheck}">
+                    <span ng-if="ActivityData[0].IsCheck">{{'LMS_ACTION_AGREE' | translate}}</span>
+                    <span ng-if="!ActivityData[0].IsCheck">{{'LMS_ACTION_UNAGREE' | translate}}</span>
+                </span>
+            </span>
+            <span class="active-body">
+                <span class="mb5" ng-if="ActivityData[0].ChangeDetails.length > 60">{{ActivityData[0].ChangeDetails.substr(0, 40)}}...</span>
+                <span class="mb5" ng-if="ActivityData[0].ChangeDetails.length <= 60">{{ActivityData[0].ChangeDetails}}</span>
+                )
+            </span>
+
+            <span class="pull-right"><a ng-click="rollbackCard()" class="text-underline">{{LMS_DATA_RECOVERY | translate}}</a></span>
+        </div>
+    </div>
+</div>
+<div class="modal-body" id="modal-body" style="overflow-x: hidden">
+    <div class="row" style="padding: 0px 10px 0px 15px">
+        <div class="col-lg-12 p0 padding-right-dashboard padding-left-dashboard" ng-class="{'col-lg-12' : !showPanelRight}">
+            <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptionsCard">
+                <div class="col-lg-12 p0" style="margin-top:-5px;">
+                    <div class="col-lg-2 h-70">
+                        <div class="col-md-12 pl-0">
+                            <div class="form-group">
+                                <label class="control-label mb5 text-underline require">{{'LMS_START_DAY' | translate}}:</label>
+                                <div class="input-group date br24" id="startDate">
+                                    <input ng-model="model.BeginTime" name="BeginTime" class="form-control bold" type="text" placeholder="{{'CJ_LBL_START_TIME' | translate}}..." ng-change="changeData('BeginTime', model.BeginTime)" ng-disabled="IsLock" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 h-70">
+                        <div class="col-md-12 pl-0">
+                            <div class="form-group">
+                                <label class="control-label mb5 text-underline">{{'LMS_END_DAY' | translate}}:</label>
+                                <div class="input-group date br24" id="endDate">
+                                    <input ng-model="model.EndTime" class="form-control bold" type="text" ng-change="changeData('EndTime', model.EndTime)" ng-disabled="IsLock" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-70 col-lg-2" ng-class1="{'col-lg-2': !isAddedCard, 'col-lg-3': isAddedCard}">
+                        <div class="form-group" ng-class="{'has-error': errorStatus }">
+                            <label class="control-label mb5 text-underline require">{{'CJ_CURD_LBL_STATUS' | translate}}:</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Status" on-select="changeData('Status', model.Status)" theme="bootstrap" ng-disabled="IsLock">
+                                    <ui-select-match placeholder="{{'CJ_CURD_TXT_STATUS' | translate}}..."><p id="status">{{$select.selected.Value}}</p></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in CardStatus | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span ng-show="errorStatus" class="label-color validation-message">
+                                    {{ LMS_STATUS_NOT_EMPTY | translate}}
+                                </span>
+                            </div>
+                            <!--<span class="pull-right fs9">
+                                <a class="fs11 pt5 text-underline" ng-click="viewLogStatus()">{{'CJ_BTN_LOG_STATUS' | translate}}</a>
+                            </span>-->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 h-70">
+                        <div class="form-group pl15">
+                            <label class="control-label mb5 text-underline" caption="LMS_CURD_LBL_WORK_TYPE">{{'LMS_MISSION_TYPE' | translate}}:</label>
+                            <div class="input-group br24">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.LmsTaskType" on-select="changeData('LmsTaskType', model.LmsTaskType)" theme="bootstrap" ng-disabled="true">
+                                    <ui-select-match placeholder="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}..."><b id="workType">{{$select.selected.Value}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in WorkTypes | filter: $select.search">
+                                        {{x.Value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addCommonSettingWorkType()" class="btn no-shadow btn-border-black-grey" style="">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 h-70 pr-0">
+                        <label class="control-label mb5 text-underline"><!--{{'CJ_CURD_LBL_COST' | translate}}:--> {{'LMS_PRIORITY' | translate}}</label>
+                        <input ng-model="model.Order" class="form-control br24" type="text" placeholder="Ưu tiên" placeholder1="<!--{{'CJ_CURD_LBL_COST' | translate}}...-->"
+                               onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                    </div>
+
+                    <div class="col-lg-2 h-70 pt25">
+                        <div class=" actions btn-group d-flex justify-content-ct" ng-class="{'disabled-element': IsLock || !isAddedCard }">
+                            <div class="text-center mr15" style="" ng-if1="!isLockWf">
+                                <a ng-click="addMember()" class1="btn btn-icon-only btn-outline btn-border-black btn-circle h-40 w40 pt10" ng-disabled="isUpdate">
+                                    <i class="fas fa-user-plus fs25 black"></i>
+                                    <!--<span><i class="fa fa-user-plus fs16 black"></i></span>-->
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'Thêm người' | translate}}</p> <!--CJ_BTN_ADD_MEMBER-->
+                            </div>
+                            <div class="text-center" ng-click="sendNotifi()">
+                                <div class1="circular--portrait w40 h-40">
+                                    <i class="fa-solid fa-bell fs25" style="--fa-secondary-color: orange; --fa-secondary-opacity:1; --fa-primary-color: red"></i>
+                                    <!--<img src="/images/default/bell-pink.gif" />-->
+                                </div>
+                                <p class="text-underline fs9 mb5 pt3">
+                                    {{'CJ_BTN_SEND_NOTIFI' | translate}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-lg-12 p0" style="margin-top:-5px;">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <label class="control-label mb5 text-underline">{{LMS_BACKGROUND_COLOR | translate}}</label>
+                            <table cols="6" class="_3dz6 uiGrid _51mz" alignh="center" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr class="_51mx">
+                                        <td role="button" tabindex="0" class="_3dz9_51m-hCent" ng-repeat="x in listColor" ng-click="selectColor(x.Id)">
+                                            <div class="_3dza">
+                                                <div aria-label="Candy" class="_6kld" style="background-color:{{x.BackgroundColor}};background-image:{{x.BackgroundImage}}">
+                                                    <span class="check-color" ng-show="x.Check">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="col-lg-12 p0">
+                    <div class="col-lg-6">
+                        <div class="form-group pr15">
+                            <div class="d-flex">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="obj.Board" on-select="boardSelect(obj.Board)" theme="bootstrap" ng-disabled="IsLock">
+                                        <ui-select-match placeholder="{{'CJ_TXT_BOARD' | translate}}..."><p class="bold" style="color: #3c92e8fc !important;">{{$select.selected.BoardName}}</p></ui-select-match>
+                                        <ui-select-choices repeat="x.BoardCode as x in listBoards | filter: $select.search">
+                                            {{x.BoardName}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addBoard()" class="btn no-shadow btn-border-black-grey">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group ">
+                            <div class="d-flex">
+                                <div class="input-group br24">
+                                    <ui-select ng-model="obj.List" on-select="listSelect(obj.List)" theme="bootstrap" style="flex-grow: 1" ng-disabled="IsLock">
+                                        <ui-select-match placeholder="{{'CJ_TXT_LIST' | translate}}..."><p class="bold" style="color: rgb(255, 156, 25); ">{{$select.selected.ListName}}</p></ui-select-match>
+                                        <ui-select-choices repeat="x.ListCode as x in Lists | filter: $select.search">
+                                            {{x.ListName}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn br24" style1="width: max-content">
+                                        <button type="button" ng-click="addList(obj.Board)" class="btn no-shadow btn-border-black-grey">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="width: 8%">
+                        <div class="text-center" style="width: 60px; margin-top: -10px">
+                            <a ng-click="saveBuffer()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5"> {{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">                
+                <div class="col-lg-12 ">
+                    <!--<div class="btn-group actions pull-right mr15" ng-show="!isAddedCard">
+                        <div class="text-center" style="width: 60px; margin-top: -25px">
+                            <a ng-click="saveBuffer()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>-->
+                    <div class="tab" role="tabpanel">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <div href="#1" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CJ_BTN_TAB_ITEM_PROGRESS' | translate}}</div>
+                            </li>
+                            <li role="presentation" class="disabled stepNext">
+                                <div href="#2" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CJ_BTN_TAB_DESCIPTION' | translate}}</div>
+                            </li>
+                            <li role="presentation" class="disabled stepNext">
+                                <div href="#3" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CJ_BTN_TAB_COMMENT' | translate}}</div>
+                            </li>
+                            <li role="presentation" class="disabled stepNext">
+                                <div href="#4" aria-controls="home" role="button" data-toggle="tab" class="ng-binding">{{'CJ_BTN_TAB_DOCUMENT' | translate}}</div>
+                            </li>
+                        </ul>
+                        <div class="tab-content pull-left fluid-width">
+                            <div role="tabpanel" class="tab-pane fade in active" id="1">
+                                <div ng-include="'../views/admin/lmsTaskManagement/card-item-check.html'" ng-class="{'disabled-element': IsLock || !isAddedCard }"></div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="2">
+                                <textarea class="form-control fs14" id="description" rows="21" ng-model="model.Description"></textarea>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="3">
+                                <div ng-include="'../views/admin/lmsTaskManagement/card-comment.html'" ng-class="{'disabled-element': IsLock || !isAddedCard }"></div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="4">
+                                <div ng-include="'../views/admin/lmsTaskManagement/file.html'" ng-class="{'disabled-element': IsLock || !isAddedCard }"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-lg-12 p0" ng-class="{'tab-margin' : !showInfoHeader}">
+                <div class="p-0 col-md-12" style="border-bottom: #d6dadc 1px solid;">
+                    <div class="col-md-12 pl-0 pr-0" style="width: 100%;">
+                        <button class="btn btn-custom-tab-color fs11" ng-click="viewTab(1)" ng-class="{'green-custom': idxViewTab == 1 }">
+                            <i class="fa fa-plus"></i>
+                            {{'CJ_BTN_TAB_ITEM_PROGRESS' | translate}}
+                        </button>
+                        <button class="btn btn-custom-tab-color fs11" ng-click="viewTab(0)" ng-class="{'green-custom': idxViewTab == 0 }">
+                            <i class="fa fa-newspaper-o"></i>
+                            {{'CJ_BTN_TAB_DESCIPTION' | translate}}
+                        </button>
+                        <button class="btn btn-custom-tab-color fs11" ng-click="viewTab(2)" ng-class="{'green-custom': idxViewTab == 2 }">
+                            <i class="fa fa-plus"></i>
+                            {{'CJ_BTN_TAB_COMMENT' | translate}}
+                        </button>
+                        <button class="btn btn-custom-tab-color fs11" ng-click="viewTab(4)" ng-class="{'green-custom': idxViewTab == 4 }">
+                            <i class="fa fa-file-text-o"></i>
+                            {{'CJ_BTN_TAB_DOCUMENT' | translate}}
+                        </button>
+                    </div>
+                </div>-->
+                <!--Đầu mục và tiến độ-->
+                <!--<div class="col-md-12 pl-0 pr-0 pt5" ng-show="idxViewTab == 1">
+                    <div ng-include="'../views/admin/lmsTaskManagement/card-item-check.html'"></div>
+                </div>-->
+                <!--End đầu mục và tiến độ-->
+                <!--Mô tả-->
+                <!--<div class="col-lg-12 p0 pt-1" ng-show="idxViewTab == 0">
+                    <textarea class="form-control fs14" id="description" rows="21" ng-model="model.Description"></textarea>
+                </div>-->
+                <!--End mô tả-->
+                <!--Thảo luận-->
+                <!--<div class="col-md-12 pl-0 pr-0" ng-show="idxViewTab == 2">
+                    <div ng-include="'../views/admin/lmsTaskManagement/card-comment.html'"></div>
+                </div>-->
+                <!--End thảo luận-->
+                <!--End đối tượng liên quan-->
+                <!--Tệp tin-->
+                <!--<div class="col-md-12 pl-0 pr-0" ng-show="idxViewTab == 4">
+                    <div ng-include="'../views/admin/lmsTaskManagement/file.html'"></div>
+                </div>-->
+                <!--End tệp tin-->
+            <!--</div>-->
+        </div>
+
+        <!--<div class="col-lg-4 pr-0" ng-show="showPanelRight">
+            <div class="col-md-12 border br4" style="padding-left:10px;padding-right:10px; padding-bottom:10px">
+                <div class="form-group">
+                    <div ng-include="'../views/admin/lmsTaskManagement/card-log-activity.html'"></div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>

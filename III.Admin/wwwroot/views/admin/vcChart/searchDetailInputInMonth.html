@@ -1,0 +1,109 @@
+﻿<style>
+    .blockElement {
+        z-index: 4000 !important;
+    }
+
+    .blockOverlay {
+        z-index: 4000 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-search icon-insert"></i>
+    <span class="modal-title" id="modal-title">{{'VCMM_CURD_LBL_SEARCH' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="searchform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsSearchDetailInputInMonth">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="far fa-calendar-alt"></i>
+                        <label class="control-label require ">{{'VCMM_CURD_LBL_TIME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input ng-model="model.DateSearch" name="DateSearch" class="form-control" type='text' id="datesearchinputinmonthdetail" placeholder="{{'VCMM_CURD_TXT_SELECT_MONTH' | translate}}..." autocomplete="off" />
+                            <span class="input-group-addon" ng-click="model.DateSearch=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fab fa-trade-federation"></i>
+                        <label class="control-label">{{'VCMM_CURD_LBL_SPECIES' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Species" theme="bootstrap">
+                                <ui-select-match placeholder="{{'VCMM_CURD_TXT_SELECT_SPECIES' | translate}}...">{{$select.selected.ProductName}}</ui-select-match>
+                                <ui-select-choices repeat="x.ProductCode as x in listProductCats | filter: $select.search">
+                                    {{x.ProductName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.Species=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                        <!--<span ng-show="errorSpecies" class="label-color validation-message">
+                            Chủng loại yêu cầu bắt buộc
+                        </span>-->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fas fa-award"></i>
+                        <label class="control-label require ">{{'VCMM_CURD_LBL_TRADEMARK' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.Trademark" theme="bootstrap" on-select="changleSelect('Trademark')">
+                                <ui-select-match placeholder="{{'VCMM_CURD_TXT_TRADEMARK' | translate}}..">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listBrand | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.Trademark=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                        <span ng-show="errorTrademark" class="label-color validation-message">
+                            {{'VCMM_MSG_TRADEMARK_REQUIRED' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <div class="col-md-4">
+                        <i class="far fa-calendar-alt"></i>
+                        <label class="control-label">Thời điểm</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="model.Time" name="Time" placeholder="Thời điểm..." id="Time" />
+                            <span class="input-group-addon end-date" ng-click="model.Time=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Tìm kiếm
+    </button>-->
+    <div class="col-md-4 pull-right">
+        <div class="btn-group actions d-flex pull-right">
+            <div class="text-center">
+                <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                    <span><i class="fa fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+        </div>
+    </div>
+</div>

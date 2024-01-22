@@ -1,0 +1,342 @@
+﻿<!--<div class="modal-header" style="height:50px; margin:auto">
+    <span class="close icon-remove " data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="glyphicon glyphicon-plus" style="font-size: 18px;color: #e9edf0;"></i> Thêm mới lái xe</h3>
+</div>
+<div class="modal-body no-space" id="modal-body" style="overflow-y:hidden !important">
+    <div class="portlet-body form" style="margin-top:15px">
+        <form name="addform" class="form-horizontal  form-bordered" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class=" col-md-6" style="padding-left:0px">
+
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left" style="padding-right:0px"><i class="glyphicon glyphicon-earphone"></i> Số điện thoại <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Phone" name="Phone" ng-pattern="/^([0-9]{10})$/" placeholder="Nhập số điện thoại" />
+                            <span class="text-danger" ng-show="addform.Phone.$error.pattern">Số điện thoại nhập không đúng!</span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="col-md-5 control-label  text-left" for="Status"><i class="sprite-image-16x16"></i> Ảnh đại diện</label>
+
+                        <div class="col-md-7 form-col-control center-wrap " style="border-left:none;">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="Profile_picture" ng-src='{{model.Profile_picture}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Profile_picture1" ng-src='{{model.Profile_picture}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <div style="margin-top:10px">
+                                <input type="file" id="file" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Profile_Picture" name="Profile_picture" onchange="readURL1(this);">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label class="control-label  col-md-5 text-left" for="Status"><i class="sprite-image-16x16"></i> Giấy phép xe</label>
+
+                        <div class="col-md-7 form-col-control " style="border-left:none">
+                            <div class="fileupload-new thumbnail  mb5" style="width:49% !important;margin:auto; float:left">
+                                <img id="License_car_image" ng-src='{{model.License_car_image}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                            </div>
+                            <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                <img id="License_car_image1" ng-src='{{model.License_car_image}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                            </div>
+                            <div style="margin-top:10px">
+                                <input type="file" id="file2" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.License_car_image" name="License_car_image" onchange="readURL2(this);">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class=" col-md-6" style="padding-left:0 !important">
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Tên <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="Nhập tên lái xe" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-md-5 text-left" style=" padding-right: 0px; "><i class="glyphicon glyphicon-menu-hamburger"></i> CMTND </label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Identification" name="Identification" placeholder="Nhập CMTND" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left" style=" padding-right: 0px;  "><i class="glyphicon glyphicon-asterisk"></i> Số năm KN </label>
+                        <div class="col-md-7">
+                            <input type="number" class="form-control" ng-model="model.Type_Driver" name="Type_Driver" placeholder="Nhập số năm kinh nghiệm" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-home"></i> Nhóm <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-7">
+                            <div class="input-group">
+                                <ui-select ng-model="model.Group" class="" style="width: 100%;" name="Group" ng-change="getGroup()">
+                                    <ui-select-match ng-click="checkGroup()" placeholder="Chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                    <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                        {{x.value}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-home"></i> Chọn số xe <strong style="color:red">(*)</strong></label>
+                        <div class="col-md-7">
+                            <div class="input-group">
+                                <ui-select ng-model="model.License_plate" class="" style="width: 100%;" name="Group">
+                                    <ui-select-match placeholder="Chọn số xe...">{{$select.selected.Code}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in romoocs | filter:$select.search">
+                                        {{x.Code}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.License_plate = ''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left"><i class="glyphicon glyphicon-envelope"></i> Email</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Email" name="Email" placeholder="Nhập email" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Id_Fb</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" ng-model="model.Id_Fb" name="Id_Fb" placeholder="Nhập id facebook" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label   col-md-5 text-left"><i class="glyphicon glyphicon-pencil"></i> Ghi chú </label>
+                        <div class="col-md-7">
+                            <textarea rows="4" class="form-control" ng-model="model.Description" name="Description" placeholder="Nhập ghi chú"> </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-plus"></i> Lưu</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;margin-right:20px;" ng-click="cancel()"><i class="fa fa-close"></i> Đóng</button>
+    </div>
+</div>-->
+
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">Thêm mới lái xe</div>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left require"><i class="glyphicon glyphicon-earphone"></i> Số điện thoại</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Phone" name="Phone" ng-pattern="/^([0-9]{10})$/" placeholder="Nhập số điện thoại" />
+                                <span class="text-danger" ng-show="addform.Phone.$error.pattern">Số điện thoại nhập không đúng!</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label text-left" for="Status"><i class="fa fa-picture-o"></i> Ảnh đại diện</label>
+                            <div class="col-md-7 form-col-control center-wrap " style="border-left:none;">
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="Profile_picture" ng-src='{{model.Profile_picture}}' class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Profile_picture1" ng-src='{{model.Profile_picture}}' class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div style="margin-top:10px">
+                                    <input type="file" id="file" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Profile_Picture" name="Profile_picture" onchange="readURL1(this);">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left" for="Status"><i class="fa fa-picture-o"></i> Giấy phép xe</label>
+                            <div class="col-md-7 form-col-control " style="border-left:none">
+                                <div class="fileupload-new thumbnail  mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="License_car_image" ng-src='{{model.License_car_image}}'  class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="License_car_image1" ng-src='{{model.License_car_image}}' class="image-default" style="height:120px; width:120px" />
+                                </div>
+                                <div style="margin-top:10px">
+                                    <input type="file" id="file2" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.License_car_image" name="License_car_image" onchange="readURL2(this);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left require"><i class="glyphicon glyphicon-user"></i> Tên</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Name" name="Name" placeholder="Nhập tên lái xe" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-md-5 text-left"><i class="glyphicon glyphicon-menu-hamburger"></i> CMTND </label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Identification" name="Identification" placeholder="Nhập CMTND" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label   col-md-5 text-left"><i class="glyphicon glyphicon-asterisk"></i> Số năm KN </label>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" ng-model="model.Type_Driver" name="Type_Driver" placeholder="Nhập số năm kinh nghiệm" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 require text-left"><i class="glyphicon glyphicon-home"></i> Nhóm</label>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.Group" class="" style="width: 100%;" name="Group" ng-change="getGroup()">
+                                        <ui-select-match ng-click="checkGroup()" placeholder="Chọn nhóm...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.group_id as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left require"><i class="glyphicon glyphicon-home"></i> Chọn số xe</label>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.License_plate" class="" style="width: 100%;" name="Group">
+                                        <ui-select-match placeholder="Chọn số xe...">{{$select.selected.Code}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in romoocs | filter:$select.search">
+                                            {{x.Code}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.License_plate = ''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-envelope"></i> Email</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Email" name="Email" placeholder="Nhập email" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-user"></i> Id_Fb</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Id_Fb" name="Id_Fb" placeholder="Nhập id facebook" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="glyphicon glyphicon-pencil"></i> Ghi chú </label>
+                            <div class="col-md-7">
+                                <textarea rows="4" class="form-control" ng-model="model.Description" name="Description" placeholder="Nhập ghi chú"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Hủy bỏ
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Thêm mới
+    </button>
+</div>
+
+<script>
+    function readURL1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Profile_picture')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    function readURL2(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+
+                $('#License_car_image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL3(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+
+                $('#Identification_image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL4(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+
+                $('#Image_car')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

@@ -1,0 +1,92 @@
+﻿<style>
+    .ui-select-search {
+        border: none !important;
+    }
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-tags icon-insert"></i>
+    <span class="modal-title" id="modal-title">{{'CONTRACT_CURD_TITLE_TAGS' | translate}} : <span class="white bold">{{model.ContractCode}}</span></span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding-top:0px">
+                <div class="form-group">
+                    <label>{{'CONTRACT_CURD_LBL_CONTRACT_PEOPLE' | translate}}</label>
+                    <ui-select ng-model="model.ContractPeople" multiple theme="bootstrap" class="" style="width: 100%;">
+                        <ui-select-match placeholder="{{'CONTRACT_CURD_TXT_CONTRACT_PEOPLE' | translate}}...">{{$item.UserName}}</ui-select-match>
+                        <ui-select-choices repeat="x in listUser | filter:$select.search">
+                            {{x.UserName}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <ui-select tagging ng-model="model.Task" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CONTRACT_CURD_TXT_TASK' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x in listTask | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-4">
+                        <button type="button" id="btncheck" class="btn btn-green" ng-click="submit()" ng-disabled="checkconfirm">
+                            <i class="fa fa-check" style="font-size:15px"></i>
+                            {{'COM_BTN_CONFIRM' | translate}}
+                        </button>
+                    </div>
+                    <div class="col-md-4" style="text-align:right;padding-right:0">
+                        <button type="button" class="btn btn-green" ng-click="submit()" ng-disabled="checkadd">
+                            <i class="fa fa-plus"></i>
+                            {{'COM_BTN_ADD' | translate}}
+                        </button>
+                    </div>-->
+                    <div class="pull-right mr15 user-mt">
+                        <div class="btn-group pull-right actions d-flex">
+                            <!--<div class="pl20 text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>-->
+                            <div class="pl20 text-center">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CONFIRM' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{'CONTRACT_CURD_LBL_NOTE' | translate}}</label>
+                    <textarea type="text" class="form-control" ng-model="model.Note" rows="3" placeholder="{{'CONTRACT_CURD_TXT_NOTE' | translate}}..." name="Description"></textarea>
+                </div>
+            </div>
+        </form>
+        <div class="ml5 mr5" style="margin-top: -15px;">
+            <table class="table dataTable table-hover table-striped "
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataTag"></table>
+        </div>
+    </div>
+</div>
+

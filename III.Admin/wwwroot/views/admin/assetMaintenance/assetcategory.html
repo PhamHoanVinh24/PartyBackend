@@ -1,0 +1,271 @@
+﻿<style>
+
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+</style>
+<div ng-controller="tablecategory">
+    <div class="table-toolbar">
+        <form name="assetcategoryform" class="form-horizontal" method="post" ng-validate="validationOptionsAssetCategory">
+            <div class="form-group" >
+                <div class="col-md-3">
+                    <div class="form-group" ng-class="{ 'has-error': errorCategoryName}">
+                        <div class="col-md-12 ">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label require bold">&nbsp;{{'ASMTNC_CURD_LBL_CATEGORY_IMPROVEMENT' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="modelAssetCategory.CategoryName" theme="bootstrap" on-select="changleSelect('CategoryName')">
+                                    <ui-select-match placeholder="{{'ASMTNC_CURD_TXT_CATEGORY_IMPROVEMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listAssetCategory | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorCategoryName" class="label-color validation-message">
+                                {{'ASMTNC_MSG_ERR_CATEGORY_IMPRO_NULL' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pr-0 pl-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fas fa-list-ol"></i>
+                            <label class="control-label require bold">{{'ASMTNC_CURD_LBL_QUANTITY' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="number" class="form-control br24" ng-model="modelAssetCategory.Quantity" name="Quantity" placeholder="{{'ASMTNC_CURD_TXT_QUANTITY' | translate}}..." onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group" style="margin-bottom: -5px !important;">
+                        <div class="col-md-12">
+                            <i class="fa fa-money"></i>
+                            <label class="control-label">{{'ASMTNC_CURD_LBL_PRICE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-9 pr15">
+                                <input class="form-control br24 text-danger" style="font-weight:bold;" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="Price" ng-model="modelAssetCategory.Price" placeholder="{{'ASMTNC_CURD_LBL_PRICE' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            </div>
+                            <div class="col-md-2 p-0">
+                                <div class="form-group" ng-class="{ 'has-error': errorCurrencyAsset}">
+                                    <div class="input-group br24-nobtn">
+                                        <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="modelAssetCategory.Currency" theme="bootstrap" on-select="changleSelect('Currency')">
+                                            <ui-select-match placeholder="{{'' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in ListCurrency | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorCurrencyAsset" class="label-color validation-message">
+                                        {{'ASMTNC_CURD_LBL_MONEY_NOT_BLANK' | translate}}!
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pr-0">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label bold">{{'ASMTNC_CURD_LBL_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12 pr-0">
+                            <input type="text" class="form-control br24" ng-model="modelAssetCategory.NoteCategory" name="NoteCategory" placeholder="{{'ASMTNC_CURD_TXT_NOTE' | translate}}..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt5">
+                    <div class="btn-group pull-right actions d-flex mt15">
+                        <div class="text-center ">
+                            <a class=" fs30 p-0" ng-click="addAssetCategory()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3" ng-click="addAssetCategory()" style="font-size: 12px !important;color: #428bca;"> {{'ASMTNC_TAB_DETAILS_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <table class="table dataTable table-hover table-striped"
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataMaintenanceCate"></table>
+        </div>
+    </div>
+</div>
+<!--<div ng-controller="tablecategory">
+    <div class="table-toolbar">
+        <form name="assetcategoryform" class="form-horizontal " method="post" ng-validate="validationOptionsAssetCategory">
+            <div class="col-md-12">
+                <div class="col-md-10 form-group mr5 mb5">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="form-group" ng-class="{ 'has-error': errorCategoryName}">
+                                <div class="col-md-12 ">
+                                    <i class="fa fa-comment" aria-hidden="true"></i>
+                                    <label class="control-label require bold">&nbsp;{{'ASMTNC_CURD_LBL_CATEGORY_IMPROVEMENT' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <ui-select ng-model="modelAssetCategory.CategoryName" theme="bootstrap" on-select="changleSelect('CategoryName')">
+                                            <ui-select-match placeholder="{{'ASMTNC_CURD_TXT_CATEGORY_IMPROVEMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listAssetCategory | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorCategoryName" class="label-color validation-message">
+                                        {{'ASMTNC_MSG_ERR_CATEGORY_IMPRO_NULL' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fa-solid fa-money-bill" aria-hidden="true"></i>
+                                    <label class="control-label require bold">{{'ASMTNC_CURD_LBL_PRICE' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" ng-model="modelAssetCategory.Price" name="Price" placeholder="{{'ASMTNC_CURD_TXT_PRICE' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <i class="fa fa-comment" aria-hidden="true"></i>
+                                    <label class="control-label bold">{{'ASMTNC_CURD_LBL_NOTE' | translate}}</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" ng-model="modelAssetCategory.NoteCategory" name="NoteCategory" placeholder="{{'ASMTNC_CURD_TXT_NOTE' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0 pt15 mb5">
+                    <div class="btn-group actions d-flex mt5">
+                        <div class="text-center pr10">
+                            <a ng-click="deleteCategory()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                <span><i class="glyphicon glyphicon-remove"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_DELETE' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a ng-click="addAssetCategory()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>-->

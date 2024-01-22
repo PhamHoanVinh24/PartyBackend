@@ -1,0 +1,142 @@
+﻿<style type="text/css">
+    .ui-select-match-close {
+        background-image: none;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'CEF_CURE_TITLE_EF' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'CEF_CURE_LBL_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-10">
+                        <div class='input-group'>
+                            <input type="text" class="form-control" ng-model="model.name" name="Name" placeholder="{{'CEF_CURE_TXT_NAME_PLACEHOLDER' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.name='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 pr-0">
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        <label class="control-label ">{{'CEF_CURE_LBL_PUBLISHED' | translate}}</label>
+                    </div>
+                    <div class="col-md-10 d-flex pr-0">
+                        <div class="mt-checkbox-list pt5">
+                            <label class="mt-checkbox mt-checkbox-outline mb10">
+                                <input type="checkbox" name="IsEnabled" ng-model="model.published" ng-click="checkedImportLot(IsEnabledImportLot)" ng-checked="IsEnabledImportLot" class="ng-valid ng-dirty ng-valid-parse ng-touched ng-empty">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-7">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label">{{'CEF_CL_GROUP' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.group" theme="bootstrap" on-select="changleSelect('CustomerCode')">
+                                        <ui-select-match placeholder="{{'CEF_CL_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Id as x  in listExtraFieldGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.group=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorGroup" class="label-color validation-message">
+                                    {{' CEF_CL_GROUP_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label">{{'CEF_CL_TYPE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.type" theme="bootstrap" on-select="changleSelect('CustomerCode')">
+                                        <ui-select-match placeholder="{{'CEF_CL_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x  in listTypeExtraField | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.type=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorType" class="label-color validation-message">
+                                    {{'CEF_CL_TYPE_NOT_BLANK' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <div class="col-md12">
+                                <div class='input-group'>
+                                    <input type="text" class="form-control" ng-model="model.value" name="CatCode" placeholder="{{'CEF_CURE_TXT_VALUE_NAME_GROUP' | translate}}..." />
+                                    <span class="input-group-btn">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="et-col-md-12">
+                                <div class='input-group'>
+                                    <input class="form-control" ng-model="model.ordering" name="CatCode" placeholder="{{'CEF_CURE_TXT_ORDERING' | translate}}..." onkeypress="return (event.charCode == 8 || event.charCode == 0 ) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                                    <span class="input-group-btn">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pt-0">
+    <div class="btn-group pull-right actions d-flex">
+        <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+            {{'COM_BTN_CANCEL' | translate}}
+        </a>-->
+        <div class="pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <!--<button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+            {{'COM_BTN_ADD' | translate}}
+        </button>-->
+        <div class="pr10">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline blue-custom">
+                <span><i class="fa fa-edit"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_EDIT' | translate}}</p>
+        </div>
+    </div>
+</div>

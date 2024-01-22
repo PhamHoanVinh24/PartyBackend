@@ -1,0 +1,60 @@
+﻿<style>
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+</style>
+<div id="contact-main" ng-controller="projectTabTeam">
+    <div class="table-toolbar">
+        <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="mt-action-5">
+                <div class="col-md-3">
+                    <div class="form-group mb5">
+                        <label class="control-label require">{{'PROJECT_LBL_TEAM' | translate}}</label>
+                        <div class="input-group" ng-class="{ 'has-error': errorTeamCode}">
+                            <ui-select tagging ng-model="model.TeamCode" theme="bootstrap" ng-change="changeSelect()">
+                                <ui-select-match placeholder="{{'PROJECT_CURD_TAB_TEAM_CURD_TXT_TEAMCODE' | translate}}">{{$select.selected.TeamName}}</ui-select-match>
+                                <ui-select-choices repeat="x.TeamCode as x in teams | filter: $select.search">
+                                    {{x.TeamName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.TeamCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorTeamCode" class="label-color validation-message">
+                            {{'PROJECT_VALIDATE_TEAM' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 pt23">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt5 mb5">
+                <div class="col-md-12">
+                    <label class="fw600 text-underline">{{'PROJECT_LBL_TEAM_LIST' | translate}}</label>
+                    <div class="col-lg-12 groupUser">
+                        <button type="button" class="btn" ng-repeat="x in AddTeams">
+                            <i class="fa fa-times float-right" aria-hidden="true" ng-click="removeTeam($index)"></i>{{x.TeamName}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

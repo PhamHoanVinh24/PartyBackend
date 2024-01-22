@@ -1,0 +1,744 @@
+﻿<style>
+    .floor {
+        margin-right: 10px;
+        width: auto;
+        padding: 8px !important;
+    }
+
+    .draw2d_ResizeHandle {
+        display: none !important;
+    }
+
+    tspan {
+        font-weight: bolder;
+    }
+    /*.parent_svg {
+       background: url(https://d4.violet.vn/uploads/blogs/735961/layout/forum_10.gif) repeat center top ;
+    }*/
+    .portlet {
+        margin-bottom: 0px !important;
+    }
+
+    .menu-2 {
+        display: flex
+    }
+
+    .menu-top i:not(.caret) {
+        margin: 4px 0 0 0;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        height: 40px;
+        border-radius: 3px;
+        transition: .3s;
+        line-height: 40px !important;
+        position: relative;
+    }
+
+    .menu-top {
+        height: 50px;
+        box-shadow: 0px 0px 10px 0px rgba(135, 135, 135, 1);
+        border-radius: 5px;
+        text-align: center;
+        line-height: 50px;
+        background: #fff;
+        margin-left: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+    }
+
+        .menu-top i:not(.caret):hover {
+            background-color: #999;
+            box-shadow: 0 0 5px 0 rgba(255, 204, 0, 1);
+        }
+
+    .create-box i {
+        font-size: 26px;
+    }
+
+    .create-box {
+        position: relative;
+    }
+
+    .create-box__hover {
+        position: absolute;
+        width: 90px;
+        font-size: 12px;
+        left: -30%;
+        top: 135%;
+        background: #656565;
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        /*transition: .3s;*/
+        height: 30px;
+        line-height: 30px;
+    }
+
+        .create-box__hover:after {
+            position: absolute;
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #656565;
+            left: 20%;
+            transform: translateY(-55%)rotate(45deg);
+        }
+
+    .create-box:hover .create-box__hover {
+        opacity: 1;
+        visibility: visible;
+        z-index: 1;
+    }
+
+    .menu {
+        position: relative;
+    }
+
+    .menu2 {
+        right: 120px;
+        position: absolute;
+        z-index: 10000;
+        bottom: 120px;
+    }
+
+    path.draw2d_shape_basic_Line {
+        stroke-width: 8px;
+    }
+
+    ellipse {
+        stroke-width: 10px;
+        stroke: #999;
+    }
+
+    .parent_svg {
+        background: url(https://d4.violet.vn/uploads/blogs/735961/layout/forum_10.gif) repeat center top !important;
+        display: block;
+        border-radius: 5px;
+        padding: 0px 0px 0px 15px !important;
+        margin-top: 10px;
+    }
+
+    .row {
+        margin-bottom: -6px
+    }
+
+    .jsonhide {
+        display: none;
+    }
+
+    rect.draw2d_shape_basic_Rectangle {
+        display: none !important;
+    }
+
+    rect.value {
+        display: block !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    html body .content .content-wrapper {
+        height: 100%;
+        overflow: hidden !important;
+    }
+
+    div#contentMain {
+        height: 100%;
+        overflow: scroll;
+    }
+
+    /*  body{
+        overflow:hidden;
+    }
+    ul.page-sidebar-menu.page-header-fixed.page-sidebar-menu-hover-submenu{
+        overflow:scroll;
+    }*/
+    .ui-select-placeholder {
+        color: #000 !important;
+        font-size: larger;
+        font-weight: 600;
+    }
+
+    .btn-floor {
+        width: auto;
+        padding: 8px !important;
+        background: white !important;
+        color: black !important;
+        /*font-weight: 700!important;*/
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+<style>
+    .checkbox {
+        width: 25px;
+        height: 25px
+    }
+
+    .checkbox1 {
+        width: 30px;
+        height: 30px
+    }
+
+    div#modal-body {
+        min-height: 250px;
+    }
+
+    div > .pl30 {
+        display: flex
+    }
+
+    .name {
+    }
+
+    .showhide {
+        border-bottom: 1px solid #000;
+    }
+
+    .ocenter {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #000;
+    }
+
+    .bt {
+        margin-left: 10px;
+        margin-right: 10%
+    }
+
+    .baolo {
+        box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.75);
+    }
+
+    .checkbox1 {
+        box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+    }
+
+    .shadow {
+        -webkit-filter: drop-shadow( 0px 0px 10px rgba(0, 0, 0, .7));
+        filter: drop-shadow( 0px 0px 10px rgba(0, 0, 0, .7));
+    }
+
+    .menu-3 {
+        width: 1000px;
+        visibility: hidden;
+        background: white;
+        z-index: 10;
+        position: absolute;
+        font-weight: 600;
+    }
+
+    .option-input-3:checked {
+        content: "";
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_ON.png) no-repeat center;
+        display: inline-block;
+        background-position-x: 0px !important;
+        /* display: block; */
+        background-size: contain;
+    }
+
+    .option-input-3 {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        position: relative;
+        top: 5.333px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 19px;
+        width: 35px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+        outline: none;
+        position: relative;
+        z-index: 1;
+        text-decoration: none;
+        background: url(/images/iconDashBoard/icon_Toggle_Switch_OFF.png) no-repeat;
+        background-size: contain;
+        margin-right: 7px;
+        border: none;
+    }
+</style>
+
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mt5 p10">
+        <div class="portlet-body">
+            <div class="row d-flex pt5" style="background-color:white">
+                <div class="col-md-12 pl-0 flex-grow-full d-flex">
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="form-group">
+                            <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_WAREHOUSE' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.WhsCode" theme="bootstrap" on-select="changeWareHouse($item)">
+                                    <ui-select-match class="bold" placeholder="Kho hồ sơ"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listWareHouse | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addArea()" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_FLOOR' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.FloorCode" theme="bootstrap" on-select="changeFloor($item)">
+                                            <ui-select-match class="bold" placeholder="Tầng"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listFloor | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addFloor()" class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_LINE' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.LineCode" theme="bootstrap" on-select="changeLine($item)">
+                                            <ui-select-match class="bold" placeholder="Dẫy"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listLine | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addLine()" class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_RACK' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.RackCode" theme="bootstrap" on-select="changeRack($item)">
+                                            <ui-select-match class="bold" placeholder="Kệ"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listRack | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addRack()" class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0 flex-grow-full">
+                        <div class="d-flex">
+                            <div class="col-md-11 flex-grow-full">
+                                <div class="form-group">
+                                    <label class="fw600 text-underline">{{'EDMSWM_CURD_LBL_LIST_POSITION' | translate}}</label>
+                                    <div class="input-group br24">
+                                        <ui-select tagging ng-model="model.PositionCode" theme="bootstrap" ng-change="changePosition()">
+                                            <ui-select-match class="bold" placeholder="Vị trí"><b class="text-dark">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listPosition | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="addPosition()" class="btn no-shadow  btn-default" style="">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-md-1 flex-basis-100">
+                                <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="search()">
+                                    <a class="fs30">
+                                        <span class="fas fa-link"></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'Neo' | translate}}</p>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-8">
+                    <div class="btn btn-icon-only btn-outline floor bold" ng-class="{'btn-floor':!x.Active,'blue-custom':x.Active}" ng-repeat="x in listFloor" ng-click="chooseFloor(x)">
+                        <span>{{x.Name}}</span>
+                    </div>
+                </div>-->
+                <div class="col-md-1 flex-basis-100">
+                    <div class="text-center pull-left pt20" style="margin-top: -10px;" ng-click="drawObject()">
+                        <a class="fs30">
+                            <span class="fas fa-search"></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mnw800 pull-right menu2">
+        <div class="menu-top menu-2">
+            <div class="create-box" ng-click="zoomout()">
+                <i class="fas fa-search-minus"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_ZOOMOUT' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="zoomin()">
+                <i class="fas fa-search-plus"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_ZOOMIN' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="hidejson()">
+                <i class="fas fa-eye-slash"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_HIDE_J' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="group()">
+                <i class="fas fa-object-group"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_GROUP' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="ungroup()">
+                <i class="fas fa-object-ungroup"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_UNGROUP' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="toggleLock()">
+                <i class="fas fa-lock" ng-if="!isLockObject"></i>
+                <i class="fas fa-lock-open" ng-if="isLockObject"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_TOGGLE_LOCK_OBJECT' | translate}}
+                </div>
+            </div>
+            <!--<div class="create-box" ng-click="editArea()" ng-if="floorCode == '' || floorCode == null">
+        <i class="fas fa-pencil"></i>
+        <div class="create-box__hover">
+            {{'EDMSDWC_LBL_EDIT' | translate}}
+        </div>
+    </div>-->
+            <div class="create-box" ng-click="deleteArea()" ng-if="wareHouseCode != '' && wareHouseCode != null && (floorCode == '' || floorCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteFloor()" ng-if="floorCode != '' && floorCode != null && (lineCode == '' || lineCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteLine()" ng-if="lineCode != '' && lineCode != null && (rackCode == '' || rackCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete
+                </div>
+            </div>
+            <div class="create-box" ng-click="deleteRack()" ng-if="rackCode != '' && rackCode != null && (positionCode == '' || positionCode == null)">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete
+                </div>
+            </div>
+            <div class="create-box" ng-click="deletePosition()" ng-if="positionCode != '' && positionCode != null">
+                <i class="fas fa-trash-alt" style="color: red"></i>
+                <div class="create-box__hover">
+                    <!--{{'EDMSDWC_LBL_EDIT' | translate}}-->
+                    Delete
+                </div>
+            </div>
+            <div class="create-box" ng-click="showFullText()">
+                <!--<i class="fas fa-search-plus"></i>-->
+                <input type="checkbox" name="fullText" id="fullText" class="radio_buttons option-input-3 radio" ng-model="isTextFull" ng-click="changeTextFull(isTextFull)">
+                <span>&nbsp;&nbsp;PARTIAL TEXT / FULL TEXT </span>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_FULL_TEXT' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="saveShapeData()">
+                <i class="fas fa-save"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_SAVE' | translate}}
+                </div>
+            </div>
+            <div class="create-box" ng-click="mapSearch()">
+                <i class="fas fa-search-location"></i>
+                <div class="create-box__hover">
+                    {{'EDMSDWC_LBL_SEARCH' | translate}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="menu-top menu-3" id="menu-object">
+        <div class="create-box">
+            <!--<i class="fas fa-search-minus"></i>-->
+            <input type="checkbox" name="front" id="front" class="radio_buttons option-input-3 radio" ng-model="isObjectFront" ng-click="changeFrontBack(isObjectFront)">
+            <span>&nbsp;&nbsp;FRONT / BACK </span>
+            <div class="create-box__hover">
+                {{'EDMSDWC_LBL_FRONT' | translate}}
+            </div>
+        </div>
+        <!--<div class="create-box" ng-click="bringToBack()">-->
+        <!--<i class="fas fa-search-plus"></i>-->
+        <!--BACK
+        <div class="create-box__hover">
+            {{'EDMSDWC_LBL_BACK' | translate}}
+        </div>
+    </div>-->
+        <div class="create-box" style="width: 75px">
+            <div class="input-group br24-nobtn">
+                <ui-select ng-model="fontSize" theme="bootstrap" ng-change="changeFontSize(fontSize)">
+                    <ui-select-match placeholder="{{'EDMSDWC_TXT_FONT_SIZE' | translate}}..."><b class="text-brown">{{$select.selected}}</b></ui-select-match>
+                    <ui-select-choices repeat="x as x in listSize | filter: $select.search">
+                        {{x}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <!--<span>&nbsp;&nbsp;FONT SIZE </span>-->
+            <div class="create-box__hover">
+                {{'EDMSDWC_LBL_FONT_SIZE' | translate}}
+            </div>
+        </div>
+        <div class="create-box">
+            <input type="color" ng-model="fontColor" ng-change="changeFontColor(fontColor)">
+            <div class="create-box__hover">
+                {{'EDMSDWC_LBL_FONT_COLOR' | translate}}
+            </div>
+            <span>&nbsp;&nbsp;FONT EDIT </span>
+        </div>
+        <!--<div class="create-box" style="width: 75px">
+        <div class="input-group br24-nobtn">
+            <ui-select ng-model="fontSize" theme="bootstrap" ng-change="changeFontSize(fontSize)">
+                <ui-select-match placeholder="{{'EDMSDWC_TXT_BORDER_SIZE' | translate}}..."><b class="text-brown">{{$select.selected}}</b></ui-select-match>
+                <ui-select-choices repeat="x as x in listSize | filter: $select.search">
+                    {{x}}
+                </ui-select-choices>
+            </ui-select>
+        </div>-->
+        <!--<span>&nbsp;&nbsp;BORDER SIZE </span>-->
+        <!--<div class="create-box__hover">
+            {{'EDMSDWC_LBL_BORDER_SIZE' | translate}}
+        </div>
+    </div>
+    <div class="create-box">
+        <input type="color" ng-model="fontColor" ng-change="changeFontColor(fontColor)">
+        <div class="create-box__hover">
+            {{'EDMSDWC_LBL_BORDER_COLOR' | translate}}
+        </div>
+        <span>&nbsp;&nbsp;BORDER EDIT </span>
+    </div>-->
+        <div class="create-box" ng-click="blink()">
+            <!--<i class="fas fa-search-plus"></i>-->
+            <input type="checkbox" name="fullText" id="fullText" class="radio_buttons option-input-3 radio" ng-model="isObjectBlink" ng-click="changeObjectBlink(isObjectBlink)">
+            <span>&nbsp;&nbsp;BLINK </span>
+            <div class="create-box__hover">
+                {{'EDMSDWC_LBL_BLINK' | translate}}
+            </div>
+        </div>
+        <div class="create-box" ng-click="deleteObject()">
+            <!--<i class="fas fa-search-plus"></i>-->
+            <i class="fas fa-trash-alt" style="color: red"></i>
+            <div class="create-box__hover">
+                <!--{{'EDMSDWC_LBL_BLINK' | translate}}-->
+                Delete
+            </div>
+        </div>
+        <div class="create-box" ng-click="objectDetail()">
+            <i class="fas fa-info-circle"></i>
+            <div class="create-box__hover">
+                {{'EDMSDWC_LBL_INFO' | translate}}
+            </div>
+        </div>
+    </div>
+    <div class="parent_svg" onselectstart="javascript:return false" id="gfx_holder_svg" style="overflow: hidden; width: 2500px; height: 2500px; position: relative;" height="2500" width="2500" fabric-canvas="">
+        <canvas id="c"></canvas>
+    </div>
+    <pre id="json" class="json_div jsonhide" style="overflow: auto; position: absolute; top: 125px; right: 120px; width: 350px; height: 500px; background: white; border: 1px solid gray">
+    </pre>
+</div>
+
+<div class="portlet-body form baolo" ng-show="setsize" style="width:40%;position:absolute;top:128px;background:#fff;left:30%;height:430px">
+    <div class="modal-header" style="background: #fff">
+        <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+        </button>
+        <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    </div>
+    <div class="row ml-2">
+        <div class="row" style="margin-bottom:-7%">
+            <div class="col-md-1 mr50 pull-right mt-1 " style="text-align:center">
+                <div class="btn btn-icon-only btn-outline" style="width:50px;background:#fff;box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.75);" ng-click="redesign(modelcheck)">
+                    <span><i class="fas fa-boxes fs16" style="color:#000"></i></span>
+                </div>
+                <label class="nowrap fs11 pl-1">{{'EDMSDWC_LBL_REDRAW' | translate}}</label>
+
+            </div>
+        </div>
+        <!--<div class="row pt10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="require">{{'EDMSWM_LBL_MAX_FLOOR_HEIGHT' | translate}}</label>
+                    <input class="form-control br24" ng-model="maxFloorHeight" name="maxFloorHeight" placeholder="{{'EDMSWM_TXT_MAX_FLOOR_HEIGHT' | translate}}..." />
+                </div>
+            </div>
+        </div>-->
+        <div class="row pt10">
+            <div class="pl30">
+                <div ng-init="modelcheck.showline=true">
+                    <input type="checkbox" id="line" class="checkbox1" name="line" value="show" ng-model="modelcheck.showline" ng-checked="true">
+
+                </div>
+                <div class="pt10 pl5 "><label class="showhide fw600" for="line">{{'EDMSDWC_LBL_SHOW_HIDE' | translate}}</label></div>
+            </div>
+            <label class="name ml30 fw700"> {{'EDMSDWC_LBL_RANGE' | translate}}</label>
+        </div>
+        <div class="row pt10 bt " ng-init="modelcheck.line=1">
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="line" ng-model="modelcheck.line" value="1" ng-checked="true"></div>
+                <div class="pt10 pl5"><label for="line">{{'EDMSDWC_LBL_ICON_BIG_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="line" ng-model="modelcheck.line" value="2"></div>
+                <div class="pt10 pl5"><label for="line">{{'EDMSDWC_LBL_ICON_MEDIUM_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="line" ng-model="modelcheck.line" value="3"></div>
+                <div class="pt10 pl5"><label for="line">{{'EDMSDWC_LBL_ICON_SMALL_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="line" ng-model="modelcheck.line" value="4"></div>
+                <div class="pt10 pl5"><label for="line" class="nowrap">{{'EDMSDWC_LBL_ICON_NODE' | translate}}</label></div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-2">
+        <div class="row pt10">
+            <div class="pl30">
+                <div ng-init="modelcheck.showrack=true">
+                    <input type="checkbox" id="line" class="checkbox1" name="line" value="show" ng-model="modelcheck.showrack" ng-checked="true">
+                </div>
+                <div class="pt10 pl5 "><label class="showhide fw600">{{'EDMSDWC_LBL_SHOW_HIDE' | translate}}</label></div>
+            </div>
+            <label class="name ml30 fw700">{{'EDMSDWC_LBL_SHELVES' | translate}}</label>
+
+        </div>
+        <div class="row pt10 bt" ng-init="modelcheck.rack=1">
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="rack" ng-model="modelcheck.rack" value="1" ng-checked="true"></div>
+                <div class="pt10 pl5 fw600"><label for="rack">{{'EDMSDWC_LBL_ICON_BIG_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="rack" ng-model="modelcheck.rack" value="2"></div>
+                <div class="pt10 pl5"><label for="rack">{{'EDMSDWC_LBL_ICON_MEDIUM_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="rack" ng-model="modelcheck.rack" value="3"></div>
+                <div class="pt10 pl5"><label for="rack">{{'EDMSDWC_LBL_ICON_SMALL_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="rack" ng-model="modelcheck.rack" value="4"></div>
+                <div class="pt10 pl5"><label for="rack" class="nowrap">{{'EDMSDWC_LBL_ICON_NODE' | translate}}</label></div>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-2">
+        <div class="row pt10">
+            <div class="pl30">
+                <div ng-init="modelcheck.showcabin=true">
+                    <input type="checkbox" id="line" class="checkbox1" name="line" value="show" ng-model="modelcheck.showcabin" ng-checked="true">
+                </div>
+                <div class="pt10 pl5 "><label class="showhide fw600">{{'EDMSDWC_LBL_SHOW_HIDE' | translate}}</label></div>
+            </div>
+            <label class="name ml30 fw700">{{'EDMSDWC_LBL_CABINET_CARTON' | translate}}</label>
+
+        </div>
+        <div class="row pt10 bt" ng-init="modelcheck.cabin=1">
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="cabin" ng-model="modelcheck.cabin" value="1" ng-checked="true"></div>
+                <div class="pt10 pl5"><label for="cabin">{{'EDMSDWC_LBL_ICON_BIG_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="cabin" ng-model="modelcheck.cabin" value="2"></div>
+                <div class="pt10 pl5"><label for="cabin">{{'EDMSDWC_LBL_ICON_MEDIUM_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30 ocenter">
+                <div><input type="radio" id="line" class="checkbox" name="cabin" ng-model="modelcheck.cabin" value="3"></div>
+                <div class="pt10 pl5"><label for="cabin">{{'EDMSDWC_LBL_ICON_SMALL_S' | translate}}</label></div>
+            </div>
+            <div class="col-md-3 pl30">
+                <div><input type="radio" id="line" class="checkbox" name="cabin" ng-model="modelcheck.cabin" value="4"></div>
+                <div class="pt10 pl5"><label for="cabin" class="nowrap">{{'EDMSDWC_LBL_ICON_NODE' | translate}}</label></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

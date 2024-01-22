@@ -1,0 +1,171 @@
+﻿<style>
+    .message-center {
+        padding-top: 5%;
+    }
+
+    .blue-modal {
+        background-color: #428bca !important;
+    }
+
+    .green-modal {
+        background-color: #009432 !important;
+    }
+
+    .mt-checkbox > span:after {
+        left: 6px !important;
+        top: 2px !important;
+        width: 5px;
+        height: 10px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+</style>
+<div class="modal-header no-color" ng-class1="{'green-modal' : titleModalAssign==1, 'blue-modal' : titleModalAssign ==2}">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-users black" style="padding-top: 7px;"></i>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 1">{{'CJ_LBL_ASSIGN_TO_GROUP' | translate}}</span>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 2">{{'CJ_LBL_ASSIGN_TO_DEPARTMENT' | translate}}</span>
+    <span class="modal-title black" id="modal-title" ng-show="titleModalAssign == 3">{{'CJ_TITLE_ASSIGN_WORK_GROUP' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pt-0" id="modal-body">
+    <div class="row mt10">
+        <div class="col-md-3 br24-nobtn">
+            <label>{{'CJ_CURD_TXT_SEARCH_HEADQUARTERS' | translate }} - {{'CJ_CURD_TXT_SEARCH_BRANCH' | translate}}</label>
+            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Branch" on-select="branchSelect(model.Branch)" theme="bootstrap" ng-disabled="isInteract">
+                <ui-select-match placeholder="{{'CJ_CURD_TXT_SEARCH_HEADQUARTERS' | translate }} - {{'CJ_CURD_TXT_SEARCH_BRANCH' | translate}}..."><b>{{$select.selected.Name}}</b></ui-select-match>
+                <ui-select-choices style="height: auto" repeat="x.Code as x in listBranch | filter: $select.search">
+                    {{x.Name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-5">
+            <label>{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}</label>
+            <div class="d-flex br24-nobtn">
+                <ui-select style="width:100%" class="ui-select-bootstrap-right-radius" ng-model="model.Object" on-select="departmentOrGroupSelect(model.Object)" theme="bootstrap" ng-disabled="isInteract">
+                    <ui-select-match placeholder="{{'CJ_LBL_DEPARTMENT_GROUP' | translate}}..."><b>{{$select.selected.Name}}<span class="text-danger" ng-show="model.Object.Name != ''">({{$select.selected.CountUser}})</span></b></ui-select-match>
+                    <ui-select-choices group-by="'Group'" repeat="x in listGroupUserAndDepartment | filter: $select.search">
+                        {{x.Name}}(<span class="text-danger">{{x.CountUser}}</span>)
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="col-md-4 br24">
+            <label>{{'CJ_CURD_BTN_MEMBER' | translate}}(<span class="text-danger">{{countUser}}</span>)</label>
+            <div ng-dropdown-multiselect="" options="listUser" selected-model="memberAssign" events="eventMember" extra-settings="stringSettings" translation-texts="translateMember"></div>
+            <!--<ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Member" on-select="memberSelect(model.Member)" theme="bootstrap" ng-disabled="isInteract">
+        <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}..."><b>{{$select.selected.GivenName}}</b></ui-select-match>
+        <ui-select-choices style="height: auto" repeat="x in listUser | filter: $select.search">
+            <i class="fas fa-square fs20" style="color: cornflowerblue"></i>
+            {{x.GivenName}}
+        </ui-select-choices>
+    </ui-select>-->
+        </div>
+        <div class="col-md-12 mt5">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+
+                .fixTableHead {
+                    overflow-y: auto;
+                }
+
+                    .fixTableHead thead th, .fixTableHead thead {
+                        position: sticky;
+                        top: 0;
+                        z-index: 10;
+                        background: white;
+                    }
+
+                        .fixTableHead thead th {
+                            border-top: 1px solid #e7ecf1 !important;
+                            border-bottom: 1px solid #e7ecf1 !important;
+                        }
+            </style>
+            <div class="portlet light bordered mb5">
+                <!--<div class="portlet-title mnh25">
+                    <div class="caption">
+                        <span class="caption-subject bold fs12">{{'CJ_LIST_GROUP_DEPART_ASSIGN' | translate}} ({{cardMember.listMember.length + cardMember.listObj.length}})</span>
+                    </div>
+                </div>-->
+                <div class="portlet-body todo-project-list-content">
+                    <div class="scrollbar-sm">
+                        <!--<div class="table-responsive mh-200" style="overflow-y:auto">-->
+                        <div class="table-responsive fixTableHead" style="height:300px">
+                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th class="pl25 col-md-6">{{'CJ_DEPART_GROUP_MEMBER' | translate}}</th>
+                                        <th class="col-md-2">{{'CJ_CURD_LBL_SEARCH_STATUS' | translate}}</th>
+                                        <th class="text-center nowrap col-md-3">{{'CJ_COL_ROLE' | translate}}</th>
+                                        <th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <!--Người được giao-->
+                                <tbody>
+                                    <tr>
+                                        <td ng-if="lstAssign.length!=0" colspan="3" class="pl25">
+                                            <i class="fa fa-user"></i>
+                                            <span class="groupValue"><b>{{'CJ_LBL_MEMBER_ASSIGN' | translate}} ({{lstAssign.length}})</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="x in lstAssign">
+                                        <td class="text-left">
+                                            <span class="fs14">{{x.GivenName}}</span>  &nbsp;&nbsp;&nbsp;&nbsp;<span class="badge-customer badge-customer-warning"> {{x.RoleSys}}</span> ,&nbsp;<span class="badge-customer badge-customer-success" ng-if="x.DepartmentName != ''">{{x.DepartmentName}}</span>
+                                            <br /><span class="text-danger" ng-show="x.IsManager">Hãy duyệt nhân viên</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group br24-nobtn">
+                                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Status" on-select="statusSelect()" theme="bootstrap" ng-disabled="!isChangeStatus">
+                                                    <ui-select-match placeholder="{{'CJ_CURD_LBL_SEARCH_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in lstStatusAssign | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group br24">
+                                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="x.Role" theme="bootstrap" on-select="roleSelectMember()" ng-disabled="x.IsInteract">
+                                                    <ui-select-match placeholder="{{'CJ_COL_ROLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in RoleData | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="addRoleAssign()" class="btn no-shadow btn-border-black-grey" style="">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span class="pull-left" ng-show="x.IsSameDepartment">
+                                                <label class="mt-checkbox mt-checkbox-outline fs12 text-success" style="margin: 6px 0 0 15px!important;">
+                                                    <input type="checkbox" ng-model="x.IsAccept" ng-change="approveEmployee(x.Id, x.IsAccept, 1)"> Đồng ý
+                                                    <span></span>
+                                                </label>
+                                                <label class="mt-checkbox mt-checkbox-outline fs12 text-danger" style="margin: 6px 0 0 15px!important;">
+                                                    <input type="checkbox" ng-model="x.IsReject" ng-change="approveEmployee(x.Id, x.IsReject, 0)"> Từ chối
+                                                    <span></span>
+                                                </label>
+                                            </span>
+                                        </td>
+                                        <td class="text-center"><i ng-show="!x.IsInteract" role="button" class="fas fa-trash-alt pt5 ng-scope" ng-click="removeMember(x.UserId,x.Id, x.GivenName)" title="{{'COM_BTN_DELETE' | translate}}" style="color: red !important; font-size: 25px; margin-top: 10px;"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

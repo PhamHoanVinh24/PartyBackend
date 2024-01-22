@@ -1,0 +1,106 @@
+﻿<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="bold mb-0">{{'TEAM_LINK_TEAM' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'PROJECT_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <!--Quản lý team-->
+                    <a href="TeamManagement#/">{{'TEAM_LINK_TEAM' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'TEAM_CURD_LBL_SEARCH_NAME' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.TeamName" class="form-control" type="text" placeholder="{{'TEAM_CURD_TXT_SEARCH_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.TeamName=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'TEAM_CURD_LBL_SEARCH_MANAGEMENT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Leader" theme="bootstrap">
+                            <ui-select-match placeholder="{{'TEAM_CURD_TXT_SEARCH_MANAGEMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in Leaders | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Leader=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'TEAM_CURD_LBL_SEARCH_MEMBER' | translate}}</label>
+                    <div class="input-group">
+                        <div class="input-group">
+                            <input ng-model="model.Member" class="form-control" type="text" placeholder="{{'TEAM_CURD_TXT_SEARCH_MEMBER' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" ng-change="changleSelect('Budget')" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Member=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <label class="fw600 text-underline">{{'TEAM_CURD_LBL_SEARCH_STATUS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'TEAM_CURD_TXT_SEARCH_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in Statuss | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       ng-show="IsTranslate"
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

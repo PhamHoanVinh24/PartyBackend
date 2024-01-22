@@ -1,0 +1,375 @@
+﻿<style>
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 80px;
+        height: 80px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 58px;
+        height: 46px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">Thêm phiếu nhập kho : <span class="">rc.1_b.chinhanhhanoi_u.admin_t.04032019</span></span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions" class="form-horizontal userFormAreaHeader">
+            <div class="form-body">
+                <div class="row mtn20">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-exchange" aria-hidden="true"></i>
+                                <label class="control-label ">Nhập theo lô</label>
+                            </div>
+                            <div class="col-md-7" style="margin-top: -5px;margin-bottom:-15px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="IsEnable" checked ng-model="model1.IsEnable" ng-change="changeEnableLotProduct()">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Chọn lô</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.LotProduct" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Chọn lô...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lotProducts | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.LotProduct=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-bank" aria-hidden="true"></i>
+                                <label class="control-label ">Chọn kho</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Store" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Chọn kho...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in stores | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Store=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group" ng-show="true">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã QR Code</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.QrCode" name="QrCode" id="QrCode" placeholder="Nhập mã QR Code..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="true">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã BarCode</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.BarCode" name="Barcode" id="Barcode" placeholder="Nhập mã BarCode..." />
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                <label class="control-label require">Tổng tiền</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Cost" name="Barcode" id="Barcode" placeholder="Tổng tiền..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-usd" aria-hidden="true"></i>
+                                <label class="control-label ">Chiết khấu</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="number" min="0" class="form-control" ng-model="model.Discount" name="Barcode" id="Barcode" placeholder="Chiếu khấu..." />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div class="col-md-5">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                <label class="control-label ">Tổng thuế</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="number" min="0" class="form-control" ng-model="model.TotalTax" name="Material" placeholder="Tổng thuế" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-usd" aria-hidden="true"></i>
+                                <label class="control-label ">Hoa hồng</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="number" min="0" class="form-control" ng-model="model.Commission" name="Material" placeholder="Hoa hồng" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mt35">
+                            <div class="col-md-5">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <label class="control-label require">Tiêu đề</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Title" name="QrCode" id="QrCode" placeholder="Tiêu đề..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                <label class="control-label ">Trạng thái TT(%)</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="number" min="0" class="form-control" ng-model="model.PaymentStatus" name="Barcode" id="Barcode" placeholder="Trạng thái thanh toán..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <label class="control-label ">Ngày TT tiếp</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="FromDate" type="text" class="form-control" ng-model="model.NextPayment" name="Material" placeholder="Ngày thanh toán tiếp" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label ">Địa chỉ</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Address" name="Material" placeholder="Địa chỉ" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                <label class="control-label ">Vị trí</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" ng-model="model.Location" name="Material" placeholder="Vị trí" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-mobile" aria-hidden="true"></i>
+                                <label class="control-label ">Thiết bị</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" ng-model="model.Device" name="Material" placeholder="Thiết bị" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row mt30">
+            <div class="col-md-12">
+                <div class="text-center pull-right" style="margin-top:-25px; margin-right:7px" ng-click="submit()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-save fs14" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3">
+                        Lưu
+                    </p>
+                </div>
+                <div ng-include="'../views/admin/lotProduct/product.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>-->
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

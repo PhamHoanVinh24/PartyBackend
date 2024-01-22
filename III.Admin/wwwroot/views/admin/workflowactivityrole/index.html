@@ -1,0 +1,111 @@
+﻿<style>
+    .app-content{
+        width: 100%;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-12 ">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="#">{{'COM_MENU_SETTING_SYSTEM' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:green;" href="/Admin/Activity">{{'Cài đặt luồng'|translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5">
+        <div class="row pt5 mb5">
+            <div class="col-md-3">
+                <label class="control-label">{{'Luồng việc' | translate}}</label>
+                <div class="input-group">
+                    <ui-select ng-model="model.WorkFlowCode" style="width: 100%;" on-select="selectEmployeeCode($item)">
+                        <ui-select-match placeholder="{{'Luồng việc' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listEmployeeCode | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.WorkFlowCode=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">{{'Chi nhánh' | translate}}</label>
+                <div class="input-group">
+                    <ui-select ng-model="model.BranchCode" style="width: 100%;" on-select="selectEmployeeCode($item)">
+                        <ui-select-match placeholder="{{'Chi nhánh' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listEmployeeCode | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.BranchCode=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">{{'Phòng ban' | translate}}</label>
+                <div class="input-group">
+                    <ui-select ng-model="model.DepartCode" style="width: 100%;" on-select="selectEmployeeCode($item)">
+                        <ui-select-match placeholder="{{'Phòng ban' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listEmployeeCode | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.DepartCode=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">{{'Vai trò' | translate}}</label>
+                <div class="input-group">
+                    <ui-select ng-model="model.Role" style="width: 100%;" on-select="selectEmployeeCode($item)">
+                        <ui-select-match placeholder="{{'Vai trò' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listEmployeeCode | filter:$select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Role=''" class="btn btn-default no-shadow" style="">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 pt-1">
+                <div class="btn-group actions  d-flex">
+                    <div class="text-center pr10 pull-right" ng-click="reload()">
+                        <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                            <span><i class="fa fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                    </div>
+                    <div class="text-center pr10" ng-click="add()">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

@@ -1,0 +1,122 @@
+﻿<script>
+    function readURL(input) {
+      //  $(this).parent().parent().parent().find('.form-control').html($(this).val());
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Profile_picture')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }    
+</script>
+<script>
+    $(".modal").modal({ backdrop: "static" });
+</script>
+<style>
+   
+</style>
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="glyphicon glyphicon-plus-sign"></i>  Thêm mới khách hàng</h3>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <div class="portlet-body form" style="margin-top:10px">
+        <form name="addform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> Mã công ty <strong style="color:red">(*)</strong></label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Company_Code" name="Company_Code" placeholder="Nhập mã công ty"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> Tên công ty</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.Company_Name" name="Company_Name" placeholder="Nhập tên công ty"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> Giám đốc</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.Company_Owner" name="FirstName" placeholder="Nhập tên giám đốc"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> Người đại diện</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Company_Contact" name="LastName" placeholder="Nhập người đại diện"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                           
+                                <label class="col-md-4 control-label  text-left" for="Status"> <i class="sprite-image-16x16"></i> Logo</label>
+                          
+                            <div class="col-md-8 form-col-control style=" border-left:none"" style="border-left:none">
+                                <div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                        <img id="Profile_picture" ng-src='{{model.Company_Image}}' src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                    </div>
+                                    <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                        <img id="Profile_picture1" ng-src='{{model.Company_Image}}' src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                    </div>
+                                </div>
+                                <input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.Company_Image" name="Profile_picture" onchange="readURL(this);">
+                                <script>
+                                    $(":file").filestyle({ buttonName: "btn btn-primary" });
+                                </script>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-phone"></i> Số điện thoại</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.Company_Phone" name="Phone" placeholder="Nhập số điện thoại"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="sprite-emailtemplate-16x16"></i> Website</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Company_Website" name="Email" placeholder="Nhập website"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="sprite-cards-16x16"></i> Loại hình</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"  ng-model="model.Company_Type" name="Email" placeholder="Nhập loại hình"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fa fa-pencil"></i> Mô tả</label>
+                            <div class="col-md-8">
+                                <textarea rows="4" class="form-control"  ng-model="model.Description" name="Email" placeholder="Nhập mô tả"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="padding-right:15px;">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-plus"></i>Thêm mới</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"><i class="fa fa-close"></i>Hủy</button>
+
+    </div>
+  </div>

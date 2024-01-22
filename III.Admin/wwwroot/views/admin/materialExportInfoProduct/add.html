@@ -1,0 +1,365 @@
+﻿<style>
+    .nav-link {
+        font-style: normal !important;
+        font-size: 13px !important;
+        font-weight: normal;
+    }
+
+    .nav-tabs > li.active > a {
+        font-style: normal !important;
+        font-size: 13px !important;
+        font-weight: normal;
+    }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            font-style: normal !important;
+            font-size: 13px !important;
+            font-weight: normal !important;
+        }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'CATEGORY_TITLE_ADD_CATEGORY' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group" style="margin-top:-25px">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-50 w50" role="button"/>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">{{'CATEGORY_CURE_LBL_IMG' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:-25px">
+                            <div class="col-md-12 " style="margin-top:-10px">
+                                <div class="thumbnail input-unstyled">
+                                    <!-- <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />-->
+                                    <img   src="data:image/png;base64, {{ImageBase}}"  class=" image-upload h-50 w50" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">QrCode</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top:-25px">
+                            <div class="col-md-12 " style="margin-top:-10px">
+                                <div class="thumbnail input-unstyled">
+                                    <img    src="data:image/png;base64, {{ImageBase1}}" class=" image-upload h-50 w150" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">BarCode</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group" ng-show="false">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'MEXIP_LBL_QRCODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.QrCode" name="QrCode" id="QrCode" placeholder="{{'MEXIP_LBL_ENTER_QRCODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="false">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'MEXIP_LBL_BARCODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Barcode" name="Barcode" id="Barcode" placeholder="{{'MEXIP_LBL_ENTER_BARCODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'MEXIP_LBL_CODE_PRODUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input ng-change="getQrCodeFromString()"  type="text" class="form-control" ng-model="model.ProductCode" name="ProductCode" id="ProductCode" placeholder="{{'CATEGORY_CURE_TXT_CODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label require">{{'MEXIP_LBL_PRODUCTS_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.ProductName" name="ProductName" placeholder="{{'CATEGORY_CURE_TXT_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">{{'MEXIP_LBL_MATERIAL' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Material" name="Material" placeholder="{{'MEXIP_LBL_MATERIAL' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">{{'MEXIP_LBL_PATTERN' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Pattern" name="Material" placeholder="{{'MEXIP_LBL_PATTERN' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">{{'MEXIP_LBL_SIZE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.Size" name="Material" placeholder="{{'MEXIP_LBL_SIZE' | translate}}..." />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group" ng-class="{ 'has-error': errorInheritance}">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label">{{'MEXIP_LBL_PRODUCT_INHERITANCE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group  ">
+                                    <ui-select tagging ng-model="model.Inheritance" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'MEXIP_LBL_PRODUCT_INHERITANCE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in inheritances | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Inheritance=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                                <!--<input type="text" class="form-control" ng-model="model.Unit" name="Unit" placeholder="Nhập đơn vị..." />-->
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label">Loại DM SP</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ProductCategoryType" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Loại DM SP...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in productCategoryTypes | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ProductCategoryType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>-->
+                        <div class="form-group" ng-class="{ 'has-error': errorProductGroup}">
+                            <div class="col-md-4">
+                                <i class="fa fa-cubes" aria-hidden="true"></i>
+                                <label class="control-label ">{{'MEXIP_LBL_GROUP_PRODUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.GroupCode" theme="bootstrap" on-select="changleSelect('ProductGroup')">
+                                        <ui-select-match placeholder="{{'MEXIP_LBL_GROUP_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in productgroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.GroupCode=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorProductGroup" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_GROUP' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': errorProductGroup}">
+                            <div class="col-md-4">
+                                <i class="fa fa-cubes" aria-hidden="true"></i>
+                                <label class="control-label">{{'MEXIP_LBL_TYPE_PRODUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.TypeCode" theme="bootstrap" on-select="changleSelect('ProductGroup')">
+                                        <ui-select-match placeholder="{{'MEXIP_LBL_PRODUCT_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in productTypes | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.TypeCode=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorProductGroup" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_GROUP' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <div class="col-md-4">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label">{{'CATEGORY_CURE_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'CATEGORY_CURE_TXT_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label ">&nbsp;{{'MLP_CURD_LBL_SUPPLIES_STATUS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'MLP_CURD_TXT_SUPPLIES_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label ">{{'CATEGORY_CURE_LBL_ACTION' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea type="text" class="form-control" ng-model="model.Note" rows="5" placeholder="{{'CATEGORY_CURE_TXT_ACTION' | translate}}..." name="Note"></textarea>
+                            </div>
+                        </div>-->
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 offset-md-2">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">{{'MEXIP_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <textarea type="text" class="form-control" ng-model="model.Note" name="Material" placeholder="{{'MEXIP_LBL_NOTE' | translate}}..." rows="3" />
+                            </div>
+                            <div class="col-md-1">
+                                <div class="text-center pull-right" style=" margin-right:0px" ng-click="submit()">
+                                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs12 mb5 pt3">{{'MEXIP_LBL_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row mt10">
+            <div class="col-md-12">
+                <uib-tabset active="active" class="mb20">
+                    <uib-tab index="0" heading="Mô tả">
+                        <textarea ng-model="model.Description" ui-tinymce="tinymceOptions" class="mb15"></textarea>
+                    </uib-tab>
+                    <uib-tab index="1" heading="Thuộc tính">
+                        <div ng-include="'../views/admin/materialProduct/more.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="2" heading="{{'SUP_CURD_TAB_FILE' | translate}}">
+                        <div ng-include="'../views/admin/materialProduct/file.html'"></div>
+                    </uib-tab>
+                    <!--<uib-tab index="1" heading="{{'SUP_CURD_TAB_CONTACT' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/contact.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="2" heading="{{'SUP_CURD_TAB_FILE' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/file.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="3" heading="{{'SUP_CURD_TAB_MORE' | translate}}" disable="SupplierId == ''">
+                        <div ng-include="'../views/admin/supplier/more.html'"></div>
+                    </uib-tab>
+                    <uib-tab index="4" heading="{{'SUP_CURD_TAB_CARD_JOB' | translate}}">
+                        <div ng-include="'../views/admin/supplier/cardJob.html'"></div>
+                    </uib-tab>-->
+
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red " href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_ADD' | translate}}
+    </button>
+</div>-->
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

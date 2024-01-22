@@ -1,0 +1,157 @@
+﻿<div class="modal-header" style="background-color:white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fas fa-plus-circle icon-insert " style="color:black"></i>
+    <span class="modal-title" id="modal-title" style="color:black"> {{'ATTRM_CURD_TITLE_ADD_MPA' | translate}}</span>
+</div>
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptionsAttr">
+            <div class="form-body pt5">
+                <!--<div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label ">{{'ATTRM_CURD_LBL_MPA_FATHER_GROUP' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <ui-select tagging ng-model="model.ParentID" ng-change="reload()" theme="bootstrap">
+                            <ui-select-match placeholder="{{'ATTRM_CURD_COMBO_MPA_FATHER_GROUP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Id as x in treedataCoursetype | filter:$select.Id| filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-labelrequire">{{'ATTRM_CURD_LBL_MPA_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Code" name="Code" placeholder="{{'ATTRM_CURD_TXT_MPA_CODE' | translate}}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'ATTRM_CURD_LBL_MPA_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control br24" ng-model="model.Name" name="Name" placeholder="{{'ATTRM_CURD_TXT_MPA_NAME' | translate}}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'ATTRM_LBL_PROPERTY_PARENT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8 br24-nobtn">
+                        <ui-select tagging ng-model="model.Parent" ng-change="reload()" theme="bootstrap">
+                            <ui-select-match placeholder="{{'ATTRM_LBL_PROPERTY_PARENT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listParent | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'ATTRM_LBL_UNIT' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Unit" ng-change="reload()" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ATTRM_LBL_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addUnit()" class="btn no-shadow btn-default" style="background: none;">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-cubes" aria-hidden="true"></i>
+                        <label class="control-label">{{'ATTRM_LBL_DATA_TYPE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.DataType" ng-change="reload()" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ATTRM_LBL_DATA_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listDataType | filter:$select.Id| filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addDataType()" class="btn no-shadow btn-default" style="background: none;">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-cubes" aria-hidden="true"></i>
+                        <label class="control-label">{{'ATTRM_LBL_GROUP' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Group" ng-change="reload()" theme="bootstrap">
+                                <ui-select-match placeholder="{{'ATTRM_LBL_GROUP' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="addGroup()" class="btn no-shadow btn-default" style="background: none;">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <label class="control-label">{{'ATTRM_CURD_LBL_MPA_DESCRIPTION' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea type="text" class="form-control br24" ng-model="model.Note" rows="3" placeholder="{{'ATTRM_CURD_TXT_MPA_DESCRIPTION' | translate}}" name="Note"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group pull-right actions d-flex mt10">
+                <div class="text-center pr10">
+                    <a data-dismiss="modal" ng-click="cancel()" class="fs30">
+                        <span><i class="fas fa-times"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                </div>
+                <div class="text-center">
+                    <a ng-click="submit()" class="fs30">
+                        <span><i class="fa-solid fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+            </div>
+        </form>
+        <div class="row mt10">
+            <!--<div class="col-lg-12">
+                <uib-tabset active="active" class="mb20">
+                    <uib-tab index="3" heading="{{'Thuộc tính con' | translate}}" disable="ParentCode == '' || ParentCode==undefined" ng-click="chkProductAttrMain()">
+                        <div ng-include="'../views/admin/materialProductAsset/tabAttribute.html'"></div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>-->
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,128 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6 ">
+           <!-- <h1 class="bold mb-0"> Yêu cầu nhập kho</h1>-->
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="#">{{'COM_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div href="/edmsFile" class="bold">{{'EDMSSRP_LINK_SRP' | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group pull-right actions">
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>
+                <a class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> {{'COM_BTN_EXEL' | translate}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mt5 p10">
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_BRANCH' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Branch" theme="bootstrap" on-select="changleSelect('ContractType')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_BRANCH' | translate}}...">{{$select.selected.OrgCode}} - {{$select.selected.OrgName}}</ui-select-match>
+                            <ui-select-choices repeat="x.OrgAddonCode as x in listBranch | filter:$select.search">
+                                {{x.OrgCode}} - {{x.OrgName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Branch=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_TYPE_OF_DOCCUMENT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.DocumentType" theme="bootstrap" on-select="changleSelect('ContractType')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_TYPE_OF_DOCCUMENT' | translate}}...">{{$select.selected.ValueSet}}</ui-select-match>
+                            <ui-select-choices repeat="x.SettingID as x in listDocumentType | filter: $select.search">
+                                {{x.ValueSet}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DocumentType=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_DATE_FROM' | translate}}</label>
+                    <div class="input-group date" id='FromDate'>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="{{'EDMSSRP_CURD_TXT_DATE_FROM' | translate}}..." ng-model="model.FromDate">
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_TO_FROM' | translate}}</label>
+                    <div class='input-group date' id='ToDate'>
+                        <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'EDMSSRP_CURD_LBL_TO_FROM' | translate}}..."/>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_SENDER' | translate}}</label>
+                    <div class='input-group '>
+                        <input type='text' autocomplete="off" class="form-control " ng-model="model.User" placeholder="{{'EDMSSRP_CURD_TXT_SENDER' | translate}}..." id='DateTo' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.User='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_STATUS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap" on-select="changleSelect('ContractType')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in status  | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3" style="padding-top:23px">
+                    <div class="btn-group">
+                        <a class="btn btn-accent" ng-click="search()">
+                            <span class=""><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+

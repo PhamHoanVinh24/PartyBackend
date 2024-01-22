@@ -1,0 +1,92 @@
+﻿<style>
+    @media only screen and (max-width : 992px) {
+        .btn-group-vertical.margin-top-40 {
+            margin-top: 0 !important;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+            .btn-group-vertical.margin-top-40 > .btn {
+                display: inline-block;
+                width: auto;
+            }
+    }
+
+    .ui-select-toggle {
+        border-radius: 0 !important;
+        border-bottom-left-radius: 4px !important;
+        border-top-left-radius: 4px !important;
+    }
+
+    .table-box-shadow {
+        box-shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.18);
+    }
+</style>
+
+<div class="modal-header" style="background-color:white">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="icon-diamond" style="color: black;font-size: 20px;padding: 10px 0px 10px 10px;"></i>
+    <span class="modal-title white" id="modal-title" style="color:black"> {{"ADM_FUNC_ADD_RESOURCE_FOR_FUNC" | translate }} Api: <span>"{{Func}}"</span></span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form pt5">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <div class="input-group br24 col-md-10">
+                            <ui-select ng-model="model.Resource" class="" style="width: 500px !important">
+                                <ui-select-match placeholder="{{'ADM_FUNC_COMBO_SELECT_RESOURCE' | translate }}...">{{$select.selected.TitleJoin}}</ui-select-match>
+                                <ui-select-choices repeat="x in treeData | filter:$select.search">
+                                    {{x.TitleJoin}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-addon" ng-click="model.Resource= undefined;">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center pr-2">
+                            <a ng-click="addFuncResource()" class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{"ADM_FUNC_CURD_TITLE_ADD_RESOURCE" | translate }}</p>
+                        </div>
+                        <div class="text-center pr-2">
+                            <a ng-click="refreshFuncResource()" class="fs30">
+                                <span><i class="fa fa-refresh"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_REFRESH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table dataTable table-bordered table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblDataRes"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group actions d-flex pull-right">
+        <div class="text-center pr-2">
+            <a ng-click="cancel()" class="fs30">
+                <span><i class="fas fa-times"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{"COM_BTN_CLOSE" | translate }}</p>
+        </div>
+        <div class="text-center pr-2">
+            <a ng-click="saveFuncResource()" class="fs30">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

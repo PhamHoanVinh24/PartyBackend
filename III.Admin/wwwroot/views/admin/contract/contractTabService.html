@@ -1,0 +1,243 @@
+﻿<style>
+
+    /*.custom_width thead tr th {
+        width: 11% !important
+    }*/
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    /*.mBorder .ui-select-toggle {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }*/
+</style>
+<div ng-controller="contractTabService">
+    <form name="addformTabService" method="post" ng-validate="validationOptionsContractTabService">
+        <div class="row">
+            <div class="col-md-8 pr-0">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_SERVICE' | translate}}</label>
+                            <div class="input-group br24" ng-class="{ 'has-error': errorServiceCode}">
+                                <ui-select ng-disabled="isAdd==false" ng-model="model.ServiceCode" theme="bootstrap" ng-change="changeService()">
+                                    <ui-select-match placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_SERVICE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in services | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button ng-disabled="isAdd==false" type="button" ng-click="model.ServiceCode=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorServiceCode" class="label-color validation-message">
+                                {{'CONTRACT_CURD_VALIDATE_SERVICE_NO_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 p-0" style="margin-bottom:-10px">
+                        <label class="mt-checkbox mt30"><input type="checkbox" ng-model="isExtend" ng-change="changeExtend()" /><span></span>{{'CONTRACT_CURD_TAB_LOS_LBL_EXTEND' | translate}}</label>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" ng-class="{ 'has-error': errorServiceCondition}">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_BIND_TO' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.ServiceCondition" theme="bootstrap" ng-change="changeCondition()" ng-disabled="isExtend==false">
+                                    <ui-select-match placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_BIND_TO' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in serviceConditions | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ServiceCondition=''" class="btn btn-default no-shadow" ng-disabled="isExtend==false">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorServiceCondition" class="label-color validation-message">
+                                {{'CONTRACT_CURD_VALIDATE_BIND_TO_NO_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pr3">
+                        <div class="form-group" ng-class="{ 'has-error': errorRange}">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_VALUE_BINDING' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.Range" theme="bootstrap" ng-change="filterCost()" ng-disabled="isExtend==false">
+                                    <ui-select-match placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_VALUE_BINDING' | translate}}">{{$select.selected.ConditionRange}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in serviceCost | filter: $select.search">
+                                        {{x.ConditionRange}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Range=''" class="btn btn-default no-shadow" ng-disabled="isExtend==false">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorRange" class="label-color validation-message">
+                                {{'CONTRACT_CURD_VALIDATE_VALUE_NO_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--<div class="col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error': errorCost}">
+                            <label class="control-label require fs11">{{'CONTRACT_CURD_TAB_LOS_LBL_PRICE' | translate}}</label>
+                            <input style="width:130px;font-weight:bold" type="text" num-thousand='true' awnum num-int='21' class="form-control" ng-model="model.Cost" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="Code" placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_PRICE' | translate}}..." ng-change="changleSelect('Cost')" />
+                            <span ng-show="errorCost" class="label-color validation-message">
+                                {{'CONTRACT_TAB_LOP_VALIDATE_PRICE' | translate}}
+                            </span>
+                        </div>
+                    </div>-->
+                    <div class="col-md-2" style="width:130px">
+                        <div class="form-group" ng-class="{ 'has-error': errorCost}">
+                            <label class="control-label require fs11">{{'CONTRACT_CURD_TAB_LOS_LBL_PRICE' | translate}}</label>
+                            <input style="width:130px;font-weight:bold" type="text" num-thousand='true' awnum num-int='21' class="form-control br24 black" ng-model="model.Cost" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" name="Code" placeholder="{{'CONTRACT_CURD_TAB_LOS_LBL_PRICE' | translate}}..." ng-change="changleSelect('Cost')" />
+                            <span ng-show="errorCost" class="label-color validation-message">
+                                {{'CONTRACT_TAB_LOP_VALIDATE_PRICE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="margin-left: 30px; width: 100px;">
+                        <div class="form-group" ng-class="{ 'has-error': errorQuantity}">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_QUANTITY' | translate}}</label>
+                            <input onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control br24" ng-model="model.Quantity" name="Quantity" placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_QUANTITY' | translate}}..." ng-change="changleSelect('Quantity')" />
+                            <span ng-show="errorQuantity" class="label-color validation-message">
+                                {{'CONTRACT_TAB_LOP_VALIDATE_AMOUNT' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="width: 150px">
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_UNIT' | translate}}</label>
+                            <div class="input-group br24-nobtn">
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Unit" theme="bootstrap" ng-change="changleSelect('Unit')">
+                                    <ui-select-match placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in units | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                {{'CONTRACT_CURD_VALIDATE_UNIT_NO_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-1 pr-0" style="width: 100px">
+                        <div class="form-group">
+                            <label class="control-label require fs11 " style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_CURRENCY' | translate}}</label>
+                            <div class="input-group mBorder">
+                                <ui-select ng-model="model.Currency" theme="bootstrap" ng-change="changleSelect('Currency')">
+                                    <ui-select-match placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in currencys | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorCurrency" class="label-color validation-message">
+                                {{'CONTRACT_CURD_VALIDATE_CURRENCY_NO_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>-->
+                    <div class="col-md-1 " style="width: 100px;">
+                        <div class="form-group" ng-class="{ 'has-error': errorTax}">
+                            <label class="control-label fs11 " style="font-size:11px !important">{{'CONTRACT_TAB_LOP_CURD_LBL_TAX' | translate}}</label>
+                            <input type="text" num-thousand='true' awnum num-int='21' onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control bold br24 black" ng-model="model.Tax" name="Code" placeholder="{{'CONTRACT_CURD_TAB_LOS_TXT_TAX' | translate}}" ng-change="changleSelect('Tax')" />
+                            <span ng-show="errorTax" class="label-color validation-message">
+                                {{'CONTRACT_CURD_TAB_LOS_LBL_TAX' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="width: 20%;">
+                        <div class="form-group">
+                            <label class="control-label fs11">{{'CONTRACT_LBL_TAX_MONEY' | translate}}</label>
+                            <input type="text" num-thousand='true' awnum num-int='21' readonly class="form-control br24 pl-2 bold black" ng-model="modelView.TaxMoney" placeholder="{{'CONTRACT_LBL_TAX_MONEY' | translate}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!--<div class="col-md-5">-->
+                <!--Member list-->
+                <label class="control-label require fs11" style="font-size:11px !important">{{'CONTRACT_CURD_TAB_LOS_LBL_SERVICE_DETAILS' | translate}}</label>
+                <div class="col-lg-12 groupUser br24" style="height:100px; border:#c2cad8 solid 1px; border-radius:4px">
+                    
+                </div>
+                <!--</div>-->
+            </div>
+            <div class="col-md-12 pr-0 pt5">
+                <div class="pull-right pr-1">
+                    <div class="pt20">
+                        <div ng-show="isAdd==true" class="text-center" ng-click="add()">
+                            <a class="fs30" ng-click="add">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex pt20 pr-0">
+                        <div ng-show="isAdd==false" class="text-center pr20" ng-click="save()">
+                            <a class="fs30">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <div ng-show="isAdd==false" class="text-center pr20" ng-click="close()">
+                            <a class="fs30">
+                                <span><i class="fas fa-times" style="color: red"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CLOSE' | translate}}</p>
+                        </div>
+                    </div>
+                    <!--<div class="btn-group actions d-flex">
+        <div class="text-center" ng-show="isAdd==true" ng-click="add()">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+        </div>
+        <div class="text-center pl20" ng-show="isAdd==false" ng-click="close()">
+            <a class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="fa fa-close"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3 ">{{'COM_BTN_CLOSE' | translate}}</p>
+        </div>
+        <div class="text-center pl20" ng-show="isAdd==false" ng-click="save()">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>-->
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="custom_width mt5">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataService"></table>
+    </div>
+</div>

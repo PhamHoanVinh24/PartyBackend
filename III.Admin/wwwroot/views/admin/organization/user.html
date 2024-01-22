@@ -1,0 +1,202 @@
+﻿<div class="modal-header">
+    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">×</button>-->
+    <span class="icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="fa fa-users"></i>  {{'MANAGE_MEMBER' | translate}} of {{model.OrgTitle}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <style>
+            .btn-function {
+                /*padding: 15px 20px 14px !important;*/
+            }
+
+            .table-box-shadow {
+                box-shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.18);
+            }
+
+            .table-height-scroll {
+                display: block;
+                height: 350px;
+                overflow: auto
+            }
+
+            @media only screen and (max-width : 992px) {
+                .btn-group-vertical.margin-top-40 {
+                    margin-top: 0 !important;
+                    margin-bottom: 15px;
+                    display: inline-block;
+                }
+
+                .btn-group-vertical.margin-top-40 > .btn {
+                    display: inline-block;
+                    width: auto;
+                }
+            }
+
+            @media only screen and (min-width : 992px) {
+                .res-margin-center {
+                    margin-top: 120px !important;
+                }
+
+                .res-position {
+                    position: absolute;
+                    left: -20px;
+                    top: 115px;
+                }
+
+                .block-col-left {
+                    padding-right: 45px;
+                }
+
+                .block-col-right {
+                    position: relative;
+                    padding-left: 45px;
+                }
+            }
+        </style>
+        <div class="row">
+            <div class="col-md-6 block-col-left">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <select ng-model="model.GroupUserCode" class="form-control" style="width: 100%; border-radius: 0" ng-change="searchUserOutOrg()">
+                                <option value="">--- {{'SELECT_GROUP_USERS' | translate}} ---</option>
+                                <option ng-repeat="x in groupUserData" value="{{ x.Id }}" ng-selected="{{ x.Id == model.GroupUserCode }}">{{ x.Title }}</option>
+                            </select>
+
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.GroupUserCode='';searchUserOutOrg()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Member out {{model.OrgTitle}}..." ng-model="model.UserNameOutOrg" ng-change="searchUserOutOrg()">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.UserNameOutOrg='';searchUserOutOrg()" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                            <!--<span class="input-group-btn">
+                                <button class="btn blue" type="button"><i class="fa fa-search"></i> {{'BTN_SEARCH_NOT_FULL' | translate}}</button>
+                            </span>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive table-box-shadow table-height-scroll">
+                    <table class="table table-bordered table-striped table-hover no-margin">
+                        <thead>
+                            <tr>
+                                <th width="30"><label class="mt-checkbox"><input type="checkbox" ng-model="selectAllUserOutOrg" ng-change="addOrRemoveUserOutOrg(null, selectAllUserOutOrg)" /><span></span></label></th>
+                                <th>{{'ADM_BRANCH_USER_NAME' | translate}}</th>
+                                <th>{{'ADM_BRANCH_USER_FULLNAME' | translate}}</th>
+                                <th>{{'ADM_BRANCH_USER_EMAIL' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="user in userOutOrgs">
+                                <td><label class="mt-checkbox"><input type="checkbox" ng-model="selectUserOutOrg[$index]" ng-change="addOrRemoveUserOutOrg(user, selectUserOutOrg[$index])" /><span></span></label></td>
+                                <td>{{ user.UserName }}</td>
+                                <td>{{ user.FullName }}</td>
+                                <td>{{ user.Email }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6 block-col-right">
+                <div class="text-center res-position">
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn blue btn-function" title="{{'ADD_ALL' | translate}}" ng-click="addAllUser()"><span class="fa fa-forward"></span></button>
+                        <button type="button" class="btn blue btn-function margin-top-10" title="{{'ADD_SELECT' | translate}}" ng-click="addUserSelected()"><span class="fa fa-chevron-right"></span></button>
+                        <button type="button" class="btn blue btn-function margin-top-10" title="{{'REFRESH' | translate}}" ng-click="refreshUser()"><span class="fa fa-refresh"></span></button>
+                        <button type="button" class="btn blue btn-function margin-top-10" title="{{'CANCEL_SELECT' | translate}}" ng-click="removeUserSelected()"><span class="fa fa-chevron-left"></span></button>
+                        <button type="button" class="btn blue btn-function margin-top-10" title="{{'CANCEL_ALL' | translate}}" ng-click="removeAllUser()"><span class="fa fa-backward"></span></button>
+                    </div>
+                </div>
+                <div>
+                    <div class="portlet-title">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select ng-model="model.OrgAddonCode" class="form-control" style="width: 100%; border-radius: 0" ng-change="searchUserInOrg()">
+                                        <option value="">--- Select {{model.OrgTitle}} ---</option>
+                                        <option ng-repeat="x in listOrgData" value="{{ x.OrgAddonCode }}" ng-selected="{{ x.OrgAddonCode == model.OrgAddonCode }}">{{ x.OrgName }}</option>
+                                    </select>
+
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="clearOrgData()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group col-md-12">
+                                    <input type="text" class="form-control" placeholder="Member in {{model.OrgTitle}}..." ng-model="model.UserNameInOrg" ng-change="searchUserInOrg()">
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.UserNameInOrg='';searchUserInOrg()" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                    <!--<span class="input-group-btn">
+                                        <button class="btn blue" type="button"><i class="fa fa-search"></i> {{'BTN_SEARCH_NOT_FULL' | translate}}</button>
+                                    </span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table-responsive table-box-shadow table-height-scroll">
+                            <table class="table table-bordered table-striped table-hover no-margin">
+                                <thead>
+                                    <tr>
+                                        <th width="30"><label class="mt-checkbox"><input type="checkbox" ng-model="selectAllUserInOrg" ng-change="addOrRemoveUserInOrg(null, selectAllUserInOrg)" /><span></span></label></th>
+                                        <th>{{'ADM_BRANCH_USER_NAME' | translate}}</th>
+                                        <th>{{'ADM_BRANCH_USER_FULLNAME' | translate}}</th>
+                                        <th>{{'ADM_BRANCH_USER_EMAIL' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="user1 in userInOrgs">
+                                        <td><label class="mt-checkbox"><input type="checkbox" ng-model="selectUserInOrg[$index]" ng-change="addOrRemoveUserInOrg(user1, selectUserInOrg[$index])" /><span></span></label></td>
+                                        <td>{{ user1.UserName }}</td>
+                                        <td>{{ user1.FullName }}</td>
+                                        <td>{{ user1.Email }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<select multiple data-ng-options="option as option for option in options" data-ng-model="selectedOptions" data-multi-select="options" data-ms-options="msOptions"></select>-->
+    </div>
+</div>
+<div class="modal-footer">
+    <!--<a data-dismiss="modal" class="btn   btn-default m-btn-cancel" href="javascript:;" ng-click="cancel()">
+        {{'COM_BTN_CANCEL' | translate}}
+    </a>
+
+    <a ng-click="submit()" class="btn  btn-primary  btn-default" href="javascript:;">
+        <i class="fa fa-floppy-o"></i> {{'COM_BTN_EDIT' | translate}}
+    </a>-->
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

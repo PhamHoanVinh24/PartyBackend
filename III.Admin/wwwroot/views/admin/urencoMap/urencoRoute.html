@@ -1,0 +1,71 @@
+﻿<div class="tab-pane active " ng-controller="urencoRoute">
+    <div class="table-toolbar-uren">
+        <div id="divstyle">
+            <form class="form-horizontal">
+                <div class="form-group pt-2">
+                    <div class='input-group '>
+                        <div class="col-md-11">
+                            <div class='input-group'>
+                                <ui-select tagging ng-keydown="($event.keyCode == 13) && reload()" ng-model="model.RouteCode" on-select="changeSelect('RouteCode')">
+                                    <ui-select-match placeholder="Tên tuyến đường">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listUrencoRoute | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button ng-click="searchcar()" class="btn btn-default no-shadow">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-md-6">
+                        <ui-select tagging ng-model="model.Manager" ng-keydown="($event.keyCode == 13) && reload()" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="Người quản lý...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in managers | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-5">
+                        <ui-select tagging ng-model="model.Status" ng-keydown="($event.keyCode == 13) && reload()" theme="bootstrap" ng-change="reload()">
+                            <ui-select-match placeholder="Trạng thái...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in statuss | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <button class="btn btn-default no-shadow start-date ml15 p5 inputHours ListCar" style="color: #c1190e;font-weight: bold;">
+                            DANH SÁCH TUYẾN ĐƯỜNG
+                        </button>
+                    </div>
+                    <button type="button" ng-click="model.ActiveTime=''" class="btn btn-default no-shadow start-date p5 mr15 flr">
+                        <span class="fa fa-question"></span>
+                    </button>
+                    <button type="button" ng-click="model.ActiveTime=''" class="btn btn-default no-shadow start-date p5 mr5 flr">
+                        <span class="fa fa-exchange"></span>
+                    </button>
+                    <button type="button" ng-click="model.ActiveTime=''" class="btn btn-default no-shadow start-date p5 mr5 flr">
+                        <span class="fa fa-refresh"></span>
+                    </button>
+                </div>
+                <div class="form-group viewTable">
+                    <div class="input-group p10">
+                        <table class="table dataTable table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblDataRoute"></table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

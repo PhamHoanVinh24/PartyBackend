@@ -1,0 +1,212 @@
+﻿<style>
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'PSP_TITLE_ADD_INFOR' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mtn20">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_PRODUCT' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.LotProductCode" theme="bootstrap" on-select="changleSelect('LotProductCode', $item)">
+                                        <ui-select-match placeholder="{{'PSP_CURD_TXT_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listProduct | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.LotProductCode=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorProductGroup" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_GROUP' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_PRICE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input value="0"  class="form-control"style="font-weight: bold" ng-model="model.Price" name="QrCode" id="Price" placeholder="{{'PSP_CURD_TXT_PRICE' | translate}}..." num-thousand='true' awnum num-int='21'/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_TAX' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input  value="0" id="Tax" class="form-control input-date br4"style="font-weight: bold" ng-model="model.Tax" placeholder="{{'PSP_CURD_TXT_TAX' | translate}}..." num-thousand='true' awnum num-int='21'/>
+                                <span class="input-group-btn">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_DISCOUNT' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input  value="0" id="Discount" class="form-control input-date br4"style="font-weight: bold" ng-model="model.Discount" placeholder="{{'PSP_CURD_TXT_DISCOUNT' | translate}}..." num-thousand='true' awnum num-int='21'/>
+                                <span class="input-group-btn">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_CUSTOM_FEE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input  value="0" id="CustomFee" class="form-control input-date br4"style="font-weight: bold" ng-model="model.CustomFee" placeholder="{{'PSP_CURD_TXT_CUSTOM_FEE' | translate}}..." num-thousand='true' awnum num-int='21'/>
+                                <span class="input-group-btn">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">{{'PSP_CURD_LBL_COMMISSION' | translate}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input value="0" id="Commission" class="form-control input-date br4"style="font-weight: bold" ng-model="model.Commission" placeholder="{{'PSP_CURD_TXT_COMMISSION' | translate}}..." num-thousand='true' awnum num-int='21'/>
+                                <span class="input-group-btn">
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row mt30">
+            <div class="col-md-12">
+                <div class="text-center pull-right" style="margin-top:-25px; margin-right:7px" ng-click="submit()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-save fs14" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3">
+                       {{COM_BTN_ADD}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

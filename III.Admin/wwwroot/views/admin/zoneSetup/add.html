@@ -1,0 +1,131 @@
+﻿<style>
+    .modal-body .control-label {
+        font-size: 13px !important;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'Thêm khu vực' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal ng-pristine ng-valid ng-isolate-scope" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10 pl-0 pr-0">
+                <div class="row ">
+                    <div class="col-lg-6">
+                        <div class="col-md-12">
+                            <div class="fileupload fileupload-new mh15" data-provides="fileupload" id="block-upload-image" style="margin: 0 auto !important;">
+                                <div class="form-group">
+                                    <div class="fileupload-new thumbnail pb-0" style="border:0; box-shadow: none;background:none;">
+                                        <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                        <img id="imageId" ng-click="loadImage()" class="h-300 w-450 br-n" onerror="this.src='../../../images/default/uploadimg.png'" ng-src="{{model.ZoneImage==null ? '../../../images/default/uploadimg.png' : model.ZoneImage}}" role="button" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <div class="text-center">
+                                            <i class="fa fa-camera blue" style="color: #337ab7;"></i>&nbsp;&nbsp;&nbsp;<a ng-click="loadImage()" class="fileupload-exists text-underline fw600" data-dismiss="fileupload">Chọn ảnh</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require bold">{{'Mã khu vực' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control br24 bold" ng-model="model.ZoneCode" name="ZoneCode" placeholder="{{'Mã khu vực' | translate}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require bold">{{'Tên khu vực' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input type="text" class="form-control br24 bold" ng-model="model.ZoneName" name="ZoneName" placeholder="{{'Tên khu vực' | translate}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class=" {'has-error': errorZoneStatus}">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require ng-binding">&nbsp;{{'Trạng thái' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select tagging ng-model="model.ZoneStatus" theme="bootstrap" on-select="changeSelect('STATUS')">
+                                        <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorZoneStatus" class="label-color validation-message ng-binding ng-hide">
+                                    {{'Trạng thái không bỏ trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-cog"></i>
+                                <label class="control-label">&nbsp;{{'Địa chỉ' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input name="ZoneAddressTxt" ng-click="openMap()" class="form-control br24" ng-model="model.ZoneAddressTxt" type="text" placeholder="{{'Địa chỉ' | translate}}...">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-cog"></i>
+                                <label class="control-label">&nbsp;{{'GPS' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <input name="ZoneAddressGps" class="form-control br24" ng-model="model.ZoneAddressGps" type="text" placeholder="{{'GPS' | translate}}...">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 nowrap">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label">&nbsp;{{'Mô tả' | translate}}</label>
+                            </div>
+                            <div class="col-md-8 pl-0">
+                                <textarea rows="3" name="ZoneDesc" class="form-control br12" ng-model="model.ZoneDesc" type="text" placeholder="{{'Mô tả' | translate}}..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class=" btn-group pull-right actions d-flex pr20">
+                            <div class="fs30" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+                                <a>
+                                    <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                            </div>
+                            <div class="fs30" ng-click="submit()">
+                                <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-lg-12" style="margin-top: 0px;">
+            <div disable="tests" ng-include="'../views/admin/zoneSetup/deviceIOT.html'"></div>
+        </div>
+    </div>
+</div>

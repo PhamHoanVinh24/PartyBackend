@@ -1,0 +1,637 @@
+﻿<link href="../../../css/admin/cardJob/card.css" rel="stylesheet" />
+<style>
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-60 {
+            width: 90%;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1300px) {
+        .modal-60 {
+            width: 75%;
+        }
+    }
+
+    @media (min-width:1300px) and (max-width:1500px) {
+        .modal-60 {
+            width: 70%;
+        }
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        font-size: 30px;
+        line-height: 0.75;
+        color: red;
+        margin-right: 8px;
+    }
+</style>
+<div class="modal-header header d-flex" style="background:#f1f1f1">
+    <div class="col-md-11 pl-0">
+        <div class="col-md-1 text-danger text-underline pl-0">#{{cardCode}}</div>
+        <div class="col-md-9">
+            <div class="category-detail-header" ng-mouseup="editingCardetailHeader(model.CardID)" ng-show="!acticeDetailDrag"></div>
+            <input class="category-title  black" id="card_{{model.CardID}}" style="width: 100%" type="text" data-currentvalue="{{model.CardName}}" value="{{model.CardName}}" ng-blur="updateCardName(model.CardID)" />
+
+        </div>
+        <div class="col-md-12 pl5 fs12">
+            <span class="gray">Board <i class="text-danger">{{completeBoard  | number : fractionSize}}%,</i></span>
+            <span class="gray">List <i class="text-danger">{{completeList  | number : fractionSize}}%,</i></span>
+            <span class="gray">{{'CJ_LBL_MODAL_HEADER' | translate}} <i class="text-success">{{model.Completed  | number : fractionSize}}%,</i></span>
+            <!--<span ng-if="model.Deadline != null">{{'CJ_CURD_LBL_DUEDATE' | translate}} <i>: {{model.Deadline | date:"dd/MM/yyyy 'lúc' hh:mm:ss"}}</i></span>-->
+        </div>
+    </div>
+    <div class="mr5">
+        <a class="card-close mr5" ng-click="cancel()">
+            <img src="/images/default/close.png" class="h-25 w25" />
+        </a>
+    </div>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <div class="row" style="padding: 10px 10px 0px 15px">
+        <div class="col-lg-8 p0">
+            <!--obj relative card-->
+            <div class="col-lg-12 p0 clearfix">
+                <div class="col-lg-3 pl-0" style="width:30% !important">
+                    <label class="control-label mt5 text-underline ng-binding col-md-12 pl-0">{{'CJ_CURD_LBL_WORK_TYPE' | translate}}:</label>
+                    <div class="input-group">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WorkType" on-select="changeWorkType(model.WorkType)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_LBL_WORK_TYPE' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in WorkTypes | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addCommonSettingWorkType()" class="btn no-shadow  green-custom" style="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 pl-0" style="width:30% !important">
+                    <label class="control-label mt5 text-underline col-md-12 pl-0">{{'CJ_CURD_LBL_PRIORITY' | translate}}:</label>
+                    <div class="input-group">
+                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.CardLevel" on-select="changeCardLevel(model.CardLevel)" theme="bootstrap">
+                            <ui-select-match placeholder="{{'CJ_CURD_LBL_PRIORITY' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in CardLevels | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="addCommonSettingCardLevel()" class="btn no-shadow  green-custom" style="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                   
+                </div>
+                <div class="col-lg-3 pl-0 pr-0" style="width:25% !important">
+                    <label class="control-label mt5 text-underline">{{'CJ_CURD_LBL_STATUS' | translate}}:</label>
+                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Status" on-select="changeCardStatus(model.Status)" theme="bootstrap">
+                        <ui-select-match placeholder="{{'CJ_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in CardStatus | filter: $select.search">
+                            {{x.Value}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-lg-3 pr-0" style="width:15% !important">
+                    <label class="control-label mt5 text-underline">{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}(%):</label>
+                    <div class="input-group">
+                        <input ng-model="model.WeightNum" class="form-control" type="text" placeholder="{{'CJ_CURD_LBL_WEIGHT_NUM' | translate}}..." ng-keydown="($event.keyCode == 13) && changeWeightNum(model.WeightNum)" ng-blur="changeWeightNum(model.WeightNum)" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 p0">
+                <div class="col-lg-3 pl-0">
+                    <label class="control-label mt5 text-underline">{{'CJ_LBL_START_TIME' | translate}}:</label>
+                    <div class="input-group date" id="startDate">
+                        <input ng-model="model.BeginTime" class="form-control" type="text" placeholder="{{'CJ_LBL_START_TIME' | translate}}..." ng-change="cardChangeBeginTime(model.BeginTime)" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 pl-0">
+                    <label class="control-label mt5 text-underline">{{'CJ_LBL_END_TIME' | translate}}:</label>
+                    <div class="input-group date" id="endDate">
+                        <input ng-model="model.EndTime" class="form-control" type="text" placeholder="{{'CJ_LBL_END_TIME' | translate}}..." ng-change="cardChangeEndTime(model.EndTime)" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-2 pr-0 pl-0 mt15">
+                    <!--<button class="btn btn-default br4 bold no-shadow" style="background-color:#f1f1f1;" ng-click="addMember()">
+                        <i class="fa fa-users"></i>
+                        {{'CJ_CURD_TAB_ADD_MEMBER' | translate}}
+
+                    </button>-->
+                    <div class="pull-left text-center pr-1">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:32px;height:32px;padding-top: 7px;" ng-click="addMember()">
+                            <span><i class="fa fa-users"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt2">{{'CJ_BTN_SELECT_PERSON' | translate}}</p>
+                    </div>
+
+                </div>
+                <div class="col-lg-4 pl-1 pr-0">
+                    <div class="input-group d-flex pt10 pl-0 pr-0">
+                        <span ng-repeat="x in activity">
+                            <label class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 15px!important;display:inline" ng-class="{'text-success':x.Value==0,'text-danger':x.Value==1,'text-primary':x.Value==2}">
+                                <input type="checkbox" ng-disabled="x.Value==0" ng-model="x.IsCheck" ng-change="updateActivity(x.Value,x.IsCheck)" /> <br /><i class="text-center" style="font-style:normal;">{{x.Name}}</i>
+                                <span></span>
+                            </label>
+                            <br />
+                            <span class="pl-0" style="display: inline-grid">
+                                <span style="font-size: 9px; padding-right:6px">{{x.Date}}</span>
+                                <span style="font-size: 9px; padding-right:6px"> lúc {{x.Time}}</span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!--end  relative card-->
+            <div class="col-lg-12 p0 pt-1">
+                <div>
+                    <div class="text-center pull-right pr-2">
+                        <button class="btn br8 bold no-shadow" style="background-color: #dc690efa;color: white;box-shadow: 3px 4px 10px #af4e01fa !important;padding-left: 7px;padding-right: 5px;padding-top: 11px;padding-bottom: 5px;" ng-click="hiddenForm()">
+                            <i class="fa fa-external-link fs18"></i>
+                        </button>
+                        <p class="text-underline fs9 mb5 mt5">{{'LMS_HIDE/LMS_SHOW' | translate}}</p>
+                    </div>
+                    <div class="text-center pull-right pr-2">
+                        <button class="btn br8 bold no-shadow" style="background-color: #dc690efa;color: white;box-shadow: 3px 4px 10px #af4e01fa !important;padding-left: 7px;padding-right: 6px;padding-top: 11px;padding-bottom: 5px;" ng-click="addLinkCardJob()">
+                            <i class="fa fa-link fs18"></i>
+                        </button>
+                        <p class="text-underline fs9 mb5 mt5">{{'Link' | translate}}</p>
+                    </div>
+
+                    <div class="text-center pull-right pr-2">
+                        <button class="btn br8 bold no-shadow" style="background-color: #dc690efa;color: white;box-shadow: 3px 4px 10px #af4e01fa !important;padding-left: 7px;padding-right: 6px;padding-top: 11px;padding-bottom: 5px;" ng-click="addItemWork()">
+                            <i class="fa fa-save fs18"></i>
+                        </button>
+                        <p class="text-underline fs9 mb5 mt5">{{'CJ_BTN_RPT_PROGRESS' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+            <!--description-->
+            <div class="col-lg-12 p0" ng-show="!showForm">
+                <label class="control-label text-underline col-md-6">{{'CJ_CURD_LBL_DESCRIPTION' | translate}}:</label>
+                <div class="col-md-6">
+                    <label class="text-primary text-underline text-center" ng-if="leader" style="font-size:11px; padding-left:100px;">{{'CJ_LBL_APPROVE_EMP' | translate}}</label>
+                </div>
+                <textarea class="form-control" ng-blur="editDescription()" rows="4" ng-model="model.Description" placeholder="{{'CJ_CURD_TXT_DESCRIPTION' | translate}}..."></textarea>
+            </div>
+            <!--end description-->
+            <div class="col-lg-12 p0 mt20" ng-show="!showForm">
+                <div class="col-lg-10 pl-0 pt-2"><label class="text-underline">{{'CJ_LBL_OBJECT_RELATIVE' | translate}}</label></div>
+                <div class="col-lg-2 pr-0">
+                    <div class="pull-right text-center pr-1">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:32px;height:32px;padding-top: 7px;" ng-click="addObjectRelative()">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt2">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                </div>
+                <div class="col-md-12 p10 pb10 table_toolbar">
+                    <div class="col-lg-12 pl-0 pr-0">
+                        <ui-select ng-model="listID" multiple theme="bootstrap" class="h-100 mh-100">
+                            <ui-select-match placeholder="{{'CJ_TXT_OBJECT_RELA' | translate}}...">
+                                <div>
+                                    &nbsp;<i>{{$item.ObjName}}</i><br />
+                                    <i>{{$item.ObjTypeName}}</i><br />
+                                    <i>{{$item.RelativeName}}</i>
+                                </div>
+                            </ui-select-match>
+                            <ui-select-choices repeat="x.ID as x in listObjRelative | filter:$select.search">
+                                {{x.ObjName}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+            </div>
+            <!--tag,add file,add checklist-->
+            <div class="col-lg-12 p0">
+                <style>
+                    .custom-scroll {
+                        position: relative;
+                        max-height: 200px;
+                        height: auto;
+                        overflow-y: scroll;
+                    }
+
+                    .custom-view {
+                        border-bottom: 1px solid #d2d2d2;
+                    }
+
+                    .itemWork {
+                        border-bottom: 1px dotted #d2d2d2;
+                    }
+
+                    .nav-tabs .nav-link, .nav-tabs a {
+                        background: #428bca;
+                        transition: 0.5s;
+                        background-size: 200% auto;
+                        border-top-left-radius: 6px !important;
+                        border-top-right-radius: 6px !important;
+                        font-size: 12px;
+                        color: white;
+                        padding: 8px;
+                    }
+
+                    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+                        color: white !important;
+                        font-weight: 300;
+                        background: #FF8000;
+                        font-size: 12px;
+                    }
+                    .wordWrap {
+                        word-wrap: break-word; /* IE 5.5-7 */
+                        white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+                        white-space: pre-wrap; /* current browsers */
+                    }
+                </style>
+                <uib-tabset>
+                    <uib-tab class="mt5 text-underline" index="0" heading="{{'CJ_TAB_CHECK_ITEM' | translate}}">
+                        <div class="col-lg-12 pr-0">
+                            <button class="btn btn-default br4 pull-right" ng-click="addCheckList()" style="background: linear-gradient(to bottom,#f2eee6,#FBFCFC );">
+                                <i class="fa fa-plus"></i>
+                                {{'CJ_BTN_CHECK_ITEM'| translate}}
+                            </button>
+                        </div>
+                        <div class="col-lg-12 p0 mt5" ng-repeat="checklist in checklists">
+                            <div class="table-toolbar table_toolbar">
+                                <div class="col-md-12 p0 pl10 pr10" ng-init="show.addCheckItem[checklist.ChkListCode] = false; show.editCheckTitle[checklist.ChkListCode] = false" style="font-size: 14px;">
+                                    <i class="fa fa-check-square-o inline"></i>
+                                    <input role="button" ng-if="show.editCheckTitle[checklist.ChkListCode]" checkcode="{{checklist.ChkListCode}}" ng-blur="editCheckTitle($event)" class="form-control bold ml5 inline" style="width: 85%" value="{{checklist.CheckTitle}}" />
+                                    <span role="button" ng-if="!show.editCheckTitle[checklist.ChkListCode]" ng-click="show.editCheckTitle[checklist.ChkListCode] = true" class="bold ml5">{{checklist.CheckTitle}}&nbsp;<i style="color:cadetblue;font-family:serif">({{checklist.Completed  | number : fractionSize}}%)</i>&nbsp;&nbsp;&nbsp;</span><i class="fas fa-balance-scale fs9">&nbsp;<span class="text-danger">{{checklist.WeightNum  | number : fractionSize}}%</span></i>
+                                    <!--<span class="pull-right" ng-if="!show.editCheckTitle[checklist.ChkListCode]"><a class="gray" ng-click="deleteCheckList(checklist.ChkListCode)">{{'COM_BTN_DELETE' | translate}}...</a></span>-->
+                                    <span class="pull-right" ng-if="!show.editCheckTitle[checklist.ChkListCode]"><a class="pull-right pr15 btn btn-icon-only btn-circle btn-outline red" style="width: 25px; height: 25px; padding-top: 3px;padding-left: 6px; margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)" ng-click="deleteCheckList(checklist.ChkListCode)"><i class="fa fa-trash"></i></a></span>
+                                    <span class="pull-right" ng-if="!show.editCheckTitle[checklist.ChkListCode]"><a class="pull-right pr10 btn btn-icon-only btn-circle btn-outline green" ng-click="assignUserToItem(checklist.ChkListCode)" style="width: 25px; height: 25px; padding-top: 3px;padding-left: 6px;margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)"><i class="fa fa-ellipsis-h"></i></a></span>
+                                    <div>
+                                        <span ng-repeat="x in checklist.ListUserItemChk ">
+                                            <i class="text-danger" style="font-size:11px;">{{x.GivenName}},&nbsp;</i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pl20 mt-1" ng-init="show.editCheckItem[checkitem.Id] = false" ng-repeat="checkitem in checkList[checklist.ChkListCode]">
+                                    <input role="button" class="form-control inline" ng-checked="checkitem.Approve == true" ng-click="checkItemClick(checkitem.Id,checklist.Id)" style="width: 18px; height: 18px" type="checkbox" />
+                                    <input role="button" type="text" class="form-control inline edit-check-item" itemid="{{checkitem.Id}}" ng-blur="editCheckItemTitle($event)" ng-if="show.editCheckItem[checkitem.Id]" value="{{checkitem.Title}}" />
+                                    <label role="button" class="strikethrough inline" style="position:inherit" ng-if="!show.editCheckItem[checkitem.Id]" ng-click="show.editCheckItem[checkitem.Id] = true">{{checkitem.Title}}</label>
+                                    <label role="button" ng-if="checkitem.MemberChecked != null && checkitem.MemberChecked != '' && !show.editCheckItem[checkitem.Id]">({{checkitem.MemberChecked}}-{{checkitem.TimeChecked | date: "dd/MM/yyyy"}})</label>
+                                    <a ng-if="!show.editCheckItem[checkitem.Id]" ng-click="deleteCheckItem(checkitem.Id)" class="pull-right pr10 btn btn-icon-only btn-circle btn-outline red pr-1" style="width: 25px; height: 25px; padding-top: 3px;padding-left: 6px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)"><i class="fa fa-trash"></i></a>
+                                    <a ng-if="!show.editCheckItem[checkitem.Id]" ng-click="assignUserToSubItem(checkitem.Id, checklist.ChkListCode)" class="pull-right pr10 btn btn-icon-only btn-circle btn-outline green" style="width: 25px; height: 25px; padding-top: 3px;padding-left: 6px; margin-right:5px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45)"><i class="fa fa-ellipsis-h"></i></a>
+                                    <div>
+                                        <a ng-repeat="k in checkitem.ListUserSubItem">
+                                            <i class="text-danger" style="font-size:11px;">{{k.GivenName}},&nbsp;</i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt10" ng-if="show.addCheckItem[checklist.ChkListCode]">
+                                    <div class="col-md-12 pr-0">
+                                        <textarea class="form-control" placeholder="{{'CJ_CURD_TXT_CHECK_ITEM' | translate}}..." ng-model="checkitem.Title"></textarea>
+                                    </div>
+                                    <div class="col-md-12 pt10">
+                                        <button class="btn green-dark bold" ng-click="addCheckItem(checklist.ChkListCode)">{{'COM_BTN_ADD' | translate}}</button>
+                                        <button class="btn btn-close" ng-click="show.addCheckItem[checklist.ChkListCode] = false"><span class="fa fa-times"></span></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pl25 mt20" ng-if="!show.addCheckItem[checklist.ChkListCode]">
+                                    <a class="gray" ng-click="show.addCheckItem[checklist.ChkListCode] = true">{{'CJ_CURD_BTN_CHECK_ITEM' | translate}}...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 p0 mt5">
+                            <div class="table_toolbar col-md-12 p10">
+                                <input class="form-control mb15" ng-keydown="($event.keyCode == 13) && addComment()" ng-blur="addComment()" ng-model="comment.Content" placeholder="{{'CJ_CURD_TXT_COMMENT' | translate}}..." />
+                                <div style="max-height:250px; overflow-y:scroll;">
+                                    <div class="active-detail pl10 pr10" ng-repeat="cmt in comments">
+                                        <div class="active-title" ng-if="cmt.Picture=='/images/default/no_user.png'">
+                                            <span class="member-initials">
+                                                <span>{{cmt.GivenName.charAt(0)}}</span>
+                                            </span>
+                                        </div>
+                                        <div class="active-title" ng-if="cmt.Picture!='/images/default/no_user.png'">
+                                            <img class="img-circle" height="32" width="32" src="{{cmt.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+                                        </div>
+                                        <div class="active-time" ng-init="show.editComment[cmt.Id] = false">
+                                            <b>{{cmt.GivenName}}</b>
+                                            <span style="color:#8c8c8c">{{cmt.CreatedTime | fomartDateTime}}</span>
+                                        </div>
+                                        <div class="active-body pl35">
+                                            <textarea class="form-control" style="height: 40px" cmtid="{{cmt.Id}}" ng-blur="updateComment($event)" ng-if="show.editComment[cmt.Id]" autofocus>{{cmt.CmtContent}}</textarea>
+                                            <p ng-if="!show.editComment[cmt.Id]" class="wordWrap" style="width:100%;"> {{cmt.CmtContent}}  <a class="pull-right" ng-click="deleteComment(cmt.Id)">{{'COM_BTN_DELETE' | translate}}</a> <a class="pull-right mr5" ng-click="show.editComment[cmt.Id] = true">{{'' | translate}}{{'CJ_CURD_LBL_UPDATE_TIME' | translate}}</a></p>
+                                            <p class="line" style="color:#8c8c8c" ng-if="cmt.UpdatedTime != null">{{'CJ_CURD_LBL_UPDATE_TIME' | translate}}: {{cmt.UpdatedTime | date: "dd/MM/yyyy 'lúc' h:mma"}} {{'CJ_CURD_LBL_UPDATE_BY' | translate}}: {{cmt.UpdatedBy}}</p>
+                                        </div>
+                                        <hr style="border-top: 1px solid #d6dadc; margin-top: 0 !important" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab class="mt5 text-underline" style="background-color: aliceblue" index="1" heading="{{'CJ_TAB_PROGRESS' | translate}}">
+                        <div class="custom-scroll">
+                            <div ng-repeat="x in listItemWork">
+                                <div class="col-lg-12 custom-view" ng-click="viewItemWork(x)">
+                                    <div class="col-lg-10">
+                                        <label class="text-danger bold text-underline col-md-2">{{x.WorkSession}}</label>
+                                        <label class="col-md-10 bold gray">{{x.Value}}</label>
+                                        <span class="gray ml10">{{'CJ_LBL_PROGRESS' | translate}}: <i class="text-danger">{{x.Progress}}%,</i></span>
+                                        <span class="gray">{{'CJ_LBL_TIME' | translate}}: <i class="text-danger">{{x.TimeCheckIn | date:'dd/MM/yyyy'}},</i></span>
+                                        <span class="gray">{{'CJ_LBL_USER_WORK' |translate}} : <i class="text-success">{{x.UserName}},</i></span>
+                                    </div>
+                                    <div class="col-lg-2 pr-0">
+                                        <div class="text-center pull-right pt-1" ng-click="editItemWork(x.Id)">
+                                            <div class="btn btn-icon-only btn-circle btn-outline blue" style="width:25px;height:25px;padding-top: 3px;padding-left: 1px;">
+                                                <span class="pt-1"><i class="fa fa-edit"></i></span>
+                                            </div>
+                                            <p class="text-underline fs9 mb5">{{'CJ_BTN_UPDATE' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 pl-3 itemWork" style="background-color:azure" ng-if="!x.checkItem" ng-repeat="y in x.listItemActivity">
+                                    <div class="col-lg-10">
+                                        <label class="col-md-12 gray">{{y.StartTime | date:'HH:mm dd/MM/yyyy'}} - {{y.EndTime | date:'HH:mm dd/MM/yyyy'}}</label>
+                                        <span class="gray ml15">{{'CJ_LBL_PROGRESS'|translate}} : <i class="text-danger">{{y.ProgressFromStaff}}%,</i></span>
+                                        <!--<span class="gray">Đánh giá: <i class="text-danger">{{y.ProgressFromLeader}}%,</i></span>-->
+                                        <span class="gray">
+                                            
+
+                                            {{'CJ_LBL_EXAMINATION'|translate}}: <input class="category-title text-danger" id="item_{{y.Id}}" data-currentvalue="{{y.ProgressFromLeader}}" value="{{y.ProgressFromLeader}}" ng-blur="updateProgressFromLeader(y.Id)" style=" width: 25px;background-color:aquamarine ;" />
+                                            %
+                                        </span>
+                                        <label class="gray col-md-12">{{y.NoteFromLeader}}</label>
+                                    </div>
+                                    <div class="col-lg-2 pr-0">
+                                        <div class="text-center pull-right pt-1 mr5" ng-click="">
+                                            <div class="btn btn-icon-only btn-circle btn-outline red" ng-click="deleteItemWork(y.Id)" style="width:25px;height:25px;padding-top: 3px;padding-left: 0px;">
+                                                <span class="pt-1"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                            <p class="text-underline fs9 mb5">{{'CJ_BTN_DELETE' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab class="mt5 text-underline" index="2" heading="{{'CJ_TAB_DOCUMENT' | translate}}">
+                        <div class="col-lg-12">
+                            <input type="file" id="fileAttachment" custom-on-change-cardjob="loadAttachment" style="display: none" />
+                            <button class="btn btn-default br4 pull-right" ng-click="addAttachment()" style="background: linear-gradient(to bottom,#f2eee6,#FBFCFC );">
+                                <i class="fas fa-file-upload"></i>
+                                {{'CJ_BTN_UPLOAD_FILE' |translate }}
+                            </button>
+                        </div>
+                        <div class="col-lg-12 p0 mt10" ng-if="attachments.length > 0">
+                            <label class="labelbodergroup" style=""><b>{{'CJ_CURD_LBL_ATTACHMENT' | translate}}</b></label>
+                            <div class="table-toolbar table_toolbar">
+                                <div class="col-md-12" ng-repeat="attachment in attachments" style="padding-left: 25px;">
+                                    <div class="col-md-12 p0">
+                                        <div class="col-md-12">
+                                            <label class="bold"><a title="{{attachment.FileName}}" ng-click="viewFileOnl(attachment.FileUrl, attachment.IsEdit)">{{attachment.FileName.substring(0, 100)}}<span ng-if="attachment.FileName.length > 100">...</span></a></label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span class="gray">{{attachment.CreatedTime | fomartDateTime}} - {{attachment.MemberId}}- <a title="{{attachment.FileName}}" target="_blank" href="{{attachment.FileUrl}}">Tải xuống</a> - <a ng-click="deleteAttachment(attachment.FileCode)" class="gray">{{'COM_BTN_DELETE' | translate}}</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <div class="text-center pull-right pt-1 pr-1" ng-click="addItemWork()">
+                        <div class="btn btn-icon-only btn-circle btn-outline green-custom" style="width:32px;height:32px;padding-top: 7px;padding-left: 1px;">
+                            <span class="pt-1"><i class="fa fa-save"></i></span>
+                        </div>
+                        <p class="text-underline fs9 mb5">{{'CJ_BTN_RPT_PROGRESS' | translate}}</p>
+                    </div>
+                </uib-tabset>
+            </div>
+        </div>
+        <div class="col-lg-4 pr-0">
+            <div class="col-md-12 border br4" style="padding-left:10px;padding-right:10px; padding-bottom:10px">
+                <style>
+                    .active:hover {
+                        background-color: white !important;
+                        cursor: pointer;
+                    }
+
+                    .my-custom-scrollbar {
+                        position: relative;
+                        max-height: 150px;
+                        height: auto;
+                        overflow-y: auto;
+                    }
+
+                    .table-wrapper-scroll-y {
+                        display: block;
+                    }
+                </style>
+                <uib-tabset active="active">
+                    <uib-tab class="mt5 text-underline" index="2" heading="{{'CJ_TXT_ACTIVITY' | translate}}" style="background-color:white">
+                        <b class="fs15">{{'CJ_LBL_LIST_ACTIVITY' | translate}}</b>
+                        <div class="portlet-body mh-150 pre-scrollable pt-1 pb-1">
+                            <div ng-repeat="x in ActivityData" style="border-bottom: 1px solid #d6dadc;margin-bottom: 5px;">
+                                <div class="active-title" ng-if="x.Picture=='/images/default/no_user.png'">
+                                    <span class="member-initials">
+                                        <span>{{x.GivenName.charAt(0)}}</span>
+                                    </span>
+                                </div>
+                                <div class="active-title" ng-if="x.Picture!='/images/default/no_user.png'">
+                                    <img class="img-circle" height="32" width="32" src="{{x.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+                                </div>
+
+                                <div class="active-time">
+                                    <b class="ng-binding">{{x.GivenName}}</b>
+                                </div>
+                                <div class="active-body">
+                                    <span>
+                                        {{x.GivenName}}
+                                        <span ng-if="x.Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+                                        <span ng-if="x.Action=='REJECT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'LMS_ACTION_REFUSE':'LMS_ACTION_UNREFUSE'}}</span>
+                                        <span ng-if="x.Action=='ACCEPT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'LMS_ACTION_AGREE':'LMS_ACTION_UNAGREE'}}</span>
+                                    </span>
+                                    <br><span class="fs10" style="color:#8c8c8c; margin-left:38px;">{{x.CreatedTime | fomartDateTime}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </uib-tab>
+                    <uib-tab class="mt5 text-underline" index="0" heading="{{'CJ_TAB_PRODUCT' | translate}}" style="background-color:white">
+                        <div class="form-group d-flex">
+                            <ui-select class="ui-select-bootstrap-right-radius pr5" ng-model="product.ProductCode" theme="bootstrap" style="width:65%">
+                                <ui-select-match placeholder="{{'CJ_TXT_PRODUCT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listProduct | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <input class="form-control mr5" type="text" ng-model="product.Quantity" placeholder="{{'CJ_CURD_LBL_QUANTITY' | translate}}" num-thousand='true' awnum num-int='21' style="width:35%" />
+                        </div>
+                        <div class="form-group d-flex">
+                            <ui-select class="ui-select-bootstrap-right-radius pr5" ng-model="product.Activity" theme="bootstrap" style="width:65%">
+                                <ui-select-match placeholder="{{'CJ_TXT_ACTIVITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listActivityProduct | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <button ng-click="addProduct(product.ProductCode,product.Quantity, product.Activity)" title="{{'COM_BTN_SAVE' | translate}}" class="btn btn-default btn-circle btn-icon-only no-shadow ml15" style="background: linear-gradient(to bottom,#659be0,#659be0 );color: white;border-radius:25px">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <b class="fs10">{{'CJ_LBL_LIST_PRODUCT' | translate}} ({{listCardProduct.length}})</b>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <table class="table table-bordered table-striped mb-0">
+                                <tbody ng-if="listCardProduct.length!=0">
+                                    <tr ng-repeat="x in listCardProduct">
+                                        <td>
+                                            <a class="fs12">{{x.ProductCode}} - {{x.ProductName}} ({{x.Quantity}})</a><br />
+                                            <span class="gray fs10">{{x.CreatedTime | fomartDateTime}} - {{x.CreatedBy}} - <a ng-click="deletedProduct(x.ID)">Xóa</a></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-if="listCardProduct.length==0">
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <span class="text-danger fs10">{{'CJ_LBL_NO_PRODUCT' | translate}}...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </uib-tab>
+                    <uib-tab class="mt5 text-underline" index="1" heading="{{'CJ_TAB_SERVICES' | translate}}" style="background-color:white">
+                        <div class="form-group d-flex">
+                            <ui-select class="ui-select-bootstrap-right-radius pr5" ng-model="service.ServiceCode" theme="bootstrap" style="width:65%">
+                                <ui-select-match placeholder="{{'CJ_LBL_SERVICES' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listService | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <input class="form-control mr5" type="text" ng-model="service.Quantity" placeholder="{{'CJ_CURD_LBL_QUANTITY' | translate}}" num-thousand='true' awnum num-int='21' style="width:35%" />
+
+                        </div>
+                        <div class="form-group d-flex">
+                            <ui-select class="ui-select-bootstrap-right-radius pr5" ng-model="service.Activity" theme="bootstrap" style="width:65%">
+                                <ui-select-match placeholder="{{'CJ_TXT_ACTIVITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listActivityService | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <button ng-click="addService(service.ServiceCode,service.Quantity, service.Activity)" title="{{'COM_BTN_SAVE' | translate}}" class="btn btn-default btn-circle btn-icon-only no-shadow" style="background: linear-gradient(to bottom,#659be0,#659be0 );color: white;border-radius:25px">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <b class="fs10">{{'CJ_LBL_LIST_SERVICES' | translate}} ({{listCardService.length}})</b>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <table class="table table-bordered table-striped mb-0">
+                                <tbody ng-if="listCardService.length!=0">
+                                    <tr ng-repeat="x in listCardService">
+                                        <td>
+                                            <a class="fs12">{{x.ServiceCode}} - {{x.ServiceName}} ({{x.Quantity}})</a><br />
+                                            <span class="gray fs10">{{x.CreatedTime | fomartDateTime}} - {{x.CreatedBy}} - <a ng-click="deletedService(x.ID)">{{'COM_BTN_DELETE' | translate}}</a></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-if="listCardService.length==0">
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <span class="text-danger fs10">{{'CJ_LBL_NO_SERVICES' | translate}}...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+                <div class="form-group">
+                    <style>
+                        .table thead {
+                            background: #f8f5f1;
+                        }
+
+                        #map {
+                            height: 150px;
+                        }
+
+                        .gm-style .gm-style-iw {
+                            font-size: 10px !important;
+                        }
+
+                        .gm-fullscreen-control {
+                            /*height: 30px !important;
+                            width: 30px !important;*/
+                            display: none;
+                        }
+
+                        /*.gm-fullscreen-control img {
+                                height: 14px !important;
+                                width: 14px !important;
+                            }*/
+
+                        a[href^="http://maps.google.com/maps"] {
+                            display: none !important
+                        }
+
+                        a[href^="https://maps.google.com/maps"] {
+                            display: none !important
+                        }
+
+                        .gmnoprint a, .gmnoprint span, .gm-style-cc {
+                            display: none;
+                        }
+
+                        .gmnoprint div {
+                            background: none !important;
+                        }
+                    </style>
+                    <div class="form-group pt-1">
+                        <label class="fs12 bold">{{'CJ_LBL_LOCATION_WORK'|translate}}</label>
+                        <div class="d-flex">
+                            <input class="form-control mr5" type="text" placeholder="{{'CJ_TXT_ENTER_LOCATION' | translate}}..." style="width:87%" id="searchAddress" />
+                            <button class="btn btn-default btn-circle btn-icon-only no-shadow" title="{{'COM_BTN_SAVE' | translate}}" ng-click="saveAddress()" style="background: linear-gradient(to bottom,#659be0,#659be0 );color: white;">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+
+                        <!--<span class="fs12">{{address.text}}</span>-->
+                        <b class="fs10">{{'CJ_LBL_LIST_LOCATION' | translate}} ({{listAddress.length}})</b>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <table class="table table-bordered table-striped mb-0">
+                                <tbody ng-if="listAddress.length!=0">
+                                    <tr ng-repeat="x in listAddress">
+                                        <td>
+                                            <a class="fs12">{{x.LocationText}}</a><br />
+                                            <span class="gray fs10">{{x.CreatedTime | fomartDateTime}} - {{x.CreatedBy}} - <a ng-click="deletedAddress(x.Id)">{{'CJ_BTN_DELETE' | translate}}</a></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-if="listAddress.length==0">
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <span class="text-danger fs10">{{'CJ_LBL_NO_LOCATION' | translate}}...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="map" class="map"></div>
+                    </div>
+                    <h3 class="bold mt15">{{'CJ_CURD_LBL_ACTION' | translate}}</h3>
+                    <button class="btn btn-red text-left" style="width: 100%" ng-click="deleteCard(model.CardID)">
+                        <span class="fa fa-remove text-white"></span>
+                        {{'CJ_CURD_BTN_DELETE_CARD' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

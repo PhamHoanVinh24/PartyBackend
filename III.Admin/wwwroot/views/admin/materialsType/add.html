@@ -1,0 +1,108 @@
+﻿<!--style-->
+<style type="text/css">
+    .ui-select-match-item {
+        background: #fff;
+    }
+
+    .ui-select-match-close {
+        background-image: none;
+    }
+
+    .list-user input {
+        border: 0 !important;
+    }
+
+    .form-group {
+        margin-bottom: 5px !important;
+    }
+
+    .control-label.require::after {
+        content: '*';
+        color: red;
+        margin-left: 5px;
+    }
+
+    .br {
+        background-color: white;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title "> {{'MT_TITLE_ADD' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form style="border: 0px solid #e7ecf1 !important;" name="addform" class="form-horizontal userFormAreaHeader br" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <label class="control-label">{{'MT_CURD_LBL_PARENT_ID' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="input-group br24-nobtn">
+                            <ui-select tagging ng-model="model.ParentId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'MT_CURD_TXT_PARENT_ID' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x in Types | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-barcode" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MT_CURD_LBL_CODE' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control  br24 " ng-model="model.Code" name="Code" placeholder="{{'MT_CURD_TXT_CODE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label require">{{'MT_CURD_LBL_NAME' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control br24" ng-model="model.Name" name="Name" placeholder="{{'MT_CURD_TXT_NAME' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <label class="control-label">{{'MT_CURD_LBL_DESCRIPTON' | translate}}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <textarea class="form-control br12" ng-model="model.Description" placeholder="{{'MT_CURD_TXT_DESCRIPTON' | translate}}..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+
+    <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        {{'MT_BTN_CANCEL' | translate}}
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'MT_BTN_ADD' | translate}}
+    </button>-->
+    <div class="btn-group pull-right text-center actions d-flex">
+        <div class="fs30 pr20" ng-click="cancel()" style="margin-right: 10px; margin-top: 18px;">
+            <a>
+                <span><i class="fas fa-times pull-right h28 w28" style="--fa-primary-color: red;"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="fs30" ng-click="submit()">
+            <a style="background-color: white !important;border-radius: 0 !important; border: 0px solid #4b9bd2 !important">
+                <span><i class="fa-solid fa-plus"></i></span>
+            </a>
+            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

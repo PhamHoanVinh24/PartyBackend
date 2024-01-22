@@ -1,0 +1,125 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pb-1 pull-right actions d-flex" style="margin-top: -45px;">
+    <!--<div class="text-center pr-2" ng-show="!isSearch">
+        <a class="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="export()">
+            <span><i class="fa fa-file-excel-o"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline blue-custom" ng-click="statistical()">
+            <span><i class="fas fa-chart-line"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_STATISTICAL' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('PHQTNS_GSC')" class="fs30">
+            <span><i class="fas fa-question fs24 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div class="table-toolbar">
+    <style>
+        @media (min-width: 1200px) {
+            .col-lg-3 {
+                width: 22%;
+            }
+        }
+    </style>
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row pb5">
+                <!--<div class="col-md-12" style="height:20px">
+                    <i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-in-line" role="button" title="Ẩn tìm kiếm"></i>
+                </div>-->
+                <div class="col-lg-4">
+                    <div class="col-md-3 pt5">
+                        <label class="control-label text-underline fw600">{{'STS_LBL_EMP' | translate}}</label>
+                    </div>
+                    <div class="col-md-9 pl-0">
+                        <div class="input-group search-group">
+                            <ui-select ng-model="model.MemberId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'STS_TXT_ALL' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                                    <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='/images/default/no_user.png'" />
+                                    <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.MemberId=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" style="width: 28%;">
+                    <div class="col-md-3 pt5 pl-0 pr-0">
+                        <label class="control-label text-underline fw600">{{'STS_CURD_LBL_FROM_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-9 pl-0 pr-0">
+                        <div class="input-group">
+                            <input type="text" autocomplete="off" class="form-control" placeholder="{{'STS_CURD_LBL_FROM_DATE' | translate}}..." ng-model="model.FromDate" id="FromTo">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" style="width: 28%;">
+                    <div class="col-md-3 pt5 pl-0 pr-0">
+                        <label class="control-label text-underline fw600">{{'STS_CURD_LBL_TO_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-9 pl-0 pr-0">
+                        <div class='input-group '>
+                            <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'STS_CURD_LBL_TO_DATE' | translate}}..." id='DateTo' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .fc-time {
+        display: none;
+    }
+</style>
+<div class="calendar-wrap pt10" ng-if="IsTranslate">
+    <div id="calendar"></div>
+</div>

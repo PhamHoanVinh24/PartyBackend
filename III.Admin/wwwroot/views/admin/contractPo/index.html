@@ -1,0 +1,212 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(90% - 50px);
+        right: 69px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSchedule()">
+            <span><i class="fas fa-calendar"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CALENDAR' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="add()">
+
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+
+    <!--<div class="text-center pr-2">
+        <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="addCardJob()">
+            <span><i class="fa fa-trello"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD_CAR' | translate}}</p>
+    </div>-->
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt15">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-md-1 pr-0 pl-1">
+                        <label class="fw600 text-underline">{{'CP_CURD_LBL_SEARCH_FORM_DATE' | translate}}</label>
+                        <div class="br24">
+                            <input ng-model="model.FromDate" class="form-control ng-pristine ng-untouched ng-valid ng-empty br24" type="text" placeholder="{{'CP_CURD_LBL_SEARCH_FORM_DATE' | translate}}..." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' />
+                        </div>
+                    </div>
+                    <div class="col-md-1 pr-0 pl-1">
+                        <label class="fw600 text-underline">{{'CP_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                        <div class="br24">
+                            <input ng-model="model.ToDate" class="form-control ng-pristine ng-untouched ng-valid ng-empty br24" type="text" autocomplete="off" placeholder="{{'CP_CURD_TXT_SEARCH_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='dateto' />
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 pl-1">
+                        <label class="fw600 text-underline">{{'CP_CURD_LBL_SEARCH_PO_SUP_CODE' | translate}}/{{'CP_CURD_TXT_PO_TITLE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.PoSupCode" class="form-control" type="text" placeholder="{{'CP_CURD_LBL_SEARCH_PO_SUP_CODE' | translate}}/{{'CP_CURD_TXT_PO_TITLE' | translate}}.." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.PoSupCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 pl-1">
+                        <label class="fw600 text-underline">{{'CP_CURD_LBL_STATUS' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select ng-model="model.Status" theme="bootstrap" ng-init="model.Status =''">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_STATUS' | translate}}"><p><i class="{{$select.selected.Icon}}"></i>&nbsp{{$select.selected.Name}}</p></ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ListCommon | filter:{Group:'CONTRACT_STATUS_PO_SUP'} | filter: $select.search">
+                                    <i class="{{x.Icon}}"></i>&nbsp{{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 pl-1">
+                        <label class="fw600 text-underline">{{'CP_CURD_CONTRACT' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.ContractCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CP_CURD_CONTRACT' | translate}}...">
+                                    {{$select.selected.ContractNo != null && $select.selected.ContractNo != null && $select.selected.ContractNo != "" ? $select.selected.ContractNo + " -" : ""}}
+                                    {{$select.selected.Name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ContractData | filter: $select.search">
+                                    {{x.ContractNo != null && x.ContractNo != null && x.ContractNo != "" ? x.ContractNo + " -" : ""}} {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ContractCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 pl-1" style="width: 14%;">
+                        <label class="fw600 text-underline">{{'CP_TAB_PROJECT' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.ProjectCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_PROJECT_CODE'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in ListProjectSearch | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ProjectCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pr-0 pl-1" style="width: 14%;">
+                        <label class="fw600 text-underline">{{'CP_LBL_BRANCH' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.BranchId" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CP_LBL_BRANCH' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listBranch | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.BranchId='';" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="width: 5%;">
+                        <div class="btn-group pt10 actions d-flex">
+                            <div class="text-center pr10 mt10">
+                                <a class="fs30" ng-click="search()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label style="color:red">{{'CP_TITLE_GUIDE' | translate}}</label>
+            <!--<span class="pull-right pl-2 pr-2 text-success">[{{'CP_CURD_TXT_CUS_SUM' | translate}}: {{allContract}}]</span>
+            <span class="pull-right text-blue pl-2">[{{'CP_CURD_TXT_CUS_ENOUGH' | translate}}: {{assignSuccess}}]</span>
+            <span class="pull-right text-danger">[{{'CP_CURD_TXT_CUS_WAITING' | translate}}: {{assignNotSuccess}}]</span>-->
+        </div>
+    </div>
+
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataContractPO"></table>
+
+    <script>
+        setTimeout(function () {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            $('.table-scrollable').mousedown(function (e) {
+                isDown = true;
+                startX = e.pageX - $('.table-scrollable').offset().left;
+                scrollLeft = $('.table-scrollable').scrollLeft();
+            });
+            $('.table-scrollable').mouseleave(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mouseup(function () {
+                isDown = false;
+            });
+            $('.table-scrollable').mousemove(function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $('.table-scrollable').offset().left;
+                const walk = (x - startX) * 1; //scroll-fast
+                $('.table-scrollable').scrollLeft(scrollLeft - walk);
+                console.log(walk);
+            });
+        }, 1000);
+
+    </script>

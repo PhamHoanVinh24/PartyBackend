@@ -1,0 +1,230 @@
+﻿<style>
+    .tab-content {
+        height: 230px;
+    }
+
+    .modal-body {
+        padding-bottom: 45px;
+    }
+
+    #inputDate {
+        color: dodgerblue;
+        font-weight: bold;
+    }
+
+    #idPhone {
+        color: dodgerblue;
+        font-weight: bold;
+    }
+
+    #identitycard {
+        color: dodgerblue;
+        font-weight: bold;
+    }
+
+    form .form-control {
+        border: 1px solid #908a8a;
+        color: #5a5a5a;
+    }
+
+    input::placeholder {
+        color: red;
+        font-weight: 600
+    }
+
+    .text-box-important {
+        background-color: #27ae60 !important;
+        color: #fcfdfd !important;
+        font-weight: bold;
+    }
+
+    .form-item {
+        position: relative;
+    }
+
+    .message-error:after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 0;
+        left: -20%;
+        display: none;
+        padding: 1em 2em;
+        color: white;
+    }
+
+    .message-error:hover:after {
+        display: block;
+        -webkit-animation: showTooltip 0.35s ease-in-out;
+        -moz-animation: showTooltip 0.35s ease-in-out;
+        animation: showTooltip 0.35s ease-in-out;
+    }
+
+    .message-error:after {
+        background: #c8fbfb;
+        border-radius: 5px;
+        color: #000000;
+        z-index: 99999;
+        margin-top: 0px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: 150px;
+        border: 1px solid #d4d4d4;
+        width: 92% !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Cập nhật chứng chỉ - thẻ AT nhân viên' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorEmployeeCode}">
+                        <div class="col-md-12">
+                            <i class="fab fa-accusoft" aria-hidden="true"></i>
+                            <label class="fw600 text-underline require">&nbsp;{{'Mã & Tên nhân viên:' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.EmployeeCode" ng-disabled="true" theme="bootstrap" on-select="changleSelect('EmployeeCode')">
+                                    <ui-select-match placeholder="{{'Nhân viên' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listEmployee | filter: $select.search" refresh="refreshAddresses($select.search)">
+                                        <div>{{x.Name}}</div>
+                                        <div class="row mt15" ng-if="$index == listEmployee.length-1">
+                                            <button class="btn btn-xs btn-success"
+                                                    style="width: 100%;"
+                                                    ng-click="loadMore($select, $event);"
+                                                    ng-disabled="loading">
+                                                Load more...
+                                            </button>
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorEmployeeCode" class="label-color validation-message">
+                                {{'Nhân viên không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorCertCode}">
+                        <div class="col-md-12">
+                            <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                            <label class="fw600 text-underline require">&nbsp;{{'Chứng chỉ AT:' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.CertCode" ng-disabled="true" theme="bootstrap" on-select="changleSelect('CertCode')">
+                                    <ui-select-match placeholder="{{'Chứng chỉ - AT' | translate}}...">{{$select.selected.Code}} - {{$select.selected.Name}} - {{$select.selected.Time}}&nbsp;{{$select.selected.Unit}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listCert | filter: $select.search">
+                                        {{x.Code}}&nbsp;-&nbsp;{{x.Name}}&nbsp;-&nbsp;{{x.Time}}&nbsp;{{x.Unit}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span ng-show="errorCertCode" class="label-color validation-message">
+                                {{'Chứng chỉ không được để trống' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group" ng-class="{ 'has-error': errorDate}">
+                        <div class="col-md-12">
+                            <i class="fa fa-calendar"></i>
+                            <label class="fw600 text-underline require">&nbsp;{{'Ngày cấp' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class='input-group date' id='Date'>
+                                <input class="form-control input-date" id="Date" rows="2" ng-readonly="true" ng-model="model.CertDateLicense" name="Date" placeholder="{{'Ngày cấp' | translate}}..." autocomplete="off" />
+                                <span class="input-group-addon" ng-disabled="true">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="col-md-12">
+
+                            <label class="fw600 ">&nbsp;</label>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class='input-group date'>
+                                <input class="form-control input-date" id="Dates" rows="2" placeholder="Còn lại:" style="border:none" ng-readonly="true" />
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
+                            <label class="fw600 text-underline require">&nbsp;{{'Số hiệu' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control" id="EndDate" name="CertNum" ng-model="model.CertNum" type="text" placeholder="{{'Số hiệu' | translate}}..." autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorMaintainType}">
+                        <div class="col-md-12">
+                            <i class="fa fa-comment"></i>
+                            <label class="fw600 text-underline">&nbsp;{{'Mô tả:' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea type="text" class="form-control bold" rows="4" ng-model="model.Noted" name="Term" placeholder="{{'Mô tả' | translate}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <label class="fw600 text-underline">&nbsp;{{'Hình ảnh:' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group input-file">
+                                <i class="fa fa-upload"></i>
+                                <input class="form-control border-top-left-4radius border-bottom-left-4radius inputFile pl30" ng-model="model.ImgPath" style="height:33px" placeholder="Hình ảnh.." readonly></>
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Tải lên</span>
+                                    <input class="form-control hidden" id="FileItem" accept=".png,.jpg,.jpeg,.gif,.tif" custom-on-change="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file" ng-model="model.ImgPath">
+                                </span>
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-choose" ng-click="ViewImage(model.ImgPath)"><i class="fa fa-file-image-o" aria-hidden="true"></i></span> 
+                                    <!--<span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+    <input class="form-control hidden" id="FileItem" custom-on-change="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">-->
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pull-right" style="margin-top:15px ;margin-right:10px">
+                    <div class="btn-group actions d-flex">
+
+                        <div class="text-center pl10 margin-right-10" ng-click="submit()">
+                            <a class="btn btn-icon-only btn-outline green-custom" style="background-color:#ffffff !important;border-color: #121312;color: #131212 !important;">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline mb-0 fs9  pt3">{{'Lưu lại' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

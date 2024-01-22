@@ -1,0 +1,219 @@
+﻿<script>
+    function readURL(input) {
+        //alert('fine');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<style>
+    .nav-tabs {
+        height: 36px;
+    }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background-color: #3c8dbc;
+            color: #efecec;
+            height: 35px;
+        }
+
+    span.buttonText {
+        font-size: 10px;
+    }
+
+    .form .form-bordered .form-group > div {
+        padding: 5px;
+    }
+
+    .form .form-bordered .form-group .control-label {
+        padding-top: 5px;
+    }
+
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit icon-edit "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'RMJNA_CURD_TITLE_EDIT_NEWS_ARTICLE' | translate}}</div>
+</div>
+<div class="modal-body" id="modal-body" style="    padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-certificate"></i> {{'RMJNA_CURD_LBL_CODE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_code" name="article_code" placeholder="{{'RMJNA_CURD_TXT_CODE' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-tint"></i> {{'RMJNA_CURD_LBL_ARTICLE_TITLE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_title" name="article_title" placeholder="{{'RMJNA_CURD_TXT_ARTICLE_TITLE' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-fire"></i> {{'RMJNA_CURD_LBL_CONTENT' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="7" cols="25" type="text" class="form-control" ng-model="model.article_content" name="article_content" placeholder="{{'RMJNA_CURD_TXT_CONTENT' | translate}}" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"> <i class="glyphicon glyphicon-leaf"></i> {{'RMJNA_CURD_LBL_LIST' | translate}} </label>
+                        <div class="col-md-8 form-col-control">
+                            <ui-select ng-model="model.cat_code" class="" ui-select-required>
+                                <ui-select-match placeholder=" {{'RMJNA_CURD_TXT_LIST' | translate}}...">{{$select.selected.cat_code}}</ui-select-match>
+                                <ui-select-choices repeat="x.cat_code as x in treeDatacategory | filter:$select.value">
+                                    {{x.cat_code}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-fire"></i> {{'RMJNA_CURD_LBL_ARTICLE_ORDER' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" ng-model="model.artile_order" name="artile_order" placeholder="{{'RMJNA_CURD_TXT_ARTICLE_ORDER' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                            <i class="sprite-image-16x16"></i>
+                            <label class="control-label" for="Status"> {{'RMJNA_CURD_LBL_IMG' | translate}}</label>
+                        </div>
+                        <div class="col-md-8 form-col-control">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:130px   !important;margin:auto;   float:left">
+                                    <img onerror="this.src='../../../images/default/no_image.png'" id="Image" ng-src='{{model.article_avarta}}' src="{{model.article_avarta}}" alt="holder" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:130px  !important;margin:auto; margin-left:1%;  float:left">
+                                    <img onerror="this.src='../../../images/default/no_image.png'" id="Image1" ng-src='{{model.article_avarta1}}' src="images/DefaultImages/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.article_avarta" name="article_avarta" onchange="readURL(this);">
+                            <!--<script>
+                                $(":file").filestyle({ buttonName: "btn btn-primary" });
+                            </script>-->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="form-group pull-right">
+            <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:15px;" ng-click="submit()"><i class="fa fa-edit"></i> {{'COM_BTN_EDIT' | translate}}</button>
+            <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;  margin-top:15px;margin-right:20px;" ng-click="cancel()"><i class="fa fa-close"></i> {{'COM_BTN_CLOSE' | translate}}</button>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#file" style=" height: 35px;  border-top-left-radius: 10px; border-top-right-radius: 10px;" data-toggle="tab"> {{'COM_BTN_FILE' | translate}}</a></li>
+    </ul>
+    <div class="tab-content" style="font-size:13px;padding-top: 0px;">
+        <div id="file" class="tab-pane fade in active" style="padding-left: 10px;padding-right: 10px;">
+            <div class="row" style=" padding-bottom:20px;">
+                <div id="sua" class="" ng-show="editBanking">
+                    <div class="row" style="font-size: 14px; ">
+                        <div class="col-md-7" style="padding-left:0px;">
+                            <div class="form-group">
+                                <label class="control-label col-md-5 text-right" style="margin-top:7px"> <i class="glyphicon glyphicon-leaf"></i> {{'RMJNA_TITLE_ADD_FILE_RELATE' | translate}}</label>
+                                <div class="col-md-7 form-col-control">
+                                    <div class="bs-component">
+                                        <div class="input-group col-md-6">
+                                            <ui-select ng-model="model.file_code" class="" style="width:250PX;" ui-select-required>
+                                                <ui-select-match placeholder="{{'RMJNA_CURD_TXT_FILE_NAME_RMJNA' | translate}}...">{{$select.selected.file_name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.file_code as x in treedataFile | filter:$select.value">
+                                                    {{x.file_name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; height:30px;margin-left:5px" ng-click="submitFile1()"><i class="fa fa-edit"></i> {{'COM_BTN_CANCEL' | translate}}</button>
+                                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;height:30px;margin-left:5px" ng-click="cancelFile()"><i class="fa fa-close"></i> {{'COM_BTN_SAVE' | translate}}</button>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top:0px;">
+
+                <div class="col-md-3">
+                    <label> {{'RMJNA_CURD_LBL_FILE_NAME_RMJNA' | translate}}</label>
+                    <div class="bs-component">
+                        <div class="input-group date pick-date" id="">
+                            <input type="text" class="form-control" value=" " ng-model="model.Key1" name="Key1" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Key1 = undefined" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <label>{{'RMJNA_CURD_LBL_CREATE_TIME_RMJNA' | translate}}</label>
+                    <div class="bs-component">
+                        <div class="input-group date pick-date" id="">
+                            <input class="form-control " id="postDate" data-val="true" name="NextTimeCheck" type="text" ng-model="model.postDate">
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.postDate = ''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" style="margin-top: 25px; border-radius:5px !important;" ng-click="reload()"><i class="fa fa-search"></i> {{'COM_BTN_SEARCH' | translate}} </button>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group pull-right actions" style="margin-top:25px">
+                        <button class="btn btn-circle btn-icon-only btn-primary" ng-click="add_file()" title="{{'RMJNA_TITLE_ADD_NEW_FILE' | translate}}" style="border-radius:50% !important"><i class="fa fa-plus"></i> </button>
+                        <button class="btn  btn-circle btn-icon-only btn-primary" ng-click="Banking()" title="{{'RMJNA_TITLE_ADD_NEXT_FILE' | translate}}" style="border-radius:50% !important;margin-left:5px"><i class="glyphicon glyphicon-plus-sign"></i> </button>
+                        <!--<a class="btn btn-circle btn-icon-only btn-default" ng-click="deleteChecked()" style="background: #ec4e56; color: white;"><i class="fa fa-lock"></i></a>
+                        <a class="btn btn-circle btn-icon-only btn-default" ng-click="reload()" title="Refresh data"><i class="fa fa-refresh"></i></a>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt5">
+                <table class="table dataTable table-bordered table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

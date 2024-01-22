@@ -1,0 +1,143 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<div class="btn-group actions pt5 pb-1 pull-right d-flex mr5" style="margin-top: -50px;">
+    <div class="text-center pr-2" >
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="addcatactivity()">
+            <span><i class="fa-solid fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row pt5 mb5">
+                    <!--Mã hđ-->
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CAT_TITLE_ACTIVITY_CODE'|translate}}</label>
+                        <div class='input-group br24'>
+                            <input ng-model="model.ActivityCode" class="form-control" type="text" placeholder="{{'CAT_TITLE_ACTIVITY_CODE'|translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage()" />
+                            <span class="input-group-btn br24">
+                                <button type="button" ng-click="model.ActivityCode='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--Tên hđ-->
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CAT_TITLE_ACTIVITY_NAME'|translate}}</label>
+                        <div class='input-group br24'>
+                            <input ng-model="model.Title" class="form-control" type="text" placeholder="{{'CAT_TITLE_ACTIVITY_NAME'|translate}}..." ng-keydown="($event.keyCode == 13) && reloadNoResetPage()" />
+                            <span class="input-group-btn br24">
+                                <button type="button" ng-click="model.Title='';" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--nhóm hđ-->
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CAT_TITLE_ACTIVITY_GROUP'|translate}}</label>
+                        <div class='input-group  br24'>
+                            <ui-select tagging ng-model="model.Group" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CAT_TITLE_ACTIVITY_GROUP'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Group=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--loại hđ-->
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'CAT_TITLE_ACTIVITY_TYPE'|translate}}</label>
+                        <div class='input-group  br24'>
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                <ui-select-match placeholder="{{'CAT_TITLE_ACTIVITY_TYPE'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Type='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="fw600 text-underline">{{'Trạng thái'|translate}}</label>
+                        <div class='input-group  br24'>
+                            <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Trạng thái'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstStatus | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--button-->
+                    <div class="col-md-2">
+                        <div class="btn-group actions pt15 d-flex">
+                            <div class="pr10">
+                                <a data-dismiss="modal" ng-click="search()" class="fs30">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH'|translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!--<div class="tabbable" ng-controller="">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>-->

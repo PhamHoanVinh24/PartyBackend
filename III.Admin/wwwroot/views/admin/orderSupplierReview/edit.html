@@ -1,0 +1,243 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+    @media(max-width:1200px) {
+        .modal-30 {
+            width: 50% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-30 {
+            width: 40% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-30 {
+            width: 30% !important;
+        }
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+</style>
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'SCG_OSR_EDIT' | translate}}</span>
+</div>
+
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding-top: 10px;">
+                <div class="row mb5">
+                    <div class="form-group col-md-8" ng-class="{ 'has-error': errorTitleReview}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_TITLE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <input type="text" class="form-control br24 ng-pristine ng-valid" ng-model="model.TitleReview">
+                            </div>
+                            <span ng-show="errorTitleReview" class="label-color validation-message">
+                                {{'OSR_VALIDATE_TITLE_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4" ng-class="{ 'has-error': errorStatus}" >
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                       {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorStatus" class="label-color validation-message">
+                                {{'OSR_VALIDATE_STATUS_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class="form-group col-md-8"  ng-class="{ 'has-error': errorCreatorTicket}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_CREATOR' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.CreatorTicket" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_OSR_CREATOR' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in ListCreator | filter: $select.search track by x.Code">
+                                        {{ x.Name }}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.CreatorTicket='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorCreatorTicket" class="label-color validation-message">
+                                {{'OSR_VALIDATE_CREATOR_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4" ng-class="{ 'has-error': errorDateReviewTicket}">
+                        <div class="pl30">
+                            <label class="require fw600 text-bold">{{'SCG_OSR_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <div class="input-group br24">
+                                    <input ng-model="model.DateReviewTicket" class="form-control" type="text" placeholder="{{'SCG_OSR_DATE' | translate}}..." 
+                                    ng-keydown="($event.keyCode == 13) && reload()" id='datereview' autocomplete="off" />
+                                </div>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.DateReviewTicket='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorDateReviewTicket" class="label-color validation-messages">
+                                {{'OSR_VALIDATE_DATE_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row mb5">
+                    <div class="form-group col-md-9">
+                        <div class="pl30">
+                            <label class="fw600 text-bold ">{{'SCG_OSR_NOTE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea rows="6" cols="70" class="form-control br24" ng-model="model.Noted" placeholder="{{'SCG_OSR_NOTE' | translate}}.."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2"  style="margin-left:70px; transform: translateY(16%);    width: 19%;">
+                        <div class="form-group col-md-12" ng-class="{ 'has-error': errorTypeCode}">
+                            <button ng-click="addDetail()" class="btn btn-success btn-block br8"> <!-- Sử dụng lớp btn-block để làm nút chiếm toàn bộ chiều rộng của cột -->
+                                <p class="text-bold fs14 mb5 pt3">{{'SCG_OSR_MORE_DETAILS' | translate}}</p>
+                            </button>
+                        </div>
+    
+                        <div class="form-group col-md-12 mt20 ml150"  style="padding-left:0px; transform: translateY(12%); width:107%">
+                            <div class="btn-group actions d-flex justify-content-center"> <!-- Thay đổi lớp text-center thành justify-content-center -->
+                                <div class="col-md-12">
+                                    <button ng-click="submit()" class="btn btn-success btn-block br8"> <!-- Sử dụng lớp btn-block để làm nút chiếm toàn bộ chiều rộng của cột -->
+                                        <p class="text-bold fs14 mb5 pt3">{{'SCG_OSR_SAVE' | translate}}</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab" role="tabpanel">
+                    <ul class=" nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <div href="#Note" aria-controls="home" role="button" data-toggle="tab">{{'SCG_OSR_MANAGE_DETAIL' | translate}}</div>
+                        </li>
+                        <li role="presentation" class="disabled stepNext">
+                            <div href="#Attribute" aria-controls="home" role="button" data-toggle="tab">{{'SCG_RESULT_REVIEW_SUP' | translate}}</div>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt10">
+                        <div role="tabpanel" class="tab-pane fade in active" id="Note">
+                            <table class="table dataTable table-hover table-striped"
+                            datatable
+                            dt-options="dtOptions"
+                            dt-columns="dtColumns"
+                            dt-instance="dtInstance"
+                            id="tblData4"></table>
+                        </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Attribute">
+                        <div role="tabpanel" class="tab-pane fade in active" id="Note">
+                            <div ng-include="'../views/admin/orderSupplierReview/TableResult.html'"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

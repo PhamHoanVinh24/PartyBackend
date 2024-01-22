@@ -1,0 +1,115 @@
+﻿<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="bold mb-0">Quản trị lô hàng</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">{{'CATEGORY_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <a href="LotProduct#">Quản trị lô hàng</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 ">
+            <div class="btn-group pull-right actions  d-flex">
+                <!--<div class="text-center pr10 btnSearch">
+                    <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                        <span><i class="fa fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3 ">Tìm kiếm</p>
+                </div>-->
+                <!--<div class="text-center pr10" ng-click="add()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs12 mb5 pt3">Thêm mới</p>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered input-search mb5">
+        <div class="portlet-body">
+           <!-- <img class="pull-right h28 w28 close-input-search" role="button" title="Đóng" src="/images/default/close.png" />-->
+            <div class="row pt5 mb5">
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'MSB_CURD_SEARCH_NAME_BATCH' | translate}}</label>
+                    <div class='input-group '>
+                        <input ng-model="model.Name" class="form-control" type="text" placeholder="{{'MSB_CURD_TXT_SEARCH_NAME_BATCH' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Name=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">Nhà cung cấp</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Supplier" theme="bootstrap" on-select="changleSelect('unit')">
+                            <ui-select-match placeholder="Nhà cung cấp...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Supplier=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'MLP_CURD_LBL_SUPPLIES_CREATEDAY' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromTo" autocomplete="off" class="form-control" type="text" placeholder="{{'MLP_CURD_TXT_SUPPLIES_CREATEDAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='FromTo' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromTo='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'MLP_CURD_LBL_SUPPLIES_ENDDAY' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.DateTo" autocomplete="off" class="form-control" type="text" placeholder="{{'MLP_CURD_TXT_SUPPLIES_ENDDAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='DateTo' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DateTo='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 mt10">
+                    <div class="text-center  pull-right pr10" ng-click="add()">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">Thêm mới</p>
+                    </div>
+                    <div class="text-center pr10 pull-right " ng-click="search()">
+                        <a class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                            <span><i class="fa fa-search"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">Tìm kiếm</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+

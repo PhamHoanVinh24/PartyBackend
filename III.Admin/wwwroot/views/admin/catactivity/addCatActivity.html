@@ -1,0 +1,266 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    .text-box-important {
+        background-color: #27ae60 !important;
+        color: #fcfdfd !important;
+        font-weight: bold;
+    }
+
+    .list-group {
+        max-height: 133px;
+        overflow-y: auto;
+        z-index: 9999;
+        position: absolute;
+        border: 1px solid #ddd;
+    }
+
+    .list-group-item {
+        padding: 0.25rem 1.25rem !important;
+        border: none !important;
+    }
+</style>
+
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title pt15" id="modal-title"> {{'CAT_TITLE_ACTIVITY_ADD_FORM' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body" style="padding-bottom: 0px;">
+    <div class="portlet-body form">
+        <form name="addcatact" class="form-horizontal " method="post" ng-validate="validationOptionsAct">
+            <div class="form-body pt-0 pl-0 pr-0">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require bold">{{'CAT_TITLE_ACTIVITY_CODE'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" name="ActCode" class="form-control br24 text-box-asset" ng-model="model.ActCode" placeholder="{{'CAT_TITLE_ACTIVITY_CODE'|translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-comment"></i>
+                                <label class="control-label require bold">{{'CAT_TITLE_ACTIVITY_NAME'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control  br24 text-box-asset" ng-model="model.ActName" name="ActName" placeholder="{{'CAT_TITLE_ACTIVITY_NAME'|translate}} ..." />
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-6">
+                        <div class="form-group" ng-class=" {'has-error': errorActGroup}">
+                            <div class="col-md-12">
+                                <i class="fa fa-th-list" aria-hidden="true"></i>
+                                <label class="control-label require bold">{{'CAT_TITLE_ACTIVITY_GROUP'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ActGroup" theme="bootstrap" on-select="changleSelect('ActGroup')">
+                                        <ui-select-match placeholder="{{'CAT_TITLE_ACTIVITY_GROUP'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in ListActivityGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorActGroup" class="label-color validation-message">
+                                    {{'CAT_VALIDATE_ACTIVITY_GROUP'|translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-th-list"></i>
+                                <label class="control-label require bold">{{'Nhóm hoạt động' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class='input-group br24 '>
+                                    <input class="form-control" name="ActGroupName" ng-model="model.ActGroupName" ng-blur="outUser()" ng-click="inUser()" ng-keyup="change(model.ActGroupName)" placeholder="{{'Nhập nhóm hoạt động' | translate}}..." />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="addGroup(model.ActGroupName)" class="btn btn-default no-shadow">
+                                            <span class="fas fa-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <ul class="list-group" id="user-packing">
+                                    <li class="list-group-item" ng-repeat="Name in listGroupNameNew" ng-click="addGroup(Name)">{{Name}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-th-list"></i>
+                                <label class="control-label require bold">{{'Loại hoạt động' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class='input-group br24'>
+                                    <input class="form-control" name="ActTypeName" ng-model="model.ActTypeName" ng-blur="outUser2()" ng-click="inUser2()" ng-keyup="changeType(model.ActTypeName)" placeholder="{{'Nhập loại hoạt động' | translate}}..." />
+                                    <span class="input-group-btn br24">
+                                        <button type="button" ng-click="addType(model.ActTypeName)" class="btn btn-default no-shadow">
+                                            <span class="fas fa-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <ul class="list-group" id="user-packing2">
+                                    <li class="list-group-item" ng-repeat="Name in listTypeNameNew" ng-click="addType(Name)">{{Name}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-6">
+                        <div class="form-group" ng-class=" {'has-error': errorActType}">
+                            <div class="col-md-12">
+                                <i class="fa fa-th-list" aria-hidden="true"></i>
+                                <label class="control-label require bold">{{'CAT_TITLE_ACTIVITY_TYPE'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ActType" theme="bootstrap" on-select="changleSelect('ActType')">
+                                        <ui-select-match placeholder="{{'CAT_TITLE_ACTIVITY_TYPE'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat=" x.Code as x in ListActivityType | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorActType" class="label-color validation-message">
+                                    {{'CAT_VALIDATE_ACTIVITY_TYPE'|translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="col-md-12 pt5">
+                        <a class="pr-2 text-success" ng-click="fileManage()" href="javascript:void(0)">{{'Chọn tệp từ server'| translate}}...</a>
+                        <span class="text-danger text-underline">{{model.FileName}}</span>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <i class="fa fa-comment" aria-hidden="true"></i>
+                                <label class="control-label bold">{{'CAT_LBL_ACTIVITY_GC'|translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea name="Note" rows="2" class="form-control br12" ng-model="model.Note" type="text" placeholder="{{'CAT_LBL_ACTIVITY_GC'|translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group actions d-flex mt25">
+                            <div class="text-center ">
+                                <a ng-click="submit()" class="fs30">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row pt3">
+        <div class="col-md-12 pl-0 pr-0">
+            <div class="tabbable">
+                <div ng-include="'../views/admin/catactivity/addheader.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,143 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:black;"></i>
+                    <a class=" bold text text-underline" style="color:black;" href="#">{{'COM_CRUMB_MANAGER_CONTENT' | translate}}</a>
+                    <span class="" style="color:black;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:black;" href="/Admin/CMSExtraField">{{'CEF_LBL_LIST_EF' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row pr-2">
+    <div class="col-lg-5 pt15">
+        <!--<div class="fs11"><label class="mColor">{{'EDMSR_LBL_TOTAL_FILE' | translate}}</label> <b>{{totalFile}}</b>.   <label class="mColor">{{'EDMSR_LBL_TOTAL_CAPICITY' | translate}}</label>: <b>{{totalSize}}</b></div>-->
+        <div class="panel panel-default boder-category br-none no-boxshadow">
+            <div class="panel-heading tree-header" style="background: #f1f1f1 !important; height:50px !important">
+                <h4 class="panel-title pull-left bold">{{'Đầu mục module' | translate}}</h4>
+            </div>
+            <div class="panel-body scroller-sm-fade" id="contentMainRepository">
+                <div id="treeDiv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData"
+                    tree-events-obj="treeEvents"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 pt15" id="dropzone">
+        <div class="portlet-body form">
+            <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+                <div class="panel-heading tree-header" style="background: #f1f1f1 !important; height:50px !important">
+                    <h4 class="panel-title pull-left bold ng-binding">{{IsEdit?'Sửa module':'Thêm module'}}</h4>
+                    <div class="btn-group pull-right actions d-flex">
+                        <!--<a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+                            {{'COM_BTN_CANCEL' | translate}}
+                        </a>-->
+                        <div class="pr10">
+                            <button class="btn btn-info br4 ng-binding" ng-click="cancel()">
+                                <i class="fas fa-sync-alt"></i>
+                                Làm mới                           
+                            </button>
+                        </div>
+                        <!--<button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+                            {{'COM_BTN_ADD' | translate}}
+                        </button>-->
+                        <div class="pr10">
+                            <button class="btn green-custom br4 ng-binding" ng-click="submit()">
+                                <i class="fa fa-save"></i>
+                                Lưu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-body">
+                    <div class="form-group" ng-class="{ 'has-error': errorModuleCode}">
+                        <div class="col-md-2 pr-0">
+                            <i class="fa fa-barcode" aria-hidden="true"></i>
+                            <label class="control-label require ">{{'Mã module' | translate}}</label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class='input-group'>
+                                <input type="text" class="form-control" ng-model="model.ModuleCode" name="Code"
+                                 placeholder="{{'Nhập mã module' | translate}}..." ng-disabled="IsEdit"/>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="IsEdit==false?model.ModuleCode='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorModuleCode" class="label-color validation-message">
+                                {{errorModuleCodeTile | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error': errorModuleTitle}">
+                        <div class="col-md-2">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            <label class="control-label require">{{'Tên module' | translate}}</label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class='input-group'>
+                                <input type="text" class="form-control" ng-model="model.ModuleTitle"
+                                name="Title" placeholder="{{'Nhập tên module' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ModuleTitle='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            
+                            <span ng-show="errorModuleTitle" class="label-color validation-message">
+                                {{errorModuleTitleTitle | translate}}
+                            </span>
+                        </div>
+                    </div>
+    
+    
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            <i class="fa fa-comment"></i>
+                            <label class="control-label">
+                                {{'Ghi chú' | translate}}
+                            </label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class='input-group'>
+                                <textarea class="form-control" ng-model="model.Description" name="Description"
+                                 placeholder="{{'Nhập nội dung' | translate}}...">
+
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            <i class="fa fa-user"></i>
+                            <label class="control-label">{{'Module cha' | translate}}</label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <ui-select tagging ng-model="model.ParentModule" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'Nhập module cha' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in ListModuleParent | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ParentModule=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>

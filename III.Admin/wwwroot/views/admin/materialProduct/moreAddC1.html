@@ -1,0 +1,179 @@
+﻿<style>
+    .form-horizontal .control-label {
+        text-align: left;
+    }
+</style>
+<div class="modal-body" id="modal-body" style="margin-bottom:-30px !important">
+    <div class="portlet-body form">
+        <form name="forms.addC1more" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionAddC1more">
+            <div class="form-body pt-0 row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" ng-src="{{model.Image}}" class="img-circle-no image-upload zoom" onerror="this.src='../../../images/default/uploadimg.png'" style="height: 120px; width: 120px;cursor: pointer" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label">{{'MLP_CURE_LBL_IMG' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="thumbnail input-unstyled">
+                                    <img data-ng-src="data:image/png;base64,{{ImageBase}}" ng-class="ImageBase==''?'opacityQrCode':''" onerror="this.src='/images/default/qrCode.png'" class="h-120 image-upload zoom1" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label">{{'MLP_CURE_LBL_QRCODE' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                <label class="control-label require"><i class="fa fa-barcode"></i>&nbsp;{{'MLP_CURE_LBL_CODE_CHILDREN_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <input ng-change="getQrCodeFromString()" ng-disabled="isEdit" class="form-control" name="AttributeCode" ng-model="model.AttributeCode" placeholder="{{'MLP_CURE_LBL_CODE_CHILDREN_CATEGORY' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label require"><i class="fas fa-file-signature"></i>&nbsp;{{'MLP_CURE_LBL_NAME_CHILDREN_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <input class="form-control" name="AttributeName" ng-model="model.AttributeName" placeholder="{{'MLP_CURE_TXT_NAME_CHILDREN_CATEGORY' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label"><i class="fas fa-users"></i>&nbsp;{{'MLP_CURE_LBL_GROUP' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Group" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'MLP_CURE_TXT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in productgroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Group=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label require"><i class="fas fa-infinity"></i>&nbsp;{{'MLP_CURD_LBL_VALUE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <input ng-change="changeValue()" class="form-control" name="Value" ng-model="model.Value" placeholder="{{'MLP_CURD_LBL_VALUE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label"><i class="fas fa-bookmark"></i>&nbsp;{{'MLP_CURE_LBL_STRUCTURE' | translate}}:</label>
+                            </div>
+                             <div class="col-md-8" style="color:#ff0000">
+                                 <!--{{structNote}}-->
+                                 {{'MLP_CURE_LBL_EXAMPLE' | translate}}
+                             </div>
+                        </div>
+                        <!--<div class="form-group">
+                             <div class="col-md-3">
+                                <label class="control-label">
+
+                                </label>
+                            </div>
+                             <div class="col-md-9 pl-0">
+                                 {{'MLP_CURE_LBL_EXAMPLE' | translate}}
+                             </div>
+                        </div>-->
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                <label class="control-label">
+
+                                </label>
+                            </div>
+                             <div class="col-md-8" style="color:#ff0000">
+                                 {{'MLP_CURE_LBL_WARNING' | translate}}
+                             </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label"><i class="fas fa-balance-scale"></i>&nbsp;{{'MLP_CURE_LBL_UNIT' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Unit" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="{{'MLP_CURE_LBL_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in treedataLevel | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Unit=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <div class="col-md-3">
+                                 <label class="control-label"><i class="fas fa-comment-dots"></i>&nbsp;{{'MLP_CURE_LBL_NOTE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <textarea cols="3" class="form-control" name="ext_value" ng-model="model.Note" placeholder="{{'MLP_CURE_TXT_NOTE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label"><i class="fa fa-line-chart"></i>&nbsp;{{'MLP_CURE_LBL_FORECAST_WAREHOUSE' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <input class="form-control" type="number" name="ForeCastInStock" ng-model="model.ForecastInStock" placeholder="{{'MLP_CURE_TXT_FORECAST_WAREHOUSE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label"><i class="fa fa-calendar"></i>&nbsp;{{'MLP_CURE_LBL_FORECAST_TIME' | translate}}</label>
+                            </div>
+                            <div class="col-md-9 pl-0">
+                                <div class='input-group date' id='ForeCastTime'>
+                                    <input type='text' class="form-control input-date" autocomplete="off" style="height: 33px;" name="ForeCastTime" ng-model="model.sForeCastTime" placeholder="{{'MLP_CURE_TXT_FORECAST_TIME' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer pr40">
+    <div class="text-center pr10 pull-right" ng-click="submit1()" ng-if="isAdd==true">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>
+    <div class="text-center pr10 pull-right" ng-click="submit1()" ng-if="isAdd==false">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+            <span><i class="fa fa-save"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+    </div>
+</div>

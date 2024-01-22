@@ -1,0 +1,395 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">Thêm mới NPP/Đầu mối/Cửa hàng</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorCusCode}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label require">Mã NPP/ĐM/CH</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Mã NPP/Đầu mối/Cửa hàng..." ng-readonly="CustomerId !=-999" />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    Không bỏ trống mã NPP/ĐM/CH
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorCusName}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label require">Tên NPP/ĐM/CH</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="CusName" ng-model="model.CusName" type="text" placeholder="Tên NPP/Đầu mối/Cửa hàng..." />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    Không bỏ trống trường tên NPP/ĐM/CH
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="far fa-address-book"></i>
+                                <label class="control-label">Người gặp</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.SURROGATE" type="text" placeholder="Người gặp..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorRole}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Vai trò</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group" style="z-index: 999999999">
+                                    <ui-select tagging ng-model="model.Role" theme="bootstrap" on-select="changleSelect('Role')">
+                                        <ui-select-match placeholder="Vai trò...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerRoles | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Role=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    Vai trò không được để trống!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-map-marker"></i>
+                                <label class="control-label">Bản đồ</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-icon" style="margin-bottom: 0px">
+                                    <i ng-click="openMap()" class="cursor fa fa-map-marker"></i>
+                                    <input ng-click="openMap()" id="locationGPS" class="form-control" ng-model="model.GoogleMap" name="key" type="text" style="padding-left: 30px; width: 100%" onkeypress="return false;" onkeydown="return false;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorAddress}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-home"></i>
+                                <label class="control-label">Địa chỉ</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <textarea style="height: 75px" id="textAreaAddress" class="form-control" ng-model="model.Address" type="text" placeholder="Địa chỉ..."></textarea>
+                                <span ng-show="errorAddress" class="label-color validation-message">
+                                    Không bỏ trống trường địa chỉ
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="far fa-address-book"></i>
+                                <label class="control-label">Vận tải</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Transport" type="text" placeholder="Vận tải..." />
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-fax"></i>
+                                <label class="control-label">Biển hiệu</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Logo" type="text" placeholder="Biển hiệu..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label">Nhóm</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusGroup" theme="bootstrap">
+                                        <ui-select-match placeholder="Nhóm NPP/Đầu mối/Cửa hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusGroup=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': errorArea}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Khu vực</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Area" theme="bootstrap" on-select="changleSelect('Area')">
+                                        <ui-select-match placeholder="Khu vực NPP/Đầu mối/Cửa hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerAreas | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Area=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorArea" class="label-color validation-message">
+                                    Khu vực không được để trống!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorTaxCode}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-barcode"></i>
+                                <label class="control-label">Mã số thuế</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.TaxCode" name="TaxCode" type="text" placeholder="Mã số thuế..." ng-change="changleSelect('TaxCode')" />
+                                <span ng-show="errorTaxCode" class="label-color validation-message">
+                                    Mã số thuế phải là chữ số!
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorIdentification}">
+                            <div class="col-md-5 ">
+                                <i class="far fa-credit-card"></i>
+                                <label class="control-label">Số CMTND</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Identification" name="Identification" type="text" placeholder="Số CMTND..." ng-change="changleSelect('Identification')" />
+                                <span ng-show="errorIdentification" class="label-color validation-message">
+                                    Số CMTND phải là chữ số!
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group" ng-class="{ 'has-error': errorFax}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-fax"></i>
+                                <label class="control-label">Fax</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.Fax" type="text" placeholder="Fax..." ng-change="changleSelect('Fax')" />
+                                <span ng-show="errorFax" class="label-color validation-message">
+                                    Số fax sai định dạng!
+                                </span>
+                            </div>
+                        </div>
+                        <!--Thêm chỗ này vào để check xem shop, Đầu mối lấy hàng từ thằng cha nào-->
+                        <!--<div class="form-group" ng-class="{ 'has-error': errorAgent}" ng-if="roleType=='SHOP'">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Chọn NPP/Đầu mối</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.InAgent" theme="bootstrap">
+                                        <ui-select-match placeholder="Chọn NPP/Đầu mối...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in InAgentForShop | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.InAgent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    Nhà phân phối/Đầu mối không được để trống!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorAgent}" ng-if="roleType=='AGENT'">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Chọn NPP</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.InAgent" theme="bootstrap">
+                                        <ui-select-match placeholder="Chọn nhà phân phối...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in InAgentForAgent | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.InAgent=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorRole" class="label-color validation-message">
+                                    Nhà cung cấp không được để trống!
+                                </span>
+                            </div>
+                        </div>-->
+                        <!--End thêm chỗ này vào để check xem shop, Đầu mối lấy hàng từ thằng cha nào-->
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label">Loại khách hàng</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusType" theme="bootstrap">
+                                        <ui-select-match placeholder="Loại khách hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerTypes | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusType=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorActivityStatus}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-flag"></i>
+                                <label class="control-label require">Trạng thái</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.ActivityStatus" theme="bootstrap" on-select="changleSelect('ActivityStatus')">
+                                        <ui-select-match placeholder="Trạng thái...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in StatusData | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.ActivityStatus=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorActivityStatus" class="label-color validation-message">
+                                    Trạng thái không được để trống!
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-mail-reply"></i>
+                                <label class="control-label ">Thư điện tử</label>
+                            </div>
+                            <div class="col-md-7  ">
+                                <input class="form-control" name="Email" ng-model="model.Email" type="email" placeholder="name@gmail.com" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorMobilePhone}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-mobile-phone"></i>
+                                <label class="control-label">Số điện thoại</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" name="Mobile" ng-model="model.MobilePhone" type="text" placeholder="Số điện thoại..." ng-change="changleSelect('MobilePhone')" />
+                                <span ng-show="errorMobilePhone" class="label-color validation-message">
+                                    Số điện thoại sai định dạng!
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="fas fa-user-circle"></i>
+                                <label class="control-label">Số tài khoản</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.AccountBank" type="text" placeholder="Số tài khoản..." />
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-md-5 ">
+                                <i class="far fa-address-book"></i>
+                                <label class="control-label">Tại ngân hàng</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <input class="form-control" ng-model="model.AddressBank" type="text" placeholder="Tại ngân hàng..." />
+                            </div>
+                        </div>
+                        <!--<div class="form-group" ng-class="{ 'has-error': errorCusGroup}">
+                            <div class="col-md-5 ">
+                                <i class="fa fa-users"></i>
+                                <label class="control-label require">Nhóm</label>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.CusGroup" theme="bootstrap" on-select="changleSelect('CusGroup')">
+                                        <ui-select-match placeholder="Nhóm NPP/Đầu mối/Cửa hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in CustomerGroup | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.CusGroup=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCusGroup" class="label-color validation-message">
+                                    Nhóm không được để trống!
+                                </span>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right mr15 user-mt">
+                        <a ng-click="submit()" class="btn btn-green " href="javascript:;">
+                            <i class="fa fa-plus"></i>&nbsp;Thêm mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row " ng-click="chkSubTab()">
+        <div class="col-md-12" ng-class="{'disabled-element' :CustomerId ==-999 }">
+            <uib-tabset active="active">
+                <!--<uib-tab index="0" heading="Mô tả">
+                    <textarea ng-model="model.Description" ui-tinymce="tinymceOptions"></textarea>
+                </uib-tab>
+                <uib-tab index="1" heading="Liên lạc" disable="CustomerId == ''">
+                    <div ng-include="'../views/admin/customer/contact.html'"></div>
+                </uib-tab>
+                <uib-tab index="2" heading="File" disable="CustomerId == ''">
+                    <div ng-include="'../views/admin/customer/file.html'"></div>
+                </uib-tab>
+                <uib-tab index="3" heading="Trường mở rộng" disable="CustomerId == ''">
+                    <div ng-include="'../views/admin/customer/more.html'"></div>
+                </uib-tab>-->
+                <uib-tab index="6" heading="Quản lý nguồn cấp">
+                    <div ng-include="'../views/admin/vcVendor/trade_relationship.html'"></div>
+                </uib-tab>
+                <uib-tab index="7" heading="Quản lý xe">
+                    <div ng-include="'../views/admin/vcVendor/managerTransporter.html'"></div>
+                </uib-tab>
+                <!--<uib style="float: right;">
+                    <a ng-click="addCardJob()" class="btn btn-green" title="Thêm thẻ việc">
+                        <i class="fa fa-ticket"></i>
+                    </a>
+                </uib>-->
+            </uib-tabset>
+        </div>
+    </div>
+</div>

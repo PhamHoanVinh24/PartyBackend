@@ -1,0 +1,139 @@
+﻿<style>
+    .span-header {
+        font-size: 26px;
+    }
+</style>
+<div class="form-group">
+    <div class="col-md-10 pl-0 span-header">
+        <i class="fa fa-plus-circle black icon-insert "></i>
+        <span>{{'DNM_STATISTICAL' | translate}}</span>
+    </div>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <form name="addforms" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="col-md-4 pt-0 pl-0 pr-0">
+            <div class="col-md-12 p-0" style="height: 150px;">
+                <label class="" style="font-size: 17px; margin-left: 14px;">{{'DNM_SELECT_DATA' | translate}}</label>
+                <ui-select ng-model="model1.ListUser" multiple theme="bootstrap" class="mnh70 br12" on-select="addAttr($item)" on-remove="removeAttr($item)">
+                    <ui-select-match placeholder="">{{$item.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listDynamicAttributes | filter:$select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-12 pl10 margin-right-10 next" style="height: 85px;" ng-click="submitData()">
+                <a class1="btn btn-icon-only btn-outline btnn" name="next">
+                    <i class="fa-solid fa-plus fs30"></i>
+                </a>
+                <p class="text-underline btn-name mb5 pt3 ng-binding" style="white-space: nowrap;">{{'COM_BTN_SAVE' | translate}}</p>
+            </div>
+            <div class="col-md-12" style="height: 31px; font-size: 18px;">
+                <span>{{'DNM_TABLE_RESULT' | translate}}</span>
+            </div>
+            <div class="col-md-12" style="overflow-y: auto; border: 2px ridge; height: 420px; border-radius: 13px; ">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="col-md-6 text-center">{{'DNM_NAME' | translate}}</th>
+                            <th class="col-md-2 text-center">{{'DNM_GENDER' | translate}} </th>
+                            <th class="col-md-2 text-center">{{'DNM_RESULT' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="listResult.length == 0"><td colspan="4" class="text-center">{{'DNM_NO_DATA' | translate}}</td></tr>  <!--MULTI-->
+                        <tr ng-repeat="x in listResult">
+                            <td class="col-md-6 text-center">
+                                <span class="bold">{{x.GivenName}} <br /></span>
+                            </td>
+                            <td class="text-center bs-checkbox" style="width : 30px">
+                                <div class="bold" ng-if="x.Gender === false">{{'DNM_MALE' | translate}}</div>
+                                <div class="bold" ng-if="x.Gender === true">{{'DNM_FEMALE' | translate}}</div>
+                            </td>
+                            <td class="col-md-2 text-center">{{x.Correct}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+        <div class="col-md-8 pt-0 pl-0 pr-0  ">
+            <div class="col-md-1" style="float: right">
+                <a class="" ng-click="search()">
+                    <span><i class="fas fa-search fs30"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+            <div class="col-md-11">
+                
+                <div class="table-responsive pt10" style="overflow-y: auto; width: 100%; min-height: 300px; border: 2px ridge; border-radius: 20px; ">
+                    <div class="col-md" ng-if="listDataSelect.length == 0">
+                        <div class="text-center">{{'DNM_NO_DATA' | translate}}</div>
+                    </div>
+                    <div ng-repeat="x in listDataSelect track by $index" class="pt10 d-flex align-item-ct">
+                        <div class="title-attr" style="width: 30%; height: 25px; ">
+                            <div class="bold" style=" margin-left: 20px;">{{$index + 1}}. {{x.Name}}</div>
+                        </div>
+                        <div class=" text-center bs-checkbox" style="width: 60%;">
+                            <div ng-if="x.DataType ==='BOOLEAN'" class="d-flex justify-content-ct">
+                                <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;" ng-if="x.Value != true"
+                                   ng-click="x.Value = true"></i>
+                                <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;" ng-if="x.Value == true"
+                                   ng-click="x.Value = false"></i>
+                            </div>
+                            <div ng-if="x.DataType ==='STRING'" class="d-flex justify-content-ct">
+                                <input class="h-30 bold w-50 form-control br24" ng-model="x.Value">
+                            </div>
+                            <div ng-if="x.DataType ==='DATETIME'" class="d-flex justify-content-ct">
+                                <div class="text-left">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_START'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="x.StartValue" name="StartValue" placeholder="{{'DNM_START'|translate}}..." b-datepicker autocomplete="off" end-date="x.EndValue" />
+                                    </div>
+                                </div>
+                                <div class="text-left">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_END'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="x.EndValue" name="EndValue" placeholder="{{'DNM_END'|translate}}..." b-datepicker autocomplete="off" start-date="x.StartValue" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="x.DataType ==='NUMBER'" class="d-flex justify-content-ct">
+                                <div class="text-left">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_START'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="x.StartValue" name="StartValue" placeholder="{{'DNM_START'|translate}}..." />
+                                    </div>
+                                </div>
+                                <div class="text-left">
+                                    <div class="col-md-12">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                        <label class="control-label require bold">{{'DNM_END'| translate}}</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control br24" ng-model="x.EndValue" name="EndValue" placeholder="{{'DNM_END'|translate}}..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="title-attr" style="width : 10%">
+                            <div class="bold">{{x.Unit}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+

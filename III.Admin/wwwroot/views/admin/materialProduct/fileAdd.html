@@ -1,0 +1,109 @@
+﻿<style type="text/css">
+    .header-treeview {
+        padding: 0 0;
+        border-bottom: 1px solid #ccc !important;
+        background: none !important;
+    }
+
+    .tag-wareHouseFile .tags {
+        height: 90px;
+        max-height: 100px;
+    }
+
+    .scrollbar-sm {
+        max-height: 300px;
+        overflow-x: auto;
+        overflow-y: visible;
+        height: 255px;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">  {{'COM_ADD_FILE' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addformfile" class="form-horizontal" method="post" ng-validate="validationOptionsFile">
+            <div class="form-body pt5 pb-0">
+                <div class="row">
+                    <div class="col-lg-6 pl-0">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label require"> <i class="fa fa-file"></i>&nbsp;{{'COM_FILE' | translate}}</label>
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control inputFile pl30" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                        <input class="form-control" id="File" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label require"><i class="fa fa-pagelines"></i>&nbsp;{{'PROJECT_CURD_TAB_FILE_NAME' | translate}}</label>
+                                <input class="form-control" ng-model="model.FileName" name="FileName" placeholder="{{'PROJECT_CURD_TAB_FILE_NAME' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label"><i class="fas fa-sort-numeric-up"></i>&nbsp;{{'PROJECT_CURD_TAB_FILE_NUMBER_DOCUMENT' | translate}}</label>
+                                <input class="form-control" ng-model="model.NumberDocument" name="NumberDocument" placeholder="{{'PROJECT_CURD_TAB_FILE_NUMBER_DOCUMENT' | translate}}..." num-thousand='true' awnum num-int='21' />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">{{'EDMSR_CURD_LBL_TAG' | translate}}</label>
+                                <tags-input add-on-enter="true" class="tag-wareHouseFile" use-strings="true" min-length="0" placeholder="{{'EDMSR_CURD_TXT_TAG' | translate}}" ng-model="model.Tags" on-tag-added="onTagAdded($tag)"></tags-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="require">{{'EDMSWHPV_CURD_LBL_CURD_FILE' | translate}}</label>
+                        <div class="panel panel-default no-boxshadow border">
+                            <div class="panel-heading header-treeview">
+                                <div class="actions text-center">
+                                    <div class="input-icon">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" ng-model="model1.search" class="br-n form-control" placeholder="{{'COM_BTN_SEARCH' | translate}}..." ng-keydown="($event.keyCode == 13) && searchRepository(model1.search)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body scrollbar-sm">
+                                <div id="treeDivv" tree="treeInstance" js-tree="treeConfig" should-apply="ac()" ng-model="treeData" tree-events-obj="treeEvents"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label"><i class="fa fa-code"></i>&nbsp;{{'EDMSWHPV_CURD_LBL_WHS_NOTE' | translate}}</label>
+                                <textarea class="form-control" ng-model="model.Desc" rows="4" placeholder="{{'EDMSWHPV_CURD_TXT_WHS_NOTE' | translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right pt10 actions d-flex">
+        <div class="text-center pr10">
+            <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+                <span><i class="fa fa-close"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

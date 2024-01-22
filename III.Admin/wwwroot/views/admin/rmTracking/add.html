@@ -1,0 +1,270 @@
+﻿
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject font-blue bold uppercase"> {{action}}</span>
+        </div>
+        <div class="actions">
+            <a ng-click="go('/')" class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+                <i class="fa fa-arrow-circle-left"></i>
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form></form>
+        <form name="addform" action="#" class="form-horizontal  form-bordered" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Khách hàng <span class="required font-red" aria-required="true">*</span></label>
+                    <div class="col-md-10">
+                        <ui-select ng-model="jmodel.CustomerID.LookupId" theme="bootstrap" ng-change="CS1()">
+                            <ui-select-match placeholder="Chọn khách hàng...">{{$select.selected.CustomerName}}</ui-select-match>
+                            <ui-select-choices repeat="item.ID as item in addLD1 | filter: $select.search">
+                                <span ng-bind-html="item.CustomerName | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Mã khách hàng</label>
+                    <div class="col-md-4">
+                        <input type="text" disabled class="form-control" ng-model="jmodel.CustomerCode"></input>
+                    </div>
+                    <label class="control-label col-md-2">Người báo giá</label>
+                    <div class="col-md-4">
+                        <input type="text" ng-disabled="true" placeholder="Nhập người báo giá" class="form-control" ng-model="jmodel.PeopleQuote"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Số điện thoại</label>
+                    <div class="col-md-4">
+                        <input type="text" placeholder="Nhập số điện thoại" class="form-control" ng-model="jmodel.NumberPhone"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Số báo giá</label>
+                    <div class="col-md-4">
+                        <input type="text" disabled placeholder="Nhập báo giá" class="form-control" ng-model="jmodel.QuotationNumber"></input>
+                    </div>
+                    <label class="control-label col-md-2">Ngày báo giá</label>
+                    <div class="col-md-4">
+                        <input name="EstablishmentDate" ng-required="true" ng-model="jmodel.QuotationDate" datetime-picker date-format="DD/MM/YYYY" class="form-control" date-only />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Địa chỉ khách hàng</label>
+                    <div class="col-md-10">
+                        <input type="text" placeholder="Nhập địa chỉ" class="form-control" ng-model="jmodel.CustomerAddress"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Số ngày hiệu lực</label>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" ng-model="jmodel.EffectiveDateNumber" ng-change="CS3()"></input>
+                    </div>
+                    <label class="control-label col-md-2">Trạng thái</label>
+                    <div class="col-md-4">
+                        <select class="form-control" ng-model="jmodel.Status">
+                            <option value="CPH">Chờ phản hồi</option>
+                            <option value="DH">Đặt hàng</option>
+                            <option value="KDH">Không đặt hàng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Loại tiền</label>
+                    <div class="col-md-4">
+                        <ui-select ng-model="jmodel.Currency" theme="bootstrap" ng-change="xxx()">
+                            <ui-select-match placeholder="Chọn loại tiền...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="item.Title as item in addLD2 | filter: $select.search">
+                                <span ng-bind-html="item.Title | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <label class="control-label col-md-2">Khóa</label>
+                    <div class="col-md-4">
+                        <input type="checkbox" ng-model="jmodel.Lock" ng-change="NOTI1()">Khóa không thay đổi thông tin</input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Ghi chú</label>
+                    <div class="col-md-10">
+                        <textarea rows="4" class="form-control" ng-model="jmodel.Notes"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Báo giá chi tiết</label>
+                    <div class="col-md-10">
+                        <label class="btn btn-primary" data-toggle="modal" ng-click="QP()">Thêm</label>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th style="text-align:center;width:5%">STT</th>
+                                <th style="width:15%">Mã sản phẩm</th>
+                                <th style="width:15%">Tên sản phẩm</th>
+                                <th style="width:15%">Thời gian giao hàng DK</th>
+                                <th style="width:7%">ĐVT</th>
+                                <th style="width:10%">Giá tiêu chuẩn</th>
+                                <th style="width:10%">Đơn giá</th>
+                                <th style="width:10%">Số lượng</th>
+                                <th style="width:10%">Thành tiền</th>
+                                <th style=""></th>
+                            </tr>
+                            <tr ng-repeat="item in Lt">
+                                <td align="center">{{$index + 1}}</td>
+                                <td align="center">{{item.ProductCode}}</td>
+                                <td align="center">{{CV1(item.ProducID.LookupId)}}</td>
+                                <td align="center">{{item.DeliveryTime}}</td>
+                                <td align="center">{{item.Units}}</td>
+                                <td align="center">{{item.StandardRates}}</td>
+                                <td align="center">{{item.UnitPrice}}</td>
+                                <td align="center">{{item.Quantity}}</td>
+                                <td align="center">{{item.Amount}}</td>
+                                <td>
+                                    <button ng-click="di($index)" type="button" class="btn red btn-circle">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                    <button ng-click="ei($index)" type="button" class="btn blue btn-circle">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"> </label>
+                    <div class="col-md-10">
+                        <a ng-click="go('/')" class="btn btn-circle  btn-default" href="javascript:;">
+                            <i class="fa fa-arrow-circle-left"></i> Quay lại
+                        </a>
+                        <a ng-click="submit()" class="btn btn-circle btn-primary  btn-default" href="javascript:;">
+                            <i class="fa fa-floppy-o"></i> Lưu
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<div class="modal fade bs-modal-lg" id="frm_Add" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg " style="width:70%;right:auto;left:auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{QPTitle}}</span>
+                    <a class="btn widget-btn-red pull-right" data-dismiss="modal" aria-hidden="true" href="#">
+                        <i class="fa fa-close"></i>
+                    </a>
+                    <br /><span class="font-red">{{resultError}}</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="portlet-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="tabnew_More">
+                            <form action="#" class="horizontal-form">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Tên sản phẩm:</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <ui-select ng-model="ic.ProducID.LookupId" theme="bootstrap" ng-change="CS2()">
+                                                <ui-select-match placeholder="Chọn sản phẩm...">{{$select.selected.Code + ' ' + $select.selected.Title}}</ui-select-match>
+                                                <ui-select-choices repeat="item.ID as item in addLD3 | filter: $select.search">
+                                                    <span ng-bind-html="item.Code + ' - ' + item.Title | highlight: $select.search"></span>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span style="color:red;margin-top:7px;display:block" ng-show="require.r1 != undefined">{{require.r1.T1}}</span>
+                                        </div>
+
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Mã sản phẩm:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" disabled class="form-control myClass" ng-model="ic.ProductCode" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>ĐVT</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" disabled class="form-control myClass" ng-model="ic.Units" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Giá bán tiêu chuẩn</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input type="text" class="form-control" ng-model="ic.StandardRates" disabled />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Số lượng:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" ng-model="ic.Quantity" ng-change="PA()"></input>
+                                            <span style="color:red;margin-top:7px;display:block" ng-show="require.r1 != undefined">{{require.r1.T2}}</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Đơn giá:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" ng-model="ic.UnitPrice" ng-change="PA()" id="txtWageLevel1"></input>
+                                            <span style="color:red;margin-top:7px;display:block" ng-show="require.r1 != undefined">{{require.r1.T3}}</span>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Thành tiền</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input type="text" disabled ng-model="ic.Amount" class="form-control"></input>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Thời gian giao hàng dự kiến: </label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input ng-model="ic.DeliveryTime" type="text" class="form-control myClass">
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="ST()">Lưu</button>
+                <button type="button" class="btn dark btn-outline" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    $("#txtWageLevel1").autoNumeric(
+       'init', { vMax: '999999999999' }
+     );
+</script>

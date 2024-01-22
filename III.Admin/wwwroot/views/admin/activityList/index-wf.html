@@ -1,0 +1,403 @@
+﻿<!--old activity-->
+<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 1px grey;
+        border-radius: 5px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: grey;
+        border-radius: 0px;
+    }
+
+    /*::-webkit-scrollbar {
+        width: 10px;
+    }*/
+
+    body.vertical-layout.vertical-menu.menu-expanded .content, body.vertical-layout.vertical-menu.menu-expanded .footer {
+        max-width: 100vw;
+        padding-left: 0px;
+    }
+
+    .sharp {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5%;
+        margin-left: 15%;
+    }
+
+    .p0 {
+        padding: 0px
+    }
+
+    .text-label-command {
+        color: white;
+    }
+
+    @keyframes blinker-one {
+        0% {
+            opacity: 0;
+        }
+    }
+
+    .borderless td, .borderless th {
+        border-top: none !important;
+        border-bottom: 1px solid #e7ecf1;
+    }
+
+    .act-sidebar {
+        position: fixed;
+        left: 1%;
+        max-width: 0px;
+        width: 100%;
+        top: 20%;
+        z-index: 100;
+        background: #fff;
+        transition: .5s;
+        opacity: 0;
+        visibility: hidden;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.55);
+        height: 100vh;
+    }
+
+    svg {
+        top: 0 !important;
+    }
+
+    .btn-border-black {
+        border: 1px solid #000;
+        background: #fff;
+    }
+
+    .panel-padding-left {
+        padding-left: 420px;
+    }
+
+    .svg-margin-left {
+        margin-left: 350px;
+    }
+
+    body.modal-open {
+        overflow: hidden !important;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .numberStep {
+        color: white;
+        height: 25px;
+        width: 25px;
+        padding-top: 5px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 12px;
+        float: left;
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+
+    #obj-data-table > thead > tr > th {
+        font-size: 13px !important;
+    }
+
+    #obj-data-table > tbody > tr > td {
+        font-size: 13px !important;
+    }
+
+    .board-selected {
+        color: white !important;
+        background-color: #428bca !important;
+        box-shadow: 3px 3px 3px #428bca6e;
+    }
+
+    .td-act {
+        width: 440px;
+        max-width: 440px;
+    }
+
+    .count-wf {
+        top: 0px !important;
+        font-weight: 400 !important;
+    }
+
+    @-webkit-keyframes blinkerAct {
+        from {
+            background-color: transparent;
+            box-shadow: none;
+            /*opacity: 0;*/
+        }
+
+        to {
+            color: blue;
+        }
+    }
+
+    .blink-act {
+        text-decoration: blink;
+        -webkit-animation-name: blinkerAct;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<link href="../../../css/admin/cardJob/board.css" rel="stylesheet" />
+<link href="../../../css/admin/cardJob/sideNavLeft.css" rel="stylesheet" />
+<style>
+    .popover {
+        max-width: 300px;
+        left: -145.5703px !important;
+        top: 50px !important;
+    }
+
+    .custom-shadow-box {
+        box-shadow: 3px 3px 3px #042906ee !important;
+    }
+
+    .img-check-in:hover {
+        box-shadow: 2px 2px 2px 2px #80c196;
+        border-radius: 4px;
+    }
+
+    .img-check-out:hover {
+        box-shadow: 2px 2px 2px 2px #9a9797;
+        border-radius: 13px;
+    }
+
+    .search-advantage-mode {
+        padding-left: 0px !important;
+    }
+
+    .has-branch-department {
+        bottom: -15px;
+    }
+
+    .jstree-default .jstree-clicked {
+        background: #fff !important;
+    }
+
+    .ui-tabs-scrollable > .nav-button.left-nav-button {
+        top: 3px;
+    }
+
+    .ui-tabs-scrollable > .nav-button.right-nav-button {
+        top: 3px;
+    }
+
+    .nav-header {
+        width: 50px;
+        float: left;
+    }
+
+    .nav-search {
+        width: 280px;
+        float: right;
+    }
+
+    .nav-body {
+        width: 320px;
+        float: right;
+    }
+
+    .custom-btn-nav-left {
+        border: 1px solid transparent;
+        transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: #acb3b9;
+        box-shadow: 2px 2px 5px #acb3b9;
+        transform: rotate( 90deg );
+        margin-top: 6px;
+        margin-right: -15px;
+    }
+
+    .custom-nav-lef-checkbox > .span-checkbox:after {
+        left: 10px !important;
+        top: 6px !important;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate( 45deg );
+    }
+
+    .span-checkbox {
+        background-color: blueviolet !important;
+        color: black !important;
+        border-radius: 50%;
+        padding: 12px;
+    }
+
+    #boardAll:hover {
+        color: #337ab7 !important;
+    }
+
+    .breadcrumb > li {
+        font-size: 12px !important;
+        font-weight: 400 !important;
+    }
+
+    .sidenav {
+        padding-top: 0px;
+    }
+
+    .unpressed {
+        border: 1px solid #d6d5d5bd;
+        box-shadow: 0px 0px 2px 1px rgb(0 0 0 / 10%);
+    }
+
+    .pressed {
+        border-bottom: 1px solid #5ab46c;
+        box-shadow: 0px 0px 2px 1px rgb(0 0 0 / 10%);
+        background-color: #d6d5d55e
+    }
+    .bg-pink {
+        background-color: #FF1493;
+    }
+</style>
+<div class="row h100">
+    <!--nav left-->
+    <nav style="padding-left: 20px">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/DashBoard">{{'COM_LINK_HOME' | translate}}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/Admin/MenuCenter">{{'COM_CRUMB_MENU_CENTER' | translate}}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/Admin/CardWorkHome">{{'COM_CRUMB_CARD_WORK_HOME' | translate}}</a>
+            </li>
+            <li class="breadcrumb-item">{{'Danh sách hoạt động' | translate}}</li> <!--WFAI_CRUMB_WF_INSTANCE-->
+        </ol>
+    </nav>
+    <div class="sidenav" id="mySidenav" style="width: 340px; overflow:hidden; top: 125px">
+        <div class="nav-body">
+            <div id="list-board" class="scroller-sm-fade p0 height-box" style="height: 84vh;">
+                <div class="col-md-12 p0 boards" ng-repeat="act in lstAct" ng-click="chooseActivity(act.ActivityInstCode)" ng-dblclick="editActivity(act.ActivityInstCode)" actInstCode="{{act.ActivityInstCode}}">
+                    <!--<span ng-if="!act.IsLock || act.ActStatus == 'Khóa hoạt động' || act.ActStatus == 'Không kích hoạt'">{{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}</span>-->
+                    <div class="col-xs-12 pt10 p0" style="">
+                        <div class="col-xs-12 pt10 pb10 unpressed" style="border-radius: 5px; /*background-color: #d6d5d55e;*/ /*box-shadow: 3px 3px 3px #d6d5d5bd;*/ " ng-class1="{'unpressed': actInstCode != act.ActivityInstCode, 'pressed': actInstCode == act.ActivityInstCode}">
+                            <div class="col-xs-12 ml0 pl-0 pr-0 cursor" style="height: 100%">
+                                <div style="display: inline-block;/* vertical-align: top*/">
+                                    <i class="fas fa-circle" style="color:green;font-size: 25px;margin-right: 10px;" ng-if="actInstCode != act.ActivityInstCode"></i>
+                                    <i class="fas fa-check-circle" style="--fa-secondary-color:green; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-right: 10px;" ng-if="actInstCode == act.ActivityInstCode"></i>
+                                    <!--<button title="Xét duyệt" style="width: 28px; height: 28px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline blink-act" ng-show="actInstCode == act.ActivityInstCode"><img style="height: 100%" src="/images/cardJob/Flat_tick_icon.svg" /></button>
+    <button title="Xét duyệt" style="width: 28px; height: 28px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline" ng-show="actInstCode != act.ActivityInstCode"><img style="height: 100%" src="/images/cardJob/Flat_no_tick_icon.svg" /></button>-->
+                                </div>
+                                <div style="display: inline-block; margin-left: 5px; font-weight: 500">
+                                    <div ng-if="act.ActStatus == 'Đã xử lý'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+                                            <!--<div class="numberStep" style="background: #009933;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                        <span class="badge-customer badge-customer-success">{{act.ActStatus}}</span>
+                                    </div>
+                                    <div ng-if="act.ActStatus == 'Đang xử lý' || act.ActStatus == 'Kích hoạt'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+
+                                            <!--<div class="numberStep" style="background: #FF9900;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                        <span class="badge-customer badge-customer-warning">{{act.ActStatus}}</span>
+                                        <!--<img class="blink-act" src="/images/default/green-blink.png" style="width: 17px;height: 17px;margin-top: -5px;" />-->
+                                    </div>
+                                    <div ng-if="act.ActStatus == 'Chưa xử lý'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+
+                                            <!--<div class="numberStep" style="background: #a59f9f;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                        <span class="badge-customer badge-customer-lock">{{act.ActStatus}}</span>
+                                    </div>
+                                    <div ng-if="act.ActStatus == 'Hủy bỏ'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+
+                                            <!--<div class="numberStep" style="background: red;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                        <span class="badge-customer badge-customer-danger">{{act.ActStatus}}</span>
+                                    </div>
+                                    <div ng-if="act.ActStatus == 'Dừng lại'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+
+                                            <!--<div class="numberStep" style="background: #FF9800;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                        <span class="badge-customer badge-customer-pause">{{act.ActStatus}}</span>
+                                    </div>
+                                    <div ng-if="act.ActStatus != 'Đã xử lý' && act.ActStatus != 'Đang xử lý' && act.ActStatus != 'Kích hoạt' && act.ActStatus != 'Chưa xử lý' && act.ActStatus != 'Hủy bỏ' && act.ActStatus != 'Dừng lại'" style="display: inline">
+                                        <a title="{{act.ActName}}" ng-click1="editInstAct(act.Id, data.ObjectCode)" ng-class="{'bold text-purple': actInstCode == act.ActivityInstCode}">
+
+                                            <!--<div class="numberStep" style="background: #FF9800;">{{act.Level}}</div>-->
+                                            ({{act.Level}}) {{act.ActName.length > 20 ? act.ActName.substr(0, 20) + " ..." : act.ActName}}
+                                        </a><br />
+                                    </div>
+                                    <br />
+                                    <span class="fs10" ng-if="act.ActStatus =='Đã xử lý'"><span class="bold fs12">{{act.Log.CreatedBy}}</span><br> [{{act.Log.sCreatedTime}}]</span>
+                                </div>
+                                <div class="actions pull-right" style="display: inline-block">
+                                    <!--Chỉnh lại là tổng số luồng việc theo nhóm luồng | trước đó là luồng việc đang xử lý theo nhóm luồng-->
+                                    <span class="tag bg-white border count-wf black tag-pill tag-default tag-up" style="border-color: black !important">{{act.CountCardJob}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--end left-->
+    <!--board detail right-->
+    <div class="col-md-12 h100" ng-class="{'search-advantage-mode' : SearchAdvMode}" style="padding-left:330px" id="BoardDetail">
+        <div class="col-md-12 pl-0 pr-0" style="margin-top: -15px;">
+            <div class="btn-group actions pt5 pull-right d-flex mr5" style="margin-top: -35px;">
+                <div class="text-center pr-1">
+                    <a ng-click="addCardActivity()" class="fs30">
+                        <span>
+                            <i class="fas fa-tasks-alt">
+                            </i>
+                        </span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3"> {{'CJ_BTN_TRANS_WORK' | translate}}</p>
+                </div>
+                <div class="text-center">
+                    <a ng-click="showSchedule()" class="fs30">
+                        <span><i class="fas fa-calendar-alt"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3"> {{'CJ_BTN_CALENDAR' | translate}}</p>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <span class="bold fs10 text-primary">
+                    * {{'Mã luồng xử lý' | translate}}: {{data.WfCode}},
+                </span> <!--AL_LBL_WF_CODE-->
+                <span class="text-danger bold fs10">&nbsp; {{'Tên luồng xử lý' | translate}}: {{data.WfName}}</span> <!--AL_LBL_WF_NAME-->
+            </div>
+            <div class="col-md-12 pr-0" style="" ng-include="'../views/admin/activityList/grid-card.html'">
+            </div>
+        </div>
+    </div>
+    <!--end board detail right-->
+</div>

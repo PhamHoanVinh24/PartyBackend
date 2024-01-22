@@ -1,0 +1,153 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(60% - 50px);
+        right: 75px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2" ng-show="!isSearch">
+        <a ng-click="showSearch()" class="fs30">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-md-4 pl-0 pr-0 pt5" >
+                            <label class="fw600 text-underline">{{'CR_LBL_SEACH_FROMDATE'|translate}}</label>
+                        </div>
+                        <div class="col-md-9 pl-0" style="width:90%">
+                            <div class="input-group br24">
+                                <input type="text" autocomplete="off" class="form-control" placeholder="{{'CR_TXT_SEACH_FROMDATE'|translate}}..." ng-model="model.FromDate" id="FromTo">
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-4 pl-0 pr-0 pt5" >
+                            <label class="fw600 text-underline">{{'CR_LBL_SEACH_TODATE'|translate}}</label>
+                        </div>
+                        <div class="col-md-9 pl-0" style="width:90%">
+                            <div class='input-group br24' >
+                                <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'CR_TXT_SEACH_TODATE'|translate}}.." id='DateTo' />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-4 pl-0 pr-0 pt5" >
+                            <label class="fw600 text-underline">{{'CR_LBL_SEACH_CUSCODE'|translate}}</label>
+                        </div>
+                        <div class="col-md-9 pl-0" style="width:90%">
+                            <div class="input-group search-group br24" >
+                                <ui-select tagging ng-model="model.CustomerId" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'CR_COMB_SEACH_CUSCODE'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in customerData | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.CustomerId=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="margin-top: 20px;">
+                        <div class="btn-group actions d-flex">
+                            <div class="text-center">
+                                <a class="fs30" ng-click="reload()">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <span class="text-danger">{{'CR_LIST_NOTIFICATION' | translate}}</span>
+        </div>
+    </div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

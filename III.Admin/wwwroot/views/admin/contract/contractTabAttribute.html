@@ -1,0 +1,94 @@
+﻿<div ng-controller="contractTabAttribute">
+    <div class="table-toolbar">
+        <div class="row">
+            <form name="addform" method="post" ng-validate="validationOptionsContractAttr">
+                <div class="col-md-2">
+                    <div class="form-group mb5">
+                        <label class="require">{{'CONTRACT_CURD_TAB_ATTRIBUTE_CURD_TXT_ATTR_CODE' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-disabled="isAdd==false" class="form-control" name="AttrCode" ng-model="model.AttrCode" placeholder="{{'CONTRACT_CURD_TAB_ATTRIBUTE_CURD_TXT_ATTR_CODE' | translate}}..."ng-change="ChangCheckCode()" />
+                            <span class="input-group-btn">
+                                <button ng-disabled="isAdd==false" type="button" ng-click="model.AttrCode=''" class="btn btn-default no-shadow" ng-style="borderValidateAttrCode" >
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group mb5">
+                        <label class="require">{{'CONTRACT_CURD_TAB_ATTRIBUTE_CURD_TXT_ATTR_VALUE' | translate}}</label>
+                        <div class="input-group">
+                            <input class="form-control" name="AttrValue" ng-model="model.AttrValue" placeholder="{{'CONTRACT_CURD_TAB_ATTRIBUTE_CURD_TXT_ATTR_VALUE' | translate}}..." ng-change="ChangCheckValue()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.AttrValue=''" class="btn btn-default no-shadow" ng-style="borderValidateAttrValue" >
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" ng-class="{ 'has-error': errorAttrGroup}">
+                    <label>{{'CONTRACT_TAB_EXT_TXT_GROUP' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.AttrGroup" on-select="changleSelect('AttrGroup')">
+                            <ui-select-match placeholder="{{'CONTRACT_TAB_EXT_TXT_GROUP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in attrGroups | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AttrGroup=''" class="btn btn-default no-shadow" ng-style="borderValidateAttrGroup">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorAttrGroup" class="label-color validation-message">
+                        {{'CONTRACT_VALIDATE_GROUP' | translate}}! |
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb5">
+                        <label>{{'CONTRACT_TAB_EXT_TXT_NOTE' | translate}}</label>
+                        <div class="input-group">
+                            <input class="form-control"  ng-model="model.Note" placeholder="{{'CONTRACT_TAB_EXT_TXT_NOTE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Note=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group actions pt20 d-flex">
+                        <div class="text-center pr10" ng-show="isAdd==true">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10" ng-show="isAdd==false">
+                            <a class="btn btn-icon-only btn-circle btn-outline red-custom " ng-click="close()">
+                                <span><i class="fa fa-close"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 " style="margin-left:8px">{{'CONTRACT_BTN_CLOSED' | translate }}</p>
+                        </div>
+                        <div class="text-center" ng-show="isAdd==false">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom " ng-click="save()">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ml10">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataAttribute"></table>
+</div>

@@ -1,0 +1,55 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <img src="../../../images/wareHouse/orderStore.png" height="30" width="30" />
+    <span class="modal-title" id="modal-title">{{'ALC_TITLE_ARRANGE_ASSET' | translate}}</span>
+</div>
+<div id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" method="post" ng-validate="validationOptions">
+            <div class="form-body pt10">
+                <div class="row">
+                    <div class="table-toolbar formAddDefault">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <i class="fa fa-cubes fw600"></i><label class="require fw600">{{'ALC_CRUD_ASSET' | translate}}</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" tagging ng-model="model.AssetCode" theme="bootstrap" ng-change="changeSelect('WareHouse',model.WHS_Code)">
+                                    <ui-select-match placeholder="{{'ALC_CRUD_ASSET' | translate}}"><b>{{$select.selected.Name}}</b></ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listAsset | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="text-danger text-underline">{{'ALC_LBL_POSITION' | translate}}: {{position}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12 pl-0 nowrap">
+                                <i class="fa fa-barcode bold"></i>
+                                <label class="control-label bold">{{'ALC_CRUD_POSITION' | translate}}</label>
+                            </div>
+                            <div class="col-md-12 pl-0">
+                                <input type="text" class="form-control bold" ng-model="model.RackPosition" placeholder="{{'ALC_CRUD_POSITION' | translate}}">
+                            </div>
+                        </div>
+                        <div class="col-md-1 p-0">
+                            <div class="text-center pull-left pt20 mr10" ng-click="arrange()">
+                                <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                    <span class="fs12 fa fa-plus"></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'ALC_BTN_ARRANGE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblDataOrder"></table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,87 @@
+﻿<style>
+    #cmsViewItem>p {
+        margin-bottom: 5px !important;
+    }
+
+    .w-95per {
+        width: 95%;
+    }
+
+    .w-5per {
+        width: 5%;
+    }
+</style>
+<div class="modal-header black" style="background-color: white !important;">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-info-circle icon-insert"></i>
+    <span class="modal-title" id="modal-title">{{model.title}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <div id="lectureViewItem" class="fs20 fw400"
+            style="font-family:Merriweather,serif;max-height: 400px;overflow-x:auto; color: black;">
+
+        </div>
+        <div class="row mt15">
+            <div class="col-md-12 p-0">
+                <textarea rows="3" class="form-control br4" ng-model="modelComment.Comment" name="Comment"
+                    placeholder="Viết bình luận..." ng-keydown="($event.keyCode == 13) && addComment()"></textarea>
+            </div>
+        </div>
+        <div class="row mt15">
+            <div style="height:160px; overflow-y:scroll;">
+                <div class="active-detail pl10 pr10" ng-repeat="cmt in comments">
+                    <div class="active-title" ng-if="cmt.Picture=='/images/default/no_user.png'">
+                        <span class="member-initials">
+                            <span>{{cmt.GivenName.charAt(0)}}</span>
+                        </span>
+                    </div>
+                    <div class="active-title" ng-if="cmt.Picture!='/images/default/no_user.png'">
+                        <img class="img-circle" height="32" width="32" src="{{cmt.Picture}}"
+                            onerror="this.src='../../../images/default/no_user.png'" />
+                    </div>
+                    <div class="active-time" ng-init="show.editComment[cmt.Id] = false">
+                        <b>{{cmt.GivenName}}</b>
+                        <span style="color:#8c8c8c">{{cmt.CreatedTime | date: "dd/MM/yyyy 'LMS_AT_TIME' h:mma"}}</span>
+                        <div class="pull-right">
+                            <span class="fa fa-file-word-o mr5 text-primary fs16" ng-click="setObjCode(cmt.Id)"
+                                onclick="$(this).parent().find('input[type=file]').click();"></span>
+                            <span class="fa fa-file-video-o mr5 text-purple fs16" ng-click="setObjCode(cmt.Id)"
+                                onclick="$(this).parent().find('input[type=file]').click();"></span>
+                            <input class="form-control border-left-4radius inputFileItemResult pl30"
+                                style="pointer-events:none; display: none;" name="File"
+                                placeholder="{{'COM_FILE' | translate}}..."></>
+                            <input class="form-control" custom-on-change="uploadFileComment" id="{{cmt.Id}}"
+                                onchange="$('.inputFileItemResult').val($(this).val().split('\\').pop());"
+                                style="display: none;" type="file">
+
+                            <span class="text-primary mr5">|</span>
+                            <span class="text-primary" ng-click="show.editComment[cmt.Id] = true">{{'LMS_EDIT' |
+                                translate}} | </span>
+                            <span class="text-primary" ng-click="deleteComment(cmt.Id)">{{'LMS_DELETED' |
+                                translate}}</span>
+                        </div>
+                    </div>
+                    <div class="active-body pl35 pb5">
+                        <textarea class="form-control" style="height: 40px" ng-blur="editComment(cmt)"
+                            ng-model="cmt.Comment" ng-if="show.editComment[cmt.Id]"></textarea>
+                        <span ng-if="!show.editComment[cmt.Id]" class="wordWrap" style="width:100%;">
+                            {{cmt.Comment}}
+                        </span>
+                        <span class="line" style="color:#8c8c8c"
+                            ng-if="cmt.UpdatedTime != null">{{'CJ_CURD_LBL_UPDATE_TIME' | translate}}: {{cmt.UpdatedTime
+                            | date: "dd/MM/yyyy 'LMS_AT_TIME' h:mma"}} {{'CJ_CURD_LBL_UPDATE_BY' | translate}}:
+                            {{cmt.UpdatedBy}}</span>
+                        <br />
+                        <a class="fs12" ng-repeat="file in cmt.ListFile" ng-click="viewFile(file)">
+                            <i class="fa fa-file-archive-o"></i> {{file.FileName}}
+                            <span class="text-danger ml10 fs10 text-underline"
+                                ng-click="deleteFileComment(file.Id)">{{'LMS_DELETED' | translate}}</span><br />
+                        </a>
+                    </div>
+                    <hr style="border-top: 1px solid #d6dadc; margin-top: 0 !important" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

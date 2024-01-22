@@ -1,0 +1,25 @@
+﻿@using ESEIM.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = ViewData["CrumbSerCatPrice"];
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+    bool hasPermissioServiceCategoryPriceInsert = session.HasPermission(CommonUtil.Controller_ServiceCategoryPrice, CommonUtil.Action_Insert);
+    bool hasPermissioServiceCategoryPriceUpdate = session.HasPermission(CommonUtil.Controller_ServiceCategoryPrice, CommonUtil.Action_Update);
+    bool hasPermissionServiceCategoryPriceDelete = session.HasPermission(CommonUtil.Controller_ServiceCategoryPrice, CommonUtil.Action_Delete);
+}
+@section plugin_script{
+    <script src="~/lib/assets/global/plugins/tinymce/tinymce.min.js"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/config.tinymce.js"></script>
+}
+<div id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+    <div ng-view></div>
+</div>
+<script>
+    var PERMISSION_SERVICE_CATEGORY_PRICE = {
+        Insert: @(hasPermissioServiceCategoryPriceInsert ? "true" : "false"),
+        Update: @(hasPermissioServiceCategoryPriceUpdate ? "true" : "false"),
+        Delete: @(hasPermissionServiceCategoryPriceDelete ? "true" : "false"),
+    };
+</script>
+<script src="~/views/admin/serviceCategoryPrice/controller.js" type="text/javascript"></script>

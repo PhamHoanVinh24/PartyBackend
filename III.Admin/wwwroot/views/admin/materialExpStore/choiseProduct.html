@@ -1,0 +1,307 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 80px;
+        height: 80px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 58px;
+        height: 46px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title " id="modal-title">{{'MES_TITLE_CHOOSE_PR_EXP' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="table-toolbar">
+                            <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label require">{{'MES_CURD_LBL_CATALOGUE_PRODUCT' | translate}}</label>
+                                        <div class="d-flex">
+                                            <div class="input-group col-md-11">
+                                                <ui-select tagging ng-model="modelList.ProductCode" theme="bootstrap" on-select="changleSelect('ProductQrCode',$item)">
+                                                    <ui-select-match placeholder="{{'MES_CURD_LBL_PROJECT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.ProductCode as x in listProduct | filter: $select.search">
+                                                        {{x.Name}}
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                            <a class="question pl10 fs25" style="color:#428bca" data-toggle="popover" data-placement="bottom" data-html="true" data-content="{{'MES_GAI_SEARCH_CHILD' | translate}} <br /> {{'MES_GAI_SEARCH_COMPLETED' | translate}}" data-trigger="hover" data-original-title="{{'MES_TUTURIAL_FIND' | translate}}">
+                                                
+                                                <i class="fa fa-question-circle"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pl-0">
+                                        <label class="control-label require">{{'D/S Lot' | translate}}</label>
+                                        <ui-select tagging ng-model="modelList.ProductLot" theme="bootstrap" on-select="changleSelect('ProductLot',$item)">
+                                            <ui-select-match placeholder="{{'MES_CHOICE_SCROLL_BOX' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listLot | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="col-md-3 pl-0">
+                                        <label class="control-label require">{{'MES_DS_SCROLL' | translate}}</label>
+                                        <ui-select tagging ng-model="modelList.ProductCoil" theme="bootstrap" on-select="changleSelect('ProductCoil',$item)">
+                                            <ui-select-match placeholder="{{'MES_CHOICE_SCROLL_BOX' | translate}}">{{$select.selected.sProductCoil}}</ui-select-match>
+                                            <ui-select-choices repeat="x.ProductCoil as x in listCoil | filter: $select.search">
+                                                {{x.sProductCoil}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="control-label require">{{'MES_CURD_LBL_QUANTITY' | translate}} ({{maxQuantity}})</label>
+                                        <div class='input-group'>
+                                            <input type='number' min="0" class="br4 form-control input-date" ng-model="modelList.Quantity" placeholder="{{'MES_CURD_LBL_QUANTITY' | translate}}..." />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 pl-0">
+                                        <label class="control-label">{{'MES_LIST_COL_DETAIL_EXPSTORE_UNIT' | translate}}</label>
+                                        <div class="input-group">
+                                            <ui-select tagging ng-model="modelList.Unit" theme="bootstrap" on-select="changleSelect('Unit',$item)" ng-disabled="modelDisable">
+                                                <ui-select-match placeholder="{{'MES_LIST_COL_DETAIL_EXPSTORE_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 actions mt20 d-flex">
+                                        <div class="text-center" ng-show="isAdd==true">
+                                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                                <span><i class="fa fa-plus"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                                        </div>
+                                        <!--<div class="text-center" ng-show="isAdd==false">
+                                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="save()">
+                                                <span><i class="fa fa-save"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                        </div>
+                                        <div class="text-center" ng-show="isAdd==false">
+                                            <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="close()">
+                                                <span><i class="fa fa-close"></i></span>
+                                            </a>
+                                            <p class="text-underline fs9 mb-0 pt3">{{'COM_BTN_CLOSE' | translate}}</p>
+                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label class="bold text-blue fs11">{{'MES_CURD_LBL_QUANTITY_EXP' | translate}} {{model.QuantityNeedExport}}</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="tblListProduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'MES_LIST_COL_QR' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'MES_LIS_COL_PRODUCT' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'Lot' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'Cuộn/thùng' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'MES_LIS_COL_LOCATION' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'MES_LIST_COL_QUANTITY' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'MES_LIST_COL_DETAIL_EXPSTORE_UNIT' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'MES_LIST_COL_ESTORE_ACTION' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in model.ListProduct">
+                                        <td class="text-center">
+                                            <img src='data:image/png;base64,{{x.sProductQrCode}}' ng-click="viewQrCode(x.sProductQrCode)" height="40" width="40" />
+                                        </td>
+                                        <td class="text-left">{{x.ProductName}}</td>
+                                        <td class="text-center">{{x.ProductLot}}</td>
+                                        <td class="text-center">{{x.sProductCoil}}</td>
+                                        <td class="text-left">{{x.RackName}}</td>
+                                        <td class="text-center">{{x.Quantity|number}}</td>
+                                        <td class="text-center">{{x.UnitName}}</td>
+                                        <td class="text-center">
+                                            <!--<i role="button" class="fa fa-edit" ng-click="edit(x, $index)" title="Chỉnh sửa" style="color:blue !important;font-size: 25px;padding-top:5px"></i>-->
+                                            <i role="button" class="fa fa-minus-circle" ng-click="removeItem(x, $index)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="5" class="text-center fw600">{{'MES_CURD_LBL_TOTAL' | translate}}</th>
+                                        <th colspan="1" class="text-center fw600">{{model.QuantityTotal|number}}</th>
+                                        <th colspan="1" class="text-center fw600"></th>
+                                        <th colspan="1" class="text-center fw600"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-md-12">
+                <div class="text-center pull-right" ng-click="submit()">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">
+                        {{'COM_BTN_SAVE' | translate}}
+                    </p>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>

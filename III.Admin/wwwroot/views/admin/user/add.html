@@ -1,0 +1,457 @@
+﻿<!--<style>
+    .has-error .form-control {
+        border-color: #e73d4a !important;
+    }
+</style>-->
+<style>
+    .has-error .form-control {
+        border-color: #e73d4a !important;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        /*border-top: none;*/
+        padding: 15px;
+    }
+
+    .table-custom {
+        /*border-top: none !important;*/
+        border-left: #e8e2e2 1px solid !important;
+        border-right: #e8e2e2 1px solid !important;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title"> {{'ADM_USER_CURD_TITLE_ADD_USER' | translate}}</span>
+
+</div>
+<div class="fluid-width pull-left">
+    <div class="text-center pr-2 pull-right">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="thumbnail " style="border: 0; box-shadow: none;background:none">
+                                <input id="File" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img id="imageId" ng-click="loadImage()" class="img-circle " style="height: 200px; width: 200px;cursor: pointer" src="/images/default/uploadimg.png" alt="Hình ảnh" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center" style="font-size: 20px;margin-top: -5px;">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <label class="control-label ">{{'ADM_USER_CURD_LBL_AVATAR' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="thumbnail " style="border: 0; box-shadow: none;background:none">
+                                <input id="FileSign" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img id="imageIdSign" ng-click="loadImageSign()" style="height: 100px; width: 200px;cursor: pointer" onerror="this.src='/images/default/icon-sign.jpg'" ng-src="{{model.SignImage==null ? '/images/default/icon-sign.jpg' : model.SignImage}}" alt="Hình ảnh" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center" style="font-size: 20px;margin-top: -5px;">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <label class="control-label ">{{'ADM_USER_LBL_SIGN' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require">{{'ADM_USER_CURD_LBL_ACCOUNT_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control br24 bold" ng-model="model.UserName" name="UserName" placeholder="{{'ADM_USER_CURD_TXT_ACCOUNT_NAME' | translate}}..." autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require">{{'ADM_USER_CURD_LBL_PASSWORD' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input id="password-field" type="password" ng-model="model.Password" name="Password" class="form-control br24" placeholder="{{'ADM_USER_CURD_TXT_PASSWORD' | translate}}..." autocomplete="off">
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password show-password"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label">{{'ADM_USER_CURD_LBL_EMPLOYEE' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.EmployeeCode" style="width: 100%;" on-select="selectEmployeeCode($item)">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_LBL_COMBO_EMPLOYEE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listEmployeeCode | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.EmployeeCode='';selectEmployeeCode(null)" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label require">{{'ADM_USER_CURD_LBL_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control br24 bold" ng-model="model.GivenName" name="GivenName" placeholder="{{'ADM_USER_CURD_TXT_NAME' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label">{{'ADM_USER_CURD_LBL_USER_USE_APP' | translate}}</label>
+                            <div class="input-group br24">
+                                <ui-select ng-model="model.TypeStaff" on-select="selectTypeStaff(model.TypeStaff)">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_TXT_USER_USE_APP' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in TypeStaffData | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.TypeStaff=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12" style="margin-top: -4px;">
+                            <label class="control-label">{{'ADM_USER_CURD_LBL_EMAIL' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control br24 bold" ng-model="model.Email" name="Email" placeholder="{{'ADM_USER_CURD_TXT_EMAIL' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label ">{{'ADM_USER_CURD_LBL_ACCOUNT_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-check mt10">
+                                <label class="form-check-label fs10 pl-0 pr20">
+                                    <!--<input type="radio" ng-model="model.UserType" ng-value="10">-->
+                                    <i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.UserType != 10" ng-click="model.UserType = 10"></i>
+
+                                    <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.UserType == 10" ng-click1="updateSelection($index, entities)"></i>
+                                    {{'ADM_USER_CURD_RADIO_MANAGER' | translate}}
+                                </label>
+                                <label class="form-check-label fs10 pl-0">
+                                    <!--<input type="radio" ng-model="model.UserType" ng-value="1" ng-checked="true">-->
+                                    <i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.UserType != 1" ng-click="model.UserType = 1"></i>
+
+                                    <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.UserType == 1" ng-click1="updateSelection($index, entities)"></i>
+                                    {{'ADM_USER_CURD_RADIO_NORMAL' | translate}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 ">
+                    <div class="form-group" ng-class="{ 'has-error': errorBranch}">
+                        <div class="col-md-12">
+                            <label class="control-label" ng-class="{'require':(model.TypeStaff === '' || model.TypeStaff === null )||(model.TypeStaff === 10)}">{{'ADM_USER_CURD_LBL_BRANCH' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24 col-md-12">
+                                <ui-select ng-model="model.BranchId" class="" style="width: 100%;" ng-required="true" on-select="changleSelect('Branch')">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_BRANCH' | translate}}...">{{$select.selected.OrgCode}} - {{$select.selected.OrgName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.OrgAddonCode as x in liBranch | filter:$select.search">
+                                        {{x.OrgCode}} - {{x.OrgName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.BranchId=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorBranch" class="label-color validation-message">
+                                {{'ADM_USER_CURD_MSG_ERR_BRANCH' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorDepartment}">
+                        <div class="col-md-12">
+                            <label class="control-label" ng-class="{'require':(model.TypeStaff === '' || model.TypeStaff === null )||(model.TypeStaff === 10)}">{{'ADM_USER_CURD_LBL_DEPARTMENT' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24 col-md-12">
+                                <ui-select ng-model="model.DepartmentId" class="" style="width: 100%;" ng-required="true" on-select="changleSelect('Department')">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_DEPARTMENT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in liDepartment | filter:$select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.DepartmentId=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorDepartment" class="label-color validation-message">
+                                {{'ADM_USER_CURD_MSG_ERR_DEPARTMENT' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorRoleId}">
+                        <div class="col-md-12">
+                            <label class="control-label" ng-class="{'require':(model.TypeStaff === '' || model.TypeStaff === null )||(model.TypeStaff === 10)}">{{'ADM_USER_CURD_LBL_ROLE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group br24 col-md-12">
+                                <ui-select ng-model="model.RoleId" ng-required="true" on-select="changleSelect('RoleId')">
+                                    <ui-select-match placeholder="{{'ADM_USER_CURD_COMBO_ROLE' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Id as x in listRoles | filter:$select.search">
+                                        {{x.Title}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.RoleId=''" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorRoleId" class="label-color validation-message">
+                                {{'ADM_USER_CURD_MSG_ERR_ROLE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <style>
+                        .group-typeWork {
+                            padding: 10px;
+                            border: 1px solid #d4d4d4;
+                            border-radius: 4px;
+                            background: #fff;
+                            min-height: 97px;
+                            display: block;
+                            float: left;
+                        }
+                    </style>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label ">{{'Kiểu nhân viên' | translate}}</label> <!--ADM_USER_CURD_LBL_EMPLOYEE_TYPE-->
+                        </div>
+                        <div class="col-md-12">
+                            <div class="group-typeWork">
+                                <label ng-repeat="x in entities" ng-class=" $index % 2 == 0 ? 'col-md-6' : 'col-md-5'" class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 10px!important;">
+
+                                    <i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="x.Check != true" ng-click="x.Check = true"></i>
+
+                                    <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="x.Check == true" ng-click="x.Check = false"></i>
+                                    {{x.Name}}
+                                    <!--<input type="checkbox" ng-model="x.Check"> {{x.Name}}-->
+                                    <!--<span></span>-->
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': errorPhoneNumber}">
+                        <div class="col-md-12" style="margin-top: -4px;">
+                            <label class="control-label">{{'ADM_USER_CURD_LBL_PHONE' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control br24 bold" ng-model="model.PhoneNumber" name="PhoneNumber" placeholder="{{'ADM_USER_CURD_TXT_PHONE' | translate}}..." ng-change="changleSelect('PhoneNumber')" />
+                            <span ng-show="errorPhoneNumber" class="label-color validation-message">
+                                {{'ADM_USER_CURD_MSG_ERR_PHONE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="control-label ">{{'ADM_USER_CURD_LBL_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mt-checkbox-list pt10">
+                                <label class="mt-checkbox" style="margin-bottom: 0; width: 30px; display: inline; font-size: 10px">
+
+                                    <i class="fas fa-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.Active != true" ng-click="model.Active = true"></i>
+
+                                    <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 20px;margin-right: 10px;" ng-if="model.Active == true" ng-click="model.Active = false"></i>
+                                    {{'ADM_USER_CURD_CHECKBOX_ACTIVE' | translate}}
+                                    <!--<input type="checkbox" ng-model="model.Active" ng-checked="model.Active"> {{'ADM_USER_CURD_CHECKBOX_ACTIVE' | translate}}
+                                    <span></span>-->
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <div class="col-md-12 ">
+                            <label class="control-label ">{{'Loại hình' | translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <ui-select ng-model="model.TypeWork" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Loại hình' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in typeWork | filter:$select.ContractCode| filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>-->
+                </div>
+                <!--<div class="col-lg-12">
+                    <div class="form-group">
+                        <div class="col-md-4" ng-class="{ 'has-error': errorGroupUserCode}">
+                            <label class="control-label require">{{'Nhóm người dùng' | translate}}</label>
+                            <ui-select ng-model="model.GroupUserCode" multiple theme="bootstrap" class="h-100 mh-100" ng-change="changleSelect('GroupUserCode')">
+                                <ui-select-match placeholder="{{'Chọn nhóm người dùng' | translate}}...">{{$item.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listGroupUser | filter:$select.ContractCode| filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorGroupUserCode" class="label-color validation-message">
+                                Nhóm người dùng không được để trống
+                            </span>
+                        </div>
+                        <div class="col-md-8" ng-class="{ 'has-error': errorArea}">
+                            <label class="control-label require">{{'ADM_USER_CURD_LBL_MANAGEMENT_AREA' | translate}}</label>
+                            <ui-select ng-model="model.Area" multiple theme="bootstrap" class="h-100 mh-100" on-select="changleSelect('Area')">
+                                <ui-select-match placeholder="{{'ADM_USER_CURD_TXT_MANAGEMENT_AREA' | translate}}...">{{$item.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listArea | filter:$select.ContractCode| filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorArea" class="label-color validation-message">
+                                Khu vực không được để trống
+                            </span>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </form>
+
+    <div class="row h-400">
+        <div class="col-lg-12">
+            <div class="btn-group actions pull-right mr15">
+
+
+                <div class="text-center pull-right pr-1" ng-click="submit()" style="margin-top: -15px" ng-if="UserId == ''">
+                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                </div>
+                <div class="text-center pull-right pr-1" ng-click="save()" style="margin-top: -15px" ng-if="UserId != ''">
+                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa-solid fa-plus fs30"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+
+            </div>
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <div href="#GroupUser" aria-controls="home" role="button" data-toggle="tab">{{'ADM_USER_CURD_TAP_USER_GROUP' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Department" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'ADM_USER_CURD_TAP_DEPARTMENT' | translate}}
+                        </div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Leaders" aria-controls="messages" role="button" data-toggle="tab">{{'ADM_USER_LBL_LEADERS_OF_USER' | translate}}</div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="GroupUser">
+                        <div ng-include="'../views/admin/user/groupUser.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Department">
+                        <div ng-include="'../views/admin/user/userDepartment.html'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Leaders">
+                        <div class="row h-300">
+                            <div class="col-md-11 mb10">
+                                <div class="col-md-12 br24 p-0" ng-class="{ 'has-error': errorUserId}">
+                                    <label class="require">{{'ADM_USER_LBL_LEADERS_OF_USER' | translate}}</label>
+                                    <ui-select ng-model="model1.listLeader" multiple theme="bootstrap" class="h-120" on-select="addUser($item)" on-remove="removeUser($item)">
+                                        <ui-select-match placeholder="{{'ADM_USER_SELECT_LEADERS_OF_USER' | translate}}...">{{$item.GivenName}}</ui-select-match>
+                                        <ui-select-choices repeat="x.UserName as x in listUser | filter:$select.search">
+                                            {{x.GivenName}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span ng-show="errorUserId" class="label-color validation-message">
+                                        {{'ADM_USER_VALIDATE_EMPLOYEE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="pr0 text-center pull-right mt20 mr10">
+                                    <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="updateManager()">
+                                        <span><i class="fas fa-sync-alt fs20"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5">{{'COM_BTN_EDIT' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

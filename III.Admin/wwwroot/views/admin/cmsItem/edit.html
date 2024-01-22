@@ -1,0 +1,253 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">{{'CMS_ITEM_CURD_LBL_EDIT_ITEM' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsCmsItem">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                
+                                <label class="control-label require"><i class="fa fa-barcode"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_TITLE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" name="Title" ng-model="model.title" ng-change="ConvertToAlias(model.title)" type="text" placeholder="{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                
+                                <label class="control-label require"><i class="fa fa-barcode"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_PATH' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" name="Alias" ng-model="model.alias" type="text" placeholder="{{'CMS_ITEM_CURD_TXT_PATH' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                
+                                <label class="control-label require"><i class="fa fa-user"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_CATEGORY' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group" ng-class="{ 'has-error': errorCatID}">
+                                    <ui-select tagging ng-model="model.cat_id" name="Category" theme="bootstrap" ng-change="changeSelect('cat_id')">
+                                        <ui-select-match placeholder="{{'CMS_ITEM_COMBO_CATEGORY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Id as x  in listCatId | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.cat_id=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorCatID" class="label-color validation-message">
+                                    {{'CMS_ITEM_CATEGORY_NOT_EMPTY' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                
+                                <label class="control-label"><i class="fa fa-user"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_DESC' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea name="Note" rows="5" class="form-control" ng-model="model.intro_text" type="text" placeholder="{{'CMS_ITEM_CURD_TXT_DESC' |translate}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left"><i class="fas fa-gift"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_DATE_POST' | translate}}</label>
+                            <div class="col-md-7">
+                                <div class='input-group date' id='DatePost'>
+                                    <input type='text' class="form-control input-date" name="DatePost" ng-model="model.date_post" placeholder="{{'CMS_ITEM_CURD_TXT_DATE_POST' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5 pr-0">
+
+                                <label class="control-label "><i class="fa fa-money" aria-hidden="true"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_TYPE_ITEM' | translate}}</label>
+                            </div>
+                            <div class="col-md-7 d-flex pr-0">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label ng-repeat="x in entities" class="mt-checkbox mt-checkbox-outline fs12" style="margin: 6px 0 0 15px!important;">
+                                            <input type="checkbox" ng-model="x.checked" ng-click="updateSelection($index, entities)"> {{x.name}}
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+
+                                <label class="control-label require" style="text-align:left;"><i class="fas fa-info-circle"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_CHOOSE_TEMPLATE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group" ng-class="{ 'has-error': errorTemplate}">
+                                    <ui-select tagging ng-model="model.template" theme="bootstrap" ng-change="changeSelect('template')">
+                                        <ui-select-match placeholder="{{'CMS_ITEM_COMBO_CHOOSE_TEMPLATE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listTemplate | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn no-shadow btn-default" ng-click="model.template='';" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorTemplate" class="label-color validation-message">
+                                    Template không được trống
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <label class="control-label "><i class="fa fa-user"></i>&nbsp;{{'CMS_ITEM_CURD_LBL_LANGUAGE' | translate}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.language" theme="bootstrap" ng-change="changeLanguage(model.language)">
+                                        <ui-select-match placeholder="{{'CMS_ITEM_COMBO_CHOOSE_LANGUAGE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listLanguage | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.language='';" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5 text-left" caption="CMS_ITEM_CURD_LBL_ORDERING"><i class="fas fa-gift"></i>&nbsp;{{'Thứ tự' | translate}}</label>
+                            <div class="col-md-7">
+                                <input type='number' class="form-control" ng-model="model.ordering" placeholder="Thứ tự" placeholder1="{{'CMS_ITEM_CURD_TXT_ORDERING' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-12 tab-common">
+            <uib-tabset active="active">
+                <uib-tab class="mt5" index="0" heading="{{'CMS_ITEM_BTN_CONTENT' | translate}}">
+                    <textarea ng-model="model.full_text" id="ckEditorItem"></textarea>
+                </uib-tab>
+                <uib-tab class="mt5" index="1" heading="{{'CMS_ITEM_BTN_IMAGE' | translate}}">
+                    <div ng-include="'../views/admin/cmsItem/image.html'"></div>
+                </uib-tab>
+                <uib-tab class="mt5" index="2" heading="{{'CMS_ITEM_BTN_FILE' | translate}}">
+                    <div ng-include="'../views/admin/filePlugin/file-plugin.html'"></div>
+                </uib-tab>
+                <uib-tab class="mt5" index="3" heading="{{'CMS_ITEM_CURD_LBL_ATT' | translate}}">
+                    <div ng-include="'../views/admin/cmsItem/articlecommon.html'"></div>
+                </uib-tab>
+                <uib-tab class="mt5" index="4" heading1="{{'CMS_ITEM_CURD_LBL_ATT' | translate}}" heading="Từ khóa tìm kiếm">
+                    <div ng-controller="addHashTag">
+                        <div class="portlet-body form mb10 pl15">
+                            <form name="addCSCform" class="form-horizontal " method="post" ng-validate="validationOptionsCSC">
+                                <div class="form-body pt-0 pl-0 pr-0">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <label class="control-label require"><i class="fa fa-user"></i><!--{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}-->Tag</label>
+                                            <div class="input-group">
+                                                <input type='text' class="form-control input-date" name="Tag" ng-model="model.Tag" placeholder="Tag" placeholder1="{{'CMS_ITEM_CURD_TXT_DATE_POST' | translate}}..." />
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="submit()" class="btn btn-default no-shadow" style="">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="errorType" class="label-color validation-message">
+                                                {{'CMS_ITEM_NOT_EMPTY' | translate}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-12 mb15">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="margin-bottom: 0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center col-md-1" style="width: 5%;">{{'STT' | translate}}</th>
+                                            <th class="text-center col-md-6 nowrap">{{'Nội dung tag' | translate}}</th>
+                                            <th class="text-center col-md-1 nowrap">{{'Thao tác' | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in listHashTag track by $index">
+                                            <td class="text-center pt15 bold">{{$index+1}}</td>
+                                            <td class="text-left pl20 text-green"><span class="fs20">{{x}}</span></td>
+                                            <td class="text-center nowrap">
+                                                <button title="Xóa" ng-click="deleteTag(x)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+                <div class="pull-right">
+                    <div class="btn-group actions d-flex">
+                        <div class="pr10">
+                            <div data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                <span><i class="glyphicon glyphicon-remove"></i></span>
+                            </div>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center pl10" ng-click="submit()">
+                            <div class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fas fa-save"></i></span>
+                            </div>
+                            <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </uib-tabset>
+        </div>
+    </div>
+</div>

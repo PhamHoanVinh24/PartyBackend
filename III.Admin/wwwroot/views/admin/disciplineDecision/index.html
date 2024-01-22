@@ -1,0 +1,136 @@
+﻿<style>
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: white !important;
+        font-weight: 700;
+        background: #FF8000;
+        font-size: 12px;
+    }
+
+    .nav-tabs .nav-link, .nav-tabs a {
+        background: #428bca;
+        transition: 0.5s;
+        background-size: 200% auto;
+        border-top-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+        font-size: 12px;
+        color: white;
+        padding: 6px;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(75% - 50px);
+        right: 50px;
+        top: 10px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+</style>
+<div class="btn-group pull-right actions pt5 d-flex" style="margin-top: -50px;">
+    <div class="text-center mt10 pr30">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center mt10 pr30" ng-click="add()">
+        <a class1="btn btn-icon-only fs25 p-0" ng-click="reload()">
+            <span><i class="fa-solid fa-plus fs30"></i></span>
+        </a>
+        <p class="text-underline btn-name mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times pull-right h28 w28 close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="fw600 text-underline">{{'ECD_LBL_CRUD_NUM_OR_NAME' | translate}}</label>
+                        <input ng-model="modelHeader.DecisionNum" name="DecisionNum" class="form-control br24" type="text" placeholder="{{'ECD_LBL_CRUD_NUM_OR_NAME' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'ECD_LBL_CRUD_FROM_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="modelHeader.FromDate" class="form-control" type="text" placeholder="{{'ECD_LBL_CRUD_FROM_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='datefrom' autocomplete="off" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.FromDate=''" class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'ECD_LBL_CRUD_TO_DATE' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="modelHeader.ToDate" class="form-control" type="text" placeholder="{{'ECD_LBL_CRUD_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='dateto' autocomplete="off" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.ToDate=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-3">
+                        <label class="fw600 text-underline">{{'Người quyết định' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="modelHeader.Signer" theme="bootstrap" ng-change="reload()">
+                                <ui-select-match placeholder="{{'Người quyết định' | translate}}">{{$select.selected.signer}}</ui-select-match>
+                                <ui-select-choices repeat="x.signer as x in LstSiger | filter: $select.search">
+                                    {{x.signer}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelHeader.Signer=''" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>-->
+                    <div class="col-md-2 d-flex pt20">
+                        <div class="text-center mt10 pr-0">
+                            <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                                <span><i class="fas fa-search color-dark fs30"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataPayDecision"></table>
+    </div>
+</div>

@@ -1,0 +1,497 @@
+﻿ <!-- Left side column. contains the logo and sidebar -->
+@using ESEIM.Utils
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Localization
+@using III.Admin.Controllers
+@inject IParameterService ParameterService
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ILanguageService LanguageService
+@inject IStringLocalizer<LmsDashBoardController> Localizer
+@{
+    var session = HttpContextAccessor.HttpContext.GetSessionUser();
+    var userName = session.UserName;
+}
+<link href="../../../css/admin/cardJob/sideNavLeft.css" rel="stylesheet" />
+<style>
+    .table-custom {
+        min-height: unset;
+    }
+
+    .popover {
+        max-width: 300px;
+        left: -145.5703px !important;
+        top: 50px !important;
+    }
+
+    .custom-shadow-box {
+        box-shadow: 3px 3px 3px #042906ee !important;
+    }
+
+    .img-check-in:hover {
+        box-shadow: 2px 2px 2px 2px #80c196;
+        border-radius: 4px;
+    }
+
+    .img-check-out:hover {
+        box-shadow: 2px 2px 2px 2px #9a9797;
+        border-radius: 13px;
+    }
+
+    .search-advantage-mode {
+        padding-left: 0px !important;
+    }
+
+    .has-branch-department {
+        bottom: -15px;
+    }
+
+    .jstree-default .jstree-clicked {
+        background: #fff !important;
+    }
+
+    .ui-tabs-scrollable > .nav-button.left-nav-button {
+        top: 3px;
+    }
+
+    .ui-tabs-scrollable > .nav-button.right-nav-button {
+        top: 3px;
+    }
+
+    .nav-header {
+        width: 50px;
+        float: left;
+    }
+
+    .nav-search {
+        width: 280px;
+        float: right;
+    }
+
+    .nav-body {
+        width: 280px;
+        float: right;
+    }
+
+    .custom-btn-nav-left {
+        border: 1px solid transparent;
+        transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: #acb3b9;
+        box-shadow: 2px 2px 5px #acb3b9;
+        transform: rotate( 90deg );
+        margin-top: 6px;
+        margin-right: -15px;
+    }
+
+    .custom-nav-lef-checkbox > .span-checkbox:after {
+        left: 10px !important;
+        top: 6px !important;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate( 45deg );
+    }
+
+    .span-checkbox {
+        background-color: blueviolet !important;
+        color: black !important;
+        border-radius: 50%;
+        padding: 12px;
+    }
+
+    #boardAll:hover {
+        color: #337ab7 !important;
+    }
+
+    .Sidebar {
+        width: 250px;
+        height: 880px;
+        overflow: unset;
+        background: #FFFFFF;
+        padding-top: 90px !important;
+    }
+
+    .Sidebar1 {
+        width: 250px;
+        height: calc(100vh - 100px);
+        left: 0px;
+        top: 0px;
+        background: #FFFFFF;
+        box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.25);
+        border-radius: 30px;
+    }
+
+        .Sidebar1 li {
+            padding-top: 10px;
+        }
+
+        .User {
+            padding-top: 50px;
+            margin-left: 115px;
+            width: 149px;
+            height: 167px;
+            left: 102px;
+            top: 50px;
+        }
+
+        .User > img {
+            width: 130px;
+            height: 60px;
+            padding-left: 20px;
+        }
+
+    .text1 {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+        /* identical to box height */
+
+        text-align: center;
+        color: #000000;
+    }
+
+    .text2 {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+        /* identical to box height */
+
+        text-align: center;
+        color: #7A7E86;
+    }
+
+    .item_menu {
+        padding-top: 35px;
+        width: 232px;
+        height: 60px;
+        left: 60px;
+        top: 200px;
+    }
+
+        .item_menu > div {
+            width: 200px;
+            height: 55px;
+            /* Blue 01 */
+            margin-left: 50px;
+            background: #1294F2;
+            border-radius: 18px;
+            border: 0px;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px !important;
+            line-height: 27px;
+            text-align: center;
+            padding-top: 15px;
+            /* identical to box height */
+
+
+            color: #FFFFFF;
+        }
+
+            .item_menu > div > a {
+                float: left;
+                padding-left: 21px;
+                color: #FFFFFF;
+            }
+
+            .item_menu > div > img {
+                float: left;
+                padding-left: 27px;
+            }
+
+    .Group {
+        margin-left: 25px;
+        /*padding-top: 50px;*/
+        width: 200px;
+        height: 30px;
+    }
+
+        .Group hr {
+            margin: 0 0;
+        }
+
+        .Group > div {
+            width: 225px;
+            padding-top: 15px;
+            /*padding-bottom: 10px;*/
+            /*font-family: Poppins;*/
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 27px;
+            position: relative;
+            float: left;
+            /* identical to box height */
+
+
+            color: #7A7E86;
+        }
+
+            .Group > div > img {
+                /*padding-right: 15px;*/
+                width: 23px;
+            }
+
+            .Group > div > a {
+                color: black;
+                padding-left: 10px;
+                font-size: 13px;
+            }
+
+    .chuong {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        /*color: #fff !important;*/
+    }
+
+    .Sidebar1 .dropdown-menu {
+        box-shadow: none !important;
+        position: initial;
+        width: 100%;
+    }
+
+    .Sidebar1 .dropdown-toggle::after {
+        top: 18px;
+    position: absolute;
+    right: 15px;
+    }
+
+    a.activeEdu {
+        color: #337ab7 !important;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+</style>
+<!--<div class="row h100">-->
+<!--nav left-->
+<div class="Sidebar sidenav" id="educationMenu">
+    <div class="Sidebar1">
+        <div class="tab-content hidden">
+            <div class="tab-pane hidden">
+                <ul class="page-sidebar-menu page-header-fixed page-sidebar-menu-hover-submenu menu-wf-system" style="background-color: #e5e5e6; z-index:1;">
+                    <li class="nav-item hidden-sm-down hidden">
+                        <a href="/Admin/LmsDashBoard" class="nav-link nav-toggle nav-menu-main hidden-xs none-hover box-shadow-bottom1">
+                            @*<img style="width:45px" src="../../../images/workflowActivity/icon-wf.png" />
+                        <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["Dựng quy trình"]</span>
+                        <span class="arrow"></span>*@
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-pane hidden" id="crawler">
+                <ul class="page-sidebar-menu page-header-fixed page-sidebar-menu-hover-submenu menu-wf-system" style="background-color: #e5e5e6; z-index:1;">
+                    <li class="nav-item hidden-sm-down hidden">
+                        <a href="/Admin/CrawlerMenu" class="nav-link nav-toggle nav-menu-main hidden-xs none-hover box-shadow-bottom1">
+                            @*<img style="width:45px" src="../../../images/workflowActivity/icon-wf.png" />
+                        <span class=" title fw400 margin_bottom_10 black fs12">@Localizer["Dựng quy trình"]</span>
+                        <span class="arrow"></span>*@
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Group">
+            <div>
+                <img src="/images/default/dashboard-icon-11.jpg" alt="" />
+                <a href="/Admin/LmsDashBoard">@Localizer["LMS_SBL_A_DASH_BOARD"]</a>
+            </div>
+            <div>
+                <img src="/images/lms/noti_pink.png" alt="" />
+                <a href="/Admin/LmsNotification">@Localizer["LMS_NOTIFICATION"]</a> @*LMS_SBL_A_NOTIFICATION*@
+            </div>
+            <div>
+                <img src="/images/default/teamwork.png" alt="" />
+                <a href="/Admin/LmsStudentManagement">@Localizer["LMS_STUDENT_MANAGMENT"]</a> @*LMS_SBL_A_STUDENT_MANAGEMENT*@
+            </div>
+            <div>
+                <img src="/images/default/training.png" alt="" />
+                <a href="/Admin/LmsClass">@Localizer["LMS_CLASS"]</a> @*LMS_SBL_A_STUDENT_MANAGEMENT*@
+            </div>
+            <div>
+                <img src="/images/lms/to-do-list.png" alt="" />
+                <a href="/Admin/LmsTaskManagement">@Localizer["LMS_MNU_TASK_ASSIGN"]</a> @*LMS_SBL_A_TASK_MANAGEMENT*@
+            </div>
+            <hr />
+            <div>
+                <img src="/images/default/online-course.png" alt="" />
+                <a href="/Admin/LmsCourse">@Localizer["LMS_SBL_A_COURSE_MANAGEMENT"]</a>
+            </div>
+            <div id1="sb-left-subject-menu">
+                <img src="/images/default/lecturer.png" alt="" />
+                <a id1="dropdown-subject" href="/Admin/LmsSubjectManagement" data-toggle1="dropdown" class1="dropdown-toggle">@Localizer["LMS_SBL_A_COURSE_SUBJECT_LECTURE"]</a>
+                @*<div aria-labelledby="dropdown-subject" class="dropdown-menu">
+                    <ul style="padding: 0px 0px 0px 30px;font-size:13px">
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsSubjectManagement#assignmentSubject">@Localizer["LMS_MNU_LECTURE_ASSIGNMENT"]</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsSubjectManagement#possessAndShareSubject">@Localizer["LMS_MNU_LECTURE_STORE"]</a>
+                        </li>
+                    </ul>
+                </div>*@
+            </div>
+            @*<div>
+            <img src="/images/lms/Elearning_Online Learning-19.svg" alt="" />
+            <a href="/Admin/LmsAssignment">@Localizer["LMS_SBL_A_ASSIGMENTS"]</a>
+            <i class="ficon icon-bell4 fs14 black chuong" style="position: absolute; top: 21px; right: 36px; "></i>
+            <span class="tag tag-pill tag-default tag-danger tag-default " style="position: absolute; top: 15px; right: 27px; width: 12px; height: 12px; padding-left: 1px; padding-right: 1px; padding-top: 0px; font-size: 10px; line-height: 12px; ">0 </span>
+        </div>*@
+            <div id1="sb-left-question-menu">
+                <img src="/images/Icon_Dashbord/icon_questionbank.png" alt="" />
+                <a id1="dropdown-question" href="/Admin/LmsQuiz" data-toggle1="dropdown" class1="dropdown-toggle">@Localizer["LMS_SBL_A_QUESTION_BANK"]</a>
+                @*<div aria-labelledby="dropdown-question" class="dropdown-menu">
+                    <ul style="padding: 0px 0px 0px 30px;font-size:13px">
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsQuiz#assignmentQuiz">@Localizer["LMS_MNU_QUIZ_ASSIGNMENT"]</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsQuiz#possessAndShareQuiz">@Localizer["LMS_MNU_QUIZ_STORE"]</a>
+                        </li>
+                    </ul>
+                </div>*@
+            </div>
+            <div id1="sb-left-practice-menu">
+                <img src="/images/Icon_Dashbord/icon_exambank.png" alt="" />
+                <i class="ficon icon-bell4 fs14 black chuong" style="position: absolute; top: 21px; right: 36px; "></i>
+                <span class="tag tag-pill tag-default tag-danger tag-default " style="position: absolute; top: 15px; right: 27px; width: 12px; height: 12px; padding-left: 1px; padding-right: 1px; padding-top: 0px; font-size: 10px; line-height: 12px; ">0 </span>
+                <a id1="dropdown-practice" href="/Admin/LmsPracticeTest" data-toggle1="dropdown" class1="dropdown-toggle">@Localizer["LMS_MNU_DO_PRACTICE"]</a>  @*LMS_SBL_A_DO_EXAM*@
+                @*<div aria-labelledby="dropdown-practice" class="dropdown-menu">
+                    <ul style="padding: 0px 0px 0px 30px;font-size:13px">
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsPracticeTest#assignmentPractice">@Localizer["LMS_MNU_PRACTICE_ASSIGNMENT"]</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-hand-point-right" style1="font-size:200%;"></i>
+                            <a href="/Admin/LmsPracticeTest#possessAndSharePractice">@Localizer["LMS_MNU_PRACTICE_STORE"]</a>
+                        </li>
+                    </ul>
+                </div>*@
+            </div>
+            <div>
+                <img src="/images/Icon_Dashbord/icon_examonline.png" alt="" />
+                <a href="/Admin/LmsExamSchedule">@Localizer["LMS_SBL_A_ONLINE_EXAM"]</a>
+                <i class="ficon icon-bell4 fs14 black chuong" style="position: absolute; top: 21px; right: 36px; "></i>
+                <span class="tag tag-pill tag-default tag-danger tag-default " style="position: absolute; top: 15px; right: 27px; width: 12px; height: 12px; padding-left: 1px; padding-right: 1px; padding-top: 0px; font-size: 10px; line-height: 12px; ">0 </span>
+            </div>
+            <div>
+                <img src="/images/Icon_Dashbord/icon_onlineclass.png" alt="" />
+                <a href="/Admin/LmsTutoringSchedule">@Localizer["LMS_SBL_A_ONLINE_CLASSES"]</a>
+            </div>
+            <hr />
+            <div>
+                <img src="/images/Icon_Dashbord/icon_studydocument.png" alt="" />
+                <a href="/Admin/LmsCourseware">@Localizer["LMS_SBL_A_STUDY_DOCUMENT"]</a>
+            </div>
+            <div>
+                <img src="/images/Icon_Dashbord/icon_document.png" alt="" />
+                <a href="/Admin/LmsDocument">@Localizer["LMS_SBL_A_DOCUMENT"]</a>
+            </div>
+            <div>
+                <img src="/images/Icon_Dashbord/icon_report.png" alt="" />
+                <a href="/Admin/LmsDashBoard#showStat">@Localizer["LMS_SBL_A_REPORT_STATISTICS"]</a>
+            </div>
+            <div>
+                <img src="/images/Icon_Dashbord/icon_generalconfig.png" alt="" />
+                <a href="/Admin/LmsCommonSetting">@Localizer["LMS_SBL_A_GENERAL_CONFIGURATION"]</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var sessionCode = "";
+    var userName = "@(userName)";
+    function create_UUID() {
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (dt + Math.random() * 16) % 16 | 0;
+            dt = Math.floor(dt / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+    }
+    function setSessionCode(sessionCode) {
+        jQuery.ajax({
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "html",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            type: "POST",
+            url: "/Admin/LmsDashBoard/SetLmsSessionCode?sessionCode=" + sessionCode,
+            contentType: "application/json",
+            success: function (rs) {
+                App.unblockUI("html");
+                //App.toastrSuccess(rs.Title);
+                console.log(rs.Title);
+            },
+            failure: function (errMsg) {
+                App.toastrSuccess(errMsg);
+            }
+        });
+    }
+    jQuery.ajax({
+        beforeSend: function (jqXHR, settings) {
+            App.blockUI({
+                target: "html",
+                boxed: true,
+                message: 'loading...'
+            });
+        },
+        type: "POST",
+        url: "/Admin/LmsDashBoard/GetLmsSessionCode",
+        contentType: "application/json",
+        success: function (rs) {
+            App.unblockUI("html");
+            //App.toastrSuccess(rs.Title);
+            if (rs == null || rs == '' || rs == undefined) {
+                sessionCode = create_UUID();
+                setSessionCode(sessionCode);
+            }
+            else {
+                sessionCode = rs;
+                console.log(sessionCode);
+            }
+        },
+        failure: function (errMsg) {
+            App.toastrError(errMsg);
+        }
+    });
+    //$(document).ready(function () {  
+    //    //Select (AddCustomer) link specifically      
+    //    $("#LmsDashBoard").click(function (e) {
+    //        $('#contentMain').load("/Admin/LmsDashBoard");
+    //        return false;
+    //    });
+    //}); 
+    //var biggestHeight = 0;
+
+    //$("body *").each(function () {
+    //    // If this elements height is bigger than the biggestHeight
+    //    if ($(this).height() > biggestHeight) {
+    //        // Set the biggestHeight to this Height
+    //        biggestHeight = $(this).height();
+    //    }
+    //});
+
+    //$("body").height(biggestHeight);
+</script>
+ @*<script src="~/views/admin/lmsSidebar/controller.js" type="text/javascript"></script>*@
+ <script src="~/views/admin/lmsDashBoard/controller.js" type="text/javascript"></script>
+<!--end left-->

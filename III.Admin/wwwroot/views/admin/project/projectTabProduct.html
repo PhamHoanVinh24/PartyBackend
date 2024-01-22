@@ -1,0 +1,115 @@
+﻿<div ng-controller="projectTabProduct">
+    <div class="table-toolbar">
+        <form name="productSearch" class="form-horizontal" method="post">
+            <div class="col pt-1 d-flex">
+                <div class="flex-grow-full">
+                    <div class="col-lg-2 pl-0">
+                        <label class="control-label fs11 " style="font-size:11px !important ;padding-top:0px;">{{'PROJECT_CURD_TAB_PAYMENT_TXT_FROMDATE' | translate}}</label>
+                        <div class='input-group br24 date'>
+                            <input type='text' class="form-control input-date" ng-model="model.FromDate" placeholder="{{'PROJECT_CURD_TAB_PAYMENT_TXT_FROMDATE' | translate}}..." id='datefromProduct' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 pl-0">
+                        <label class="control-label fs11 " style="font-size:11px !important ;padding-top:0px;">{{'PROJECT_CURD_TAB_PAYMENT_TXT_TODATE' | translate}}</label>
+                        <div class='input-group br24 date'>
+                            <input type='text' class="form-control input-date" ng-model="model.ToDate" placeholder="{{'PROJECT_CURD_TAB_PAYMENT_TXT_TODATE' | translate}}..." id='datetoProduct' />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5 pl-0">
+                        <label class="control-label fs11 " style="font-size:11px !important ;padding-top:0px;">{{'PROJECT_TAB_PRODUCT_CURD_LBL_PRODUCT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="model.ProductCode" on-select="selectProduct($item)" ng-change="changleSelect('ProductCode')" style="width: 100%" name="ProductCode">
+                                <ui-select-match placeholder="{{'PROJECT_TAB_PRODUCT_CURD_LBL_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listProducts | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-0">
+                        <label class="control-label fs11 " style="font-size: 11px !important; padding-top: 0px;">{{'Loại phiếu' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="model.PortType" theme="bootstrap" ng-disabled="IsHide" on-select="changleSelect('PortType',$item)">
+                                <ui-select-match placeholder="{{'Loại phiếu' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listPortType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn" ng-hide="IsHide">
+                                <button type="button" ng-click="model.PortType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 flex-basis-250">
+                    <div class="btn-group pt10 actions d-flex justify-content-sb">
+                        <div class="mr10 pr-0 text-center">
+                            <a class="" ng-click="search()" style="border-radius: 0px !important">
+                                <i class="fas fa-search pt15 fs30"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-0 text-center">
+                            <a class="" ng-click="exportExcel()" style="border-radius: 0px !important">
+                                <i class="fas fa-file-excel pt15 fs30" style="color: green"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-0 text-center">
+                            <a class="" ng-click="add()" style="border-radius: 0px !important">
+                                <i class="fa-solid fa-plus pt15 text-#be4bdb fs30"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="pr-0 text-center" ng-show="isShowHeader">
+                            <a ng-click="hideHeader(); reload();" class="">
+                                <span><i class="fas fa-chevron-up pt15 fs35" aria-hidden="true"></i></span>
+                            </a>
+                        </div>
+                        <div class="pr-0 text-center" ng-show="!isShowHeader">
+                            <a ng-click="showHeaderCard(); reload();" class="">
+                                <span><i class="fas fa-chevron-down pt15 fs35" aria-hidden="true"></i></span>
+                            </a>
+                        </div>
+
+                        <!--<div class="text-center pr10">
+        <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center">
+        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+            <span><i class="fa fa-plus"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataProductProject"></table>
+</div>

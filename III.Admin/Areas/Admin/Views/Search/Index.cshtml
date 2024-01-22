@@ -1,0 +1,704 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@section plugin_script {
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.js"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-resource.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-route.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-cookies.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-sanitize.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-touch.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/angularjs/1.7.9/angular-animate.min.js" type="text/javascript"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/tinymce.min.js"></script>
+    <script src="~/lib/assets/global/plugins/tinymce/config.tinymce.js"></script>
+    <script src="~/lib/assets/global/plugins/angulerjs-scroll/angular-scroll.js"></script>
+    <script src="~/lib/assets/global/plugins/ui-select/select.js" type="text/javascript"></script>
+}
+@section plugin_style{
+    <link href="~/lib/assets/global/plugins/angulerjs-taginput/ng-tags-input.min.css" rel="stylesheet" />
+    <link href="~/lib/assets/global/plugins/ui-select/select.css" rel="stylesheet" type="text/css" />
+}
+
+<head>
+    <style>
+        .mfp-content {
+            background: #fff;
+            width: 60% !important;
+        }
+
+        .mfp-close-btn-in .mfp-close {
+            color: #33333300;
+            width: 29px;
+            height: 28px;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: bold
+        }
+
+        .icon-insert {
+            font-size: 15px;
+        }
+
+        .scroll_List {
+            height: 150px;
+            overflow: scroll;
+        }
+
+            .scroll_List::-webkit-scrollbar {
+                width: 0 !important
+            }
+
+        .scroll_List, vertical-layout {
+            overflow: -moz-scrollbars-none;
+        }
+
+        .scroll_List, vertical-layout {
+            -ms-overflow-style: none;
+        }
+
+        .vertical-layout::-webkit-scrollbar {
+            width: 0 !important
+        }
+
+        caption, th {
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid;
+            height: 30px;
+        }
+
+        td, th {
+            padding: 0;
+            text-align: center;
+            border: 1px solid #d2d2d2;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modal-header">
+        <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+        <i class="fa fa-search icon-insert "></i>
+        <span class="modal-title" id="modal-title">Tìm kiếm nâng cao</span>
+    </div>
+    <div class="modal-body pb-0" id="modal-body">
+        <div class="portlet-body">
+            <div class="row pt5 mb5" style="background: #f3f3f3;">
+                <div class="w-30 pr-0 pl10 pr10" style="float:left">
+                    <label class="fw600 text-underline">Từ khóa</label>
+                    <div class="input-group">
+                        <input id="keySearch" class="form-control" type="text" placeholder="Từ khóa..." ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.keySearch=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="w-30 pr-0 fl pl10 pr10" style="float:left">
+                    <label class="fw600 text-underline">Nhân sự</label>
+                    <div class="input-group">
+                        <div id="listEmployee"></div>
+                        <span class="input-group-btn">
+                            <button type="button" onclick="deleteEmployee()" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="w-20 pr-0 pl10 pr10" style="float:left">
+                    <label class="fw600 text-underline">Thời gian từ</label>
+                    <div class="input-group">
+                        <div class="input-group date pick-date" id="FromDateFormat">
+                            <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" id="fromDate" style="width: 70%;float: left;">
+                            <button type="button" ng-click="idEmployee='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-20 pr-0 pl10 pr10" style="float:left">
+                    <label class="fw600 text-underline">Thời gian đến</label>
+                    <div class="input-group">
+                        <div class="input-group date pick-date" id="ToDateFormat">
+                            <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" id="toDate" style="width: 70%;float: left;">
+                            <button type="button" ng-click="idEmployee='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label class="control-label col-md-2 text-left require bold p-0"><i class="fas fa-search-plus"></i>&nbsp;Tìm trong</label>
+                        <div class="col-md-10">
+                            <div id="listObjTypeJC"></div>
+                            <span class="input-group-btn" style="float: left;">
+                                <button type="button" onclick="deleteSelectObjTypeLC();" class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn-group actions d-flex">
+                        <div class="pr10 text-center">
+                            <button class="btn btn-icon-only btn-circle btn-outline green-custom" onclick="addDown()">
+                                <span><i class="fa fa-download"></i></span>
+                            </button>
+                            <p class="text-underline fs9 mb5 pt3">Thêm xuống</p>
+                        </div>
+                        <div class="btn-group actions d-flex">
+                            <div class="pr10 text-center">
+                                <button class="btn btn-icon-only btn-circle btn-outline purple-custom" onclick="search()">
+                                    <span><i class="fa fa-search"></i></span>
+                                </button>
+                                <p class="text-underline fs9 mb5 pt3">Tìm kiếm</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body" style="margin-bottom: 20px;">
+            <div id="listObject1" class="scroll_List"></div>
+        </div>
+        <div class="portlet-body" style="width:100%;margin-top: 10px">
+            <div id="ResultSearchAdvanced"></div>
+            <div id="ViewCardJob" style="height: 150px;overflow: scroll;"></div>
+        </div>
+
+
+
+    </div>
+</body>
+<script>
+    var htmlTypeObject = '';
+    var htmlEmployee = '';
+    var keySearch = "";
+    var nameEmployee = "";
+    var idEmployee = "";
+    var FromDate = "";
+    var ToDate = "";
+    var nameTypeObj = "";
+    var idTypeObj = "";
+    var listObject = [];
+    var listObjectData = [];
+    var listObjTypeJC = [];
+    var listStatus = [];
+    var listStatusProduct = [];
+    var listStatusRequestPrice = [];
+    var listStatusCustomer = [];
+    var listStatusSupplier = [];
+    var listStatusContractPo = [];
+    var listGetStatusProJect = [];
+    var listGetStatusContract = [];
+    var id = 0;
+    function loadEmployee() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetAllEmployee",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listEmployee = data;
+                htmlEmployee = htmlEmployee + '<select id="idEmployee" class="form-control""><option value="ALL">-- Chọn tất cả --</option >';
+                for (var y in data) {
+                    htmlEmployee = htmlEmployee + "<option value=" + data[y].Id + ">" + data[y].fullname + "</option >"
+                }
+                htmlEmployee = htmlEmployee + '</select>';
+                $('#listEmployee').append(htmlEmployee);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadObjTypeJC() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetObjTypeJC",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listObjTypeJC = data;
+                htmlTypeObject = htmlTypeObject + '<select id="idTypeObj" class="form-control width-90-per fll" style="float:left;"><option value="ALL">-- Chọn kiểu đối tượng --</option >';
+                for (var y in data) {
+                    htmlTypeObject = htmlTypeObject + "<option value=" + data[y].Code + ">" + data[y].Name + "</option >' +"
+                }
+                htmlTypeObject = htmlTypeObject + '</select>';
+                $('#listObjTypeJC').append(htmlTypeObject);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatus() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatus",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatus = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusProduct() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusProduct",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatusProduct = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusRequestPrice() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusRequestPrice",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatusRequestPrice = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusCustomer() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusCustomer",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatusCustomer = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusSupplier() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusSupplier",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatusSupplier = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusContractPo() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusContractPo",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listStatusContractPo = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusProJect() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusProJect",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listGetStatusProJect = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function loadStatusContract() {
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/GetStatusContract",
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (data) {
+                listGetStatusContract = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    function search() {
+        var list = []
+        
+        keySearch = $('#keySearch').val();
+        nameEmployee = $('#idEmployee').val();
+        FromDate = $('#fromDate').val();
+        ToDate = $('#toDate').val();
+        idEmployee = $('#idEmployee').val();
+        for (var i = 0; i < listEmployee.length; i++) {
+            if (idEmployee == listEmployee[i].Id) {
+                nameEmployee = listEmployee[i].fullname;
+                break;
+            }
+        }
+        var listObjectView = [];
+        var typeObjectName = "";
+        var ObjectName = "";
+        for (var i = 0; i < listObject.length; i++) {
+            var objectCode = $('#Object' + listObject[i].index).val();
+            var status = $('#status' + listObject[i].index).val();
+            var logic = $('#logicSelect' + listObject[i].index).val();
+            var typeObjectCode = listObject[i].typeObjectCode;
+            for (var i = 0; i < listObjTypeJC.length; i++) {
+                if (typeObjectCode == listObjTypeJC[i].Code) {
+                    typeObjectName = listObjTypeJC[i].Name;
+                    break;
+                }
+            }
+            for (var i = 0; i < listObjectData.length; i++) {
+                if (objectCode == listObjectData[i].Code) {
+                    ObjectName = listObjectData[i].Name;
+                    break;
+                }
+            }
+            listObjectView.push({
+                typeObjectName: typeObjectName,
+                ObjectName: ObjectName
+            });
+            list.push({
+                objectCode: objectCode,
+                status: status,
+                logic: logic,
+                typeObjectCode: typeObjectCode,
+            });
+
+        }
+        var data = {
+            KeySearch: keySearch,
+            IdEmployee: idEmployee,
+            FromDate: FromDate,
+            ToDate: ToDate,
+            ListObject: list
+        };
+        jQuery.ajax({
+            type: "POST",
+            url: "/Admin/Search/SearchAdvanced",
+            contentType: "application/json",
+            dataType: "JSON",
+            data: JSON.stringify(data),
+            beforeSend: function (jqXHR, settings) {
+                App.blockUI({
+                    target: "#contentMain",
+                    boxed: true,
+                    message: 'loading...'
+                });
+            },
+            success: function (rs) {
+                
+                var htmlViewObject = "";
+                for (var i = 0; i < listObjectView.length; i++) {
+                    htmlViewObject = htmlViewObject + '<span> ' + listObjectView[i].typeObjectName + ': ' + listObjectView[i].ObjectName + '</span>,';
+                };
+
+                var htmlViewSearch = '<div style="font-size: 15px;font-weight: bold;color: #005000;">' +
+                    '  <i style = "padding-right: 10px;" class="fas fa-align-left"></i>'
+                    + htmlViewObject +
+                    '   </div >' +
+                    '   <div style="font-size: 15px;">' +
+                    '       <i style="padding-right: 10px;" class="far fa-clock"></i>' +
+                    '       <span>Thời gian: ' + ToDate + ' - ' + ToDate + '</span>' +
+                    '   </div>' +
+                    '    <div style="font-size: 15px;">' +
+                    '       <i style="padding-right: 10px;" class="fas fa-user"></i>' +
+                    '       <span>Nhân sự: ' + nameEmployee + '</span>' +
+                    '   </div>' +
+                    '   <div style="font-size: 15px;">' +
+                    '       <i style="padding-right: 10px;" class="fas fa-briefcase"></i>' +
+                    '        <span>Hoạt động công việc:</span>' +
+                    '    </div>';
+                $('#ResultSearchAdvanced').empty();
+                $('#ResultSearchAdvanced').append(htmlViewSearch);
+                var htmlViewCardJob = '<table style="width:100%"><tr><th>Tên thể</th><th>Kinh phí</th><th>Bắt đầu</th><th>Kết thúc</th></tr>';
+                for (var i = 0; i < rs.Object.queryTab.length; i++) {
+                    htmlViewCardJob = htmlViewCardJob + '<tr><td>#:' + rs.Object.queryTab[i].CardCode + '</td><td>' + rs.Object.queryTab[i].CardName + '</td><td>' + rs.Object.queryTab[i].BeginTime + '</td><td>' + rs.Object.queryTab[i].EndTime + '</td></tr>';
+                };
+                htmlViewCardJob = htmlViewCardJob + ' </table>';
+                $('#ViewCardJob').empty();
+                $('#ViewCardJob').append(htmlViewCardJob);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+        
+    };
+    function addDown() {
+        ++id;
+        var htmlStatus = '<option value="ALL">-- Chọn kiểu trạng thái --</option >';
+        var htmlObject = '<option value="ALL">-- Chọn kiểu đối tượng --</option >';
+        for (var i = 0; i < listStatus.length; i++) {
+            htmlStatus = htmlStatus + "<option value=" + listStatus[i].Code + ">" + listStatus[i].Value + "</option >' +"
+        }
+        switch (idTypeObj) {
+
+            case "PRODUCT"://san pham
+                for (var i = 0; i < listStatusProduct.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listStatusProduct[i].Code + ">" + listStatusProduct[i].Value + "</option >' +"
+                }
+                break;
+            case "SERVICECAT"://dich vu
+                //for (var i = 0; i < listStatusProduct.length; i++) {
+                //    htmlStatus = htmlStatus + "<option value=" + listStatusProduct[i].Code + ">" + listStatusProduct[i].Value + "</option >' +"
+                //}
+                break;
+            case "ORDER_REQUEST"://thong tin co hoi
+                //for (var i = 0; i < listStatusProduct.length; i++) {
+                //    htmlStatus = htmlStatus + "<option value=" + listStatusProduct[i].Code + ">" + listStatusProduct[i].Value + "</option >' +"
+                //}
+                break;
+            case "REQUEST_PRICE"://yeu cau hoi gia
+                for (var i = 0; i < listStatusRequestPrice.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listStatusRequestPrice[i].Code + ">" + listStatusRequestPrice[i].Value + "</option >' +"
+                }
+                break;
+            case "CUSTOMER"://Khach hang
+                for (var i = 0; i < listStatusProduct.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listStatusProduct[i].Code + ">" + listStatusProduct[i].Value + "</option >' +"
+                }
+                break;
+            case "SUPPLIER"://nha cung cap
+                for (var i = 0; i < listStatusSupplier.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listStatusSupplier[i].Code + ">" + listStatusSupplier[i].Value + "</option >' +"
+                }
+                break;
+            case "CONTRACT_PO"://hop dong mua
+                for (var i = 0; i < listStatusContractPo.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listStatusContractPo[i].Code + ">" + listStatusContractPo[i].Value + "</option >' +"
+                }
+                break;
+            case "PROJECT"://du an
+                for (var i = 0; i < listGetStatusProJect.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listGetStatusProJect[i].Code + ">" + listGetStatusProJect[i].Value + "</option >' +"
+                }
+                break;
+            case "CONTRACT":// hop dong ban
+                for (var i = 0; i < listGetStatusContract.length; i++) {
+                    htmlStatus = htmlStatus + "<option value=" + listGetStatusContract[i].Code + ">" + listGetStatusContract[i].Value + "</option >' +"
+                }
+                break;
+
+        };
+        $('#listObject1').empty();
+        idTypeObj = $('#idTypeObj').val();
+        if (idTypeObj != 0) {
+            for (var i = 0; i < listObjTypeJC.length; i++) {
+                if (idTypeObj == listObjTypeJC[i].Code) {
+                    nameTypeObj = listObjTypeJC[i].Name;
+                    break;
+                }
+            }
+            jQuery.ajax({
+                type: "POST",
+                url: "/Admin/Search/GetListObjTemp?code=" + idTypeObj,
+                beforeSend: function (jqXHR, settings) {
+                    App.blockUI({
+                        target: "#contentMain",
+                        boxed: true,
+                        message: 'loading...'
+                    });
+                },
+                success: function (data) {
+                    listObjectData = data;
+                    for (var i = 0; i < data.length; i++) {
+                        htmlObject = htmlObject + "<option value=" + data[i].Code + ">" + data[i].Name + "</option >' +"
+                    }
+                    listObject.unshift({
+                        html: '<div class="row pt5 mb5" id="' + id + '">' +
+                            '    <div class="col-md-5 pr-0">' +
+                            '        <label class="fw600 text-underline">' + nameTypeObj + '</label>' +
+                            '        <div class="input-group">' +
+                            '             <select id="Object' + id + '" class="form-control">' + htmlObject +
+                            '           </select >' +
+                            '        </div>' +
+                            '    </div>' +
+                            '    <div class="col-md-3 pr-0" style="float:left">' +
+                            '        <label class="fw600 text-underline">Trạng thái</label>' +
+                            '        <div class="input-group">' +
+                            '            <select id="status' + id + '" class="form-control">' + htmlStatus +
+                            '           </select >' +
+                            '        </div>' +
+                            '    </div>' +
+                            '    <div class="col-md-3 pr-0" style="float:left">' +
+                            '        <label class="fw600 text-underline">Logic</label>' +
+                            '        <div class="input-group">' +
+                            '           <select id="logicSelect' + id + '" class="form-control">' +
+                            '               <option value="AND">AND</option >' +
+                            '               <option value="OR">OR</option>' +
+                            '           </select >' +
+                            '        </div>' +
+                            '    </div>' +
+                            '    <div class="width-5-per pl15" style="float:left">' +
+                            '        <div class="btn-group pt20 actions d-flex">' +
+                            '            <div class="pr10 text-center">' +
+                            '                <button class="btn btn-icon-only btn-circle btn-outline red" onclick="deleteObject(' + id + ')">' +
+                            '                    <span><i class="fa fa-trash"></i></span>' +
+                            '                </button>' +
+                            '            </div>' +
+                            '        </div>' +
+                            '    </div>' +
+                            ' </div>',
+                        index: id,
+                        typeObjectCode: idTypeObj
+                    });
+                    var listView = [];
+                    for (var i = 0; i < listObject.length; i++) {
+                        listView.push(listObject[i].html);
+                    }
+                    $('#listObject1').append(listView);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        };
+
+    };
+    function deleteObject(id) {
+        for (var i = 0; i < listObject.length; i++) {
+            if (id == listObject[i].index) {
+                listObject.splice(listObject.indexOf(listObject[i]), 1);
+                $('#listObject1').empty();
+                var listView = [];
+                for (var i = 0; i < listObject.length; i++) {
+                    listView.push(listObject[i].html);
+                }
+                $('#listObject1').append(listView);
+                break
+            };
+        }
+
+    }
+    function deleteSelectObjTypeLC() {
+        $('#listObjTypeJC').empty();
+        $('#listObjTypeJC').append(htmlTypeObject);
+    }
+    function deleteEmployee() {
+        $('#listEmployee').empty();
+        $('#listEmployee').append(htmlEmployee);
+    }
+    $("#FromDateFormat").datepicker({
+        inline: false,
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        fontAwesome: true,
+    }).on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('.endDate').datepicker('setStartDate', maxDate);
+    });
+    $("#ToDateFormat").datepicker({
+        inline: false,
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        fontAwesome: true,
+    }).on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('.endDate').datepicker('setStartDate', maxDate);
+    });
+
+    function init() {
+        loadEmployee();
+        loadObjTypeJC();
+        loadStatus();
+        loadStatusProduct();
+        loadStatusRequestPrice();
+        loadStatusCustomer();
+        loadStatusSupplier();
+        loadStatusContractPo();
+        loadStatusProJect();
+        loadStatusContract();
+    };
+    init();
+
+
+</script>
+

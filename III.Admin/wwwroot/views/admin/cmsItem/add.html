@@ -1,0 +1,346 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    /*@media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }*/
+
+    @media (max-width:1000px) {
+        .custom-width .modal-dialog {
+            min-width: 90%;
+        }
+    }
+
+    @media (min-width:1000px) {
+        .custom-width .modal-dialog {
+            min-width: 1000px;
+        }
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        /*border-top: none;*/
+        padding: 15px;
+    }
+
+    .table-custom {
+        /*border-top: none !important;*/
+        border-left: #e8e2e2 1px solid !important;
+        border-right: #e8e2e2 1px solid !important;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title" id="modal-title" style="line-height: 30px" ng-if="!isEdit">{{'CMS_ITEM_CURD_LBL_ADD_LIST_ITEM' | translate}}</span>
+    <span class="modal-title" id="modal-title" style="line-height: 30px" ng-if="isEdit">{{'CMS_ITEM_CURD_LBL_EDIT_ITEM' | translate}}</span>
+</div>
+<div class="modal-body pb10" id="modal-body">
+    <div class="portlet-body form form-bold">
+        <form name="{{!isEdit ? 'addform' : 'editform'}}" class="" method="post" ng-validate="validationOptionsCmsItem">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="form-group col-lg-8 col-md-12 pl-0 mt10" ng-if="model.language == 'CMS_LANGUAGE20211027001'">
+                        <label class="require"> {{'CMS_ITEM_CURD_LBL_TITLE' | translate}}</label>
+                        <input class="form-control br24 text-custom" name="Title" ng-model="model.title" ng-change="ConvertToAlias(model.title)" type="text" placeholder2="{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}...">
+                    </div>
+                    <div class="form-group col-lg-8 col-md-12 pl-0 mt10" ng-if="model.language != 'CMS_LANGUAGE20211027001'">
+                        <label class="require"> {{'CMS_ITEM_CURD_LBL_TITLE' | translate}}</label>
+                        <input class="form-control br24 text-custom" name="Title" ng-model="modelJson.title" ng-change="ConvertToAlias(model.title)" type="text" placeholder2="{{'CMS_ITEM_CURD_TXT_TITLE' | translate}}...">
+                    </div>
+                    <div class="form-group col-lg-4 col-md-12 p-0 mt10">
+                        <label class=""> {{'CMS_ITEM_CURD_LBL_DATE_POST' | translate}}</label>
+                        <div class='input-group br24 date' id='DatePost'>
+                            <input type='text' class="form-control input-date" name="DatePost" ng-model="model.date_post" placeholder2="{{'CMS_ITEM_CURD_TXT_DATE_POST' | translate}}..." />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-8 col-md-12 pl-0">
+                        <label class="require"> {{'CMS_ITEM_CURD_LBL_CATEGORY' | translate}}</label>
+                        <div class="input-group br24" ng-class="{ 'has-error': errorCatID}">
+                            <ui-select tagging ng-model="model.cat_id" theme="bootstrap" ng-change="changeSelect('cat_id')" ng-disabled="isGroupLocked">
+                                <ui-select-match placeholder2="{{'CMS_ITEM_COMBO_CATEGORY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Id as x  in listCatId | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.cat_id=''" class="btn btn-default no-shadow" style="" ng-disabled="isGroupLocked">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+
+                        </div>
+                        <span ng-show="errorCatID" class="label-color validation-message">
+                            {{'CMS_ITEM_VALIDATE_CATEGORY' | translate}}
+                        </span>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-12 p-0">
+                        <label class=""> {{'CMS_ITEM_CURD_LBL_LANGUAGE' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.language" theme="bootstrap" ng-change="changeLanguage(model.language)">
+                                <ui-select-match placeholder2="{{'CMS_ITEM_COMBO_CHOOSE_LANGUAGE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listLanguage | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.language='';" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12  pl-0">
+                        <label class=""> {{'CMS_ITEM_CURD_LBL_DESC' | translate}}</label>
+                        <textarea name="Note" rows="5" class="form-control br12" ng-model="model.intro_text" type="text" placeholder2="{{'CMS_ITEM_CURD_TXT_DESC' |translate}}..."></textarea>
+                    </div>
+                    <div class="col-lg-12 p-0">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-12">
+                                <label class=""> {{'CMS_ITEM_CURD_LBL_TYPE_ITEM' | translate}}</label>
+                                <div class="input-group">
+                                    <label ng-repeat="x in entities" class="mt-checkbox mt-checkbox-outline fs12 pl20" style="margin: 6px 15px 0 0!important;">
+                                        <!--<input type="checkbox" ng-model="x.checked" ng-click="updateSelection($index, entities)">-->
+                                        <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.checked != true"
+                                           ng-click="updateSelection($index, entities)"></i>
+                                        <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="x.checked == true"
+                                           ng-click="updateSelection($index, entities)"></i>
+                                        {{x.name}}
+                                        <!--<span></span>-->
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-8 col-md-12">
+                                <label class="require"> {{'CMS_ITEM_CURD_LBL_CHOOSE_TEMPLATE' | translate}}</label>
+                                <div class="input-group br24" ng-class="{ 'has-error': errorTemplate}">
+                                    <ui-select tagging ng-model="model.template" theme="bootstrap" ng-change="changeSelect('template')">
+                                        <ui-select-match placeholder2="{{'CMS_ITEM_COMBO_CHOOSE_TEMPLATE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listTemplate | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn no-shadow btn-default" ng-click="model.template='';" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorTemplate" class="label-color validation-message">
+
+                                    {{'CMS_ITEM_VALIDATE_TEMPLATE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="require"> {{'CMS_ITEM_CURD_LBL_PATH' | translate}}</label>
+                                <input class="form-control br24" name="Alias" ng-model="model.alias" type="text" placeholder2="{{'CMS_ITEM_CURD_TXT_PATH' | translate}}..." />
+                            </div>
+                            <div class="form-group pl-0 col-md-2">
+                                <label class=""> {{'Thứ tự' | translate}}</label> <!--CMS_ITEM_CURD_LBL_ORDERING-->
+                                <input type='number' class="form-control br24" ng-model="model.ordering" placeholder2="{{'Thứ tự' | translate}}" placeholder1="{{'CMS_ITEM_CURD_TXT_ORDERING' | translate}}..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row h-450 mt10">
+        <div class="col-md-12">
+            <div class="btn-group actions pull-right mr15">
+                <div class="text-center pull-right" ng-click="submit()" ng-if="!isEdit" style1="margin-top: -15px">
+                    <i class="fa-solid fa-plus" style="color: cornflowerblue; font-size: 30px; cursor: pointer"></i>
+                    <!--<div class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-plus"></i></span>
+            </div>-->
+                    <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+                <div class="text-center pull-right" ng-click="submit()" ng-if="isEdit" style1="margin-top: -15px">
+                    <i class="fa-solid fa-plus" style="color: cornflowerblue; font-size: 30px; cursor: pointer"></i>
+                    <!--<div class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fas fa-save"></i></span>
+            </div>-->
+                    <p class="text-underline mb-0 fs9  pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                </div>
+                <div class="text-center pull-right pr30" ng-click="delete(model.id)" ng-if="isEdit" style1="margin-top: -15px">
+                    <i class="fas fa-trash-alt" style="color:red; font-size: 30px; cursor: pointer"></i>
+                    <!--<div class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="fa fa-trash"></i></span>
+            </div>-->
+                    <p class="text-underline mb-0 fs9 pt3">{{'COM_BTN_DELETE' | translate}}</p>
+                </div>
+            </div>
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <div href="#Content" aria-controls="home" role="button" data-toggle="tab">{{'CMS_ITEM_BTN_CONTENT' | translate}}</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Image" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'CMS_ITEM_BTN_IMAGE' | translate}}
+                        </div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#FilePlugin" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'CMS_ITEM_BTN_FILE' | translate}}
+                        </div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Attribute" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'CMS_ITEM_CURD_LBL_ATT' | translate}}
+                        </div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#Hashtag" aria-controls="profile" role="button" data-toggle="tab">
+                            {{'EDMSR_CURD_SEARCH_KEY_WORD' | translate}} <!--{{'CMS_ITEM_BTN_HASH_TAG' | translate}}-->
+                        </div>
+                    </li>
+                </ul>
+                <div class="tab-content pt10">
+                    <div role="tabpanel" class="tab-pane fade in active" id="Content">
+                        <textarea ng-model="model.full_text" id="ckEditorItem" ng-class1="{'disabled-element' : isShow == '' && !isEdit }"></textarea>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Image">
+                        <div ng-include="'../views/admin/cmsItem/image.html'" ng-class1="{'disabled-element' : isShow == '' && !isEdit }"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="FilePlugin">
+                        <div style="height: 350px;" ng-include="'../views/admin/filePlugin/file-plugin.html'" ng-class="{'disabled-element' : isShow == '' && !isEdit }"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Attribute">
+                        <div ng-include="'../views/admin/cmsItem/articlecommon.html'" ng-class="{'disabled-element' : isShow == '' && !isEdit }"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Hashtag">
+                        <div ng-controller="addHashTag" class="h-300" ng-class="{'disabled-element' : isShow == '' && !isEdit }" style="overflow-y: auto; overflow-x: hidden">
+                            <div class="portlet-body form mb10 pl15">
+                                <form name="addCSCform" class="form-horizontal " method="post" ng-validate="validationOptionsCSC">
+                                    <div class="form-body pt-0 pl-0 pr-0">
+                                        <div class="row ">
+                                            <div class="col-md-1">
+                                                <label class="control-label lh25 require"><i class="fa fa-user"></i><!--{{'CMS_ITEM_CURD_LBL_TYPE' | translate}}-->{{'EDMSR_CURD_TAG' | translate}}</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="input-group br24">
+                                                    <input type='text' class="form-control input-date" name="Tag" ng-model="model.Tag" placeholder2="Tag" placeholder1="{{'CMS_ITEM_CURD_TXT_DATE_POST' | translate}}..." />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" ng-click="submit()" class="btn btn-default no-shadow" style="">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                                <span ng-show="errorType" class="label-color validation-message">
+                                                    {{'CMS_ITEM_NOT_EMPTY' | translate}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-12 mb15">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" style="margin-bottom: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center col-md-1" style="width: 5%;">{{'EDMSR_CURD_STT' | translate}}</th>
+                                                <th class="text-center col-md-6 nowrap">{{'EDMSR_CURD_CONTENT_TAG' | translate}}</th>
+                                                <th class="text-center col-md-1 nowrap">{{'EDMSR_CURD_MANIPULATION' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in listHashTag track by $index">
+                                                <td class="text-center bold">{{$index+1}}</td>
+                                                <td class="text-left pl20"><span class1="fs20">{{x}}</span></td>
+                                                <td class="text-center nowrap">
+                                                    <button title="Xóa" ng-click="deleteTag(x)" style="width: 25px; height: 25px; padding: 0px" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

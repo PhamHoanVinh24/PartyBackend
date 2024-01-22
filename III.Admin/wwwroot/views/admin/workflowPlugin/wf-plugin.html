@@ -1,0 +1,110 @@
+﻿<style>
+    .wf-step a {
+        float: left;
+    }
+</style>
+
+<div class="col-md-12 mb5" style="border-radius: 10px;background: whitesmoke;" ng-controller="wf-plugin">
+    <div ng-show="!isCollaps">
+        <div class="col-md-11 p0">
+            <div id="wf-step1" class="col-md-12 p10" style="width: 100%;" ng-show="!isCollaps">
+                <div ng-repeat="x in lstActArranged">
+                    <div class="col-md-4 h-50 pt10 pl-0 pr-0" ng-repeat="k in x">
+                        <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Duyệt và kết thúc' || k.ActStatus == 'Kích hoạt'"><i class="fas fa-check-circle" style="--fa-secondary-color:green; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-right: 10px;"></i></a>
+                        <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Hủy bỏ' || k.ActStatus == 'Dừng lại'"><i class="fas fa-circle" style="color: orange; font-size: 25px; margin-right: 10px;"></i></a>
+                        <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Đang xử lý'"><i class="fas fa-circle" style="color:green;font-size: 25px;margin-right: 10px;"></i></a>
+                        <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Chưa xử lý'"><i class="fas fa-circle" style="color:grey;font-size: 25px;margin-right: 10px;"></i></a>
+                        <a title="{{k.ActName}}" ng-click="editInstAct(k.Id, k.ObjectCode)" class="fw600 nowrap" ng-if="k.ActName.length > 40">
+                            <!--<div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+                 'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                 'act-pending': (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+                 'act-success': (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Kích hoạt'),
+                 'act-success': (!k.IsLock && k.ActStatus == 'Duyệt và kết thúc'),
+                 'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>-->
+                            {{k.ActName.substr(0,40)}}...
+                        </a>
+                        <a title="{{k.ActName}}" ng-click="editInstAct(k.Id, k.ObjectCode)" class="fw600 nowrap" ng-if="k.ActName.length <= 40">
+                            <!--<div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+                 'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                 'act-pending': (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+                 'act-success': (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Kích hoạt' || k.ActStatus == 'Duyệt và kết thúc')),
+                 'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>-->
+                            {{k.ActName}}
+                        </a>
+                        <br>
+                        <span ng-show="k.IsInstance" ng-class="{'badge-customer-lock' : k.IsLock,
+                                  'badge-customer-pause' : (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                  'badge-customer-warning' : (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+                                  'badge-customer-success' : (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Kích hoạt' || k.ActStatus == 'Duyệt và kết thúc')),
+                                  'badge-customer-danger' : (!k.IsLock && k.ActStatus == 'Hủy bỏ')}"
+                              class="badge-customer fs10">{{k.ActStatus}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 pull-right" style="position: absolute;width:0%;right: 0;top: 36%;">
+            <a style="margin: auto;" title="Collaps" class="pull-right fs25" ng-click="expand()"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
+        </div>
+        <div class="text-center pr-2" style="padding-top: 9px;">
+            <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs25">
+                <span><i class="fas fa-question" aria-hidden="true"></i></span>
+            </a>
+        </div>
+    </div>
+
+    <div ng-show="isCollaps">
+        <div class="col-md-12">
+            <div class="d-flex" style="width: 100%;">
+                <div class="col-md-12  pr-0 text-center p10" ng-if="lstActRelative.length == 0" style="width: 100%;">
+                    <span class="text-danger fw600">Bạn chưa có hoạt động liên quan cần xử lý</span>
+                    <a style="margin: auto;" title="Expand" class="pull-right" ng-click="expand()"><i class="fas fa-chevron-down fs20" aria-hidden="true"></i></a>
+                </div>
+                <div ng-if="lstActRelative.length != 0" style="width: 100%;">
+                    <div class="col-md-1" style="position: absolute;width:0%;left: -5px;top: 36%;" ng-if="isScroll" ng-click="scrollLeft()">
+                        <a style="margin: auto;" title="Collaps" class="pull-left"><i class="fas fa-chevron-left fs20" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-md-11">
+                        <div id="wf-step" class="d-flex p10" style="width: 100%;overflow-x: hidden;">
+                            <div style="width: {{width}}; margin: auto; display: inline-table;" ng-repeat="k in lstActRelative">
+                                <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Duyệt và kết thúc' || k.ActStatus == 'Kích hoạt'"><i class="fas fa-check-circle" style="--fa-secondary-color:green; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-right: 10px;"></i></a>
+                                <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Hủy bỏ' || k.ActStatus == 'Dừng lại'"><i class="fas fa-circle" style="color: orange; font-size: 25px; margin-right: 10px;"></i></a>
+                                <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Đang xử lý'"><i class="fas fa-circle" style="color:green;font-size: 25px;margin-right: 10px;"></i></a>
+                                <a title="Xét duyệt" type="button" ng-click="approve(k.ActivityInstCode, k.ActStatus)" ng-if="k.ActStatus == 'Chưa xử lý'"><i class="fas fa-circle" style="color:grey;font-size: 25px;margin-right: 10px;"></i></a>
+                                <a title="{{k.ActName}}" class="fw600" ng-if="k.ActName.length > 40">
+                                    <!--<div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+                                     'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                     'act-pending': (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+                                     'act-success': (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Duyệt và kết thúc' || k.ActStatus == 'Kích hoạt')),
+                                     'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>-->
+
+                                    {{k.ActName.substr(0,40)}}...
+                                </a>
+                                <a title="{{k.ActName}}" ng-click="editInstAct(k.Id, k.ObjectCode)" class="fw600" ng-if="k.ActName.length <= 40">
+                                    <!--<div class="numberStep" style="background: #FF9900;" ng-class="{'act-lock' : k.IsLock,
+     'act-stop': (!k.IsLock && k.ActStatus == 'Dừng lại'),
+     'act-pending': (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+     'act-success': (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Duyệt và kết thúc' || k.ActStatus == 'Kích hoạt')),
+     'act-cancel': (!k.IsLock && k.ActStatus == 'Hủy bỏ')}">{{k.Level}}</div>-->
+                                    {{k.ActName}}
+                                </a>
+                                <br>
+                                <span ng-show="k.IsInstance" ng-class="{'badge-customer-lock' : k.IsLock,
+                                  'badge-customer-pause' : (!k.IsLock && k.ActStatus == 'Dừng lại'),
+                                  'badge-customer-warning' : (!k.IsLock && (k.ActStatus == 'Đang xử lý')),
+                                  'badge-customer-success' : (!k.IsLock && (k.ActStatus == 'Đã xử lý' || k.ActStatus == 'Duyệt và kết thúc' || k.ActStatus == 'Kích hoạt')),
+                                  'badge-customer-danger' : (!k.IsLock && k.ActStatus == 'Hủy bỏ')}"
+                                      class="badge-customer fs10">{{k.ActStatus}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="position: absolute;width:0%;right: 40px;top: 36%;" ng-if="isScroll" ng-click="scrollRight()">
+                        <a style="margin: auto;" title="Collaps" class="pull-right"><i class="fas fa-chevron-right fs20" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-md-1 pull-right" style="position: absolute;width:0%;right: 0;top: 36%;">
+                        <a style="margin: auto;" title="Collaps" class="pull-right" ng-click="expand()"><i class="fas fa-chevron-down fs20" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

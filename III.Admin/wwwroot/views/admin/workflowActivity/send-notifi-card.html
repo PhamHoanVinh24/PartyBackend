@@ -1,0 +1,75 @@
+﻿<style>
+    .message-center {
+        padding-top: 5%;
+    }
+
+    .blue-modal {
+        background-color: #428bca !important;
+    }
+
+    .green-modal {
+        background-color: #009432 !important;
+    }
+
+    .mt-checkbox > span:after {
+        left: 6px !important;
+        top: 2px !important;
+        width: 5px;
+        height: 10px;
+        border: solid #888;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+</style>
+<div class="modal-header no-color">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+    <i class="fa fa-users black" style="padding-top: 7px;"></i>
+    <span class="black" id="modal-title" style="font-weight: bold;">{{'CJ_LBL_LIST_USER_RECEI_NOTIFI' | translate}}</span>
+</div>
+<div class="modal-body pt-0" id="modal-body">
+    <div class="row mt10">
+        <div class="col-md-12 pl-0 pr-0 mt5" style="max-height: 300px; overflow-y: scroll;">
+            <style>
+                .portlet.light > .portlet-title > .caption {
+                    padding: 0px 0;
+                }
+
+                .ui-select-choices-group-label {
+                    font-weight: bold;
+                    padding-left: 10px !important;
+                    color: #515354 !important;
+                }
+
+                .table-responsive {
+                    overflow: unset;
+                }
+            </style>
+            <table class="table table-bordered" style="margin-bottom: 0; ">
+                <thead>
+                    <tr>
+                        <th class="pl25 col-md-6">{{'CJ_LBL_FULL_NAME' | translate}}</th>
+                        <th class="text-center col-md-1">{{'COM_BTN_DELETE' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bold black" ng-repeat="x in listUsers">
+                        <td class="text-center ">{{x.GivenName}}</td>
+                        <td>
+                            <span ng-if="x.IsCheck" class="fa fa-check-circle" style=" font-size: 23px; color: #247dcb;" ng-click="approve(x.UserId, x.IsCheck)"></span>
+                            <span ng-if="!x.IsCheck" class="fa fa-times-circle" style=" font-size: 23px; color: #247dcb;" ng-click="approve(x.UserId, x.IsCheck)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt10" style="margin-left: -15px;">
+        <div class="col-md-12 pr-1 text-right">
+            <a class="fs35" ng-click="submit()">
+                <div><i class="fa fa-location-arrow" style="margin-right: 16px;"></i></div>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'CJ_BTN_SEND_NOTIFI' | translate}}</p>
+        </div>
+    </div>
+</div>

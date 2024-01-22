@@ -1,0 +1,90 @@
+﻿<style>
+    .blockElement {
+        z-index: 4000 !important;
+    }
+
+    .blockOverlay {
+        z-index: 4000 !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fas fa-search icon-insert"></i>
+    <span class="modal-title" id="modal-title">{{'COM_BTN_SEARCH' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="searchform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsSearchWorkTime">
+            <div class="form-body" style="padding: 10px;">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa-solid fa-calendar"></i>
+                        <label class="control-label require ">{{'STS_LBL_FROM_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="model.FromDate" name="FromDate" placeholder="{{'STS_TXT_FROM_DATE' | translate}}..." id="FromTo" autocomplete="off" />
+                            <span class="input-group-addon start-date" ng-click="model.FromDate=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <i class="fa-solid fa-calendar"></i>
+                        <label class="control-label require ">{{'STS_LBL_TO_DATE' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="model.ToDate" name="ToDate" placeholder="{{'STS_LBL_TO_DATE' | translate}}..." id="DateTo" autocomplete="off" />
+                            <span class="input-group-addon end-date" ng-click="model.ToDate=''">
+                                <span class="fa fa-times"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorUser}">
+                    <div class="col-md-4">
+                        <i class="fas fa-user"></i>
+                        <label class="control-label require">{{'STS_LIST_COL_EMP' | translate}}</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" on-select="changleSelect('UserId')">
+                                <ui-select-match placeholder="{{'STS_TXT_ALL' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                                    <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />
+                                    <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.UserId=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorUser" class="label-color validation-message">
+                            {{'STS_VALIDATE_EMP' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="from-group">
+                    <span class="text-danger">{{'STS_LBL_INFO_IN_MONTH' | translate}}</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="col-md-4 pull-right">
+        <div class="btn-group actions d-flex pull-right">
+            <div class="text-center">
+                <a ng-click="submit()" class="btn btn-icon-only btn-circle btn-outline purple-custom">
+                    <span><i class="fa fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+        </div>
+    </div>
+</div>

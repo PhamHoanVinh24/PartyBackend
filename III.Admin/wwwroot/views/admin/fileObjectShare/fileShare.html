@@ -1,0 +1,103 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-link icon-insert white"></i>
+    <span class="modal-title white" id="modal-title">{{'FIOS_LIST_COL_FILE_SHARE' | translate}}</span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-3 pl-0">
+                        <label class="require">{{'FIOS_MSG_LBL_TYPE_ORIENTATION' | translate}}</label>
+                        <div class="input-group" ng-class="{ 'has-error': errorObjType}">
+                            <ui-select tagging ng-model="model.ObjectType" theme="bootstrap" on-select="changeObjType(model.ObjectType)">
+                                <ui-select-match placeholder="{{'FIOS_MSG_LBL_TYPE_ORIENTATION' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listObjType | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ObjectType='';reloadListObjectShare()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorObjType" class="label-color validation-message">
+                            {{'FIOS_MSG_LBL_ORIENTATION_NOT_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-4 pl-0" ng-class="{ 'has-error': errorObjCode}">
+                        <label class="require">{{'FIOS_MSG_LBL_ORIENTATION' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.ObjectCode" theme="bootstrap" on-select="changeObjCode(model.ObjectCode)">
+                                <ui-select-match placeholder="{{'FIOS_MSG_LBL_ORIENTATION' | translate}}...">{{$select.selected.ObjName}}-{{$select.selected.ObjCode}}</ui-select-match>
+                                <ui-select-choices repeat="x.ObjCode as x in listObjCode | filter:$select.search">
+                                    {{x.ObjName}}-{{x.ObjCode}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ObjectCode='';reloadListObjectShare()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorObjCode" class="label-color validation-message">
+                            {{'FIOS_VALIDATE_OBJ_BLANK' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-3 pl-0" ng-class="{ 'has-error': errorObjCode}">
+                        <label class="require">{{'FIOS_MSG_LBL_FILE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.FileCode" theme="bootstrap" on-select="selectFile(model.FileCode)">
+                                <ui-select-match placeholder="{{'FIOS_MSG_LBL_FILE' | translate}}">{{$select.selected.FileName}}</ui-select-match>
+                                <ui-select-choices repeat="x.FileCode as x in listFileObject | filter:$select.search">
+                                    {{x.FileName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.FileCode='';reloadListObjectShare()" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorObjCode" class="label-color validation-message">
+                            {{'FIOS_MSG_LBL_FILE_NOT_ORIENTATION' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-2 pl-0 mt20">
+                        <a class="btn btn-icon-only btn-circle btn-outline blue-custom" ng-click="share()">
+                            <span><i class="fa fa-share-alt"></i></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row areaQRCode height-250 boder-box mt5">
+                    <div class="table-toolbar file-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center fw600 text-underline width-50" colspan="1">{{'FIOS_LIST_COL_INDEX' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="2">{{'FIOS_LIST_COL_FILE_NAME' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="3">{{'FIOS_LIST_COL_TYPE_OBJ' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="3">{{'FIOS_LIST_COL_OBJ' | translate}}</th>
+                                    <th class="text-center fw600 text-underline" colspan="1">{{'COM_BTN_DELETE' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listObjectShare">
+                                    <td class="text-center" colspan="1">{{$index+1}}</td>
+                                    <td class="text-center" colspan="2">{{x.FileName}}</td>
+                                    <td class="text-center" colspan="3">{{x.ObjectTypeName}}</td>
+                                    <td class="text-center" colspan="3">{{x.ObjectName}}</td>
+                                    <td class="text-center" colspan="1">
+                                        <i role="button" class="fa fa-minus-circle" ng-click="removeObjectShare(x.Id)" title="Xóa" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

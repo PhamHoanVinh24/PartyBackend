@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html class=" regular-on ">
+
+<head>
+    <meta name="google-site-verification" content="WC9FfWNfVRyJn8pWPXTHM4uCe_p-U13-iz0dV8A6puk" />
+    <meta charset="utf-8" />
+    <meta property="og:site_name" content="Real time white board for drawing on line, share photo and capture image from webcam" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://vrobbi-nodedrawing.herokuapp.com" />
+    <meta property="fb:admins" content="100004633505284" />
+    <meta property="og:title" content="Real time whiteboard collaborative with chat in html5 and websocket" />
+    <meta property="fb:app_id" content="508864332486444" />
+    <meta name="keywords" content="lavagna collaborativa, disegnare on line, applicazione real time, multiuser whiteboard, realtime application, drawing on line, drawing game, html5, web 2.0, software, internet, image capture, webcam" />
+    <meta name="description" content="lavagna multiutente condivisa in tempo reale, multiuser whiteboard real time application, draw on line and share your draw with all on the net" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notepad and Chating</title>
+
+    <link rel='stylesheet' id='mediaelement-css' href='js/mediaelement/mediaelementplayer.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='wp-mediaelement-css' href='js/mediaelement/wp-mediaelement.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='customscrollbar-css' href='assets/css/vendor/customscrollbar.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='fontawesome-css' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-editor-css' href='assets/css/vendor/editor.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-selectBoxIt-css' href='assets/css/vendor/jquery.selectBoxIt.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='bootstrap-css' href='assets/css/vendor/bootstrap.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='zoom-style-css' href='assets/css/zoom.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='iii-notepad-style-css' href='assets/css/styles1.css' type='text/css' media='all' />
+    <style id='iii-notepad-style-inline-css' type='text/css'>
+        @font-face {
+            font-family: "Myriad_regular";
+            src: url("assets/fonts/MYRIADPROREGULAR.ttf");
+        }
+    </style>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.subscribers.js'></script>
+    <script type='text/javascript' src='assets/vendor/videoCall/lib/fm.websync.chat.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.11/socket.io.js'></script>
+    <script type='text/javascript' src='js/jquery/jquery.js'></script>
+    <script type='text/javascript' src='js/jquery/jquery-migrate.min.js'></script>
+</head>
+
+<body class=" regular-on ">
+    <div id="cc-loading"><span></span></div>
+    <input type="hidden" class="current_url" value="index.html">
+    <div id="online-learning">
+        <div class="container-fluid">
+
+            <div id="menu-top">
+                <div class="row">
+                    <div class="nav-menu">
+                        <button type="button" class="btn">
+				<i class="fa fa-bars fa-2x"></i>
+			</button>
+                        <div class="menu">
+                            <ul class="list-group">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="notepate" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Notepate</a>
+                                    <ul class="dropdown-menu-a" id="notepate">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Camera</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Mic</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open Worksheet</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="tutoring" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Tutoring</a>
+                                    <ul class="dropdown-menu-a" id="tutoring">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Camera</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Test Mic</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open Worksheet</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="worksheet" href="#">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>Worksheet</a>
+                                    <ul class="dropdown-menu-a" id="worksheet">
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>New</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Open</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Save</a></li>
+                                        <li><a href="#"><i class="fa fa-circle" aria-hidden="true"></i>Preview</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="outside">
+                            <a href=""></a>
+                        </div>
+                    </div>
+                    <div class="logo fl">
+                        <a href="#">
+                            <img src="assets/images/normal/ik_Logo.png" />
+                        </a>
+                        <div class="tent" style="float: right;color: #fff;margin-left: 10px;margin-top: 2px">
+                            <p>iK Notepad</p>
+                        </div>
+                    </div>
+                    <div class="actions-r">
+                        <div class="tb-register">
+                            <a href="https://iktutor.com/iklearn/en/?r=login&ref=notepad" class="tb-register-btn">
+                                <img src="assets/images/login/03_icon_n-create_account.png" />
+                                <span class="tb-register-txt">
+							Create Account						</span>
+                            </a>
+                        </div>
+                        <div class="tb-login">
+                            <a href="javascript::void(0)" class="tb-login-btn">
+                                <img src="assets/images/login/01_icon_n_login.png" />
+                                <span class="tb-login-txt">
+							Login						</span>
+                            </a>
+                            <div class="tb-login-popup hidden">
+                                <form name="tb-login-form" id="tb-login-form" method="post">
+                                    <p class="login-username">
+                                        <img src="assets/images/normal/2_ID.png" />
+                                        <input type="text" name="log" placeholder="Username (email)" id="user_login" class="input" value="" size="20" />
+                                    </p>
+                                    <p class="login-password">
+                                        <img src="assets/images/normal/3_Password.png" />
+                                        <input type="password" name="pwd" placeholder="Password:" id="user_pass" class="input" value="" size="20" />
+                                    </p>
+                                    <p class="login-submit">
+                                        <button type="button" id="tb-login-submit" class="button-primary">
+									Log In								</button>
+                                        <button type="button" id="tb-login-cancel" class="button-primary">
+									Cancel								</button>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tb-mode">
+                            <select onchange="window.location.href= this.value">
+					<option value="notepad.html" selected>
+						Notepad					</option>
+					<option value="index.html">
+						Tutoring					</option>
+					<option value="worksheet.html">
+						Worksheet					</option>
+				</select>
+                        </div>
+                        <div class="full-screen-mode full">
+                            <p>
+                                <img class="full" src="assets/images/normal/01_Icon_Full_Screen.png" />
+                                <img class="min" src="assets/images/normal/02_Icon_Min_Screen.png" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function() {
+                    //khai báo các biến cần dùng
+                    var btn = document.querySelector('.btn'),
+                        list_menu = document.querySelector('.list-group'),
+                        outside = document.querySelector('.outside'),
+                        cover = document.querySelector('.menu');
+
+                    btn.onclick = function() {
+                        outside.classList.add('ShowUp');
+                        cover.classList.add('appear-menu');
+                    }
+                    outside.onclick = function() {
+                        outside.classList.remove('ShowUp');
+                        cover.classList.remove('appear-menu');
+                    }
+
+
+                    var tilemenu = document.getElementsByClassName('dropdown-toggle'),
+                        sbmenu = document.getElementsByClassName('dropdown-menu-a');
+                    for (var i = 0; i < tilemenu.length; i++) {
+                        tilemenu[i].onclick = function() {
+
+
+                            if (this.classList[1] == 'dropdown-toggle-color') { // click vào cái đã hiện thị rồi
+
+                                this.classList.remove('dropdown-toggle-color');
+
+                                // 3 dòng dưới là cho  các đối tưởng được click ẩn đi
+                                var showsubmenu = this.getAttribute('data-toggle'),
+                                    show_elment = document.getElementById(showsubmenu);
+                                show_elment.classList.remove('show-dropdown-menu');
+                            } else { // click vào các cái còn lại
+
+                                // cho all bỏ màu chữ của class dropdown-toggle
+                                for (var k = 0; k < tilemenu.length; k++) {
+                                    tilemenu[k].classList.remove('dropdown-toggle-color');
+                                }
+                                this.classList.toggle('dropdown-toggle-color');
+
+                                // lấy về data-toggle
+                                var showsubmenu = this.getAttribute('data-toggle'),
+                                    show_elment = document.getElementById(showsubmenu);
+
+                                // cho all cac class dropdown-menu-a khác ẩn đi
+                                for (var i = 0; i < sbmenu.length; i++) {
+                                    sbmenu[i].classList.remove('show-dropdown-menu')
+                                }
+
+                                // cho  các đối tưởng được click hiện ra
+                                show_elment.classList.toggle('show-dropdown-menu');
+                            }
+                        }
+                    }
+                }, false)
+            </script>
+            <div id="menu-main">
+                <div class="row">
+                    <div class="no-padding border-r">
+                        <div class="row taskbar-notepad r-taskbar">
+                            <div class="block-ws">
+
+                                <!-- <select>
+	<option class="hidden">
+		Select Action	</option>
+	<option>
+		New	</option>
+	<option>
+		Open	</option>
+	<option>
+		Save	</option>
+	<option>
+		Open Worksheet	</option>
+</select> -->
+
+                                <!-- <div class="tutor-ws-div">
+	<div class="trigger-action">
+		<span>
+			Select Action		</span>
+	</div>
+	<div class="list-action">
+		<ul>
+			<li>
+				<a href="" class="">
+					New				</a>
+			</li>
+			<li>
+				<a href="" class="">
+					Test Camera				</a>
+			</li>
+			<li>
+				<a href="" class="">
+					Test Mic				</a>
+			</li>
+			<li>
+				<a href="" class="">
+					Open Worksheet				</a>
+			</li>
+		</ul>
+	</div>
+</div> -->
+
+                                <div class="containerr" style="margin-bottom: 27px;margin-left: -8px; margin-right:40px">
+
+                                    <div class="select-box" id="dropdown">
+
+                                        <div class="options-container">
+
+                                            <div class="option" id="newhihi">
+                                                <input type="radio" class="radio" id="Automobiles" name="category" value="n">
+                                                <label for="Automobiles">New</label>
+                                            </div>
+
+                                            <div class="option" id="openhihi">
+                                                <input type="radio" class="radio" id="Film" name="category" value="">
+                                                <label for="Film">Test Camera</label>
+                                            </div>
+
+
+                                            <div class="option" id="savehihi">
+                                                <input type="radio" class="radio" id="science" name="category" value="">
+                                                <label for="science">Test Mic</label>
+                                            </div>
+
+
+                                            <div class="option" id="p">
+                                                <input type="radio" class="radio" id="Music" name="category" value="">
+                                                <label for="Music">Open Worksheet</label>
+                                            </div>
+                                        </div>
+                                        <div class="selected">
+                                            Select Action
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- <div class="containerr">
+
+                    <div class="select-box" id="dropdown">
+
+                        <div class="options-container">
+
+                            <div class="option" id="newhihi">
+                                <input type="radio" class="radio" id="Automobiles" name="category" value="n">
+                                <label for="Automobiles" >New</label>
+                            </div>
+
+                            <div class="option" id="openhihi">
+                                <input type="radio" class="radio" id="Film" name="category" value="">
+                                <label for="Film">Test Camera</label>
+                            </div>
+
+
+                            <div class="option" id="savehihi">
+                                <input type="radio" class="radio" id="science" name="category" value="">
+                                <label for="science">Test Mic</label>
+                            </div>
+
+
+                            <div class="option" id="p">
+                                <input type="radio" class="radio" id="Music" name="category" value="">
+                                <label for="Music">Open Worksheet</label>
+                            </div>
+                        </div>
+                        <div class="selected">
+                            Select Action
+                        </div>
+                    </div>
+                </div>
+
+ --></div>
+                            <div class="block-control fl">
+                                <p id="change-size-pencil" class="tool-btn tooltip-wrap" data-layer="1">
+                                    <img src="assets/images/notepad/pen.png" />
+                                    <span class="hidden tooltip-icon">
+		<span class="h">Pen tool</span>
+                                    <span class="t">Draw on the screen</span>
+                                    </span>
+                                </p>
+                                <div class="hidden pencil-class style-popup-pencil tool-submenu">
+                                    <ul id="pencils-body">
+                                        <li class="icon-layer close-popup-pencil">
+                                            <span style="line-height: 0;" class="icon-layer close-popup-pencil">
+				Pen			</span>
+                                        </li>
+                                        <li class="icon-layer btn-pencil hr1 active" data-pencil="1">
+                                            <img style="width: 5px;height: 5px" src="assets/images/notepad/pencil/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-pencil hr2" data-pencil="2">
+                                            <img style="width: 8px;height: 8px" src="assets/images/notepad/pencil/2.png" />
+                                        </li>
+                                        <li class="icon-layer btn-pencil hr3" data-pencil="3">
+                                            <img style="width: 11px;height: 11px" src="assets/images/notepad/pencil/3.png" />
+                                        </li>
+                                        <li class="icon-layer btn-pencil hr4" data-pencil="4">
+                                            <img style="width: 14px;height: 14px" src="assets/images/notepad/pencil/4.png" />
+                                        </li>
+                                        <li class="icon-layer btn-pencil hr5" data-pencil="5">
+                                            <img style="width: 18px;height: 18px" src="assets/images/notepad/pencil/5.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="hidden  hello close-class style-popup-close">
+                                    <div class="col-md-9 text-popup-close">
+                                        No layer is selected </div>
+                                    <div class="col-md-3 no-padding">
+                                        <button type="button" class="red-btn scel-btn close-popup-close">
+			Cancel		</button>
+                                    </div>
+                                </div>
+                                <p class="tool-btn tooltip-wrap" id="change-eraser">
+                                    <img src="assets/images/notepad/eraser.png" />
+                                    <span class="hidden tooltip-icon">
+		<span class="h">Eraser tool</span>
+                                    <span class="t">Eraser lines and image from screen</span>
+                                    </span>
+                                </p>
+                                <div class="hidden eraser-class style-popup-eraser tool-submenu">
+                                    <ul id="erasers-body">
+                                        <li class="icon-layer close-popup-eraser">
+                                            <span>
+				Eraser			</span>
+                                        </li>
+                                        <li class="icon-layer btn-eraser active" data-eraser="30">
+                                            <img style="width: 5px;height: 5px;" src="assets/images/notepad/eraser/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-eraser" data-eraser="50">
+                                            <img style="width: 8px;height: 8px;" src="assets/images/notepad/eraser/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-eraser" data-eraser="70">
+                                            <img style="width: 11px;height: 11px;" src="assets/images/notepad/eraser/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-eraser" data-eraser="90">
+                                            <img style="width: 14px;height: 14px;" src="assets/images/notepad/eraser/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-eraser" data-eraser="100">
+                                            <img style="width: 18px;height: 18px;" src="assets/images/notepad/eraser/1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-eraser-clear border-bottom">
+                                            <img src="assets/images/notepad/eraser-all.png" />
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                                <p class="tool-btn tooltip-wrap" id="change-color">
+                                    <img src="assets/images/notepad/color/top/black.png" alt="Colors">
+                                    <span class="hidden tooltip-icon">
+		<span class="h">Color tool</span>
+                                    <span class="t">Select a line color</span>
+                                    </span>
+                                </p>
+                                <div class="hidden color-class style-popup-color tool-submenu">
+                                    <ul id="colors-body">
+                                        <li class="icon-layer close-popup-color">
+                                            <span>
+				Color			</span>
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#ffffff" data-image-url="white.png">
+                                            <img src="assets/images/notepad/color/white.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color active" data-color="#000000" data-image-url="black.png">
+                                            <img src="assets/images/notepad/color/black.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#0000FF" data-image-url="blue.png">
+                                            <img src="assets/images/notepad/color/blue.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#FF0000" data-image-url="red.png">
+                                            <img src="assets/images/notepad/color/red.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#008000" data-image-url="green.png">
+                                            <img src="assets/images/notepad/color/green.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#C500AF" data-image-url="redPurple.png">
+                                            <img src="assets/images/notepad/color/light_purple.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#FF8D15" data-image-url="orange.png">
+                                            <img src="assets/images/notepad/color/orange.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color" data-color="#8E3AFF" data-image-url="purple.png">
+                                            <img src="assets/images/notepad/color/purple.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <p class="block-layer tool-btn tooltip-wrap" id="add-layer">
+                                    <img src="assets/images/notepad/layers.png" />
+                                    <span class="hidden tooltip-icon">
+		<span class="h">Layer tool</span>
+                                    <span class="t">Create, delete and manage the layers</span>
+                                    </span>
+                                </p>
+                                <div class="hidden layer-class style-popup-layer tool-submenu">
+                                    <ul id="layers-body">
+                                        <li class="close-popup-layer">
+                                            <p id="layer-span">
+                                                Layers </p>
+                                        </li>
+                                        <li class="icon-layer btn-add-layer">
+                                            <img src="assets/images/notepad/layer/add.png" />
+                                        </li>
+                                        <li class="icon-layer btn-delete-layer border-bottom">
+                                            <img src="assets/images/notepad/layer/delete.png" />
+                                        </li>
+                                        <li class="icon-layer icon-selector active">
+                                            <img src="assets/images/notepad/layer/layer-1.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <p class="block-grid tool-btn tooltip-wrap" id="icon-grid">
+                                    <img src="assets/images/notepad/grids.png" />
+                                    <span class="hidden tooltip-icon">
+		<span class="h">Grids tool</span>
+                                    <span class="t">Triggers guidelines and change background colors</span>
+                                    </span>
+                                </p>
+                                <div class="hidden grid-class style-popup-grid tool-submenu">
+                                    <ul id="grids-body">
+                                        <li class="icon-layer close-popup-grid">
+                                            <span>
+				Grid			</span>
+                                        </li>
+                                        <li class="icon-layer btn-color-grid active" data-color="#FFFFFF">
+                                            <img src="assets/images/notepad/grid/white.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color-grid" data-color="#DDDDDD">
+                                            <img src="assets/images/notepad/grid/gray.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color-grid" data-color="#fffdbf">
+                                            <img src="assets/images/notepad/grid/yellow.png" />
+                                        </li>
+                                        <li class="icon-layer btn-color-grid border-bottom" data-color="#d1fffe">
+                                            <img src="assets/images/notepad/grid/blue.png" />
+                                        </li>
+                                        <li class="icon-layer btn-grid" data-grid="1">
+                                            <img src="assets/images/notepad/grid/type1.png" />
+                                        </li>
+                                        <li class="icon-layer btn-grid" data-grid="2">
+                                            <img src="assets/images/notepad/grid/type2.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="block-image fl">
+                                <p id="add-type-box" class="tooltip-wrap">
+                                    <img src="assets/images/notepad/text_box.png" />
+                                    <span class="hidden tooltip-icon">
+			<span class="h">Text tool</span>
+                                    <span class="t">Create text on the screen</span>
+                                    </span>
+                                </p>
+                                <p class="add-image tooltip-wrap">
+                                    <img src="assets/images/notepad/upload_image.png" />
+                                    <input id="file-input" class="form-control inputfile input-sm" type="file">
+                                    <span class="hidden tooltip-icon">
+			<span class="h">Image tool</span>
+                                    <span class="t">Insert images from the local drive</span>
+                                    </span>
+                                </p>
+                                <div class="hidden np-sheet-info"></div>
+                                <p id="icon-screenshot tooltip-wrap">
+                                    <img src="assets/images/notepad/screenShot.png" />
+                                    <span class="hidden tooltip-icon">
+			<span class="h">Capture Image</span>
+                                    <span class="t">Take a screenshots</span>
+                                    </span>
+                                </p>
+                                <div class="hidden screenshot-class style-popup-screenshot">
+                                    <p class="name-popup">
+                                        Capture Images </p>
+                                    <ul>
+                                        <li class="item-screenshot" style=" padding-right: 20px">
+                                            <input type="checkbox" class="checkbox-style" id="screenshot-check" value="" />
+                                        </li>
+                                        <li class="item-screenshot" style=" width: 100px;">
+                                            <form method="get">
+                                                <select class="select-box-it form-control" id="select-screenshot">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="4">4</option>
+						<option value="8">8</option>
+						<option value="20">20</option>
+						<option value="60">60</option>
+						<option value="120">120</option>
+						<option value="300">300</option>
+						<option value="600">600</option>
+					</select><span class="style-sec">Sec.</span>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row wrapper_contend" id="wrapper">
+
+                <div class="col-10 main-content main-notepad">
+                    <div id="cursors">
+
+                    </div>
+                    <div id="panel" class="panel">
+
+                    </div>
+                    <div id="divrubber" title="drag to erase with checkbox signed" alt="drag to erase with checkbox signed">
+                        <div id="controlrubber" class="css-img-erase"></div>
+                    </div>
+                </div>
+                <div class="col-4 sb-right">
+                    <div class="opacitySideMenu">
+                        <div class="opacitySideMenu-inner">
+                            <div class="opactiyPercentage">
+                                <p id="rangevalue"></p><span>%</span>
+                            </div>
+                            <div class="editBar">
+                                <input type="range" class="slider" name="bgopacity" id="bgopacity" value="100" min="0" max="100" step="1" />
+                            </div>
+                            <!--			<div class="closeSideMenu">-->
+                            <!--				<p class="phideSideMenu">-->
+                            <!--					<img class="img-fluid fr hideSideMenu" src="-->
+                            <!--assets\images\reveal\08_icon_Menu_Close.png" alt="close" />-->
+                            <!--				</p>-->
+                            <!--				<p>-->
+                            <!--					<img class="img-fluid fr showSideMenu hidden" src="-->
+                            <!--assets\images\reveal\09_icon_Menu_Open.png" alt="open" />-->
+                            <!--				</p>-->
+                            <!--			</div>-->
+                        </div>
+                        <p class="tit-head">Participants <span><span></p>
+		<div class="hidden-participant-btn">
+			<img class="on" src="assets\images\video/12_icon_Side_Close.png" />
+			<img class="off" src="assets\images\video/13_icon_Side_Open.png" />
+		</div>
+		<div class="hide-participant-line hidden"></div>
+	</div>
+
+	<div id="videoAndMic" class="hidden">
+		<div class="turnVideo hidden">
+			<p class="On_Video hidden">
+				<img src="assets\images\notepad\sidebar/Video_Chat_ON.png" />
+				<span>Video Is On</span>
+                        </p>
+                        <p class="Off_Video hidden">
+                            <img src="assets\images\notepad\sidebar/Video_Chat_OFF.png" />
+                            <span>Video Is Off</span>
+                        </p>
+                    </div>
+                    <div class="turnMic hidden">
+                        <p class="On_Mic hidden">
+                            <img src="assets\images\notepad\sidebar/Video_Chat_ON.png" />
+                            <span>Mic Is On</span>
+                        </p>
+                        <p class="Off_Mic hidden">
+                            <img src="assets\images\notepad\sidebar/Video_Chat_OFF.png" />
+                            <span>Mic Is Off</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="wrap-sidebar-left">
+                    <div class="menu-tray show-both" style="display: block">
+                        <div class="attend-list style-scrollbar" style="display: block">
+                            <div class="row list_participants">
+                                <ul>
+                                    <li class="item-list">
+                                        <div class="avatar-attend">
+                                        </div>
+                                        <p class="text-overfl">
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="attend-video-list">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="participantLowerBottom">
+                                        <img class="img-fluid" src="assets\images\notepad\sidebar\Status_TooFast.png" />
+                                    </div>
+                                    <div class="participantLowerBottom">
+                                        <img class="img-fluid" src="assets\images\notepad\sidebar/Status_TooFast.png" />
+                                    </div>
+                                    <div class="participantLowerBottom">
+                                        <img class="img-fluid" src="assets\images\notepad\sidebar/Status_TooFast.png" />
+                                    </div>
+                                    <div class="participantLowerBottom">
+                                        <img class="img-fluid" src="assets\images\notepad\sidebar/Status_TooFast.png" />
+                                    </div>
+                                    <div class="participantLowerBottom">
+                                        <img class="img-fluid" src="assets\images\notepad\sidebar/Status_TooFast.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat_box" style="display: block;">
+                            <div class="ui-resizable-handle ui-resizable-n"></div>
+                            <div id="chat" class="message-list">
+                                <ul id="testichat" class="inbox-message">
+                                </ul>
+                            </div>
+                            <div class="start-tutoring">
+                                <span>
+						Start Tutoring					</span>
+                            </div>
+                            <div class="message-send">
+                                <div class="float-left message-input">
+                                    <input type="text" id="scrivi" rows="1" name="message-input" placeholder="Type Your Message Here..." />
+                                    <input type="hidden" id="emoji" name="emoji" value="default" />
+                                </div>
+
+                                <div class="button-send float-left">
+                                    <div id="btn-send">
+                                        <img src="assets\images\video\16_icon_Chat_Enter_Arrow.png" />
+                                    </div>
+                                    <div class="status-selector">
+                                        <img src="assets\images\video/15_Icon_Status_Default.png" />
+                                    </div>
+                                </div>
+                                <div class="status-selector-bar" style="display: none; ">
+                                    <ul>
+                                        <li class="ic-fast" data-type="fast">
+                                            <p>Too Fast</p>
+                                            <img src="assets\images\notepad\sidebar\Status_TooFast.png" />
+                                        </li>
+                                        <li class="ic-confused" data-type="confused">
+                                            <p>Confused</p>
+                                            <img src="assets\images\notepad\sidebar\Status_Confused.png" />
+                                        </li>
+                                        <li class="ic-understand" data-type="understand">
+                                            <p>Good</p>
+                                            <img src="assets\images\notepad\sidebar\Status_Good.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="row bottom-menu">
+
+
+
+        <div class="popup_user_menu hidden">
+
+            <div class="invite_user">
+                <img src="assets/images/regular/01_icon_Invite_Friend.png" />
+                <span class="click_invite">
+				<u>Invite a Friend</u>
+			</span>
+            </div>
+
+            <div class="invite_user_list">
+                <img src="assets/images/regular/02_icon_Select_List.png" />
+                <span>
+				<u>Select from a list</u>
+			</span>
+            </div>
+            <div class="input_user_invite hidden">
+                <img class="img_toggle" src="assets/images/regular/01_icon_Invite_Friend.png" />
+                <form action="" method="POST" id="form_check">
+                    <input type="email" name="email_check" placeholder="Email..." id="input_email">
+                    <div class="clear-input" onclick="document.getElementById('input_email').value=null;"></div>
+
+
+                    <div class="button" id="click_check_email">Invite</div>
+
+                    <a class="add_friend_list" id="click_add_friend_list">Add to Friends List</a>
+            </div>
+        </div>
+
+        </form>
+
+        <div class="popup_messages hidden">
+            <div class="messages_center">
+
+                <img class="warning" src="assets/images/regular/01_Icon_Invitation.png" />
+                <p>Invitation from <b id="insert_email"></b>.</p>
+                <a href="" class="accept">Accept</a>
+                <a href="" class="decline">Decline</a>
+                <img class="exit exit_messages" src="assets/images/regular/06_icon_Warning_bar_Close_X.png" />
+            </div>
+        </div>
+
+
+        <div class="popup_messages_3 hidden">
+            <div class="messages_center_3">
+                <img class="warning" src="assets/images/regular/05_icon_Warning.png" />
+                <p class="error_messages"></p>
+                <img class="exit exit_messages" src="assets/images/regular/06_icon_Warning_bar_Close_X.png" />
+            </div>
+        </div>
+
+
+        <div class="popup_messages_2 hidden">
+            <div class="messages_center_2">
+                <img class="warning" src="assets/images/regular/05_icon_Warning.png" />
+                <p>Delete selected friends from a list?</p>
+                <a class="delete" id="click_delete_friend_list">Delete</a>
+
+                <img class="exit" id="exit_messages_2" src="assets/images/regular/06_icon_Warning_bar_Close_X.png" />
+            </div>
+        </div>
+
+
+        <div class="popup_user_list hidden">
+            <div class="user_list_center">
+                <h4>Select from a List</h4>
+
+                <div class="dropdown-li user_list_detail">
+
+                    <ul id="friend-list" class="">
+
+                    </ul>
+                </div>
+                <div class="footer_user_list">
+                    <div class="roll_back_footer_list">
+                        <img src="assets/images/regular/02_icon_Select_List.png" />
+                    </div>
+                    <button type="">Invite All</button>
+
+                    <div class="delete_contact">
+                        <img src="assets/images/regular/04_icon_Delete.png" />
+                        <u>Delete Concact</u>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="actionOnRight">
+            <div class="block-chat">
+
+
+                <p class="toogle-menu-tray active">
+                    <img src="assets/images/video/01_icon_Chat_Participants.png" />
+                </p>
+                <p class="add_friend active">
+                    <img src="assets\images\regular\Icon_ADD.png" />
+                </p>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="popUpBtn">
+        <p>
+            <img class="fl img-fluid clickToHideBottom" src="assets/images/video/08_icon_Bottom_Close.png" alt="Hide" />
+        </p>
+        <p>
+            <img class="fl img-fluid clickToShowBottom" src="assets/images/video/09_icon_Bottom_Open.png" alt="Show" />
+        </p>
+    </div>
+    <div class="end-notepad">
+        <p>
+            <img class="" src="assets/images/video/17_icon_Active_Close.png" />
+        </p>
+    </div>
+    <div class="wrapper-bg"></div>
+    <div class="user-login-form hidden">
+        <div class="userForm">
+            <div class="userForm-inner">
+                <form class="userLoginForm">
+                    <div class="user-1 form-section">
+                        <p>
+                            Login 1 </p>
+                        <label>
+								Username (email address							</label>
+                        <input type="text" name="user1" class="user1" />
+                    </div>
+
+                    <div class="user-2 form-section">
+                        <p>
+                            Login 2 </p>
+                        <label>
+								Username (email address							</label>
+                        <input type="text" name="user2" class="user2" />
+                    </div>
+                    <div class="form-section">
+                        <button type="button" class="userFormSubmit">
+								Login							</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type='text/javascript' src='js/jquery/ui/core.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/widget.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/mouse.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/draggable.min.js'></script>
+    <script type='text/javascript' src='js/jquery/ui/resizable.min.js'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var mejsL10n = {
+            "language": "en-US",
+            "strings": {
+                "Close": "Close",
+                "Fullscreen": "Fullscreen",
+                "Download File": "Download File",
+                "Download Video": "Download Video",
+                "Play\/Pause": "Play\/Pause",
+                "Mute Toggle": "Mute Toggle",
+                "None": "None",
+                "Turn off Fullscreen": "Turn off Fullscreen",
+                "Go Fullscreen": "Go Fullscreen",
+                "Unmute": "Unmute",
+                "Mute": "Mute",
+                "Captions\/Subtitles": "Captions\/Subtitles"
+            }
+        };
+        var _wpmejsSettings = {
+            "pluginPath": "\/notepad\/wp-includes\/js\/mediaelement\/"
+        };
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='js/mediaelement/mediaelement-and-player.min.js'></script>
+    <script type='text/javascript' src='js/mediaelement/wp-mediaelement.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/touch-punch.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/customscrollbar.min.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.countdown.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/editor.js'></script>
+    <script type='text/javascript' src='assets/js/vendor/jquery.selectBoxIt.min.js'></script>
+    <script type='text/javascript' src='assets/js/user.js'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var iii_script = {
+            "site_url": "http:\/\/localhost\/notepad\/",
+            "plugin_url": "http:\/\/localhost\/notepad\/wp-content\/plugins\/iii-notepad\/",
+            "ajax_url": "http:\/\/localhost\/notepad\/wp-admin\/admin-ajax.php",
+            "buy_time_fail": "You dont have enough point to buy time",
+            "buy_time_done": "You buy time done",
+            "empty_video_url": "Please enter video url",
+            "empty_layer": "Please chosen layer"
+        };
+        /* ]]> */
+    </script>
+    <script src="http://localhost:8800/socket.io/socket.io.js"></script>
+    <script type='text/javascript' src='assets/js/regular.js'></script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+﻿<style>
+    .modal-body .control-label {
+        font-family: "Open Sans", sans-serif;
+        font-weight: bold !important;
+        font-size: 14px !important;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <span class="modal-title pt17" id="modal-title"><i class="fas fa-info-circle"></i>&nbsp;{{'Chi tiết' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <div class="row mt20">
+            <div class="col-md-9">
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_CODE' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="ObjectCode" id="ObjectCode" ng-model="rack.Code" type="text" readonly/>
+                </div>
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_TITLE' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="ObjectName" id="ObjectName" ng-model="rack.Name" type="text" readonly/>
+                </div>
+                <!--<div class="col-md-12">
+                    <label class="bold">{{'Kích thước' | translate}}: <span class="text-green"> {{rack.R_Size}}</span></label>
+                </div>
+                <div class="col-md-12">
+                    <label class="bold">{{'Trạng thái' | translate}}: <span class="text-green"> {{rack.Status}}</span></label>
+                </div>-->
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_PACKING_WEIGHT' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="PackingWeight" id="PackingWeight" ng-model="data.Weight" type="text"/>
+                </div>
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_PACKING_SIZE' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="PackingSize" id="PackingSize" ng-model="data.Size" type="text"/>
+                </div>
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_PACKING_QUANTITY' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="PackingQuanity" id="PackingQuanity" ng-model="data.Quanity" type="text"/>
+                </div>
+                <div class="col-md-12">
+                    <label class="control-label bold">{{'EDMSDWC_LBL_OBJECT_GROUP' | translate}}</label>
+                </div>
+                <div class="col-md-12 pl5" style="padding-right:5px">
+                    <input class="form-control br24 text-important" name="ObjectGroup" id="ObjectGroup" ng-model="data.Group" type="text"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border-qrcode">
+                    <div class="text-center">
+                        <div class="img-thumbnail">
+                            <img data-ng-src="data:image/png;base64,{{QR_Code}}" ng-class="QR_Code==''?'opacityQrCode':'' " onerror="this.src='/images/default/qrCode.png'" class="h-80" /><br />
+                            <!--<label><span class="fa fa-qrcode"></span> {{'QRCode' | translate}}</label>-->
+                        </div>
+                        <div class="text-center mt5" ng-click="print(QR_Code)">
+                            <a class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                <span><i class="fas fa-print"></i></span>
+                            </a>
+                            <p class="text-underline fs14 mb5 pt3">{{'Print' | translate}}</p>
+                        </div>
+                        <div class="text-center mt25" ng-click="updateObject()">
+                            <a>
+                                <span><i class="fa-solid fa-plus fs30"></i></span>
+                            </a>
+                            <p class="text-underline fs14 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 h-50">
+                <label class="control-label bold pt5 d-flex align-item-ct" ng-click="toggleProducts()">
+                    <i ng-if="!checkProduct" class="fa-solid fa-caret-right fs25"></i>
+                    <i ng-if="checkProduct" class="fa-solid fa-caret-down fs25"></i>
+                    <span class="fs18">&nbsp;{{'EDMSDWC_LBL_LIST_PRODUCT' | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-12" ng-show="checkProduct">
+                <table class="table dataTable table-hover table-striped"
+                       datatable
+                       dt-options="dtOptions"
+                       dt-columns="dtColumns"
+                       dt-instance="dtInstance"
+                       id="tblData"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

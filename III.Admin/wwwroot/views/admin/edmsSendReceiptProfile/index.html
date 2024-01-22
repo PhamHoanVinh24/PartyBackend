@@ -1,0 +1,163 @@
+﻿<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-4 ">
+            <h1 class="bold mb-0">{{'EDMSSRP_TITLE_SEND_RECEIPT_PROFILE' | translate}}</h1>
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="/">{{'EDWHB_LINK_HOME' | translate}}</a>
+                    <span>&gt;</span>
+                </li>
+                <li>
+                    <div class="bold">{{'EDMSSRP_TITLE_SEND_RECEIPT_PROFILE' | translate}}</div>
+                    <!--<div class="bold">Yêu cầu xuất kho</div>-->
+                </li>
+            </ul>
+        </div>
+        <!--<div class="col-md-8">
+            <div class="btn-group pull-right actions">
+                <a ng-click="add()" class="btn br4 btn-green">
+                    <span class=""><i class="fa fa-plus"></i> {{'COM_BTN_ADD' | translate}}</span>
+                </a>
+                <a class="btn btn-export">
+                    <span class=""><i class="glyphicon glyphicon-export"></i> {{'EDWHB_BTN_EXPORT_EXCEL' | translate}}</span>
+                </a>
+            </div>
+        </div>-->
+    </div>
+    <div class="portlet light bordered input-search mt5 p10">
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_BRANCH' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.BrCode" theme="bootstrap" on-select="changleSelect('BrCode')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_BRANCH' | translate}}...">{{$select.selected.OrgCode}} - {{$select.selected.OrgName}}</ui-select-match>
+                            <ui-select-choices repeat="x.OrgAddonCode as x in listBranch | filter:$select.search">
+                                {{x.OrgCode}} - {{x.OrgName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.BrCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_TYPE_OF_DOCCUMENT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.DocType" theme="bootstrap" on-select="changleSelect('DocType')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_TYPE_OF_DOCCUMENT' | translate}}...">{{$select.selected.ValueSet}}</ui-select-match>
+                            <ui-select-choices repeat="x.SettingID as x in listDocumentType | filter: $select.search">
+                                {{x.ValueSet}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DocType=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDWHB_CURD_LBL_SEARCH_WAREHOUSE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.WHS_Code" theme="bootstrap" on-select="reload()">
+                            <ui-select-match placeholder="{{'EDWHB_CURD_TXT_SEARCH_WAREHOUSE' | translate}}...">{{$select.selected.WHS_Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.WHS_Code as x in listWareHouse | filter: $select.search">
+                                {{x.WHS_Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WHS_Code=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>-->
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_DATE_FROM' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.FromDate" class="form-control" type="text" placeholder="{{'EDMSSRP_CURD_TXT_DATE_FROM' | translate}}..." id='FromTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_TO_FROM' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.ToDate" class="form-control" type="text" placeholder="{{'EDMSSRP_CURD_LBL_TO_FROM' | translate}}..." id='DateTo' ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_WHS_USER' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.WHS_User" theme="bootstrap" on-select="changleSelect('WHS_User')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_WHS_USER' | translate}}...">{{$select.selected.GivenName}}</ui-select-match>
+                            <ui-select-choices repeat="x.UserName as x in listWareHouseUser| filter: $select.search">
+                                {{x.GivenName}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.WHS_User=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'EDMSSRP_CURD_LBL_STATUS' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.RqStatus" theme="bootstrap" on-select="changleSelect('RqStatus')">
+                            <ui-select-match placeholder="{{'EDMSSRP_CURD_TXT_STATUS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in status  | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.RqStatus=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()" href="javascript:;">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</label></div>
+</div>
+<table class="table dataTable  table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>

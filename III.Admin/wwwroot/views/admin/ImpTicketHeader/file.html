@@ -1,0 +1,62 @@
+﻿<div ng-controller="file">
+    <div class="table-toolbar">
+        <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="mt-action-5">
+                <!--<div class="col-md-3">
+                    <div class="form-group mr5">
+                        <label class="control-label">Tiêu đề</label>
+                        <input ng-model="model.Title" class="form-control" type="text" placeholder="Tiêu đề..." />
+                    </div>
+                </div>-->
+                <div class="col-md-3  form-group mr5">
+                    <label class="control-label">Chọn sản phẩm</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('unit')">
+                            <ui-select-match placeholder="Chọn sản phẩm...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-3  form-group mr5">
+                    <label class="control-label">Nhập số lượng</label>
+                    <div class='input-group date'>
+                        <input type='text' class="form-control input-date" ng-model="model.Quantity" placeholder="Nhập số lượng..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Quantity='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6 actions mt15 ">
+                    <a  ng-show="isEdit==false" ng-disabled="LotProductCode==''" ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom " style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-plus fs12" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <a ng-show="isEdit==true" ng-click="close()" class="btn btn-icon-only btn-circle btn-outline red-custom " style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-close fs12" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                    <a  ng-show="isEdit==true" ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom " style="width:40px !important; height:40px !important">
+                        <span><i class="fa fa-save fs12" style="width:30px !important; height:30px !important; margin-top:5px"></i></span>
+                    </a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>

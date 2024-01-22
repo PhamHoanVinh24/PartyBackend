@@ -1,0 +1,107 @@
+﻿<style>
+    .h-95-srcoll {
+        overflow: auto;
+        max-height: 95px !important;
+        height: 95px !important;
+    }
+
+    .boder-box-custom-scroll {
+        padding: 1px;
+        /* overflow: hidden; */
+        word-wrap: break-word;
+        cursor: text;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        height: 100%;
+        border-radius: 4px;
+        max-height: 200px;
+        height: 150px;
+    }
+
+    .tags-custom {
+        margin: 2px;
+        padding: 0 5px;
+        display: inline-block;
+        float: left;
+        font: 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+        /*height: 26px;*/
+        height: auto;
+        line-height: 25px;
+        border: 1px solid #acacac;
+        border-radius: 3px;
+        background: -webkit-linear-gradient(top,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+        background: linear-gradient(to bottom,#f0f9ff 0,#cbebff 47%,#a1dbff 100%);
+    }
+
+    .black-custom {
+        height: 40px !important;
+        border-color: #d4d4d4;
+        color: #000 !important;
+        background: #ffffff !important;
+    }
+</style>
+
+<div ng-controller="tabAttribute">
+    <div class="table-toolbar">
+        <div class="row">
+            <form name="attrform" method="post" ng-validate="validationAttributeOptions">
+                <div class="col-md-4" ng-class="{ 'has-error': errorAttrCode}">
+                    <i class="fas fa-list fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'PR_DETAIL_EXTEND_CRITERIA' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.AttrCode" theme="bootstrap" ng-change="selectAttributeMain(model.AttrCode)" ng-disabled="isEditAttribute">
+                            <ui-select-match placeholder="{{'PR_DETAIL_EXTEND_CRITERIA' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listProductAttributeMain | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.AttrCode=''" class="btn no-shadow black-custom" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorAttrCode" class="label-color validation-message">
+                        {{'PR_DETAIL_EXTEND_CRITERIA_MSG_NOT_EMPTY' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-4 txt">
+                    <div class="input-group">
+                        <i class="fas fa-info-circle fs16 pr5"></i>
+                        <label class="fw600 text-underline require">{{'PR_DETAIL_EXTEND_VALUE' | translate}}</label>
+                        <input class="form-control br24" name="Value" ng-model="model.AttrValue" placeholder="{{'PR_DETAIL_EXTEND_VALUE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="mr10 pr-0" ng-hide="isEditAttribute">
+                            <a class="fs30" ng-click="add()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-0" ng-hide="!isEditAttribute">
+                            <a class="btn btn-icon-only fs25 p-0" ng-click="save()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <div class="mr10 pr-0" ng-hide="!isEditAttribute">
+                            <a class="btn btn-icon-only fs25 p-0" ng-click="cancle()">
+                                <span><i class="fa-solid fa-rectangle-xmark"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCLE' | translate}}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataAttribute"></table>
+</div>

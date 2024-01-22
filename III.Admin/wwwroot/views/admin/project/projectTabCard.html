@@ -1,0 +1,129 @@
+﻿<div ng-controller="projectTabCard">
+    <div class="row">
+        <form name="tabcardform" method="post" ng-validate="validationOptionsCheckList">
+            <div class="form-group">
+                <div class="col-md-5">
+                    <div class="form-group" ng-class="{ 'has-error': errorItemName}">
+                        <i class="fas fa-university"></i>
+                        <label class="control-label">{{'PROJECT_LBL_ITEMS' | translate}}</label>
+                        <input class="form-control bold fs13 black br24" name="Đầu mục" type="text" ng-model="model.ItemName" placeholder="{{'PROJECT_LBL_ITEMS' | translate}}..." />
+                    </div>
+                    <span ng-show="errorItemName" class="label-color validation-message">
+                        {{'PROJECT_ERR_ITEM' | translate}}
+                    </span>
+                </div>                
+                <div class="form-group col-md-5">
+                    <div class="col-md-12">
+                        <i class="fas fa-bars"></i>
+                        <label class="control-label">{{'PROJECT_PARENT_CATEGORY' | translate}}</label> 
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group br24-nobtn">
+                            <ui-select tagging ng-model="model.ItemParent" theme="bootstrap" on-select="changleSelect('Gr')">
+                                <ui-select-match placeholder="{{'PROJECT_PARENT_CATEGORY' | translate}}...">{{$select.selected.Name}}</ui-select-match> 
+                                <ui-select-choices repeat="x.Code as x in listItemPlan | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0" style="width: 11%;">
+                    <div class="form-group" ng-class="{ 'has-error': errorItemWeight}">
+                        <i class="fas fa-percent"></i>
+                        <label class="control-label">{{'PROJECT_LBL_WEIGHT' | translate}}</label>
+                    <div class="input-group ">
+                        <input class="form-control br24" ng-model="model.ItemWeight" name="" placeholder="{{'PROJECT_LBL_WEIGHT' | translate}}..." autocomplete="off">
+                    </div>
+                    </div>
+                    <span ng-show="errorItemWeight" class="label-color validation-message">
+                        {{'PROJECT_ERR_WEIGHT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-5 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorDurationTime}">
+                        <div class="col-md-8">
+                            <i class="fas fa-hourglass-half"></i>
+                            <label class="control-label require">{{'PROJECT_LBL_DURATIONTIME' | translate}}</label> 
+                            <div class="col-md p-0">
+                                <input class="form-control text-danger br24" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="Budget" ng-model="model.DurationTime" placeholder="{{'PROJECT_LBL_DURATIONTIME' | translate}}..." num-thousand='true' awnum num-int='21' style="font-weight : 700;" />
+                            </div>
+                            <span ng-show="errorDurationTime" class="label-color validation-message">
+                                 {{'PROJECT_ERR_DURATIONTIME' | translate}}
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md" style="margin-right: -28px">
+                                <i class="fas fa-info"></i>
+                                <label class="control-label require">{{'PROJECT_DURATION_UNIT' | translate}}</label> <!---->
+                                <div class="form-group" ng-class="{'has-error': errorCurrency}">
+                                    <div class="input-group br24-nobtn">
+                                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.DurationUnit" name="Unit" theme="bootstrap" on-select="changleSelect('Currency')">
+                                            <ui-select-match placeholder="{{'PROJECT_DURATION_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in listUnit | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorCurrency" class="label-color validation-message">
+                                         {{'PROJECT_ERR_DURATION_UNIT' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorCost}">
+                        <div class="col-md-8">
+                            <i class="fa-solid fa-money-bill"></i>
+                            <label class="control-label require">{{'PROJECT_CURD_LBL_PROJECT_PRJ_BUDGET' | translate}}</label> 
+                            <div class="col-md p-0">
+                                <input class="form-control text-danger br24" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" type="text" name="Budget" ng-model="model.Cost" placeholder="{{'PROJECT_CURD_LBL_PROJECT_PRJ_BUDGET' | translate}}..." num-thousand='true' awnum num-int='21' style="font-weight : 700;" />
+                            </div>
+                            <span ng-show="errorCost" class="label-color validation-message">
+                                {{'PROJECT_ERR_COST' | translate}}
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <label class="control-label require">{{'PROJECT_MONEY' | translate}}</label> <!---->
+                                <div class="form-group" ng-class="{'has-error': errorCurrency}">
+                                    <div class="input-group br24-nobtn">
+                                        <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.CostUnit" name="Currency" theme="bootstrap" on-select="changleSelect('Currency')">
+                                            <ui-select-match placeholder="{{'PROJECT_MONEY' | translate}}...">{{$select.selected.Name}}</ui-select-match> <!--{{'PROJECT_LBL_LINK_FTP' | translate}}-->
+                                            <ui-select-choices repeat="x.Code as x in currencyProject | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span ng-show="errorCurrency" class="label-color validation-message">
+                                        {{'PROJECT_ERR_CURRENCY' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pt15">
+                    <div class="col-md-6 btn-group actions d-flex">
+                        <div class="text-center" ng-click="addCheckList()">
+                            <a class="fs30 p-0">
+                                <span><i class="fa-solid fa-plus pt15"></i></span>
+                            </a>
+                            <p style="font-size: 12px;" class="text-underline mb-0 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataProjectCard">
+    </table>
+</div>

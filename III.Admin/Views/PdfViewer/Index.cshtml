@@ -1,0 +1,46 @@
+﻿@using Syncfusion.EJ2
+@using ESEIM.Utils
+@{
+    ViewData["Title"] = "Pdf";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Syncfusion.EJ2
+
+<link href="~/lib/assets/global/plugins/ej2/material.css" rel="stylesheet" />
+<script src="~/lib/assets/global/plugins/ej2/ej2.min.js"></script>
+<script src="~/lib/robust/core/libraries/jquery.min.js" type="text/javascript"></script>
+
+@section ControlsSection{
+    <div>
+        <style>
+            .app-content {
+                width: 100%;
+            }
+        </style>
+        <ejs-pdfviewer id="pdfviewer" enableToolbar="true" style="height:600px; width:100%;"></ejs-pdfviewer>
+    </div>
+
+    <ejs-scripts></ejs-scripts>
+}
+<script type="text/javascript">
+    window.onload = function () {
+        var pdfViewer = document.getElementById('pdfviewer').ej2_instances[0];
+
+        pdfViewer.toolbar.downloadItem.hidden = true;
+
+        pdfViewer.serviceUrl = '/PdfViewer';
+        documenteditor = pdfViewer.documentEditor;
+        jQuery.ajax({
+            type: "POST",
+            url: "/PdfViewer/Loadtest",
+            success: function (data) {
+                pdfViewer.load(data);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+    $(".menu-toggle").addClass("hidden");
+</script>
+

@@ -1,0 +1,127 @@
+﻿<style>
+    #tblDataNote_wrapper {
+        top: 5px;
+    }
+</style>
+<div ng-controller="projectTabNote">
+    <div class="row">
+        <form name="projectEvent.addform" method="post" ng-validate="validateOptionProjectNote">
+            <div class="col pl15 pr15">
+                <div class="row">
+                    <div class="col-lg-3  form-group mb5">
+                        <label class="control-label require">{{'Tiêu đề'|translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' ng-model="model.Title" class="form-control" name="Title" placeholder="{{''|translate}}.." />
+                            <span class="input-group-btn" ng-click="model.Title=''">
+                                <button type="button" class="btn btn-default no-shadow end-date-reminder">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2  form-group mb5">
+                        <label class="control-label require">{{'Từ ngày'|translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' ng-model="model.FromDate" class="form-control" name="FromDate" placeholder="{{'Từ ngày'|translate}}..." id='FromDateEvent' />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2  form-group mb5">
+                        <label class="control-label require">{{'Đến ngày'|translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' ng-model="model.ToDate" class="form-control" name="ToDate" placeholder="{{'Đến ngày'|translate}}.." id='ToDateEvent' />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3  form-group mb5">
+                        <label class="control-label">{{'Vị trí'|translate}}</label>
+                        <div class="input-icon" style="margin-bottom: 0px">
+                            <i ng-click="openMap()" class="cursor fa fa-map-marker"></i>
+                            <input ng-click="openMap()" id="locationGPS" class="form-control br24" ng-model="model.Location" name="Location" type="text" style="padding-left: 30px; width: 100%" onkeypress="return false;" onkeydown="return false;" />
+                        </div>
+                    </div>
+                    <div class="col-lg-2  form-group mb5">
+                        <label class="control-label require">{{'Lặp lại'|translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select ng-model="model.RepeatType" theme="bootstrap" ng-disabled="IsHide" on-select="changleSelect('RepeatType',$item)">
+                                <ui-select-match placeholder="{{'PROJECT_CURD_TAB_PAYMENT_CURD_TXT_AET_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listRepeatType | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn" ng-hide="IsHide">
+                                <button type="button" ng-click="model.RepeatType=''" class="btn btn-default no-shadow">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorRepeatType" class="label-color validation-message">
+                            {{'Kiểu lặp lại không được để trống' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3  form-group mb5">
+                        <label class="control-label">{{'Ghi chú'|translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' ng-model="model.Note" name="Note" class="form-control" placeholder="{{''|translate}}.." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Note=''" class="btn btn-default no-shadow end-date-reminder">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 pr-0">
+                        <div class="btn-group pull-left pt10 actions d-flex" ng-if="!isEdit">
+                            <div class="mr10 pr-0">
+                                <a class="" ng-click="add()" style="border-radius: 0px !important">
+                                    <i class="fa-solid fa-plus pt15 text-#be4bdb fs30"></i>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                            </div>
+                        </div>
+                        <div class="btn-group pull-left pt10 actions d-flex" ng-if="isEdit">
+                            <div class="mr10 pr-0">
+                                <a class="" ng-click="update()" style="border-radius: 0px !important">
+                                    <i class="fa-solid fa-plus pt15 text-#be4bdb fs30"></i>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                        <div class="btn-group pull-right pt10 actions d-flex">
+                            <div class="mr10 pr-0">
+                                <a class="" ng-click="viewCalendar()" style="border-radius: 0px !important">
+                                    <i class="fas fa-calendar-alt pt15 fs30"></i>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3">{{'Xem lịch' | translate}}</p>
+                            </div>
+                        </div>
+                        <!--<div class="btn-group pull-right pt10 actions d-flex">
+                            <div class="pr-0 text-center" ng-show="isShowHeader">
+                                <a ng-click="hideHeader(); reload();" class="">
+                                    <span><i class="fas fa-chevron-up pt15 fs35" aria-hidden="true"></i></span>
+                                </a>
+                            </div>
+                            <div class="pr-0 text-center" ng-show="!isShowHeader">
+                                <a ng-click="showHeaderCard(); reload();" class="">
+                                    <span><i class="fas fa-chevron-down pt15 fs35" aria-hidden="true"></i></span>
+                                </a>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataNoteProject"></table>
+</div>

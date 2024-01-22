@@ -1,0 +1,161 @@
+﻿<style>
+    .nav-tabs {
+        height: 36px;
+    }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background-color: #3c8dbc;
+            color: #efecec;
+            height: 35px;
+        }
+    
+</style>
+<div class="modal-header">
+    <span class="close icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel1()"></span>
+    <h3 class="modal-title" id="modal-title"><i class="fa fa-edit"></i> {{'RMVTC_TITLE_EDIT_INFORMATION' | translate}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form" style="margin-top:10px">
+        <form name="editform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row">
+                    <div class=" col-md-6" style="padding-left:0">
+                        <div class="form-group" hidden>
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i>id</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.id" name="id" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-book"></i> {{'RMVTC_CURD_LBL_CODE_TABLE' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.table_code" name="table_code" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-book"></i> {{'RMVTC_CURD_LBL_TABLE_NAME' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.table_name" name="table_name" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-calendar"></i> {{'RMVTC_CURD_LBL_BEGIN_TIME_APPLY' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" type="text" ng-model="model.begin_time_apply" id="datetimepicker2">
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.begin_time_apply = undefined" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <script>
+
+                                        $('#datetimepicker2').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+                                </script>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-calendar"></i> {{'RMVTC_CURD_LBL_END_TIME_APPLY' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" type="text" ng-model="model.end_time_apply" id="datetimepicker3">
+                                        <span class="input-group-btn">
+                                            <button type="button" ng-click="model.end_time_apply = undefined" class="btn btn-default no-shadow">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <script>
+
+                                    $('#datetimepicker3').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+                                </script>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class=" col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-exclamation" aria-hidden="true"></i>&nbsp;{{'RMVTC_CURD_LBL_STATUS' | translate}}</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="model.status" class="" style="width: 100%;">
+                                        <ui-select-match placeholder="{{'RMVTC_CURD_TXT_STATUS' | translate}}...">{{$select.selected.value}}</ui-select-match>
+                                        <ui-select-choices repeat="x.status1 as x in names1 | filter:$select.value">
+                                            {{x.value}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.status = undefined" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-user"></i> {{'RMVTC_CURD_LBL_APPROVER_ID' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.appover_id" name="appover_id" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4 text-left"><i class="fas fa-sticky-note"></i> {{'RMVTC_CURD_LBL_NOTE' | translate}}</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="model.note" name="note" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8 pull-right" style="border:none;">
+                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-edit"></i>{{'COM_BTN_SAVE' | translate}}</button>
+                                <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel1()"><i class="fa fa-close"></i>{{'COM_CONFIRM_CANCEL' | translate}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-body" id="modal-body" style="padding:5px; margin-top:15px">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#parent" style=" height: 35px; border-top-left-radius: 10px; border-top-right-radius: 10px;" data-toggle="tab">{{'RMVTC_TITLE_INFORMATION_SERVICE' | translate}}</a></li>
+            </ul>
+            <div class="tab-content" style="font-size:13px;">
+                <div id="parent" class="tab-pane fade  in active ">
+                    <div class="row btn-group pull-right" style="margin-right: 15px;margin-bottom:10px">
+                        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-right:10px" ng-click="add_details1()" ;>{{'COM_BTN_ADD' | translate}} </button>
+                        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="delete()">{{'COM_BTN_DELETE' | translate}}</button>
+                    </div>
+                    <table class="table dataTable table-hover table-striped"
+                           datatable
+                           dt-options="dtOptions"
+                           dt-columns="dtColumns"
+                           dt-instance="dtInstance"
+                           id="tblData"></table>
+                </div>
+
+            </div>
+            <!--<div class="form-group" style="text-align:right">
+            <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel()"> Đóng</button>
+        </div>-->
+        </div>
+    </div>
+</div>
+<!--<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;" ng-click="submit()"><i class="fa fa-edit"></i>Lưu</button>
+   <button type="submit" class="btn btn-primary" style="border-radius: 4px !important" ng-click="cancel1()"><i class="fa fa-trash-o"></i>Hủy</button>
+</div>-->
+
+

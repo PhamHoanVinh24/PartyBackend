@@ -1,0 +1,120 @@
+﻿<style>
+    .box-file-detail {
+        overflow: auto;
+        max-height: 102px !important;
+        height: 102px !important;
+    }
+</style>
+<div ng-controller="detail">
+    <div class="table-toolbar">
+        <form name="detailform" method="post" ng-validate="validationDetailOptions">
+            <div class="col-md-4 pl-0">
+                <div class="form-group" ng-class="{ 'has-error': errorCandidateCode}">
+                    <label class="control-label require">{{'PER_DETAIL_CANDIDATE' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.CandidateCode" theme="bootstrap" ng-disable="isEditDetail" ng-change="changeSelect('CandidateCode')">
+                            <ui-select-match placeholder="{{'PER_DETAIL_CANDIDATE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listCadidate | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CandidateCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorCandidateCode" class="label-color validation-message">
+                        {{'PER_DETAIL_CANDIDATE_MSG_NOT_EMPTY' | translate}}
+                    </span>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': errorStatus}">
+                    <label class="control-label require">{{'PER_DETAIL_STATUS_NAME' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select tagging ng-model="model.Status" theme="bootstrap" ng-change="changeSelect('Status')">
+                            <ui-select-match placeholder="{{'PER_DETAIL_STATUS_NAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorStatus" class="label-color validation-message">
+                        {{'PER_DETAIL_STATUS_MSG_NOT_EMPTY' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label require">{{'PER_DETAIL_RESULT' | translate}}</label>
+                    <div class="mb5">
+                        <input class="form-control bold" name="Result" ng-model="model.Result" placeholder="{{'PER_DETAIL_RESULT' | translate}}..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{'PER_DETAIL_NOTE' | translate}}</label>
+                    <div class="mb5">
+                        <input class="form-control" name="Note" ng-model="model.Note" placeholder="{{'PER_DETAIL_NOTE' | translate}}..." />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 p-0 mt15">
+                <div class="form-group">
+                    <div class="boder-box box-file-detail br24 ml15 mr5">
+                        <button type="button" class="tags-custom" ng-repeat="x in listFileDetail">
+                            <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="deleteFile(x.Id)"></i><a ng-click="download(x.FileCode)">{{x.FileName}}</a>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center pr10">
+                            <div class="btn btn-icon-only btn-boder1 btn-outline">
+                                <i class="fas fa-upload"></i>
+                                <input type="file" class="btn-upload" custom-on-change="uploadFileDetail" id="btn-upload-file-detail" />
+                            </div>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_UPLOAD' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-boder1 btn-outline" ng-click="extend()">
+                                <span><i class="fas fa-expand-arrows-alt"></i></span>
+                                <input type="file" class="btn-upload" custom-on-change="a" id="btn-upload-files" />
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'PER_BTN_EXTEND' | translate}}</p>
+                        </div>
+                        <div class="text-center" ng-if="!isEditDetail">
+                            <a class="btn btn-icon-only fs25 p-0" ng-click="add()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pr10" ng-if="isEditDetail">
+                            <a class="btn btn-icon-only btn-boder1 btn-outline" ng-click="cancel()">
+                                <span><i class="fas fa-remove"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center" ng-if="isEditDetail">
+                            <a class="btn btn-icon-only fs25 p-0" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataDetail"></table>
+</div>

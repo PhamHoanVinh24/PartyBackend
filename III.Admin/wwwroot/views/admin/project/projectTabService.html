@@ -1,0 +1,136 @@
+﻿<div ng-controller="projectTabService">
+    <form name="addformTabService" method="post" ng-validate="validationOptionsTabService">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group" ng-class="{ 'has-error': errorServiceCode}">
+                    <label class="control-label require fs11">{{'PROJECT_TAB_SERVICE_LBL_SERVICE' | translate}}</label>
+                    <div class="input-group br24" ng-class="{ 'has-error': errorServiceCode}">
+                        <ui-select ng-disabled="model.Id!=''" ng-model="model.ServiceCode" theme="bootstrap" ng-change="changleSelect('ServiceCode')">
+                            <ui-select-match placeholder="{{'PROJECT_TAB_SERVICE_LBL_SERVICE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in services | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button ng-disabled="model.Id!=''" type="button" ng-click="model.ServiceCode=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorServiceCode" class="label-color validation-message">
+                        {{'PROJECT_TAB_SERVICE_MS_VALIDATE_SERVICE' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{ 'has-error': errorLevel}">
+                    <label class="control-label require fs11">{{'PROJECT_TAB_SERVICE_LBL_LEVEL' | translate}}</label>
+                    <div class="input-group br24">
+                        <ui-select ng-model="model.Level" theme="bootstrap" ng-change="changleSelect('Level')">
+                            <ui-select-match placeholder="{{'PROJECT_TAB_SERVICE_LBL_LEVEL' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in serviceLevel | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Level=''" class="btn btn-default no-shadow" ng-disabled="isExtend==false">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorLevel" class="label-color validation-message">
+                        {{'PROJECT_TAB_SERVICE_MSG_VALIDATE_LEVEL' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group" ng-class="{ 'has-error': errorQuantity}">
+                    <label class="control-label require fs11">{{'PROJECT_TAB_SERVICE_LBL_QUANTITY' | translate}}</label>
+                    <input type="text" num-thousand='true' awnum num-int='21' onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control br24" ng-model="model.Quantity" name="Quantity" placeholder="{{'PROJECT_TAB_SERVICE_LBL_QUANTITY' | translate}}" ng-change="changleSelect('Quantity')" />
+                    <span ng-show="errorQuantity" class="label-color validation-message">
+                        {{'PROJECT_TAB_SERVICE_MSG_VALIDATE_QUANTITY_ZERO' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{ 'has-error': errorDurationTime}">
+                    <div class="row">
+                        <div class="col-md-7 pr5">
+                            <label class="control-label require fs11">{{'PROJECT_TAB_SERVICE_LBL_TIME' | translate}}</label>
+                            <input type="text" num-thousand='true' awnum num-int='21' onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" class="form-control br24" ng-model="model.DurationTime" name="DurationTime" placeholder="{{'PROJECT_TAB_SERVICE_LBL_TIME' | translate}}" ng-change="changleSelect('DurationTime')" />
+                            <span ng-show="errorDurationTime" class="label-color validation-message">
+                                {{'PROJECT_TAB_SERVICE_MSG_VALITE_ZERO' | translate}}
+                            </span>
+                        </div>
+                        <div class="col-md-4 pl-0 br24-nobtn">
+                            <ui-select class="ui-select-bootstrap-right-radius pt30" style1="padding-top:22px" ng-model="model.Unit" theme="bootstrap">
+                                <ui-select-match placeholder="{{'PROJECT_TAB_SERVICE_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in serviceDurationUnit | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label fs11">{{'PROJECT_TAB_SERVICE_NOTE' | translate}}</label>
+                    <input type="text" class="form-control br24" ng-model="model.Note" name="Note" placeholder="{{'PROJECT_TAB_SERVICE_NOTE' | translate}}" />
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="btn-group pt20 actions d-flex">
+                    <div class="mr10 pr-0" ng-if="model.Id==''">
+                        <a class="" ng-click="add()" style="border-radius: 0px !important">
+                            <i class="fa-solid fa-plus text-#be4bdb fs30"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                    <div class="mr10 pr20" ng-if="model.Id!=''">
+                        <a class="" ng-click="update()" style="border-radius: 0px !important">
+                            <i class="fa-solid fa-plus fs30"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                    <div class="mr10 pr-0" ng-if="model.Id!=''">
+                        <a class="" ng-click="reset()" style="border-radius: 0px !important">
+                            <i style="--fa-primary-color: red;" class="fas fa-times fs30"></i>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3"> {{'COM_BTN_CLOSE' | translate}}</p>
+                    </div>
+                    <!--<div class="pr10 text-center" ng-if="model.Id==''">
+                        <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                            <span><i class="fa fa-plus"></i></span>
+                        </a>
+                        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                    </div>
+                    <div class="btn-group pr10" ng-if="model.Id!=''">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom mt10" ng-click="update()">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group pr10" ng-if="model.Id!=''">
+                        <div class="text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline red-custom mt10" ng-click="reset()">
+                                <span><i class="fa fa-close"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CLOSE' | translate}}</p>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataServiceProject"></table>
+</div>

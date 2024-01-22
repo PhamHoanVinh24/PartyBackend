@@ -1,0 +1,96 @@
+﻿<style>
+    .btn-border-black {
+        border: 1px solid #000;
+    }
+</style>
+<div ng-controller="fileActivity">
+    <div class="table-toolbar pl5 pr5">
+        <form name="searchform" class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-lg-5">
+                    <label class="fs11">{{'COM_FILE' | translate}}</label>
+                    <div class="input-group br24 input-file">
+                        <i class="fa fa-upload"></i>
+                        <input class="form-control border-left-4radius inputFile pl30" style="pointer-events:none" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                        <span class="input-group-btn">
+                            <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                            <input class="form-control" custom-on-change-customer="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file">
+                        </span>
+                    </div>
+                    <span class="pull-right">
+                        <a class="text-underline text-green" ng-click="extend()">{{'COM_BTN_SETUP_DEFAULT' | translate}}</a>
+                    </span>
+
+                    <!--<span class="text-danger fs11">{{'Đường dẫn' | translate}}</span>-->
+                </div>
+                <div class="col-lg-2 pull-left mt15">
+                    <div class="actions text-center pt20">
+                        <label class="mt-checkbox rqSign mt-checkbox-outline fs12" style="display:inline" ng-class="{'disabled-element': !isAccepted || IsLock}">
+                            <i class="fas fa-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.SignatureRequire != true" ng-click="model.SignatureRequire = true"></i>
+
+                            <i class="fas fa-check-square" style="color:cornflowerblue;font-size: 25px;margin-right: 10px;" ng-if="model.SignatureRequire == true" ng-click="model.SignatureRequire = false"></i>
+                            <!--<input type="checkbox" ng-model="model.SignatureRequire" ng-disabled="!isAccepted || IsLock" />
+    <span style="padding: 14px;background-color: white;"></span>-->
+                        </label>
+                        <div class="fs12 text-underline" style1="margin-top: 12px;">
+                            {{'WFAI_CHK_REQUIRE_SIGN_FILE' | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="btn-group pt20 d-flex">
+                        <div class="text-center mt10 pr10">
+                            <a class1="btn btn-icon-only btn-outline btn-border-black" ng-click="add()">
+                                <i class="fa-solid fa-plus fs25" aria-hidden="true"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                        <!--<div class="text-center pr10">
+                            <a class="btn btn-icon-only btn-outline btn-border-black" ng-click="extend()">
+                                <span><i class="fas fa-expand-arrows-alt black"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'WFAI_BTN_EXTEND' | translate}}</p>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12 pr-0 pl-0 pb-1">
+                <div class="col-md-11 pl-0 pr-0 p5 br4 mb5">
+                    <div class="col-lg-12 pl-0 pr-0">
+                        <div class="form-group">
+                            <ui-select ng-model="modelFile.ActShare" multiple theme="bootstrap" limit="100"
+                                       style="width: 100%; height: 65px;" class="br12">
+                                <ui-select-match placeholder="{{'WFAI_CRUD_SELECT_ACT' | translate}}...">
+                                    <span>{{$item.Title}}</span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="x in shareFileTo |  filter:$select.search">
+                                    <div class="p5">{{x.Title}}</div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <div class="btn-group pt20 d-flex">
+                        <div class="text-center mt10 pr10">
+                            <a class1="btn btn-icon-only btn-outline btn-border-black" ng-click="addActShareOfFile()">
+                                <i class="fa-solid fa-plus fs25" aria-hidden="true"></i>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dropzone" ngf-drop="uploadFile($files)" ngf-multiple="true">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataWorkflowFile"></table>
+    </div>
+</div>

@@ -1,0 +1,163 @@
+﻿<style>
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .border-black {
+        border: 1px solid #000;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body">
+            <div class="row mb5">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                            <label class="control-label fw600">{{'SEARCH_CT_FILE_DATASETS'|translate}}</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group search-group br24">
+                                <ui-select tagging ng-model="model.Group" theme="bootstrap" on-select="changleSelect('Group')">
+                                    <ui-select-match placeholder="{{'SEARCH_CT_FILE_DATASETS'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat=" x.Code as x in lstGroupKeySearch | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="addKeyWord()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'SEARCH_CT_FILE_FOLDE' | translate}}</label>
+                    <div class="input-group search-group br24">
+                        <ui-select tagging ng-model="model.CatCode" theme="bootstrap">
+                            <ui-select-match placeholder="{{'SEARCH_CT_FILE_FOLDE' | translate}}">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstCat | filter: $select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CatCode='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'SEARCH_CT_FILE_USE' | translate}}</label>
+                    <div class="input-group search-group br24">
+                        <ui-select tagging ng-model="model.UserId" theme="bootstrap">
+                            <ui-select-match placeholder="{{'SEARCH_CT_FILE_USE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.UserId as x in lstUser | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.UserId='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="btn-group actions d-flex mr5 pt15">
+                        <div class="text-center pr10 pl10">
+                            <a data-dismiss="modal" ng-click="ocrFile()" class="fs30">
+                                <span><i class="fas fa-users-cog"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_HANDLE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group actions d-flex pull-right">
+                        <div class="text-center pr-1 mt15">
+                            <input type="file" id="fileAttachment" custom-on-change-cardjob="loadAttachment" style="display: none" />
+                            <a class="fs30" ng-click="addAttachment()">
+                                <span><i class="fas fa-upload"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_UPLOAD' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-1 mt15">
+                            <a class="fs30" ng-click="performOCREdms()">
+                                <span><i class="fas fa-recycle"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_CONVERT' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-1 mt15">
+                            <a class="fs30" ng-click="deleteFiles()">
+                                <span><i class="fas fa-trash"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_DELETE_FILE' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-1 mt15">
+                            <a class="fs30" ng-click="resultOCR()">
+                                <span><i class="fas fa-list"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_RESULT' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-1 mt15">
+                            <a class="fs30" ng-click="exportExcel()">
+                                <span><i class="fas fa-file-excel"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'SEARCH_CT_FILE_EXPORT_EXCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center pr-2" style="margin-top: 15px;">
+                            <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+                                <span><i class="fas fa-question " aria-hidden="true"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 mb5 pl-0 pull-right">
+    <span class="text-green">{{ 'SEARCH_CT_FILE_TOTAL_FILES' | translate }}: {{countFile}}</span>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

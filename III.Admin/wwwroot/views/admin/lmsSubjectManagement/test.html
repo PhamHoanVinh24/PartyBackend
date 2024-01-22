@@ -1,0 +1,662 @@
+﻿<style>
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .select-box.multi-choice {
+        display: flex;
+        flex-direction: row;
+        margin-top: 50px;
+        flex-wrap: wrap;
+    }
+
+    .multi-choice input {
+        margin-top: 1px;
+        margin-left: 5px;
+        height: 20px;
+        border: 1px #b5b5b5 solid;
+        border-radius: 3px;
+        padding-left: 5px;
+    }
+
+    .radio-toolbar .an {
+        flex-basis: 70px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-top: -25px;
+        /*margin-right: 10px;
+           margin-left: 10px;*/
+        width: 100%;
+        height: 40px;
+        padding: 0px;
+        /*border: 1px #b5b5b5 solid;*/
+        border-radius: 3px;
+        color: #eeeeee;
+        float: left;
+        display: flex;
+        align-items: right;
+        justify-content: space-between;
+    }
+
+    /*.close-modal {
+           z-index: 9990;
+           position: absolute;
+           padding: 0px;
+           border-radius: 50px;
+       }
+
+       .close-modal {
+           position: absolute;
+           top: -25px;
+           right: -25px;
+           display: block;
+           width: 50px;
+           height: 50px;
+           text-indent: -9999px;
+           background-size: contain;
+           background-repeat: no-repeat;
+           background-position: center center;
+           background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==);
+       }*/
+
+    .full-opacity {
+        opacity: 1 !important;
+    }
+
+    hr.bd-rounded {
+        border-top: 8px solid #bbb;
+        border-radius: 5px;
+    }
+
+    hr.bd-dashed {
+        border-top: 2px dashed #bbb;
+        border-radius: 3px;
+        width: 50%;
+    }
+
+    .question-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-right: 10px;
+        /*border: 1px #b5b5b5 solid;*/
+        /*border-radius: 3px;*/
+        padding-left: 5px;
+        margin-right: 10px;
+        min-height: 50px;
+        /*box-shadow: #b5b5b5 10px 10px 20px;*/
+        font-family: "Roboto";
+        box-shadow: 1px 1px 1px #ccc;
+        background: #f9f9f9;
+        border-radius: 50px;
+    }
+
+    .an img {
+        height: 80px;
+    }
+
+    .icon-think {
+        height: 40px !important;
+        margin-left: 20px;
+        flex-basis: 40px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .quiz-content {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+        .quiz-content p:first-child {
+            display: inline;
+        }
+
+    .hightlight {
+        background-color: #4bc6fc;
+        color: white !important;
+    }
+    /*CSS form Tab*/
+    .progress-container {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: row;
+        align-items: center;
+    }
+
+        .progress-container > .abort {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 18px;
+            opacity: 0.5;
+        }
+
+            .progress-container > .abort:hover {
+                opacity: 1;
+            }
+
+    .progress-title {
+        /*font-size: 18px;
+           font-weight: 700;
+           color: #000;
+           margin: 0 0 10px;*/
+        padding-left: 5px;
+    }
+
+    .progress-outer {
+        background: #fff;
+        padding: 0 15px;
+        width: 100%;
+        /*border: 5px solid #bebfbf;
+           border-radius: 45px;*/
+        /*margin-bottom: 20px;*/
+        position: relative;
+    }
+
+    .progress {
+        position: relative;
+        background: #bebfbf;
+        border-radius: 20px !important;
+        margin: 0 !important;
+        height: 40px;
+    }
+
+        .progress .progress-bar {
+            border-radius: 20px;
+            box-shadow: none;
+            animation: animate-positive 2s;
+        }
+
+    .progress-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #6b7880;
+        position: absolute;
+        top: 3px;
+        right: 10px;
+        line-height: 40px;
+    }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    @keyframes animate-positive {
+        0% {
+            width: 0;
+        }
+    }
+
+    .btnZoom {
+        float: left;
+        width: 25px;
+        height: 25px;
+    }
+
+    .btnDelete {
+        float: right;
+    }
+    /*Progress bar*/
+    .fill-answer {
+        box-shadow: #b5b5b5 10px 10px 20px;
+        margin-top: 50px;
+    }
+
+        .fill-answer::placeholder {
+            color: gray
+        }
+
+    /*drag - drop*/
+    .answer-choose {
+        margin-top: 32px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .option-choose {
+        margin-top: 32px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        /*padding: 0 10px;*/
+        flex-wrap: wrap;
+    }
+
+    .answer-list {
+        min-height: 50px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .quesion-flex-el {
+        display: flex;
+        align-items: center;
+        padding-left: 2%;
+        width: 96%;
+    }
+
+    .answer-drag-area {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        /*padding-left: 2%;
+           width: 96%;*/
+        height: 50%;
+    }
+
+        .answer-drag-area .line:first-child {
+            border-top: none;
+        }
+
+    .question-drag-txt {
+        padding: 12px;
+        font-size: 20px;
+        border-radius: 10px;
+        margin-top: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .question-img {
+        width: 75px;
+    }
+
+    .speaker {
+        width: 40px;
+    }
+
+    .line {
+        width: 100%;
+        border-top: 2px solid #e5e5e5;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-drag {
+        border-radius: 10px;
+        height: 35px;
+        line-height: 35px;
+        background-color: white;
+        text-align: center;
+        border: 1px solid #e5e5e5;
+        margin: 0 4px;
+        padding: 0 12px;
+        box-shadow: 1px 4px #e5e5e5;
+        /*min-width: 50px;*/
+    }
+
+    .btn-dis {
+        background-color: #d9d9d9;
+        box-shadow: none;
+    }
+
+    .moved {
+        background-color: #e5e5e5;
+    }
+
+        .moved span,
+        .moved img {
+            display: none;
+        }
+    /*Drag drop*/
+    /**
+    * The dndDraggingSource class will be applied to
+    * the source element of a drag operation. It makes
+    * sense to hide it to give the user the feeling
+    * that he's actually moving it.
+    */
+    .answer-list[dnd-list] .dndDraggingSource {
+        display: none;
+    }
+
+    /**
+    * An element with .dndPlaceholder class will be
+    * added to the dnd-list while the user is dragging
+    * over it.
+    */
+    .answer-choose[dnd-list] .dndPlaceholder {
+        background-color: #ddd;
+        border-radius: 10px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        border: 1px solid #e5e5e5;
+        margin: 0 4px;
+        padding: 0 12px;
+        box-shadow: 1px 4px #e5e5e5;
+    }
+
+    .option-choose[dnd-list] .dndPlaceholder {
+        display: none;
+    }
+
+    .canvas-container {
+        width: 100% !important;
+    }
+
+    canvas {
+        border: 1px #b5b5b5 solid;
+        box-shadow: #b5b5b5 10px 10px 20px;
+    }
+
+
+    .bg-light {
+        background-color: #eaecf3 !important;
+    }
+
+    .text-dark {
+        color: #171347 !important;
+    }
+
+    .text-left {
+        text-align: left !important;
+    }
+
+    .p-2 {
+        padding: 0.5rem !important;
+    }
+
+    .mb-2, .my-2 {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .rounded {
+        border-radius: 0.375rem !important;
+    }
+
+    .border {
+        border: 1px solid #e2e8f0 !important;
+    }
+
+    .align-items-center {
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        align-items: center !important;
+    }
+
+    .justify-content-between {
+        -webkit-box-pack: justify !important;
+        -ms-flex-pack: justify !important;
+        justify-content: space-between !important;
+    }
+
+    .media-container {
+        width: 100%;
+        display: flex;
+        justify-items: center;
+    }
+
+    .media-container img, video, audio {
+        max-width: 100%;
+        max-height: 50vh;
+    }
+</style>
+
+	<div class="row header-q" style="position: fixed; background: white; z-index: 2;" id="test-header">
+	    <div class="" style="display: flex; align-items: center">
+	        <!--<h3 class="text-center fs24 fw600 text-underline">QUIZ</h3>-->
+	        <i class="fas fa-alarm-clock fs25" style="padding-left: 25px;color: green;padding-right: 10px;"></i>
+	        <span style="font-size: 20px;color: green;font-weight: 600;">{{countDown}}</span>
+	        <div class="progress-container">
+	            <!--<span class="abort" ng-click="cancelUpload()">&times;</span>-->
+	            <!--<div class="progress-title">{{progressBar.name}}</div>-->
+	            <div class="progress-outer">
+	                <div class="progress">
+	                    <div class="progress-bar progress-bar-striped progress-bar-success" ng-style="progressBarAuto.style"></div>
+	                    <div class="fs20 text-center fs600 white" style="line-height: 40px; position: absolute; left: 0; right: 0">{{currentQuestion}} / {{totalQuestion}} ({{progressBarAuto.progress}})</div>
+	                </div>
+	            </div>
+	        </div>
+	        <div style="display: flex; flex-direction: column;">
+	            <div class="fs20 text-center" ng-click="submit()" style="margin-right: 20px; margin-left: 30px; height: 50px; line-height: 50px; margin-top: 10px; cursor: pointer" ng-if1="!isAlreadyDone">
+	                <i class="fas fa-paper-plane fs25"></i>
+	                <!--<img src="/images/lms/submit.png" style="height: 100%" />-->
+	                <p class="text-underline fs9 mb5 pt3 ng-binding" style="line-height: 10px">{{'LMS_SUBMIT_EXERCISE' | translate}}</p>
+	            </div>
+	            <div class="fs20 text-center" ng-click="refresh()" style="margin-right: 50px; height: 50px; line-height: 50px; margin-top: 10px; cursor: pointer" ng-if1="isAlreadyDone" ng-if="false">
+	                <img src="/images/lms/redo.png" style="height: 100%" />
+	                <!--<p class="text-underline fs9 mb5 pt3 ng-binding" style="line-height: 10px">{{'LMS_REDO' | translate}}</p>-->
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+    <div class="col-md-12">
+        <span style="display: none" class="form-control answer-box bg-correct" id="answer" value="" autocomplete="off" data-placement="top" data-trigger="focus"></span>
+        <div class="popover fade top in" role="tooltip" id="popover527237" style="top: -40px; left: 339.5px;"><div class="arrow" style="left: 50%;"></div><div class="popover-content g"><span ng-model="Return" class="Return">{{Return}}</span></div></div>
+    </div>
+
+<div style=" margin-top: 120px; height: calc(100% - 120px); overflow-y: auto; float: left; width: 100%;">
+    <div style="font-size: 17px; /*background-color: rgba(0, 0, 0, 0.5)*/ " class="col-sm-12 mb20 pt25" ng-repeat="x in listQuestion" ng-init="qIndex = $index; qLast = $last" ng-if="!playGame">
+        <div class="mb10 fw600" style="/* border: 1px #b5b5b5 solid; */ /* border-radius: 3px; */ padding-top: 25px; padding-left: 50px; padding-bottom: 50px; min-height: 150px; box-shadow: #b5b5b5 10px 10px 20px; font-size: 36px; position: relative; border: 1px #ccc; box-shadow: 1px 1px 1px 1px #ccc; border-radius: 15px;">
+            <!--<span ng-style="x.color">{{x.Code +': '}}</span>--><span class="quiz-content" ng-bind-html="x.Content" ng-if="x.Type != 'QUIZ_GAME'"></span>
+            <a class="quiz-content" type="button" ng-if="x.Type == 'QUIZ_GAME' && !x.playGame">
+                {{'LMS_QUIZ_GAME_TITLE' | translate}}
+                <!--<i class="fas fa-puzzle-piece fs25 pl25"></i>-->
+                <img style="height: 25px; margin-left: 25px" src="/images/lms/jigsaw.png" />
+            </a>
+            <div class="media-container" ng-repeat="media in x.ListMediaType">
+                <img ng-src="{{media.Url}}" ng-if="media.Code == 'IMAGE' && media.Check == true"
+                     onerror="this.src = 'https://os.3i.com.vn//uploads/repository/LMS_ANSWER/rong-roc-3.png'" alt="">
+                <video controls ng-if="media.Code == 'VIDEO' && media.Check == true">
+                    <source ng-src="{{media.Url}}" type="video/mp4">
+                    {{'LMS_ADD_QUIZ.HTML_BROWSER_SUPPORT_VIDEO' | translate}}
+                </video>
+                <audio controls ng-if="media.Code == 'VOICE' && media.Check == true">
+                    <source ng-src="{{media.Url}}" type="video/mp4">
+                    {{'LMS_ADD_QUIZ.HTML_BROWSER_SUPPORT_AUDIO' | translate}}
+                </audio>
+            </div>
+            <div ng-if="x.playGame" class="pt30 pr30">
+                <div ng-include="'/lib/eduComposeEngine/play.html'" style="position: relative"></div>
+            </div>
+            <div class="pull-right" style="display: flex; position: absolute; top: 40px; right: 10px;">
+                <div style="display: flex; justify-content: space-evenly; font-size: 12px">
+                </div>
+            </div>
+            <div class="pull-right" style="display: flex; position: absolute; bottom: 10px; right: 10px;">
+                <div style="display: flex; justify-content: space-evenly; font-size: 12px">
+                    <div class="text-center mt10 pr-2">
+                        <a class1="btn btn-icon-only btn-circle btn-outline" ng-click="addRef(x.IdQuiz, 'VOICE')">
+                            <span><i class="fas fa-microphone fs25"></i></span>
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'LMS_RECORD' | translate}}</p>-->
+                    </div>
+                    <div class="text-center mt10 pr-2">
+                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="addRef(x.IdQuiz, 'VIDEO')">
+                            <span><i class="fas fa-video-plus fs25"></i></span>
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'LMS_VIDEO_REF' | translate}}</p>-->
+                    </div>
+                    <div class="text-center mt10 pr-2">
+                        <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="addRef(x.IdQuiz, 'IMAGE')">
+                            <span><i class="fas fa-images fs25"></i></span>
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'LMS_IMAGE' | translate}}</p>-->
+                    </div>
+                    <div class="text-center mt10 pr-2">
+                        <a class1="btn btn-icon-only btn-circle btn-outline pt-0" ng-click="addRef(x.IdQuiz, 'CMS')">
+                            <!--<img class="mr5 ng-scope" style="width: 34px;" src="../../../images/iconDashBoard/icon_Text-Worksheet.png">-->
+                            <span><i class="fas fa-file-edit fs25"></i></span>
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'LMS_CREATE_ARTICLE' | translate}}</p>-->
+                    </div>
+                    <div class="text-center mt10 pr-2">
+                        <a class1="btn btn-icon-only btn-circle btn-outline p-0" ng-click="showHint($index)">
+                            <span><i class="fas fa-lightbulb-on fs25"></i></span>
+                            <!--<img style="width: 100%" src="/images/lms/light_bulb.png" />-->
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'LMS_SM_HINT' | translate}}</p>-->
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right" style="display: flex; position: absolute; top: 10px; right: 10px;" ng-click="playQuizGame(x, qIndex)" ng-if="x.Type == 'QUIZ_GAME'">
+                <a aria-expanded="true" aria-controls="attachments-icon" style="overflow-anchor: none;" ng-show="!x.playGame">
+                    <i class="fas fa-chevron-down color-dark fs20"></i>
+                </a>
+                <a aria-expanded="false" aria-controls="attachments-icon" style="overflow-anchor: none;" ng-show="x.playGame">
+                    <i class="fas fa-chevron-up color-dark fs20"></i>
+                </a>
+            </div>
+        </div>
+        <ul class="select-box multi-choice" ng-style="x.containVideo" ng-if="x.Type == 'QUIZ_SING_CH' || x.Type == 'QUIZ_MUL_CH'">
+            <li style="float: left; min-width: 25%; margin-bottom: 10px" ng-repeat="y in x.listAnswer" ng-init="y.Order = $index + 1" ng-if="y.Type == 'TEXT'" same-height=".question-box" trigger="uiChange">
+                <div class="question-box radio-toolbar" ng-class="{'hightlight': y.check == true}" ng-click="checkQuestion(x.Code, y.Order - 1)">
+                    <!--<label class="an">
+                        <img class="icon-think" ng-src="{{'/images/default/thinking_' + y.Order + '.png'}}">
+                        <button ng-show="y.check == false" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box-empty.png"></button>
+                        <button ng-show="y.check == true" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box.png"></button>
+                    </label>-->
+                    <div style="font-size: 20px; display: flex; align-items: flex-start; width: 100%;"><div style=" padding-left: 20px; " ng-bind-html="y.Content"></div></div>
+                </div>
+            </li>
+            <li style="float: left; min-width: 25%; margin-bottom: 10px;" ng-repeat="y in x.listAnswer" ng-init="y.Order = $index + 1" ng-if="y.Type == 'IMAGE'" same-height="">
+                <div class="question-box radio-toolbar" ng-class="{'hightlight': y.check == true}" ng-click="checkQuestion(x.Code, y.Order - 1)">
+                    <!--<label class="an">
+                        <button ng-show="y.check == false" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box-empty.png"></button>
+                        <button ng-show="y.check == true" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box.png"></button>
+                    </label>-->
+                    <div class="image-answer" style="font-size: 28px; display:flex; align-items: flex-start; /*height: 500px; width:280px;*/"><img style="/*width: 100%;*/ max-height: 500px;" ng-src="{{y.Url}}" /></div>
+                </div>
+            </li>
+            <li style="float: left; min-width: 50%; margin-bottom: 10px;" ng-repeat="y in x.listAnswer" ng-init="y.Order = $index + 1" ng-if="y.Type == 'VIDEO'" same-height=".question-box" trigger="uiChange">
+                <div class="question-box radio-toolbar" ng-class="{'hightlight': (y.IsAnswer && x.ShowHint) || y.check == true}" ng-click="checkQuestion(x.Code, y.Order - 1)">
+                    <!--<label class="an">
+                        <button ng-show="y.check == false" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box-empty.png"></button>
+                        <button ng-show="y.check == true" ng-click="checkQuestion(x.Code, y.Order - 1)" style="background: white; background: transparent; border: none;"><img src="/images/default/check-box.png"></button>
+                    </label>-->
+                    <div style="font-size: 28px; width: 100%;"><youtube-video video-url="y.Url" player-width="'100%'"></youtube-video></div>
+                </div>
+            </li>
+        </ul>
+        <textarea name="fillAnswer" rows="6" cols1="50" class="fill-answer fs20 fluid-width br24 pl30 pr30" placeholder="{{'Nhập câu trả lời' | translate}}" ng-model="x.fillAnswer" ng-blur="checkFillAnswer(x.Code)" ng-keydown="$event.keyCode === 13 && checkFillAnswer(x.Code)" ng-if="x.Type == 'QUIZ_NO_CH_FILL_WORD' || x.Type == 'QUIZ_NO_CH_REPLY_WORD'"></textarea>
+        <div class="answer-drag-area" ng-if="x.Type == 'QUIZ_SORT_ARRANGE'">
+            <div class="line">
+                <div class="answer-choose answer-list" dnd-list="x.listOne">
+                    <button #choice_1 class="btn-drag btn-answer" ng-style="{'min-width': item1.minW}" ng-repeat="item1 in x.listOne"
+                            dnd-draggable="item1"
+                            dnd-moved="x.listOne.splice($index, 1)"
+                            dnd-effect-allowed="move"
+                            dnd-type="listOneType">
+                        <!--<span class="objFabric?-code" style="display: none;">{{item1.Code}}</span>-->
+                        <span ng-if="item1.Type == 'TEXT'">{{item1.ContentDecode}}</span>
+                        <img ng-if="item1.Type == 'IMAGE'" style="width: 22px;" src="{{item1.Url}}" alt="">
+                    </button>
+                    <button class="dndPlaceholder" ng-style="{'min-width': placeHolderMinW}">
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="line"></div> -->
+            <div class="line" style="height: 0;"></div>
+        </div>
+        <div class="option-choose answer-list" dnd-list="x.listTwo" dnd-allowed-types="listTwoAllowedTypes"
+             dnd-drop="dragDropOff(x.Code, item, external, type)">
+            <button #choice_2 class="btn-drag btn-option" ng-style="{'min-width': item2.minW}" ng-repeat="item2 in x.listTwo" ng-class="{'moved': item2.Moved}"
+                    dnd-draggable="item2"
+                    dnd-moved="dragDropOn(x.Code, $index)"
+                    dnd-effect-allowed="move"
+                    dnd-type="listTwoType">
+                <!--<span class="objFabric?-code" style="display: none;">{{item2.Code}}</span>-->
+                <span ng-if="item2.Type == 'TEXT'">{{item2.ContentDecode}}</span>
+
+                <img ng-if="item2.Type == 'IMAGE'" style="width: 22px;" src="{{item2.Url}}" alt="">
+            </button>
+        </div>
+        <div ng-if="x.Type == 'QUIZ_PAIRS_ELEMENT'">
+            <div style="margin-left: 15px; height: 35px; width: calc(100% - 30px)">
+                <a id="zoomIn" class="btnZoom mt5" style="margin-right: 25px" ng-click="zoomIn(x.modelFabric.index)">
+                    <i style="font-size: 20px;" class="fas fa-plus"></i>
+                </a>
+                <a id="zoomOut" class="btnZoom mt5" style="margin-right: 25px" ng-click="zoomOut(x.modelFabric.index)">
+                    <i style="font-size: 20px;" class="fas fa-minus"></i>
+                </a>
+                <a id="redrawCanvas" class="btnZoom mt5" ng-click="redrawCanvas(x.modelFabric.index)">
+                    <i style="font-size: 20px;" class="fas fa-arrows-alt"></i>
+                </a>
+                <a id="deleteCanvasObj" class="btnDelete mt10" ng-disabled="isLineChoosen" ng-click="deleteLine(x.modelFabric.index)">
+                    <i style="font-size: 20px; padding-right: 25px; color: red" class="fas fa-trash-alt"></i>
+                </a>
+                <a id="fullScreenTest" class="btnDelete mt10" ng-click="goFullscreen(x.modelFabric.index)">
+                    <i style="font-size: 20px; padding-right: 25px;" class="fas fa-expand-wide" " ng-if="!isFullScreen"></i>
+                    <i style="font-size: 20px; padding-right: 25px;" class="fas fa-compress" ng-if="isFullScreen"></i>
+                </a>
+            </div>
+            <div fabric-canvas-test="listAnswer" handler="initCanvas(index)" ng-model="x.modelFabric"><canvas>You have a very old browser... (It does not support HTML5 canvas)</canvas></div>
+        </div>
+        <div class="text-center" style="display:flex; flex-direction: column; align-items: center" ng-if="!qLast"><hr class="bd-dashed"></div>
+    </div>
+    <script>
+    function toggleFixed() {
+        var parentwidth = $(".container-q").width();
+        console.log(parentwidth);
+        if (parentwidth < 200) {
+            $(".header-q").toggleClass('fixed-hq');
+        } else {
+            $(".header-q").width(parentwidth);
+        }
+    }
+
+    toggleFixed();
+    function HandleUserResult(result, qIndex, userCanvas, userPosition) {
+        //alert("result of popup is: " + result);
+        window.userResultIndex = qIndex;
+        window.userResultGame = result;
+        window.userCanvas = userCanvas;
+        window.userPosition = userPosition;
+        window.setTimeout(function () {
+            angular.element('#test-header').scope().$apply();
+        }, 100);
+    }
+    </script>
+
+</div>

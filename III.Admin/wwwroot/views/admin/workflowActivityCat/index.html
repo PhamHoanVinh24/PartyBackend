@@ -1,0 +1,643 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            .tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }
+
+            .tab .nav-tabs li div {
+                color: white;
+                background: #696e72;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 30px;
+                border-top: 1px solid #d3d3d3;
+                border-bottom: 1px solid #d3d3d3;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        border-right: 1px solid #d3d3d3;
+    }
+
+    .tab .nav-tabs li div:hover {
+        background: #5c9fb9;
+    }
+
+        .tab .nav-tabs li div:hover:before {
+            border-left: 15px solid #5c9fb9;
+        }
+
+    .tab .nav-tabs li:last-child div:hover:before {
+        border-left: 15px solid #5c9fb9;
+    }
+
+    .tab .nav-tabs li.active div:after,
+    .tab .nav-tabs li div:after {
+        content: "";
+        border-left: 17px solid #5c9fb9;
+        border-top: 16px solid transparent;
+        border-bottom: 17px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li.active div:before {
+        border-left: 17px solid #5c9fb9;
+    }
+
+    .tab .nav-tabs li div:before {
+        border-bottom: 15px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 15px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus,
+    .tab .nav-tabs > li.active > div:hover {
+        border: none;
+        color: #fff;
+        background: #5c9fb9;
+        border-top: 1px solid #d3d3d3;
+        border-bottom: 1px solid #d3d3d3;
+        /*font-weight: 600;*/
+    }
+
+    /* .tab .nav-tabs li:last-child.active div:after,
+    .tab .nav-tabs li:last-child div:after {
+        border: none;
+    }
+
+    .tab .nav-tabs li:last-child div:after,
+    .tab .nav-tabs li:last-child div:hover:before,
+    .tab .nav-tabs li:last-child.active div:before,
+    .tab .nav-tabs li:last-child div:before {
+        border-left: none;
+
+    }*/
+
+    .tab .nav-tabs li:last-child.active div:after,
+    .tab .nav-tabs li:last-child div:after {
+        content: "";
+        border-left: 19px solid #5c9fb9;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+        position: absolute;
+        top: 1px;
+        right: -18px;
+        z-index: 1;
+    }
+
+    .tab .nav-tabs li:last-child div:after {
+        border-left: 17px solid #fff;
+    }
+
+    .tab .nav-tabs li:last-child div:before {
+        border-bottom: 17px solid rgba(0, 0, 0, 0);
+        border-left: 15px solid #696e72;
+        border-top: 16px solid rgba(0, 0, 0, 0);
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 2px;
+        z-index: 2;
+    }
+
+    .tab .nav-tabs li:last-child.active div:before {
+        border-left: 17px solid #5c9fb9 !important;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    body.vertical-layout.vertical-menu.menu-expanded .content, body.vertical-layout.vertical-menu.menu-expanded .footer {
+        max-width: 100vw;
+        padding-left: 0px;
+    }
+
+    .sharp {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5%;
+        margin-left: 15%;
+    }
+</style>
+<div id="toolbar" class="navbar-default">
+</div>
+<div ng-show="isWF" class="parent_svg" onselectstart="javascript:return false" id="gfx_holder" style="width: 2000px; height:1500px;">
+    <div class="milestone" style="width:1500px;height:2000px ;display:flex"></div>
+</div>
+
+<nav class="main-menu-wf" ng-show="false">
+    <ul>
+        <li>
+            <a href="#">
+                <i class="fa fa-home fa-2x"></i>
+                <span class="nav-text">
+                    Dashboard
+                </span>
+            </a>
+
+        </li>
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-laptop fa-2x"></i>
+                <span class="nav-text">
+                    Stars Components
+                </span>
+            </a>
+
+        </li>
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-list fa-2x"></i>
+                <span class="nav-text">
+                    Forms
+                </span>
+            </a>
+
+        </li>
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-folder-open fa-2x"></i>
+                <span class="nav-text">
+                    Pages
+                </span>
+            </a>
+
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-bar-chart-o fa-2x"></i>
+                <span class="nav-text">
+                    Graphs and Statistics
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-font fa-2x"></i>
+                <span class="nav-text">
+                    Quotes
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-table fa-2x"></i>
+                <span class="nav-text">
+                    Tables
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-map-marker fa-2x"></i>
+                <span class="nav-text">
+                    Maps
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-info fa-2x"></i>
+                <span class="nav-text">
+                    Documentation
+                </span>
+            </a>
+        </li>
+        <li>
+            <a class="workflow-link d-f" href="#">
+                <i class="fas fa-network-wired fa-2x wf-icon"></i>
+                <span class="wl-text nav-text">
+                    Workflow
+                </span>
+            </a>
+        </li>
+    </ul>
+    <ul class="logout">
+        <li>
+            <a href="#">
+                <i class="fa fa-power-off fa-2x"></i>
+                <span class="nav-text">
+                    Logout
+                </span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="main-menu-top">
+    <div class="menu-top ">
+        <div class="create-box">
+            <i class="fas fa-long-arrow-alt-left undo"></i>
+            <div class="create-box__hover">
+                Undo
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-long-arrow-alt-right redo"></i>
+            <div class="create-box__hover">
+                Redo
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-list-alt list-activity"></i>
+            <div class="create-box__hover">
+                List Activity
+            </div>
+        </div>
+        <div class="create-box" ng-click="createActivity()">
+            <i class="fab fa-buromobelexperte create-activity"></i>
+            <div class="create-box__hover">
+                Create Activity
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fab fa-gg create-line"></i>
+            <div class="create-box__hover">
+                Create Line
+            </div>
+        </div>
+    </div>
+    <div id="canvas">
+    </div>
+    <div class="menu-top menu-2">
+        <div class="create-box">
+            <i class="fa-solid fa-user"></i>
+            <div class="create-box__hover">
+                Actors
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-terminal"></i>
+            <div class="create-box__hover">
+                Commands
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fa-solid fa-clock"></i>
+            <div class="create-box__hover">
+                Timers
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-code"></i>
+            <div class="create-box__hover">
+                Code Actions
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fa-solid fa-map"></i>
+            <div class="create-box__hover">
+                Location
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fas fa-prescription"></i>
+            <div class="create-box__hover">
+                Process Info
+            </div>
+        </div>
+    </div>
+    <div class="menu-top menu-3">
+        <div class="create-box">
+            <i class="fab fa-buromobelexperte create-activity"></i>
+            <div class="create-box__hover">
+                Create Activity
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fab fa-gg create-line"></i>
+            <div class="create-box__hover">
+                Create Line
+            </div>
+        </div>
+        <div class="create-box" ng-click="library()">
+            <i class="fa-solid fa-map"></i>
+            <div class="create-box__hover">
+                Create Line
+            </div>
+        </div>
+        <div class="create-box">
+            <i class="fab fa-gg create-line autoarange"></i>
+            <div class="create-box__hover">
+                AutoArange
+            </div>
+        </div>
+        <div class="" style="width: 355px; line-height: 15px !important;">
+            <div class="col-md-12">
+                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.WfCode" theme="bootstrap" ng-change="changeWf(model.WfCode)">
+                    <ui-select-match placeholder="{{'Luồng hoạt động' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listWF | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <!--<div class="create-box" ng-click="addWorkflow()">
+            <button class="btn btn-custom-tab-color ml5">
+                <span class="fa fa-plus"></span>
+                {{'Thêm' | translate}}
+            </button>
+        </div>-->
+        <div class="create-box" ng-click="addWorkflow()">
+            <button class="btn btn-custom-tab-color ml5">
+                <span class="fa fa-plus"></span>
+                {{'Thêm' | translate}}
+            </button>
+        </div>
+        <!--<div class="create-box">
+            <button class="btn red-custom ml5" ng-click="editWf()">
+                <span class="fa fa-edit"></span>
+                {{'Sửa' | translate}}
+            </button>
+        </div>-->
+        <div class="create-box">
+            <button class="btn btn-custom-tab-color ml5">
+                <span class="fa fa-bullseye"></span>
+                {{'JSON' | translate}}
+            </button>
+        </div>
+        <div class="create-box">
+            <button class="btn green-custom ml5" ng-click="changeTypeView()">
+                <span class="fa fa-trello"></span>
+                {{'Thẻ việc' | translate}}
+            </button>
+        </div>
+        <div class="create-box">
+            <button class="btn purple-custom ml5" ng-click="changeTypeView()">
+                <img style="width:15px" src="../../../images/workflowActivity/icon-wf.png" />
+                {{'Sơ đồ' | translate}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="menu-right" id="zoom" ng-show="isWF">
+    <div class="create-box create-box-r">
+        <i class="fas fa-expand-arrows-alt move"></i>
+        <div class="create-box__hover create-box__hover--r">
+            Move
+        </div>
+    </div>
+    <div class="create-box create-box-r">
+        <i class="fas fa-expand-alt fullscreen"></i>
+        <div class="create-box__hover create-box__hover--r">
+            Full Screen
+        </div>
+    </div>
+    <div class="create-box create-box-r" ng-click="zoomDefault()">
+        <i class="fas fa-search-minus zoomdefault"></i>
+        <div class="create-box__hover create-box__hover--r">
+            zoom Default
+        </div>
+    </div>
+    <div class="create-box create-box-r">
+        <i class="fas fa-plus zoomin" ng-click="zoomIn()"></i>
+        <div class="create-box__hover create-box__hover--r">
+            Zoom in
+        </div>
+    </div>
+    <div class="create-box create-box-r" ng-click="zoomOut()">
+        <i class="fas fa-minus zoomout"></i>
+        <div class="create-box__hover create-box__hover--r">
+            zoom out
+        </div>
+    </div>
+</div>
+
+<div class="menu-top menu-bottom" ng-show="isWF">
+    <div class="create-box">
+        <i class="fas fa-long-arrow-alt-left"></i>
+        <div class="create-box__hover">
+            Undo
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fas fa-long-arrow-alt-right"></i>
+        <div class="create-box__hover">
+            Redo
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fab fa-buromobelexperte create-activity"></i>
+        <div class="create-box__hover">
+            Create Activity
+        </div>
+    </div>
+    <div class="create-box">
+        <i class="fab fa-gg create-line"></i>
+        <div class="create-box__hover">
+            Create Line
+        </div>
+    </div>
+</div>
+
+<div class="act-sidebar">
+    <div class="act-sidebar__title ">
+        <h3 class="act-sidebar__title--h3 accordion1">
+            <i class="fas fa-sort-amount-down"></i>  Symbols
+        </h3>
+        <i class="fa-solid fa-xmark act-sidebar__close"></i>
+    </div>
+    <div class="act-sidebar__content act__content1" ng-repeat="x in lstLibSharp">
+        <!--<b class="text-underline" ng-if="x.ListSharpLib.length > 0">{{x.TypeName}}</b>-->
+        <div class="" ng-repeat="k in x.ListSharpLib">
+            <div ng-click="creatActByLib(k.SharpCode)" id="{{k.SharpCode}}" class="sharp fs16" style="font-weight: 600;cursor: pointer;width:60%;"><i class="{{k.SharpPath}} sharpicon"></i>&nbsp;&nbsp;{{k.SharpName}}</div>
+        </div>
+    </div>
+    <div class="act-sidebar__content act__content2">
+    </div>
+</div>
+<!--end menu activity-left -->
+<!-- wfl instance -->
+<div class="wfl-instance" style="top: 45px; height: 93vh !important;" id="tab-menu-wfinst">
+    <div class="tab" role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <div href="#WFContent" aria-controls="home" role="button" data-toggle="tab">Danh sách luồng ({{lstWfInst.length}})</div>
+            </li>
+            <div class="btn-group actions d-flex pull-right">
+                <div class="text-center pr-1">
+                    <i data-dismiss="modal" ng-click="showSearch()" class="btn btn-icon-only btn-circle btn-outline btn-custom-tab-color">
+                        <span><i class="fa fa-search"></i></span>
+                    </i>
+                </div>
+                <!--<button class="btn green-custom  ml5" ng-click="createWfInstance()">
+                    <span class="fa fa-plus"></span>
+                    {{'Thêm' | translate}}
+                </button>-->
+            </div>
+        </ul>
+        <div>
+            <input type="text" class="form-control mt5 ml5 pr5" ng-show="isSearch" ng-change="searchWfInst(model.WfInst)" ng-model="model.WfInst" name="WfInst" placeholder="Tìm kiếm..." />
+            <span class="fas fa-times fs15 ng-scope" style="position:absolute;right: 30px;top: 63px;cursor: pointer;" ng-click="model.WfInst='';searchWfInst(model.WfInst)" ng-if="model.WfInst!=''"></span>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="WFContent">
+            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="grey white-text title">
+                        <tr>
+                            <th style="width: 3%;"></th>
+                            <th style="width: 94%;"></th>
+                            <th style="width: 3%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in lstWfInst">
+                            <td class="text-center">{{$index + 1}}</td>
+                            <td class="">
+                                <a ng-click="wfInstanceClick(x.Code)">{{x.WfName}} - {{x.Code}}</a>
+                                <br /><span class="fs12" style="color: green;">{{x.CreatedBy}}&nbsp;&nbsp;{{x.CreatedTime}}</span>
+                            </td>
+                            <td class="text-center">
+                                <button title="Sửa" ng-click="editWfInst(x.Code)" style="width: 25px; height: 25px; padding: 0px; background: #3598dc;" class="btn btn-icon-only btn-circle btn-outline blue"><i class="fa fa-edit fs10" style="color: #fff;"></i></button>
+                                <button title="Xoá" ng-click="deleteWfInstance(x.Code)" style="width: 25px; height: 25px; padding: 0px;background: #e7505a;border-color: #e7505a;" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash fs10" style="color: #fff;"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <div href="#ActInst" aria-controls="home" role="button" data-toggle="tab">Hoạt động</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#ActInstDocs" aria-controls="home" role="button" data-toggle="tab">Tài liệu</div>
+                    </li>
+                    <li role="presentation" class="disabled stepNext">
+                        <div href="#ActInstResult" aria-controls="home" role="button" data-toggle="tab">Dữ liệu kết quả</div>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="ActInst">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table">
+                            <thead class="grey white-text title">
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Tên hoạt động</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Đếm ngược</th>
+                                </tr>
+                            </thead>
+                            <tbody class="activity">
+                                <tr ng-repeat="x in lstActInst">
+                                    <td class="text-center">{{$index + 1}}</td>
+                                    <td class=""><a ng-click="editInstAct(x.ID, x.ObjCode)">{{x.Title}}</a></td>
+                                    <td class="text-center">{{x.Status}}</td>
+                                    <td class="text-center">{{x.Timer}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="ActInstDocs">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table">
+                            <thead class="grey white-text title">
+                                <tr>
+                                    <th style="width: 3%;">STT</th>
+                                    <th class="col-md-8">Tệp tin</th>
+                                    <th class="col-md-2">Hoạt động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="activity">
+                                <tr ng-repeat="x in lstAttachment">
+                                    <td class="text-center">{{$index + 1}}</td>
+                                    <td class="">
+                                        <div class="col-md-12 pr-0 pl-0" ng-repeat="file in x.LstAttachment">
+                                            <div class="col-md-12 pr-0 pl-0">
+                                                <i style="color: {{file.Color}};font-size: 15px;" class="{{file.Icon}} pr5 pull-left" aria-hidden="true"></i>
+                                                <label class="bold col-md-10 pr-0 pl-0"><a title="{{file.FileName}}" ng-click="viewFile(file.FileCode, file.FileUrl)">{{file.FileName.substring(0, 100)}}<span ng-if="file.FileName.length > 100">...</span></a></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{x.Title}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="ActInstResult">
+                    <div class="table-responsive" style="max-height: 335px; overflow-y: auto;">
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 text-center">{{'Tên dữ liệu' | translate}}</th>
+                                    <th class="col-md-1 text-center">{{'Giá trị' | translate}}</th>
+                                    <th class="col-md-2 text-center">{{'Hoạt động' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in lstResultAttrData">
+                                    <td class="text-center">
+                                        {{x.AttrName}}
+                                        <br /><span class="fs12" style="color:green;">
+                                            {{x.CreatedBy}} <br /> {{x.CreatedTime}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">{{x.Value}} {{x.Unit}}</td>
+                                    <td class="text-center">{{x.Title}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- wfl instance -->
+<pre id="json" ng-show="isWF" class="json_div" style="overflow:auto;position:absolute; top:6.5rem; right:10px; width:350px; height:500px;background:white;border:1px solid gray"></pre>
+
+<div id="grid-card" class="col-md-12 mt50" ng-show="!isWF">
+    <table class="table dataTable table-hover"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>

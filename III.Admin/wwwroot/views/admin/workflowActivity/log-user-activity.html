@@ -1,0 +1,35 @@
+﻿<div class="modal-header" style="background-color:white">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-edit pt5 fs16 black"></i>
+    <span class="modal-title black" id="modal-title">
+       {{'Hoạt động' | translate}}
+    </span>
+</div>
+<div class="mb40">
+    <div class="col-md-12 br4" style="background-color: #ddf1f1; padding: 5px;">
+        <span class="text-blue pl-2">{{'CJ_LBL_VIEWED' | translate}}: {{countView}}</span>
+        <span class="text-danger">{{'CJ_LBL_REJECTED' | translate}}: {{countReject}}</span>
+        <span class="text-green">{{'CJ_LBL_ACCEPTED' | translate}}: {{countAccept}}</span>
+    </div>
+</div>
+<div class="mh-300 pl-2" style="overflow-y: scroll;">
+    <div ng-repeat="x in ActivityData" style="border-bottom: 1px solid #d6dadc;margin-bottom: 5px;">
+        <div class="active-title" ng-if="x.Picture=='/images/default/no_user.png'">
+            <span class="member-initials">
+                <span>{{x.GivenName.charAt(0)}}</span>
+            </span>
+        </div>
+        <div class="active-title" ng-if="x.Picture!='/images/default/no_user.png'">
+            <img class="img-circle" height="32" width="32" src="{{x.Picture}}" onerror="this.src='../../../images/default/no_user.png'" />
+        </div>
+        <div class="active-time">
+            <b class="ng-binding">{{x.GivenName}}</b>
+            <span ng-if="x.Action=='REVIEW'">{{'CJ_STATUS_VIEWED' | translate}}</span>
+            <span ng-if="x.Action=='REJECT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'đã từ chối':'đã bỏ từ chối'}}</span>
+            <span ng-if="x.Action=='ACCEPT'" ng-class="{'text-danger':!x.IsCheck}">{{x.IsCheck ?'đã đồng ý':'đã bỏ đồng ý'}}</span>
+        </div>
+        <div class="active-body">
+            <span class="fs12" style="color:#8c8c8c;">{{x.CreatedTime}}</span>
+        </div>
+    </div>
+</div>

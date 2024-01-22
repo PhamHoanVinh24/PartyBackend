@@ -1,0 +1,106 @@
+﻿@using Syncfusion.EJ2.Gantt;
+@using III.Admin.Controllers
+@{
+    Layout = null;
+}
+@addTagHelper *, Syncfusion.EJ2
+<head>
+    <!-- Syncfusion ASP.NET Core controls styles -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.2.43/fluent.css" />
+    <!-- Syncfusion ASP.NET Core controls scripts -->
+    <script src="https://cdn.syncfusion.com/ej2/20.2.43/dist/ej2.min.js"></script>
+    <style>
+        div#GanttContainer_Gantt_Toolbar {
+            height: 50px !important;
+        }
+    </style>
+</head>
+<body>
+    @{
+        List<GanttChartController.GanttDataSource> GanttDataSourceCollection = new List<GanttChartController.GanttDataSource>();
+
+        GanttChartController.GanttDataSource Record1 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 1,
+            TaskName = "Project initiation",
+            StartDate = new DateTime(2019, 04, 02),
+            EndDate = new DateTime(2019, 04, 21),
+            SubTasks = new List<GanttChartController.GanttDataSource>(),
+        };
+        GanttChartController.GanttDataSource Child1 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 2,
+            TaskName = "Identify site location",
+            StartDate = new DateTime(2019, 04, 02),
+            Duration = 4,
+            Progress = 70,
+
+        };
+        GanttChartController.GanttDataSource Child2 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 3,
+            TaskName = "Perform soil test",
+            StartDate = new DateTime(2019, 04, 02),
+            Duration = 4,
+            Progress = 50
+
+        };
+        GanttChartController.GanttDataSource Child3 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 4,
+            TaskName = "Soil test approval",
+            StartDate = new DateTime(2019, 04, 02),
+            Duration = 4,
+            Progress = 50
+        };
+        Record1.SubTasks.Add(Child1);
+        Record1.SubTasks.Add(Child2);
+        Record1.SubTasks.Add(Child3);
+
+        GanttChartController.GanttDataSource Record2 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 5,
+            TaskName = "Project estimation",
+            StartDate = new DateTime(2019, 04, 02),
+            EndDate = new DateTime(2019, 04, 21),
+            SubTasks = new List<GanttChartController.GanttDataSource>()
+        };
+        GanttChartController.GanttDataSource Child4 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 6,
+            TaskName = "Develop floor plan for estimation",
+            StartDate = new DateTime(2019, 04, 04),
+            Duration = 3,
+            Progress = 70
+        };
+        GanttChartController.GanttDataSource Child5 = new GanttChartController.GanttDataSource()
+        {
+            TaskId = 7,
+            TaskName = "List materials",
+            StartDate = new DateTime(2019, 04, 04),
+            Duration = 3,
+            Progress = 50
+        };
+        Record2.SubTasks.Add(Child4);
+        Record2.SubTasks.Add(Child5);
+
+        GanttDataSourceCollection.Add(Record1);
+        GanttDataSourceCollection.Add(Record2);
+    }
+
+    <ejs-gantt id='GanttContainer' dataSource="ViewBag.dataSource" toolbar="@(new List<string>() { "PdfExport" })"
+               toolbarClick="toolbarClick" allowPdfExport="true">
+        <e-gantt-taskfields id="TaskId" name="TaskName" startDate="StartDate" duration="Duration" progress="Progress" child="SubTasks">
+        </e-gantt-taskfields>
+    </ejs-gantt>
+    <script>
+        function toolbarClick(args) {
+            var gantt = document.getElementById("GanttContainer").ej2_instances[0];
+            if (args.item.id === 'GanttContainer_pdfexport') {
+                gantt.pdfExport();
+            }
+        }
+    </script>
+    <!-- Syncfusion ASP.NET Core Script Manager -->
+    <ejs-scripts></ejs-scripts>
+</body>

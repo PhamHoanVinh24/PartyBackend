@@ -1,0 +1,177 @@
+﻿<style>
+    .close-input-search-box {
+        margin: -15px 0px;
+        z-index: 10;
+        position: relative;
+    }
+
+    .labelbodergroup {
+        margin-top: 5px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        padding: 3px 10px !important;
+    }
+
+    @media (min-width: 1200px) and (max-width:1500px) {
+        .col-custom-lg-2 {
+            float: left !important;
+            width: 25% !important;
+        }
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(70% - 50px);
+        right: 75px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb>li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="showSearch()">
+            <span><i class="fas fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a class="fs30" ng-click="printSelected()">
+            <span><i class="fas fa-print"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'PQRCM_BTN_PRINT_QR_CODE' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="exportExcel()" class="fs30">
+            <span><i class="fas fa-file-excel fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('DSNS_TKNS')" class="fs30">
+            <span><i class="fas fa-question " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar pt10">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="row pt5 mb5">
+                    <div class="col-md-12">
+                        <i ng-click="showSearch()"
+                            style="margin-top:9px !important; margin-right:5px !important; font-size:25px"
+                            class="fas fa-times  pull-right h28 w28  close-input-search" role="button"
+                            title="Ẩn tìm kiếm"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label class="fw600 text-underline">{{'PQRCM_CURD_LBL_FROM_DATE' | translate}}</label>
+                        <div class="input-group date br24">
+                            <input type="text" id='dateFrom' autocomplete="off" class="form-control"
+                                placeholder="{{'PQRCM_CURD_TXT_FROM_DATE' | translate}}..." ng-model="model.FromDate">
+                            <span class="input-group-btn ">
+                                <button type="button" ng-click="model.FromDate='';"
+                                    class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="fw600 text-underline">{{'PQRCM_CURD_LBL_TO_DATE' | translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' id='dateTo' autocomplete="off" class="form-control "
+                                ng-model="model.ToDate" placeholder="{{'PQRCM_CURD_TXT_TO_DATE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.ToDate='';"
+                                    class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw600 text-underline">{{'PQRCM_LBL_PRODUCT' | translate}}</label>
+                        <div class='input-group date br24'>
+                            <input type='text' autocomplete="off" class="form-control " ng-model="model.Product"
+                                placeholder="{{'PQRCM_TXT_PRODUCT' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Product='';"
+                                    class="btn btn-default no-shadow end-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="col-lg-2 col-md-4 col-custom-lg-2">
+                        <label class="fw600 text-underline">{{'PQRCM_LBL_LOT_PRODUCT_CODE' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select tagging ng-model="model.LotProductCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'PQRCM_TXT_LOT_PRODUCT_CODE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lotProducts | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.LotProductCode=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>-->
+                    <div class="col-lg-3 ">
+                        <label class="fw600 text-underline">{{'PQRCM_LBL_TICKET_IMP_CODE' | translate}}</label>
+                        <div class="input-group search-group br24">
+                            <ui-select tagging ng-model="model.TicketImpCode" theme="bootstrap">
+                                <ui-select-match
+                                    placeholder="{{'PQRCM_TXT_TICKET_IMP_CODE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in ticketImps | filter:$select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.TicketImpCode=''"
+                                    class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2  ">
+                        <div class="btn-group pt20 actions d-flex">
+                            <div class="text-center pr10 " ng-click="search()">
+                                <a class="fs30">
+                                    <span><i class="fas fa-search"></i></span>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3 ">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--<i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table dataTable  table-hover table-striped" datatable dt-options="dtOptions" dt-columns="dtColumns"
+    dt-instance="dtInstance" id="tblData"></table>

@@ -1,0 +1,269 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #tblData_wrapper .table-scrollable {
+        height: 70vh;
+        overflow-y: auto;
+    }
+
+    .calendar-wrap {
+        height: calc(70vh + 96px);
+        overflow-y: auto;
+    }
+
+    @-webkit-keyframes blinkerAct {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            color: blue;
+        }
+    }
+
+    .blink-act {
+        text-decoration: blink;
+        -webkit-animation-name: blinkerAct;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+
+    .help-block {
+        color: #ed6b75 !important;
+    }
+
+    .fc-event-event-trans-gray {
+        background-color: #f1f1f1;
+    }
+
+    .fc-event-event-trans-orange {
+        background-color: rgb(255, 156, 25, 0.25);
+    }
+
+    .fc-event-event-trans-green {
+        background-color: #17a74240;
+    }
+
+    .fc-time, .fc-title {
+        color: black !important;
+    }
+
+    .fc-day-grid-event {
+        border: none !important;
+    }
+
+    .actName {
+        /* display: block;
+        max-width: 70px; */
+        padding-right: 10px;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pull-right pt5 pb-1 actions d-flex" style="margin-top: -50px;">
+    <!--<div class="text-center pr-2" ng-show="!isSearch">
+        <a class="btn btn-icon-only btn-circle btn-outline gold-custom" ng-click="showSearch()">
+            <span><i class="fa fa-search"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>-->
+    <div class="pr-2 text-center">
+        <a ng-click="add()"><i class="fas fa-calendar-plus fs30 mt10" style="color: cornflowerblue /*--fa-primary-color: #f271;--fa-secondary-color: #009433; --fa-secondary-opacity: 1*/ "></i></a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2">
+        <a ng-click="viewCmsDetail('HCNS_QDDD')" class="fs30">
+            <span><i class="fas fa-question fs30 " aria-hidden="true"></i></span>
+        </a>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="table-toolbar" ng-show="IsTranslate">
+        <div class="portlet light bordered input-search mb5 mt10">
+            <div class="portlet-body pr15 pb10">
+                <div class="row">
+                    <!--<div class="col-md-12" style="height:20px">
+                        <i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-in-line" role="button" title="{{'STL_LBL_SEARCH_HIDDEN' | translate}}"></i>
+                    </div>-->
+                    <div class="col-xl-6 col-lg-12 pl5 pr-0">
+                        <div class="col-md-7 pl-0 pr5">
+                            <label class1="fw600 text-underline">{{'STL_CURD_COMBO_USER_ID' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select ng-model="model.UserId" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'STL_CURD_COMBO_USER_ID' | translate}}..."><img class="img-circle h-20" ng-src="{{ $select.selected.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />&nbsp; {{$select.selected.GivenName}}</ui-select-match>
+                                    <ui-select-choices repeat="x.UserId as x in listUser | filter: $select.search">
+                                        <img class="img-circle w25 h-25" ng-src="{{ x.Picture }}" onerror="this.src='../../../images/default/no_user.png'" />
+                                        <div ng-bind-html="x.GivenName" style="display: inline"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.UserId='';" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pl-0 pr5">
+                            <label class1="fw600 text-underline">{{'STL_CURD_LBL_REPORT_TYPE' | translate}}</label>
+                            <div class="input-group br24 search-group">
+                                <ui-select ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'STL_CURD_LBL_REPORT_TYPE' | translate}}">
+                                        <p>{{$select.selected.Name}}</p>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-12 pl5 pr-0">
+                        <div class="col-md-5 pl-0 pr5">
+                            <label class1="fw600 text-underline">{{'STL_CURD_LBL_FROM_DAY' | translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.FromDate" autocomplete="off" class="form-control input-date" type="text" placeholder="{{'STL_CURD_TXT_FROM_DAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="From" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pl-0 pr5">
+                            <label class1="fw600 text-underline">{{'STL_CURD_LBL_TO_DAY' | translate}}</label>
+                            <div class="input-group br24">
+                                <input ng-model="model.ToDate" autocomplete="off" class="form-control input-date" type="text" placeholder="{{'STL_CURD_TXT_TO_DAY' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id="To" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0 pr-0">
+                            <div class="btn-group pl10 pt20 actions d-flex">
+                                <div class="mt15">
+                                    <a class1="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="reload()">
+                                        <!--<span><i class="fa fa-search"></i></span>-->
+                                        <i class="fas fa-search fs25"></i>
+                                    </a>
+                                    <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class1="text-primary bold">{{'STL_CURD_NUM_RECOMMEN_YOUR' | translate}}: {{totalSessionUser}} | {{'STL_CURD_NUM_RECOMMEN_TOTAL' | translate}}: {{totalRecord}}</span>
+            </div>
+            <!--<div class="col-md-12" ng-if="model.Status != ''">
+                <span class1="text-primary bold" ng-if="model.Status == 'NOT_WORK'">{{'STL_TOTAL_NOT_WORK_DAY' | translate}}: {{total}}</span>
+            </div>-->
+        </div>
+    </div>
+    <table class="table dataTable table-hover table-striped-double"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>
+<div class="col-md-6">
+    <style>
+        .fc-time {
+            display: none;
+        }
+
+        .fc-content {
+            font-size: 10px !important;
+        }
+    </style>
+    <div class="row" style="margin-top: -10px">
+        <div class="col-md-12">
+            <label class1="fw600 text-underline">{{'STL_CURD_VIEW_DATA_OVER_TIME ' | translate}}:</label> <!--STL_LBL_VIEW_MODE-->
+        </div>
+        <div class="col-md-3 d-flex" style="justify-content: center;">
+            <div class="btn-group actions d-flex">
+                <div class="mr15 text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline p-0" ng-click="changeView('CREATED_TIME')" ng-show="model.ViewMode=='ACTION_TIME'">
+                        <img style="height: 100%" src="/images/cardJob/Flat_tick_icon.svg" />
+                    </a>
+                    <a class="btn btn-icon-only btn-circle btn-outline p-0" ng-click="changeView('ACTION_TIME')" ng-show="model.ViewMode=='CREATED_TIME'">
+                        <img style="height: 100%" src="/images/cardJob/Flat_no_tick_icon.svg" />
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'STL_CURD_USE_SPELLS' | translate}}</p> <!--STL_BTN_ACTION_TIME_MODE-->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="btn-group actions d-flex">
+                <div class="text-center">
+                    <a class="btn btn-icon-only btn-circle btn-outline p-0" ng-click="changeView('ACTION_TIME')" ng-show="model.ViewMode=='CREATED_TIME'">
+                        <img style="height: 100%" src="/images/cardJob/Flat_tick_icon.svg" />
+                    </a>
+                    <a class="btn btn-icon-only btn-circle btn-outline p-0" ng-click="changeView('CREATED_TIME')" ng-show="model.ViewMode=='ACTION_TIME'">
+                        <img style="height: 100%" src="/images/cardJob/Flat_no_tick_icon.svg" />
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'STL_CURD_CREATE_SPELLS' | translate}}</p> <!--STL_BTN_CREATED_TIME_MODE-->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group actions d-flex justify-content-fe">
+                <div class="text-center">
+                    <a ng-click="exportExcel()"><i class="fas fa-file-excel fs30" style="--fa-primary-color: white; --fa-secondary-color: #009433; --fa-secondary-opacity: 1 "></i></a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="calendar-wrap" ng-if="IsTranslate">
+        <div id="calendar"></div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

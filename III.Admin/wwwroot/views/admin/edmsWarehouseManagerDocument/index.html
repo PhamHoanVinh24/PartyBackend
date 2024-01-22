@@ -1,0 +1,84 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<!--<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:green;"></i>
+                    <a class=" bold text text-underline" style="color:green;" href="/Admin/EDMSRepository">{{'Kho dữ liệu & số hóa' | translate}}</a>
+                    <span class="" style="color:green;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:green;"  href="/Admin/EDMSWarehouseManagerDocument">{{'EDMSWM_LINK_FLOOR_LINE_RACK' | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group pull-right actions hidden">
+                <div class="pl20 text-center pr10">
+                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                        <span><i class="fa fa-file-excel-o"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_EXCEL' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<div class="list-body-scroll mt15">
+    <div class="listWareHouse col-md-6">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6 class="bold pt15 pb10">{{'EDMSWM_CURD_LBL_LIST_WAREHOUSE' | translate}}</h6>
+                </div>
+            </div>
+        </div>
+        <div ng-if="IsTranslate" ng-include="'../views/admin/edmsWarehouseManager/listWarehouse.html'"></div>
+        <div ng-if="IsTranslate"  ng-include="'../views/admin/edmsWarehouseManager/listLine.html'"></div>
+    </div>
+    <div class="col-md-6">
+        <div ng-if="IsTranslate" ng-include="'../views/admin/edmsWarehouseManager/listFloor.html'"></div>
+        <div ng-if="IsTranslate"  ng-include="'../views/admin/edmsWarehouseManager/listRack.html'"></div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

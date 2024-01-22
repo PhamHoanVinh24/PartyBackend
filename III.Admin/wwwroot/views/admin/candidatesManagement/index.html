@@ -1,0 +1,132 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+</style>
+<div class="table-toolbar" ng-show="IsTranslate">
+    <div class="row">
+        <div class="btn-group pull-right pt10 actions d-flex" style="margin-top: -50px;">
+            <div class="text-center pr10">
+                <a class="btn btn-icon-only btn-outline btn-boder1" ng-click="search()">
+                    <span><i class="fa fa-search"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+            </div>
+            <div class="text-center">
+                <a class="btn btn-icon-only btn-outline btn-boder1" ng-click="add()">
+                    <span><i class="fa fa-plus"></i></span>
+                </a>
+                <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row pt10 mb15">
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_SEARCH_LBL_FULLNAME' | translate}}</label>
+            <div class="input-group">
+                <div class='input-group '>
+                    <input ng-model="model.Fullname" class="form-control" type="text" placeholder="{{'CM_CURD_SEARCH_TXT_FULLNAME' | translate}}" ng-keydown="($event.keyCode == 13) && reload()" />
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="model.Fullname='';" class="btn btn-default no-shadow end-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_LBL_CM_FROM_DATE' | translate}}</label>
+            <div class="input-group">
+                <input type="text" autocomplete="off" class="form-control" placeholder="{{'CM_CURD_TXT_CM_FROM_DATE' | translate}}..." ng-model="model.FromDate" id="FromTo">
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.FromDate='';" class="btn btn-default no-shadow start-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_LBL_CM_TO_DATE' | translate}}</label>
+            <div class='input-group '>
+                <input type='text' autocomplete="off" class="form-control " ng-model="model.ToDate" placeholder="{{'CM_CURD_TXT_CM_FROM_DATE' | translate}}..." id='DateTo' />
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.ToDate='';" class="btn btn-default no-shadow end-date">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_SEARCH_LBL_SEX' | translate}}</label>
+            <div class="input-group">
+                <ui-select tagging ng-model="model.Sex" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CM_CURD_SEARCH_TXT_SEX' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in Sex | filter:$select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Sex=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_SEARCH_LBL_BIRTHDAY' | translate}}</label>
+            <div class="input-group">
+                <ui-select tagging ng-model="model.Year" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CM_CURD_SEARCH_TXT_BIRTHDAY' | translate}}...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="x as x in listYear | filter:$select.search">
+                        {{x}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Year=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3">
+            <label>{{'CM_CURD_SEARCH_LBL_ABILITY' | translate}}</label>
+            <div class="input-group">
+                <ui-select tagging ng-model="model.Skill" theme="bootstrap">
+                    <ui-select-match placeholder="{{'CM_CURD_SEARCH_TXT_ABILITY' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listSkill | filter:$select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Skill=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <span class="text-danger">{{'CM_MSG_TABLE' | translate}}</span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"> <label class="text-danger">{{'CM_TIP_EDIT_RECORD' | translate}}</label></div>
+</div>
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+

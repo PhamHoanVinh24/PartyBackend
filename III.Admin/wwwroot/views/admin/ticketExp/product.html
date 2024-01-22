@@ -1,0 +1,103 @@
+﻿<div ng-controller="product">
+    <div class="table-toolbar">
+        <form name="searchform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label">Sản phẩm</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('unit')">
+                            <ui-select-match placeholder="Sản phẩm...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <!--<span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>-->
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">Số lượng</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="br4 form-control input-date" ng-model="model.Quantity" placeholder="Số lượng..." />
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label class="control-label">Đơn vị</label>
+                    <!--<div class='input-group date'>
+                        <input type='text' class="form-control input-date" ng-model="model.Note" placeholder="Đơn vị..." />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Note='';" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>-->
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.ProductCode" theme="bootstrap" on-select="changleSelect('unit')">
+                            <ui-select-match placeholder="Đơn vị...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <!--<span class="input-group-btn">
+                            <button type="button" ng-click="model.ProductCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>-->
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">Giá</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="br4 form-control input-date" ng-model="model.Cost" placeholder="Giá..." />
+                    </div>
+                </div>
+
+
+                <div class="col-md-1">
+                    <label class="control-label">Thuế</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="br4 form-control input-date" ng-model="model.Tax" placeholder="%" />
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label class="control-label">Ch/khấu</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="br4 form-control input-date" ng-model="model.Tax" placeholder="%" />
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label class="control-label">Hoa hồng</label>
+                    <div class='input-group'>
+                        <input type='number' min="0" class="br4 form-control input-date" ng-model="model.Tax" placeholder="%" />
+                    </div>
+                </div>
+                <div class="col-md-1 actions mt15 ">
+                    <a ng-show="isEdit==false" ng-disabled="LotProductCode==''" ng-click="add()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                        <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <a ng-show="isEdit==true" ng-click="close()" class="btn btn-icon-only btn-circle btn-outline red-custom ">
+                        <span><i class="fa fa-close"></i></span>
+                    </a>
+                    <a ng-show="isEdit==true" ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom ">
+                        <span><i class="fa fa-save"></i></span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblData"></table>
+</div>

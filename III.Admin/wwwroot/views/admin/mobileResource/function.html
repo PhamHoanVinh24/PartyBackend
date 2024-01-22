@@ -1,0 +1,107 @@
+﻿<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-th" style="color: white;font-size: 20px;padding: 10px 0px 10px 10px;"></i>
+    <span class="modal-title white" id="modal-title"> {{"ADM_RESOURCE_RESOURCE_FUNCTION_MANAGEMENT" | translate }} Api: <span>"{{Api}}"</span></span>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="portlet-body form pt5">
+        <style>
+            @media only screen and (max-width : 992px) {
+                .btn-group-vertical.margin-top-40 {
+                    margin-top: 0 !important;
+                    margin-bottom: 15px;
+                    display: inline-block;
+                }
+
+                    .btn-group-vertical.margin-top-40 > .btn {
+                        display: inline-block;
+                        width: auto;
+                    }
+            }
+
+            .dataTables_wrapper .table-scrollable {
+                border: 1px solid #e7ecf1 !important;
+            }
+
+            .ui-select-toggle {
+                border-radius: 0 !important;
+                border-bottom-left-radius: 4px !important;
+                border-top-left-radius: 4px !important;
+            }
+
+            .table-box-shadow {
+                box-shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.18);
+            }
+        </style>
+        <div class="portlet-body form">
+            <div class="row mb10">
+                <div class="col-md-7">
+                    <!--<div class="input-group col-md-6">
+                        <ui-select ng-model="model.Function" class="" style="width: 430px !important">
+                            <ui-select-match placeholder="{{'SEARCH_FUNC' | translate }}...">{{$select.selected.TitleJoin}}</ui-select-match>
+                            <ui-select-choices repeat="x in liFunction | filter:$select.search">
+                                {{x.TitleJoin}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-addon" ng-click="model.Function='';">
+                            <span class="fa fa-times"></span>
+                        </span>
+                    </div>-->
+                    <div class="input-group col-md-12">
+                        <ui-select tagging ng-model="model.Function" theme="bootstrap">
+                            <ui-select-match placeholder="{{'ADM_RESOURCE_SEARCH_FUNC' | translate }}...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x in liFunction | filter: $select.search">
+                                <div style="padding-left: {{15 * x.Level}}px">
+                                    <i ng-show="x.HasChild" class="fa fa-folder-open icon-state-warning"></i>
+                                    <i ng-show="!x.HasChild" class="fa fa-folder text-info"></i>
+                                    {{x.TitleJoin}}
+                                </div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-addon" ng-click="model.Function=''">
+                            <span class="fa fa-times"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <button class="btn btn-green" ng-click="addResFunction()"><i class="fa fa-plus"></i>{{"COM_BTN_ADD" | translate }}</button>
+                        <button type="button" class="btn btn-default" ng-click="refreshResFunction()">
+                            <i class="fa fa-refresh"></i> {{'COM_BTN_REFRESH' | translate}}
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <!--<div class="" ng-init="initData()">
+                            <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property"
+                                       on-select="my_tree_handler(branch)" expand-level="4" icon-leaf="glyphicon glyphicon-adjust"></tree-grid>
+                        </div>-->
+                        <table class="table dataTable table-bordered table-hover table-striped"
+                               datatable
+                               dt-options="dtOptions"
+                               dt-columns="dtColumns"
+                               dt-instance="dtInstance"
+                               id="tblData"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group pull-right actions d-flex mr25">
+        <div class="text-center pr10">
+            <a data-dismiss="modal" ng-click="cancel()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                <span><i class="glyphicon glyphicon-remove"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a ng-click="saveResFunction()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

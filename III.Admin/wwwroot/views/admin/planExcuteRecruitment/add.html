@@ -1,0 +1,307 @@
+﻿<style>
+    @media(max-width:992px) {
+        .modal-50 {
+            width: 75% !important;
+        }
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-50 {
+            width: 70% !important;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1500px) {
+        .modal-50 {
+            width: 60% !important;
+        }
+    }
+
+    @media (min-width:1501px) {
+        .modal-50 {
+            width: 50% !important;
+        }
+    }
+
+    .table-detail .table-scrollable {
+        height: auto;
+    }
+
+    /*Style tab*/
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: purple;
+        background: white;
+        border-top: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-weight: 700 !important;
+        border-bottom: 6px solid #ff9800 !important;
+    }
+
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+        border-bottom-width: 0px !important;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+        }
+
+            /*.tab .nav-tabs li:last-child {
+                border-right: 0px solid #ddd;
+            }
+
+            .tab .nav-tabs li:first-child div {
+                border-left: 1px solid #ddd;
+            }*/
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                /*border-bottom: 1px solid #d3d3d3;*/
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+        /*border-right: 1px solid #d3d3d3;*/
+    }
+
+    ::-webkit-scrollbar {
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #eaeaea;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgb(0 0 0 / 30%);
+        background-color: #F5F5F5;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+    }
+
+    .file-body {
+        overflow: auto;
+        height: 111px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    .file-header {
+        z-index: 1;
+        width: 80%;
+        text-align: center !important;
+        margin: 10%;
+        margin-top: -6px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .box-file {
+        overflow: auto;
+        max-height: 113px !important;
+        height: 113px !important;
+    }
+</style>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-header white-custom height-50">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert " style="line-height: 30px"></i>
+    <span class="modal-title" id="modal-title" style="line-height: 30px">{{'PER_ADD_PLAN_EXCUTE_RECRUITMENT' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt5">
+                <div class="row">
+                    <div class="col-md-4 nowrap">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'PER_RECRUITMENT_CODE' | translate}}</label>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.RecruitmentCode" name="RecruitmentCode" placeholder="{{'PER_RECRUITMENT_CODE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-list" aria-hidden="true"></i>
+                                <label class="control-label bold">{{'PER_PLAN_NUMBER' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.PlanNumber" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'PER_PLAN_NUMBER' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listPlan | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.PlanNumber=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-list" aria-hidden="true"></i>
+                                <label class="control-label">{{'PER_SUBJECT_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.SubjectCode" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'PER_SUBJECT_NAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listSubject | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.SubjectCode=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-project-diagram" aria-hidden="true"></i>
+                                <label class="control-label">{{'PER_STATUS_NAME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group br24">
+                                    <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                        <ui-select-match placeholder="{{'PER_STATUS_NAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in listStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Status=''" class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 nowrap">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require custom-title-code-bold">{{'PER_TITLE' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control br24 custom-title-code-bold" ng-model="model.Title" name="Title" placeholder="{{'PER_TITLE' | translate}}..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-calendar-alt"></i>
+                                <label class="control-label require">{{'PER_START_TIME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='start-time'>
+                                    <input type='text' class="form-control input-date" name="StartTime" ng-model="model.sStartTime" placeholder="{{'PER_START_TIME' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <i class="fas fa-calendar-alt"></i>
+                                <label class="control-label require">{{'PER_END_TIME' | translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class='input-group date br24' id='end-time'>
+                                    <input type='text' class="form-control input-date" name="EndTime" ng-model="model.sEndTime" placeholder="{{'PER_END_TIME' | translate}}..." />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="boder-box box-file br24 ml15">
+                                <button type="button" class="tags-custom" ng-repeat="x in listFileHeader">
+                                    <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="deleteFile(x.Id)"></i><a ng-click="download(x.FileCode)">{{x.FileName}}</a>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-group actions d-flex pull-right">
+                                <div class="text-center pr10">
+                                    <div class="fs30">
+                                        <i class="fas fa-upload"></i>
+                                        <input type="file" class="btn-upload" custom-on-change-header="uploadFile" id="btn-upload-file" />
+                                    </div>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_UPLOAD' | translate}}</p>
+                                </div>
+                                <div class="text-center pr10">
+                                    <a class="fs30" ng-click="extend()">
+                                        <span><i class="fas fa-expand-arrows-alt" style="color: #337ab7"></i></span>
+                                        <input type="file" class="btn-upload" custom-on-change="a" id="btn-upload-files" />
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'PER_BTN_EXTEND' | translate}}</p>
+                                </div>
+                                <div class="text-center pull-right pr-1" ng-click="submit()">
+                                    <a class="fs30">
+                                        <span><i class="fa-solid fa-plus"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active stepNext">
+                            <div href="#profileDetailTab" aria-controls="home" role="button" data-toggle="tab">{{'PER_DETAIL' | translate}}</div>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt10">
+                        <div role="tabpanel" class="tab-pane fade in active" id="profileDetailTab">
+                            <div ng-include="'../views/admin/planExcuteRecruitment/detail.html'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

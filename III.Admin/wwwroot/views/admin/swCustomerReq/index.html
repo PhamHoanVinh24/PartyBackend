@@ -1,0 +1,233 @@
+﻿<div class="table-toolbar">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="breadcrumb-title">
+        <li>
+          <i class="fa fa-home" style="color: black"></i>
+          <a class="bold text text-underline" style="color: black" href="#"
+            >{{'COM_CRUMB_MANAGER_CONTENT' | translate}}</a
+          >
+          <span class="" style="color: black">&gt;</span>
+        </li>
+        <li>
+          <a
+            class="bold text-underline"
+            style="color: black"
+            href="/Admin/CMSExtraField"
+            >{{'CEF_LBL_LIST_EF' | translate}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="portlet light bordered input-search mb5">
+    <div class="portlet-body">
+      <div class="row pt5 mb5">
+        <div class="col-md-2">
+          <label class="fw600 text-underline"
+            >{{'Từ khóa' | translate}}<!--Tiêu đề--></label
+          >
+          <div class="input-group">
+            <input
+              ng-model="searchModel.Title"
+              class="form-control"
+              type="text"
+              placeholder="{{'Nhập từ khóa tìm kiếm' | translate}}"
+              ng-keydown="($event.keyCode == 13) && reload()"
+            />
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.Title='';"
+                class="btn btn-default no-shadow end-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="fw600 text-underline"
+            >{{'Tên công ty' | translate}}<!--Tiêu đề--></label
+          >
+          <div class="input-group">
+            <input
+              ng-model="searchModel.CompanyName"
+              class="form-control"
+              type="text"
+              placeholder="{{'Nhập từ khóa tìm kiếm' | translate}}"
+              ng-keydown="($event.keyCode == 13) && reload()"
+            />
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.CompanyName='';"
+                class="btn btn-default no-shadow end-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="fw600 text-underline">{{'Từ ngày' | translate}}</label>
+          <div class="input-group">
+            <input
+              type="text"
+              autocomplete="off"
+              class="form-control"
+              placeholder="{{'Từ ngày' | translate}}..."
+              ng-model="searchModel.FromDate"
+              id="PostFromDate"
+            />
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.FromDate='';"
+                class="btn btn-default no-shadow start-post-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="fw600 text-underline">{{'Đến ngày' | translate}}</label>
+          <div class="input-group">
+            <input
+              type="text"
+              autocomplete="off"
+              class="form-control"
+              placeholder="{{'Đến ngày' | translate}}..."
+              ng-model="searchModel.ToDate"
+              id="PostToDate"
+            />
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.ToDate='';"
+                class="btn btn-default no-shadow end-post-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="fw600 text-underline"
+            >{{'Trạng thái' | translate}}</label
+          >
+          <div class="input-group">
+            <ui-select tagging ng-model="searchModel.Status" theme="bootstrap">
+              <ui-select-match placeholder="{{'Trạng thái' | translate}}..."
+                >{{$select.selected.Name}}</ui-select-match
+              >
+              <ui-select-choices
+                repeat="x.Code as x in ListStatus | filter: $select.search"
+              >
+                {{x.Name}}
+              </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.Status='';"
+                class="btn btn-default no-shadow start-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="fw600 text-underline"
+            >{{'CMS_ITEM_CURD_LBL_CATEGORY' | translate}}</label
+          >
+          <div class="input-group">
+            <ui-select
+              tagging
+              ng-model="searchModel.ModuleTitle"
+              theme="bootstrap"
+            >
+              <ui-select-match
+                placeholder="{{'CMS_ITEM_COMBO_CATEGORY' | translate}}..."
+                >{{$select.selected.Name}}</ui-select-match
+              >
+              <ui-select-choices
+                repeat="x.Id as x in listModuleId | filter: $select.search"
+              >
+                {{x.Name}}
+              </ui-select-choices>
+            </ui-select>
+            <span class="input-group-btn">
+              <button
+                type="button"
+                ng-click="searchModel.ModuleTitle='';"
+                class="btn btn-default no-shadow start-date"
+              >
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="btn-group pt20 actions d-flex">
+            <div class="text-center">
+              <a
+                class="btn btn-icon-only btn-circle btn-outline purple-custom"
+                ng-click="search()"
+              >
+                <span><i class="fa fa-search"></i></span>
+              </a>
+              <p class="text-underline fs9 mb5 pt3">
+                {{'COM_BTN_SEARCH' | translate}}
+              </p>
+            </div>
+            <div class="pl20 text-center">
+              <a
+                class="btn btn-icon-only btn-circle btn-outline green-custom"
+                ng-click="add()"
+              >
+                <span><i class="fa fa-plus"></i></span>
+              </a>
+              <p class="text-underline fs9 mb5 pt3">
+                {{'COM_BTN_ADD' | translate}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="form-group">
+      <div class="col-md-2">
+        <div class="btn-group pt20 actions d-flex">
+          <div class="text-center">
+            <a
+              class="btn btn-icon-only btn-circle btn-outline red-custom"
+              ng-click="upload()"
+            >
+              <span><i class="fa fa-plus"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">
+              {{'Upload File' | translate}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row pr-2">
+  <div class="" id="dropzone">
+    <table
+      class="table dataTable table-hover table-striped"
+      datatable
+      dt-options="dtOptions"
+      dt-columns="dtColumns"
+      dt-instance="dtInstance"
+      id="tblData"
+    ></table>
+  </div>
+</div>

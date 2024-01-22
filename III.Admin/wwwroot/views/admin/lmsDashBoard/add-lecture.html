@@ -1,0 +1,438 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div,
+    .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    /*CSS form Tab*/
+</style>
+<div class="modal-header no-color h-30">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle icon-insert black"></i>
+    <span class="modal-title black" id="modal-title">{{header}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row">
+                    <div class="col-md-3 h-80">
+                        <label class="col-md-12 pl-0 fw600 require text-underline">{{'LMS_LECTURE_CODE' | translate}}</label>
+                        <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorLectureCode}">
+                            <input class="form-control text-important" name="LectCode" ng-model="modelLecture.LectCode" ng-change="changeData('LectCode')"
+                                   type="text" placeholder="{{'LMS_LECTURE_CODE' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelLecture.LectCode='';"
+                                        class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorLectureCode" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LECTURE_CODE' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-12 pl-0 fw600 require text-underline">{{'LMS_LECTURE_NAME' | translate}}</label>
+                        <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorLectureName}">
+                            <input class="form-control text-important" name="Level" ng-model="modelLecture.LectName" ng-change="changeData('LectName')"
+                                   type="text" placeholder="{{'LMS_LECTURE_NAME' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelLecture.LectName='';"
+                                        class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorLectureName" class="label-color validation-message">
+                            {{'LMS_VALIDATE_LECTURE_NAME' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-3 h-80">
+                        <label class="col-md-12 pl-0 fw600 text-underline">
+                            {{
+'LMS_LECTURE_STATUS' |
+                            translate
+                            }}
+                        </label>
+                        <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorType}">
+                            <ui-select tagging ng-model="modelLecture.Status" theme="bootstrap" ng-change="">
+                                <ui-select-match placeholder="{{'LMS_LECTURE_STATUS' | translate}}...">
+                                    {{$select.selected.Name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listStatus | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelLecture.Status='';"
+                                        class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span ng-show="errorType" class="label-color validation-message">
+                            {{'LMS_TYPE_NOT_EMPTY' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-3 h-80">
+                        <label class="col-md-12 pl-0 fw600 text-underline">
+                            {{
+'LMS_DURATION' |
+                            translate
+                            }}
+                        </label>
+                        <div class="col-md-12 input-group br24 search-group">
+                            <input class="form-control text-important" name="Duration" ng-model="modelLecture.Duration"
+                                   type="text" placeholder="{{'LMS_DURATION' | translate}}..." />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelLecture.Duration='';"
+                                        class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_UNIT' | translate}}</label>
+                        <div class="col-md-12 input-group br24 search-group">
+                            <ui-select tagging ng-model="modelLecture.Unit" theme="bootstrap">
+                                <ui-select-match placeholder="{{'LMS_UNIT' | translate}}...">
+                                    {{$select.selected.Name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                    <span class="bold fs11">{{x.Name}}</span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="modelLecture.Unit='';"
+                                        class="btn btn-default no-shadow start-date">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_LECTURE_INTERACT' | translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <div class="input-group input-file br24">
+                                <i class="fa fa-upload"></i>
+                                <input class="form-control border-left-4radius inputInteractiveFilePath pl30"
+                                       style="pointer-events:none" name="InteractiveFilePath" placeholder=""
+                                       placeholder1="Tệp tin..." ng-model="InteractiveFilePath">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-choose input-group-addon"
+                                          onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                    <input class="form-control" custom-on-change-lms="loadInteractFile"
+                                           onchange="$('.inputInteractiveFilePath').val($(this).val().split('\\').pop());"
+                                           style="display: none;" type="file" accept=".zip">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-11">
+                        <label class="col-md-12 pl-0 fw600 text-underline">{{'LMS_LECTURE_VIDEO' | translate}}</label>
+                        <div class="col-md-12 input-group search-group">
+                            <div class="input-group br24">
+                                <input class="form-control text-important" name="VideoPresent"
+                                       ng-model="modelLecture.VideoPresent" type="text"
+                                       placeholder="{{'LMS_LECTURE_VIDEO' | translate}}"
+                                       placeholder1="{{'CMS_CAT_TXT_ADDCATEGORY' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="showVideo()" class="btn btn-default no-shadow">
+                                        <span class="glyphicon glyphicon-play"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="pull-right mt20">
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center">
+                                    <a ng-click="submit()"
+                                       class1="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa-solid fa-plus fs30" style1="margin-left:7px"></i></span>
+                                    </a>
+                                    <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12 nowrap">
+                                <i class="fa fa-user"></i>
+                                <label class="control-label bold">{{'LMS_DESC' | translate}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea ng-model="modelLecture.Description" id="ckEditorItemLecture"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12"
+                             ng-class="{'cursor-not-allowed': LectCode == null || LectCode == ''}"
+                             ng-click="checkLectCode()">
+                            <div ng-controller="file-plugin-lecture"
+                                 ng-class="{'disabled-element': LectCode == null || LectCode == ''}">
+                                <div class="table-toolbar">
+                                    <div class="table-toolbar">
+                                        <form name="searchform" class="form-horizontal" method="post"
+                                              ng-validate="validationOptions">
+                                            <div class="form-group">
+                                                <div class="col-lg-10">
+                                                    <label class="control-label fw600">
+                                                        {{
+'LMS_FILE' |
+                                                        translate
+                                                        }}
+                                                    </label>
+                                                    <div class="input-group br24 input-file">
+                                                        <i class="fa fa-upload"></i>
+                                                        <input class="form-control border-left-4radius inputFile pl30"
+                                                               style="pointer-events:none" name="File"
+                                                               placeholder="{{'COM_FILE' | translate}}..."></>
+                                                        <span class="input-group-btn">
+                                                            <span class="btn btn-default btn-choose"
+                                                                  onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                                            <input class="form-control"
+                                                                   custom-on-change-supplier="" handler="loadFile(event)" ng-model="modelFile.Duration"
+                                                                   onchange="$('.inputFile').val($(this).val().split('\\').pop());"
+                                                                   style="display: none;" type="file">
+                                                        </span>
+                                                    </div>
+                                                    <span class="pull-right">
+                                                        <a class="pr15 fs11 text-underline pull-right"
+                                                           ng-click="extend()">
+                                                            {{
+'COM_BTN_SETUP_DEFAULT' |
+                                                            translate
+                                                            }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <!--<div class="col-md-2">
+                                                    <label class="col-md-12 pl-0 control-label fw600 require">
+                                                        {{
+'LMS_DURATION_(MINUTES)'
+                                                        | translate
+                                                        }}
+                                                    </label>-->
+                                                    <!--LMS_LECTURE_DURATION-->
+                                                    <!--<div class="input-group br24 date" id="duration">
+                                                        <input ng-model="modelFile.Duration" name="Duration"
+                                                               class="form-control text-important" type="text"
+                                                               placeholder="{{'Thời lượng (phút)' | translate}}..." />
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>-->
+                                                <!--<div class="col-md-2">
+                                                    <label class="col-md-12 pl-0 fw600 text-underline">{{'Đơn vị' | translate}}</label>
+                                                    <div class="col-md-12 input-group search-group">
+                                                        <ui-select tagging ng-model="modelFile.Unit" theme="bootstrap">
+                                                            <ui-select-match placeholder="{{'LMS_UNIT' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                            <ui-select-choices repeat="x.Code as x  in listUnit | filter: $select.search">
+                                                                <span class="bold fs11">{{x.Name}}</span>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" ng-click="modelFile.Unit='';" class="btn btn-default no-shadow start-date">
+                                                                <span class="glyphicon glyphicon-remove"></span>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>-->
+                                                <div class="col-lg-2">
+                                                    <div class="btn-group pt20 d-flex">
+                                                        <div class="text-center pr10">
+                                                            <a class1="btn btn-icon-only btn-circle btn-outline green-custom"
+                                                               ng-click="add()">
+                                                                <span><i class="fas fa-upload fs30"></i></span>
+                                                            </a>
+                                                            <p class="text-underline fs9 mb5 pt3">
+                                                                {{
+'COM_BTN_UP_FILE' |
+                                                                translate
+                                                                }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="dropzone" ngf-drop="uploadFileLecture($files)" ngf-multiple="true">
+                                    <table class="table dataTable table-hover table-striped" datatable
+                                           dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance"
+                                           id="tblDataObjectFile"></table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb20"
+                             ng-class="{'cursor-not-allowed': LectCode == null || LectCode == ''}"
+                             ng-click="checkLectCode()">
+                            <div ng-class="{'disabled-element': LectCode == null || LectCode == ''}">
+                                <div class="col-lg-6 p-0">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label require bold">
+                                                <i class="fa fa-barcode"></i>&nbsp;{{'LMS_COURSE_LBL_COURSE' | translate}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="input-group br24" ng-class="{ 'has-error': errorCourse}">
+                                                <ui-select class="" tagging ng-model="modelCourse.Code" theme="bootstrap"
+                                                           ng-change="changeData('Course')" ng-disabled="id< 0">
+                                                    <ui-select-match placeholder="{{'LMS_COURSE_LBL_COURSE' | translate}}...">
+                                                        {{$select.selected.Name}}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x  in listCourse | filter: $select.search">
+                                                        <span class="bold fs11">{{x.Name}}</span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="addCourse()"
+                                                            class="btn btn-default no-shadow">
+                                                        <span class="fa fa-arrow-down"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 mb15 mt15">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="margin-bottom: 0;">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center col-md-1" style="width: 5%;">
+                                                            {{
+'LMS_PRACTICE_TEST_LBL_ORDER' |
+                                                translate
+                                                            }}
+                                                        </th>
+                                                        <th class="text-center col-md-2 nowrap">
+                                                            {{'LMS_COURSE_LBL_NAME_COURSE' | translate}}
+                                                        </th>
+                                                        <!--LMS_COURSE_SUBJECT_NAME-->
+                                                        <th class="text-center col-md-6 nowrap">
+                                                            {{'LMS_DESC' | translate}}
+                                                        </th>
+                                                        <!--LMS_COURSE_SUBJECT_DESCRIPTION-->
+                                                        <th class="text-center col-md-1 nowrap">
+                                                            {{
+'LMS_PRACTICE_TEST_LBL_OPERATION' |
+                                                translate
+                                                            }}
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in listLectureCourse">
+                                                        <td class="text-center pt15 bold">{{$index+1}}</td>
+                                                        <td class="text-left pl20 text-green">{{x.CourseName}}</td>
+                                                        <td class="text-left pl20 text-green">{{x.CourseNote}}</td>
+                                                        <td class="text-center nowrap">
+                                                            <a title="{{'COM_BTN_DELETE' | translate}}" ng-click="deleteCourse(x)"
+                                                               style="width: 25px; height: 25px; padding: 0px"
+                                                               class="fs25"><i class="fas fa-trash" style="--fa-primary-color: red;"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<script>
+    window.URL = window.URL || window.webkitURL;
+    function getDuration(control) {
+        var video = document.createElement('video');
+        video.preload = 'metadata';
+        video.onloadedmetadata = function () {
+            window.URL.revokeObjectURL(video.src);
+            alert("Duration : " + video.duration + " seconds");
+        }
+        video.src = URL.createObjectURL(control.files[0]);
+    }
+</script>-->

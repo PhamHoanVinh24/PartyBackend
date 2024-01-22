@@ -1,0 +1,211 @@
+﻿<link href="../../../css/admin/cardJob/sideNavLeft.css" rel="stylesheet" />
+<style>
+    .popover {
+        max-width: 300px;
+        left: -145.5703px !important;
+        top: 50px !important;
+    }
+</style>
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb-title">
+                <li>
+                    <i class="fa fa-home " style="color:black;"></i>
+                    <a class=" bold text-underline" style="color:black;" href="/Admin/DashBoard">{{'Thông báo' | translate}}</a>
+                    <span class="" style="color:black;">&gt;</span>
+                </li>
+                <li>
+                    <a class=" bold text-underline" style="color:black;" href="/Admin/NotificationCardJob">{{'Việc mới đến'|translate}}</a>
+                </li>
+            </ul>
+            <div class="pr-0 pull-right" ng-show="!isSearch" ng-click="showSearch()">
+                <button class="btn gold-custom br4">
+                    <i class="fa fa-search"></i>
+                    {{'COM_BTN_SEARCH'| translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row h100">
+    <div class="portlet light bordered input-search mb5" ng-show="isSearch">
+        <div class="portlet-body">
+            <div class="row pt5 mb5">
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Từ khóa' | translate}}</label>
+                    <input class="form-control" ng-model="searchObj.CardName" placeholder="{{'Từ khóa' | translate}}..." />
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Từ ngày' | translate}}</label>
+                    <div class="input-group date" id="FromDate">
+                        <input class="form-control" ng-model="searchObj.FromDate" placeholder="{{'Từ ngày' | translate}}..." />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Đến ngày' | translate}}</label>
+                    <div class="input-group date" id="ToDate">
+                        <input class="form-control" ng-model="searchObj.ToDate" placeholder="{{'Đến ngày' | translate}}..." />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Loại đối tượng' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="searchObj.ObjTypeCode" theme="bootstrap" on-select="objTypeChange(searchObj.ObjTypeCode)">
+                            <ui-select-match placeholder="{{'Loại đối tượng' | translate}}..."><p class="bold">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in objTypeJC | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchObj.ObjTypeCode='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Đối tượng'|translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="searchObj.Object" theme="bootstrap" on-select="search()">
+                            <ui-select-match placeholder="{{'Đối tượng' | translate}}..."><p class="bold">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listObjWithType | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchObj.Object=''; searchInTab(5)" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <i ng-click="showSearch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm"></i>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Phòng ban'|translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="searchObj.Department" theme="bootstrap" on-select="search()">
+                            <ui-select-match placeholder="{{'Phòng ban' | translate}}..."><p class="bold">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listDepartment | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchObj.Department='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Nhóm'|translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="searchObj.Group" theme="bootstrap" on-select="search()">
+                            <ui-select-match placeholder="{{'Nhóm' | translate}}..."><p class="bold">{{$select.selected.Name}}</p></ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in listGroup | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchObj.Group=''" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw600 text-underline">{{'Trạng thái' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="searchObj.Status" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Value}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in CardStatus | filter: $select.search">
+                                {{x.Value}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="searchObj.Status='';" class="btn btn-default no-shadow">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="pr10 text-center">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row pl-3"><p class="text-danger">{{'COM_MSG_LIST_GUIDE' | translate}}</p></div>
+    <div class="board-detail-body">
+        <style>
+            .nav-tabs .nav-link, .nav-tabs a {
+                background: #428bca;
+                transition: 0.5s;
+                background-size: 200% auto;
+                border-top-left-radius: 6px !important;
+                border-top-right-radius: 6px !important;
+                font-size: 12px;
+                color: white;
+                padding: 8px;
+            }
+
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+                color: white !important;
+                font-weight: 300;
+                background: #FF8000;
+                font-size: 12px;
+            }
+        </style>
+        <table class="table dataTable table-hover" 
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+</div>
+
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

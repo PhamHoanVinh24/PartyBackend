@@ -1,0 +1,287 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .h-60 {
+        height: 60px;
+    }
+
+    .pl0 {
+        padding-left: 10px;
+    }
+
+    .p25 {
+        padding-left: 25px;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+
+    .pr15 {
+        padding-right: 10px;
+    }
+
+    .pr15 {
+        padding-right: 15px;
+    }
+
+    .pr20 {
+        padding-right: 20px;
+    }
+
+    .pr5 {
+        padding-right: 5px;
+    }
+
+    .mt5 {
+        margin-top: 5px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .ml15 {
+        margin-left: 20px;
+    }
+
+    .mt23 {
+        margin-right: 60px;
+    }
+
+    .mt25 {
+        margin-top: 25px;
+    }
+
+    .w-100-percent {
+        width: 100%;
+    }
+
+    .w-30-percent {
+        width: 30%;
+    }
+
+    .bgWhite {
+        background: #FFF;
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom, #f2eee6, #FBFCFC);
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166, 0.2) !important;
+        padding-bottom: 15px;
+    }
+</style>
+
+<div ng-class="{'cursor-not-allowed': idQuiz == null || idQuiz == '' || idQuiz == -1}">
+    <div ng-controller="manageReference" ng-class="{'disabled-element': idQuiz == null || idQuiz == '' || idQuiz == -1}">
+        <div class="portlet-body form mb10">
+            <form name="addCSCform" class="form-horizontal " method="post" ng-validate="validationOptionsCSC">
+                <div class="form-body pt-0 pl-0 pr-0">
+                    <div class="row ">
+                        <div class="col-md-2 mnw150 h-70">
+                            <label class="col-md-12 pl-0 fw400 text-underline require">{{'LMS_TYPE' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group" ng-class="{ 'has-error': errorType}">
+                                <ui-select tagging ng-model="modelRef.Type" theme="bootstrap"
+                                           ng-change="changeType(); errorType = false">
+                                    <ui-select-match placeholder="{{'LMS_TYPE' | translate}}...">
+                                        {{$select.selected.Name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listRefType | filter: $select.search">
+                                        <span class="bold fs11">{{x.Name}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelRef.Type='';"
+                                            class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorType" class="label-color validation-message">
+                                {{'LMS_TYPE_NOT_EMPTY' | translate}}
+                            </span>
+                        </div>
+                        <div class="col-md-4 mnw300 h-70" ng-show="modelRef.Type == 'CMS'">
+                            <label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_ARTICLE_CMS' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group">
+                                <ui-select tagging ng-model="modelRef.Link" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'LMS_ARTICLE_CMS' | translate}}...">
+                                        {{$select.selected.Name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x  in listCmsQuiz | filter: $select.search">
+                                        <span class="bold fs11">{{x.Name}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Unit='';"
+                                            class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mnw300 h-70" ng-show="modelRef.Type == 'VOICE'">
+                            <label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_VOICE' | translate}}</label>
+                            <div class="col-md-12 input-group search-group">
+                                <div class="input-group br24 input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-left-4radius inputIVoiceRef pl30"
+                                           style="pointer-events:none" name="VoiceRef" placeholder="Tệp tin..."
+                                           ng-model="VoiceRef">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose"
+                                              onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                        <input class="form-control" custom-on-change-lms="loadVoiceRef"
+                                               onchange="$('.inputIVoiceRef').val($(this).val().split('\\').pop());"
+                                               style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mnw300 h-70" ng-show="modelRef.Type == 'IMAGE'">
+                            <label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_IMAGE' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group">
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control border-left-4radius inputImageRef pl30"
+                                           style="pointer-events:none" name="ImageRef" placeholder="Tệp tin..."
+                                           ng-model="ImageRef">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose"
+                                              onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                                        <input class="form-control" custom-on-change-lms="loadImageRef"
+                                               onchange="$('.inputImageRef').val($(this).val().split('\\').pop());"
+                                               style="display: none;" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mnw300 h-70" ng-show="modelRef.Type == 'VIDEO'">
+                            <label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_VIDEO_REF' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group">
+                                <div class="input-group">
+                                    <input class="form-control text-important" name="VideoContent" ng-model="modelRef.Link"
+                                           type="text" placeholder="Video tham khảo"
+                                           placeholder1="{{'CMS_CAT_TXT_ADDCATEGORY' | translate}}..." />
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="showVideo(modelRef.Link)"
+                                                class="btn btn-default no-shadow">
+                                            <span class="glyphicon glyphicon-play"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mnw300 h-70" ng-show="modelRef.Type == 'CMS'">
+                            <label class="col-md-12 pl-0 fw400 text-underline">{{'LMS_ARCTILE_TITLE' | translate}}</label>
+                            <div class="col-md-12 input-group br24 search-group">
+                                <input class="form-control text-important" name="CmsItemName" ng-model="modelCmsItem.title"
+                                       ng-change="ConvertToAlias(modelCmsItem.title)" type="text"
+                                       placeholder="{{'Tiêu đề bài viết' | translate}}..." />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="modelCmsItem.title='';"
+                                            class="btn btn-default no-shadow start-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mnw150 h-70">
+                            <div class="pull-right mt20">
+                                <div class="btn-group actions d-flex">
+                                    <div class="text-center mt10">
+                                        <a ng-click="submit()" class="">
+                                            <span><i class="fa-solid fa-plus fs30"></i></span>
+                                            <!--<img style="width:100%; height:100%;"
+                                                 src="/images/default/save-button-icon_340535.png">-->
+                                        </a>
+                                        <!--<p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SAVE' | translate}}</p>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt10" ng-show="modelRef.Type == 'CMS'">
+                            <label class="col-md-12 pl-0 fw400 text-underline require">
+                                {{
+'LMS_REF_CONTENT' |
+                            translate
+                                }}
+                            </label>
+                            <div class="col-md-12 input-group search-group" ng-class="{ 'has-error': errorType}">
+                                <textarea ng-model="modelCmsItem.full_text" id="ckEditorItemCms"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12 mb15 mnh100">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1" style="width: 5%;">{{'LMS_NO' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'LMS_TYPE' | translate}}</th>
+                            <th class="text-center col-md-6">{{'LMS_PATH' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'LMS_GUIDER' | translate}}</th>
+                            <th class="text-center col-md-1 nowrap">{{'LMS_ACTION' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in listReference track by x.Code">
+                            <td class="text-center pt15 bold">{{$index+1}}</td>
+                            <td class="text-left pl20 nowrap"
+                                ng-class="{'text-purple': x.Type == 'VIDEO', 'text-primary': x.Type == 'CMS'}"
+                                ng-style="{'color': x.Type == 'IMAGE' ? 'rgb(42,42,42)' : (x.Type == 'VOICE' ? '#e599f7' : black)}">
+                                <span class="fa fa-file-video-o mr5 text-purple fs14" ng-if="x.Type == 'VIDEO'"></span>
+                                <span class="fa fa-picture-o mr5" style="color: rgb(42,42,42);font-size: 14px;"
+                                      ng-if="x.Type == 'IMAGE'"></span>
+                                <span class="fa fa-file-audio-o mr5" style="color: #e599f7; font-size: 14px;"
+                                      ng-if="x.Type == 'VOICE'"></span>
+                                <div style="display: inline-block">
+                                    <img class="mr5" style="width: 14px;"
+                                         src="../../../images/iconDashBoard/icon_Text-Worksheet.png" ng-if="x.Type == 'CMS'">
+                                </div>
+                                <span class="fs14">{{x.TypeName}}</span>
+                            </td>
+                            <td class="text-left pl20 col-md-6">
+                                <a class="fs14"
+                                   ng-click="viewReference(x.Link, x.Type)">{{x.Link}}</a>
+                            </td>
+                            <td class="text-left pl20">
+                                <span class="fs14">
+                                    {{x.CreatedBy}}<span ng-if="x.CreatedTime != '' && x.CreatedTime != null">
+                                        ({{x.CreatedTime}})
+                                    </span>
+                                </span>
+                            </td>
+                            <td class="text-center nowrap">
+                                <a title="Xóa" ng-click="deleteReference(x)"
+                                        style1="width: 25px; height: 25px; padding: 0px"
+                                        class1="btn btn-icon-only btn-circle btn-outline red">
+                                    <i class="fas fa-trash-alt pt10 fs25 text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

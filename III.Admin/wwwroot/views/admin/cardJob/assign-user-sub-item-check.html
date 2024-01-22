@@ -1,0 +1,84 @@
+﻿<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fa fa-plus-circle black icon-insert "></i>
+    <span class="modal-title black" id="modal-title">{{'CJ_MODAL_TITLE_ADD_EMP' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addStaff" class="form-horizontal" method="post" ng-validate="validationOptionsAssignStaffToItem">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorUserId}">
+                        <label class="fw600 text-underline require">{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUserItem | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUserId" class="label-color validation-message">
+                                {{'CJ_VALIDATE_EMP' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label class="text-underline require fw600">{{'CJ_LBL_TIME_EXPERIED' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="model.EstimateTime" type="number" class="form-control br24" name="EstimateTime" placeholder=" {{'CJ_LBL_TIME_EXPERIED' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-class="{ 'has-error': errorUnit}">
+                        <label class="fw600 text-underline require">{{'CJ_LBL_UNIT_TIME' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.Unit" theme="bootstrap" ng-change="changeSelect('Unit')">
+                                <ui-select-match placeholder="{{'CJ_LBL_UNIT_TIME' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnitAssignStaff | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                {{'CJ_VALIDATE_UNIT_TIME' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pt20 col-md-2 pl-0 pr-0">
+                        <div class="actions btn-group">
+                            <div class="text-center mt10">
+                                <a ng-click="submit()" class1="btn btn-icon-only btn-outline btn-border-black">
+                                    <span><i class="fa-solid fa-plus fs25"></i></span>
+                                </a>
+                                <p class="text-underline fs9 mb5 pt3"> {{'CJ_ADD_EMP_DOWN' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3 fw600 text-underline">{{'CJ_CURD_BTN_MEMBER' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'CJ_LBL_TIME_EXPERIED' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'CJ_LBL_UNIT_TIME' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listUserSubItem">
+                                <td>{{x.GivenName}}</td>
+                                <td class="text-center">{{x.EstimateTime}}</td>
+                                <td class="text-center">{{x.Status}}</td>
+                                <td class="text-center">
+                                    <a><i role="button" ng-click="delete(x.ID)" class="fas fa-trash-alt" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i></a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

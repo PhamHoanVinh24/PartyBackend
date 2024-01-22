@@ -1,0 +1,146 @@
+﻿<div class="modal-header"> 
+    <span class="icon-remove" style="margin:0 auto" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"></span>
+    <h3 class="modal-title" id="modal-title">{{'IMPORT' | translate}} {{'USER' | translate}}</h3>
+</div>
+<div class="modal-body no-space" id="modal-body">
+    <div class="portlet-body form"> 
+        <form name="importform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions" enctype="multipart/form-data">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'UPLOAD' | translate}} Excel (*)</label>
+                    <div class="col-md-6">
+                        <input type="file" files-input class="form-control" ng-model="model.FileUpload" name="FileUpload" accept=".xlsx, .xls" /> 
+                        <div class="margin-top-10">
+                            Template: <a href="/files/template-upload-user.xlsx">template-upload-user.xlsx</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button"  class="btn btn-primary" ng-click="uploadUser()">
+                            {{'UPLOAD' | translate}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="margin: 10px;">
+        <div class="table-scrollable">
+            <table class="table table-striped table-bordered table-hover table-user">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width: 50px;">
+                        <label class="mt-checkbox mt-checkbox-outline">
+                            <input type="checkbox" ng-model="selectAll" ng-click="toggleAll()" />
+                            <span></span>
+                        </label>
+                    </th>
+                    <th class="text-center">#</th>
+                    <th class="text-center">{{'USER_USERNAME' | translate }}</th>
+                    <th class="text-center">{{'USER_FULLNAME' | translate }}</th>
+                    <th class="text-center" style="width: 200px;">{{'EMAIL' | translate }}</th>
+                    <th class="text-center">{{'EMPLOYEE_CODE' | translate }}</th>
+                    <th class="text-center">{{'DEPARTMENT' | translate }}</th>
+                    <th class="text-center">{{'BRANCH' | translate }}</th>
+                    <th class="text-center">{{'PROFIT_CENTER' | translate }}</th>
+                    <th class="text-center">{{'ACCOUNT_EXECUTIVE' | translate }}</th>
+                    <th class="text-center">{{'GROUP_USERS' | translate }}</th>
+                    <th class="text-center">{{'ROLE' | translate }}</th>
+                    <th class="text-center">{{'STATUS' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in listUsers">
+                    <td class="text-center">
+                        <label class="mt-checkbox mt-checkbox-outline" ng-show="item.Error == false">
+                            <input type="checkbox" ng-model="item.Checked" ng-click="toggleOne()" />
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>{{ item.RowNum }}</td>
+                    <td>
+                        {{ item.UserName }}
+                        <span class="text-danger" ng-show="item.ErrorUserName">
+                            <br/>
+                            ({{ item.MessageUserName }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.FullName }}
+                    </td>
+                    <td>
+                        <input type="email" class="form-control" ng-model="item.Email" name="Email" />
+                    </td>
+                    <td>
+                        {{ item.EmployeeCode }}
+                        <span class="text-danger" ng-show="item.ErrorEmployeeCode">
+                            <br />
+                            ({{ item.MessageEmployeeCode }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.Department }}
+                        <span class="text-danger" ng-show="item.ErrorDepartment">
+                            <br />
+                            ({{ item.MessageDepartment }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.Branch }}
+                        <span class="text-danger" ng-show="item.ErrorBranch">
+                            <br />
+                            ({{ item.MessageBranch }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.ProfitCenter }}
+                        <span class="text-danger" ng-show="item.ErrorProfitCenter">
+                            <br />
+                            ({{ item.MessageProfitCenter }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.AccountExecutive }}
+                        <span class="text-danger" ng-show="item.ErrorAccountExecutive">
+                            <br />
+                            ({{ item.MessageAccountExecutive }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.GroupUser }}
+                        <span class="text-danger" ng-show="item.ErrorGroupUser">
+                            <br />
+                            ({{ item.MessageGroupUser }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.Role }}
+                        <span class="text-danger" ng-show="item.ErrorRole">
+                            <br />
+                            ({{ item.MessageRole }})
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.Status }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-group actions d-flex pull-right">
+        <div class="text-center pr10">
+            <a class="btn btn-icon-only btn-circle btn-outline red-custom" ng-click="cancel()">
+                <span><i class="fa fa-close"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="submit()" href="javascript:;">
+                <span><i class="fa fa-save"></i></span>
+            </a>
+            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+        </div>
+    </div>
+</div>

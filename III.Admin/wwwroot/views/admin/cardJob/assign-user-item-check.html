@@ -1,0 +1,143 @@
+﻿<div class="modal-header no-color">
+    <!--<img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />-->
+    <i class="fas fa-plus-circle black" style="padding-top: 8px;"></i>
+    <!--<span class="modal-title " id="modal-title">{{'CJ_MODAL_TITLE_ADD_EMP' | translate}}</span>-->
+    <span class="modal-title black " id="modal-title">{{'CJ_MODAL_TITLE_ADD_EMP' | translate}}</span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pt-0 pb-0" id="modal-body">
+    <div class="portlet-body form" style="border-bottom: 1px solid #b3b0b0">
+        <form name="addStaff" class="form-horizontal" method="post" ng-validate="validationOptionsAssignStaffToItem">
+            <div class="form-body pt0 pb-20">
+                <div class="row">
+                    <div class="col-md-5 pl-0" ng-class="{ 'has-error': errorUserId}">
+                        <label class="fw600 text-underline require">{{'CJ_CURD_BTN_MEMBER' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.UserId" theme="bootstrap" ng-change="changeSelect('UserId')">
+                                <ui-select-match placeholder="{{'CJ_CURD_BTN_MEMBER' | translate}}">{{$select.selected.GivenName}}</ui-select-match>
+                                <ui-select-choices repeat="x.UserId as x in listUsers | filter: $select.search">
+                                    {{x.GivenName}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUserId" class="label-color validation-message">
+                                {{'CJ_VALIDATE_EMP' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label class="text-underline require fw600">{{'CJ_LBL_TIME_EXPERIED' | translate}}</label>
+                        <div class="input-group">
+                            <input ng-model="model.EstimateTime" type="number" class="form-control br24" name="EstimateTime" placeholder=" {{'CJ_LBL_TIME_EXPERIED' | translate}}..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-class="{ 'has-error': errorUnit}">
+                        <label class="fw600 text-underline require">{{'CJ_LBL_UNIT_TIME' | translate}}</label>
+                        <div class="input-group br24-nobtn">
+                            <ui-select ng-model="model.Unit" theme="bootstrap" ng-change="changeSelect('Unit')">
+                                <ui-select-match placeholder="{{'CJ_LBL_UNIT_TIME' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listUnitAssignStaff | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span ng-show="errorUnit" class="label-color validation-message">
+                                {{'CJ_VALIDATE_UNIT_TIME' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pt30 col-md-2 pl-0 pr-0">
+                        <div class="actions btn-group pull-left">
+                            <div class="text-center">
+                                <a ng-click="submit()" class1="btn btn-icon-only btn-outline btn-border-black">
+                                    <!--<span><i class="fa fa-save black"></i></span>-->
+                                    <i class="fa fa-chevron-down fs25" style="color: #183153"></i>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3"> {{'CJ_ADD_EMP_DOWN' | translate}}</p>-->
+                            </div>
+                        </div>
+                        <!--<button class="btn btn-red br4 pull-right" ng-click="submit()">
+                            <i class="fa fa-plus"></i>
+                            {{'CJ_ADD_EMP_DOWN'| translate}}
+                        </button>-->
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-md-4 fw600 text-underline">{{'CJ_CURD_BTN_MEMBER' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'CJ_LBL_TIME_EXPERIED' | translate}}</th>
+                                <th class="col-md-3 text-center fw600 text-underline">{{'CJ_LBL_UNIT_TIME' | translate}}</th>
+                                <th class="col-md-2 text-center fw600 text-underline">{{'COM_BTN_DELETE' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in listUserInItem">
+                                <td>{{x.GivenName}}</td>
+                                <td class="text-center">{{x.EstimateTime}}</td>
+                                <td class="text-center">{{x.Status}}</td>
+                                <td class="text-center">
+                                    <i role="button" ng-click="delete(x.ID)" class="fas fa-trash-alt" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="portlet-body form pt15" id="constraint-body">
+        <div class="row">
+            <div class="col-md-9" ng-class="{ 'has-error': errorChkListCode}" style="width: 76%;">
+                <label class="fw600 text-underline require">{{'CJ_LBL_CONSTRAINT_BEFORE' | translate}}</label>
+                <div class="input-group br24-nobtn">
+                    <ui-select ng-model="modelConstraint.ChkListCode" theme="bootstrap" ng-change="changeSelect('ChkListCode')">
+                        <ui-select-match placeholder="{{'CJ_TXT_SELECT_ITEM_CHECK' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in listItemCheck | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span ng-show="errorChkListCode" class="label-color validation-message">
+                        {{'CJ_VALIDATE_ITEM_CHECK' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="pt30 col-md-2">
+                <div class="actions btn-group pull-left">
+                    <div class="text-center">
+                        <a ng-click="addConstraint()" class1="btn btn-icon-only btn-outline btn-border-black">
+                            <i class="fa fa-chevron-down fs25" style="color: #183153"></i>
+                            <!--<span><i class="fa fa-save black"></i></span>-->
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3"> {{'CJ_ADD_EMP_DOWN' | translate}}</p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group pt5">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1">{{'STT' | translate}}</th>
+                            <th class="text-center col-md-9 nowrap">{{'CJ_TAB_CHECK_ITEM' | translate}}</th>
+                            <th class="text-center col-md-2 nowrap">{{'COM_BTN_DELETE' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in listConstraint">
+                        <tr>
+                            <td class="text-center pt15">{{$index + 1}}</td>
+                            <td class="text-center pt15">{{x.Title}}</td>
+                            <td class="text-center">
+                                <i role="button" ng-click="deleteConstraint(x.ChkListCode)" class="fas fa-trash-alt" title="{{'COM_BTN_DELETE' | translate}}" style="color:red !important;font-size: 25px;padding-top:5px"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="padding: 0xp !important;">
+</div>

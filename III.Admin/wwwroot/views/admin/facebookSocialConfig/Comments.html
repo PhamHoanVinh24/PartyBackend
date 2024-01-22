@@ -1,0 +1,491 @@
+﻿<style>
+    .dataTables_wrapper .table-scrollable {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    @media (min-width:992px) and (max-width:1200px) {
+        .modal-80 {
+            width: 80%;
+        }
+    }
+
+    input.larger {
+        width: 20px;
+        height: 20px;
+    }
+    @media (min-width:1201px) and (max-width:1400px) {
+        .modal-80 {
+            width: 70%;
+        }
+    }
+
+    @media (min-width:1400px) {
+        .modal-80 {
+            width: 60%;
+        }
+    }
+
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: green;
+        background: white;
+        border-top: 2px solid #e7505a;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+
+    .lecture-cover-upload {
+        background-image: url("../../../images/default/05_Title_Image.jpg");
+        background-color: #e9eef1;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    div.stars {
+        flex-direction: row-reverse;
+        width: 270px;
+        display: flex;
+        justify-content: start;
+    }
+
+    input.star {
+        display: none;
+    }
+
+    label.star {
+        float: right;
+        padding: 10px;
+        font-size: 20px;
+        color: #444;
+        padding: 0px 5px 0px 5px;
+        transition: all .2s;
+    }
+
+    input.star:checked ~ label.star:before {
+        content: '\f005';
+        color: #FD4;
+        transition: all .25s;
+    }
+
+    input.star-5:checked ~ label.star:before {
+        color: #FE7;
+        text-shadow: 0 0 20px #952;
+    }
+
+    input.star-1:checked ~ label.star:before {
+        color: #F62;
+    }
+
+    label.star:before {
+        content: '\f006';
+        font-family: "Open Sans",sans-serif;
+    }
+
+    .mr50 {
+        margin-right: 0px !important;
+    }
+
+    body {
+        font-family: "Open Sans",sans-serif;
+    }
+
+    .modal-body .control-label {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+    }
+
+    .close-modal {
+        z-index: 9999;
+        position: absolute;
+        padding: 0px;
+        border-radius: 50px;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        display: block;
+        width: 50px;
+        height: 50px;
+        text-indent: -9999px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border-color: #ff5ca1;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/XKHq6urW1tb////w8PDV1dXp6elDeZ9WAAAAEHRSTlMACkZ5FnA+QUAZSXMHFT8XTiEbVAAAAAFiS0dEEwy7XJYAAAAHdElNRQflDAEGMgLw4uMaAAAAAW9yTlQBz6J3mgAAATNJREFUSMe1l9tygzAMRM21kAtdMO3/f2ohTDpQJFn1Jvtmxmdk2UZehSCqKCv8qiqL4Fbd4KSmdqEtFLVJ9AOGOhPtkVCvs5cUC1w09ppmgauI3jzoqtuZvXtZ4J4dV4r9HxbI2Ctl1xxndNTuxJJ346w+M+Fj2l0O3BGBn6GHPHggAm+h61x4rS1CzcE4HcfTKExq5FWPMc778RyjRC91Uvg6xQO9sHESphWhlNKZ9/Qc/yzkqTJUSNAqiyoANq2zS9KwaYvV4Q0zWQN+0CZrwRttsG+DmWUzG8Ycle+SUNeT+jGcv+SXMK3wFoNvKWWyDFEFMOTCtvGy1fLPjW3cNHWveGK5x52yFZyh4awUZ+Io+8gZV84y+05MNetcm5AydHaDYtqyIYmu+sxvyh7ytYM/qPe1AtpYDhcAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMTItMDFUMDY6NTA6MDIrMDA6MDDiIsyiAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTEyLTAxVDA2OjUwOjAyKzAwOjAwk390HgAAAABJRU5ErkJggg==);
+        /*background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==);*/
+    }
+    .input1 {
+        width: 100px;
+        height: 30px;
+        border: 1px solid rgb(212, 212, 212);
+        border-radius: 20px;
+        background: white;
+        color: black;
+        font-family: 'Open Sans';
+    }
+</style>
+<!--<button type="button" class="close-modal ng-scope" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>-->
+<!--<div class="modal-header header d-flex pt10" style="background:white;font-size: 15px; height:35px">
+    <span style="padding:0px" class="modal-title fas fa-gears" id="modal-title">&nbsp;&nbsp;{{'Domain Configuration' | translate}}</span>--><!--URL_LIST_TXT_DOMAIN_CONFIGURATION-->
+<!--</div>-->
+<div class="boder-box">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal " method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0 pb-0" style="padding: 0px 10px">
+                <div class="row">
+                    <div class="row ">
+                        <div class="col-lg-12 pt10">
+                            <div class="form-group">
+                                <div class="col-md-1 " style="padding:0px">
+                                    <label class="control-label require bold text-underline"><i class="fa fa-align-left"></i>&nbsp;{{'TWITT_CONFIG_CONTENT' | translate}}</label>
+                                </div>
+                                <div class="col-md-11">
+                                    <textarea rows="3" class="form-control" name="Credentials" ng-model="setting_json_param.comment.comment" type="text" placeholder="{{'' | translate}}..." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group" style="margin-top:15px">
+                                <div class="col-md-1" style="padding:0px">
+                                    <label class="control-label require bold text-underline"><i class="fa fa-group"></i>&nbsp;{{'TWITT_CONFIG_GROUP' | translate}}</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="col-md-12" style="padding:0px">
+                                        <div class="col-md-12 pl-0 input-group search-group" ng-class="{ 'has-error': errorType}">
+                                            <ui-select tagging ng-model="setting_json_param.comment.group" theme="bootstrap" ng-change="changeType(); errorType = false">
+                                                <ui-select-match placeholder="{{'' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x  in setting_json_param.comment.group | filter: $select.search">
+                                                    <span class="bold fs11">{{x.Name}}</span>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Type='';" class="btn btn-default no-shadow start-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group" style="margin-top:15px">
+                                <div class="col-md-1" style="padding:0px">
+                                    <label class="control-label require bold  text-underline"><i class="fa fa-calendar-o"></i>&nbsp;{{'TWITT_CONFIG_POST' | translate}}</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="col-md-12" style="padding:0px">
+                                        <div class="col-md-12 pl-0 input-group search-group" ng-class="{ 'has-error': errorType}">
+                                            <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changeType(); errorType = false">
+                                                <ui-select-match placeholder="{{'POST/GET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x  in listType | filter: $select.search">
+                                                    <span class="bold fs11">{{x.Name}}</span>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Type='';" class="btn btn-default no-shadow start-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:105px">
+                        <div class="col-md-3">
+                            <div class="form-group col-md-12 p-0">
+                                <label class="require text-underline  text-blue" > {{'TWITT_CONFIG_FROM' | translate}}</label>
+                                <div class='input-group date'>
+                                    <input ng-model="setting_json_param.comment.get_content_of_post.from" type='text' class="form-control text-custom" placeholder="{{'From' | translate}}" id="datefrom" name="StartTime" autocomplete="off" />
+                                    <span class="input-group-addon start-date" ng-click="model.StartTime = ''">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group col-md-12 p-0">
+                                <label class="require text-underline  text-blue"> {{'TWITT_CONFIG_TO' | translate}}</label>
+                                <div class='input-group date'>
+                                    <input ng-model="setting_json_param.comment.get_content_of_post.to" type='text' class="form-control text-custom" placeholder="{{'To' | translate}}" id="dateto" name="EndTime" autocomplete="off" />
+                                    <span class="input-group-addon end-date" ng-click="model.EndTime = ''">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:5px">
+                        <div class="col-md-1" style="padding:0px">
+                            <label class="control-label require bold text-underline "><i class="fas fa-user-friends"></i>&nbsp;{{'TWITT_CONFIG_FRIENDS' | translate}}</label>
+                        </div>
+                        <div class="col-md-9" style="padding-right:0px;margin-left:12px">
+                            <div class="form-group col-md-12 p-0" style="padding-left:0px">
+                                <div class="col-md-12 p-0" ng-class="{ 'has-error': errorUserId}">
+                                    <ui-select ng-model="setting_json_param.comment.get_content_of_post.friend" multiple theme="bootstrap" class="h-120" on-select="addUser($item)" on-remove="removeUser($item)">
+                                        <ui-select-match placeholder="{{'' | translate}}...">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="Code as x in setting_json_param.comment.get_content_of_post.friend | filter:$select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span ng-show="errorUserId" class="label-color validation-message">
+                                        {{'MS_VALIDATE_EMPLOYEE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pt20 pl50">
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center pl10" ng-click="submit()">
+                                    <div class="btn btn-circle">
+                                        <span><i class="fa fa-play-circle" style="font-size: 36px; color: lawngreen "></i></span>
+                                    </div>
+                                    <p class="mb-5">{{'TWITT_CONFIG_PLAY' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group" style="margin-top:15px">
+                                <div class="col-md-1" style="padding:0px">
+                                    <label class="control-label require bold  text-underline"><i class="fa fa-calendar"></i>&nbsp;{{'TWITT_CONFIG__SCHEDULE' | translate}}</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="col-md-12" style="padding:0px">
+                                        <div class="col-md-12 pl-0 input-group search-group" ng-class="{ 'has-error': errorType}">
+                                            <ui-select tagging ng-model="model.Type" theme="bootstrap" ng-change="changeType(); errorType = false">
+                                                <ui-select-match placeholder="{{'POST/GET' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-choices repeat="x.Code as x  in listType | filter: $select.search">
+                                                    {{x.Name}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="model.Type='';" class="btn btn-default no-shadow start-date">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row boder-box mt10 ml80" style="margin-left:105px;width:955px">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label require bold  text-underline"><i class=""></i>&nbsp;{{'TWITT_CONFIG_DAILY' | translate}}</label>
+                                </div>
+                                <div class="col-lg-12 pl50">
+                                    <div class="col-md-1">
+                                        <input class="form-check-input larger" type="checkbox" value="" id="flexCheckDefault" />
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.daily.house" type="text" placeholder="{{'Hour' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.daily.minutes" type="text" placeholder="{{'Minutes' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.daily.second" type="text" placeholder="{{'Second' | translate}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label require bold  text-underline"><i class=""></i>&nbsp;{{'TWITT_CONFIG__WEEKLY' | translate}}</label>
+                                </div>
+                                <div class="col-lg-12 pl50">
+                                    <div class="col-md-1">
+                                        <input class="form-check-input larger" type="checkbox" value="" id="flexCheckDefault" />
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.weekl.th" type="text" placeholder="{{'Date' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.weekl.house" type="text" placeholder="{{'Hour' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.weekl.minutes" type="text" placeholder="{{'Minutes' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.weekl.second" type="text" placeholder="{{'Second' | translate}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group" style="margin-bottom:10px !important">
+                                <div class="col-md-12">
+                                    <label class="control-label require bold  text-underline"><i class=""></i>&nbsp;{{'TWITT_CONFIG_MONTHLY' | translate}}</label>
+                                </div>
+                                <div class="col-lg-12 pl50">
+                                    <div class="col-md-1">
+                                        <input class="form-check-input larger" type="checkbox" value="" id="flexCheckDefault" />
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.monthly.date_run" type="text" placeholder="{{'Daye' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.monthly.house" type="text" placeholder="{{'Hour' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.monthly.minutes" type="text" placeholder="{{'Minutes' | translate}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched" name="Title" ng-model="setting_json_param.comment.schedule.monthly.second" type="text" placeholder="{{'Second' | translate}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="padding:0px">
+                            <label class="control-label require bold text-underline "><i class="fas fa-list-alt"></i>&nbsp;{{'TWITT_CONFIG_GET_COMMENT_OF' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:105px">
+                        <div class="col-md-3 pt5">
+                            <div class="form-group col-md-12 p-0">
+                                <label class="require  text-underline text-blue"> {{'TWITT_CONFIG_FROM' | translate}}</label>
+                                <div class='input-group date'>
+                                    <input ng-model="setting_json_param.comment.get_content_of_post.from" type='text' class="form-control text-custom " placeholder="{{'From' | translate}}" id="datefrom" name="StartTime" autocomplete="off" />
+                                    <span class="input-group-addon start-date" ng-click="model.StartTime = ''">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3  pt5">
+                            <div class="form-group col-md-12 p-0">
+                                <label class="require text-underline text-blue"> {{'TWITT_CONFIG_TO' | translate}}</label>
+                                <div class='input-group date'>
+                                    <input ng-model="setting_json_param.comment.get_content_of_post.to" type='text' class="form-control text-custom " placeholder="{{'To' | translate}}" id="dateto" name="EndTime" autocomplete="off" />
+                                    <span class="input-group-addon end-date" ng-click="model.EndTime = ''">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 pt5" style="width:313px">
+                            <div class="form-group">
+                                <label class="mb5 require text-underline text-blue">{{'TWITT_CONFIG_STATUS' | translate}}</label>
+                                <div class="input-group">
+                                    <ui-select class="ui-select-bootstrap-right-radius " ng-model="setting_json_param.comment.get_content_of_post.status" on-select="changeData('SubjectCode', $item)" theme="bootstrap">
+                                        <ui-select-match placeholder1="{{'Status' | translate}}..." placeholder="{{'Status' | translate}}"><b id="SubjectCode">{{$select.selected.Name}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in setting_json_param.comment.get_content_of_post.status | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:105px;padding-right:26px">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="mb5 require text-underline text-blue">{{'TWITT_CONFIG_POST' | translate}}</label>
+                                <div class="input-group">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ListStatus" on-select="changeData('SubjectCode', $item)" theme="bootstrap">
+                                        <ui-select-match placeholder1="{{'Post' | translate}}..." placeholder="{{'Post' | translate}}"><b id="SubjectCode">{{$select.selected.Name}}</b></ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pt5  pull-right">
+                            <div class="pl50"><button type="button" class="fa fa-database bg-font-white  btn btn-outline-secondary" style=" border: 1px white; border-radius: 5px; font-size: 25px;"></button></div>
+                            <label class="mb-5 pl30">{{'TWITT_CONFIG_DATA_STORAGE' | translate}}</label>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:105px">
+                        <div class="col-md-10" style="padding-right:0px">
+                            <div class="form-group col-md-12 p-0" style="padding-left:0px">
+                                <div class="col-md-12 p-0" ng-class="{ 'has-error': errorUserId}">
+                                    <ui-select ng-model="setting_json_param.comment.get_content_of_post.friend" multiple theme="bootstrap" class="h-120" on-select="addUser($item)" on-remove="removeUser($item)">
+                                        <ui-select-match placeholder="{{'' | translate}}...">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="Code as x in setting_json_param.comment.get_content_of_post.friend | filter:$select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span ng-show="errorUserId" class="label-color validation-message">
+                                        {{'MS_VALIDATE_EMPLOYEE' | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2 pt20" ">
+                            <div class="text-center pl10" ng-click="submitcomment()">
+                                <div class="pl15"><button type="button" class="bg-font-white far fa-save btn btn-outline-secondary" style=" border: 1px white; border-radius: 5px; font-size: 25px;"></button></div>
+                                <p class=" mb-5 ">{{'COM_BTN_SAVE' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </form>
+    </div>
+
+</div>

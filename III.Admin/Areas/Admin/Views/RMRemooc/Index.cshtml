@@ -1,0 +1,2726 @@
+﻿@using ESEIM.Utils
+@{
+    ViewData["Title"] = "Romooc Page";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="~/lib/assets/global/plugins/angularjs-datatable/js/fm.min.js"></script>
+<script src="~/lib/assets/global/plugins/angularjs-datatable/js/fm.websync.min.js"></script>
+<script src="~/lib/assets/global/plugins/angularjs-datatable/js/chat.js"></script>
+<script src="~/lib/assets/global/plugins/angularjs-datatable/js/util_map.js"></script>
+<script src="~/js/color_convert.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=vn"></script>
+<head>
+    <style>
+        .table-hover > tbody > tr:hover, .table-hover > tbody > tr:hover > td {
+            background: #f3f4f6 !important;
+            font-weight: bold;
+        }
+
+        #webmenu {
+            width: 340px;
+        }
+
+        #map {
+            width: 100%;
+            height: 90%;
+        }
+
+        /*#go_to_field {
+            position: absolute;
+            top: 10px;
+            left: 165px;
+        }*/
+
+        #idlistpark {
+            width: 250px;
+            top: 10px;
+            left: 10px;
+            background: none repeat scroll 0 0 white;
+        }
+
+        #idlistpark2 {
+            width: 250px;
+            top: 10px;
+            left: 10px;
+            background: none repeat scroll 0 0 white;
+        }
+
+        #idlistpark3 {
+            width: 250px;
+            top: 10px;
+            left: 10px;
+            background: none repeat scroll 0 0 white;
+        }
+
+        .table td, .table th {
+            font-size: 13px !important;
+        }
+
+        #popup {
+            min-width: 420px;
+        }
+
+        .popover {
+            max-width: 900px;
+            min-width: 470px;
+            position: absolute;
+        }
+
+        .arrow {
+            position: relative;
+            background: #fff;
+            border: 1px solid #003c88;
+        }
+
+            .arrow:after, .arrow:before {
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+            }
+
+            .arrow:after {
+                border-color: rgba(255, 255, 255, 0);
+                border-top-color: #fff;
+                border-width: 10px;
+                margin-left: -10px;
+            }
+
+            .arrow:before {
+                border-color: rgba(153, 153, 153, 0);
+                border-top-color: #003c88;
+                border-width: 11px;
+                margin-left: -11px;
+            }
+
+        .rightPanel {
+            border-radius: 15px;
+            background: #ecf0f5;
+            height: 780px;
+            width: 610px;
+            float: right;
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            right: 0px;
+            bottom: 5px;
+            font-size: 12px;
+            margin-top: 5px;
+            /* box-shadow: -5px -5px 5px #666; */
+            box-shadow: -4px -4px 6px rgb(84, 82, 82);
+            -moz-box-shadow: -4px -4px 6px rgb(84, 82, 82);
+            -webkit-box-shadow: -4px -4px 6px rgb(84, 82, 82);
+        }
+
+        .rightPanel1 {
+            border-radius: 7px;
+            background: none repeat scroll 0 0 rgba(0,0,0,.5);
+            color: #fff;
+            padding: 5px;
+            float: right;
+            z-index: 0;
+            position: absolute;
+            top: 55px;
+            right: 10px;
+            font-size: 12px;
+        }
+
+        .tab-content {
+            margin-top: 40px;
+            z-index: 999 !important;
+            position: absolute;
+            margin-left: 35px;
+        }
+
+        .nav {
+            margin-bottom: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .list-group-item {
+            background: none repeat scroll 0 0 rgba(0,0,0,.5);
+        }
+
+        .dual-list .list-group {
+            margin-top: 8px;
+        }
+
+        .list-left li, .list-right li {
+            cursor: pointer;
+        }
+
+        .list-arrows {
+            padding-top: 100px;
+        }
+
+            .list-arrows button {
+                margin-bottom: 20px;
+            }
+
+        h3 {
+            text-transform: uppercase;
+        }
+
+        .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+            .dropbtn:hover, .dropbtn:focus {
+                background-color: #3e8e41;
+            }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+        .dropdown a:hover {
+            background-color: #f1f1f1
+        }
+
+        .show {
+            display: block;
+        }
+
+
+        .mini-submenu {
+            padding: 9px;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            padding: 2px;
+        }
+
+        .mini-submenu:hover {
+            cursor: pointer;
+        }
+
+        .mini-submenu .icon-bar {
+            border-radius: 1px;
+            display: block;
+            height: 2px;
+            width: 22px;
+            margin-top: 3px;
+            background-color: #000;
+        }
+
+
+
+        #slide-submenu {
+            cursor: pointer;
+        }
+
+        p {
+            color: black;
+        }
+
+        .btn-label {
+            position: relative;
+            left: -12px;
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 3px 0 0 3px;
+        }
+
+        .btn-labeled {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+            .btn-labeled:focus {
+                color: aqua;
+            }
+
+        .menu {
+            background-color: #00547E;
+            border-bottom: 4px solid #04A3ED;
+            width: 100%;
+            height: auto;
+            padding: 0 10px;
+            position: absolute;
+            margin-right: 10px;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+
+        .popup:after, .popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            right: 120px;
+        }
+
+        .popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            right: 120px;
+        }
+
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+
+        .menu .navbar-nav > .active > a {
+            background-color: #04A3ED;
+            color: white;
+            font-weight: bold;
+        }
+
+        .menu .navbar-nav > li > a {
+            font-size: 13px;
+            color: white;
+            padding: 10px 35px;
+        }
+
+            .menu .navbar-nav > li > a:hover {
+                background-color: #226c20;
+            }
+
+        .navbar-header > a {
+            font-family: 'Ubuntu Condensed', sans-serif;
+            padding: 0px;
+            margin: 0px;
+            text-decoration: none;
+            color: white;
+            font-size: 25px;
+            padding: 5px 30px;
+        }
+
+            .navbar-header > a:hover {
+                text-decoration: none;
+                color: #04A3ED;
+            }
+
+        .form-bordered {
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,0.2);
+            background: #f2f5ebc4;
+            border-radius: 4px;
+            /* padding-left: 5px; */
+        }
+
+        .ab:focus {
+            position: relative;
+            -webkit-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+            -moz-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+            box-shadow: 0px 1px 0px rgba(21,73,155,1), 0px -2px 25px rgba(0,0,0,.7);
+            color: blanchedalmond;
+            text-decoration: none;
+            background-color: #337ab7;
+            display: block;
+            letter-spacing: 1px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            text-align: center;
+            -webkit-transition: all .1s ease;
+            -moz-transition: all .1s ease;
+            -ms-transition: all .1s ease;
+            -o-transition: all .1s ease;
+            transition: all .1s ease;
+        }
+
+        .ab {
+            -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+            -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+            box-shadow: 0px 1px 0px rgba(21,73,155,1), 0px -2px 6px rgba(0,0,0,.9);
+            position: relative;
+            top: 6px;
+            letter-spacing: 1px;
+            color: black;
+            background-color: cornflowerblue;
+            font-family: 'Yanone Kaffeesatz';
+            font-weight: 700;
+            font-size: 1.2em;
+            padding: 4px;
+            margin: -9px auto;
+            width: 77px;
+        }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-color: #999;
+        }
+
+        .nav-tabs > li.active {
+            background-color: white !important;
+            color: white;
+        }
+
+        .input-group-addon {
+            padding: 0px 10px;
+        }
+
+        .nav-tabs > li > a {
+            font-weight: bold;
+            /* border-top-left-radius: 10px; */
+            /* border-top-right-radius: 10px; */
+            background: white;
+            color: black;
+            border: 1px solid #999;
+            margin: 0px;
+            font-size: 15px;
+            padding: 8px 20px;
+        }
+
+            .nav-tabs > li > a:hover {
+                background: rgba(0, 0, 0, 0.3);
+                color: white;
+                border-color: #999;
+            }
+
+        .nav-tabs > li.active {
+            background: #296a27;
+            color: white;
+        }
+
+
+        .table-toolbar {
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 4px !important;
+            border: 1px solid #c1bfbf;
+            margin-top: 9%;
+            height: 605px;
+            padding-left: 13px !important;
+        }
+
+
+        .table-toolbar-no-padding {
+            background-color: #ecf0f1;
+            border-radius: 4px !important;
+            border: 2px solid #ccc;
+            margin-bottom: -44px !important;
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+            background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+            box-shadow: 2px 5px 1pc #0a070947;
+        }
+
+        div.tab button:hover {
+            background-color: #296a27;
+        }
+
+        button.tablinks.active {
+            background-color: #296a27;
+            color: white;
+        }
+
+        .table > thead > tr > th {
+            color: darkgreen;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="col-md-12" style="height:40px;padding: 0;">
+
+        <div class="col-md-5" style="padding:0">
+            <div class="col-md-10 p1">
+                <input style="margin-top: 5px;" type="text" placeholder="Tìm kiếm vị trí..." id="autocomplete" name="Name" autocapitalize="off" class="form-control pac-container ng-pristine ng-valid ng-empty ng-touched" autocomplete="off">
+
+            </div>
+            <div class="col-md-2 p2">
+                <button class="btn btn-primary" id="TimKiem" style=" border-radius:5px !important;margin-top: 5px;"><i class="fa fa-search"></i> Tìm kiếm </button>
+
+            </div>
+        </div>
+        <div class="col-md-7" style="padding:0">
+            @*<div class="mini-submenu rightPanel1">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>*@
+            @* <div class="rightPanel" id="pnSearch" style="z-index:999">*@
+            <div class="col-md-12" style="padding:0">
+                <ul class="nav nav-tabs pull-right" role="tablist">
+                    <li class="" id="idRomooc">
+                        <a data-toggle="tab" href="#search">Romooc</a>
+                    </li>
+                    <li class="  text-center"><a class="tablinks" data-toggle="tab" href="#layers" id="packing" onclick=" $(' .tab-content').css('display', 'block');$('.tab-content').removeClass('open');">Bãi đỗ</a></li>
+                    <li class=" text-center"><a class="tablinks" data-toggle="tab" onclick="activetractor(this)" href="#chugiai" id="idremooc">Đầu kéo</a></li>
+                    <li class=" text-center"><a class="tablinks" data-toggle="tab" href="#driver" id="iddriver" onclick=" $(' .tab-content').css('display', 'block');$('.tab-content').removeClass('open');">Tài xế</a></li>
+                    <li class=" text-center active"><a class="tablinks" data-toggle="tab" href="#parking" id="add_packing" onclick=" $(' .tab-content').css('display', 'block');$('.tab-content').removeClass('open');">Vẽ bãi xe</a></li>
+                    <li class="mini-submenu" style="float:right">
+
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <div class="tab-content">
+                <div id="search" class="tab-pane fade">
+                    <div class="table-toolbar" style="margin-top: 0% !important">
+                        <div class="col-md-12 padding-top-offset-5" style="display:inline;padding:0px;">
+                            <div class="col-md-3 " style="padding-top:8px;padding-left:0px;padding-right:0px">
+                                <div class="input-group">
+                                    <div class="form-group">
+                                        @*<label for="remooccode" style=" font-weight:bold; color:grey">Romooc Code:</label>*@
+                                        <input placeholder="Mã romooc" style="width:95%;height:37px;top:1px;left:0px;padding-right:1px" list="go_to_field_id2" type="text" class="form-control" name="browser" id="idlistpark2">
+                                        <datalist id="go_to_field_id2"></datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker11">
+
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Thời gian xuất phát từ" type="text" style="height: 37px;" id="FromDate">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <script>
+                                    $('#datetimepicker11').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+                                </script>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker2">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" style="height: 37px;" id="ToDate">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="padding-left:0px">
+                                <button class="btn btn-circle btn-icon-only  btn-info" onclick="searchrm(this)" style="background: #286091;height: 37px; width: 40px; padding: 3px; margin-bottom: 0px;margin-top:8px;"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="col-md-12 padding-top-offset-5">
+                            <div class="col-md-12 padding-top-offset-5" style="margin-top: 10px;" id="Info" hidden>
+                                <h4 style="text-align:center;font-weight:bold;margin-top:0">THÔNG TIN ROMOOC</h4>
+                            </div>
+                            <div id="romoocInfo" hidden style=" margin-top: 20px;">
+
+                            </div>
+                            <div id="romoocHistory" hidden style="margin-top:10px">
+
+                                <h4 style="    font-weight: bold;text-align:center;">HIỂN THỊ LỊCH SỬ</h4>
+                                <div class="row">
+
+                                    <table class="table">
+                                        <thead>
+
+                                            <tr style="color: black;display:block;">
+                                                <th style="text-align: center;width:95px">Mã chuyến</th>
+                                                <th style="text-align: center;width:100px">Số xe</th>
+                                                <th style="text-align:center;width: 235px;">Thời gian đi</th>
+                                                <th style="text-align:center;width: 235px;">Thời gian đến</th>
+                                                <th style="text-align:center;width:150px"> Tài xế</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rmchtrTable" style="display:block;height:335px;overflow-x:scroll;overflow-y:scroll"></tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="romoocstatus" hidden>
+                            <div class="col-md-12 padding-top-offset-5">
+                                <p style="    border-bottom: 3px black solid; font-weight:bold; color:black">Trạng thái romooc</p>
+                            </div>
+                            <table class="table">
+                                <tbody id="rm1Table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="layers" class="tab-pane fade" style="color:#ffffff;">
+                    <div class="table-toolbar" style="margin-top: 0% !important">
+                        <div class="col-md-12 padding-top-offset-5" style="display:inline;padding:0px">
+                            <div class="col-md-3 " style="padding-top:8px;padding-left: 0px;padding-right: 0px;">
+                                <div class="input-group">
+
+                                    <div class="form-group">
+                                        @*<label for="remooccode" style=" font-weight:bold; color:grey">Tên bãi xe:</label>*@
+                                        <input placeholder="Tên bãi xe" style="width:95%;height:37px;top:1px;left:0px;padding-right:1px" list="go_to_field_id" type="text" class="form-control" name="browser" id="idlistpark">
+                                        <datalist id="go_to_field_id"></datalist>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker21">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Thời gian xuất phát từ" type="text" style="height: 37px;" id="date21">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker22">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" style="height: 37px;" id="date22">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="padding-left:0px">
+                                <button class="btn btn-circle btn-icon-only  btn-info" onclick="searchparking(this)" style="background: #286091;height: 37px; width: 40px; padding: 3px; margin-bottom: 0px;margin-top:8px;"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br />
+                        <div id="parkinghst" hidden>
+
+                            <h4 style="font-weight: bold;text-align:center;color:black; margin-top:40px">LỊCH SỬ HOẠT ĐỘNG CỦA BÃI ĐỖ</h4>
+                            <div class="row">
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr style="color: black;display:block">
+                                            <th style="text-align: center;width:95px">Mã chuyến</th>
+                                            <th style="text-align: center;width:90px">Số xe</th>
+                                            <th style="text-align:center;width:90px">Số mooc</th>
+                                            <th style="text-align:center;width:235px">Thời gian đi</th>
+                                            <th style="text-align:center;width:235px">Thời gian đến</th>
+                                            <th style="text-align:center;width:150px">Tài xế</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="parkingTable" style="display:block;height:460px;overflow-x:scroll;overflow-y:scroll"></tbody>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div id="chugiai" class="tab-pane fade">
+                    <div class="table-toolbar" style="margin-top: 0% !important">
+                        <div class="col-md-12" style="display:inline;padding: 0px;">
+                            <div class="col-md-3 " style="padding-top:8px;padding-left: 0px;padding-right: 0px;">
+                                <div class="input-group">
+                                    <div class="form-group">
+                                        <input placeholder="Mã đầu kéo" style="width:95%;height:37px;top:1px;left:0px;padding-right:1px" list="go_to_field_id12" type="text" class="form-control" name="browser" id="idlistpark12">
+                                        <datalist id="go_to_field_id12"></datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker31">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Thời gian xuất phát từ" type="text" style="height: 37px;" id="date31">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 8px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker32">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" style="height: 37px;" id="date32">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="padding-left:0px">
+                                <button class="btn btn-circle btn-icon-only  btn-info" onclick="searchTractor(this)" style="background: #286091;height: 37px; width: 40px; padding: 3px; margin-bottom: 0px;margin-top:8px;"><i class="fa fa-search"></i></button>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div id="TractorList" style=" margin-top: 15px;" hidden>
+                            <div class="col-md-12" style=" margin-top: 15px;margin-bottom: 10px;" id="btnpp">
+                                <h4 style="text-align:center;font-weight:bold; margin-top:0px">DANH SÁCH ĐẦU KÉO ĐANG TRONG CHUYẾN</h4>
+                            </div>
+                            <div class="row">
+
+                                <table class="table table-hover" style="height: 475px; table-layout: fixed;">
+                                    <thead>
+                                        <tr class="" style="display: block;">
+                                            <th style="font-weight:bold;width:95px">Mã chuyến</th>
+                                            <th style="text-align: center;font-weight:bold;width:90px">Số xe</th>
+                                            <th style="text-align: center;font-weight:bold;width:90px">Số mooc</th>
+                                            <th style="text-align: center;font-weight:bold;width:300px">Thời gian đi</th>
+                                            <th style="text-align: center;font-weight:bold;width:116px">Tài xế</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenttractor" style="height:400px;display:block;overflow-x:scroll;overflow-y:scroll"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12 padding-top-offset-5" style="margin-top: 10px;" id="RemoocInfo" hidden>
+                            <h4 style="text-align:center;  font-weight:bold;margin-top:0">THÔNG TIN ĐẦU KÉO</h4>
+                        </div>
+                        <div id="tractorInfo" hidden style=" margin-top: 20px;">
+
+                        </div>
+                        <div id="TractorHistory" hidden>
+                            <div class="col-md-12 padding-top-offset-5" style="margin-bottom: 10px;">
+                                <h4 style="    font-weight: bold;text-align:center;margin-top:0">HIỂN THỊ LỊCH SỬ</h4>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="" style="display:block">
+                                        <th style="font-weight:bold;width:95px">Mã chuyến</th>
+                                        <th style="width:100px">Số mooc</th>
+                                        <th style="width:230px">Thời gian đi</th>
+                                        <th style="width:230px">Thời gian đến</th>
+                                        <th style="width:150px">Tài xế</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tractorHisTable" style="display:block;height:270px;overflow-x:scroll;overflow-y:scroll"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="driver" class="tab-pane fade" style="color:#ffffff;">
+                    <div class="table-toolbar" style="margin-top: 0% !important">
+                        <div class="col-md-12 padding-top-offset-5" style="display:inline;padding:0px">
+                            <div class="col-md-3 " style="padding-top:8px;padding-left: 0px;padding-right: 0px;">
+                                <div class="input-group">
+                                    <div class="form-group">
+                                        <input placeholder="Tài xế" list="go_to_field_driver" style="width:95%;height:37px;top:1px;left:0px;padding-right:1px" type="text" class="form-control" name="browser" id="idlistpark9">
+                                        <datalist id="go_to_field_driver"></datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 9px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker3">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Thời gian xuất phát từ" type="text" style="height: 37px;" id="date3">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top:8px;padding-left: 0px;padding-right: 8px;">
+                                <div class="bs-component">
+                                    <div class="input-group date pick-date" id="datetimepicker4">
+                                        <input class="form-control" data-val="true" name="NextTimeCheck" placeholder="Đến" type="text" style="height: 37px;" id="date4">
+                                        <span class="input-group-addon cursor">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="padding-left:0px">
+                                <button class="btn btn-circle btn-icon-only  btn-info" onclick="searchdriver(this)" style="background: #286091;height: 37px; width: 40px; padding: 3px; margin-bottom: 0px;margin-top:8px;"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <h4 style="font-weight: bold;text-align:center;margin-top:50px;color:black" id="Driver" hidden>THÔNG TIN TÀI XẾ</h4>
+                        <div class="row">
+
+
+                            <div id="driverInfo" hidden>
+                            </div>
+
+                        </div>
+
+
+                        <div id="driverHistory" hidden>
+                            <h4 style="    font-weight: bold;text-align:center; color:black; margin-top:0px">HIỂN THỊ LỊCH SỬ</h4>
+                            <div class="row">
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr style="color: black;display:block;">
+                                            <th style="width: 95px;">Mã chuyến</th>
+                                            <th style="width:90px">Số xe</th>
+                                            <th style="width:90px">Số mooc</th>
+                                            <th style="width: 200px;">Thời gian đi</th>
+                                            <th>Thời gian đến</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="driverhiss" style="display:block;height:280px;overflow-x:scroll;overflow-y:scroll"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="parking" class="tab-pane fade in active">
+                    <div class="table-toolbar" style="margin-top: 0% !important;    padding-left: 5px !important;">
+
+                        <form class="form-inline" style="    padding-left: 15px;    padding-top: 10px;" hidden>
+                            <label style="font-weight:bold;color:black">Chọn kiểu vẽ &nbsp;</label>
+                            <select id="type" style="border-radius:7px !important; width:22%;height:37px;top:1px;left:0px;padding-right:1px">
+                                <option id="o2" value="Polygon">Đa giác</option>
+                                <option id="o1" value="None">Không chọn</option>
+
+                            </select>
+                        </form>
+
+                        <div id="divstyle" style=" height: 595px;overflow-y: auto;">
+                            <div class="form-bordered">
+                                <div class="row">
+                                    <div class="col-md-7" style="padding-left: 0px; padding-bottom: 10px;">
+                                        <label class="col-md-7 text-left" style="font-weight:bold;color:black">Màu nền &nbsp; </label>
+                                        <div class="col-md-5" style="padding-left: 0px;">
+                                            <input class="form-control" type="color" name="favcolor" value="#64C936" id="cl1" style="height:37px;width:100px">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5" style="padding-bottom: 10px;">
+                                        <label class="col-md-6 text-left" style="font-weight:bold;color:black">Font Size &nbsp;</label>
+                                        <div class="col-md-6" style="padding-left: 0px;padding-right:0px">
+                                            <input class="form-control" type="number" name="points" step="1" min="8" max="20" value="12" style="color:black; border-radius: 7px !important;" id="nb4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="    padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black">Khách hàng</label>
+                                    <div class=" col-md-8" style="padding-left: 0px;">
+                                        <input placeholder="Khách hàng" style="height:37px;" list="listCustomer" type="text" class="form-control" name="browser" id="idListCustomer">
+                                        <datalist id="listCustomer"></datalist>
+                                    </div>
+                                </div>
+                                <div class="row" style="    padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black">Ảnh (Avatar)</label>
+                                    <div class="col-md-8 btn-group dropdown" style="padding-left: 0px;">
+                                        <button id="btn_select_image" style="width:100%" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            Chọn ảnh
+                                            <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+                                        </button>
+
+                                        <ul id="chooseImage" class="hidden dropdown" style="position:absolute ; z-index:99999 !important; width: 98%;margin-top: 35px;margin-left: -377px !important;">
+                                            <li id="pagoda" style="list-style: none;">
+                                                <a href="#" title="Select this card"><img src="/images/icon_chua.jpg" style="width:30px; height:30px;"> Chùa </a>
+                                            </li>
+                                            <li id="company" style="list-style: none;">
+                                                <a href="#" title="Select this card"><img src="/images/company.png" style="width:30px; height:30px;"> Công ty </a>
+
+                                            </li>
+                                            <li id="shop" style="list-style: none;">
+                                                <a href="#" title="Select this card"><img src="/images/icon_cuahang.jpg" style="width:30px; height:30px;"> Cửa hàng </a>
+
+                                            </li>
+
+                                            <li id="park" style="list-style: none;">
+                                                <a href="#" title="Select this card"><img src="/images/icon_parking.jpg" style="width:30px; height:30px;"> Bãi xe </a>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row" style="    padding-bottom: 10px;">
+                                    <form>
+                                        <div class="col-md-4 text-left">
+                                            <p style="font-weight:bold;color:black;margin:0">Hình ảnh</p>
+                                            <div class="col-md-12 mt10" title="Vẽ bãi xe" ng-if="isDraw==false">
+                                                <a><img src="~/images/default/drawing.png" id="draw" style="width:50px; height:50px" /></a>
+                                            </div>
+                                            <div class="col-md-12 mt10" title="Xóa dữ liệu vừa vẽ" ng-if="isDraw==true">
+                                                <a><img src="~/images/default/eraser.png" id="refresh" style="width:50px; height:50px" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 form-col-control " style="padding-left: 0px; border-left:none">
+                                            <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                                <img id="Profile_picture" src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                            </div>
+                                            <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                                <img id="Image1" src="/images/default/no_image.png" style="height:120px; width:145px" />
+                                            </div>
+                                            <input type="file" id="file" class="filestyle" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input name="Profile_picture" onchange="readURL1(this);">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black">Tên bãi &nbsp;</label>
+                                    <div class="col-md-8" style="padding-left: 0px;">
+                                        <input type="text" class="form-control" placeholder="Bãi xe" style=" color:black;height:37px;border-radius: 7px !important;" id="tx1">
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black">Địa chỉ &nbsp;</label>
+                                    <div class="col-md-8" style="padding-left: 0px;">
+                                        <input type="text" class="form-control" placeholder="Địa chỉ bãi xe" style=" color:black;height:37px;border-radius: 7px !important;" id="Address">
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black">Mô tả &nbsp;</label>
+                                    <div class="col-md-8" style="padding-left: 0px;">
+                                        <input type="text" class="form-control" placeholder="Thông tin bãi xe" style=" color:black;height:37px;border-radius: 7px !important;" id="tx2">
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <label class="col-md-4 text-left" style="font-weight:bold;color:black"></label>
+                                    <div class="col-md-8" style="padding-left: 0px;">
+                                        <div id="divsave">
+                                            <button class="btn btn-primary" id="addToParkingTemp"> Thêm bãi xe</button>
+                                            <button class="btn btn-default" style=" " id="styleform"> Cancel</button>
+                                            <button class="btn btn-primary pull-right" id="save"> Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt10">
+                                <label class="col-md-4 text-left" style="font-weight:bold;color:black">Thông tin bãi vừa thêm</label>
+                                <div class="col-md-8" style="padding-left: 0px;">
+                                    <div>
+                                        <table class="table-bordered table" id="tableParkingTemp" style="max-height:20px; overflow:auto">
+                                            <thead>
+                                                <tr>
+                                                    <th class="bold" style="width:150px">Tên bãi</th>
+                                                    @* <th class="bold" style="width:150px">Hình ảnh</th>*@
+                                                    <th class="bold" style="width:100px">Tác vụ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableParkTemp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            @*</div>*@
+        </div>
+
+    </div>
+    <div id="map" class="col-md-12" style="padding:0">
+        <div id="popup" title="" style="align-content:center">
+
+
+        </div>
+
+        @*<div id="parking31" class="mfp-hide white-popup-block neverduplicate col-md-6 col-md-offset-3 panel" style="padding-top:5px">
+
+                <div class="col-md-12 padding-top-offset-5" style="padding-top:0px">
+                    <div class="menu col-md-12" style="left:0px;right:0px;">
+
+                        <div class="navbar-header">
+                            <a href="#">Danh sách đầu kéo đang hoạt động</a>
+                        </div>
+
+                    </div>
+
+                    <p style="margin-top:46px;margin-bottom:0px"><a class="popup-modal-dismiss btn btn-danger" href="#">Đóng</a></p>
+                </div>
+
+
+                <table class="table table2">
+                    <thead> <tr class="info"><th style="font-weight:bold;color:darkslategray">Mã chuyến đi</th><th style="font-weight:bold;color:darkslategray">Mã đầu kéo</th> <th style="font-weight:bold;color:darkslategray">Romooc gắn kèm</th><th style="font-weight:bold;color:darkslategray">Thời gian đi</th><th>Tài xế</th></tr></thead>
+                    <tbody id="contenttractor"></tbody>
+                </table>
+                <br />
+            </div>
+            <div id="parking32" class="mfp-hide white-popup-block neverduplicate col-md-6 col-md-offset-3 panel" style="padding-top:5px">
+
+                <div class="col-md-12 padding-top-offset-5" style="padding-top:0px">
+                    <div class="menu col-md-12" style="left:0px;right:0px;">
+
+                        <div class="navbar-header">
+                            <a href="#">Lịch sử hoạt động đầu kéo</a>
+                        </div>
+
+                    </div>
+
+                    <p style="margin-top:46px;margin-bottom:0px"><a class="popup-modal-dismiss btn btn-danger" href="#">Đóng</a></p>
+                </div>
+
+                <table class="table table3">
+                    <thead> <tr class="info"><th style="font-weight:bold;color:darkslategray">Mã chuyến đi</th> <th style="font-weight:bold;color:darkslategray">Romooc gắn kèm</th><th style="font-weight:bold;color:darkslategray">Thời gian đi</th><th style="font-weight:bold;color:darkslategray">Thời gian đến</th><th>Tài xế</th></tr></thead>
+                    <tbody id="contenttractorh"></tbody>
+                </table>
+                <br />
+            </div>
+            <div id="parking33" class="mfp-hide white-popup-block neverduplicate col-md-6 col-md-offset-3 panel" style="padding-top:5px">
+
+                <div class="col-md-12 padding-top-offset-5" style="padding-top:0px">
+                    <div class="menu col-md-12" style="left:0px;right:0px;">
+
+                        <div class="navbar-header">
+                            <a href="#">Lịch sử hoạt động bãi đỗ</a>
+                        </div>
+
+                    </div>
+
+                    <p style="margin-top:46px;margin-bottom:0px"><a class="popup-modal-dismiss btn btn-danger" href="#">Đóng</a></p>
+                </div>
+
+
+                <table class="table table4">
+                    <thead> <tr class="info"><th style="font-weight:bold;color:darkslategray">Mã chuyến đi</th> <th style="font-weight:bold;color:darkslategray">Mã đầu kéo</th> <th style="font-weight:bold;color:darkslategray">Romooc gắn kèm</th><th style="font-weight:bold;color:darkslategray">Thời gian đi</th><th style="font-weight:bold;color:darkslategray">Thời gian đến</th><th>Tài xế</th></tr></thead>
+                    <tbody id="parkinghiss"></tbody>
+                </table>
+                <br />
+            </div>
+            <div id="parking34" class="mfp-hide white-popup-block neverduplicate col-md-6 col-md-offset-3 panel" style="padding-top:5px">
+
+                <div class="col-md-12 padding-top-offset-5" style="padding-top:0px">
+                    <div class="menu col-md-12" style="left:0px;right:0px;">
+
+                        <div class="navbar-header">
+                            <a href="#">Lịch sử hoạt động tài xế</a>
+                        </div>
+
+                    </div>
+
+                    <p style="margin-top:46px;margin-bottom:0px"><a class="popup-modal-dismiss btn btn-danger" href="#">Đóng</a></p>
+                </div>
+
+
+                <table class="table table5">
+                    <thead> <tr class="info"><th style="font-weight:bold;color:darkslategray">Mã chuyến đi</th> <th style="font-weight:bold;color:darkslategray">Mã đầu kéo</th> <th style="font-weight:bold;color:darkslategray">Romooc gắn kèm</th><th style="font-weight:bold;color:darkslategray">Thời gian đi</th><th style="font-weight:bold;color:darkslategray">Thời gian đến</th></tr></thead>
+
+                    <tbody id="driverhiss"></tbody>
+                </table>
+                <br />
+            </div>*@
+    </div>
+    <!-- /Right Panel -->
+
+    <div id="Modal_ThongBao" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 30%;">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="height: 40px;">
+                    <h4 class="modal-title col-md-11">Thông báo</h4>
+                    <button type="button" class="close" data-dismiss="modal" id="close" style="padding-top: 0px;"><i class="fa fa-remove"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label id="msg" style="text-align:center;"> </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_Info" class=" modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 40%;top:10%">
+            <!-- Modal content-->
+            <div class="modal-content popup">
+                <div class="modal-body" style="padding:10px">
+                    <div class="row">
+
+                        <div class="col-md-11 " style="padding:0">
+                            <div class="row content">
+
+                            </div>
+                        </div>
+                        <div class="col-md-1" style="padding:0">
+                            <span class="close icon-remove close" style="margin:0 auto" data-dismiss="modal" id="close"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        receiveQueue = new Queue();
+        objnew = {};
+        var imgPath = null;
+        var getAllCurentRomooc = function (data) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetAllRemooc",
+                success: function (data) {
+                    // console.log("getAllCurentRomooc:" + JSON.stringify(data));
+                    for (var y in data) {
+                        $('#go_to_field_id2')
+                            .append($("<option>")
+                                .attr("class", 'list-group-item')
+                                .attr("data-customvalue", data[y].LisencePlate)
+                                .attr("value", data[y].LisencePlate));
+
+                        objnew = data;
+                    }
+                }
+            });
+        };
+
+        var getAllCurrentParking = function (data) {
+            $('#go_to_field_id').empty();
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetAllParking",
+                success: function (data) {
+                    // console.log("getAllCurentRomooc:" + JSON.stringify(data));
+                    for (var y in data) {
+                        $('#go_to_field_id')
+                            .append($("<option>")
+                                .attr("class", 'list-group-item')
+                                .attr("data-customvalue", data[y].Id)
+                                .attr("value", data[y].title));
+
+                        objnew = data;
+                    }
+                }
+            });
+        };
+        var getAllCurrentTractor = function (data) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetAllCurrentTractor",
+                success: function (data) {
+                    // console.log("getAllCurentRomooc:" + JSON.stringify(data));
+                    for (var i in data) {
+                        $('#go_to_field_id12')
+                            .append($("<option>")
+                                .attr("class", 'list-group-item')
+                                .attr("data-customvalue", data[i].License_Plate)
+                                .attr("value", data[i].License_Plate));
+
+                        objnew = data;
+                    }
+                }
+            });
+        };
+        var getAllDriver = function (data) {
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/getAllDriver",
+                success: function (data) {
+                    //console.log("getAllDriver:" + JSON.stringify(data));
+                    for (var y in data) {
+                        $('#go_to_field_driver')
+                            .append($("<option>")
+                                .attr("class", 'list-group-item')
+                                .attr("data-customvalue", data[y].Id)
+                                .attr("value", data[y].Name));
+                        objnew = data;
+                    }
+
+                }
+            });
+            var data = [];
+            data.push({ Code: "SHOP", Name: "Cửa hàng" });
+            data.push({ Code: "PAGODA", Name: "Chùa" });
+            data.push({ Code: "PARK", Name: "Bãi xe" });
+            data.push({ Code: "COMPANY", Name: "Công ty" });
+            for (var i = 0; i < data.length; ++i)
+                $('#listAvatar')
+                    .append($("<option>")
+                        .attr("class", 'list-group-item')
+                        .attr("data-customvalue", data[i].Code)
+                        .attr("value", data[i].Name));
+        };
+        var getAllCustomer = function (data) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetAllCustomer",
+                success: function (data) {
+                    //console.log("getAllCustomer:" + JSON.stringify(data));
+                    for (var y in data) {
+                        $('#listCustomer')
+                            .append($("<option>")
+                                .attr("class", 'list-group-item')
+                                .attr("data-customvalue", data[y].Company_Code)
+                                .attr("value", data[y].Company_Name));
+                        objnew = data;
+                    }
+                }
+            });
+
+        };
+        getAllCurrentTractor();
+        getAllCurrentParking();
+        getAllCurentRomooc();
+        getAllDriver();
+        getAllCustomer();
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    console.log('link: ' + e.target.result);
+                    $('#Profile_picture')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="/lib/assets/global/plugins/magnific/jquery.magnific-popup.min.js"></script>
+    <script type="text/javascript" src="/lib/assets/global/plugins/magnific/paginathing.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700' rel='stylesheet' type='text/css'>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAn-5Fd7KH4e78m1X7SNj5gayFcJKDoUow&libraries=places"
+            type="text/javascript"></script>
+</body>
+<!-- End Right panel/ -->
+<script>
+    var isBatch = true;
+    var listParkingTemp = [];
+    function hexToRgbA(hex, opacity) {
+
+        var c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            c = hex.substring(1).split('');
+            if (c.length == 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+        }
+        throw new Error('Bad Hex');
+    }
+    $('.mini-submenu').on('click', function () {
+
+        //  $(".nav-tabs > li.active").removeClass("active");
+        //$(".tab-content > div.active").removeClass("active");
+        if ($('.tab-content').hasClass("open")) {
+
+            $(".tab-content").css("display", "none");
+            $('.tab-content').removeClass("open");
+        }
+        else {
+
+            $(".tab-content").css("display", "block");
+
+            $('.tab-content').addClass("open");
+        }
+    });
+    $('#datetimepicker2').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker3').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker4').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker21').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker22').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker31').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+    $('#datetimepicker32').datetimepicker({ pickTime: false, format: 'DD/MM/YYYY' });
+
+    var saveMapToDb = function (data) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: data,
+            url: "/Admin/RMRemoocX/InsertParkingWithImage",
+
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (data) {
+                //console.log("Insert parking:" + JSON.stringify(data));
+                addPackingUnclick();
+                get_fields();
+                getAllCurrentParking();
+            }
+        });
+    }
+    $(function () {
+        $('.popup-modal').magnificPopup({
+            type: 'inline',
+            preloader: false,
+
+            modal: true
+        });
+        $(document).on('click', '.popup-modal-dismiss', function (e) {
+            e.preventDefault();
+            $.magnificPopup.close();
+
+        });;
+
+
+
+    });
+
+    var map;
+    var fields_vector_source;
+    var isDraw = false;
+    setup_map(); // set up the map
+    get_fields(); // Map the fields from WKT
+    //locate_me(); // Add point
+    var isOpen = false;
+    $(document).on("click", "#btn_select_image", function () {
+        if (isOpen == false) {
+            document.getElementById("chooseImage").setAttribute("class", "dropdown table-toolbar-no-padding");
+            isOpen = true;
+        }
+        else {
+            document.getElementById("chooseImage").setAttribute("class", "hidden");
+            isOpen = false;
+        }
+
+    });
+
+    $(document).on("click", "button#go_to_field", function () {
+        go_to_field();
+    });
+    $(document).on("click", "#pagoda", function () {
+        document.getElementById("chooseImage").setAttribute("class", "hidden");
+        isOpen = false;
+        document.getElementById("btn_select_image").innerHTML = '<a href="#" title="Select this card"><img src="/images/icon_chua.jpg" style="width: 20px; height: 20px;"> Chùa </a><span class="glyphicon glyphicon-chevron-down pull-right"></span>';
+        imgPath = "PAGODA";
+    });
+    $(document).on("click", "#shop", function () {
+        document.getElementById("chooseImage").setAttribute("class", "hidden");
+        isOpen = false;
+        document.getElementById("btn_select_image").innerHTML = '<a href="#" title="Select this card"><img src="/images/icon_cuahang.jpg" style="width:20px; height:20px;"> Cửa hàng </a><span class="glyphicon glyphicon-chevron-down pull-right"></span>';
+        imgPath = "SHOP";
+    });
+
+
+
+    $(document).on("click", "#company", function () {
+        document.getElementById("chooseImage").setAttribute("class", "hidden");
+        isOpen = false;
+        document.getElementById("btn_select_image").innerHTML = '<a href="#" title="Select this card"><img src="/images/company.png" style="width:20px; height:20px;"> Công ty </a><span class="glyphicon glyphicon-chevron-down pull-right"></span>';
+        imgPath = "COMPANY";
+    }); $(document).on("click", "#park", function () {
+        document.getElementById("chooseImage").setAttribute("class", "hidden");
+        isOpen = false;
+        document.getElementById("btn_select_image").innerHTML = ' <a href="#" title="Select this card"><img src="/images/icon_parking.jpg" style="width:20px; height:20px;"> Bãi xe </a><span class="glyphicon glyphicon-chevron-down pull-right"></span>';
+        imgPath = "PARK";
+    });
+    function locate_me() {
+        var locationPoint = new ol.Feature({
+            geometry: new ol.geom.Point([106.68479919433594, 10.897367896986843])
+        });
+        locationPoint.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+        // A vector layer to hold the location point
+        var locationLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [
+                    locationPoint
+                ]
+            })
+        });
+        map.addLayer(locationLayer);
+    }
+    //-----------------------------------------------------VARIABLE---------------------------------------------------------------------------------
+    var parkingTemplayer = new ol.source.Vector({});
+    var count = 0;
+    function get_fields() {
+        var styles3 = [
+
+            new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#64c936',
+                    width: 3
+                }),
+                fill: new ol.style.Fill({
+                    color: 'rgba(0, 0, 255, 0.1)'
+                }),
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 0.5],
+                    size: [52, 52],
+                    offset: [52, 0],
+                    opacity: 1,
+                    scale: 1.0,
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: "https://openlayers.org/en/v4.3.3/examples/data/icon.png"
+                }))
+            }),
+
+
+        ];
+        vectorSource1 = new ol.source.Vector({});
+        console.log('vectorSource1', vectorSource1);
+        var vectorIcon = new ol.source.Vector({});
+
+        centervier = [];
+        vnfields = [];
+        var iconFeatures = [];
+        var getAllParking = function (data) {
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemoocX/GetAllPacking",
+                success: function (data) {
+                    for (var i in data) {
+                        try {
+                            var obj = JSON.parse(i);
+                            var parse = JSON.parse(data[i].Gis_data);
+                            //console.log(i + ' : ');
+                            // console.log(parse.gis_data);
+
+                            var field_title = parse.properties.text;
+                            var fill_color = parse.properties.fill_color;
+
+                            var stroke_color = parse.properties.stroke_color;
+                            var stroke_width = parse.properties.stroke_width;
+                            var text_fill = parse.properties.text_fill;
+                            var font_size = parse.properties.font_size;
+                            var Image = data[i].Image;
+                            var CompanyCode = data[i].Company_Code;
+                            var Owner = data[i].Owner;
+                            var Address = data[i].Address;
+                            var Description = data[i].Description;
+                            var title = data[i].title;
+                            var Icon = 'http://117.6.131.222:4010' + data[i].Icon;
+                            vnfields.push(parse.gis_data);
+
+                            var polygon1 = new ol.geom.Polygon(parse.gis_data);
+                            console.log(parse.gis_data);
+                            var iconFeature = new ol.Feature({
+                                geometry: new ol.geom.Point(parse.gis_data[0][0]),
+                                name: parse.properties.text,
+                                image: data[i].Image,
+                                description: data[i].Description,
+                                title: data[i].title,
+                                owner: data[i].Owner,
+                                Address: data[i].Address,
+                                CompanyCode: data[i].Company_Code,
+                                population: data[i].Id,
+                                rainfall: 500
+                            });
+
+                            // polygon1.transform('EPSG:4326', 'EPSG:3857');
+                            var feature1 = new ol.Feature(polygon1);
+                            feature1.setId(data[i].Id);
+                            feature1.getGeometry();
+                            var xyx = feature1.getGeometry();
+                            var xzx = feature1.getId();
+                            feature1.set('point', parse.gis_data[0][0]);
+                            //console.log(xzx);
+
+                            feature1.set('description', field_title);
+                            feature1.set('title', title);
+                            if (fill_color.includes('rgba')) {
+                                //console.log(fill_color);
+                                feature1.set('fill_color', fill_color);
+                                feature1.set('stroke_color', fill_color);
+                            }
+                            else {
+                                feature1.set('fill_color', hexToRgbA(fill_color, 0.2));
+                                feature1.set('stroke_color', hexToRgbA(fill_color, 1));
+                            }
+
+                            feature1.set('stroke_width', "0.2");
+                            feature1.set('text_fill', "#000000");
+                            feature1.set('text_stroke_color', "#000000");
+                            feature1.set('text_stroke_width', "0");
+                            feature1.set('font_size', 12);
+                            feature1.set('zindex', "30");
+                            feature1.set('Image', Image);
+                            feature1.set('Icon', Icon);
+                            feature1.set('Icon', Icon);
+                            feature1.set('Address', Address);
+                            feature1.set('Owner', Owner);
+                            feature1.set('Description', Description);
+                            feature1.set('CompanyCode', CompanyCode);
+                            //feature1
+
+                            feature1.setStyle(styleFunction);
+                            //$('#go_to_field_id')
+                            //    .append($("<option>")
+                            //        .attr("class", 'list-group-item')
+                            //        .attr("data-customvalue", data[i].Id)
+                            //        .attr("value", field_title));
+
+                            //.text("Đi đến "+field_title));
+
+
+
+
+                            vectorSource1.addFeature(feature1);
+
+                        }
+                        catch (Exc) { }
+                    };
+                }
+            });
+        }
+        var obj2 = getAllParking();
+        // var extent = vectorSource1.getExtent();
+        //    map.getView().fit(extent, map.getSize());
+        var vectorLayer1 = new ol.layer.Vector({
+            source: vectorSource1,
+            style: styles3
+        });
+        vectorLayer2 = new ol.layer.Vector({
+            source: vectorIcon,
+            style: styles3
+        });
+        vectorLayer3 = new ol.layer.Vector({
+            source: parkingTemplayer,
+            style: styles3
+        });
+        map.addLayer(vectorLayer1);
+        map.addLayer(vectorLayer2);
+        map.addLayer(vectorLayer3);
+    }
+
+    var drawSV = new ol.source.Vector({ wrapX: false });
+    drawLV = new ol.layer.Vector({
+        source: drawSV
+    });
+    var typeSelect = document.getElementById('type');
+    var addPacking = document.getElementById('add_packing');
+
+    map.addLayer(drawLV);
+
+    var draw; // global so we can remove it later
+    function addInteraction() {
+
+        var value = typeSelect.value;
+        //var value = 'Polygon';
+
+        if (value !== 'None') {
+            draw = new ol.interaction.Draw({
+                source: drawSV,
+                type: (typeSelect.value)
+            });
+            map.addInteraction(draw);
+        }
+
+
+
+    }
+
+    function hexToRgb(hex, a) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if (result) {
+            r = parseInt(result[1], 16);
+            g = parseInt(result[2], 16);
+            b = parseInt(result[3], 16);
+            var mess = 'rgba(' + r + ', ' + g + ', ' + b + ',' + a + ')';
+            return mess
+        }
+
+    }
+
+    style_form = function () {
+
+        $("#divsave").removeAttr("hidden");
+        cl1 = document.getElementById('cl1').value;
+        nb4 = document.getElementById('nb4').value;
+        tx1 = document.getElementById('tx1').value;
+        tx2 = document.getElementById('tx2').value;
+        console.log("tên" + tx1);
+        //d = "'" + cl1 + "'";
+        //var x = hexToRgb(d, nb1);
+        map.removeLayer(drawLV);
+
+
+        var zoom = map.getView().getZoom();
+        var font_size = zoom * 1;
+        var drawLV = new ol.layer.Vector({
+            source: drawSV,
+            style:
+                new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: hexToRgb(cl1, 0.2),
+                        // color: cl1,
+
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: cl1,
+                        width: '0.1'
+                    }),
+                    text: new ol.style.Text({
+                        font: font_size + 'px Calibri,sans-serif',
+                        fill: new ol.style.Fill({ color: '#000000' }),
+                        textBaseline: 'top',
+                        stroke: new ol.style.Stroke({
+                            color: '#000000', width: '1'
+                        }),
+                        // get the text from the feature - `this` is ol.Feature
+                        text: tx1
+                    }),
+                    zIndex: 10
+                })
+        });
+        map.addLayer(drawLV);
+    }
+    style_all_form = function () {
+        map.removeLayer(drawLV);
+        var zoom = map.getView().getZoom();
+        var font_size = zoom * 1;
+        var features = drawLV.getSource().getFeatures();
+        if (features != null && features.length > 0) {
+            for (var item in features) {
+
+
+            }
+        }
+        var drawLV = new ol.layer.Vector({
+            source: drawSV,
+            style:
+                new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: hexToRgb(cl1, 0.2),
+                        // color: cl1,
+
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: cl1,
+                        width: '0.1'
+                    }),
+                    text: new ol.style.Text({
+                        font: font_size + 'px Calibri,sans-serif',
+                        fill: new ol.style.Fill({ color: '#000000' }),
+                        textBaseline: 'top',
+                        stroke: new ol.style.Stroke({
+                            color: '#000000', width: '1'
+                        }),
+                        // get the text from the feature - `this` is ol.Feature
+                        text: tx1
+                    }),
+                    zIndex: 10
+                })
+        });
+        map.addLayer(drawLV);
+    }
+    $('#styleform').click(function () {
+        var features = drawLV.getSource().getFeatures();
+        if (features != null && features.length > 0) {
+            for (x in features) {
+
+                drawLV.getSource().removeFeature(features[x]);
+
+            }
+        }
+        listParkingTemp = [];
+        $('#tableParkTemp').empty();
+        document.getElementById('tx1').val("");
+        document.getElementById('tx2').val("");
+
+        $('#idListCustomer').val("");
+        $('#Address').val("");
+
+    })
+
+    window.onkeydown = function (event) {
+        if (event.keyCode == 27) {
+            var features = drawLV.getSource().getFeatures();
+            if (features != null && features.length > 0) {
+                drawLV.getSource().removeFeature(features[features.length - 1]);
+            }
+        }
+
+    };
+
+    $('#addToParkingTemp').click(function () {
+
+        var features2 = drawLV.getSource().getFeatures();
+        var newForm = new ol.format.GeoJSON();
+        var featColl = newForm.writeFeaturesObject(features2);
+        var tx1 = document.getElementById('tx1').value;
+        var tx2 = document.getElementById('tx2').value;
+        var cl1 = document.getElementById('cl1').value;
+        var nb4 = document.getElementById('nb4').value;
+        var value31 = $('#idListCustomer').val();
+        var Company_Code = $('#listCustomer [value="' + value31 + '"]').data('customvalue');
+        var Address = $('#Address').val();
+        var file_data = $('#file').prop('files')[0];
+        var dataObj = new Object();
+        if (featColl.features[count] != null && featColl.features[count].geometry != null && featColl.features[count].geometry.coordinates != null) {
+
+            dataObj.gis_data = featColl.features[count].geometry.coordinates;
+            dataObj.properties = {};
+            dataObj.properties.fill_color = cl1;
+            dataObj.properties.text = tx1;
+            dataObj.properties.font_size = nb4;
+
+            var objTotal1 = {};
+            objTotal1.Gis_data = {};
+            objTotal1.Gis_data = dataObj;
+            objTotal1.title = dataObj.properties.text;
+            objTotal1.Description = tx2;
+            objTotal1.Owner = "1";
+            objTotal1.Company_Code = Company_Code;
+            objTotal1.Address = Address;
+            if (isBatch == true) {
+
+                var data = {
+                    title: tx1,
+                    Gis_data: JSON.stringify(dataObj),
+                    Description: tx2,
+                    Owner: objTotal1.Owner,
+                    Company_Code: objTotal1.Company_Code != null ? objTotal1.Company_Code : null,
+                    Address: objTotal1.Address != null ? objTotal1.Address : null,
+                    Icon: imgPath != null ? imgPath : null,
+                    pictureFile: file_data != null ? file_data : null
+
+                };
+
+                listParkingTemp.push(data);
+                count = count + 1;
+                var html1 = '<tr><td class="text-center">' + tx1 + '</td>'
+                    + '<td <label onclick=deleteParkingTempItem("' + (listParkingTemp.length - 1) + '")> <a>Xóa</a></label ></td>'
+                    + '<td <label onclick=stopRobot("' + '")> </label ></td>'
+                    + '<td><label onclick=finishRobot("' + '")> </label >'
+                    + '</td ></tr > </tr>';
+                $('#tableParkTemp').append(html1);
+
+            }
+        }
+        else {
+            App.notifyDanger("Vui lòng vẽ 1 bãi xe trước khi thêm");
+
+        }
+
+    })
+    $('#save').click(function () {
+        if (listParkingTemp.length > 0) {
+
+            for (var item = 0; item < listParkingTemp.length; item++) {
+                insertItem(listParkingTemp[item]);
+            }
+            $('#idListCustomer').val("");
+            $('#tx1').val("");
+            $('#Address').val("");
+            $('#tx2').val("");
+            $('#tableParkTemp').empty();
+            listParkingTemp = [];
+
+            App.notifySuccess("Thêm bãi xe thành công");
+            count = 0;
+        }
+        else {
+            App.notifyDanger("Bạn phải thêm bãi trước khi lưu");
+        }
+    })
+    var deleteParkingTempItem = function (data) {
+        for (var i = 0; i < listParkingTemp.length; ++i) {
+            if (i == parseInt(data)) {
+                listParkingTemp.splice(i, 1);
+                var features = drawLV.getSource().getFeatures();
+                if (features != null && features.length > 0) {
+                    drawLV.getSource().removeFeature(features[i]);
+                    count = count - 1;
+                }
+                // console.log(data);
+            }
+        }
+        // $('#tableParkingTemp').clear();
+        $("#tableParkTemp tr").remove();
+        for (var i = 0; i < listParkingTemp.length; ++i) {
+            var html1 = '<tr><td class="text-center">' + listParkingTemp[i].title + '</td>'
+                + '<td <label onclick=deleteParkingTempItem("' + (listParkingTemp.length - 1) + '")> <a>Xóa</a></label ></td>'
+                + '<td <label onclick=stopRobot("' + '")> </label ></td>'
+                + '<td><label onclick=finishRobot("' + '")> </label >'
+                + '</td ></tr > </tr>';
+            $('#tableParkTemp').append(html1);
+
+        }
+
+
+    }
+    var insertItem = function (data) {
+
+        formdata = new FormData();
+        formdata.append("title", data.title);
+        formdata.append("Gis_data", data.Gis_data);
+        formdata.append("Description", data.Description);
+        formdata.append("Owner", data.Owner);
+        formdata.append("Company_Code", data.Company_Code);
+        formdata.append("Icon", data.Icon);
+        formdata.append("Address", data.Address);
+        formdata.append("pictureFile", data.pictureFile);
+        saveMapToDb(formdata);
+    }
+    var insert = function (image, data) {
+
+        value31 = $('#idListCustomer').val();
+        var Company_Code = $('#listCustomer [value="' + value31 + '"]').data('customvalue');
+        var Address = $('#Address').val();
+        addInteraction();
+        var features2 = drawLV.getSource().getFeatures();
+        var newForm = new ol.format.GeoJSON();
+        var featColl = newForm.writeFeaturesObject(features2);
+
+        var dataObj = new Object();
+        dataObj.gis_data = featColl.features[0].geometry.coordinates;
+        dataObj.properties = {};
+
+        dataObj.properties.fill_color = cl1;
+        dataObj.properties.text = tx1;
+        dataObj.properties.font_size = nb4;
+        objTotal1 = {};
+        objTotal1.Gis_data = {};
+        objTotal1.Gis_data = dataObj;
+        objTotal1.Address = Address;
+
+        objTotal1.title = dataObj.properties.text;
+        objTotal1.Description = tx2;
+        objTotal1.Owner = "1";
+        objTotal1.Company_Code = Company_Code;
+
+        formdata = new FormData();
+        formdata.append("title", objTotal1.title != null ? objTotal1.title : null);
+        formdata.append("Gis_data", JSON.stringify(dataObj));
+        // formdata.append("Image", fi);
+        formdata.append("Description", objTotal1.Description != null ? objTotal1.Description : null);
+        formdata.append("Owner", objTotal1.Owner != null ? objTotal1.Owner : null);
+        formdata.append("Company_Code", objTotal1.Company_Code != null ? objTotal1.Company_Code : null);
+        formdata.append("Address", objTotal1.Address != null ? objTotal1.Address : null);
+        formdata.append("Icon", imgPath != null ? imgPath : null);
+        var fileUpload = $("#file")[0];
+        var file_data = $('#file').prop('files')[0];
+        formdata.append("pictureFile", file_data != null ? file_data : null);
+        console.log(fileUpload);
+        saveMapToDb(formdata);
+        //console.log("xxxxx" + objTotal.Gis_data);
+        drawLV = new ol.layer.Vector({});
+
+    }
+
+    $('#packing').click(function () {
+        addPackingUnclick();
+    });
+    $('#idremooc').click(function () {
+        addPackingUnclick();
+    })
+    $('#iddriver').click(function () {
+        addPackingUnclick();
+    })
+
+    $('#idRomooc').click(function () {
+        addPackingUnclick();
+    })
+
+    $('#draw').click(function () {
+        //if (isDraw == false) {
+        map.removeInteraction(draw);
+        $("#popup").attr("hidden", "true");
+        $("#Modal_Info").modal('hide');
+        typeSelect.value = 'Polygon';
+        //else {
+        typeSelect.onchange();
+        //}
+        //    isDraw = false;
+        //    document.getElementById("draw").setAttribute("src", "/images/drawing.png");
+        //addPackingUnclick();
+        //var features = drawLV.getSource().getFeatures();
+        //if (features != null && features.length > 0) {
+        //    drawLV.getSource().removeFeature(features[count-1]);
+        //    count = count - 1;
+        //}
+
+        //    map.addOverlay(popup);
+
+        //    map.removeInteraction(draw);
+        //    //  $("#popup").attr("hidden", "false");
+        //    typeSelect.value = 'None';
+        //    addInteraction();
+        //}
+
+
+        //$("#refresh").attr("hidden", "false");
+        //$("#draw").attr("hidden", "true");
+
+    })
+    $('#refresh').click(function () {
+
+        //var features = drawLV.getSource().getFeatures();
+        //if (features != null && features.length > 0) {
+        //    drawLV.getSource().removeFeature(features[count-1]);
+        //    count = count - 1;
+        //}
+        var features = drawLV.getSource().getFeatures();
+        if (features != null && features.length > 0) {
+
+            drawLV.getSource().removeFeature(features[features.length - 1]);
+
+        }
+        map.addOverlay(popup);
+        map.removeInteraction(draw);
+        typeSelect.value = 'None';
+        addInteraction();
+    })
+
+    // iddriver
+    /**
+     * Handle change event.
+     */
+    typeSelect.onchange = function () {
+        map.removeInteraction(draw);
+        addInteraction();
+        $("#divstyle").removeAttr("hidden");
+        // $("#popup").attr("hidden", "true");
+    };
+
+    addPackingUnclick = function () {
+
+        var features = drawLV.getSource().getFeatures();
+        if (features != null && features.length > 0) {
+
+            for (x in features) {
+                drawLV.getSource().removeFeature(features[x]);
+            }
+        }
+
+        map.addOverlay(popup);
+
+        map.removeInteraction(draw);
+        //  $("#popup").attr("hidden", "false");
+        typeSelect.value = 'None';
+        addInteraction();
+    }
+    //addPacking.onclick = function () {
+    //    map.removeInteraction(draw);
+    //    $("#popup").attr("hidden", "true");
+    //    $("#Modal_Info").modal('hide');
+    //    typeSelect.value = 'Polygon';
+    //    typeSelect.onchange();
+    //};
+    //addInteraction();
+    function styleFunction() {
+
+        var zoom = map.getView().getZoom();
+        var font_size = zoom * 1;
+        var coordinates = this.getGeometry().getInteriorPoint().getCoordinates();
+        var k = new ol.geom.Point(coordinates);
+        return [
+
+            new ol.style.Style({
+
+                fill: new ol.style.Fill({
+                    color: this.get('fill_color')
+                }),
+                stroke: new ol.style.Stroke({
+                    color: this.get('stroke_color'),
+                    width: this.get('stroke_width')
+                }),
+                text: new ol.style.Text({
+                    font: font_size + 'px Calibri,sans-serif',
+                    fill: new ol.style.Fill({ color: this.get('text_fill') }),
+                    textBaseline: 'top',
+                    stroke: new ol.style.Stroke({
+                        color: this.get('text_stroke_color'), width: this.get('text_stroke_width')
+                    }),
+                    // get the text from the feature - `this` is ol.Feature
+                    text: this.get('description')
+                }),
+                zIndex: this.get('zindex')
+            }),
+            new ol.style.Style({
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 1],
+                    size: [50, 50],
+                    opacity: 6,
+                    scale: 1.0,
+                    src: this.get('Icon')
+                })),
+                geometry: k
+            })
+        ];
+    }
+
+
+
+    var input = document.getElementById('autocomplete');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    var bounds = new google.maps.LatLngBounds();
+    var test;
+    $('#TimKiem').click(function () {
+
+
+        var place
+        if (test !== autocomplete.getPlace()) {
+            test = place = autocomplete.getPlace();
+        }
+
+        if (place != null) {
+
+            var a = bounds.extend(place.geometry.location);
+            var lat = place.geometry.location.lat();
+            var lng = place.geometry.location.lng();
+            // map.getView().fit(bounds);
+            var point = new ol.geom.Point(ol.proj.transform([place.geometry.location.lng(), place.geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'));
+            map.setView(new ol.View({
+                center: ol.proj.transform([place.geometry.location.lng(), place.geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'),
+                // center : ol.proj.fromLonLat([105.8102273,20.99113243]),
+                zoom: 11
+            }));
+            map.getView().setZoom(15);
+
+        }
+        else {
+
+            value21 = $('#autocomplete').val();
+            var idParking;
+            debugger
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { title: value21 },
+                url: "/Admin/RMRemooc/GetParkingById",
+                success: function (data) {
+                    if (data.ID == 0) {
+                        App.notifyDanger(data.Title);
+                    }
+                    else {
+                        idParking = data.Object.Id;
+                        var aaa = parseInt(idParking);
+                        var field_location = vectorSource1.getFeatureById(aaa).getProperties();
+                        console.log("ttttt" + field_location);
+                        var field_extent = field_location.geometry.getExtent();
+                        map.getView().fit(field_extent, map.getSize());
+                        map.getView().setZoom(15);
+                    }
+                }
+            });
+
+
+        }
+
+    })
+
+
+    function setup_map() {
+        // A vector layer to hold the fields
+        fields_vector_source = new ol.source.Vector({});
+
+        //test
+        vectorSource1 = new ol.source.Vector({});
+
+        map = new ol.Map({
+            target: $('#map')[0],
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(
+                        {
+                            url: 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                            attributions: [
+                                new ol.Attribution({ html: '© Google' }),
+                                new ol.Attribution({ html: '<a href="https://developers.google.com/maps/terms">Terms of Use.</a>' })
+                            ]
+                        })
+                }),
+                new ol.layer.Vector({
+                    source: fields_vector_source
+                })
+                //test
+                ,
+                new ol.layer.Vector({
+                    source: vectorSource1
+                }),
+                new ol.layer.Vector({
+                    source: parkingTemplayer
+                })
+
+            ],
+            view: new ol.View({
+                center: ol.proj.transform([106.68479919433594, 10.897367896986843], 'EPSG:4326', 'EPSG:3857'),
+                // center : ol.proj.fromLonLat([105.8102273,20.99113243]),
+                zoom: 11
+            }),
+            controls: ol.control.defaults({
+                attribution: false,
+                zoom: false,
+            })
+        });
+
+
+
+    }
+
+    function go_to_field() {
+        var field_id = $('#idlistpark').val();
+        console.log(field_id);
+        var field_location = vectorSource1.getFeatureById(field_id).getGeometry();
+        console.log(field_location);
+        var field_extent = field_location.getExtent();
+        map.getView().fit(field_extent, map.getSize());
+    }
+
+    var element = document.getElementById('popup');
+    var pos = ol.proj.fromLonLat([106.68479919433594, 10.897367896986843]);
+    var popup = new ol.Overlay({
+        element: element,
+        position: pos,
+        positioning: 'bottom-center',
+        stopEvent: false,
+        offset: [0, 50]
+
+    });
+    map.addOverlay(popup);
+    // display popup on click
+    map.on('click', function (evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                return feature;
+            });
+
+        if (feature) {
+
+            //var parking_info = '<div class="row"> <div class="col-md-5"><img style="height:200px;width:200px" src="' + feature.get('Image') + '" onerror =' + "'" + 'this.src="' + '/images/avatar_default.png' + '"' + "'" + '"></div> <div class="col-md-7"><p> Tên bãi xe:' + feature.get('title') + '</p> <p>Thông tin bãi xe:' + feature.get('Description') + '</p><p>Chủ sở hữu: ' + feature.get('Owner') + '</p><p>Công ty: ' + feature.get('CompanyCode') + '</p></div>';
+            var info = '<table class="table" style="margin-bottom:0"><tbody><tr><td style="font-weight:bold;font-size: 15px;">Tên bãi xe: </td> <td colspan="3" style="font-weight:bold;font-size: 15px;color:red">' + feature.get('title') + ' </td> </tr><tr><td  style="font-weight:bold"> Chủ sở hữu:</td><td  colspan="3" style="font-weight:bold;color:green">' + feature.get('CompanyCode') + '</td></tr><tr><td style="font-weight:bold;">Địa chỉ bãi xe: </td> <td style="color:green" colspan="3">' + feature.get('Address') + ' </td></tr>  <tr><td colspan="2"><img style="height:150px;width:150px" src="' + feature.get('Image') + '" onerror =' + "'" + 'this.src="' + '/images/default/no_image.png' + '"' + "'" + '"></td><td colspan="2"><p style="margin:0;color:green"><strong style="color:black">Thông tin bãi xe:</strong> <br/>' + feature.get('Description') + '</p></td></tr></tbody></table>';
+            var coordinates = feature.getGeometry().getCoordinates();
+            popup.setPosition(coordinates);
+            //$('#go_to_field_id2').empty();
+            getAllCurentRomooc();
+
+            for (var i in objnew) {
+
+                if (objnew[i].Position_parking == feature.get('population')) {
+                    if (objnew[i].Status == 0) {
+                        re_status = 'Dừng bến';
+                        re_type = ' <a href="google.com"> <img src="https://i.imgur.com/Ha3KNfJ.png"  class="img-thumbnail" alt="Cinque Terre" width="25" > </a>';
+                    }
+                    else {
+                        re_status = 'Xuất bến';
+                        re_type = '<a href="google.com"> <img src="https://i.imgur.com/4pcSPn9.png" href="google.com" class="img-thumbnail" alt="Cinque Terre" width="25" > </a>';
+                    };
+
+                }
+            }
+
+            var data = feature.get('title');
+            if (data != null && data != "") {
+
+
+                map.getView().fit(feature.getGeometry(), map.getSize());
+                map.getView().setZoom(15);
+
+                $('#Modal_Info .content').html(info);
+                $('#Modal_Info').modal('show');
+            }
+
+        }
+
+        //else if (feature && feature.get('rainfall') == 501) {
+
+        //    getAllCurentRomooc();
+        //    $('#go_to_field_id2').empty();
+
+
+
+        //    var coordinates = feature.getGeometry().getCoordinates();
+        //    popup.setPosition(coordinates);
+        //    var yarray = [];
+        //    var xarray = [];
+        //    var valuezz = feature.get('name');
+        //    for (var i in objnew) {
+        //        if (valuezz == objnew[i].Remooc_code) {
+        //            var ppobj = JSON.parse(objnew[i].FieldValue);
+        //            sttrmz = "Available"
+        //            if (objnew[i].Status == false) {
+        //                sttrmz = "On Way"
+
+        //            }
+        //            //console.log("501" + JSON.stringify(ppobj));
+        //            xarray.push('<table class="table "> <tbody> <tr class="success"> <td style="font-weight:bold;color:black">Hãng</td> <td style="color:green">' + ppobj.producer + '</td> </tr> <tr class="success"> <td style="font-weight:bold;color:black">Hình ảnh</td> <td style="color:green"><img src="' + objnew[i].Image + '" alt="" height="100" ></td> </tr> <tr class="success"> <td style="font-weight:bold;color:black"> Loại mooc</td> <td style="color:black"> ' + ppobj.type + ' </td> </tr> <tr class="success"> <td style="font-weight:bold;color:black">Kích thước tổng thể (mm)</td> <td style="color:black">' + ppobj.sizeTotal + '</td> </tr> <tr class="success"> <td style="font-weight:bold;color:black">Kích thước thùng (mm)</td> <td style="color:black">' + ppobj.sizeBins + '</td> </tr> <tr class="success"> <td style="font-weight:bold;color:black">Trọng lượng bản thân</td> <td style="color:black">' + ppobj.seflWeight + 'kg</td></tr> <tr class="success"> <td style="font-weight:bold;color:black">Trọng tải lưu hành </td> <td style="color:black"> ' + ppobj.shippingWeight + 'kg</td></tr> <tr class="success"> <td style="font-weight:bold;color:black">Cầu</td> <td style="color:black"> ' + ppobj.carrier + '</td></tr> <tr class="success"> <td style="font-weight:bold;color:black">Lốp Trước/ Sau</td><td style="color:black"> ' + ppobj.tire + '</td></tr><tr class="success"><td style="font-weight:bold;color:black">Sản xuất</td><td style="color:black"> ' + ppobj.origin + '</td></tbody></table>');
+        //            yarray.push(' <tr class="danger"> <td style="font-weight:bold;color:black">Trạng thái</td> <td style="color:green">' + sttrmz + '</td> </tr> <tr class="danger"> <td style="font-weight:bold;color:black">Bãi đỗ</td> <td style="color:black">' + objnew[i].Position_text + '</td> </tr> <tr class="danger"> <td style="font-weight:bold;color:black">Vị trí</td> <td style="color:black">' + objnew[i].Position_gps + '</td> </tr> <tr class="danger"> <td style="font-weight:bold;color:black">Thời điểm đỗ</td> <td style="color:black">' + objnew[i].Position_time + '</td> </tr> <tr class="danger"> <td style="font-weight:bold;color:black">Mã đầu kéo</td> <td style="color:black">' + objnew[i].Remooc_code + '</td> </tr>');
+        //        }
+        //    }
+        //    $('#rm1Table').empty();
+        //    $('#rm1Table').append(yarray);
+        //    $("#romoocstatus").removeAttr("hidden");
+
+        //    $(element).popover({
+        //        'placement': 'top',
+        //        'html': true,
+
+        //        'content': xarray
+        //    });
+        //    $(element).popover('show');
+        //}
+        else {
+            $(element).popover('destroy');
+            //$("#listrm").addAttr("hidden");
+            $("#listrm").attr("hidden", "true");
+            $("#romoocstatus").attr("hidden", "true");
+            $("#parkinghst").attr("hidden", "true");
+
+            $('#rm1Table').empty();
+            $('#parkingTable').empty();
+        }
+    });
+    // change mouse cursor when over marker
+    map.on('pointermove', function (e) {
+        if (e.dragging) {
+            $(element).popover('destroy');
+            return;
+        }
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.hasFeatureAtPixel(pixel);
+        map.getTarget().style.cursor = hit ? 'pointer' : '';
+    });
+
+    function searchparking(btn) {
+
+        $('#parkingTable').empty();
+
+        value21 = $('#idlistpark').val();
+        debugger
+        var idParking = $('#go_to_field_id [value="' + value21 + '"]').data('customvalue');
+        var aaa = parseInt(idParking);
+        var time21 = $('#date21').val();
+        var time22 = $('#date22').val();
+
+        var getParkingSearch = function (data) {
+            if (data.End_position_code == null || data.End_position_code == "") {
+                App.notifyDanger("Vui lòng chọn bãi xe!");
+                return;
+
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetPackingById",
+                success: function (data) {
+
+                    // console.log("Packing data" + JSON.stringify(data));
+                    var parkingTable = [];
+                    for (var i in data) {
+                        parkingTable.push('<tr class = ""><td style="color:black;width:95px">' + data[i].Trip_code + '</td><td style="color:black;width:90px">' + data[i].Tractor_code + '</td><td style="color:black;width:90px">' + data[i].Remooc_code + '</td> <td style="color:black;width:235px">Xuất phát lúc <strong>' + data[i].Start_position_time + '</strong> tại <strong>' + data[i].Start_position_text + '<strong></td><td style="color:black;width:235px">Đến nơi lúc <strong>' + data[i].End_position_time + '</strong> tại <strong>' + data[i].End_position_text + '<strong></td><td style="color:black;width:150px">' + data[i].Name + '</td></tr>');
+                    }
+                    $('#parkingTable').append(parkingTable);
+                }
+            });
+            $("#btnpp").removeAttr("hidden");
+            $('#parkinghst').removeAttr("hidden");
+        };
+        var objSearch = {
+            End_position_code: idParking,
+            Start_position_time: time21,
+            End_position_time: time22
+
+        };
+
+        getParkingSearch(objSearch);
+
+        var field_location = vectorSource1.getFeatureById(aaa).getProperties();
+        console.log("ttttt" + field_location);
+        var field_extent = field_location.geometry.getExtent();
+        map.getView().fit(field_extent, map.getSize());
+        map.getView().setZoom(15);
+    };
+
+    function searchdriver(btn) {
+        $("#driverInfo").empty();
+        $('#driverTable').empty();
+        $('#driverhiss').empty();
+
+
+        value31 = $('#idlistpark9').val();
+        var idDrver = $('#go_to_field_driver [value="' + value31 + '"]').data('customvalue');
+
+        var aaa = parseInt(idDrver);
+        //getCurrentEm(value31, idDrver);
+        var time31 = $('#date3').val();
+        var time32 = $('#date4').val();
+
+        var getDriverSearch = function (data) {
+            if (data.Driver_Id == null || data.Driver_Id == "") {
+                App.notifyDanger("Vui lòng chọn tài xế!");
+                return;
+
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/searchDriverTractorNew",
+                success: function (data1) {
+                    // console.log          $.ajax({("Driver data" + JSON.stringify(data));
+                    var user = data1.User;
+                    var data = data1.DriverTracktor;
+                    var content_arr = [];
+                    content_arr.push('<table class="table "> <tbody> <tr class=""> <td style="font-weight:bold;color:black">Tài xế</td> <td style="color:red">' + user.Name + '</td> </tr> <tr class=""> <td style="font-weight:bold;color:black">Hình ảnh</td> <td style="color:green"><img src="' + user.Profile_Picture + '" alt="" height="60" ></td> </tr> <tr class=""> <td style="font-weight:bold;color:black"> Số điện thoại</td> <td style="color:green">' + user.Phone + ' </td> </tr> <tr class=""> <td style="font-weight:bold;color:black">Kinh nghiệm lái</td> <td style="color:green">' + "Chưa xác định" + '</td>  </tbody></table>');
+
+                    var content_arr2 = [];
+
+                    for (var i in data) {
+                        content_arr2.push('<tr class = ""><td style="color:black;width: 95px;">' + data[i].Trip_code + '</td><td  style="color:black;width: 90px;">' + data[i].Tractor_code + '</td><td  style="color:black;width: 90px;">' + data[i].Remooc_code + '</td> <td style="color:black;width: 200px;">Xuất phát lúc <strong>' + data[i].Start_position_time + '</strong> tại <strong>' + data[i].Start_position_text + '<strong></td><td style="color:black">Đến nơi lúc <strong>' + data[i].End_position_time + '</strong> tại <strong>' + data[i].End_position_text + '<strong></td></tr>');
+                    }
+                    $("#driverInfo").append(content_arr);
+                    $('#driverhiss').append(content_arr2);
+                }
+            });
+            $("#btnppp").removeAttr("hidden");
+            $('#Driver').removeAttr("hidden");
+            $("#driverInfo").removeAttr("hidden");
+            $("#driverHistory").removeAttr("hidden");
+        };
+        var objSearch = {
+            Driver_Id: idDrver,
+            Start_position_time: time31,
+            End_position_time: time32
+        };
+
+        getDriverSearch(objSearch);
+
+    };
+
+    var vectorIcon2 = new ol.source.Vector({});
+    var vectorIcon3 = new ol.source.Vector({});
+
+
+
+
+
+
+
+    var ibs = 10;
+    var path = [];
+
+    getCurrentEm = function (data1, data2) {
+
+        $('#rm1Table').empty();
+
+
+        //$('#go_to_field_id2').empty();
+        getAllCurentRomooc();
+        sttrmz2 = true;
+        //console.log("objnew" + JSON.stringify(objnew))
+        for (var i in objnew) {
+            if (data1 == objnew[i].Remooc_code) {
+
+                sttrmz2 = objnew[i].Status;
+
+            }
+        }
+
+        var aaa = parseInt(data2);
+        console.log('vector', vectorSource1);
+        var field_location = vectorSource1.getFeatureById(aaa).getProperties();
+        var pointpk = vectorSource1.getFeatureById(aaa).get('point');
+        var poitnpk2 = new ol.geom.Point(ol.proj.transform(pointpk, 'EPSG:3857',
+            'EPSG:4326'));
+
+        var poitnpk3 = new ol.geom.Point(ol.proj.transform([11875413.538184507, 1283981.392167715], 'EPSG:3857',
+            'EPSG:4326'));
+        poitnpk4 = [poitnpk2.A[1], poitnpk2.A[0]];
+        poitnpk5 = [poitnpk3.A[1], poitnpk3.A[0]];
+        if (sttrmz2 == false) {
+            map.removeLayer(vectorLayer2);
+            var field_extent = field_location.geometry.getExtent();
+
+            map.getView().fit(field_extent, map.getSize());
+            var centerz = map.getView().getCenter();
+            map.getView().setZoom(14);
+
+            //var getPathGoogle = function (orgin, destination) {
+
+            //      $.ajax({
+
+            //          type: "GET",
+            //          dataType: "json",
+            //          crossDomain: true,
+
+            //          data: "origin=" + orgin + "&destination=" + destination + "&key=AIzaSyC9nbnOB0erMKa8zIEXwcMMipwTdndvqHs",
+            //          url: "https://maps.googleapis.com/maps/api/directions/json",
+            //          success: function (data) {
+
+            //              path = polyline.decode(data.routes[0].overview_polyline.points);
+            //              console.log(path);
+            //              pathLayerMarker = renderLinePathLayer(path);
+
+            //              map.addLayer(pathLayerMarker);
+
+
+            //              map.removeLayer(vectorLayer2);
+
+            //              var field_extent = field_location.geometry.getExtent();
+
+            //              map.getView().fit(field_extent, map.getSize());
+            //              var centerz = map.getView().getCenter();
+
+
+            //              map.getView().setZoom(14);
+            //              var i = 10;
+
+            //              setInterval(function () {
+            //                  console.log("subcribe failed: " + JSON.stringify(receiveQueue));
+            //                  if (receiveQueue.size() != 0) {
+            //                      var dataGPS = receiveQueue.dequeue();
+
+
+            //                      console.log("data Gps" + JSON.stringify(dataGPS));
+            //                      var poitnpk6 = new ol.geom.Point(ol.proj.transform([dataGPS.text[1], dataGPS.text[0]], 'EPSG:4326',
+            //                          'EPSG:3857'));
+            //                  }
+
+            //                  console.log("0" + dataGPS.text[1]);
+            //                  console.log("0" + dataGPS.text[0]);
+
+            //                  var poitnpk6 = new ol.geom.Point(ol.proj.transform([dataGPS.text[1], dataGPS.text[0]], 'EPSG:4326',
+            //                      'EPSG:3857'));
+            //                  ibs++;
+
+            //                  console.log("data gps" + JSON.stringify(poitnpk6));
+            //                  var iconStyle = new ol.style.Style({
+            //                      image: new ol.style.Icon(({
+            //                          anchor: [0.5, 46],
+            //                          anchorXUnits: 'fraction',
+            //                          anchorYUnits: 'pixels',
+            //                          src: 'https://openlayers.org/en/v4.3.3/examples/data/icon.png'
+            //                      }))
+            //                  });
+            //                  var iconStyleGrey2 = new ol.style.Style({
+            //                      image: new ol.style.Icon(({
+            //                          anchor: [0.5, 46],
+            //                          anchorXUnits: 'fraction',
+            //                          anchorYUnits: 'pixels',
+            //                          src: 'https://i.imgur.com/9GoWcAL.png'
+            //                      }))
+            //                  });
+            //                  var iconFeature = new ol.Feature({
+            //                      geometry: poitnpk6,
+            //                      name: data1,
+            //                      population: "y",
+            //                      rainfall: 501,
+            //                      style: iconStyleGrey2
+            //                  });
+            //                  iconFeature.setId(1);
+
+
+            //                  vectorIcon2.addFeature(iconFeature);
+
+            //                  vectorIcon2.getFeatureById(1).setGeometry(poitnpk6);
+            //                  vectorIcon2.getFeatureById(1).setStyle(iconStyleGrey2);
+            //ss              }, 1000);
+            //              romoocLayer = new ol.layer.Vector({
+            //                  source: vectorIcon2,
+            //                  style: iconStyleGrey2
+            //              });
+            //              map.addLayer(romoocLayer);
+            //          },
+            //          error: function (error) {
+
+            //              jsonValue = jQuery.parseJSON(error.responseText);
+
+
+            //          }
+            //      });
+            //  }
+
+            //  getPathGoogle(poitnpk4, poitnpk5);
+            setInterval(function () {
+                console.log("receiveQueue: " + JSON.stringify(receiveQueue));
+                if (receiveQueue.size() != 0) {
+                    var dataGPS = receiveQueue.dequeue();
+                    console.log("data Gps" + JSON.stringify(dataGPS));
+                    var poitnpk6 = new ol.geom.Point(ol.proj.transform([dataGPS.text[1], dataGPS.text[0]], 'EPSG:4326',
+                        'EPSG:3857'));
+                }
+
+                console.log("0" + dataGPS.text[1]);
+                console.log("0" + dataGPS.text[0]);
+
+                var poitnpk6 = new ol.geom.Point(ol.proj.transform([dataGPS.text[1], dataGPS.text[0]], 'EPSG:4326',
+                    'EPSG:3857'));
+
+                var iconStyle = new ol.style.Style({
+                    image: new ol.style.Icon(({
+                        anchor: [0.5, 46],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: 'https://openlayers.org/en/v4.3.3/examples/data/icon.png'
+                    }))
+                });
+                var iconStyleGrey2 = new ol.style.Style({
+                    image: new ol.style.Icon(({
+                        anchor: [0.5, 46],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: 'https://i.imgur.com/9GoWcAL.png'
+                    }))
+                });
+                var iconFeature = new ol.Feature({
+                    geometry: poitnpk6,
+                    name: data1,
+                    population: "y",
+                    rainfall: 501,
+                    style: iconStyleGrey2
+                });
+                iconFeature.setId(1);
+                vectorIcon2.addFeature(iconFeature);
+
+                vectorIcon2.getFeatureById(1).setGeometry(poitnpk6);
+                vectorIcon2.getFeatureById(1).setStyle(iconStyleGrey2);
+
+
+            }, 1000);
+            setTimeout(function () {
+                if (receiveQueue.size() == 0) {
+                    alert("Romooc đã rời bãi xe và không bật GPS")
+                }
+
+            }, 1000);
+            romoocLayer = new ol.layer.Vector({
+                source: vectorIcon2,
+                style: iconStyleGrey2
+            });
+            map.addLayer(romoocLayer);
+        }
+        else {
+
+            map.removeLayer(vectorLayer2);
+            //console.log("ttttt" + pointpk);
+            var field_extent = field_location.geometry.getExtent();
+
+            map.getView().fit(field_extent, map.getSize());
+            var centerz = map.getView().getCenter();
+
+
+            map.getView().setZoom(14);
+            var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://openlayers.org/en/v4.3.3/examples/data/icon.png'
+                }))
+            });
+            var iconFeature = new ol.Feature({
+                geometry: new ol.geom.Point(centerz),
+                name: data1,
+                population: "y",
+                rainfall: 501,
+
+            });
+            var iconStyleGrey2 = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://i.imgur.com/9GoWcAL.png'
+                }))
+            });
+
+            vectorIcon2.addFeature(iconFeature);
+            romoocLayer = new ol.layer.Vector({
+                source: vectorIcon2,
+                style: iconStyleGrey2
+            });
+            map.addLayer(romoocLayer);
+        }
+
+
+
+    };
+
+    setInterval(function () {
+        var crzoom = map.getView().getZoom();
+        if (crzoom < 11
+        ) {
+            map.addLayer(vectorLayer2);
+        }
+    }, 1000);
+
+
+
+
+    function searchrm(btn) {
+        path = [];
+        ibs = 10;
+        vectorIcon2.clear();
+
+        $('#go_to_field_id4').empty();
+        $("#rmchtrTable").empty();
+        $("#romoocInfo").empty();
+
+
+        var rmCode = $('#idlistpark2').val();
+
+        var idParking = $('#go_to_field_id2 [value="' + rmCode + '"]').data('customvalue');
+
+        console.log(idParking);
+
+        //getCurrentEm(rmCode, idParking);
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        var getRemoocSearch = function (data) {
+
+            if (data.Remooc_code == null || data.Remooc_code == "") {
+
+                App.notifyDanger("Vui lòng chọn số mooc");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "/Admin/RMRemooc/GetTrackingById",
+                success: function (data) {
+                    var remoocTracking = data.TrackingRomooc;
+                    var remooc = data.Romooc;
+                    var remoocTable = [];
+                    var content_arr2 = [];
+                    content_arr2.push('<table class="table"> <tbody> <tr class=""> <td style="color:black;font-weight:bold">Số mooc</td> <td style="color:red">' + remooc.License_Plate + '</td><td style="color:black;font-weight:bold"> Nhóm</td> <td style="color:green">' + remooc.Group + ' </td> </tr> <tr class=""> <td rowspan="2" style="color:black;font-weight:bold">Hình ảnh</td> <td rowspan="2" style="color:green"><img src="' + remooc.Image + '" alt="" height="60" ></td><td style="color:black;font-weight:bold">Hãng</td> <td style="color:green">' + remooc.Generic + '</td> </tr> <tr class=""> <td style="font-weight:bold;color:black">Xuất xứ</td> <td style="color:green">' + remooc.Origin + '</td>  </tr> </tbody></table>');
+
+                    for (var i in remoocTracking) {
+                        remoocTable.push('<tr class = ""><td style="color:black;width:95px">' + remoocTracking[i].Trip_code + '</td><td style="width:100px;color:black">' + remoocTracking[i].Tractor_code + '</td> <td style="color:black;width: 235px;">Xuất phát lúc <strong>' + remoocTracking[i].Start_position_time + '</strong> tại <strong>' + remoocTracking[i].Start_position_text + '<strong></td><td style="color:black;width: 235px;">Đến bến lúc <strong style="">' + remoocTracking[i].End_position_time + '</strong> tại <strong>' + remoocTracking[i].End_position_text + '<strong></td><td style="width:150px">' + remoocTracking[i].Name + '</td></tr>');
+                    }
+                    $('#rmchtrTable').append(remoocTable);
+                    $("#romoocInfo").append(content_arr2);
+                }
+            });
+            $("#rmchst").removeAttr("hidden");
+            $('#Info').removeAttr("hidden");
+            $('#romoocInfo').removeAttr("hidden");
+
+            $("#romoocHistory").removeAttr("hidden");
+        };
+        var objSearch = {
+            Remooc_code: rmCode,
+            Start_position_time: FromDate,
+            End_position_time: ToDate
+        };
+        getRemoocSearch(objSearch);
+    }
+
+    function activetractor(btn) {
+        $(' .tab-content').css('display', 'block');
+        $('.tab-content').removeClass("open");
+        $('#contenttractor').empty();
+        var getAllTractorActive = function (data) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: data,
+                url: "remoocx/GetAllTractorActive",
+                success: function (data) {
+
+                    var contentArr = [];
+                    var contentArrPlus = [];
+                    for (var i in data) {
+
+
+                        //contentArrPlus.push('<button class="btn  btn-info abxc" id="' + data[i].Start_position_code + '" style="height:30px" onclick="searchTrc(this)">' + data[i].Tractor_code+'</button>');
+                        contentArr.push('<tr class = ""><td style=" width: 95px;">' + data[i].Trip_code + '</td><td style="width:90px">' + data[i].Tractor_code + '</td><td style="width:90px">' + data[i].Remooc_code + '</td> <td style="width: 300px;">Xuất phát lúc <strong>' + data[i].Start_position_time + '</strong> tại <strong>' + data[i].Start_position_text + '<strong></td><td>' + data[i].Name + '</td></tr>');
+                    }
+                    //$('#listtr').append(contentArrPlus);
+                    $('#contenttractor').append(contentArr);
+                }
+            });
+
+        };
+        getAllTractorActive();
+        $("#TractorList").removeAttr("hidden");
+    }
+
+    function searchTractor(btn) {
+        $("#tractorInfo").empty();
+        $("#tractorHisTable").empty();
+
+        var rmCode = $('#idlistpark12').val();
+        console.log("aa" + rmCode);
+        var idTractor = $('#go_to_field_id12 [value="' + rmCode + '"]').data('customvalue');
+
+        var time11 = $('#date31').val();
+        var time12 = $('#date32').val();
+        if (time11 == "")
+            time11 = null;
+
+        var objSearch2 = {
+            TracktorCode: rmCode,
+            Start_position_time: time11,
+            End_position_time: time12
+
+        };
+        console.log(JSON.stringify(objSearch2));
+
+        var getTractorSearch = function (data) {
+            if (data.TracktorCode == null || data.TracktorCode == "") {
+
+                App.notifyDanger("Vui lòng chọn biển số");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: objSearch2,
+                url: "/Admin/RMRemooc/searchTrackingTractorNew",
+                success: function (data1) {
+                    console.log(JSON.stringify(data1));
+                    var tracktor = data1.Tracktor;
+                    var data = data1.TrackingTracktor;
+                    var content_arr = [];
+                    var content_arr2 = [];
+                    content_arr2.push('<table class="table"> <tbody> <tr class=""> <td style="color:black;font-weight:bold">Biển số</td> <td style="color:red">' + tracktor.License_Plate + '</td><td style="color:black;font-weight:bold"> Nhóm</td> <td style="color:green">' + tracktor.Group + ' </td> </tr> <tr class=""> <td rowspan="2" style="color:black;font-weight:bold">Hình ảnh</td> <td rowspan="2" style="color:green"><img src="' + tracktor.Image + '" alt="" height="60" ></td><td style="color:black;font-weight:bold">Hãng</td> <td style="color:green">' + tracktor.Generic + '</td> </tr> <tr class=""> <td style="font-weight:bold;color:black">Xuất xứ</td> <td style="color:green">' + tracktor.Origin + '</td>  </tr> </tbody></table>');
+                    for (var i in data) {
+                        content_arr.push('<tr class = ""><td style="color:black;width:95px">' + data[i].Trip_code + '</td><td  style="color:black;width:90px">' + data[i].Remooc_code + '</td> <td style="color:black;width: 230px;;">Xuất phát lúc <strong>' + data[i].Start_position_time + '</strong> tại <strong style="">' + data[i].Start_position_text + '<strong></td><td style="color:black;width: 230px;">Đến nơi lúc <strong>' + data[i].End_position_time + '</strong> tại <strong>' + data[i].End_position_text + '<strong></td><td style="width:150px">' + data[i].Name + '</td></tr>');
+                    }
+                    $("#tractorInfo").append(content_arr2);
+                    $('#tractorHisTable').append(content_arr);
+                }
+            });
+            $("#TractorList").attr("hidden", "true");
+            $("#RemoocInfo").removeAttr("hidden");
+            $("#tractorInfo").removeAttr("hidden");
+
+            $("#TractorHistory").removeAttr("hidden");
+        };
+        getTractorSearch(objSearch2);
+    }
+</script>

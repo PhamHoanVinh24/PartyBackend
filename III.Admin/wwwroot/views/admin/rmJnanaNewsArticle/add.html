@@ -1,0 +1,104 @@
+﻿<script>
+    function readURL(input) {
+        //  $(this).parent().parent().parent().find('.form-control').html($(this).val());
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log('link: ' + e.target.result);
+                $('#Image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <div class="modal-title custom-title " id="modal-title">{{'RMJNA_CURD_TITLE_ADD' | translate}}</div>
+</div>
+<div class="modal-body no-space" id="modal-body">
+
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal  form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-certificate"></i> {{'RMJNA_CURD_LBL_CODE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_code" name="article_code" placeholder="{{'RMJNA_CURD_TXT_CODE' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-tint"></i> {{'RMJNA_CURD_LBL_ARTICLE_TITLE' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_title" name="article_title" placeholder="{{'RMJNA_CURD_TXT_ARTICLE_TITLE' | translate}}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-fire"></i> {{'RMJNA_CURD_LBL_CONTENT' | translate}}</label>
+                        <div class="col-md-8">
+                            <textarea rows="7" cols="25" type="text" class="form-control" ng-model="model.article_content" name="article_content" placeholder="{{'RMJNA_CURD_TXT_CONTENT' | translate}}" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <div class=" col-md-6" style="padding-left:0">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"> <i class="glyphicon glyphicon-leaf"></i> {{'RMJNA_CURD_LBL_LIST' | translate}}</label>
+                        <div class="col-md-8 form-col-control">
+
+                            <ui-select ng-model="model.cat_code" class="" ui-select-required>
+                                <ui-select-match placeholder="{{'RMJNA_CURD_TXT_LIST' | translate}}...">{{$select.selected.cat_code}}</ui-select-match>
+                                <ui-select-choices repeat="x.cat_code as x in treeDatacategory1 | filter:$select.value">
+                                    {{x.cat_code}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="glyphicon glyphicon-fire"></i> {{'RMJNA_CURD_LBL_ARTICLE_ORDER' | translate}}</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" ng-model="model.artile_order" name="artile_order" placeholder="{{'RMJNA_CURD_TXT_ARTICLE_ORDER' | translate}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                            <i class="sprite-image-16x16"></i>
+                            <label class="control-label" for="Status"> {{'RMJNA_CURD_LBL_IMG' | translate}}</label>
+                        </div>
+                        <div class="col-md-8 form-col-control ">
+                            <div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; float:left">
+                                    <img id="Image" ng-src='{{model.article_avarta}}' src="../../../images/default/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                                <div class="fileupload-new thumbnail mb5" style="width:49% !important;margin:auto; margin-left:1%;  float:left">
+                                    <img id="Image1" ng-src='{{model.article_avarta1}}' src="../../../images/default/no_image.png" style="height:120px; width:120px" />
+                                </div>
+                            </div>
+                            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif, .bmp" files-input ng-model="model.article_avarta" name="article_avarta" onchange="readURL(this);">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important; margin-top:15px;" ng-click="submit()"><i class="fa fa-plus"></i> {{'COM_BTN_SAVE' | translate}}</button>
+        <button type="submit" class="btn btn-primary" style="border-radius: 4px !important;  margin-top:15px;margin-right:20px;" ng-click="cancel()"><i class="fa fa-close"></i> {{'COM_BTN_CLOSE' | translate}}</button>
+    </div>
+</div>

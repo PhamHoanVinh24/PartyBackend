@@ -1,0 +1,458 @@
+﻿<style>
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width:768px) and (max-width:1200px) {
+        .modal-70 {
+            width: 80% !important;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1500px) {
+        .modal-70 {
+            width: 70% !important;
+        }
+    }
+
+    .userFormAreaHeader {
+        border-radius: 4px !important;
+        border: 0px solid #e7ecf1 !important;
+        box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;
+        padding-top: 5px;
+        margin-bottom: 5px;
+        background: none;
+    }
+    .message-alert {
+    color: green; /* Đặt màu chữ thành màu đỏ */
+    font-size: 16px; /* Đặt kích thước chữ */
+    font-weight: bold; /* Đặt độ đậm của chữ */
+    /* Bất kỳ kiểu tùy chỉnh khác mà bạn muốn */
+}
+/* CSS cho pop-up */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #000;
+}
+.custom-checkbox {
+    /* Tùy chỉnh kiểu dáng của checkbox ở đây */
+    width: 15px;
+    height: 15px;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+
+    .custom-checkbox.checked {
+  /* Kiểu dáng của checkbox khi được chọn (checked) */
+    background-color: #28a745;
+    border: 1px solid #28a745;
+    color: #fff;
+    }
+
+
+
+
+</style>
+
+<div class="modal-header white-custom">
+    <button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+    </button>
+
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> {{'Chỉnh sửa dịch vụ' | translate}}</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="editform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body" style="padding-left: 40px;">
+                <div class="row mb20">
+                    <div class="form-group col-md-12" ng-class="{ 'has-error': errorTypeCode}">
+                        <div class="col-lg-2 pr-0" >
+                            <label class="fw600 text-bold">{{'SCP_LBL_CUS_TYPER' | translate}}</label>
+                        </div>
+                        <div class="col-lg-10" style="margin-top: -5px; padding-left: 40px; padding-right: 45px;">
+                            <div class="input-group br24">
+                                <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="Customer.Type" name="ProductCode" id="ProductCode" readonly="" disabled="">
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="row mb20">
+                    <div class="form-group col-md-12" ng-class="{ 'has-error': errorTypeCode}">
+                        <div class="col-lg-2 pr-0" >
+                            <label class="fw600 text-bold" >{{'SCP_LBL_CUS_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-lg-10" style="margin-top: -5px; padding-left: 40px; padding-right: 45px;">
+                            <div class="input-group br24">
+                                <input type="text" class="form-control br24 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="Customer.Name" name="ProductCode" id="ProductCode" readonly="" disabled="">
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="row mb20">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorServiceCode}">
+                        <div class="col-lg-5 pr-0">
+                            <label class="fw600 require text-bold">{{'SCP_LBL_SERVICE_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-lg-7" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.ServiceCode" theme="bootstrap" ng-change="updateCheckbox()">
+                                    <ui-select-match placeholder="{{'SCP_LBL_SERVICE_NAME' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listServiceCategory | filter: $select.search track by x.Code">
+                                        {{ x.Name }}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ServiceCode='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorServiceCode" class="label-color validation-message">
+                                {{'SVR_VALIDATE_SERVICENAME_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorServiceType}">
+                        <div class="col-lg-5 pr-0" style="padding-left: 25px;">
+                            <label class="fw600 require text-bold">{{'SCP_LBL_SERVICE_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-lg-7" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.ServiceType" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCP_LBL_SERVICE_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in listServiceType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.ServiceType='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorServiceType" class="label-color validation-message">
+                                {{'SVR_VALIDATE_SERVICETYPE_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb20">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorBeginTime}">
+                        <div class="col-lg-5 pr-0">
+                            <label class="fw600 require text-bold">{{'SCP_CURD_LBL_SEFFECTIVE_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" autocomplete="off"
+                                    style="height: 33px;" ng-model="model.BeginTime" id="BeginTime" 
+                                    placeholder="{{'SCP_CURD_LBL_SEFFECTIVE_DATE' | translate}}..." 
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.BeginTime=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorBeginTime" class="label-color validation-message">
+                                {{'SVR_VALIDATE_BEGINTIME_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorEndTime}">
+                        <div class="col-lg-5 pr-0" style="padding-left: 25px;">
+                            <label class="fw600 require text-bold">{{'SCP_CURD_LBL_SEFFECTIVE_DATE' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <div class='input-group br24 date'>
+                                <input type='text' class="form-control input-date" autocomplete="off"
+                                    style="height: 33px;" ng-model="model.EndTime" id="EndTime" 
+                                    placeholder="{{'SCP_CURD_LBL_SEXPIRY_DATE' | translate}}..." 
+                                    ng-keydown="($event.keyCode == 13) && reload()" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.EndTime=''" class="btn btn-default no-shadow start-date">
+                                        <span class="fa fa-calendar"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorEndTime" class="label-color validation-message">
+                                {{'SVR_VALIDATE_ENDTIME_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb20">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorStatus}">
+                        <div class="col-lg-5 pr-0">
+                            <label class="fw600 require text-bold ">{{'SCG_COL_PAYMENT_STATUS' | translate}}</label>
+                        </div>
+                        <div class="col-lg-7" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.PaymentStatus" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCG_COL_PAYMENT_STATUS' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in listPaymentStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.PaymentStatus='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <span ng-show="errorStatus" class="label-color validation-message">
+                                {{'SVR_VALIDATE_LOGACTION_BLANK' | translate}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <div class="col-lg-5 pr-0" style="padding-left: 25px;">
+                            <label class="fw600 text-bold ">{{'SCP_LBL_LOG_ACTION' | translate}}</label>
+                        </div>
+                        <div class="col-lg-7" style="margin-top: -5px;">
+                            <div class="input-group br24">
+                                <ui-select tagging ng-model="model.Status" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCP_LBL_LOG_ACTION' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in listStatus | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.Status='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb20">
+                    <div class="form-group col-md-6" ng-class="{ 'has-error': errorTypeCode}">
+                        <div class="col-lg-5 pr-0">
+                            <label class="fw600 text-bold ">{{'SCP_LBL_WARNING' | translate}}</label>
+                        </div>
+                        <div class="col-lg-7" style="margin-top: -5px;" >
+                            <div class="input-group br24">
+                                <!-- <ui-select tagging ng-model="model.WarningType" theme="bootstrap">
+                                    <ui-select-match placeholder="{{'SCP_LBL_WARNING_TYPE' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Name as x in listWarningType | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.WarningType='';" class="btn btn-default no-shadow" style="">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span> -->
+                                <div ng-show="showSubscriptionAlert" ng-class="{'message-alert': !MessageAlert.Error}" style="font-size: 12px;"> 
+                                    {{MessageAlert.Title}}
+                                </div>
+                                
+
+
+                            </div>
+                            <span ng-show="errorTypeCode" class="label-color validation-message">
+                                {{'MLP_MSG_NOT_TYPECODE' | translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 " style="padding-left: 40px;">
+                        <input type="checkbox" ng-model="model.IsServcieAdditional" class="custom-checkbox" ng-class="{ 'checked': service.selected }"
+                        ng-disabled="!model.ObjectType || !model.BeginTime || !model.EndTime || !model.ServiceCode"> Mở rộng
+                    </div>     
+                </div>
+
+                <div class="row mb20" ng-show="model.IsServcieAdditional">
+                    <div class="col-md-12 ">
+                        <label class="fw600 text-bold ">{{'Bảng dịch vụ nâng cao' | translate}}</label>
+                    </div>
+                    <div class="row mb20 mt10">
+                        <div class="form-group col-md-6" ng-class="{ 'has-error': errorTypeCode}">
+                            <div class="col-lg-5 pr-0" style="padding-left: 30px;">
+                                <label class="control-label require fs15 fw600 text-bold " style="font-size:13px !important">{{'SCP_LBL_CUS_CONSTRAINT' | translate}}</label>
+                            </div>
+                            <div class="col-lg-7" style="margin-top: -5px;">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select ng-model="ServiceAdditional" ng-change="onServiceAddSelect($select.selected)">
+                                        <ui-select-match placeholder="Chọn dịch vụ...">{{$select.selected[0].Group.ObjectName}}</ui-select-match>
+                                        <ui-select-choices repeat="item in listServiceAdditional">
+                                            {{item[0].Group.ObjectName}}
+                                        </ui-select-choices>
+                                    </ui-select> 
+                                </div>
+                                <span ng-show="errorTypeCode" class="label-color validation-message">
+                                    {{'MLP_MSG_NOT_TYPECODE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" ng-class="{ 'has-error': errorTypeCode}">
+                            <div class="col-lg-5 pr-0" style="padding-left: 25px;">
+                                <label class="control-label require fs15 fw600 text-bold " style="font-size:13px !important">{{'SCP_LBL_CUS_CONSTRAINT_VALUES' | translate}}</label>
+                            </div>
+                            <div class="col-lg-7" style="margin-top: -5px;">
+                                <div class="input-group br24-nobtn">
+                                    <ui-select ng-model="ServiceAdd2" ng-disabled="ServiceAdditional.length==0" ng-change="onServiceAddSelect2($select.selected)">
+                                        <ui-select-match placeholder="Chọn dịch vụ...">{{$select.selected.Price | currency: '' : 0}}</ui-select-match>
+                                        <ui-select-choices repeat="item in ServiceAdditional">
+                                            {{item.Name}}
+                                        </ui-select-choices>
+                                    </ui-select> 
+                                </div>
+                                <span ng-show="errorTypeCode" class="label-color validation-message">
+                                    {{'MLP_MSG_NOT_TYPECODE' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center pull-right" style="padding-right: 70px;" >
+                        <a class="" ng-click="addData()">
+                            <span><i class="fa-solid fa-plus fs40"></i></span>
+                        </a>
+                        <p class="text-underline fs12 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+
+                    <table class="table dataTable table-hover table-striped"
+                    datatable
+                    dt-options="dtOptions"
+                    dt-columns="dtColumns"
+                    dt-instance="dtInstance"
+                    id="tblData2">
+                    </table>
+                </div>
+
+                
+
+                <div class="row mb20 mr20">
+                    <h2 style="color: rgb(0, 13, 113); padding-left: 15px; margin: 0px;">{{'SCP_LBL_CUS_TOTAL' | translate}}:<span>{{TotalPrice| currency: '' : 0}} {{' VNĐ'}}</span></h2>
+                    <div class="text-center pull-right " style="padding-right: 35px;" >
+                        <a class="" ng-click="submit()">
+                                <span><i class="fa-solid fa-plus fs40"></i></span>
+                        </a>
+                        <p class="text-underline fs12 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

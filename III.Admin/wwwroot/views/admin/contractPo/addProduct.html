@@ -1,0 +1,341 @@
+﻿<style>
+
+    /*.custom_width thead tr th {
+        width: 11% !important
+    }*/
+    .class9 {
+        width: 8% !important
+    }
+
+    .class18 {
+        width: 13.5% !important
+    }
+
+    .groupUser .btn {
+        margin: 10px 5px 10px 0;
+        background: #fff;
+        border-radius: 2px !important;
+        padding: 2px 0px 2px 5px !important;
+        min-width: 88px;
+        font-size: 13px !important;
+    }
+
+    #formProduct .help-block {
+        font-size: 9px !important;
+    }
+
+    #tblListPoProduct th {
+        white-space: nowrap;
+    }
+
+    input.largerCheckbox {
+        width: 25px;
+        height: 25px;
+    }
+
+    .reqNew {
+        background: blanchedalmond !important;
+    }
+</style>
+<div ng-controller="addProduct">
+    <div ng-show="IsStorage==true">
+        <form name="forms.addform" method="post" ng-validate="validationProductOptions">
+            <div id="formProduct">
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{ 'has-error': errorProductCode}">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_PRODUCT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ProductCode" theme="bootstrap" ng-disabled="isDisableProductCode" ng-change="changeProduct()" on-select="changleSelect('ProductCode',$item)">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_PRODUCT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in products | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorProductCode" class="label-color validation-message fs9">
+                            {{'CP_VALIDATE_PRODUCT_NO_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_PRICE' | translate}}</label>
+                        <input class="form-control bold" ng-model="model.UnitPrice" name="UnitPrice" type="text" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"  num-thousand='true' awnum num-int='21' placeholder="{{'CP_CURD_TXT_PRICE' | translate}}..." ng-change="changeQuantityPrice()" />
+                        <span ng-show="errorPrice" class="label-color validation-message fs9">
+                            {{'Giá phải lớn hơn 0' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_UNIT' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Unit" theme="bootstrap" ng-disabled="isDisableUnit" on-select="changleSelect('Unit', $item)">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_UNIT' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in units | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span ng-show="errorUnit" class="label-color validation-message fs9">
+                            {{'CP_VALIDATE_UNIT_NO_BLANK' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                    <div class="form-group">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_QUANTITY' | translate}}</label>
+                        <input class="form-control bold" ng-model="model.Quantity" type="text" name="Quantity" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" placeholder="{{'CP_CURD_TXT_QUANTITY' | translate}}..." ng-change="changeQuantityPrice()" />
+                        <span ng-show="errorQuantity" class="label-color validation-message fs9">
+                            {{'CP_VALIDATE_QUANTITY_NEGATIVE' | translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <!--<div class="col-md-1 pl-0">
+                    <div class="form-group" ng-class="{ 'has-error': errorCurrency}">
+                        <label class="control-label require fs9">{{'CP_CURD_LBL_CURRENCY' | translate}}</label>
+                        <div class="input-group">
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Currency" theme="bootstrap" ng-disabled="isDisableCurrency" on-select="changleSelect('Currency', $item)">
+                                <ui-select-match placeholder="{{'CP_CURD_TXT_CURRENCY' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in currencys | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <span ng-show="errorCurrency" class="label-color validation-message fs9">
+                        {{'CP_VALIDATE_CURRENCY_NO_BLANK' | translate}}
+                    </span>
+                </div>-->
+                <div class="col-md-12 pl-0">
+                    <label class="col-md-12 text-danger fs9">{{'CP_TITLE_SEARCH_CHILD_PRODUCTS' | translate}}</label>
+                    <label class="col-md-12 text-danger fs9">{{'CP_TITLE_SEARCH_PRODUCTS_COMPLETE' | translate}}</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'CP_CURD_LBL_PRODUCT_TYPE' | translate}}</label>
+                        <input type="text" class="form-control" ng-disabled="isDisableProductType" ng-model="model.ProductTypeName" name="ProductTypeName" placeholder="{{'CP_CURD_TXT_PRODUCT_TYPE' | translate}}..." />
+                    </div>
+                </div>
+                <div class="col-md-4 pl-0">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'CP_CURD_LBL_CATALOGUE' | translate}}</label>
+                        <input type="text" class="form-control" ng-disabled="isDisableCatalogue" ng-model="model.Catalogue" name="Catalogue" placeholder="{{'CP_CURD_TXT_CATALOGUE' | translate}}..." />
+                    </div>
+                </div>
+                <div ng-class="{ 'col-md-3': !isAdd,'col-md-4': isAdd}" class="pl-0">
+                    <div class="form-group">
+                        <label class="control-label fs9">{{'CP_CURD_LBL_NOTE' | translate}}</label>
+                        <input class="form-control" ng-model="model.Note" type="text" placeholder="{{'CP_CURD_TXT_NOTE' | translate}}..." />
+                    </div>
+                </div>
+                <div ng-class="{ 'col-md-2 pr-0': !isAdd,'col-md-1 pr-0': isAdd}">
+                    <div class="btn-group actions d-flex">
+                        <div class="text-center pt10" ng-if="isAdd==true">
+                            <a ng-click="add()" ng-disabled="PoSupCode==''" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center pt10" ng-if="isAdd==false">
+                            <a ng-click="close()" class="btn btn-icon-only btn-circle btn-outline red-custom">
+                                <span><i class="fa fa-close"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_CANCEL' | translate}}</p>
+                        </div>
+                        <div class="text-center pl10 pt10" ng-if="isAdd==false">
+                            <a ng-click="save()" class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                <span><i class="fa fa-save"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-12 mt5">
+            <table class="table dataTable table-hover table-striped"
+                   datatable
+                   dt-options="dtOptions"
+                   dt-columns="dtColumns"
+                   dt-instance="dtInstance"
+                   id="tblDataProduct"></table>
+        </div>
+    </div>
+    <div ng-show="IsStorage==false">
+        <div class="form-body col-md-12 pb50">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CP_CURD_LBL_SEARCH_FORM_DATE' | translate}}</label>
+                    <div class="input-group br24">
+                        <input ng-model="modelSearch.FromDate" class="form-control" type="text" placeholder="{{'CP_CURD_LBL_SEARCH_FORM_DATE' | translate}}..." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" id='datefromtimepicker' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelSearch.FromDate=''" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'CP_CURD_LBL_SEARCH_TO_DATE' | translate}}</label>
+                    <div class="input-group br24">
+                        <input ng-model="modelSearch.ToDate" class="form-control" type="text" autocomplete="off" placeholder="{{'CP_CURD_LBL_SEARCH_TO_DATE' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" id='datetotimepicker' />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelSearch.ToDate=''" class="btn btn-default no-shadow end-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Dự án' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="modelSearch.ProjectCode" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Dự án'|translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in projects | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelSearch.ProjectCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw600 text-underline">{{'Hợp đồng' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="modelSearch.ContractCode" theme="bootstrap">
+                            <ui-select-match placeholder="{{'Hợp đồng'|translate}}">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in contracts | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelSearch.ContractCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="fw600 text-underline">{{'Mã yêu cầu' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="modelSearch.RequestCode" class="form-control" type="text" placeholder="Mã yêu cầu..." autocomplete="off" ng-keydown="($event.keyCode == 13) && reload()" />
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="modelSearch.RequestCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>-->
+                <div class="col-md-3">
+                    <div class="btn-group pt10 actions d-flex">
+                        <div class="pr10 text-center">
+                            <a class="fs30" ng-click="search()">
+                                <span><i class="fas fa-search"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3 ng-binding">{{'COM_BTN_SEARCH' | translate}}</p>
+                        </div>
+                        <div class="text-center">
+                            <a class=" fs30 p-0" ng-click="save()">
+
+                                <span><i class="fa-solid fa-plus"></i></span>
+
+                            </a>
+
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="text-danger">{{'CP_LBL_NOTE_RECORD_COLOR' | translate}}</span>
+                </div>
+            </div>
+            <!--<div class="row col-md-12">
+        <div class="col-md-4">
+            <label class="control-label">{{'Yêu cầu đặt hàng' | translate}}</label>
+            <div class="input-group">
+                <ui-select ng-model="model.Request" theme="bootstrap" on-select="changeRequest($item)">
+                    <ui-select-match placeholder="{{'Yêu cầu đặt hàng' | translate}}">{{$select.selected.Name}}</ui-select-match>
+                    <ui-select-choices repeat="x.Code as x in listRequest | filter: $select.search">
+                        {{x.Name}}
+                    </ui-select-choices>
+                </ui-select>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="model.Request=''" class="btn btn-default no-shadow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <label class="control-label">{{'Danh sách Y/C đặt hàng' | translate}}</label>
+            <div class="col-lg-12 groupUser h-100-srcoll" style="border:#c2cad8 solid 1px; border-radius:4px">
+                <button type="button" class="btn" ng-repeat="x in listRequestChoose" ; style="height:35px; border:1px solid #c2cad8; border-radius:4px !important; margin-top:5px">
+                    {{x.Name}}<i style="color:red; font-size:10px;margin-left: 10px;font-size: 20px;" class="fa fa-times float-right" aria-hidden="true" ng-click="removeRequest($index)"></i>
+                </button>
+            </div>
+        </div>
+    </div>-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group table-responsive">
+                        <div class="col-md-12 pt10">
+                            <table class="table table-striped table-bordered table-sm mb5" cellspacing="0" id="tblListPoProduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center fw600 text-underline"><input type="checkbox" ng-model="isCheckAll" ng-checked="isCheckAll" class="largerCheckbox" ng-change="checkAll()"></th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_RQ_NAME' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_PRODUCT_CODE' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'CP_LIST_COL_PRODUCT_NAME' | translate}}</th>
+                                        <th class="col-md-3 text-center fw600 text-underline">{{'CP_LIST_COL_CUS' | translate}}</th>
+                                        <!--<th class="col-md-3 text-center fw600 text-underline">{{'Tên yêu cầu' | translate}}</th>-->
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'CP_LIST_COL_COST' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'CP_LIST_COL_SL_KS' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_TRANSFER_RATE' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_RATE_LOST' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_QUANTITY_NK' | translate}}</th>
+                                        <th class="col-md-1 text-center fw600 text-underline">{{'CP_LIST_COL_UNIT' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'CP_LIST_COL_DATE_ARRIVE' | translate}}</th>
+                                        <th class="col-md-2 text-center fw600 text-underline">{{'CP_LIST_COL_NOTE' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="h-100-srcoll">
+                                    <tr ng-repeat="x in listProducts" ng-class="{ 'reqNew': x.Type=='NEW'}">
+                                        <td class="text-left">
+                                            <input type="checkbox" ng-checked="x.Checked" ng-click="checkItem(x)" id="{{x.Id}}" class="largerCheckbox">
+                                        </td>
+                                        <td class="text-left bold text-primary">{{x.ReqName}}</td>
+                                        <td class="text-left">{{x.ProductCode}}</td>
+                                        <td class="text-left">{{x.ProductName}}</td>
+                                        <td class="text-left bold text-primary">{{x.CusName}}</td>
+                                        <td class="text-center bold pl-0 pr-0"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center w100" ng-model="x.UnitPrice" /></td>
+                                        <td class="text-center bold text-primary">{{x.PoCount|number : fractionSize}}</td>
+                                        <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateConversion" ng-blur="changeRate(x)" disabled /></td>
+                                        <td class="text-center"><input num-thousand="true" awnum="" num-int="21" aria-invalid="false" min="0.1" class="br4 form-control text-center" ng-model="x.RateLoss" ng-blur="changeRate(x)" disabled /></td>
+                                        <td class="text-center bold text-primary">{{x.Quantity|number : fractionSize}}</td>
+                                        <td class="text-center">{{x.UnitName}}</td>
+                                        <td class="text-center pl-0 pr-0">
+                                            <div class='input-group date datePicker'>
+                                                <input type='text' class="form-control input-date" ng-model="x.sExpectedDate" placeholder="{{'CP_LIST_COL_DATE_ARRIVE' | translate}}..." disabled />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center p5"><textarea rows="3" class="br4 form-control text-center" ng-model="x.Note" disabled /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

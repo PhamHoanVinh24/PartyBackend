@@ -1,0 +1,161 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    .mColor {
+        color: red;
+        font-weight: bold
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div id="breadcrumbIndex"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/DashBoard"><i class="fa fa-home"></i>{{'LMS_EXAM_LBL_HOME_PAGE' | translate}}</a></li><li class="breadcrumb-item"><a href="/Admin/LmsDashBoard">Hệ thống quản lý học tập</a></li><li class="breadcrumb-item">Ngân hàng đề thi</li></ol></div>
+<div class="table-toolbar">
+    <div class="portlet light bordered input-search mb5 mt10">
+        <div class="portlet-body pb5">
+            <div class="row pb5">
+                <div class="col-md-6 pr-0">
+                    <label class="fw600 text-underline">{{'LMS_EXAM_LBL_KEY_WORK' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Keyword" class="form-control br4" type="text" placeholder="{{'LMS_EXAM_LBL_KEY_WORK' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'LMS_EXAM_LBL_FROM_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'LMS_EXAM_LBL_FROM_DATE' | translate}}..." ng-model="model.FromDate" id="FromDate">
+                    </div>
+                </div>
+                <div class="col-md-1 pr-0">
+                    <label class="fw600 text-underline">{{'LMS_EXAM_LBL_TO_DATE' | translate}}</label>
+                    <div class="input-group">
+                        <input type="text" autocomplete="off" class="form-control br4" placeholder="{{'LMS_EXAM_LBL_TO_DATE' | translate}}..." ng-model="model.ToDate" id="ToDate">
+                    </div>
+                </div>
+                <div class="col-md-2 wpercent20 pr-0">
+                    <label class="fw600 text-underline">{{'LMS_EXAM_LBL_SUBJECTS' | translate}}</label>
+                    <div class="input-group search-group">
+                        <ui-select tagging ng-model="model.Subject" theme="bootstrap">
+                            <ui-select-match placeholder="{{'LMS_EXAM_LBL_SUBJECTS' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x  in listSubject | filter: $select.search">
+                                <span class="bold fs11">{{x.Name}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Category='';" class="btn btn-default no-shadow start-date">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1" style="width: 5%;">
+                    <div class="btn-group pt20 actions d-flex">
+                        <div class="text-center mr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline purple-custom" ng-click="search()">
+                                <span><i class="fa fa-search"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 p-0" style="width: 7%;">
+                    <div class="btn-group pt20 actions d-flex pull-right">
+                        <div class="text-center mr10">
+                            <a class="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()">
+                                <span><i class="fa fa-plus"></i></span>
+                            </a>
+                            <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+                        </div>
+                        <div class="text-center" ng-show="!isSearch">
+                            <a class="btn btn-icon-only btn-circle btn-outline" style="-webkit-box-shadow: 0 2px 5px 0;" ng-click="collapse()">
+                                <span><i class="fas fa-compress-arrows-alt"></i></span>
+                            </a>
+                        </div>
+                        <div class="text-center" ng-show="isSearch">
+                            <a class="btn btn-icon-only btn-circle btn-outline" style="-webkit-box-shadow: 0 2px 5px 0;" ng-click="expand()">
+                                <span><i class="fas fa-expand-arrows-alt"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="!isSearch">
+    <div class="col-md-6">
+        <div class="fs14"><label class="mColor"><i class="fa fa-warning"></i>{{'LMS_EXAM_MSG_TOYAL_EXAM' | translate}}</label> <b>{{totalAssignments}}</b>.</div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblData"></table>
+    </div>
+    <div class="col-md-6">
+        <style>
+            .fc-time {
+                display: none;
+            }
+
+            .fc-event-event-custom {
+                box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(76 175 80 / 40%);
+                border: none !important;
+                width: 92%;
+                margin-left: 4% !important;
+            }
+
+            .fc-content {
+                font-size: 12px !important;
+            }
+        </style>
+        <div class="calendar-wrap" ng-if="IsTranslate">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+<div class="row mt20">
+    <div class="col-md-12">
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptionsExam"
+               dt-columns="dtColumnsExam"
+               dt-instance="dtInstanceExam"
+               id="tblDataExam"></table>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

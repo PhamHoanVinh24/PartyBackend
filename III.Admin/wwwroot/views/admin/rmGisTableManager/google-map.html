@@ -1,0 +1,163 @@
+﻿<script src="../../js/ol.js"></script>
+<script src="../../js/polyline.js"></script>
+<script src="../../js/render_view_ol3.js"></script>
+<script>
+    setTimeout(function () {
+        fields_vector_source = new ol.source.Vector({});
+        var center = ol.proj.transform([105.808124, 20.991484], 'EPSG:4326', 'EPSG:3857');
+        map = new ol.Map({
+            target: $('#map')[0],
+
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM({
+                        url: 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+
+
+                    })
+                }),
+                new ol.layer.Vector({
+                    source: fields_vector_source
+                })
+            ],
+
+            view: new ol.View({
+                center: center,
+                zoom: 15
+
+            }),
+
+            controls: ol.control.defaults({
+                attribution: false,
+                zoom: false,
+            })
+        });
+        var pathGG = $('#pathGG').html();
+        var id = $("#ID").html();
+        var aaa = parseInt(id);
+        if (pathGG != "" && pathGG != null) {
+            pathSourceVector = new ol.source.Vector({
+                features: []
+            });
+            pathLayerMarker = new ol.layer.Vector({
+                source: pathSourceVector
+            });
+            var path = polyline.decode(pathGG);
+
+            pathLayerMarker = renderLinePathLayer(path);
+            map.addLayer(pathLayerMarker);
+
+            var styles3 = [
+
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#64c936',
+                        width: 3
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(100, 201, 54,1)'
+                    })
+                }),
+            ];
+
+            var iconStyleStart = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 26],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://i.imgur.com/pjZYQLJ.png'
+                })),
+                zIndex: 11
+            });
+            var iconStyleEnd = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    anchor: [0.5, 26],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://i.imgur.com/3g07NhB.png'
+                })),
+                zIndex: 11
+            });
+
+            var pathLenght = path.length - 1;
+            var iconFeatureStart = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.transform([parseFloat(path[0][1]), parseFloat(path[0][0])], 'EPSG:4326', 'EPSG:3857')),
+                type: "valve"
+            });
+
+            iconFeatureStart.setId(1);
+            iconFeatureStart.setStyle(iconStyleStart);
+            var iconFeatureEnd = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.transform([parseFloat(path[pathLenght][1]), parseFloat(path[pathLenght][0])], 'EPSG:4326', 'EPSG:3857')),
+                type: "valve"
+            });
+            iconFeatureEnd.setId(2);
+            iconFeatureEnd.setStyle(iconStyleEnd);
+            var vectorIcon = new ol.source.Vector({});
+            vectorIcon.addFeature(iconFeatureStart);
+            vectorIcon.addFeature(iconFeatureEnd);
+
+            var vectorLayer = new ol.layer.Vector({
+                source: vectorIcon,
+                style: styles3
+            });
+
+            map.addLayer(vectorLayer);
+            pathSource = new ol.source.Vector({});
+            debugger
+            pathSource.addFeature(renderLineStringFeature(path))
+            var field_location = pathSource.getFeatureById(aaa).getProperties();
+            console.log("" + field_location)
+            var field_extent = field_location.geometry.getExtent();
+            map.getView().fit(field_extent, map.getSize());
+            map.getView().setZoom(12);
+        }
+    }, 100);
+</script>
+<style>
+    .pac-container {
+        z-index: 10000 !important;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #map {
+        max-height: 500px;
+    }
+</style>
+<div class="row" style="background-color: white; border-radius: 5px; padding: 5px">
+    <div class="col-md-12" style="padding: 0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-11 col-sm-11" style="padding: 10px">
+                    <i class="fa fa-map-marker" style="color: red; font-size: 25px"></i>
+                    <span style="font-weight: bold; margin-left: 10px">
+                        Bản đồ
+                    </span>
+                </div>
+                <div class="col-md-1 col-sm-1" style="padding: 0px; text-align: right;">
+                    <a style="padding: 0;  margin-right: 5px; background-color:transparent" aria-hidden="true" data-dismiss="model" ng-click="cancel()">
+                        <img title="Close" src="/images/default/close.png" style="width: 25px; height: 25px" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr style="height: 1px; margin: 0px" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <div id="map" class="map" tabindex="0"></div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right" style="padding-bottom: 10px">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            Đóng
+        </button>
+    </div>
+</div>

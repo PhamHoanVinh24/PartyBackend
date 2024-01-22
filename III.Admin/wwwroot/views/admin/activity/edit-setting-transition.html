@@ -1,0 +1,102 @@
+﻿<style>
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+
+    .thumbnail {
+        border: 0px !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert  "></i>
+    <span class="modal-title custom-title " id="modal-title">{{'ACT_TITLE_TRANSTION_ADD'|translate}}</span>
+</div>
+<div class="modal-body" style="padding-bottom: 0px !important;">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsSettingWF">
+            <div class="form-body pt-0 pb-0">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label require">{{'ACT_CRUD_WF_CODE' | translate}}</label>
+                                <input class="form-control" name="WorkflowCode" ng-model="model.WorkflowCode" placeholder="{{'ACT_CRUD_WF_CODE' | translate}}..." ng-readonly="true" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{ 'has-error': errorTransitionCode}">
+                                <label class="control-label require">{{'ACT_CRUD_TRS_TYPE' | translate}}</label>
+                                <div class="input-group">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.TransitionCode" theme="bootstrap" ng-change="selectChange('TransitionCode')">
+                                        <ui-select-match placeholder="{{'ACT_CRUD_TRS_TYPE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstTransition | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorTransitionCode" class="label-color validation-message">
+                                    {{'Kiểu đường không được bỏ trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{ 'has-error': errorCommand}">
+                                <label class="control-label require">{{'ACT_CRUD_CONDITION' | translate}}</label>
+                                <div class="input-group">
+                                    <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.Command" theme="bootstrap" ng-change="selectChange('Command')">
+                                        <ui-select-match placeholder="{{'ACT_CRUD_CONDITION' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in lstCommand | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span ng-show="errorCommand" class="label-color validation-message">
+                                    {{'Lệnh không được bỏ trống' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pb10">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">{{'ACT_CRUD_ACT_BEGIN' | translate}}</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ActivityInitial" theme="bootstrap" ng-disabled="true">
+                                    <ui-select-match placeholder="{{'ACT_CRUD_ACT_BEGIN' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstAct  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">{{'ACT_CRUD_ACT_END' | translate}}</label>
+                                <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ActivityDestination" theme="bootstrap" ng-disabled="true">
+                                    <ui-select-match placeholder="{{'ACT_CRUD_ACT_END' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in lstAct  | filter: $select.search">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        {{'COM_BTN_SAVE' | translate}}
+    </button>
+</div>

@@ -1,0 +1,127 @@
+﻿<style>
+    .mt-sub-20 {
+        margin-top: -20px;
+    }
+
+    /*CSS form Tab*/
+    .tab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
+        .tab .nav-tabs li {
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 5px;
+        }
+
+            .tab .nav-tabs li div {
+                color: black;
+                background: white;
+                border-radius: 0;
+                margin-right: -1px;
+                padding: 5.5px 20px;
+                border-bottom: none !important;
+                font-weight: 600;
+            }
+
+    .nav-tabs li:first-child div {
+        border-radius: 5px 0 0 0px;
+    }
+
+    .nav-tabs li:last-child div {
+        border-radius: 0 5px 0px 0;
+    }
+
+    .tab .nav-tabs li.active > div, .tab .nav-tabs > li.active > div:focus {
+        border: none;
+        color: black !important;
+        background: white;
+        border-top: 2px solid #e7505a !important;
+        border-left: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab .tab-content {
+        font-size: 14px;
+        border: 1px solid #d3d3d3;
+        border-top: none;
+        padding: 15px;
+    }
+    /*CSS form Tab*/
+</style>
+<div class="modal-header no-color h-40" style="background-color: #f1f1f1">
+    <!--<img class="icon-remove" title="Đóng" src="/images/default/close.png" ng-click="cancel()" />-->
+    <span class="modal-title board-title black" id="modal-title">{{model.CheckTitle}}<i class="fs10 text-danger" style="font-family:serif">&nbsp;({{model.Completed}}%)</i></span>
+</div>
+<button type="button" class="close-modal" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+</button>
+<div class="modal-body pb-0" id="modal-body-file-item">
+    <div class="portlet-body">
+        <div class="table-toolbar pl5 pr5">
+            <form name="searchform" class="form-horizontal" method="post">
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label class="control-label fw600 text-underline">{{'Tên đầu mục' | translate}}</label>
+                        <div class="input-group">
+                            <input class="form-control br24 text-important" ng-model="model.CheckTitle" name="CheckTitle" placeholder="{{'Tên đầu mục' | translate}}..."></input>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="btn-group pt20 d-flex">
+                            <div class="text-center mt10">
+                                <a class1="btn btn-icon-only btn-outline btn-border-black" ng-click="updateCheckList()" ng-disabled="IsLock || !isAceptCard || isUpdate">
+                                    <!--<span><i class="fa fa-save black"></i></span>-->
+                                    <i class="fa-solid fa-plus fs20"></i>
+                                </a>
+                                <!--<p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SAVE' | translate}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label class="control-label fw600 text-underline">{{'Mô tả yêu cầu' | translate}}</label>
+                        <div class="input-group">
+                            <textarea rows="5" class="form-control br12" ng-model="model.Note" name="Note" placeholder="{{'Mô tả yêu cầu' | translate}}..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-11">
+                <label class="control-label fw600 text-underline">{{'COM_FILE' | translate}}</label>
+                <div class="input-group br24 input-file">
+                    <i class="fa fa-upload"></i>
+                    <input class="form-control border-left-4radius inputFile pl30" style="pointer-events:none" name="File" placeholder="{{'COM_FILE' | translate}}..."></>
+                    <span class="input-group-btn">
+                        <span class="btn btn-default btn-choose input-group-addon" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                        <input class="form-control" custom-on-change-customer="loadFile" onchange="$('.inputFile').val($(this).val().split('\\').pop());" style="display: none;" type="file" ng-disabled="IsLock || !isAceptCard">
+                    </span>
+                </div>
+                <span class="pull-right">
+                    <a class="pr15 fs11 text-underline pull-right" ng-click="extend()" ng-disabled="IsLock || !isAceptCard">{{'COM_BTN_SETUP_DEFAULT' | translate}}</a>
+                </span>
+            </div>
+            <div class="col-lg-1">
+                <div class="btn-group pt20 d-flex">
+                    <div class="text-center mt10 nowrap">
+                        <a class1="btn btn-icon-only btn-circle btn-outline green-custom" ng-click="add()" ng-disabled="IsLock || !isAceptCard || isUpdate">
+                            <!--<span><i class="fa fa-arrow-down"></i></span>-->
+                            <i class="fa fa-chevron-down fs20"></i>
+                        </a>
+                        <!--<p class="text-underline fs9 mb5 pt3">{{'Thêm tệp' | translate}}</p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table dataTable table-hover table-striped"
+               datatable
+               dt-options="dtOptions"
+               dt-columns="dtColumns"
+               dt-instance="dtInstance"
+               id="tblDataCustomerFile"></table>
+    </div>
+</div>

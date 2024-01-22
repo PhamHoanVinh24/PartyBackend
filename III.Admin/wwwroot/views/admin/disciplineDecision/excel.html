@@ -1,0 +1,431 @@
+﻿<style>
+    .modal-body {
+        padding-top: 5px !important;
+        padding-bottom: 5px;
+    }
+
+    .modal-footer {
+        min-height: 500px;
+    }
+
+    .input-group-btn {
+        vertical-align: top;
+    }
+
+    .portlet.light.bordered {
+        margin-right: 15px;
+        border: 1px solid #e7ecf1 !important;
+        background: #f8f9f9 !important
+    }
+
+    .table > thead > tr > th {
+        vertical-align: middle;
+        height: 20px !important;
+        border-bottom: 2px solid #e7ecf1;
+    }
+
+    .btn {
+        cursor: pointer
+    }
+
+    .txt {
+        text-align: initial
+    }
+
+    .table-scrollable {
+        min-height: unset !important
+    }
+
+    .table-custom {
+        min-height: unset !important;
+        border: none
+    }
+
+    .portlet.light.bordered {
+        border: none !important
+    }
+
+    span.btn.btn-default.form-control.ui-select-toggle {
+        height: 40px
+    }
+
+    button.btn.btn-default.no-shadow {
+        height: 40px
+    }
+
+    span.btn.btn-default.form-control.ui-select-toggle {
+        font-weight: 700;
+        padding-top: 10px;
+    }
+
+    .cl {
+        color: #000
+    }
+
+    .name {
+        top: 12%;
+        margin-left: 55px;
+        font-size: 10px;
+        position: absolute;
+    }
+
+    .input-custom {
+        display: none;
+    }
+
+    .no-line-break {
+        white-space: nowrap;
+    }
+
+    .save {
+        color: red;
+        font-family: Arial;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .dataTables_scrollBody {
+        position: relative;
+        overflow: auto;
+        width: 100%;
+        max-height: 350px;
+    }
+
+    #tblData {
+        border: solid 0.01px;
+        border-color: #d4cdcd;
+        max-height: 500px;
+    }
+
+    /*.col {
+        border-right: solid 0.01px;
+        border-color: #d4cdcd;
+    }*/
+
+    .col-5 {
+        width: 5%;
+    }
+
+    .col-10 {
+        width: 10%;
+    }
+
+    .col-15 {
+        width: 15%;
+    }
+
+    .table .btn {
+        margin-right: 0px !important;
+    }
+
+    .custom-title {
+        margin-left: 20px;
+    }
+
+    .input-custom-decision {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #9e9e9e;
+        border-radius: 0;
+        outline: none;
+        height: 3rem;
+        width: 100%;
+        font-size: 16px;
+        margin: 0 0 8px 0;
+        padding: 0;
+        box-shadow: none;
+        box-sizing: content-box;
+        transition: box-shadow .3s, border .3s;
+    }
+
+    .detail input {
+        height: 40px;
+    }
+
+    .input-file input {
+        border-radius: 0px !important;
+    }
+
+    .input-salary {
+        border-radius: 4px !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <div class="modal-title custom-title " id="modal-title"> {{"ECD_BTN_IMPORT_EXCEL_STAFF" | translate}}</div>
+    <i class="fa fa-file-excel vtc "></i>
+</div>
+<div class="modal-body" style="padding-top: 5px !important" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addData" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body pt-0">
+                <div class="row mt-action-5">
+                    <div class="col-lg-4 pl-0 mt10 no-line-break">
+                        <label>Mẫu file template : <a href="/files/Template/TCLD/import/import-quyet-dinh-luong.xlsx" download="">import-quyet-dinh-luong.xlsx</a></label>
+                    </div>
+                    <div class="col-lg-4 pl-0 no-line-break">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label require fs11"><i class="fa fa-file fs16"></i>&nbsp;&nbsp;{{"ECD_BTN_SELECT_FILE"|translate}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group input-file">
+                                    <i class="fa fa-upload"></i>
+                                    <input class="form-control inputFile pl30" style="height: 34px !important; font-weight: 400" placeholder="Chọn file ..." readonly></>
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Browser</span>
+                                        <input class="form-control hidden input-custom" id="FileItem" custom-on-change="FileItem" name="FileItem" onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)" type="file">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 pl-0">
+                        <div class="btn-group pt5 pb-1 pull-right actions d-flex">
+                            <div class="btn-group actions d-flex" ng-show="showCheck">
+                                <div class="text-center  pl10 margin-right-10  " ng-click="checkloop()">
+                                    <a class="btn btn-icon-only btn-outline btnn">
+                                        <span><i class="fa fa-check vtc"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 btn-name pt3">{{'ECD_BTN_EXAM' | translate}}</p>
+                                </div>
+                            </div>
+                            <div class="btn-group actions d-flex">
+                                <div class="text-center  pl10 margin-right-10 openExcel hidden" ng-click="uploadFile()">
+                                    <a class="btn btn-icon-only btn-outline btnn">
+                                        <span><i class="fa fa-file-excel vtc"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 btn-name pt3">{{'ECD_BTN_IMPORT_EXCEL' | translate}}</p>
+                                </div>
+                            </div>
+                            <div class="btn-group actions d-flex" ng-show="showSubmit">
+                                <div class="text-center pl10 margin-right-10 save " ng-click="submit()">
+                                    <a class="btn btn-icon-only btn-outline btnn">
+                                        <span><i class="fa fa-save vtc"></i></span>
+                                    </a>
+                                    <p class="text-underline mb-0 btn-name pt3">{{'ECD_BTN_SAVE' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="portlet light bordered input-search mb5 detail" ng-show="IsEdit==true">
+    <div class="portlet-body">
+        <div class="row pt5 mb5">
+            <div class="row">
+                <div class="col-lg-3 pl30 txt" ng-class="{ 'has-error': errorUnit}">
+                    <i class="fa-solid fa-building fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_DEPARTMENT' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.DepartmentCode" theme="bootstrap" ng-change="changeUnit(model.DepartmentCode)">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_DEPARTMENT' | translate}}...">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="x.DepartmentCode as x in treeDataunit | filter:$select.search">
+                                {{x.Title}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.DepartmentCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorUnit" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_DEPARTMENT_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-3 txt" ng-class="{ 'has-error': errorCareerCode}">
+                    <i class="fas fa-users fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_EMPOYEE'| translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.EmployeeCode" theme="bootstrap" ng-change="changUser(model.EmployeeCode)">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_EMPOYEE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.CodeName as x in lstUserinDpt | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.EmployeeCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 txt" ng-class="{ 'has-error': errorCareer}">
+                    <i class="fas fa-laptop-house fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_JOB'| translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CareerCode" theme="bootstrap" ng-change="changePayScale(model.CareerCode, model.PayScaleCode)">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_JOB' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstCareer | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CareerCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorCareer" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_JOB_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-2 txt" ng-class="{ 'has-error': errorChucDanh}">
+                    <i class="fas fa-file-signature fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_TITLE'| translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.CareerTitle" theme="bootstrap">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_TITLE' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstPayTitle | filter:$select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.CareerTitle=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorChucDanh" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_TITLE_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="row pt20">
+                <div class="col-md-2 txt pl30" ng-class="{ 'has-error': errorPayScaleCode}">
+                    <i class="fas fa-balance-scale fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_LEVEL_WAGE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.PayScaleCode" theme="bootstrap" ng-change="changePayScale(model.CareerCode, model.PayScaleCode)">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_LEVEL_WAGE' | translate}}...">{{$select.selected.Code}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in lstPayScale | filter:$select.search">
+                                {{x.Code}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PayScaleCode=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorPayScaleCode" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_LEVEL_WAGE_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-2 txt" ng-class="{ 'has-error': errorPayRanges}">
+                    <i class="fas fa-money-bill-wave fs16 pr5"></i>
+                    <label class="fw600 text-underline require">{{'ECD_LBL_CRUD_UP_WAGE' | translate}}</label>
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.PayRanges" theme="bootstrap" ng-change="changePayRanges(model.Career, model.PayScale, model.PayRanges)">
+                            <ui-select-match placeholder="{{'ECD_LBL_CRUD_UP_WAGE' | translate}}...">{{$select.selected.Ranges}}</ui-select-match>
+                            <ui-select-choices repeat="x.Ranges as x in lstRange | filter:$select.search">
+                                {{x.Ranges}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.PayRanges=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <span ng-show="errorPayRanges" class="label-color validation-message">
+                        {{'ECD_LBL_CRUD_UP_WAGE_NOT_BLANK' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-2 txt">
+                    <i class="fas fa-comments fs16 pr5"></i>
+                    <label class="fw600 text-underline">{{'ECD_LBL_CRUD_BAG_WAGE' | translate}}</label>
+                    <div class="input-group">
+                        <input ng-model="model.Salary" class="form-control input-salary" type="text" placeholder="{{'ECD_LBL_CRUD_BAG_WAGE' | translate}}..." ng-disabled="true" />
+                    </div>
+                </div>
+                <div class="col-md-3 txt pull-right pt23">
+                    <div class="btn-group actions d-flex pull-right pr15">
+                        <div class="text-center pl10 margin-right-10 next" ng-click="cancelEdit()">
+                            <a class="btn btn-icon-only btn-outline btnn " name="next">
+                                <i class="fa-solid fa-xmark fs30 vtc  " aria-hidden="true"></i>
+                            </a>
+                            <p class="text-underline fs13 mb5 pt3 cl">{{'ECD_BTN_CANCLE' | translate}}</p>
+                        </div>
+                        <div class="text-center pl10 margin-right-10 next" ng-click="submitEdit()">
+                            <a class="btn btn-icon-only btn-outline btnn " name="next">
+                                <i class="fas fa-save fs30 vtc  " aria-hidden="true"></i>
+                            </a>
+                            <p class="text-underline fs13 mb5 pt3 cl">{{'ECD_BTN_SAVE' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" ng-show="IsEdit==false">
+    <div class="text-center">
+        <h4 class="fs15 bold">
+            {{'ECD_LBL_CRUD_DATE_DEC_NUM' | translate}}: <input class="text-center w125 input-custom-decision" ng-model="header.DecisionNumber" type="text"> /QĐ-VQHC
+        </h4>
+        <input class="input-custom-decision w150 text-center" name="PlanDate" ng-model="header.DecisionDate" autocomplete="off" type="text" placeholder="{{'Ngày quyết định' | translate}}" id="planDate" />
+    </div>
+    <div class="save hidden text-underline">{{'ECD_LBL_CRUD_SUM_FILE' | translate}} {{count}}</div>
+    <div class="dataTables_scrollBody">
+        <table class="table dataTable table-hover table-striped " id="tblData">
+            <thead>
+                <tr class="text-center">
+                    <th class="col col-5">
+                        {{'ECD_LBL_CRUD_STT' | translate}}
+                    </th>
+                    <th class="col col-5">
+                        {{'ECD_LBL_CRUD_NUM_CARD' | translate}}
+                    </th>
+                    <th class="col col-10">
+                        {{'ECD_LIST_COL_FULL_NAME' | translate}}
+                    </th>
+                    <th class="col col-15">
+                        {{'ECD_LBL_CRUD_DEPARTMENT' | translate}}
+                    </th>
+                    <th class="col col-15">
+                        {{'ECD_LBL_CRUD_JOB' | translate}}
+                    </th>
+                    <th class="col col-15">
+                        {{'ECD_LBL_CRUD_TITLE' | translate}}
+                    </th>
+                    <th class="col col-10">
+                        {{'ECD_LBL_CRUD_LEVEL_WAGE' | translate}}
+                    </th>
+                    <th class="col col-10">
+                        {{'ECD_LBL_CRUD_UP_WAGE' | translate}}
+                    </th>
+                    <th class="col col-10">
+                        {{'ECD_LBL_CRUD_BAG_WAGE' | translate}}
+                    </th>
+                    <th class="col col-5">
+                        {{'ECD_LIST_COL_MANIPULATION' | translate}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in Listdata">
+                    <td class="text-center"><div>{{$index+1}}</div></td>
+                    <td class="text-center"><div>{{item.EmployeeCode}}</div></td>
+                    <td class="text-left"><div>{{item.EmployeeName}}</div></td>
+
+                    <td class="text-left"><div>{{item.DepartmentName}}</div></td>
+                    <td class="text-left"><div>{{item.CareerName}}</div></td>
+                    <td class="text-center"><div>{{item.TitleName}}</div></td>
+
+                    <td class="text-center"><div>{{item.PayScaleCode}}</div></td>
+                    <td class="text-center"><div>{{item.PayRanges}}</div></td>
+                    <td class="text-right"><div>{{item.Salary}}</div></td>
+
+                    <td class="nowrap text-center">
+                        <button ng-click="editDetails(item)" style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(85,168,253,0.45);" class="btn btn-icon-only btn-circle btn-outline blue"><i class="fa fa-edit"></i></button>
+                        <button title="Xoá" ng-click="delete(item)" style="width: 25px; height: 25px; padding: 0px;-webkit-box-shadow: 0 2px 5px 0 rgba(230,60,95,0.45);" class="btn btn-icon-only btn-circle btn-outline red"><i class="fa fa-trash"></i></button>
+                    </td>
+            </tbody>
+        </table>
+    </div>
+</div>

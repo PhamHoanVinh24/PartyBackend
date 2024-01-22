@@ -1,0 +1,74 @@
+﻿<style>
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+
+    .thumbnail {
+        border: 0px !important;
+    }
+</style>
+<div class="modal-header">
+    <img class="close icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert white"></i>
+    <div class="modal-title  custom-title white" id="modal-title">Thêm liên hệ </div>
+</div>
+<div class="modal-body" style="padding-bottom: 0px !important;">
+    <div class="portlet-body form">
+        <form name="addForm" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptionsSettingWF">
+            <div class="form-body pt-0 pb-0">
+                <div class="row mb5">
+                    <div class="col-md-6 pr30">
+                        <div class="form-group">
+                            <label class="control-label require">Mã luồng</label>
+                            <input class="form-control" name="WorkflowCode" ng-model="model.WorkflowCode" placeholder="Mã luồng..." ng-readonly="true" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Activity đầu</label>
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ActivityInitial" theme="bootstrap" ng-disabled="true">
+                                <ui-select-match placeholder="{{'Activity đầu' | translate}}...">{{$select.selected.CatName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listCatObjActivity  | filter: $select.search">
+                                    {{x.CatName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 pl20">
+                        
+                        <div class="form-group">
+                            <label class="control-label">Transition Type</label>
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.TransitionCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'Luồng hoạt động' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstTypeTrs | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Activity cuối</label>
+                            <ui-select class="ui-select-bootstrap-right-radius" ng-model="model.ActivityDestination" theme="bootstrap" ng-disabled="true">
+                                <ui-select-match placeholder="{{'Activity cuối' | translate}}...">{{$select.selected.CatName}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in getTranSitionType  | filter: $select.search">
+                                    {{x.CatName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="row pb5">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <label>{{'Biểu thức điều kiện' | translate}}</label>
+                        <textarea ng-model="model.Command" placeholder="{{'Biểu thức điều kiện' | translate}}" rows="3" class="form-control"></textarea>
+                    </div>
+                </div>-->
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Thêm mới
+    </button>
+</div>

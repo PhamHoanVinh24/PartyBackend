@@ -1,0 +1,471 @@
+﻿<style>
+
+    .pos .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        padding-left: 5px !important
+    }
+
+
+    .ui-select-bootstrap .ui-select-toggle {
+        border-bottom-right-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+    }
+
+    #user .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    .border-qrcode .img-thumbnail {
+        border: none;
+    }
+
+    .border-qrcode .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .border-qrcode .file-body {
+        max-height: 100px;
+        height: 100px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+        overflow: auto
+    }
+
+    .labelbodergroup {
+        margin-left: 24px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border: 1px solid #e9dada;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    .table_body {
+        background: linear-gradient(to bottom,#f2eee6,#FBFCFC );
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        box-shadow: 0px 5px 10px 2px rgba(127, 143, 166,0.2) !important;
+        padding-bottom: 15px;
+    }
+
+    #box-documentType .tags {
+        max-height: 200px;
+        height: 140px;
+    }
+
+    #documentType .tags {
+        max-height: 90px;
+        height: 90px;
+    }
+
+    #box .file-body {
+        height: 150px;
+        border-radius: 4px !important;
+        border: 1px solid #e9dada;
+        padding-top: 15px;
+        background: #fffdfd;
+    }
+
+    #box .file-header {
+        margin-left: 25px;
+        margin-top: -12px;
+        position: absolute;
+        background: linear-gradient(to bottom,#f1f1f1,#FBFCFC );
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 3px 10px !important;
+    }
+
+    #tblFileRequest tbody tr td {
+        max-width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title"> Thêm thông tin lô hàng</span>
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal userFormAreaHeader" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="row mtn20">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                    <img id="imageId" ng-click="selectImage()" class="img-circle image-upload h-50 w50" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">Ảnh lô hàng</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <img class=" image-upload h-50 w50" role="button" src="data:image/png;base64, {{ImageBase}}" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">QrCode</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <div class="thumbnail input-unstyled">
+                                    <img src="data:image/png;base64, {{ImageBase1}}" class=" image-upload h-50 w150" role="button" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center fs10 mtn30">
+                                <label class="control-label ">BarCode</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group"  ng-class="{ 'has-error': errorTitle}">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label require">Tiêu đề</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.Title" name="Title" id="Title" placeholder="Tiêu đề..." />
+                            </div>
+                        </div>
+                        <div class="form-group"  ng-class="{ 'has-error': errorLotProductCode}">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã lô hàng</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input ng-change="getQrCodeFromString()" ng-text-change="getQrCodeFromString()" type="text" class="form-control" ng-model="model.LotProductCode" name="LotProductCode" id="LotProductCode" placeholder="Mã lô..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorLotProductName}">
+                            <div class="col-md-5">
+                                <i class="fas fa-file-signature" aria-hidden="true"></i>
+                                <label class="control-label require">Tên lô</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.LotProductName" name="LotProductName" id="LotProductName" placeholder="Tên lô..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="false">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã QR Code</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.QrCode" name="QrCode" id="QrCode" placeholder="Nhập mã QR Code..." />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="false">
+                            <div class="col-md-5">
+                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                <label class="control-label require">Mã BarCode</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" ng-model="model.BarCode" name="Barcode" id="Barcode" placeholder="Nhập mã BarCode..." />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Thuế nhập khẩu</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input  class="form-control "style="font-weight: bold" ng-model="model.Tax" name="Barcode" id="Barcode" placeholder="Thuế nhập khẩu..." num-thousand='true' awnum num-int='21' />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Phí hải quan</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control " style="font-weight: bold" ng-model="model.CustomFee" name="Barcode" id="Barcode" placeholder="Phí hải quan..."num-thousand='true' awnum num-int='21' />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Tổng giá mua</label>
+                            </div>
+                            <div class="col-md-7">
+                               <!--<input readonly type="number" min="0" class="form-control" ng-model="model.Cost" name="Material" placeholder="" />-->
+                             <input readonly  class="form-control"style="font-weight: bold" ng-model="model.Cost" name="Material" placeholder=""  num-thousand='true' awnum num-int='21'/>
+                           </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Tiền hoa hồng</label>
+                            </div>
+                            <div class="col-md-7">
+                              <!--<input type="number" min="0" class="form-control" ng-model="model.PoundAge" name="Barcode" id="Barcode" placeholder="Tiền hoa hồng..." />-->
+                            <input class="form-control"style="font-weight: bold" ng-model="model.PoundAge" name="Barcode" id="Barcode" placeholder="Tiền hoa hồng..."  num-thousand='true' awnum num-int='21'/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Chiết khấu</label>
+                            </div>
+                            <div class="col-md-7">
+                                <!--<input type="number" min="0" class="form-control" ng-model="model.Discount" name="Material" placeholder="Chiết khấu" />-->
+                            <input class="form-control"style="font-weight: bold" ng-model="model.Discount" name="Material" placeholder="Chiết khấu"num-thousand='true' awnum num-int='21' />
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                                <label class="control-label ">Quy cách</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control" ng-model="model.Packing" name="Material" placeholder="Quy cách đóng gói" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div style="display: flex;">
+                                    <input ng-if="false" disabled readonly type='number' min="0" style="width:40px !important;" ng-model="model1.x1" value="1" ng-change="x1()" />
+                                    <div style="width:70px !important;" class="pos">
+                                        <ui-select tagging ng-model="model1.x1a" theme="bootstrap" on-select="x1()">
+                                            <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in x1as | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <!--</div>
+                <div class="col-md-12" style="display:inline-flex; margin-left: -30px;">-->
+                                    <input type='number' min="0" style="width:40px !important; margin-left:10px; padding-left:5px" ng-model="model1.x2" ng-change="x1()" />
+                                    <div style="width:70px !important; margin-left:2px " class="pos">
+                                        <ui-select tagging ng-model="model1.x2a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                            <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in x2as | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <input type='number' min="0" style="width:40px !important;margin-left:10px; padding-left:5px" ng-model="model1.x3" ng-change="x1()" />
+                                    <div style="width:70px !important;  margin-left:2px " class="pos">
+                                        <ui-select tagging ng-model="model1.x3a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                            <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in x3as | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <!--</div>
+                <div class="col-md-12" style="display:inline-flex; margin-left: -30px;">-->
+                                    <input type='number' min="0" style="width:40px !important; margin-left:10px; padding-left:5px;" ng-model="model1.x4" ng-change="x1()" />
+                                    <div style="width:70px !important; margin-left:2px " class="pos">
+                                        <ui-select tagging ng-model="model1.x4a" theme="bootstrap" style="border-bottom-left-radius:0px !important;" on-select="x1()">
+                                            <ui-select-match placeholder="DVT">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="x.Code as x in x4as | filter: $select.search">
+                                                {{x.Name}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="text-danger fs10">*Sản phẩm trong lô không theo quy cách</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Bình quân thuế</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="TaxMedium" class="form-control "style="font-weight: bold" ng-model="model.TaxMedium" name="Material" placeholder="Bình quân thuế" readonly num-thousand='true' awnum num-int='21'/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Bình quân giá</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="CostMedium" class="form-control"style="font-weight: bold" ng-model="model.CostMedium" name="Material" placeholder="Bình quân giá" readonly num-thousand='true' awnum num-int='21'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                <label class="control-label ">Giá vận chuyển</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input class="form-control"style="font-weight: bold" ng-model="model.TransferCost" name="Material" placeholder="Giá vận chuyển" num-thousand='true' awnum num-int='21'/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': errorUnit}">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label ">Nhà cung cấp</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Supplier" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Nhà cung cấp...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in suppliers | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Supplier=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label ">Kho hàng</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Store" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Kho hàng...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Id as x in stores | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Store=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <label class="control-label ">Xuất xứ</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <ui-select tagging ng-model="model.Origin" theme="bootstrap" on-select="changleSelect('unit')">
+                                        <ui-select-match placeholder="Xuất xứ...">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="x.Code as x in origins | filter: $select.search">
+                                            {{x.Name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="model.Origin=''" class="btn btn-default no-shadow" style="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="errorUnit" class="label-color validation-message">
+                                    {{'CATEGORY_MSG_NOT_UNIT' | translate}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                <label class="control-label ">Ngày sản xuất</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="ManufactureDate" type="text" class="form-control" ng-model="model.sManufactureDate" name="Material" placeholder="Ngày sản xuất" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                <label class="control-label ">Hạn sử dụng</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input id="ExpiryDate" type="text" class="form-control" ng-model="model.sExpiryDate" name="Material" placeholder="Hạn sử dụng" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                                <label class="control-label ">Ghi chú</label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea type="text" class="form-control" ng-model="model.Note" name="Material" placeholder="Ghi chú" rows="2" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <i class="fa fa-file-import" aria-hidden="true"></i>
+                                <label class="control-label ">Tệp tin</label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="border-qrcode ">
+                                    <div class="col-lg-12 boder-box" style="height:100px !important">
+                                        <button type="button" class="tags-custom" ng-repeat="x in listFileBox">
+                                            <i class="fa fa-times pull-right ic-remove" aria-hidden="true" ng-click="removeFileReq($index)"></i><span>{{x.FileName}}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-center pull-right" style="margin-top:5px; margin-right:7px" ng-click="submit()">
+                                    <a class="btn btn-icon-only btn-circle btn-outline green-custom">
+                                        <span><i class="fa fa-save"></i></span>
+                                    </a>
+                                    <p class="text-underline fs12 mb5 pt3">
+                                        Lưu
+                                    </p>
+                                </div>
+                                <div class="text-center pull-right" style="margin-top:5px; margin-right:7px">
+                                    <div class="btn btn-icon-only btn-circle btn-outline green-custom text-center" style="width:35px; height:35px">
+                                        <i class="fas fa-upload" style="width:20px;"></i>
+                                        <input type="file" class="btn-upload" custom-on-change="loadFileReq" />
+                                    </div>
+                                    <p class="text-underline fs12 mb5 pt3">
+                                        Tải tệp
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-include="'../views/admin/lotProduct/product.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>

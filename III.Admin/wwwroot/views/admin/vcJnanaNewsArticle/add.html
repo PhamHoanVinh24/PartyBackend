@@ -1,0 +1,88 @@
+﻿<style>
+    .text-image {
+        text-align: center;
+        transform: translate(0%, -160%);
+        font-weight: 600;
+        color: #afafaf;
+    }
+</style>
+<div class="modal-header">
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+    <i class="fa fa-plus-circle icon-insert "></i>
+    <span class="modal-title" id="modal-title">Thêm tin tức</span>
+</div>
+<div class="modal-body no-space" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal form-bordered" method="post" ng-validate="validationOptions">
+            <div class="form-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fa fa-barcode"></i> Mã tin tức</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_code" name="article_code" placeholder="Nhập mã tin tức" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fa fa-info-circle"></i> Tiêu đề</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="model.article_title" name="article_title" placeholder="Nhập tiêu đề" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left require"><i class="fas fa-comments"></i> Nội dung</label>
+                        <div class="col-md-8">
+                            <textarea rows="7" cols="25" type="text" class="form-control" ng-model="model.article_content" name="article_content" placeholder="Nhập nội dung" />
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"> <i class="fas fa-cart-plus"></i> Danh mục</label>
+                        <div class="col-md-8">
+                            <div class='input-group '>
+                                <ui-select ng-model="model.cat_code" class="" ui-select-required>
+                                    <ui-select-match placeholder="Tên danh mục...">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="x.Code as x in treeDatacategory1 | filter:$select.value">
+                                        {{x.Name}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="model.cat_code='';" class="btn btn-default no-shadow end-date">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 text-left"><i class="fas fa-sort-numeric-up"></i> Ưu tiên</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" ng-model="model.artile_order" name="artile_order" placeholder="Thứ tự ưu tiên" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 form-col-label text-left" style="border-left:none">
+                            <i class="fa fa-picture-o"></i>
+                            <label class="control-label" for="Status"> Ảnh</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="fileupload-new thumbnail mb-0" role="button"  >
+                                <input id="file" accept=".png,.jpg,.jpeg,.gif,.tif" type="file" style="display:none" />
+                                <img  ng-click="selectImage()" ng-src="{{model.article_avarta}}" src="../../../images/default/upload_image.png" class="h-120 w120" />
+                                <div class="text-image" ng-show="model.article_avarta==''" ng-click="selectImage()">Nhấn vào đây để chọn ảnh</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a data-dismiss="modal" class="btn btn-red" href="javascript:;" ng-click="cancel()">
+        Đóng
+    </a>
+    <button ng-click="submit()" class="btn btn-green mr5" href="javascript:;">
+        Thêm mới
+    </button>
+</div>

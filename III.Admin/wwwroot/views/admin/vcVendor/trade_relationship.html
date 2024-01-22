@@ -1,0 +1,76 @@
+﻿<div ng-controller="trade_relationship">
+    <div class="table-toolbar">
+        <form name="relationship">
+            <div class="row">
+                <div class="col-md-3 mt5">
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Brand" theme="bootstrap" on-select="changleSelect('Area')" ng-if="Role='DISTRIBUTOR'">
+                            <ui-select-match placeholder="Chọn thương hiệu...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Code as x in Brands | filter: $select.search">
+                                {{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Brand=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 mt5">
+                    <div class="input-group">
+                        <ui-select tagging ng-model="model.Seller" theme="bootstrap" ng-disabled="IsDisableSeller">
+                            <ui-select-match placeholder="Chọn NPP/đầu mối...">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="x.Seller as x in Distributors | filter: $select.search">
+                                {{x.Role}}{{x.Name}}
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="model.Seller=''" class="btn btn-default no-shadow" style="">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="mt5" ng-if="IsAdd==true">
+                            <a ng-click="submit()" class="btn br4 btn-green">
+                                <span class=""><i class="fa fa-plus"></i> Thêm mới</span>
+                            </a>
+                        </div>
+                        <div class="mt5" ng-if="IsAdd==false">
+                            <a ng-click="update()" class="btn br4 btn-green">
+                                <span class=""><i class="fa fa-save"></i> Lưu lại</span>
+                            </a>
+                            <a ng-click="cancelUpdate()" class="btn br4 btn-red">
+                                <span class=""><i class="fa fa-life-saver"></i> Hủy bỏ</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-6 text-right mt5" ng-if="IsAdd==true">
+                    <a ng-click="submit()" class="btn br4 btn-green">
+                        <span class=""><i class="fa fa-plus"></i> Thêm mới</span>
+                    </a>
+                </div>
+                <div class="col-md-6 text-right mt5" ng-if="IsAdd==false">
+                    <a ng-click="update()" class="btn br4 btn-green">
+                        <span class=""><i class="fa fa-save"></i> Lưu lại</span>
+                    </a>
+                    <a ng-click="cancelUpdate()" class="btn br4 btn-red">
+                        <span class=""><i class="fa fa-life-saver"></i> Hủy bỏ</span>
+                    </a>
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <table class="table dataTable table-hover table-striped"
+           datatable
+           dt-options="dtOptions"
+           dt-columns="dtColumns"
+           dt-instance="dtInstance"
+           id="tblDataIndex"></table>
+</div>

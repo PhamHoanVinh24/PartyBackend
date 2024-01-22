@@ -1,0 +1,166 @@
+﻿<style>
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb > li {
+        font-size: 16px;
+        font-weight: 600;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(65% - 60px);
+        right: 70px;
+    }
+
+        #searchBox .bordered {
+            border: 1px solid #80808057 !important;
+            box-shadow: 1px 3px 8px 0px #888888c2;
+        }
+
+    .cke_bottom {
+        background-color: white !important;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="btn-group pt5 pb-1 pull-right actions d-flex" style="margin-top: -50px;">
+
+    <div class="text-center pr-2 mt10">
+        <a class="" ng-click="showSearch()">
+            <span><i class="fas fa-search fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+    </div>
+    <div class="text-center pr-2 mt10">
+        <a class="" ng-click="add()">
+
+            <span><i class="fa-solid fa-plus fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+    <div class="text-center pr-2 mt10">
+        <a href="/Admin/DynamicRegistSurvey#addRegist">
+
+            <span><i class="fas fa-poll-h fs30"></i></span>
+        </a>
+        <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+    </div>
+</div>
+<div id="searchBox" ng-show="isSearch">
+    <div class="table-toolbar">
+        <div class="portlet light bordered mb5 mt10">
+            <div class="portlet-body">
+                <div class="col-md-12" style="height:20px">
+                    <i ng-click="showSearch()" style="margin-top:9px !important; font-size:25px; color: red" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+                </div>
+                <div class="row mb">
+                    <!-- tạo ô nhập từ khóa-->
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'COM_LBL_KEYWORD' | translate}}</label>
+                        <div class="input-group br24">
+                            <input ng-model="model.Keyword" class="form-control" type="text" placeholder="{{'COM_LBL_KEYWORD' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Keyword=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!--tạo box mục cần tìm-->
+                    <div class="col-md-3">
+                        <label class="fw600 text-underline">{{'DNM_TYPE_TICKET' | translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.Type" theme="bootstrap">
+                                <ui-select-match placeholder="{{'DNM_TYPE_TICKET'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in listTypeDynamic | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.Type=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <label class="fw600 text-underline">{{'DNM_GROUP_TICKET'|translate}}</label>
+                        <div class="input-group br24">
+                            <ui-select tagging ng-model="model.GroupCode" theme="bootstrap">
+                                <ui-select-match placeholder="{{'DNM_GROUP_TICKET'|translate}}...">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="x.Code as x in lstAttrGroup | filter: $select.search">
+                                    {{x.Name}}
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                                <button type="button" ng-click="model.GroupCode=''" class="btn btn-default no-shadow" style="">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                        <!--tạo nút search-->
+                        <div class="col-md-1" style="width: 5%;">
+                            <div class="btn-group pt20 actions d-flex">
+                                <div class="text-center pr10">
+                                    <a class="" ng-click="search()" style="margin-top: 19px !important " ;>
+                                        <span><i class="fas fa-search pt15 fs30"></i></span>
+                                    </a>
+                                    <!-- <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--<i ng-click="showSe<!--arch()" class="fas fa-angle-up pull-right h28 w28 close-input-search hide-search-more-line" role="button" title="Ẩn tìm kiếm" style="margin-right: 20px !important;"></i>-->
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table dataTable table-hover table-striped"
+       datatable
+       dt-options="dtOptions"
+       dt-columns="dtColumns"
+       dt-instance="dtInstance"
+       id="tblData"></table>
+<script>
+    setTimeout(function () {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        $('.table-scrollable').mousedown(function (e) {
+            isDown = true;
+            startX = e.pageX - $('.table-scrollable').offset().left;
+            scrollLeft = $('.table-scrollable').scrollLeft();
+        });
+        $('.table-scrollable').mouseleave(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mouseup(function () {
+            isDown = false;
+        });
+        $('.table-scrollable').mousemove(function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - $('.table-scrollable').offset().left;
+            const walk = (x - startX) * 1; //scroll-fast
+            $('.table-scrollable').scrollLeft(scrollLeft - walk);
+            console.log(walk);
+        });
+    }, 1000);
+
+</script>

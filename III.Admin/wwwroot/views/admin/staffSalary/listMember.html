@@ -1,0 +1,67 @@
+﻿<div class="modal-header black" style="background: rgb(241, 241, 241);">
+    <span class="modal-title fas fa-users fs15">&nbsp;&nbsp;{{'STS_LBL_LIST_EMP' | translate}} {{value==1?'đi muộn':value==2?'làm việc':'nghỉ'}} {{'STS_LBL_DATE' | translate}} {{date}}</span>
+    <img class="icon-remove" title="Close" src="/images/default/close.png" ng-click="cancel()" />
+</div>
+<div class="modal-body pb-0" id="modal-body">
+    <div class="portlet-body form">
+        <form name="addform" class="form-horizontal" method="post">
+            <div class="form-body pb25 pt5">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <!--late-->
+                        <table class="table table-bordered" style="margin-bottom: 0;" ng-if="value==1 || value==2">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-md-1">{{'STS_LIST_COL_INDEX' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_EMP' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_TIME' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_STATUS' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_LOCATION' | translate}}</th>
+                                    <th class="text-center col-md-7">{{'STS_LIST_COL_ADDRESS' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listMember">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td class="text-center">{{x.GiveName}}</td>
+                                    <td class="text-center">{{x.ActionTime | date:'HH:mm:ss'}}</td>
+                                    <td class="text-center" ng-class="{'text-danger': (value==1) ,'text-success' : value==2}">
+                                        {{value==1?'Đi muộn':value==2?'Làm việc':'Nghỉ'}}&nbsp;
+                                        <span class="nowrap" ng-class="{'text-success' : x.IsPermissionLate}" ng-if="value==1">{{x.IsPermissionLate ? 'Có phép' : 'Không phép'}}</span>
+                                    </td>
+                                    <td class="text-center ">{{x.LocationGPS}}</td>
+                                    <td class="text-center">{{x.LocationText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--End late-->
+                        <!--No Work-->
+                        <table class="table table-bordered" style="margin-bottom: 0;" ng-if="value==3">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-md-1">{{'STS_LIST_COL_INDEX' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_EMP' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_FROM_DATE' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_COL_TO_DATE' | translate}}</th>
+                                    <th class="text-center col-md-1 nowrap">{{'STS_LIST_STATUS' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in listMember">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td class="text-center">{{x.GiveName}}</td>
+                                    <td class="text-center">{{x.FromTo}}</td>
+                                    <td class="text-center">{{x.ToDate}}</td>
+                                    <td class="text-center">
+                                        <span ng-class="{'text-danger': !x.IsPermissionNoWork ,'text-success' : x.IsPermissionNoWork}">{{x.IsPermissionNoWork?'Có phép':'Không phép'}}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--End No Work-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
