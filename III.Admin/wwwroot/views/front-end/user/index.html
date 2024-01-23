@@ -28,6 +28,7 @@
     input {
         border: none;
     }
+    
     table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -50,6 +51,10 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+    .col-right{
+        height:100vh;
+        box-shadow: 1px 3px 8px 0px #888888c2
+    }
     @media (min-width:992px) and (max-width:1200px) {
         .modal-70 {
             width: 75%;
@@ -165,26 +170,34 @@ td, th {
     <div class="col-lg-8 col-left" method="post" ng-validate="validationOptionsCustomer">
         <div class="form-body pt-0">
             
-                <div class="input-file" style="width: 400px;">
-                    <form name="addData" class="" method="post" ng-validate="validationOptions" style="display: flex;">
-                        <div class="display:flex; justify-content:space-between;">
-                            <div class="form-group flex-grow-full">                                            
-                                <div class="input-group input-file" >
-                                    <input class="form-control" style="height: 34px !important; border-radius: 24px;" placeholder="Chọn tệp" readonly></>
-                                    <span class="input-group-btn">
-                                        <span class="btn btn-default btn-choose" onclick="$(this).parent().find('input[type=file]').click();">Tải file</span>
-                                        <input class="form-control hidden input-custom" id="FileItem" custom-on-change="FileItem" name="FileItem" onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)" type="file">
-                                    </span>
+                <div class="input-file">
+                    <form name="addData" class="" method="post" ng-validate="validationOptions" style="padding-left: 10px; padding-right: 30px;">
+                        <div class="" style="display:flex; justify-content:space-between;">
+                            <div class="form-group flex-grow-full" style="display: flex; justify-content: space-between;">                                            
+                                <div class="input-group input-file ">
+                                    <div class=" form-control custom-title-code-bold" style="border-radius: 24px;background-color: #EEF1F5;">
+                                        <input class="form-control inputFile" style="border: #FFFF;width: 300px;height: 25px; border-right:1px solid #C9CDCF" placeholder="Chọn tệp" readonly/>
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default btn-choose" style="margin: -6px" onclick="$(this).parent().find('input[type=file]').click();">Tải file</span>
+                                            <input class="form-control hidden input-custom" id="FileItem" custom-on-change="FileItem" name="FileItem" onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)" type="file">
+                                        </span>
+                                    </div>
                                 </div>
                                 <!-- <a class="pr15 fs11 text-underline pull-right" ng-click="chooseFileServer()">Chọn file từ server'</a> -->
-                            </div>
-                            <div class="" style="">
-                                <div class="text-center pl10 pt10 margin-right-10 openExcel" ng-click="uploadFile()" ng-class="{'disabled-element': !openExcel}">
-                                    <a class="">
-                                        <span>Load xuống</span>
-                                    </a>
+                                <div class="text-center " style="padding-left: 30px;"  ng-class="{'disabled-element': !openExcel}">
+                                    <button class="btn btn-primary" style="border-radius: 24px;height: 34px;" ng-click="uploadFile()">
+                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                        <span>Load</span>
+                                    </button>
                                     <!--<p class="text-underline mb-0 btn-name pt3">{{'Nhập excel' | translate}}</p>-->
                                 </div>
+                            </div>
+            
+                            <div>
+                                <button class="btn btn-info" >
+                                    <i class="fa fa-floppy-o"></i>
+                                    <span>Save</span>
+                                </button>
                             </div>
                         </div>
                         <div class="tab-content pt10" style="display: none;">
@@ -199,28 +212,15 @@ td, th {
             <form class="" style="border: 0px solid #e7ecf1 !important;box-shadow: 0 2px 3px 2px rgb(0 0 0 / 3%) !important;">
                 <div class="row mt-action-5">
                     <div class=" ml-15">
-                        <div class="toggle-header" ng-click="showInfor=!showInfor">
-                            <i ng-show="showInfor" class="fa fa-caret-down"></i>
-                            <i ng-show="!showInfor" class="fa fa-caret-right"></i>
-                            <label>Thông tin sơ yếu lý lịch</label>
+                        <div class="toggle-header" style="display: flex; justify-content: space-between;" ng-click="showInfor=!showInfor">
+                            <div>
+                                <i ng-show="showInfor" class="fa fa-caret-down"></i>
+                                <i ng-show="!showInfor" class="fa fa-caret-right"></i>
+                                <label>Thông tin sơ yếu lý lịch</label>
+                            </div>
                         </div>
                         <div class="row mt-15" style="padding-left: 15px; font-size: 12px;" ng-show="showInfor">
                             <div class="col-md-6">
-                                <div class="form-group row" >
-                                    <div class="col-md-4 pr-0">
-                                        <i class="fa fa-barcode"></i>
-                                        <label class="control-label require custom-title-code-bold">Mã hồ sơ</label>
-                                        
-                                    </div>
-                                    <div class="col-md-8" style="display: flex;">
-                                        <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Mã hồ sơ: 20220123">
-                                            
-                                            </i>
-                                            <input style="border: none; width: 300px;height: 25px;" name="CusCode" ng-model="infUser.ResumeNumber" type="text" placeholder="Mã hồ sơ"  />
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="form-group row">
                                     <div class="col-md-4 pr-0">
                                         <i class="fa fa-user"></i>
@@ -228,7 +228,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Họ và tên: Nguyễn Quang Huy">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'Nguyễn Quang Huy'">
                                             
                                             </i>
                                             <input style="border: none; width: 300px;height: 25px;" name="CusCode" ng-model="infUser.LastName" type="text" placeholder="Họ và tên"  />
@@ -243,7 +243,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ngày sinh: 05-11-1998">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'05-11-1998'">
                                             
                                             </i>
                                             <input style="width: 300px;height: 25px;" name="CusCode" ng-model="infUser.DateofBird" type="text" placeholder="Ngày sinh" />
@@ -272,7 +272,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Số điện thoại: 0397638979"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'0397638979'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.Phone" type="text" placeholder="Số điện thoại" />
                                         </div>
                                         
@@ -286,8 +286,8 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Email: email@gmail.com"></i>  
-                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.Email" type="text" placeholder="email@gmail.com" />
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'email@gmail.com'"></i>  
+                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="Email" type="text" placeholder="email@gmail.com" />
                                         </div>
                                      
                                     </div>
@@ -385,18 +385,6 @@ td, th {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <div class="col-md-4 pr-0 ">
-                                        <i class="fa fa-barcode"></i>
-                                        <label class="control-label require custom-title-code-bold">Mã tài khoản</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Mã tài khoản: 1"></i>  
-                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.Religion" type="text" placeholder="Mã tài khoản"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <div class="col-md-4 pr-0">
                                         <i class="fa fa-user"></i>
                                         <label class="control-label require custom-title-code-bold">Họ và tên khai sinh</label>
@@ -404,7 +392,7 @@ td, th {
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
                                             <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Họ và tên khai sinh: Nguyễn Quang Huy"></i>  
-                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.FistName" type="text" placeholder="Họ và tên khai sinh"/>
+                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.FirstName" type="text" placeholder="Họ và tên khai sinh"/>
                                         </div>
                                     </div>
                                 </div>
@@ -416,7 +404,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Giáo dục phổ thông: 12/12 "></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'12/12'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.GeneralEducation" type="text" placeholder="Giáo dục phổ thông"/>
                                         </div>
                                     </div>
@@ -428,7 +416,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Giáo dục đại học: Đại học sư pham Hà Nội"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Đại học sư pham Hà Nội'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.Undergraduate" type="text" placeholder="Giáo dục đại học"/>
                                         </div>
                                     </div>
@@ -436,10 +424,13 @@ td, th {
                                 <div class="form-group row">
                                     <div class="col-md-4 pr-0 ">
                                         <i class="fa fa-graduation-cap"></i>
-                                        <label class="control-label require custom-title-code-bold">Trường tốt nghiệp</label>
+                                        <label class="control-label require custom-title-code-bold">Học hàm</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Trường tốt nghiệp" />
+                                        <div class="br24 form-control custom-title-code-bold" >
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Phó giáo sư'"></i>  
+                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.RankAcademic" type="text" placeholder="Trường tốt nghiệp"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -449,7 +440,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Giáo dục nghề nghiệp: Không"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Nghề thợ xây'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.VocationalTraining" type="text" placeholder="Giáo dục nghề nghiệp"/>
                                         </div>
                                     </div>
@@ -461,7 +452,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ngoại ngữ: Tiếng Anh"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'Tiếng Anh'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.ForeignLanguage" type="text" placeholder="Ngoại ngữ"/>
                                         </div>
                                     </div>
@@ -473,7 +464,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Tiếng dân tộc thiểu số: Không"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Tiếng dân tộc Thái'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.MinorityLanguage" type="text" placeholder="Tiếng dân tộc thiểu số"/>
                                         </div>
                                         
@@ -486,10 +477,9 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Lý luận chính trị: Không"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Lý luận chính trị trung cấp'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.PoliticalTheory" type="text" placeholder="Lý luận chính trị"/>
                                         </div>
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.LevelEducation.PoliticalTheory" type="text" placeholder="Lý luận chính trị" ng-readonly="CustomerId !=''" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -499,7 +489,7 @@ td, th {
                                     </div>
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold" >
-                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'Tin học: '"></i>  
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Chứng chỉ tin học trung cấp'"></i>  
                                             <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.LevelEducation.It" type="text" placeholder="Tin học"/>
                                         </div>
                                     </div>
@@ -510,7 +500,10 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Nơi tạo</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi tạo" />
+                                        <div class="br24 form-control custom-title-code-bold" >
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'Hà Nội'"></i>  
+                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="PlaceCreatedTime.place" type="text" placeholder="Nơi tạo"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -519,7 +512,10 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Tự nhận xét</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tự nhận xét" />
+                                        <div class="br24 form-control custom-title-code-bold" >
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Tôi cảm thấy mình có đủ điều kiện để ra nhập Đảng'"></i>  
+                                            <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="SelfComment.context" type="text" placeholder="Tự nhận xét"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -531,7 +527,6 @@ td, th {
                                 <i ng-show="!showFamily" class="fa fa-caret-right"></i>
                                 <label>Lý lịch gia đình</label>
                             </div>
-                            <div style="font-size: 20px;"><i class="fa fa-plus"></i></div>
                         </div>
                         <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily" >
                             <div ng-repeat="x in Relationship">
@@ -550,8 +545,10 @@ td, th {
                                             <label class="control-label require custom-title-code-bold">Họ và tên</label>
                                         </div>
                                         <div class="col-md-8">
-                                        
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.Name" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover">
+                                            <div class="br24 form-control custom-title-code-bold" >
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'Nguyễn Quang Huy'"></i>  
+                                                <input style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="x.Name" type="text" placeholder="Họ và tên"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -1202,14 +1199,14 @@ td, th {
                 </div>
             </form>
             <div class="pull-right" style="padding-top: 20px;">
-                <button class="btn-group action btn btn-dark" style="background: #CE7A58;" ng-click="submit()">
-                    <a style="padding-left: 45px;">SAVE</a>
+                <button class="btn-group action btn btn-dark" style="background: #EEF1F5;color: #000;" ng-click="submit()">
+                    <a style="padding-left: 5px;">Lưu lại</a>
                 </button>
             </div>
         </div>
     </div>
     <div class="col-lg-4 ml-10 col-right">
-        <div class="title"><h2>Thông tin phê duyệt</h2></div>
+        <div class="title" style="padding-top: 10px;padding-bottom: 10px;"><h2>Thông tin phê duyệt</h2></div>
         <div class="toggle-header" ng-click="showFamily=!showFamily">
             <i ng-show="showFamily" class="fa fa-caret-down"></i>
             <i ng-show="!showFamily" class="fa fa-caret-right"></i>

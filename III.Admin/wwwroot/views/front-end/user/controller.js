@@ -91,6 +91,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
         
         setTimeout(function () {
+            $scope.Email = 'NguyenHuy@gmail.com';
             var today = new Date();
             var resumeNumber = today.getFullYear()+''+(today.getMonth()+1)+''+today.getDate();
             console.log(resumeNumber);
@@ -435,7 +436,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             console.log("Relationship:", $scope.Relationship);
             //Page 9 Tự nhận xét
-            var SelfComment = {
+            $scope.SelfComment = {
                 context: Array.from(listPage[9].querySelectorAll("tr:first-child > td > p:first-child"))[0].innerText
             };
             //Page 9 ket don
@@ -519,6 +520,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].split(',');
             $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3];
             $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].split(',');
+            $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5];
+            $scope.infUser.LevelEducation.It = $scope.listDetail6[6].split(',');
+            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].split(',');
 
             $scope.infUser.Phone = $scope.listDetail8;
             $scope.infUser.PhoneContact = $scope.listDetail9.trim();
