@@ -1,5 +1,5 @@
 ﻿var ctxfolder = "/views/front-end/user";
-var app = angular.module('App_ESEIM', [ "ngRoute" ])
+var app = angular.module('App_ESEIM', ["ngRoute"])
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -17,12 +17,12 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
-        
+
     }
 });
 
 app.controller('Ctrl_ESEIM', function ($scope, $rootScope, $compile, dataservice) {
-    
+
 });
 
 app.config(function ($routeProvider, $locationProvider) {
@@ -35,19 +35,19 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter) {
     console.log("indeeeeee");
-   /* $scope.upload = function () {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: ctxfolder + '/word.html',
-            controller: 'word',
-            backdrop: 'static',
-            size: '70'
-        });
-        modalInstance.result.then(function (d) {
-            reloadData(true);
-        }, function () { });
-        console.log("ok");
-    };*/
+    /* $scope.upload = function () {
+         var modalInstance = $uibModal.open({
+             animation: true,
+             templateUrl: ctxfolder + '/word.html',
+             controller: 'word',
+             backdrop: 'static',
+             size: '70'
+         });
+         modalInstance.result.then(function (d) {
+             reloadData(true);
+         }, function () { });
+         console.log("ok");
+     };*/
     $scope.fileNameChanged = function () {
         $scope.openExcel = true;
         setTimeout(function () {
@@ -71,16 +71,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             var resultImp = await fetch("/UserProfile/Import", requestOptions);
             var txt = await resultImp.text();
             $scope.defaultRTE
-           // console.log($scope.defaultRTE)
+            // console.log($scope.defaultRTE)
             $scope.JSONobjj = handleTextUpload(txt)
             console.log($scope.JSONobj);
         }
     };
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
-        
+
         $scope.infUser = {
-            
+
             LevelEducation: {
                 Undergraduate: [],
                 PoliticalTheory: [],
@@ -89,11 +89,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 MinorityLanguage: []
             }
         }
-        
+
         setTimeout(function () {
             $scope.Email = 'NguyenHuy@gmail.com';
             var today = new Date();
-            var resumeNumber = today.getFullYear()+''+(today.getMonth()+1)+''+today.getDate();
+            var resumeNumber = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
             console.log(resumeNumber);
             var listPage = document.querySelectorAll(".Section0 > div > table");
             console.log(listPage)
@@ -192,7 +192,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             function isTime(e) {
                 return (e.includes('Ngày') && e.includes('tháng') && e.includes('năm')) ? true : false;
             }
-            var HistoricalFeatures = [];
+            $scope.HistoricalFeatures = [];
             for (let i = 0; i < data.length; i++) {
                 var obj = {
                     time: null,
@@ -205,10 +205,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         obj.content = data[i + 1];
                 }
                 if (obj.time != null && obj.content != null) {
-                    HistoricalFeatures.push(obj);
+                    $scope.HistoricalFeatures.push(obj);
                 }
             }
-            console.log("HistoricalFeatures:", HistoricalFeatures);
+            console.log("HistoricalFeatures:", $scope.HistoricalFeatures);
             //Page 5 Di nuoc nguoai
             var datapage5 = Array.from(listPage[5].querySelectorAll("tr:nth-child(n+2)"));
             var pElementP5s = [];
@@ -220,17 +220,20 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP5s.push(pInTr);
             })
-            var GoAboard = [];
+            $scope.GoAboard = [];
             for (let i = 0; i < pElementP5s.length; i++) {
 
                 var GoAboardObj = {
-
+                    time: {
+                        begin: pElementP5s[i][0].substring(pElementP5s[i][0].indexOf("Từ") + 2, pElementP5s[i][0].indexOf("đến")).trim(),
+                        end: pElementP5s[i][0].substring(pElementP5s[i][0].indexOf("đến") + 3).trim(),
+                    },
                     purpose: pElementP5s[i][1],
                     country: pElementP5s[i][2]
                 };
-                GoAboard.push(GoAboardObj);
+                $scope.GoAboard.push(GoAboardObj);
             }
-            console.log('GoAboard', GoAboard)
+            console.log('GoAboard', $scope.FGoAboard)
             //Page6 Khen thuong
             var datapage6 = Array.from(listPage[6].querySelectorAll("tr:nth-child(n+2)"));
             var pElementP6s = [];
@@ -520,6 +523,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].split(',');
             $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3];
             $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].split(',');
+
             $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5];
             $scope.infUser.LevelEducation.It = $scope.listDetail6[6].split(',');
             $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].split(',');
@@ -528,7 +532,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.PhoneContact = $scope.listDetail9.trim();
 
             var JSONobj = {
-                InformationUser:$scope.infUser,
+                InformationUser: $scope.infUser,
                 Create: $scope.PlaceCreatedTime,
                 PersonalHistory: $scope.PersonalHistory,
                 BusinessNDuty: $scope.BusinessNDuty,
@@ -538,24 +542,24 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 SelfComment: $scope.SelfComment,
                 Relationship: $scope.Relationship
             }
-           // console.log(JSON.stringify(JSONobj))
+            // console.log(JSON.stringify(JSONobj))
             setTimeout(function () {
                 $scope.$apply();
-            },100);
-        },100);
+            }, 100);
+        }, 100);
     }
     setTimeout(async function () {
         //  loadDate();
-          // initialize Rich Text Editor component
-          $scope.defaultRTE = new ej.richtexteditor.RichTextEditor({
-              height: '850px'
-          });
-          // Render initialized Rich Text Editor.
-          $scope.defaultRTE.appendTo('#defaultRTE');
-          var obj = $scope.defaultRTE.getContent();
-          obj.firstChild.contentEditable = 'false'
-      
-      }, 50);
+        // initialize Rich Text Editor component
+        $scope.defaultRTE = new ej.richtexteditor.RichTextEditor({
+            height: '850px'
+        });
+        // Render initialized Rich Text Editor.
+        $scope.defaultRTE.appendTo('#defaultRTE');
+        var obj = $scope.defaultRTE.getContent();
+        obj.firstChild.contentEditable = 'false'
+
+    }, 50);
 });
 
 app.controller('orderProductTicket', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceImpStore, $location, $uibModalInstance, para) {
