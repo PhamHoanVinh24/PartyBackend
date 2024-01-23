@@ -150,6 +150,28 @@ td, th {
         margin-bottom: 5px;
         background: none;
     }
+    input:focus {
+        outline: none;
+        border: none;
+    }
+
+    input {
+        border: none;
+    }
+    .popover-header {
+        display: none;
+    }
+
+    .popover-header {
+        font-size: 12px;
+    }
+
+    .fade {
+        opacity: 100;
+        font-size: 12px;
+        font-weight: 400;
+        background-color: #EEF1F5;
+    }
 </style>
 
 <div class="portlet-body form row" style="margin-top: 15px">
@@ -373,7 +395,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Bằng cấp</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Bằng cấp" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.LevelEducation.RankAcademic" type="text" placeholder="Bằng cấp" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -382,7 +404,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Trường tốt nghiệp</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Trường tốt nghiệp" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.LevelEducation.Undergraduate" type="text" placeholder="Trường tốt nghiệp" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -400,7 +422,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Ngoại ngữ</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Ngoại ngữ" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.LevelEducation.ForeignLanguage" type="text" placeholder="Ngoại ngữ" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -409,7 +431,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Tiếng dân tộc thiểu số</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tiếng dân tộc thiểu số" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="infUser.LevelEducation.MinorityLanguage" type="text" placeholder="Tiếng dân tộc thiểu số" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -427,7 +449,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Tin học</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Tin học" ng-readonly="CustomerId !=''" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="infUser.LevelEducation.It" type="text" placeholder="Tin học" ng-readonly="CustomerId !=''" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -436,7 +458,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Nơi tạo</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Nơi tạo" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="PlaceCreatedTime.place" type="text" placeholder="Nơi tạo" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -445,7 +467,7 @@ td, th {
                                         <label class="control-label require custom-title-code-bold">Tự nhận xét</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Tự nhận xét" />
+                                        <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="SelfComment" type="text" placeholder="Tự nhận xét" />
                                     </div>
                                 </div>
                             </div>
@@ -469,15 +491,20 @@ td, th {
                                     </div>
                                     <div style="font-size: 20px; color: red;"><i class="fa fa-times"></i></div>
                                 </div>
-                                <div class="mt-15" style="padding-left: 15px;" ng-show="showFamily2">
+                                <div class="mt-2" style="padding-left: 15px;" ng-show="showFamily2">
                                     <div class="form-group row">
                                         <div class="col-md-4 pr-0">
                                             <i class="fa fa-user"></i>
                                             <label class="control-label require custom-title-code-bold">Họ và tên</label>
                                         </div>
-                                        <div class="col-md-8">
-                                        
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.Name" type="text" placeholder="Họ và tên" ng-readonly="CustomerId !=''" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover">
+
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.Name" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -485,8 +512,16 @@ td, th {
                                             <i class="fa fa-calendar-o"></i>
                                             <label class="control-label require custom-title-code-bold">Năm sinh</label>
                                         </div>
-                                        <div class="col-md-8">
+                                        <!--<div class="col-md-8">
                                             <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.Year.YearBirth" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
+                                        </div>-->
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.YearBirth" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -494,8 +529,15 @@ td, th {
                                             <i class="fa fa-calendar-o"></i>
                                             <label class="control-label require custom-title-code-bold">Năm mất</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.Year.YearDeath" type="text" placeholder="Năm mất" ng-readonly="CustomerId !=''" />
+
+                                        
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.YearDeath" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -503,8 +545,16 @@ td, th {
                                             <i class="fa fa-map-marker"></i>
                                             <label class="control-label require custom-title-code-bold">Quê quán</label>
                                         </div>
-                                        <div class="col-md-8">
+                                        <!--<div class="col-md-8">
                                             <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.HomeTown" type="text" placeholder="Quê quán" ng-readonly="CustomerId !=''" />
+                                        </div>-->
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.HomeTown" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -512,8 +562,14 @@ td, th {
                                             <i class="fa fa-home"></i>
                                             <label class="control-label require custom-title-code-bold">Nơi cư trú</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="x.Residence" type="text" placeholder="Nơi cư trú" />
+                                        
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.Residence" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -521,8 +577,14 @@ td, th {
                                             <i class="fa fa-users"></i>
                                             <label class="control-label require custom-title-code-bold">Nghề nghiệp</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="x.Job" type="text" placeholder="Nghề nghiệp" />
+                                        
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="x.Job" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -530,23 +592,24 @@ td, th {
                                             <i class="fa fa-user"></i>
                                             <label class="control-label require custom-title-code-bold">Quá trình công tác</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <div class="" style="display: table;border-collapse: separate;">
-                                                <input class="form-control custom-title-code-bold br24" name="CusName" ng-model="" type="text" placeholder="Quá trình công tác" />
-                                                <span class="input-group-btn">
-                                                    <button type="button" ng-click="addCommonSettingArea()" class="btn btn-default no-shadow" style="">
-                                                        <span class="glyphicon glyphicon-plus"></span>
-                                                    </button>
-                                                </span>
+                                        
+                                            <div class="col-md-8" style="display: flex;">
+                                                <div class="br24 form-control custom-title-code-bold">
+                                                    <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                    </i>
+                                                    <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                                </div>
+                                                <ul>
+                                                    <li>
+
+                                                        {{y}}
+                                                        <span style="float: right;"><i class="fa fa-times"></i></span>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            <ul ng-repeat="y in x.WorkingProcess">
-                                                <li>  
-                                                   
-                                                    {{y}}
-                                                    <span style="float: right;"><i class="fa fa-times"></i></span>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            
+                                        
                                     
                                     </div>
                                     <div class="form-group row">
@@ -554,14 +617,22 @@ td, th {
                                             <i class="fa fa-user"></i>
                                             <label class="control-label require custom-title-code-bold">Thái độ chính trị</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusName" ng-mode" type="text" placeholder="Thái độ chính trị" />
-                                            <ul ng-repeat="y in x.PoliticalAttitude ">
-                                                <li>
-                                                   {{y}}
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        
+                                            <div class="col-md-8" style="display: flex;">
+                                                <div class="br24 form-control custom-title-code-bold">
+                                                    <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                    </i>
+                                                    <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                                </div>
+                                                <ul ng-repeat="y in x.PoliticalAttitude ">
+                                                    <li>
+                                                        {{y}}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -584,17 +655,28 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Từ ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày"  />
+                                            </div>
                                         </div>
+                                        
                                     </div>
-                                    <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="col-md-6 row" style="padding-left: 0px;padding-right: 0px;">
                                         <div class="col-md-4 pr-0">
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Đến ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Đến ngày"  />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -603,8 +685,13 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Nội dung</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Nội dung..." ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nội dung"  />
+                                        </div>
                                     </div>
                                 </div>
     
@@ -639,8 +726,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Từ ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -648,8 +740,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Đến ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Đến ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -658,17 +755,27 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Nội dung</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Làm việc gì, ở đâu..." ng-readonly="CustomerId !=''" />
-                                    </div>
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nội dung" />
+                                        </div>
+                                    </div>ng
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-2 pr-0">
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Chức vụ</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Chức vụ" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Chức vụ" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="list-item">
@@ -704,8 +811,14 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Từ ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                          
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -713,8 +826,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Đến ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Đến" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -723,43 +841,33 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Nội dung</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Nội dung..." ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nội dung" />
+                                        </div>
                                     </div>
                                 </div>
     
                                 <div class="list-item">
                                     <table>
                                         <tr>
-                                          <th>Từ ngày</th>
-                                          <th>Đến ngày</th>
-                                          <th>Nội dung</th>
-                                          <th>Xoá bỏ</th>
+                                            <th>Thời gian</th>
+
+                                            <th>Nội dung</th>
+                                            <th>Xoá bỏ</th>
                                         </tr>
-                                        <tr>
-                                          <td>9-2016</td>
-                                          <td>6-2019</td>
-                                          <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                          <td>
-                                            <i class="fa fa-times"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <tr ng-repeat="x in HistoricalFeatures">
+                                            <td>{{x.time}}</td>
+                                            <td>{{x.content}}</td>
+
                                             <td>
-                                              <i class="fa fa-times"></i>
+                                                <i class="fa fa-times"></i>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td>
-                                              <i class="fa fa-times"></i>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
@@ -775,8 +883,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Ngày, tháng, năm</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Ngày, tháng, năm" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nội dung" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -784,8 +897,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Cấp quyết định</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Cấp quyết định" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Cấp quyết định" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -794,43 +912,33 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Lý do, hình thức</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Lý do, hình thức" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Lý do, hình thức" />
+                                        </div>
                                     </div>
                                 </div>
     
                                 <div class="list-item">
                                     <table>
                                         <tr>
-                                          <th>Ngày, tháng, năm</th>
-                                          <th>Lý do, hình thức</th>
-                                          <th>Cấp quyết định</th>
-                                          <th>Xoá bỏ</th>
+                                            <th>Ngày, tháng, năm</th>
+                                            <th>Lý do, hình thức</th>
+                                            <th>Cấp quyết định</th>
+                                            <th>Xoá bỏ</th>
                                         </tr>
-                                        <tr>
-                                          <td>9-2016</td>
-                                          <td>6-2019</td>
-                                          <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                          <td>
-                                            <i class="fa fa-times"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <tr ng-repeat="x in Laudatory">
+                                            <td>{{x.time}}</td>
+                                            <td>{{x.officialReason}}</td>
+                                            <td>{{x.grantDecision}}.</td>
                                             <td>
-                                              <i class="fa fa-times"></i>
+                                                <i class="fa fa-times"></i>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td>
-                                              <i class="fa fa-times"></i>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
@@ -846,8 +954,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Tháng, năm</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Ngày, tháng, năm" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Tháng, năm" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -855,8 +968,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Cấp quyết định</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Cấp quyết định" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Cấp quyết định" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -865,43 +983,33 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Lý do, hình thức</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Lý do, hình thức" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Lý do.. hình thức" />
+                                        </div>
                                     </div>
                                 </div>
     
                                 <div class="list-item">
                                     <table>
                                         <tr>
-                                          <th>Tháng, năm</th>
-                                          <th>Lý do, hình thức</th>
-                                          <th>Cấp quyết định</th>
-                                          <th>Xoá bỏ</th>
+                                            <th>Tháng, năm</th>
+                                            <th>Lý do, hình thức</th>
+                                            <th>Cấp quyết định</th>
+                                            <th>Xoá bỏ</th>
                                         </tr>
-                                        <tr>
-                                          <td>9-2016</td>
-                                          <td>6-2019</td>
-                                          <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                          <td>
-                                            <i class="fa fa-times"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <tr ng-repeat="x in Disciplined">
+                                            <td>{{x.time}}</td>
+                                            <td>{{x.officialReason}}</td>
+                                            <td>{{x.grantDecision}}</td>
                                             <td>
-                                              <i class="fa fa-times"></i>
+                                                <i class="fa fa-times"></i>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td>
-                                              <i class="fa fa-times"></i>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
@@ -917,8 +1025,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Từ ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -926,8 +1039,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Đến ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Đến ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -936,8 +1054,13 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Tên trường</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Tên trường" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Tên trường" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -945,8 +1068,13 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Ngành học hoặc tên lớp học</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Ngành học hoặc tên lớp học" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngành học" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -954,46 +1082,36 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Văn bằng chứng chỉ</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Văn bằng chứng chỉ" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Văn bằng chứng chỉ" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="list-item">
                                     <table>
                                         <tr>
-                                          <th>Từ ngày</th>
-                                          <th>Đến ngày</th>
-                                          <th>Tên trường</th>
-                                          <th>Ngành học hoặc tên lớp học</th>
-                                          <th>Văn bằng chứng chỉ</th>
-                                          <th>Xoá bỏ</th>
+                                            <th>Từ ngày</th>
+                                            <th>Đến ngày</th>
+                                            <th>Tên trường</th>
+                                            <th>Ngành học hoặc tên lớp học</th>
+                                            <th>Văn bằng chứng chỉ</th>
+                                            <th>Xoá bỏ</th>
                                         </tr>
-                                        <tr>
-                                          <td>9-2016</td>
-                                          <td>6-2019</td>
-                                          <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                          <td></td>
-                                          <td></td>
-                                          <td>
-                                            <i class="fa fa-times"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
+                                        <tr ng-repeat="x in PassedTrainingClasses">
+                                            <td>{{x.time.begin}}</td>
+                                            <td>{{x.time.end}}</td>
+                                            <td>{{x.school}}</td>
+                                            <td>{{x.class}}</td>
+                                            <td>{{x.business}}</td>
                                             <td>
-                                              <i class="fa fa-times"></i>
+                                                <i class="fa fa-times"></i>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td>
-                                              <i class="fa fa-times"></i>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
@@ -1009,8 +1127,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Từ ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Từ ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
@@ -1018,8 +1141,13 @@ td, th {
                                             <i class="fa fa-calendar"></i>
                                             <label class="control-label require custom-title-code-bold">Đến ngày</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Đến ngày" ng-readonly="CustomerId !=''" />
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
+
+                                                </i>
+                                                <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Đến ngày" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1028,8 +1156,13 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Nội dung đi</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Nội dung đi" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nội dung" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -1037,8 +1170,13 @@ td, th {
                                         <i class="fa fa-pencil-square-o"></i>
                                         <label class="control-label require custom-title-code-bold">Nước nào</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Nước nào" ng-readonly="CustomerId !=''" />
+                                    <div class="col-md-10" style="display: flex;">
+                                        <div class="br24 form-control custom-title-code-bold">
+                                            <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:Campuchia">
+
+                                            </i>
+                                            <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Nước nào" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="list-item">
@@ -1050,31 +1188,13 @@ td, th {
                                           <th>Đi nước nào</th>
                                           <th>Xoá bỏ</th>
                                         </tr>
-                                        <tr>
-                                          <td>9-2016</td>
-                                          <td>6-2019</td>
-                                          <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                          <td></td>
-                                          <td>
-                                            <i class="fa fa-times"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td></td>
+                                        <tr ng-repeat="x in GoAboard">
+                                            <td>{{x.time.begin}}</td>
+                                            <td>{{x.time.end}}</td>
+                                            <td>{{x.purpose}}</td>
+                                            <td>{{x.country}}</td>
                                             <td>
-                                              <i class="fa fa-times"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9-2016</td>
-                                            <td>6-2019</td>
-                                            <td>Học tại trường trung học cơ sở Yên Phong,...</td>
-                                            <td></td>
-                                            <td>
-                                              <i class="fa fa-times"></i>
+                                                <i class="fa fa-times"></i>
                                             </td>
                                         </tr>
                                     </table>
@@ -1093,8 +1213,13 @@ td, th {
                                     <i class="fa fa-user"></i>
                                     <label class="control-label require custom-title-code-bold">Người giới thiệu</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="model.CusCode" type="text" placeholder="Người giới thiệu" ng-readonly="CustomerId !=''" />
+                                <div class="col-md-8" style="display: flex;">
+                                    <div class="br24 form-control custom-title-code-bold">
+                                        <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                        </i>
+                                        <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Người giới thiệu" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -1102,8 +1227,13 @@ td, th {
                                     <i class="fa fa-calendar"></i>
                                     <label class="control-label require custom-title-code-bold">Ngày và nơi vào Đoàn</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Ngày và nơi vào đoàn" />
+                                <div class="col-md-8" style="display: flex;">
+                                    <div class="br24 form-control custom-title-code-bold">
+                                        <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                        </i>
+                                        <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi vào Đoàn" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -1111,16 +1241,26 @@ td, th {
                                     <i class="fa fa-calendar"></i>
                                     <label class="require custom-title-code-bold">Ngày và nơi vào Đảng lần thứ nhất</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Ngày và nơi vào Đảng lần thứ nhất" />
+                                <div class="col-md-8" style="display: flex;">
+                                    <div class="br24 form-control custom-title-code-bold">
+                                        <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                        </i>
+                                        <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi vào Đảng lần thứ nhất" />
+                                    </div>
                                 </div>
                             </div><div class="form-group row">
                                 <div class="col-md-4 pr-0 ">
                                     <i class="fa fa-calendar"></i>
                                     <label class="require custom-title-code-bold">Ngày và nơi công nhận chính thức lần thứ nhất</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input class="form-control br24 custom-title-code-bold" name="CusName" ng-model="model.CusName" type="text" placeholder="Ngày và nơi công nhận chính thức lần thứ nhất" />
+                                <div class="col-md-8" style="display: flex;">
+                                    <div class="br24 form-control custom-title-code-bold">
+                                        <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
+
+                                        </i>
+                                        <input style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi công nhận chính thức lần thứ nhất" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
