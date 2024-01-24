@@ -17,8 +17,15 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
+        getItemPartyAdmissionProfile: function (data, callback) {
+            $http.get('/UserProfile/GetItem/' + data).then(callback);
+        },
+        insert: function (data, callback) {
+            $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
+            //submitFormUpload1('/Admin/HREmployee/Insert', data, callback);
+        },
         update: function (data, callback) {
-            $http.post('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
+            $http.put('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
             //submitFormUpload1('/Admin/HREmployee/Insert', data, callback);
         },
     }
@@ -36,7 +43,7 @@ app.config(function ($routeProvider, $locationProvider) {
         })
 });
 
-app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter) {
+app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter,$http) {
     console.log("indeeeeee");
     /* $scope.upload = function () {
          var modalInstance = $uibModal.open({
@@ -529,13 +536,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0];
             $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1];
-            $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].split(',');
+            $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2];//.split(',');
             $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3];
-            $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].split(',');
+            $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4];//.split(',');
 
             $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5];
-            $scope.infUser.LevelEducation.It = $scope.listDetail6[6].split(',');
-            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].split(',');
+            $scope.infUser.LevelEducation.It = $scope.listDetail6[6];//.split(',');
+            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7];//.split(',');
 
             $scope.infUser.Phone = $scope.listDetail8;
             $scope.infUser.PhoneContact = $scope.listDetail9.trim();
@@ -557,19 +564,33 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }, 100);
         }, 100);
     }
+    
+    $scope.get = function (id = 3) {
+        dataservice.getItemPartyAdmissionProfile(id, function(rs){
+            rs = rs.data;
 
+        })
+    }
     $scope.senddata = function () {
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
     }
-
+    //insert and update
+    $scope.isUpdate = true;
+    
     $scope.submit = function () {
+        var today = new Date();
         $scope.model = {}
-        $scope.model.Id = 1;
         $scope.model.CurrentName = $scope.infUser.LastName;
-        $scope.model.BirthDay = $scope.infUser.DateofBird;
+        var fullDate = new Date($scope.infUser.DateofBird);
+        var onlyDate = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
+        $scope.model.Birthday = onlyDate;
         $scope.model.BirthName = $scope.infUser.FirstName;
-        $scope.model.Gender = $scope.infUser.Sex;
+        if($scope.infUser.Sex == 'Nam'){
+            $scope.model.Gender = 0;
+        }else if($scope.infUser.Sex == 'Nữ'){
+            $scope.model.Gender = 1;
+        }else $scope.model.Gender = 2;
         $scope.model.Nation = $scope.infUser.Nation;
         $scope.model.Religion = $scope.infUser.Religion;
         $scope.model.PermanentResidence = $scope.infUser.Residence;
@@ -578,18 +599,35 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model.Job = $scope.infUser.NowEmployee;
         $scope.model.HomeTown = $scope.infUser.HomeTown;
         $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
-        // $scope.model.JobEducation = $scope.infUser.LastName;
-        // $scope.model.UnderNPostGraduateEducation = $scope.infUser.LastName;
-        // $scope.model.PoliticalTheory = $scope.infUser.LastName;
-        // $scope.model.MinorityLanguages = $scope.infUser.LastName;
-        $scope.model.ResumeNumber = '20240124'
-        dataservice.update($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
-        });
+        $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
+        $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
+        $scope.model.UnderPostGraduateEducation = '';//$scope.infUser.LevelEducation.Undergraduate.trim();
+        $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
+        $scope.model.Picture = '';
+        $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
+        $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
+        $scope.model.ItDegree = '';//$scope.infUser.LevelEducation.It;
+        $scope.model.PoliticalTheory = '';//$scope.infUser.LevelEducation.PoliticalTheory;
+        $scope.model.SelfComment = '';//$scope.SelfComment.context;
+        $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
+        $scope.model.ResumeNumber = '2024124'//today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        
+        if($scope.isUpdate){
+            dataservice.update($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            });
+        }else {
+            dataservice.insert($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            });
+        }
         console.log($scope.model);
     }
 
+    //update
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component

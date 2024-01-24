@@ -95,52 +95,56 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpPost]
-		public object UpdatePartyAdmissionProfile([FromBody] PartyAdmissionProfile model)
-		{
-			var msg = new JMessage() { Error = false };
-			try
-			{
-				var obj = _context.PartyAdmissionProfiles.Find(model.Id);
+        [HttpPut]
+        public object UpdatePartyAdmissionProfile( [FromBody] PartyAdmissionProfile model)
+        {
+            var msg = new JMessage() { Error = false };
+			var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ResumeNumber);
+            try
+            {
+            
 
-				obj.CurrentName = model.CurrentName;
-				obj.BirthDay = model.BirthDay;
-				obj.BirthName = model.BirthName;
-				obj.Gender = obj.Gender;
-				obj.Nation = obj.Nation;
-				obj.Religion = obj.Religion;
-				obj.PermanentResidence = model.PermanentResidence;
-				obj.Phone = model.Phone;
-				obj.Picture = model.Picture;
-				obj.HomeTown = model.HomeTown;
-				obj.PlaceBirth = model.PlaceBirth;
-				obj.Job = model.Job;
-				obj.TemporaryAddress = model.TemporaryAddress;
-				obj.GeneralEducation = model.GeneralEducation;
-				obj.JobEducation = model.JobEducation;
-				obj.UnderNPostGraduateEducation = model.UnderNPostGraduateEducation;
-				obj.Degree = model.Degree;
-				obj.PoliticalTheory = model.PoliticalTheory;
-				obj.ForeignLanguage = model.ForeignLanguage;
-				obj.ITDegree = model.ITDegree;
-				obj.MinorityLanguages = model.MinorityLanguages;
-				obj.SelfComment = model.SelfComment;
-				obj.CreatedPlace = model.CreatedPlace;
-				obj.ResumeNumber = model.ResumeNumber;
+                //    obj.CurrentName = currentName;
+                obj.CurrentName = model.CurrentName;
+                obj.Birthday = model.Birthday;
+                obj.BirthName = model.BirthName;
+                obj.Gender = obj.Gender;
+                obj.Nation = obj.Nation;
+                obj.Religion = obj.Religion;
+                obj.PermanentResidence = model.PermanentResidence;
+                obj.Phone = model.Phone;
+                obj.Picture = model.Picture;
+                obj.HomeTown = model.HomeTown;
+                obj.PlaceBirth = model.PlaceBirth;
+                obj.Job = model.Job;
+                obj.TemporaryAddress = model.TemporaryAddress;
+                obj.GeneralEducation = model.GeneralEducation;
+                obj.JobEducation = model.JobEducation;
+                obj.ItDegree = model.ItDegree;
+                obj.Degree = model.Degree;
+                obj.PoliticalTheory = model.PoliticalTheory;
+                obj.ForeignLanguage = model.ForeignLanguage;
+                obj.ItDegree = model.ItDegree;
+                obj.MinorityLanguages = model.MinorityLanguages;
+                obj.SelfComment = model.SelfComment;
+                obj.CreatedPlace = model.CreatedPlace;
+                obj.ResumeNumber = model.ResumeNumber;
 
-				_context.PartyAdmissionProfiles.Add(obj);
-				_context.SaveChanges();
 
-				msg.Title = "Cập nhật Sơ yếu lí lịch thành công";
-			}
-			catch (Exception err)
-			{
-				msg.Error = true;
-				msg.Title = "Cập nhật Sơ yếu lí lịch thất bại";
-			}
-			return msg;
-		}
-		[HttpPost]
+
+                _context.PartyAdmissionProfiles.Update(obj);
+                _context.SaveChanges();
+
+                msg.Title = "Cập nhật Sơ yếu lí lịch thành công";
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Cập nhật Sơ yếu lí lịch thất bại";
+            }
+            return msg;
+        }
+        [HttpPost]
 		public object UpdateIntroduceOfParty([FromBody] IntroducerOfParty model)
 		{
 			var msg = new JMessage() { Error = false };
@@ -382,10 +386,10 @@ namespace III.Admin.Controllers
 				if(string.IsNullOrEmpty(model.CurrentName) || string.IsNullOrEmpty(model.BirthName) || string.IsNullOrEmpty(model.Nation) || string.IsNullOrEmpty(model.Religion)
 					|| string.IsNullOrEmpty(model.PermanentResidence) || string.IsNullOrEmpty(model.Phone) || string.IsNullOrEmpty(model.Picture)
 					|| string.IsNullOrEmpty(model.HomeTown) || string.IsNullOrEmpty(model.PlaceBirth) || string.IsNullOrEmpty(model.Job) || string.IsNullOrEmpty(model.TemporaryAddress)
-					|| string.IsNullOrEmpty(model.GeneralEducation) || string.IsNullOrEmpty(model.JobEducation) || string.IsNullOrEmpty(model.UnderNPostGraduateEducation)
+					|| string.IsNullOrEmpty(model.GeneralEducation) || string.IsNullOrEmpty(model.JobEducation) || string.IsNullOrEmpty(model.UnderPostGraduateEducation)
 					|| string.IsNullOrEmpty(model.Degree) || string.IsNullOrEmpty(model.PoliticalTheory) || string.IsNullOrEmpty(model.ForeignLanguage)
-					|| string.IsNullOrEmpty(model.ITDegree) || string.IsNullOrEmpty(model.MinorityLanguages) || string.IsNullOrEmpty(model.SelfComment) || string.IsNullOrEmpty(model.ResumeNumber)
-					|| model.BirthDay!=null
+					|| string.IsNullOrEmpty(model.ItDegree) || string.IsNullOrEmpty(model.MinorityLanguages) || string.IsNullOrEmpty(model.SelfComment) || string.IsNullOrEmpty(model.ResumeNumber)
+					|| model.Birthday!=null
 					) { 
 					_context.PartyAdmissionProfiles.Add(model);
 					_context.SaveChanges();
