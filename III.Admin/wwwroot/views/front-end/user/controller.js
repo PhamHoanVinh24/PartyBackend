@@ -17,7 +17,10 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
-
+        update: function (data, callback) {
+            $http.post('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
+            //submitFormUpload1('/Admin/HREmployee/Insert', data, callback);
+        },
     }
 });
 
@@ -78,27 +81,24 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     };
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
-    $scope.inputPerHis = {};
+    // $scope.inputPerHis = {};
             
-    $scope.addPersonalHistory = function () {
-                $scope.PersonalHistory.push(inputPerHis);
-                // Xóa dữ liệu từ input sau khi thêm
-                $scope.inputPerHis = {};
-            }
+    // $scope.addPersonalHistory = function () {
+    //             $scope.PersonalHistory.push(inputPerHis);
+    //             // Xóa dữ liệu từ input sau khi thêm
+    //             $scope.inputPerHis = {};
+    //         }
+    $scope.infUser = {
+        LevelEducation: {
+            Undergraduate: [],
+            PoliticalTheory: [],
+            ForeignLanguage: [],
+            It: [],
+            MinorityLanguage: []
+        }
+    }
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
-
-        $scope.infUser = {
-
-            LevelEducation: {
-                Undergraduate: [],
-                PoliticalTheory: [],
-                ForeignLanguage: [],
-                It: [],
-                MinorityLanguage: []
-            }
-        }
-
         setTimeout(function () {
             $scope.Email = 'NguyenHuy@gmail.com';
             var today = new Date();
@@ -115,6 +115,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
+            $scope.PersonalHistory = [];
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -129,7 +130,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log('PersonalHistory', $scope.PersonalHistory)
             
             //Page3 Những nơi công tác và chức vụ đã qua
-            $scope.itemList.push($scope.inputText);
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
                 .filter(function (element) {
                     return element.textContent.trim().length > 0;
@@ -446,7 +446,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     }
                 }
             }
-
             console.log("Relationship:", $scope.Relationship);
             //Page 9 Tự nhận xét
             $scope.SelfComment = {
@@ -558,6 +557,39 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }, 100);
         }, 100);
     }
+
+    $scope.senddata = function () {
+        var data = $rootScope.ProjectCode;
+        $rootScope.$emit('eventName', data);
+    }
+
+    $scope.submit = function () {
+        $scope.model = {}
+        $scope.model.Id = 1;
+        $scope.model.CurrentName = $scope.infUser.LastName;
+        $scope.model.BirthDay = $scope.infUser.DateofBird;
+        $scope.model.BirthName = $scope.infUser.FirstName;
+        $scope.model.Gender = $scope.infUser.Sex;
+        $scope.model.Nation = $scope.infUser.Nation;
+        $scope.model.Religion = $scope.infUser.Religion;
+        $scope.model.PermanentResidence = $scope.infUser.Residence;
+        $scope.model.Phone = $scope.infUser.Phone;
+        $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
+        $scope.model.Job = $scope.infUser.NowEmployee;
+        $scope.model.HomeTown = $scope.infUser.HomeTown;
+        $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
+        // $scope.model.JobEducation = $scope.infUser.LastName;
+        // $scope.model.UnderNPostGraduateEducation = $scope.infUser.LastName;
+        // $scope.model.PoliticalTheory = $scope.infUser.LastName;
+        // $scope.model.MinorityLanguages = $scope.infUser.LastName;
+        $scope.model.ResumeNumber = '20240124'
+        dataservice.update($scope.model, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+        });
+        console.log($scope.model);
+    }
+
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component
@@ -572,136 +604,4 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }, 50);
 });
 
-app.controller('orderProductTicket', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceImpStore, $location, $uibModalInstance, para) {
-    $scope.model = {
-        MappingCode: '',
-    }
-
-    $scope.listProducts = [];
-    $scope.listSelect = [];
-
-    $scope.QuantityMax = '';
-
-    $scope.cancel = function () {
-        $uibModalInstance.close($rootScope.rootId);
-    }
-
-    $scope.listMapping = [];
-    $scope.initLoad = function () {
-        // var itemProduct = para.objPara.item;
-        // $scope.model.ProductQrCode = itemProduct.ProductQrCode;
-        // $scope.model.Quantity = itemProduct.ValueCoil;
-        // $scope.model.sProductCoil = para.objPara.productCoil;
-        // $scope.model.ProductNoImp = para.objPara.isTankStatic ? '1' : para.objPara.productNo;
-        // $scope.model.ProductNo = para.objPara.isTankStatic ? '1' : '';
-        // $scope.model.IsTankStatic = para.objPara.isTankStatic;
-        dataserviceImpStore.getListMapping("", function (rs) {
-            rs = rs.data;
-            $scope.listMapping = rs;
-        });
-        // dataserviceImpStore.getPositionProductVatco(para.objPara.item.Id, para.objPara.item.TicketCode, function (rs) {
-        //     rs = rs.data;
-        //     $scope.lstProduct = rs;
-        // })
-
-        dataserviceImpStore.getProductDetailNew(para.objPara.TicketCode, function (rs) {
-            rs = rs.data;
-            $scope.lstProduct = rs;
-            // if ($scope.listProdDetail.length > 0) {
-            //     $scope.disabledReason = true;
-            // }
-        })
-        // dataserviceImpStore.getTreeZone(function (rs) {
-        //     rs = rs.data;
-        //     $scope.lstTreeZone = rs;
-        // })
-    }
-
-    $scope.initLoad();
-
-    $scope.validate = function () {
-        if ($scope.model.MappingCode != '' && $scope.model.MappingCode != null && $scope.model.MappingCode != undefined) {
-            return false;
-        } else {
-            App.toastrError(caption.MIST_VALIDATE_ADD_REQUIRE_INFO_RB);
-            return true;
-        }
-    }
-    $scope.orderProductVatCo = function (item) {
-        // var item = $scope.listProdDetail[index];
-        if (item != null) {
-            dataserviceImpStore.checkProductInStore(item.Id, function (rs) {
-                rs = rs.data;
-                // var getStore = $scope.listStore.find(function (element) {
-                //     if (element.Code == $scope.model.StoreCode) return true;
-                // });
-                var objPara = {
-                    item: item,
-                    rootId: $rootScope.rootId,
-                    productName: item.ProductName,
-                    productNo: item.ProductNo,
-                    productCoil: '',
-                    storeName: '',
-                    isTankStatic: rs === false
-                };
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: ctxfolderImpStore + '/orderProduct.html',
-                    controller: 'orderProduct',
-                    backdrop: 'static',
-                    size: '60',
-                    resolve: {
-                        para: function () {
-                            return {
-                                objPara
-                            };
-                        }
-                    }
-                });
-                modalInstance.result.then(function (id) {
-                    $scope.initLoad();
-                }, function () {
-                });
-            });
-        } else {
-            App.toastrError(caption.MIST_ADD_PRODUCT_SAVE_BEFORE_SORT);
-        }
-    }
-
-    $scope.save = function () {
-        if ($scope.model.MappingCode != '' && $scope.model.MappingCode != null && $scope.model.MappingCode != undefined) {
-            // return false;
-        } else {
-            App.toastrError(caption.MIST_VALIDATE_ADD_REQUIRE_INFO_RB);
-            return true;
-        }
-        const body = $scope.lstProduct.filter(x => x.IsSelected).map(x => ({
-            ProductCode: x.ProductCode,
-            ProductName: x.ProductName,
-            Unit: x.Unit,
-            ProductQrCode: x.ProductQRCode,
-            ProductNoImp: x.ProductNoImp,
-            ProductNo: x.ProductNoInput,
-            IsTankStatic: x.IsTankStatic,
-            MappingCode: $scope.model.MappingCode,
-            IdImpProduct: x.Id,
-            IsTankStatic: x.IsTankStatic,
-            UnitCode: x.UnitCode,
-        }));
-        dataserviceImpStore.orderMultiProduct(body, function (rs) {
-            rs = rs.data;
-            if (rs.Error) {
-                App.toastrError(rs.Title);
-            } else {
-                App.toastrSuccess(rs.Title);
-            }
-            $scope.initLoad();
-        })
-    }
-
-    setTimeout(function () {
-        setModalMaxHeight('.modal');
-        setModalDraggable('.modal-dialog');
-    }, 200);
-});
 
