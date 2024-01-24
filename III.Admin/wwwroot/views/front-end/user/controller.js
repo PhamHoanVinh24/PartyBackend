@@ -76,6 +76,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.JSONobj);
         }
     };
+    //Thêm data vào PersonalHistory
+    $scope.PersonalHistory = [];
+    $scope.inputPerHis = {};
+            
+    $scope.addPersonalHistory = function () {
+                $scope.PersonalHistory.push(inputPerHis);
+                // Xóa dữ liệu từ input sau khi thêm
+                $scope.inputPerHis = {};
+            }
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
 
@@ -105,7 +114,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 return textContent.length > 0 && /\+/.test(textContent);
             });
 
-            $scope.PersonalHistory = [];//đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
+            //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -118,8 +127,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 $scope.PersonalHistory.push(PersonHis);
             }
             console.log('PersonalHistory', $scope.PersonalHistory)
+            
             //Page3 Những nơi công tác và chức vụ đã qua
-
+            $scope.itemList.push($scope.inputText);
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
                 .filter(function (element) {
                     return element.textContent.trim().length > 0;
