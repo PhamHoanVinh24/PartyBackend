@@ -31,6 +31,19 @@ app.factory('dataservice', function ($http) {
         delete: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
         },
+        //award 
+        getAwardById: function (data, callback) {
+            $http.Delete('/UserProfile/GetAwardById/', data).then(callback);  
+        },
+        insertAward: function (data, callback) {
+            $http.post('/UserProfile/InsertAward/', data).then(callback); 
+        },
+        updateAward: function (data, callback) {
+            $http.post('/UserProfile/UpdateAward/', data).then(callback);  
+        },
+        deleteAward: function (data, callback) {
+            $http.Delete('/UserProfile/DeleteAward/', data).then(callback);  
+        },
     }
 });
 
@@ -105,8 +118,27 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             ForeignLanguage: [],
             It: [],
             MinorityLanguage: []
-        }
+        },
+        ResumeNumber: ''
     }
+    var today = new Date();
+    $scope.infUser.ResumeNumber = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate()
+    //lịch sử bản thân
+    $scope.PersonalHistory = [];
+    //quá trình công tác
+    $scope.BusinessNDuty = [];
+    //di nước ngoài
+    $scope.GoAboard = [];
+    //Những lớp đào tạo
+    $scope.PassedTrainingClasses = [];
+    //đạc điểm lịch sử
+    $scope.HistoricalFeatures = [];
+    //khen thưởng
+    $scope.Laudatory = [];
+    //Kỷ luật
+    $scope.Disciplined = [];
+    //quan hệ gia đình
+    $scope.Relationship = [];
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
         setTimeout(function () {
@@ -125,7 +157,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
-            $scope.PersonalHistory = [];
+            
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -158,7 +190,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });;
                 pElementP2s.push(pInTr);
             })
-            $scope.BusinessNDuty = [];
+            
             for (let i = 0; i < pElementP2s.length; i++) {
                 var begin = pElementP2s[i][0].substr(pElementP2s[i][0].indexOf('-') - 2, 7);
                 var end = pElementP2s[i][0].substr(pElementP2s[i][0].lastIndexOf('-') - 2, 7);
@@ -187,7 +219,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             console.log(pElementP4s)
-            $scope.PassedTrainingClasses = [];
+            
             for (let i = 0; i < pElementP4s.length; i++) {
                 var obj = {
                     school: pElementP4s[i][0],
@@ -212,7 +244,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             function isTime(e) {
                 return (e.includes('Ngày') && e.includes('tháng') && e.includes('năm')) ? true : false;
             }
-            $scope.HistoricalFeatures = [];
+            
             for (let i = 0; i < data.length; i++) {
                 var obj = {
                     time: null,
@@ -240,7 +272,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP5s.push(pInTr);
             })
-            $scope.GoAboard = [];
+            
             for (let i = 0; i < pElementP5s.length; i++) {
 
                 var GoAboardObj = {
@@ -265,7 +297,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP6s.push(pInTr);
             })
-            $scope.Laudatory = [];
             for (let i = 0; i < pElementP6s.length; i++) {
 
                 var obj = {
@@ -288,7 +319,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP7s.push(pInTr);
             })
-            $scope.Disciplined = [];
+    
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
                     time: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
@@ -309,7 +340,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pE8.push(pInTr);
             })
-            $scope.Relationship = [];
+            
             let RelationshipIndex = 0;
             for (let y = 0; y < pE8.length; y++) {
                 for (let i = 0; i < pE8[y].length; i++) {
@@ -578,11 +609,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
     }
-    //insert and update
-    $scope.isUpdate = true;
+
+    // AdmissionProfile
+
+    // insert and update
+    $scope.isUpdate = false;
     
     $scope.submit = function () {
-        var today = new Date();
         $scope.model = {}
         $scope.model.CurrentName = $scope.infUser.LastName;
         var fullDate = new Date($scope.infUser.DateofBird);
@@ -613,7 +646,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model.PoliticalTheory = '';//$scope.infUser.LevelEducation.PoliticalTheory;
         $scope.model.SelfComment = '';//$scope.SelfComment.context;
         $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
-        $scope.model.ResumeNumber = '2024124'//today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
+        $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
         
         if($scope.isUpdate){
@@ -645,6 +678,30 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
         console.log($scope.id);
     }
+
+    // award
+    $scope.submitAward = function () {
+        console.log(1);
+        $scope.model = {}
+        $scope.model.MonthYear = $scope.Laudatory.time;
+		$scope.model.Reason = $scope.Laudatory.officialReason;
+		$scope.model.GrantOfDecision = $scope.Laudatory.grantDecision;
+        $scope.model.ProfileCode = '2024124';
+        
+        if($scope.isUpdate){
+            dataservice.updateAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            });
+        }else {
+            dataservice.insertAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            });
+        }
+        console.log($scope.model);
+    }
+
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component
