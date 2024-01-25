@@ -42,13 +42,174 @@ namespace III.Admin.Controllers
 			return Redirect("/Home/Index");
 		}
 
-		#region get
+        #region get
+        public object GetPartyAdmissionProfile()
+        {
+            var user = _context.PartyAdmissionProfiles.ToList();
+            return user;
+        }
+        public object GetPartyAdmissionProfileByResumeNumber([FromBody] string resumeNumber)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == resumeNumber);
+            return user;
+        }
+        /*public object GetPartyAdmissionProfileByUserCode([FromBody] int userCode)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
+            return user;
+        }*/
+        public object GetPartyAdmissionProfileByUserCode([FromBody] int Id)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
+            return user;
+        }
 
-		#endregion
+        public object GetFamily()
+        {
+            var rs = _context.Families.ToList();
+            return rs;
+        }
+        public object GetFamilyById([FromBody] int id)
+        {
+            var rs = _context.Families.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetFamilyByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.Families.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
 
-		#region Update
+        public object GetIntroducerOfParty()
+        {
+            var rs = _context.IntroducerOfParties.ToList();
+            return rs;
+        }
+        public object GetIntroducerOfPartyById([FromBody] int id)
+        {
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.id == id);
+            return rs;
+        }
+        public object GetIntroducerOfPartyByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
 
-		[HttpPost]
+        public object GetAward()
+        {
+            var rs = _context.Awards.ToList();
+            return rs;
+        }
+        public object GetAwardById([FromBody] int id)
+        {
+            var rs = _context.Awards.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetAwardByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.Awards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+        public object GetGoAboard()
+        {
+            var rs = _context.GoAboards.ToList();
+            return rs;
+        }
+        public object GetGoAboardById([FromBody] int id)
+        {
+            var rs = _context.GoAboards.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetGoAboardByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.GoAboards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetPersonalHistory()
+        {
+            var rs = _context.PersonalHistories.ToList();
+            return rs;
+        }
+        public object GetPersonalHistoryById([FromBody] int id)
+        {
+            var rs = _context.PersonalHistories.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetPersonalHistoryByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.PersonalHistories.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+        public object GetTrainingCertificatedPass()
+        {
+            var rs = _context.TrainingCertificatedPasses.ToList();
+            return rs;
+        }
+        public object GetTrainingCertificatedPassById([FromBody] int id)
+        {
+            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetTrainingCertificatedPassByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetWorkingTracking()
+        {
+            var rs = _context.WorkingTrackings.ToList();
+            return rs;
+        }
+        public object GetWorkingTrackingById([FromBody] int id)
+        {
+            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetWorkingTrackingByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetHistorySpecialist()
+        {
+            var rs = _context.HistorySpecialists.ToList();
+            return rs;
+        }
+        public object GetHistorySpecialistById([FromBody] int id)
+        {
+            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetHistorySpecialistByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetWarningDisciplined()
+        {
+            var rs = _context.WarningDisciplineds.ToList();
+            return rs;
+        }
+        public object GetWarningDisciplinedById([FromBody] int id)
+        {
+            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetWarningDisciplinedByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+        #endregion
+
+        #region Update
+
+        [HttpPost]
 		public object PartyRegist()
 		{
 			var msg = new JMessage() { Error = false };

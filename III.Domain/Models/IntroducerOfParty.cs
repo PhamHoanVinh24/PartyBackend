@@ -23,6 +23,7 @@ namespace ESEIM.Models
 		
 		[StringLength(maximumLength: 150)]
 		public string PlaceNTimeJoinRecognize1st { get; set; }
+		public string ProfileCode {  get; set; }
 		public bool IsDeleted { get; set; }
 
 	}

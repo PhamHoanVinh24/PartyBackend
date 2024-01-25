@@ -577,7 +577,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
     //insert and update
     $scope.isUpdate = true;
-    
+
+    $scope.submid2 = function () {
+
+    }
     $scope.submit = function () {
         var today = new Date();
         $scope.model = {}
