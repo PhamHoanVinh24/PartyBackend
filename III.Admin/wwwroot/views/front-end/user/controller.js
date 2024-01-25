@@ -22,11 +22,14 @@ app.factory('dataservice', function ($http) {
         },
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
-            //submitFormUpload1('/Admin/HREmployee/Insert', data, callback);
+            
         },
         update: function (data, callback) {
             $http.put('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
-            //submitFormUpload1('/Admin/HREmployee/Insert', data, callback);
+            
+        },
+        delete: function (data, callback) {
+            $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
         },
     }
 });
@@ -627,7 +630,21 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.model);
     }
 
-    //update
+    //delete
+    $scope.delete = function() {
+        $scope.id = 1;
+        dataservice.delete($scope.id, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+            // if (rs.Error) {
+            //     App.toastrError(rs.Title);
+            // } else {
+            //     App.toastrSuccess(rs.Title);
+            //     $uibModalInstance.close();
+            // }
+        });
+        console.log($scope.id);
+    }
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component
