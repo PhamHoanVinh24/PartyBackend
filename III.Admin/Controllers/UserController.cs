@@ -418,8 +418,7 @@ namespace III.Admin.Controllers
 				var obj = _context.HistorySpecialists.Find(model.Id);
 
 				obj.MonthYear = model.MonthYear;
-				obj.Reason = model.Reason;
-				obj.GrantOfDecision = model.GrantOfDecision;
+				obj.Content = model.Content;
 
 				_context.HistorySpecialists.Add(obj);
 				_context.SaveChanges();
@@ -686,26 +685,27 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertHistorysSpecialist([FromBody] HistorySpecialist model)
+		public object InsertHistorysSpecialist([FromBody] HistorySpecialist[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Reason) || string.IsNullOrEmpty(model.GrantOfDecision)
-					)
-				{
-					_context.HistorySpecialists.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Content) || x.MonthYear != null)
+                    {
+                        _context.HistorySpecialists.Add(x);
+                        _context.SaveChanges();
 
-					msg.Title = "Thêm mới Đặc điểm lịch sử thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đặc điểm lịch sử chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                    }
+                }
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -740,25 +740,28 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertAward([FromBody] Award model)
+		public object InsertAward([FromBody] Award[] model)
 		{
 			var msg = new JMessage() { Error = false };
+
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Reason)||string.IsNullOrEmpty(model.Reason)|| string.IsNullOrEmpty(model.GrantOfDecision)
-					)
+				foreach (var x in model)
 				{
-					_context.Awards.Add(model);
-					_context.SaveChanges();
+					if (!string.IsNullOrEmpty(x.Reason) || x.MonthYear != null || x.GrantOfDecision != null)
+					{
+						_context.Awards.Add(x);
+						_context.SaveChanges();
 
-					msg.Title = "Thêm mới Khen thưởng thành công";
+						msg.Title = "Thêm mới Lịch sử bản thân thành công";
+					}
+					else
+					{
+						msg.Error = true;
+						msg.Title = "Lịch sử bản thân chưa hợp lệ";
+					}
 				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Khen thưởng chưa hợp lệ";
-				}
+
 			}
 			catch (Exception err)
 			{
@@ -768,26 +771,27 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertWorkingTracking([FromBody] WorkingTracking model)
+		public object InsertWorkingTracking([FromBody] WorkingTracking[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Role)||string.IsNullOrEmpty(model.Work)||model.To!=null||model.From!=null
-					)
-				{
-					_context.WorkingTrackings.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Role) || x.To != null || x.ProfileCode != null)
+                    {
+                        _context.WorkingTrackings.Add(x);
+                        _context.SaveChanges();
 
-					msg.Title = "Thêm mới Quá trình công tác thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Quá trình công tác chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                    }
+                }
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
