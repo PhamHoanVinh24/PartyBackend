@@ -637,7 +637,7 @@ namespace III.Admin.Controllers
 		#endregion
 
 		#region delete
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteFamily([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -663,7 +663,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteIntroducerOfParty([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -689,7 +689,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeletePartyAdmissionProfile([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -715,7 +715,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteAward([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -742,7 +742,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteGoAboard([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -768,7 +768,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeletePersonalHistory([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -794,7 +794,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteWorkingTracking([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -820,7 +820,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteTrainingCertificatedPass([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -846,7 +846,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteWarningDisciplined([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
@@ -872,7 +872,7 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		[HttpDelete]
+		[HttpPost]
 		public object DeleteHistorySpecialist([FromBody] int Id)
 		{
 			var msg = new JMessage() { Error = false };
