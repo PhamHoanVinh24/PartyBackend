@@ -138,6 +138,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 $scope.PersonalHistory.push(PersonHis);
             }
             console.log('PersonalHistory', $scope.PersonalHistory)
+
+            
             
             //Page3 Những nơi công tác và chức vụ đã qua
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
@@ -188,6 +190,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             console.log(pElementP4s)
             $scope.PassedTrainingClasses = [];
+            let check = 0;
             for (let i = 0; i < pElementP4s.length; i++) {
                 var obj = {
                     school: pElementP4s[i][0],
@@ -199,11 +202,33 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     business: pElementP4s[i][1]
                 };
                 $scope.PassedTrainingClasses.push(obj);
+                check = 1;
+            }
+            if (check === 1) {
+                var ttpd = document.getElementById("TTPD")
+                var llgd = document.getElementById("LLGD")
+                var lsbt = document.getElementById("LSBT")
+                var gtvd = document.getElementById("GTVD")
+
+                console.log(llgd)
+
+                llgd.style.opacity = 1;
+                llgd.style.pointerEvents = "auto";
+
+                lsbt.style.opacity = 1;
+                lsbt.style.pointerEvents = "auto";
+
+                gtvd.style.opacity = 1;
+                gtvd.style.pointerEvents = "auto";
+
+                ttpd.style.display = "block";
+
+                check = 0;
             }
             console.log('PassedTrainingClasses', $scope.PassedTrainingClasses)
 
-            // console.log(data)
-            //
+
+
             var data = Array.from(listPage[3].querySelectorAll('td > p')).filter(function (ele) {
                 return ele.innerText.trim().length > 0;
             }).map(function (element) {
@@ -561,7 +586,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 SelfComment: $scope.SelfComment,
                 Relationship: $scope.Relationship
             }
-            // console.log(JSON.stringify(JSONobj))
+
+            console.log($scope.listDetail1[0])
             setTimeout(function () {
                 $scope.$apply();
             }, 100);
