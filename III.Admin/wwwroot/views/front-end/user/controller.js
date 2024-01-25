@@ -683,23 +683,25 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.submitAward = function () {
         console.log(1);
         $scope.model = {}
-        $scope.model.MonthYear = $scope.Laudatory.time;
-		$scope.model.Reason = $scope.Laudatory.officialReason;
-		$scope.model.GrantOfDecision = $scope.Laudatory.grantDecision;
-        $scope.model.ProfileCode = '2024124';
+        $scope.Laudatory.forEach(function (laudatory){
+            $scope.model.MonthYear = laudatory.time;
+		    $scope.model.Reason = laudatory.officialReason;
+		    $scope.model.GrantOfDecision = laudatory.grantDecision;
+            $scope.model.ProfileCode = '2024124';
         
-        if($scope.isUpdate){
-            dataservice.updateAward($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            });
-        }else {
-            dataservice.insertAward($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            });
-        }
-        console.log($scope.model);
+            if($scope.isUpdate){
+                dataservice.updateAward($scope.model, function (rs) {
+                    rs = rs.data;
+                    console.log(rs);
+                });
+            }else {
+                dataservice.insertAward($scope.model, function (rs) {
+                    rs = rs.data;
+                    console.log(rs);
+                });
+            }
+
+        })
     }
 
     setTimeout(async function () {
