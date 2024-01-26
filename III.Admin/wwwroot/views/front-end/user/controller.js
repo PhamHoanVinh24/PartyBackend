@@ -31,6 +31,45 @@ app.factory('dataservice', function ($http) {
         delete: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
         },
+        //BusinessNDuty
+        getBusinessNDutyById: function (data, callback) {
+            $http.get('/UserProfile/GetWorkingTrackingById/', data).then(callback);  
+        },
+        insertBusinessNDuty: function (data, callback) {
+            $http.post('/UserProfile/InsertWorkingTracking/', data).then(callback); 
+        },
+        updateBusinessNDuty: function (data, callback) {
+            $http.post('/UserProfile/UpdateWorkingTracking/', data).then(callback);  
+        },
+        deleteBusinessNDuty: function (data, callback) {
+            $http.delete('/UserProfile/DeleteWorkingTracking/', data).then(callback);  
+        },
+        //HistorySpecialist
+        getHistorySpecialistById: function (data, callback) {
+            $http.get('/UserProfile/GetHistorysSpecialistById/', data).then(callback);  
+        },
+        insertHistorySpecialist: function (data, callback) {
+            $http.post('/UserProfile/InsertHistorysSpecialist/', data).then(callback); 
+        },
+        updateHistorySpecialist: function (data, callback) {
+            $http.post('/UserProfile/UpdateHistorysSpecialist/', data).then(callback);  
+        },
+        deleteHistorySpecialist: function (data, callback) {
+            $http.delete('/UserProfile/DeleteHistorysSpecialist/', data).then(callback);  
+        },
+        //award 
+        getAwardById: function (data, callback) {
+            $http.get('/UserProfile/GetAwardById/', data).then(callback);  
+        },
+        insertAward: function (data, callback) {
+            $http.post('/UserProfile/InsertAward/', data).then(callback); 
+        },
+        updateAward: function (data, callback) {
+            $http.post('/UserProfile/UpdateAward/', data).then(callback);  
+        },
+        deleteAward: function (data, callback) {
+            $http.delete('/UserProfile/DeleteAward/', data).then(callback);  
+        },
     }
 });
 
@@ -105,8 +144,27 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             ForeignLanguage: [],
             It: [],
             MinorityLanguage: []
-        }
+        },
+        ResumeNumber: ''
     }
+    var today = new Date();
+    $scope.infUser.ResumeNumber = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate()
+    //lịch sử bản thân
+    $scope.PersonalHistory = [];
+    //quá trình công tác
+    $scope.BusinessNDuty = [];
+    //di nước ngoài
+    $scope.GoAboard = [];
+    //Những lớp đào tạo
+    $scope.PassedTrainingClasses = [];
+    //đạc điểm lịch sử
+    $scope.HistoricalFeatures = [];
+    //khen thưởng
+    $scope.Laudatory = [];
+    //Kỷ luật
+    $scope.Disciplined = [];
+    //quan hệ gia đình
+    $scope.Relationship = [];
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
         setTimeout(function () {
@@ -125,7 +183,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
-            $scope.PersonalHistory = [];
+            
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -160,7 +218,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });;
                 pElementP2s.push(pInTr);
             })
-            $scope.BusinessNDuty = [];
+            
             for (let i = 0; i < pElementP2s.length; i++) {
                 var begin = pElementP2s[i][0].substr(pElementP2s[i][0].indexOf('-') - 2, 7);
                 var end = pElementP2s[i][0].substr(pElementP2s[i][0].lastIndexOf('-') - 2, 7);
@@ -189,8 +247,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             console.log(pElementP4s)
+
             $scope.PassedTrainingClasses = [];
             let check = 0;
+
             for (let i = 0; i < pElementP4s.length; i++) {
                 var obj = {
                     school: pElementP4s[i][0],
@@ -237,7 +297,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             function isTime(e) {
                 return (e.includes('Ngày') && e.includes('tháng') && e.includes('năm')) ? true : false;
             }
-            $scope.HistoricalFeatures = [];
+            
             for (let i = 0; i < data.length; i++) {
                 var obj = {
                     time: null,
@@ -265,7 +325,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP5s.push(pInTr);
             })
-            $scope.GoAboard = [];
+            
             for (let i = 0; i < pElementP5s.length; i++) {
 
                 var GoAboardObj = {
@@ -290,7 +350,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP6s.push(pInTr);
             })
-            $scope.Laudatory = [];
             for (let i = 0; i < pElementP6s.length; i++) {
 
                 var obj = {
@@ -313,7 +372,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP7s.push(pInTr);
             })
-            $scope.Disciplined = [];
+    
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
                     time: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
@@ -334,7 +393,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pE8.push(pInTr);
             })
-            $scope.Relationship = [];
+            
             let RelationshipIndex = 0;
             for (let y = 0; y < pE8.length; y++) {
                 for (let i = 0; i < pE8[y].length; i++) {
@@ -604,11 +663,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
     }
-    //insert and update
-    $scope.isUpdate = true;
+
+    // AdmissionProfile
+
+    // insert and update
+    $scope.isUpdate = false;
     
     $scope.submit = function () {
-        var today = new Date();
         $scope.model = {}
         $scope.model.CurrentName = $scope.infUser.LastName;
         var fullDate = new Date($scope.infUser.DateofBird);
@@ -639,7 +700,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model.PoliticalTheory = '';//$scope.infUser.LevelEducation.PoliticalTheory;
         $scope.model.SelfComment = '';//$scope.SelfComment.context;
         $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
-        $scope.model.ResumeNumber = '2024124'//today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
+        $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
         
         if($scope.isUpdate){
@@ -671,6 +732,118 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
         console.log($scope.id);
     }
+    //Những công tác và chức vụ đã qua
+    $scope.submitBusinessNDuty = function () {
+        $scope.model = [];
+        $scope.BusinessNDuty.forEach(function (businessNDuty) {
+            var obj = {};
+            obj.From = businessNDuty.time.begin.trim();
+            obj.To = businessNDuty.time.end.trim();
+            obj.Work = businessNDuty.business;
+            obj.Role = businessNDuty.duty;
+            obj.ProfileCode = "2024124";
+            $scope.model.push(obj)
+        });
+    //    $scope.modelUpdate = [];
+   
+        if ($scope.isUpdate) {
+            dataservice.updateBusinessNDuty($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertBusinessNDuty($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        }  
+        console.log($scope.model);
+    }
+    //ĐẶC ĐIỂM LỊCH SỬ
+    $scope.submitHistorySpecialist = function () {
+        $scope.model = [];
+        $scope.HistoricalFeatures.forEach(function (historicalFeatures) {
+            var obj = {};
+            obj.MonthYear = historicalFeatures.time;
+            obj.Content = historicalFeatures.content;
+            obj.ProfileCode = "2024124";
+            $scope.model.push(obj)
+        });
+    //    $scope.modelUpdate = [];
+   
+        if ($scope.isUpdate) {
+            dataservice.updateHistorySpecialist($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertHistorySpecialist($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        }  
+        console.log($scope.model);
+    }
+    // award
+    $scope.submitAward = function () {
+        $scope.model = [];
+        $scope.Laudatory.forEach(function (laudatory) {
+            var obj = {};
+            obj.MonthYear = laudatory.time;
+            obj.Reason = laudatory.officialReason;
+            obj.GrantOfDecision = laudatory.grantDecision;
+            obj.ProfileCode = "2024124";
+            $scope.model.push(obj)
+        });
+    //    $scope.modelUpdate = [];
+   
+        if ($scope.isUpdate) {
+            dataservice.updateAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        }  
+        console.log($scope.model);
+    }
+    
+    // award
+    // $scope.submitAward = function () {
+    //     console.log(1);
+    //     $scope.model = {}
+    //     if($scope.isUpdate){
+    //         $scope.Laudatory.forEach(function (laudatory){
+    //             $scope.model.MonthYear = laudatory.time;
+    //             $scope.model.Reason = laudatory.officialReason;
+    //             $scope.model.GrantOfDecision = laudatory.grantDecision;
+    //             $scope.model.ProfileCode = '2024124';
+    //             console.log($scope.model);
+
+    //             dataservice.updateAward($scope.model, function (rs) {
+    //                 rs = rs.data;
+    //                 console.log(rs);
+    //             });
+    //         })
+    //     }else {
+    //         $scope.Laudatory.forEach(function (laudatory){
+    //             $scope.model.MonthYear = laudatory.time;
+    //             $scope.model.Reason = laudatory.officialReason;
+    //             $scope.model.GrantOfDecision = laudatory.grantDecision;
+    //             $scope.model.ProfileCode = '2024124';
+    //             console.log($scope.model);
+
+    //             dataservice.insertAward($scope.model, function (rs) {
+    //                 rs = rs.data;
+    //                 console.log(rs);
+    //             });
+    //         })
+    //     }
+    // }
+
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component

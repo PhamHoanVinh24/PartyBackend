@@ -42,13 +42,175 @@ namespace III.Admin.Controllers
 			return Redirect("/Home/Index");
 		}
 
-		#region get
+        #region get
+        public object GetPartyAdmissionProfile()
+        {
+            var user = _context.PartyAdmissionProfiles.ToList();
+            return user;
+        }
+        public object GetPartyAdmissionProfileByResumeNumber([FromBody] string resumeNumber)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == resumeNumber);
+            return user;
+        }
+        /*public object GetPartyAdmissionProfileByUserCode([FromBody] int userCode)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
+            return user;
+        }*/
+        public object GetPartyAdmissionProfileByUserCode([FromBody] int Id)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
+            return user;
+        }
 
-		#endregion
+        public object GetFamily()
+        {
+            var rs = _context.Families.ToList();
+            return rs;
+        }
+        public object GetFamilyById([FromBody] int id)
+        {
+            var rs = _context.Families.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetFamilyByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.Families.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
 
-		#region Update
+        public object GetIntroducerOfParty()
+        {
+            var rs = _context.IntroducerOfParties.ToList();
+            return rs;
+        }
+        public object GetIntroducerOfPartyById([FromBody] int id)
+        {
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.id == id);
+            return rs;
+        }
+        public object GetIntroducerOfPartyByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
 
-		[HttpPost]
+        public object GetAward()
+        {
+            var rs = _context.Awards.ToList();
+            return rs;
+        }
+        public object GetAwardById([FromBody] int id)
+        {
+            var rs = _context.Awards.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetAwardByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.Awards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+        public object GetGoAboard()
+        {
+            var rs = _context.GoAboards.ToList();
+            return rs;
+        }
+        public object GetGoAboardById([FromBody] int id)
+        {
+            var rs = _context.GoAboards.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetGoAboardByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.GoAboards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetPersonalHistory()
+        {
+            var rs = _context.PersonalHistories.ToList();
+            return rs;
+        }
+        public object GetPersonalHistoryById([FromBody] int id)
+        {
+            var rs = _context.PersonalHistories.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetPersonalHistoryByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.PersonalHistories.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+        public object GetTrainingCertificatedPass()
+        {
+            var rs = _context.TrainingCertificatedPasses.ToList();
+            return rs;
+        }
+        public object GetTrainingCertificatedPassById([FromBody] int id)
+        {
+            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetTrainingCertificatedPassByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetWorkingTracking()
+        {
+            var rs = _context.WorkingTrackings.ToList();
+            return rs;
+        }
+        public object GetWorkingTrackingById([FromBody] int id)
+        {
+            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetWorkingTrackingByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetHistorySpecialist()
+        {
+            var rs = _context.HistorySpecialists.ToList();
+            return rs;
+        }
+        public object GetHistorySpecialistById([FromBody] int id)
+        {
+            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetHistorySpecialistByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        public object GetWarningDisciplined()
+        {
+            var rs = _context.WarningDisciplineds.ToList();
+            return rs;
+        }
+        public object GetWarningDisciplinedById([FromBody] int id)
+        {
+            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.Id == id);
+            return rs;
+        }
+        public object GetWarningDisciplinedByProfileCode([FromBody] string profileCode)
+        {
+            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.ProfileCode == profileCode);
+            return rs;
+        }
+
+        #endregion
+
+        #region Update
+
+        [HttpPost]
 		public object PartyRegist()
 		{
 			var msg = new JMessage() { Error = false };
@@ -256,8 +418,7 @@ namespace III.Admin.Controllers
 				var obj = _context.HistorySpecialists.Find(model.Id);
 
 				obj.MonthYear = model.MonthYear;
-				obj.Reason = model.Reason;
-				obj.GrantOfDecision = model.GrantOfDecision;
+				obj.Content = model.Content;
 
 				_context.HistorySpecialists.Add(obj);
 				_context.SaveChanges();
@@ -524,26 +685,27 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertHistorysSpecialist([FromBody] HistorySpecialist model)
+		public object InsertHistorysSpecialist([FromBody] HistorySpecialist[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Reason) || string.IsNullOrEmpty(model.GrantOfDecision)
-					)
-				{
-					_context.HistorySpecialists.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Content) || x.MonthYear != null)
+                    {
+                        _context.HistorySpecialists.Add(x);
+                        _context.SaveChanges();
 
-					msg.Title = "Thêm mới Đặc điểm lịch sử thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đặc điểm lịch sử chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                    }
+                }
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -578,25 +740,28 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertAward([FromBody] Award model)
+		public object InsertAward([FromBody] Award[] model)
 		{
 			var msg = new JMessage() { Error = false };
+
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Reason)||string.IsNullOrEmpty(model.Reason)|| string.IsNullOrEmpty(model.GrantOfDecision)
-					)
+				foreach (var x in model)
 				{
-					_context.Awards.Add(model);
-					_context.SaveChanges();
+					if (!string.IsNullOrEmpty(x.Reason) || x.MonthYear != null || x.GrantOfDecision != null)
+					{
+						_context.Awards.Add(x);
+						_context.SaveChanges();
 
-					msg.Title = "Thêm mới Khen thưởng thành công";
+						msg.Title = "Thêm mới Lịch sử bản thân thành công";
+					}
+					else
+					{
+						msg.Error = true;
+						msg.Title = "Lịch sử bản thân chưa hợp lệ";
+					}
 				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Khen thưởng chưa hợp lệ";
-				}
+
 			}
 			catch (Exception err)
 			{
@@ -606,26 +771,27 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertWorkingTracking([FromBody] WorkingTracking model)
+		public object InsertWorkingTracking([FromBody] WorkingTracking[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Role)||string.IsNullOrEmpty(model.Work)||model.To!=null||model.From!=null
-					)
-				{
-					_context.WorkingTrackings.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Role) || x.To != null || x.ProfileCode != null)
+                    {
+                        _context.WorkingTrackings.Add(x);
+                        _context.SaveChanges();
 
-					msg.Title = "Thêm mới Quá trình công tác thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Quá trình công tác chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                    }
+                }
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
