@@ -13,7 +13,7 @@ namespace ESEIM.Models
 		public int Id { get; set; }
 
 		[StringLength(maximumLength: 200)]
-		public string PoliticalAttiude { get; set; }
+		public string PoliticalAttitude { get; set; }
 
 		[StringLength(maximumLength: 50)]
 		public string Relation { get; set; }

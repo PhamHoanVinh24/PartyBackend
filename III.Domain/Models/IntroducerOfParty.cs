@@ -16,13 +16,13 @@ namespace ESEIM.Models
 		public string PersonIntroduced { get; set; }
 
 		[StringLength(maximumLength: 150)]
-		public string PlaceNTimeJoinUnion { get; set; }
+		public string PlaceTimeJoinUnion { get; set; }
 		
 		[StringLength(maximumLength: 150)]
-		public string PlaceNTimeJoinParty1st { get; set; }
+		public string PlaceTimeJoinParty { get; set; }
 		
 		[StringLength(maximumLength: 150)]
-		public string PlaceNTimeJoinRecognize1st { get; set; }
+		public string PlaceTimeRecognize { get; set; }
 		public string ProfileCode {  get; set; }
 		public bool IsDeleted { get; set; }
 
