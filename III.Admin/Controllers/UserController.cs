@@ -236,7 +236,7 @@ namespace III.Admin.Controllers
 				obj.Name = model.Name;
 				obj.WorkingProgress = model.WorkingProgress;
 				obj.Relation = model.Relation;
-				obj.Class_Composition = model.Class_Composition;
+				obj.ClassComposition = model.ClassComposition;
 				obj.PartyMember = model.PartyMember;
 				obj.BirthYear = model.BirthYear;
 				obj.DeathReason = model.DeathReason;
@@ -393,7 +393,6 @@ namespace III.Admin.Controllers
 				obj.SchoolName = model.SchoolName;
 				obj.From = model.From;
 				obj.To = model.To;
-				obj.Major = model.Major;
 				obj.Class = model.Class;
 				obj.Certificate = model.Certificate;
 
@@ -508,29 +507,32 @@ namespace III.Admin.Controllers
 		#region insert
 
 		[HttpPost]
-		public object InsertFamily([FromBody] Family model)
+		public object InsertFamily([FromBody] Family[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Relation) || !string.IsNullOrEmpty(x.ClassComposition)
+                    || !string.IsNullOrEmpty(x.BirthYear) || !string.IsNullOrEmpty(x.HomeTown)
+                    || !string.IsNullOrEmpty(x.Residence) || !string.IsNullOrEmpty(x.Job)
+                    || !string.IsNullOrEmpty(x.WorkingProgress) || x.PartyMember != null)
+                    {
+                        _context.Families.Add(x);
+                        
 
-				if (string.IsNullOrEmpty(model.Relation)||string.IsNullOrEmpty(model.Class_Composition)
-					|| string.IsNullOrEmpty(model.BirthYear) || string.IsNullOrEmpty(model.HomeTown)
-					|| string.IsNullOrEmpty(model.Residence) || string.IsNullOrEmpty(model.Job)
-					|| string.IsNullOrEmpty(model.WorkingProgress) || model.PartyMember!=null
-					)
-				{
-					_context.Families.Add(model);
-					_context.SaveChanges();
-
-					msg.Title = "Thêm mới Hoàn cảnh gia đình thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Hoàn cảnh gia đình chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -656,27 +658,29 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertTrainingCertificatedPass([FromBody] TrainingCertificatedPass model)
+		public object InsertTrainingCertificatedPass([FromBody] TrainingCertificatedPass[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (string.IsNullOrEmpty(model.Major) || string.IsNullOrEmpty(model.Class) || string.IsNullOrEmpty(model.Certificate) ||
-					string.IsNullOrEmpty(model.SchoolName) || model.From!=null || model.To!=null
-
-					)
-				{
-					_context.TrainingCertificatedPasses.Add(model);
-					_context.SaveChanges();
-
-					msg.Title = "Thêm mới Đi nước ngoài thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đi nước ngoài chưa hợp lệ";
-				}
-			}
+                foreach (var x in model)
+                {
+                    if ( string.IsNullOrEmpty(x.Class) || string.IsNullOrEmpty(x.Certificate) ||
+                    string.IsNullOrEmpty(x.SchoolName) || x.From != null || x.To != null
+)
+                    {
+                        _context.TrainingCertificatedPasses.Add(x);
+                        msg.Title = "Thêm mới Đi nước ngoài thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+						msg.Title = "Đi nước ngoài chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -695,7 +699,6 @@ namespace III.Admin.Controllers
                     if (!string.IsNullOrEmpty(x.Content) || x.MonthYear != null)
                     {
                         _context.HistorySpecialists.Add(x);
-                        _context.SaveChanges();
 
                         msg.Title = "Thêm mới Lịch sử bản thân thành công";
                     }
@@ -703,8 +706,10 @@ namespace III.Admin.Controllers
                     {
                         msg.Error = true;
                         msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
                     }
                 }
+                _context.SaveChanges();
             }
 			catch (Exception err)
 			{
@@ -751,7 +756,6 @@ namespace III.Admin.Controllers
 					if (!string.IsNullOrEmpty(x.Reason) || x.MonthYear != null || x.GrantOfDecision != null)
 					{
 						_context.Awards.Add(x);
-						_context.SaveChanges();
 
 						msg.Title = "Thêm mới Lịch sử bản thân thành công";
 					}
@@ -759,10 +763,12 @@ namespace III.Admin.Controllers
 					{
 						msg.Error = true;
 						msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
 					}
 				}
+                _context.SaveChanges();
 
-			}
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -781,7 +787,6 @@ namespace III.Admin.Controllers
                     if (!string.IsNullOrEmpty(x.Role) || x.To != null || x.ProfileCode != null)
                     {
                         _context.WorkingTrackings.Add(x);
-                        _context.SaveChanges();
 
                         msg.Title = "Thêm mới Lịch sử bản thân thành công";
                     }
@@ -789,8 +794,10 @@ namespace III.Admin.Controllers
                     {
                         msg.Error = true;
                         msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
                     }
                 }
+                _context.SaveChanges();
             }
 			catch (Exception err)
 			{

@@ -17,7 +17,12 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
-        getItemPartyAdmissionProfile: function (data, callback) {
+        //InsertFamily
+        insertFamily: function (data, callback) {
+            $http.post('/UserProfile/InsertFamily/', data).then(callback); 
+        },
+        //PartyAdmissionProfile
+        getItemPartyAdmissionProfileById: function (data, callback) {
             $http.get('/UserProfile/GetItem/' + data).then(callback);
         },
         insert: function (data, callback) {
@@ -31,9 +36,26 @@ app.factory('dataservice', function ($http) {
         delete: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
         },
+        //PersonalHistory
+        getPersonalHistoryById: function (data, callback) {
+            $http.post('/UserProfile/GetPersonalHistoryById?id=', data).then(callback);  
+        },
+        
+        updatePersonalHistory: function (data, callback) {
+            $http.post('/UserProfile/UpdatePersonalHistory/', data).then(callback);  
+        },
+        deletePersonalHistory: function (data, callback) {
+            $http.delete('/UserProfile/DeletePersonalHistory/', data).then(callback);  
+        },
+        //GoAboard
+        getGoAboardById: function (data, callback) {
+            $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);  
+        },
+        
+        
         //BusinessNDuty
         getBusinessNDutyById: function (data, callback) {
-            $http.get('/UserProfile/GetWorkingTrackingById/', data).then(callback);  
+            $http.post('/UserProfile/GetWorkingTrackingById?id=', data).then(callback);  
         },
         insertBusinessNDuty: function (data, callback) {
             $http.post('/UserProfile/InsertWorkingTracking/', data).then(callback); 
@@ -46,7 +68,7 @@ app.factory('dataservice', function ($http) {
         },
         //HistorySpecialist
         getHistorySpecialistById: function (data, callback) {
-            $http.get('/UserProfile/GetHistorysSpecialistById/', data).then(callback);  
+            $http.post('/UserProfile/GetHistorySpecialistById?id=', data).then(callback);  
         },
         insertHistorySpecialist: function (data, callback) {
             $http.post('/UserProfile/InsertHistorysSpecialist/', data).then(callback); 
@@ -59,7 +81,7 @@ app.factory('dataservice', function ($http) {
         },
         //award 
         getAwardById: function (data, callback) {
-            $http.get('/UserProfile/GetAwardById/', data).then(callback);  
+            $http.post('/UserProfile/GetAwardById?id=', data).then(callback);  
         },
         insertAward: function (data, callback) {
             $http.post('/UserProfile/InsertAward/', data).then(callback); 
@@ -69,6 +91,29 @@ app.factory('dataservice', function ($http) {
         },
         deleteAward: function (data, callback) {
             $http.delete('/UserProfile/DeleteAward/', data).then(callback);  
+        },
+        //WarningDisciplined
+        getWarningDisciplinedById: function (data, callback) {
+            $http.post('/UserProfile/GetWarningDisciplinedById?id=', data).then(callback);  
+        },
+        updateWarningDisciplined: function (data, callback) {
+            $http.post('/UserProfile/UpdateWarningDisciplined/', data).then(callback);  
+        },
+        deleteWarningDisciplined: function (data, callback) {
+            $http.delete('/UserProfile/DeleteWarningDisciplined/', data).then(callback);  
+        },
+        //TrainingCertificatedPass
+        getTrainingCertificatedPassById: function (data, callback) {
+            $http.post('/UserProfile/GetTrainingCertificatedPassById?id=', data).then(callback);  
+        },
+        insertTrainingCertificatedPass: function (data, callback) {
+            $http.post('/UserProfile/InsertTrainingCertificatedPass/', data).then(callback); 
+        },
+        updateTrainingCertificatedPass: function (data, callback) {
+            $http.post('/UserProfile/UpdateTrainingCertificatedPass/', data).then(callback);  
+        },
+        deleteTrainingCertificatedPass: function (data, callback) {
+            $http.delete('/UserProfile/DeleteTrainingCertificatedPass/', data).then(callback);  
         },
     }
 });
@@ -653,8 +698,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }, 100);
     }
     
-    $scope.get = function (id = 3) {
-        dataservice.getItemPartyAdmissionProfile(id, function(rs){
+    $scope.getPartyAdmissionProfileById = function (id = 3) {
+        dataservice.getItemPartyAdmissionProfileById(id, function(rs){
             rs = rs.data;
 
         })
@@ -663,13 +708,47 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
     }
-
+    //insertFamily
+    $scope.insertFamily = function () {
+        $scope.model = [];
+        
+        $scope.Relationship.forEach(function (e) {
+            var obj = {};
+            obj.Relation = e.Relation;
+            obj.ClassComposition = e.ClassComposition;
+            obj.PartyMember = e.PartyMember;
+            obj.Name = e.Name;
+            obj.BirthYear = '';//e.Year.YearBirth;
+            obj.DeathYear = '';//e.Year.YearDeath;
+            obj.DeathReason = '';//e.Year.Reason;
+            obj.Residence = e.Residence;
+            obj.PoliticalAttitude = e.PoliticalAttitude.join(',');
+            obj.HomeTown = e.HomeTown;
+            obj.Job = e.Job;
+            obj.WorkingProgress = e.WorkingProcess.join(',');
+            obj.ProfileCode = "2024124";
+            $scope.model.push(obj)
+        });
+    //    $scope.modelUpdate = [];
+   
+        if ($scope.isUpdate) {
+            dataservice.updateFamily($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertFamily($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        }  
+        console.log($scope.model);
+    }
+    
     // AdmissionProfile
-
-    // insert and update
     $scope.isUpdate = false;
     
-    $scope.submit = function () {
+    $scope.submitPartyAdmissionProfile = function () {
         $scope.model = {}
         $scope.model.CurrentName = $scope.infUser.LastName;
         var fullDate = new Date($scope.infUser.DateofBird);
@@ -691,14 +770,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
         $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
         $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
-        $scope.model.UnderPostGraduateEducation = '';//$scope.infUser.LevelEducation.Undergraduate.trim();
+        $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate.trim();
         $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
         $scope.model.Picture = '';
         $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
         $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
-        $scope.model.ItDegree = '';//$scope.infUser.LevelEducation.It;
-        $scope.model.PoliticalTheory = '';//$scope.infUser.LevelEducation.PoliticalTheory;
-        $scope.model.SelfComment = '';//$scope.SelfComment.context;
+        $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
+        $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
+        $scope.model.SelfComment = $scope.SelfComment.context;
         $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
         $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
@@ -717,7 +796,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.model);
     }
 
-    //delete
     $scope.delete = function() {
         $scope.id = 1;
         dataservice.delete($scope.id, function (rs) {
@@ -732,7 +810,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
         console.log($scope.id);
     }
+
     //Những công tác và chức vụ đã qua
+    $scope.getBusinessNDutyById = function () {
+        $scope.id = 2;
+        dataservice.getBusinessNDutyById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
     $scope.submitBusinessNDuty = function () {
         $scope.model = [];
         $scope.BusinessNDuty.forEach(function (businessNDuty) {
@@ -760,6 +847,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.model);
     }
     //ĐẶC ĐIỂM LỊCH SỬ
+    $scope.getHistorySpecialistById = function () {
+        $scope.id = 2;
+        dataservice.getHistorySpecialistById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
     $scope.submitHistorySpecialist = function () {
         $scope.model = [];
         $scope.HistoricalFeatures.forEach(function (historicalFeatures) {
@@ -785,7 +880,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.model);
     }
     //
+
     // award
+    $scope.getAwardById = function () {
+        $scope.id = 2;
+        dataservice.getAwardById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
     $scope.submitAward = function () {
         $scope.model = [];
         $scope.Laudatory.forEach(function (laudatory) {
@@ -811,7 +915,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }  
         console.log($scope.model);
     }
-    
+    //getWarningDisciplinedId
+    $scope.getWarningDisciplinedById = function () {
+        $scope.id = 2;
+        dataservice.getWarningDisciplinedById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
     // award
     // $scope.submitAward = function () {
     //     console.log(1);
@@ -844,7 +956,65 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //         })
     //     }
     // }
+    //TrainingCertificatedPass
+    $scope.getTrainingCertificatedPassById = function () {
+        $scope.id = 2;
+        dataservice.getTrainingCertificatedPassById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
+    
+    $scope.submitTrainingCertificatedPass = function () {
+        $scope.model = [];
+        $scope.PassedTrainingClasses.forEach(function (passedTrainingClasses) {
+            var obj = {};
+            obj.SchoolName = passedTrainingClasses.school;
+            obj.Class = passedTrainingClasses.class;
+            obj.From = passedTrainingClasses.time.begin;
+            obj.To = passedTrainingClasses.time.end;
+            obj.Certificate = passedTrainingClasses.business;
+            obj.ProfileCode = "2024124";
+            $scope.model.push(obj)
+        });
+    //    $scope.modelUpdate = [];
+   
+        if ($scope.isUpdate) {
+            dataservice.updateTrainingCertificatedPass($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        }  
+        console.log($scope.model);
+    }
+    //getGetPersonalHistoryById
+    $scope.getPersonalHistoryById = function () {
+        $scope.id = 2;
+        dataservice.getPersonalHistoryById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
 
+    
+    //getGoAboardById
+    $scope.getGoAboardById = function () {
+        $scope.id = 2;
+        dataservice.getGoAboardById($scope.id, function (rs) {
+            rs = rs.data;
+            console.log(rs.data);
+
+        })
+
+        console.log($scope.id);
+    }
     setTimeout(async function () {
         //  loadDate();
         // initialize Rich Text Editor component

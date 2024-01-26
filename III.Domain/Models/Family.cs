@@ -12,39 +12,39 @@ namespace ESEIM.Models
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
-		[StringLength(maximumLength: 200)]
-		public string PoliticalAttiude { get; set; }
+		
+		public string PoliticalAttitude { get; set; }
 
-		[StringLength(maximumLength: 50)]
+		
 		public string Relation { get; set; }
 
-		[StringLength(maximumLength: 50)]
-		public string Class_Composition { get; set; }
+		
+		public string ClassComposition { get; set; }
 
 		public bool PartyMember { get; set; }
 
-		[StringLength(maximumLength: 20)]
+		
 		public string BirthYear { get; set; }
 
-		[StringLength(maximumLength: 20)]
+	
 		public string DeathYear { get; set; }
 
-		[StringLength(maximumLength: 50)]
+		
 		public string DeathReason { get; set; }
 
-		[StringLength(maximumLength: 50)]
+	
 		public string HomeTown { get; set; }
 
-		[StringLength(maximumLength: 50)]
+	
 		public string Residence { get; set; }
 
-		[StringLength(maximumLength: 50)]
+	
 		public string Job { get; set; }
 
-		[StringLength(maximumLength: 255)]
+	
 		public string WorkingProgress { get; set; }
 
-		[StringLength(maximumLength: 50)]
+
 		public string Name { get; set; }
 
 		public string ProfileCode { get; set; }
