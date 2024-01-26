@@ -784,6 +784,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }  
         console.log($scope.model);
     }
+    //
     // award
     $scope.submitAward = function () {
         $scope.model = [];
