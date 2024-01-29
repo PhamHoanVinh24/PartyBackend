@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
+using OpenXmlPowerTools;
 using Syncfusion.EJ2.DocumentEditor;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.ToList();
             return user;
         }
-        public object GetPartyAdmissionProfileByResumeNumber([FromBody] string resumeNumber)
+        public object GetPartyAdmissionProfileByResumeNumber( string resumeNumber)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == resumeNumber);
             return user;
@@ -58,7 +59,7 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
             return user;
         }*/
-        public object GetPartyAdmissionProfileByUserCode([FromBody] int Id)
+        public object GetPartyAdmissionProfileByUserCode( int Id)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
             return user;
@@ -69,14 +70,14 @@ namespace III.Admin.Controllers
             var rs = _context.Families.ToList();
             return rs;
         }
-        public object GetFamilyById([FromBody] int id)
+        public object GetFamilyById( int id)
         {
             var rs = _context.Families.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetFamilyByProfileCode([FromBody] string profileCode)
+        public object GetFamilyByProfileCode( string profileCode)
         {
-            var rs = _context.Families.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.Families.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -85,14 +86,14 @@ namespace III.Admin.Controllers
             var rs = _context.IntroducerOfParties.ToList();
             return rs;
         }
-        public object GetIntroducerOfPartyById([FromBody] int id)
+        public object GetIntroducerOfPartyById(int id)
         {
             var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.id == id);
             return rs;
         }
-        public object GetIntroducerOfPartyByProfileCode([FromBody] string profileCode)
+        public object GetIntroducerOfPartyByProfileCode( string profileCode)
         {
-            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.IntroducerOfParties.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -101,14 +102,14 @@ namespace III.Admin.Controllers
             var rs = _context.Awards.ToList();
             return rs;
         }
-        public object GetAwardById([FromBody] int id)
+        public object GetAwardById( int id)
         {
             var rs = _context.Awards.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetAwardByProfileCode([FromBody] string profileCode)
+        public object GetAwardByProfileCode( string profileCode)
         {
-            var rs = _context.Awards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
         public object GetGoAboard()
@@ -116,14 +117,14 @@ namespace III.Admin.Controllers
             var rs = _context.GoAboards.ToList();
             return rs;
         }
-        public object GetGoAboardById([FromBody] int id)
+        public object GetGoAboardById( int id)
         {
             var rs = _context.GoAboards.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetGoAboardByProfileCode([FromBody] string profileCode)
+        public object GetGoAboardByProfileCode(string profileCode)
         {
-            var rs = _context.GoAboards.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -132,14 +133,15 @@ namespace III.Admin.Controllers
             var rs = _context.PersonalHistories.ToList();
             return rs;
         }
-        public object GetPersonalHistoryById([FromBody] int id)
+	
+        public object GetPersonalHistoryById( int id)
         {
             var rs = _context.PersonalHistories.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetPersonalHistoryByProfileCode([FromBody] string profileCode)
+        public object GetPersonalHistoryByProfileCode( string profileCode)
         {
-            var rs = _context.PersonalHistories.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
         public object GetTrainingCertificatedPass()
@@ -147,14 +149,14 @@ namespace III.Admin.Controllers
             var rs = _context.TrainingCertificatedPasses.ToList();
             return rs;
         }
-        public object GetTrainingCertificatedPassById([FromBody] int id)
+        public object GetTrainingCertificatedPassById( int id)
         {
             var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetTrainingCertificatedPassByProfileCode([FromBody] string profileCode)
+        public object GetTrainingCertificatedPassByProfileCode( string profileCode)
         {
-            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -163,14 +165,14 @@ namespace III.Admin.Controllers
             var rs = _context.WorkingTrackings.ToList();
             return rs;
         }
-        public object GetWorkingTrackingById([FromBody] int id)
+        public object GetWorkingTrackingById( int id)
         {
             var rs = _context.WorkingTrackings.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetWorkingTrackingByProfileCode([FromBody] string profileCode)
+        public object GetWorkingTrackingByProfileCode(string profileCode)
         {
-            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -179,14 +181,14 @@ namespace III.Admin.Controllers
             var rs = _context.HistorySpecialists.ToList();
             return rs;
         }
-        public object GetHistorySpecialistById([FromBody] int id)
+        public object GetHistorySpecialistById(int id)
         {
             var rs = _context.HistorySpecialists.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetHistorySpecialistByProfileCode([FromBody] string profileCode)
+        public object GetHistorySpecialistByProfileCode(string profileCode)
         {
-            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -195,17 +197,16 @@ namespace III.Admin.Controllers
             var rs = _context.WarningDisciplineds.ToList();
             return rs;
         }
-        public object GetWarningDisciplinedById([FromBody] int id)
+        public object GetWarningDisciplinedById(int id)
         {
             var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.Id == id);
             return rs;
         }
-        public object GetWarningDisciplinedByProfileCode([FromBody] string profileCode)
+        public object GetWarningDisciplinedByProfileCode(string profileCode)
         {
-            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode);
             return rs;
         }
-
         #endregion
 
         #region Update
@@ -246,7 +247,7 @@ namespace III.Admin.Controllers
 				obj.Job = model.Job;
 				obj.WorkingProgress = model.WorkingProgress;
 				obj.Name = model.Name;
-				_context.Families.Add(obj);
+				_context.Families.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Hoàn cảnh gia đình thành công";
 			}
@@ -312,14 +313,14 @@ namespace III.Admin.Controllers
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				var obj = _context.IntroducerOfParties.Find(model.id);
+				var obj = _context.IntroducerOfParties.FirstOrDefault(x=>x.ProfileCode==model.ProfileCode);
 
 				obj.PersonIntroduced = model.PersonIntroduced;
-				obj.PlaceNTimeJoinParty1st = model.PlaceNTimeJoinParty1st;
-				obj.PlaceNTimeJoinUnion = model.PlaceNTimeJoinUnion;
-				obj.PlaceNTimeJoinRecognize1st = model.PlaceNTimeJoinRecognize1st;
+				obj.PlaceTimeJoinParty = model.PlaceTimeJoinParty;
+				obj.PlaceTimeJoinUnion = model.PlaceTimeJoinUnion;
+				obj.PlaceTimeRecognize = model.PlaceTimeRecognize;
 
-				_context.IntroducerOfParties.Add(obj);
+				_context.IntroducerOfParties.Update(obj);
 				_context.SaveChanges();
 
 				msg.Title = "Cập nhật Người giới thiệu thành công";
@@ -333,20 +334,38 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object UpdatePersonalHistory([FromBody] PersonalHistory model)
+		public object UpdatePersonalHistories([FromBody] PersonalHistory[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				var obj = _context.PersonalHistories.Find(model.Id);
+				if(model!=null && model.Length > 0)
+				{
+					foreach(var x in model)
+					{
+						if(x.End!=null || x.Begin!=null || !string.IsNullOrEmpty(x.Content))
+						{
+                            var obj = _context.PersonalHistories.FirstOrDefault(y=>y.ProfileCode==x.ProfileCode);
 
-				obj.Begin = model.Begin;
-				obj.End = model.Begin;
-				obj.Content = model.Content;
+                            obj.Begin = x.Begin;
+                            obj.End = x.Begin;
+                            obj.Content = x.Content;
 
-				_context.PersonalHistories.Add(obj);
-				_context.SaveChanges();
-				msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                            _context.PersonalHistories.Update(obj);
+							_context.SaveChanges() ;
+                        }
+  
+                    }
+                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+					return msg;
+                }
+				else
+				{
+					msg.Error = true;
+					msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+					return msg;
+                }
+				
 
 			}
 			catch (Exception err)
@@ -357,7 +376,43 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 
-		[HttpPost]
+        [HttpPost]
+        public object UpdatePersonalHistory([FromBody] PersonalHistory model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                if (model != null)
+                {
+                    var obj = _context.PersonalHistories.FirstOrDefault(y => y.Id == model.Id);
+
+                    obj.Begin = model.Begin;
+                    obj.End = model.End;
+                    obj.Content = model.Content;
+
+                    _context.PersonalHistories.Update(obj);
+                    _context.SaveChanges();
+                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                    return msg;
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                    return msg;
+                }
+
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Cập nhật Lịch sử cá nhân thất bại";
+            }
+            return msg;
+        }
+
+        [HttpPost]
 		public object UpdateGoAboard([FromBody] GoAboard model)
 		{
 			var msg = new JMessage() { Error = false };
@@ -368,9 +423,9 @@ namespace III.Admin.Controllers
 				obj.From = model.From;
 				obj.To = model.To;
 				obj.Contact = model.Contact;
-				obj.Coutry = model.Coutry;
+				obj.Country = model.Country;
 
-				_context.GoAboards.Add(obj);
+				_context.GoAboards.Update(obj);
 				_context.SaveChanges();
 
 				msg.Title = "Cập nhật Đi nước ngoài thành công";
@@ -396,7 +451,7 @@ namespace III.Admin.Controllers
 				obj.Class = model.Class;
 				obj.Certificate = model.Certificate;
 
-				_context.TrainingCertificatedPasses.Add(obj);
+				_context.TrainingCertificatedPasses.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Những lớp đào tạo bồi dưỡng đã qua thành công";
 			}
@@ -409,7 +464,7 @@ namespace III.Admin.Controllers
 		}
 
 		[HttpPost]
-		public object UpdateHistorysSpecialist([FromBody] HistorySpecialist model)
+		public object UpdateHistorySpecialist([FromBody] HistorySpecialist model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -419,7 +474,7 @@ namespace III.Admin.Controllers
 				obj.MonthYear = model.MonthYear;
 				obj.Content = model.Content;
 
-				_context.HistorySpecialists.Add(obj);
+				_context.HistorySpecialists.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Đặc điểm lịch sử thành công";
 			}
@@ -443,7 +498,7 @@ namespace III.Admin.Controllers
 				obj.Reason = model.Reason;
 				obj.GrantOfDecision = model.GrantOfDecision;
 
-				_context.WarningDisciplineds.Add(obj);
+				_context.WarningDisciplineds.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Kỷ luật thành công";
 			}
@@ -466,7 +521,7 @@ namespace III.Admin.Controllers
 				obj.Reason = model.Reason;
 				obj.GrantOfDecision = model.GrantOfDecision;
 
-				_context.Awards.Add(obj);
+				_context.Awards.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Khen thưởng thành công";
 			}
@@ -490,7 +545,7 @@ namespace III.Admin.Controllers
 				obj.Work = model.Work;
 				obj.Role = model.Role;
 
-				_context.WorkingTrackings.Add(obj);
+				_context.WorkingTrackings.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Những công tác và chức vụ đã qua thành công";
 			}
@@ -578,9 +633,8 @@ namespace III.Admin.Controllers
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (string.IsNullOrEmpty(model.PersonIntroduced) ||string.IsNullOrEmpty(model.PlaceNTimeJoinUnion)
-					|| string.IsNullOrEmpty(model.PlaceNTimeJoinParty1st) || string.IsNullOrEmpty(model.PlaceNTimeJoinRecognize1st)
-
+				if (
+					model!=null
 					)
 				{
 					_context.IntroducerOfParties.Add(model);
@@ -602,25 +656,26 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertPersonalHistory([FromBody] PersonalHistory model)
+		public object InsertPersonalHistory([FromBody] PersonalHistory[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (string.IsNullOrEmpty(model.Content) ||model.Begin!=null||model.End!=null
-					
-					)
-				{
-					_context.PersonalHistories.Add(model);
-					_context.SaveChanges();
+				foreach(var x in model) {
+                    if (!string.IsNullOrEmpty(x.Content) || x.Begin != null || x.End != null)
+                    {
+                        _context.PersonalHistories.Add(x);
+                        _context.SaveChanges();
 
-					msg.Title = "Thêm mới Lịch sử bản thân thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Lịch sử bản thân chưa hợp lệ";
-				}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                    }
+                }
+				
 			}
 			catch (Exception err)
 			{
@@ -630,26 +685,30 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertGoAboard([FromBody] GoAboard model)
+		public object InsertGoAboard([FromBody] GoAboard[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (string.IsNullOrEmpty(model.Contact) || string.IsNullOrEmpty(model.Coutry)
-					|| model.From != null ||model.To!=null
-					)
+				foreach (var x in model)
 				{
-					_context.GoAboards.Add(model);
-					_context.SaveChanges();
+					if (!string.IsNullOrEmpty(x.Contact) || !string.IsNullOrEmpty(x.Country)
+						|| x.From != null || x.To != null
+						)
+					{
+						_context.GoAboards.Add(x);
 
-					msg.Title = "Thêm mới Đi nước ngoài thành công";
+						msg.Title = "Thêm mới Đi nước ngoài thành công";
+					}
+					else
+					{
+						msg.Error = true;
+						msg.Title = "Đi nước ngoài chưa hợp lệ";
+						return msg;
+					}
 				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đi nước ngoài chưa hợp lệ";
-				}
-			}
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -719,24 +778,29 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertWarningDisciplined([FromBody] WarningDisciplined model)
+		public object InsertWarningDisciplined([FromBody] WarningDisciplined[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (ModelState.IsValid)
-				{
-					_context.WarningDisciplineds.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.MonthYear) || !string.IsNullOrEmpty(x.Reason) || !string.IsNullOrEmpty(x.GrantOfDecision))
+                    {
+                        _context.WarningDisciplineds.Add(x);
+                        
 
-					msg.Title = "Thêm mới Cảnh cáo, kỷ luật thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Cảnh cáo kỷ luật chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -1121,7 +1185,7 @@ namespace III.Admin.Controllers
                     throw new System.NotSupportedException("EJ2 DocumentEditor does not support this file format.");
             }
         }
-        #region Model
+       /* #region Model
         public class AwardModel
         {
             public string MonthYear { get; set; }
@@ -1346,6 +1410,6 @@ namespace III.Admin.Controllers
             public TimePeriodObj Time { get; set; }
             public string Business { get; set; }
         }
-        #endregion
+        #endregion*/
     }
 }

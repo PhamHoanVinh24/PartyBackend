@@ -12,7 +12,7 @@ namespace ESEIM.Models
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
-		
+		[StringLength(maximumLength: 200)]
 		public string PoliticalAttitude { get; set; }
 
 		
