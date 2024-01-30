@@ -1361,7 +1361,7 @@ namespace III.Admin.Controllers
                     Directory.CreateDirectory(uploadPath);
                 }
                 // Tạo đường dẫn cho file mới được tải lên.
-                string filePath = Path.Combine(uploadPath, file.FileName);
+				   string filePath = Path.Combine(uploadPath, file.FileName);
                 // Mở một luồng để ghi dữ liệu từ file tải lên.
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {

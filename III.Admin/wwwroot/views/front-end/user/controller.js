@@ -20,9 +20,6 @@ app.factory('dataservice', function ($http) {
         getItemPartyAdmissionProfile: function (data, callback) {
             $http.get('/UserProfile/GetItem/' + data).then(callback);
         },
-        getSubmittedFile: function (data, callback) {
-            submitFormUpload('/UserProfile/fileUpload/' + data);
-        }
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
             
@@ -88,7 +85,7 @@ app.config(function ($routeProvider, $locationProvider) {
         })
 });
 
-app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter,$http) {
+app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
     /* $scope.upload = function () {
          var modalInstance = $uibModal.open({
@@ -131,10 +128,33 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.JSONobj);
         }
     };
+    $scope.uploadExtensionFile = async function () {
+        var file = document.getElementById("file").files[0];
+        if (file == null || file == undefined || file == "") {
+            /*App.toastrError(caption.COM_MSG_CHOSE_FILE);*/
+            Console.Writeln("Error");
+        }
+        else {
+            var formdata = new FormData();
+            formdata.append("file", file);
+
+            var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+            };
+            var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
+            var txt = await resultImp.text();
+            $scope.defaultRTE
+            // console.log($scope.defaultRTE)
+            $scope.JSONobjj = handleTextUpload(txt)
+            console.log($scope.JSONobj);
+        }
+    };
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
     // $scope.inputPerHis = {};
-            
+
     // $scope.addPersonalHistory = function () {
     //             $scope.PersonalHistory.push(inputPerHis);
     //             // Xóa dữ liệu từ input sau khi thêm
@@ -186,7 +206,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
-            
+
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
@@ -200,8 +220,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }
             console.log('PersonalHistory', $scope.PersonalHistory)
 
-            
-            
+
+
             //Page3 Những nơi công tác và chức vụ đã qua
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
                 .filter(function (element) {
@@ -221,7 +241,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });;
                 pElementP2s.push(pInTr);
             })
-            
+
             for (let i = 0; i < pElementP2s.length; i++) {
                 var begin = pElementP2s[i][0].substr(pElementP2s[i][0].indexOf('-') - 2, 7);
                 var end = pElementP2s[i][0].substr(pElementP2s[i][0].lastIndexOf('-') - 2, 7);
@@ -300,7 +320,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             function isTime(e) {
                 return (e.includes('Ngày') && e.includes('tháng') && e.includes('năm')) ? true : false;
             }
-            
+
             for (let i = 0; i < data.length; i++) {
                 var obj = {
                     time: null,
@@ -328,7 +348,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP5s.push(pInTr);
             })
-            
+
             for (let i = 0; i < pElementP5s.length; i++) {
 
                 var GoAboardObj = {
@@ -375,7 +395,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP7s.push(pInTr);
             })
-    
+
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
                     time: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
@@ -396,7 +416,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pE8.push(pInTr);
             })
-            
+
             let RelationshipIndex = 0;
             for (let y = 0; y < pE8.length; y++) {
                 for (let i = 0; i < pE8[y].length; i++) {
@@ -655,13 +675,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }, 100);
         }, 100);
     }
-    
+
     $scope.get = function (id = 3) {
         dataservice.getItemPartyAdmissionProfile(id, function(rs){
             rs = rs.data;
-
         })
     }
+   
     $scope.senddata = function () {
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
