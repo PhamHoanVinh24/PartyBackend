@@ -1345,30 +1345,29 @@ namespace III.Admin.Controllers
         #region fileUpload 
         [HttpPost]
         public async Task<IActionResult> fileUpload(IFormFile file)
-		{
-			if (file == null || file.Length == 0)
-			{
-				return BadRequest("File empty or not selected");
-			}
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File empty or not selected");
+            }
+
             try
             {
-                // Đường dẫn tới thư mục
                 string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-
-                // Tạo thư mục nếu chưa tồn tại
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
-                // Tạo đường dẫn cho file mới được tải lên.
-				   string filePath = Path.Combine(uploadPath, file.FileName);
-                // Mở một luồng để ghi dữ liệu từ file tải lên.
+                string filePath = Path.Combine(uploadPath, file.FileName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    return Conflict("File with the same name already exists");
+                }
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                // Trả về thông báo thành công hoặc thông tin về file đã tải lên.
                 return Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
             }
             catch (Exception ex)
@@ -1376,6 +1375,7 @@ namespace III.Admin.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         #endregion
     }
 }

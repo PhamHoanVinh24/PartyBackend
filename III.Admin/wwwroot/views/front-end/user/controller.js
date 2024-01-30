@@ -128,6 +128,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.JSONobj);
         }
     };
+    //file 
     $scope.uploadExtensionFile = async function () {
         var file = document.getElementById("file").files[0];
         if (file == null || file == undefined || file == "") {
