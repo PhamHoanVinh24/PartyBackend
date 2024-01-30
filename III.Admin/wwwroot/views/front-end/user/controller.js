@@ -20,6 +20,9 @@ app.factory('dataservice', function ($http) {
         getItemPartyAdmissionProfile: function (data, callback) {
             $http.get('/UserProfile/GetItem/' + data).then(callback);
         },
+        getSubmittedFile: function (data, callback) {
+            submitFormUpload('/UserProfile/fileUpload/' + data);
+        }
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
             

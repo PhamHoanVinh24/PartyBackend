@@ -2,6 +2,7 @@
 using ESEIM.Utils;
 using Hot.Models.AccountViewModels;
 using III.Domain.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -11,14 +12,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace III.Admin.Controllers
 {
 	public class UserProfileController : Controller
 	{
-
+		
 		private readonly EIMDBContext _context;
-
 		public UserProfileController(EIMDBContext context)
 		{
 			_context = context;
@@ -1338,6 +1339,42 @@ namespace III.Admin.Controllers
             public string Class { get; set; }
             public TimePeriodObj Time { get; set; }
             public string Business { get; set; }
+        }
+        #endregion
+
+        #region fileUpload 
+        [HttpPost]
+        public async Task<IActionResult> fileUpload(IFormFile file)
+		{
+			if (file == null || file.Length == 0)
+			{
+				return BadRequest("File empty or not selected");
+			}
+            try
+            {
+                // Đường dẫn tới thư mục
+                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+                // Tạo thư mục nếu chưa tồn tại
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                // Tạo đường dẫn cho file mới được tải lên.
+                string filePath = Path.Combine(uploadPath, file.FileName);
+                // Mở một luồng để ghi dữ liệu từ file tải lên.
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Trả về thông báo thành công hoặc thông tin về file đã tải lên.
+                return Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         #endregion
     }
