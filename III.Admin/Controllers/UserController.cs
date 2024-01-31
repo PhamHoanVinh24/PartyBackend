@@ -3,18 +3,24 @@ using ESEIM.Utils;
 using FTU.Utils.HelperNet;
 using Hot.Models.AccountViewModels;
 using III.Domain.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using OpenXmlPowerTools;
 using Syncfusion.EJ2.DocumentEditor;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using static III.Admin.Controllers.MobileLoginController;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static III.Admin.Controllers.AccountController;
 
 namespace III.Admin.Controllers
 {
@@ -22,12 +28,24 @@ namespace III.Admin.Controllers
 	{
 
 		private readonly EIMDBContext _context;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly IStringLocalizer<AccountLoginController> _stringLocalizer;
+        private readonly IParameterService _parameterService;
 
-		public UserProfileController(EIMDBContext context)
-		{
-			_context = context;
-		}
-		public IActionResult Index()
+        public UserProfileController(EIMDBContext context,
+            UserManager<AspNetUser> userManager,
+            SignInManager<AspNetUser> signInManager,
+            IStringLocalizer<AccountLoginController> stringLocalizer,
+            IParameterService parameterService)
+        {
+            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _stringLocalizer = stringLocalizer;
+            _parameterService = parameterService;
+        }
+        public IActionResult Index()
 		{
 			return View();
 		}
@@ -43,11 +61,145 @@ namespace III.Admin.Controllers
         {
             return View();
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        {
+			var msg = new JMessage() { Error = false };
+            if (ModelState.IsValid)
+            {
+				var user = new AspNetUser {
+					UserName = model.UserName,
+					Email = model.Email,
+					GivenName=model.GivenName,
+					PhoneNumber = model.PhoneNumber,
+					Gender=model.Gender,
+					Area="User"
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    // Tùy chọn: Đăng nhập người dùng sau khi đăng ký
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+					msg.Title = "Đăng ký thành công hãy chờ ban quản trị duyệt !";
+                    // Trả về mã thông báo, thông tin người dùng, hoặc thông tin khác tùy thuộc vào yêu cầu của ứng dụng di động
+                    return Ok(msg);
+                }
+				msg.Error = true;
+				msg.Title = "Đăng ký thất bại";
+                return Ok(msg);
+            }
+
+            msg.Error = true;
+			msg.Title = "Invalid model state";
+            return Ok(msg);
+        }
+
         [HttpPost]
-		public IActionResult Login(LoginViewModel model)
-		{
-			return Redirect("/Home/Index");
-		}
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+                {
+                    ModelState.AddModelError(string.Empty, _stringLocalizer["LN_USR_PASS_NOT_EMPTY"]);
+                    return View(model);
+                }
+                Regex rx = new Regex(@"\p{Cs}");
+                MatchCollection matches = rx.Matches(model.Username);
+                if (matches.Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
+                }
+                else
+                {
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
+                    }
+                    else if (user.Active == false)
+                    {
+                        ModelState.AddModelError(string.Empty, "Tài khoản chưa được kích hoạt !");
+                    }
+                    else
+                    {
+                        var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: false);
+                        //if (result.RequiresTwoFactor)
+                        //{
+                        //    result = await _signInManager.SignInOrTwoFactorAsync()
+                        //}
+                        if (result.Succeeded || result.RequiresTwoFactor)
+                        {
+                            var authenProps = new AuthenticationProperties
+                            {
+                                IsPersistent = model.RememberLogin,
+                                ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(model.RememberLogin ? (15 * 24 * 60) : _parameterService.GetSessionTimeoutAdmin()),
+                            };
+                            var timeStamp = DateTime.Now;
+
+                            user.IsOnline = 1;
+                            user.LoginTime = DateTime.Now;
+                            user.LoginFailCount = 0;
+
+
+                            await _signInManager.SignInAsync(user, authenProps);
+
+                            var session = new SessionUserLogin();
+                            session.UserId = user.Id;
+                            session.UserName = user.UserName;
+                            session.FullName = user.GivenName;
+                            session.Email = user.Email;
+                            session.EmployeeCode = user.EmployeeCode;
+                            session.SessionTimeOut = _parameterService.GetSessionTimeout();
+                            session.ExpireTimeSpan = DateTime.Now.AddMinutes(session.SessionTimeOut);
+                            session.Picture = user.Picture;
+                            session.BranchId = user.BranchId != null ? user.BranchId : null;
+                            session.TimeStamp = timeStamp;
+
+                            HttpContext.Session.Set("UserSession", session);
+
+                            return RedirectToLocal(nameof(Index));
+                        }
+                        if (result.IsLockedOut)
+                        {
+                            return RedirectToAction(nameof(Lockout));
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INVALID_LOGIN"]);
+                            return View(model);
+                        }
+                    }
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return Redirect("/admin");
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Lockout()
+        {
+            return View();
+        }
+
 
         #region get
         public object GetPartyAdmissionProfile()
@@ -1286,7 +1438,7 @@ namespace III.Admin.Controllers
             return value;
         }
 
-        internal static FormatType GetFormatType(string format)
+         static FormatType GetFormatType(string format)
         {
             if (string.IsNullOrEmpty(format))
                 throw new System.NotSupportedException("EJ2 DocumentEditor does not support this file format.");
@@ -1536,5 +1688,30 @@ namespace III.Admin.Controllers
             public string Business { get; set; }
         }
         #endregion*/
+    }
+
+    public class RegisterDto
+    {
+        [Required]
+        public string UserName { get;  set; }
+
+        [Required]
+        public bool Gender { get;  set; }
+
+        [Required]
+        public string PhoneNumber { get;  set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get;  set; }
+
+        [Required]
+        public string Password { get;  set; }
+
+        [Required]
+        public string ConfrimPassword { get;  set; }
+
+        [Required]
+        public string GivenName { get;  set; }
     }
 }
