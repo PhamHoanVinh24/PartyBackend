@@ -203,6 +203,43 @@
         font-weight: 400;
         background-color: #EEF1F5;
     }
+    .popup{
+        width: 400px;
+        background = #fff;
+        border-radius : 6px;
+        position : absolute;
+        top : 0;
+        left : 50%;
+        transform : translate(-50%, -50%) scale(0.1);
+        text-align: center;
+        padding : 0 30px 30px;
+        color : #333;
+        visibility : hidden;
+    }
+    .popup h2{
+        font-size : 38px;
+        font-weight : 500;
+        margin : 30px 0 10px;
+    }
+    .popup button{
+        width : 100%;
+        margin-top : 50px;
+        padding : 10px 0;
+        background : #6fd649;
+        color: #fff;
+        border : 0;
+        outline: none;
+        font-size : 18px;
+        border-radius : 4px;
+        cursor : pointer;
+        box-shadow : 0 5px 5px rgba(0,0,0,0.2);
+        transition : transform 0.4s , top 0.4s;
+    }
+    .open-popup {
+        visibility: visible;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(1);
+    }
 </style>
 
 <div class="portlet-body form row" style="margin-top: 15px">
@@ -1445,16 +1482,21 @@
                     <label> Tệp đính kèm </label>
                     <div class="container mt-5">
                         <div class="input-group input-file ">
-                            <form id="fileForm" action="your_upload_endpoint" method="post" enctype="multipart/form-data">
+                            <form id="fileForm" method="post" enctype="multipart/form-data">
                                 <div style="display:flex">
-                                    <input style="padding : 0px 0px 0px 0px ; " id="input-2" name="input2[]" type="file" class="file" data-show-upload="false" data-show-caption="true" multiple onchange="addFileInput()">
-
+                                    <input style="padding : 0px 0px 0px 0px ; " id="file" name="file" type="file" class="file" data-show-upload="false" data-show-caption="true">
                                     <input type="hidden" id="fileInputCount" value="1">
-                                    <button class="btn btn-primary" style="border-radius:10px ; font-size : 16px ; height : 30px" type="submit">Tải lên</button>
+                                    <button class="btn btn-primary" onclick="openPopup()" ng-click="uploadExtensionFile()" style="border-radius:10px ; font-size : 16px ; height : 30px" type="submit">Tải lên</button>
                                 </div>
 
                             </form>
                             </div>
+                        <div class="popup" id="popup">
+                            <h2>Tải lên file thành công</h2>
+                            <button type="button" onclick="closePopup()">
+                                OK
+                            </button>
+                        </div>
                         </div>
                     </div>
             </div>
@@ -1507,73 +1549,19 @@
         padding: 10px;
         border-bottom: #000;
     }
-    #uploadSuccessPopup {
-        z-index: 9999;
-    }
+
 
 </style>
-<!--popup-->
+
 <script>
-    const fileInput = document.getElementById('yourFileInputId'); // Thay thế bằng id thật của input file
-    const uploadSuccessPopup = document.getElementById('uploadSuccessPopup');
-    const popupMessage = document.getElementById('popupMessage');
-    const popupFilePath = document.getElementById('popupFilePath');
-
-    fileInput.addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const response = await fetch('your-backend-endpoint', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-
-                if (data.Success) {
-                    // Hiển thị popup
-                    uploadSuccessPopup.style.display = 'block';
-
-                    // Cập nhật nội dung trong popup
-                    popupMessage.textContent = 'File uploaded successfully.';
-                    popupFilePath.textContent = 'File path: ' + data.FilePath;
-                } else {
-                    alert('File upload failed. Server response: ' + data.Message);
-                }
-            } else {
-                alert('File upload failed. Server returned ' + response.status + ' ' + response.statusText);
-            }
-        } catch (error) {
-            console.error('File upload failed. Error: ', error);
-        }
-    });
-
+    let popup = document.getElementById("popup");
+    function openPopup() {
+        popup.classList.add("open-popup");
+    }
     function closePopup() {
-        // Đóng popup khi người dùng nhấp vào nút đóng
-        uploadSuccessPopup.style.display = 'none';
+        popup.classList.remove("open-popup");
     }
 
-</script>
-<script>
-    function addFileInput() {
-        var container = document.getElementById('fileInputContainer');
-        var inputCountInput = document.getElementById('fileInputCount');
-        var inputCount = parseInt(inputCountInput.value);
-        inputCount++;
-        var newInput = document.createElement('input');
-        newInput.type = 'file';
-        newInput.name = 'uploadedFiles[]';
-        newInput.className = 'file';
-        newInput.setAttribute('data-show-upload', 'false');
-        newInput.setAttribute('data-show-caption', 'true');
-        newInput.setAttribute('multiple', '');
-        newInput.addEventListener('change', addFileInput);
-        container.appendChild(newInput);
-        inputCountInput.value = inputCount;
-    }
 </script>
 
 <script>
