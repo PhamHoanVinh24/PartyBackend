@@ -573,14 +573,14 @@
             </div>
         </div>
         <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily">
-            <div ng-repeat="x in Relationship">
+            <div ng-repeat="x in Relation">
                 <div class="toggle-header" style="display: flex; justify-content: space-between;">
                     <div ng-click="showFamily2=!showFamily2">
                         <i ng-show="showFamily2" class="fa fa-caret-down"></i>
                         <i ng-show="!showFamily2" class="fa fa-caret-right"></i>
                         <label class="fs-18">Thông tin của {{x.Relation}}</label>
                     </div>
-                    <div style="font-size: 20px; color: red;"><i class="fa fa-trash"></i></div>
+                    <div style="font-size: 20px; color: red;"><i class="fa fa-trash" ng-click="deleteFamily(x)"></i></div>
                 </div>
                 <div class="mt-2" style="padding-left: 15px;" ng-show="showFamily2">
                     <div class="form-group row">
@@ -612,7 +612,7 @@
                                 <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
 
                                 </i>
-                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.Year.YearBirth" type="text" placeholder="Từ ngày" />
+                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.BirthYear" type="text" placeholder="Từ ngày" />
                             </div>
                         </div>
                     </div>
@@ -626,7 +626,20 @@
                                                 <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
 
                                                 </i>
-                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.Year.YearDeath" type="text" placeholder="Từ ngày" />
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.DeathYear" type="text" placeholder="Từ ngày" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0">
+                                            <i class="fa fa-calendar-o"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Lý do mất</label>
+                                        </div>
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:'Mất vì tuổi già'">
+                                                </i>
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.DeathReason" type="text" placeholder="Lý do" />
                                             </div>
                                         </div>
                                     </div>
@@ -688,7 +701,7 @@
                                                 <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
 
                                                 </i>
-                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.WorkingProgress" type="text" placeholder="Từ ngày" />
                                             </div>
                                             <ul>
                                                 <li>
@@ -710,14 +723,25 @@
                                                 <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
                                                 </i>
                                                 <input class="displayInfo" style="border: #FFFF; width : 400px" name="CusCode" ng-model="x.PoliticalAttitude" type="text" placeholder="Từ ngày" />
-                                                <!--<ul ng-repeat="y in x.PoliticalAttitude ">
-                                <li>s
-                                    {{y}}
-                                </li>
-                            </ul>-->
                                             </div>
 
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0 ">
+                                            <i class="fa fa-user"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Đảng viên</label>
+                                        </div>
+
+                                        <div class="col-md-8" style="display: flex;">
+                                            <input class="displayInfo" style="border: #FFFF; width : 400px" name="CusCode" ng-model="x.PartyMember" type="checkbox" placeholder="" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pull-right">
+                                        <button class="btn" ng-click="updateFamily(x)" style="color:#0dcaf0">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -808,7 +832,7 @@
                             <td>{{x.End}}</td>
                             <td>{{x.Content}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deletePesonalHistory(x)"></i>
                             </td>
                         </tr>
                     </table>
@@ -904,7 +928,7 @@
                             <td>{{x.Work}}</td>
                             <td>{{x.Role}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteWorkingTracking(x)"></i>
                             </td>
                         </tr>
                     </table>
@@ -986,7 +1010,7 @@
                             <td>{{x.Content}}</td>
 
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteHistorySpecialist(x)"></i>
                             </td>
                         </tr>
 
@@ -1067,7 +1091,7 @@
                             <td>{{x.Reason}}</td>
                             <td>{{x.GrantOfDecision}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteAward(x)"></i>
                             </td>
                         </tr>
 
@@ -1132,7 +1156,7 @@
                 </div>
                 <div class="pull-right">
                     <button class="btn" ng-click="updateWarningDisciplined()" style="color:#0dcaf0">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-plus" ></i>
                     </button>
                 </div>
                 <div class="list-item">
@@ -1148,7 +1172,7 @@
                             <td>{{x.Reason}}</td>
                             <td>{{x.GrantOfDecision}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteWarningDisciplined(x)"></i>
                             </td>
                         </tr>
 
@@ -1262,7 +1286,7 @@
                             <td>{{x.Class}}</td>
                             <td>{{x.Certificate}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteTrainingCertificatedPass(x)"></i>
                             </td>
                         </tr>
                     </table>
@@ -1359,7 +1383,7 @@
                             <td>{{x.Contact}}</td>
                             <td>{{x.Country}}</td>
                             <td style="text-align:center">
-                                <i style="color:red" class="fa fa-trash"></i>
+                                <i style="color:red" class="fa fa-trash" ng-click="deleteGoAboard(x)"></i>
                             </td>
                         </tr>
                     </table>
@@ -1367,13 +1391,13 @@
             </div>
         </div>
 
-                        <div class="toggle-header" id="GTVD" style="display: flex; justify-content: space-between; opacity: 0.3; pointer-events: none" ng-click="showDegree=!showDegree">
-                            <div>
+                        <div id="GTVD" style="display: flex; justify-content: space-between;">
+                            <div class="toggle-header" ng-click="showDegree=!showDegree">
                                 <i ng-show="showDegree" class="fa fa-caret-down"></i>
                                 <i ng-show="!showDegree" class="fa fa-caret-right"></i>
                                 <label>Giới thiệu vào đảng</label>
                             </div>
-                            <div ng-click="submitAward()">
+                            <div ng-click="getIntroducerOfPartyByProfileCode()">
                                 <i class="fa fa-floppy-o fs-1" style=" width: 4rem; height:4rem"></i>
                             </div>
                         </div>
@@ -1389,7 +1413,7 @@
                                         <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
 
                                         </i>
-                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Người giới thiệu" />
+                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="Introducer.PersonIntroduced" type="text" placeholder="Người giới thiệu" />
                                     </div>
                                 </div>
                             </div>
@@ -1403,7 +1427,7 @@
                                         <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
 
                                         </i>
-                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi vào Đoàn" />
+                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="Introducer.PlaceTimeJoinUnion" type="text" placeholder="Ngày và nơi vào Đoàn" />
                                     </div>
                                 </div>
                             </div>
@@ -1417,10 +1441,11 @@
                                         <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
 
                                         </i>
-                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi vào Đảng lần thứ nhất" />
+                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="Introducer.PlaceTimeJoinParty" type="text" placeholder="Ngày và nơi vào Đảng lần thứ nhất" />
                                     </div>
                                 </div>
-                            </div><div class="form-group row">
+                            </div>
+                            <div class="form-group row">
                                 <div class="col-md-4 pr-0 ">
                                     <i class="fa fa-calendar"></i>
                                     <label class="displayInfo require custom-title-code-bold">Ngày và nơi công nhận chính thức lần thứ nhất</label>
@@ -1430,9 +1455,14 @@
                                         <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Nơi thường trú : phường Minh Khai, quận Bắc Từ Liêm, Hà Nội">
 
                                         </i>
-                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Ngày và nơi công nhận chính thức lần thứ nhất" />
+                                        <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="Introducer.PlaceTimeRecognize" type="text" placeholder="Ngày và nơi công nhận chính thức lần thứ nhất" />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="pull-right">
+                                <button class="btn" ng-click="submitIntroducer()" style="color:#0dcaf0">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>

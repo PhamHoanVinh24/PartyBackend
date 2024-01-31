@@ -1,5 +1,6 @@
 ﻿using ESEIM.Models;
 using ESEIM.Utils;
+using FTU.Utils.HelperNet;
 using Hot.Models.AccountViewModels;
 using III.Domain.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -15,6 +16,7 @@ using Syncfusion.EJ2.DocumentEditor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -56,7 +58,10 @@ namespace III.Admin.Controllers
 		{
 			return View();
 		}
-
+        public IActionResult Admin()
+        {
+            return View();
+        }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
@@ -247,7 +252,7 @@ namespace III.Admin.Controllers
         }
         public object GetIntroducerOfPartyByProfileCode( string profileCode)
         {
-            var rs = _context.IntroducerOfParties.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -1029,7 +1034,7 @@ namespace III.Admin.Controllers
 
 		#region delete
 		[HttpDelete]
-		public object DeleteFamily([FromBody] int Id)
+		public object DeleteFamily( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1055,7 +1060,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteIntroducerOfParty([FromBody] int Id)
+		public object DeleteIntroducerOfParty( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1081,7 +1086,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeletePartyAdmissionProfile([FromBody] int Id)
+		public object DeletePartyAdmissionProfile( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1107,7 +1112,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteAward([FromBody] int Id)
+		public object DeleteAward(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1134,7 +1139,7 @@ namespace III.Admin.Controllers
 		}
 
 		[HttpDelete]
-		public object DeleteGoAboard([FromBody] int Id)
+		public object DeleteGoAboard(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1160,7 +1165,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeletePersonalHistory([FromBody] int Id)
+		public object DeletePersonalHistory(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1186,7 +1191,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteWorkingTracking([FromBody] int Id)
+		public object DeleteWorkingTracking(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1212,7 +1217,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteTrainingCertificatedPass([FromBody] int Id)
+		public object DeleteTrainingCertificatedPass(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1238,7 +1243,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteWarningDisciplined([FromBody] int Id)
+		public object DeleteWarningDisciplined(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1264,7 +1269,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteHistorySpecialist([FromBody] int Id)
+		public object DeleteHistorySpecialist(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1289,8 +1294,127 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		#endregion
-		
+        #endregion
+        public class JTableModelFile : JTableModel
+        {
+            public string Name { get; set; }
+            public bool Gender { get; set; }
+            public string Nation { get; set; }
+            public string Religion { get; set; }
+            public string GeneralEducation { get; set; }
+            public string JobEducation { get; set; }
+            public string Degree { get; set; }
+            public string ForeignLanguage { get; set; }
+            public string ItDegree { get; set; }
+            public string MinorityLanguage { get; set; }
+            public string PermanentResidence { get; set; }
+            public string Job { get; set; }
+            public string TemporaryAddress { get; set; }
+            public string HomeTown { get; set; }
+            public string FromDate { get; set; }
+            public string ToDate { get; set; }
+            public int UserCode { get; set; }
+        }
+
+        [HttpPost]
+        public object JTable([FromBody] JTableModelFile jTablePara)
+        {
+            try
+            {
+                int intBegin = (jTablePara.CurrentPage - 1) * jTablePara.Length;
+                var fromDate = !string.IsNullOrEmpty(jTablePara.FromDate) ? DateTime.ParseExact(jTablePara.FromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+                var toDate = !string.IsNullOrEmpty(jTablePara.ToDate) ? DateTime.ParseExact(jTablePara.ToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+                var query = from a in _context.PartyAdmissionProfiles
+                            
+                            where (fromDate == null || (fromDate <= a.Birthday))
+                                   && (toDate == null || (toDate >= a.Birthday ))
+                                   && (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.GeneralEducation) || a.GeneralEducation.ToLower().Contains(jTablePara.GeneralEducation.ToLower()))
+
+                                   && (string.IsNullOrEmpty(jTablePara.Degree) || a.Degree.ToLower().Contains(jTablePara.Degree.ToLower()))
+								   
+                                   && (string.IsNullOrEmpty(jTablePara.ForeignLanguage) || a.ForeignLanguage.ToLower().Contains(jTablePara.ForeignLanguage.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.ItDegree) || a.ItDegree.ToLower().Contains(jTablePara.ItDegree.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.MinorityLanguage) || a.MinorityLanguages.ToLower().Contains(jTablePara.MinorityLanguage.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.PermanentResidence) || a.PermanentResidence.ToLower().Contains(jTablePara.PermanentResidence.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Job) || a.Job.ToLower().Contains(jTablePara.Job.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.TemporaryAddress) || a.TemporaryAddress.ToLower().Contains(jTablePara.TemporaryAddress.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.HomeTown) || a.HomeTown.ToLower().Contains(jTablePara.HomeTown.ToLower()))
+                                  
+                            select new
+                            {
+                                a.Id,
+                                a.CurrentName,
+								a.BirthName,
+                                a.Birthday,
+                                a.Gender,
+                                a.Nation,
+                                a.Religion,
+								a.Phone,
+                                a.JobEducation,
+                                a.Degree,
+                                a.ForeignLanguage,
+                                a.ItDegree,
+                                a.MinorityLanguages,
+                                a.PermanentResidence,
+                                a.Job,
+								a.Picture,
+                                a.TemporaryAddress,
+                                a.HomeTown,
+                                a.UnderPostGraduateEducation,
+                                a.GeneralEducation,
+                                a.PoliticalTheory,
+                                a.PlaceBirth,
+                                a.SelfComment,
+								a.CreatedPlace,
+								a.ResumeNumber
+                                //ModuleCount = (a != null) ? _context.CustomerModuleRequests.Count(x => x.ReqCode == b.ReqCode) : 0
+                            };
+
+                //int total = _context.PartyAdmissionProfiles.Count();
+                var query_row_number = query.AsEnumerable().Select((x, index) => new
+                {
+                    stt = index + 1,
+                    x.Id,
+                    x.CurrentName,
+					x.BirthName,
+                    x.Birthday,
+                    x.Gender,
+                    x.Nation,
+                    x.Religion,
+					x.Phone,
+                    x.JobEducation,
+                    x.Degree,
+                    x.ForeignLanguage,
+                    x.ItDegree,
+                    x.MinorityLanguages,
+                    x.PermanentResidence,
+                    x.Job,
+                    x.Picture,
+                    x.TemporaryAddress,
+                    x.HomeTown,
+                    x.UnderPostGraduateEducation,
+                    x.GeneralEducation,
+                    x.PoliticalTheory,
+                    x.PlaceBirth,
+                    x.SelfComment,
+                    x.CreatedPlace,
+					x.ResumeNumber
+                }).ToList();
+                int count = query_row_number.Count();
+                var data = query_row_number.AsQueryable().OrderBy(x => x.stt);
+                
+                return Json(data);
+            }
+            catch (Exception err)
+            {
+                return Json(null);
+            }
+        }
+
         public string Import(IFormCollection data)
         {
             if (data.Files.Count == 0)
