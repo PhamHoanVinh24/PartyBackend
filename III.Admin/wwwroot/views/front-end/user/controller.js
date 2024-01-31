@@ -34,8 +34,8 @@ app.factory('dataservice', function ($http) {
            // console.log($http.get('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=' + data))
             $http.post('/UserProfile/GetPersonalHistoryById?Id=' + data).then(callback);
         },
-        getItemPartyAdmissionProfile: function (data, callback) {
-            $http.get('/UserProfile/GetItem/' + data).then(callback);
+        getPartyAdmissionProfileByUserCode: function (data, callback) {
+            $http.get('/UserProfile/GetPartyAdmissionProfileByUserCode?Id=' + data).then(callback);
         },
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
@@ -743,9 +743,37 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }, 100);
     }
     
-    $scope.getPartyAdmissionProfileById = function (id = 3) {
-        dataservice.getItemPartyAdmissionProfileById(id, function(rs){
+    $scope.getPartyAdmissionProfileByUserCode = function () {
+        var id = 3
+        dataservice.getPartyAdmissionProfileByUserCode(id, function(rs){
             rs = rs.data;
+            $scope.infUser.LastName = rs.CurrentName;
+        
+        $scope.infUser.Birthday = rs.Birthday;
+         $scope.infUser.FirstName = rs.BirthName;
+        
+        $scope.infUser.Sex = rs.Gender
+        $scope.infUser.Nation = rs.Nation;
+        $scope.infUser.Religion = rs.Religion;
+        $scope.infUser.Residence = rs.PermanentResidence;
+        $scope.infUser.Phone = rs.Phone;
+        $scope.infUser.PlaceofBirth = rs.PlaceBirth;
+        $scope.infUser.NowEmployee = rs.Job;
+        $scope.infUser.HomeTown = rs.HomeTown;
+        $scope.infUser.TemporaryAddress =rs.TemporaryAddress;
+        $scope.infUser.LevelEducation.GeneralEducation =  rs.GeneralEducation;
+        $scope.infUser.LevelEducation.VocationalTraining = rs.JobEducation;
+        $scope.infUser.LevelEducation.Undergraduate = rs.UnderPostGraduateEducation;
+        $scope.infUser.LevelEducation.RankAcademic = rs.Degree;
+        
+        $scope.infUser.LevelEducation.ForeignLanguage = rs.ForeignLanguage;
+        $scope.infUser.LevelEducation.MinorityLanguage =  rs.MinorityLanguages;
+        $scope.infUser.LevelEducation.It = rs.ItDegree;
+        $scope.infUser.LevelEducation.PoliticalTheory = rs.PoliticalTheory ;
+        $scope.SelfComment.context = rs.SelfComment;
+        $scope.PlaceCreatedTime.place =rs.CreatedPlace;
+         $scope.infUser.ResumeNumber =  rs.ResumeNumber;
+            console.log($scope.infUser);
         })
     }
 
