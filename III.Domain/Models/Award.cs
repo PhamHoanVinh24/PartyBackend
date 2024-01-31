@@ -10,7 +10,7 @@ namespace ESEIM.Models
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
-		public DateTime MonthYear { get; set; }
+		public string MonthYear { get; set; }
 
         [MaxLength(200)]
         public string Reason { get; set; }

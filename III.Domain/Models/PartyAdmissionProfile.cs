@@ -81,5 +81,6 @@ namespace ESEIM.Models
         public string CreatedPlace { get; set; }
         public int UserCode { get; set; }
         public bool IsDeleted { get; set; }
+        public string Status {  get; set; }
     }
 }

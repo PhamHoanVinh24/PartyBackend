@@ -48,6 +48,11 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.ToList();
             return user;
         }
+        public object GetPartyAdmissionProfileByUserCode(int userCode)
+        {
+            var user = _context.PartyAdmissionProfiles.Where(x=>x.UserCode==userCode).ToList();
+            return user;
+        }
         public object GetPartyAdmissionProfileByResumeNumber( string resumeNumber)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == resumeNumber);
@@ -58,7 +63,7 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
             return user;
         }*/
-        public object GetPartyAdmissionProfileByUserCode( int Id)
+        public object GetPartyAdmissionProfileById( int Id)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
             return user;
@@ -76,7 +81,7 @@ namespace III.Admin.Controllers
         }
         public object GetFamilyByProfileCode( string profileCode)
         {
-            var rs = _context.Families.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.Families.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -108,7 +113,7 @@ namespace III.Admin.Controllers
         }
         public object GetAwardByProfileCode( string profileCode)
         {
-            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetGoAboard()
@@ -123,7 +128,7 @@ namespace III.Admin.Controllers
         }
         public object GetGoAboardByProfileCode(string profileCode)
         {
-            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -140,7 +145,7 @@ namespace III.Admin.Controllers
         }
         public object GetPersonalHistoryByProfileCode( string profileCode)
         {
-            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetTrainingCertificatedPass()
@@ -155,7 +160,7 @@ namespace III.Admin.Controllers
         }
         public object GetTrainingCertificatedPassByProfileCode( string profileCode)
         {
-            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -171,7 +176,7 @@ namespace III.Admin.Controllers
         }
         public object GetWorkingTrackingByProfileCode(string profileCode)
         {
-            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -187,7 +192,7 @@ namespace III.Admin.Controllers
         }
         public object GetHistorySpecialistByProfileCode(string profileCode)
         {
-            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -203,7 +208,7 @@ namespace III.Admin.Controllers
         }
         public object GetWarningDisciplinedByProfileCode(string profileCode)
         {
-            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         #endregion
@@ -411,7 +416,7 @@ namespace III.Admin.Controllers
 				obj.SchoolName = model.SchoolName;
 				obj.From = model.From;
 				obj.To = model.To;
-				obj.Major = model.Major;
+			
 				obj.Class = model.Class;
 				obj.Certificate = model.Certificate;
 
@@ -436,9 +441,7 @@ namespace III.Admin.Controllers
 				var obj = _context.HistorySpecialists.Find(model.Id);
 
 				obj.MonthYear = model.MonthYear;
-				obj.Reason = model.Reason;
-				obj.GrantOfDecision = model.GrantOfDecision;
-
+				obj.Content = model.Content;
 				_context.HistorySpecialists.Add(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Đặc điểm lịch sử thành công";
@@ -563,14 +566,7 @@ namespace III.Admin.Controllers
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if(string.IsNullOrEmpty(model.CurrentName) || string.IsNullOrEmpty(model.BirthName) || string.IsNullOrEmpty(model.Nation) || string.IsNullOrEmpty(model.Religion)
-					|| string.IsNullOrEmpty(model.PermanentResidence) || string.IsNullOrEmpty(model.Phone) || string.IsNullOrEmpty(model.Picture)
-					|| string.IsNullOrEmpty(model.HomeTown) || string.IsNullOrEmpty(model.PlaceBirth) || string.IsNullOrEmpty(model.Job) || string.IsNullOrEmpty(model.TemporaryAddress)
-					|| string.IsNullOrEmpty(model.GeneralEducation) || string.IsNullOrEmpty(model.JobEducation) || string.IsNullOrEmpty(model.UnderPostGraduateEducation)
-					|| string.IsNullOrEmpty(model.Degree) || string.IsNullOrEmpty(model.PoliticalTheory) || string.IsNullOrEmpty(model.ForeignLanguage)
-					|| string.IsNullOrEmpty(model.ItDegree) || string.IsNullOrEmpty(model.MinorityLanguages) || string.IsNullOrEmpty(model.SelfComment) || string.IsNullOrEmpty(model.ResumeNumber)
-					|| model.Birthday!=null
-					) { 
+				if(model!=null) { 
 					_context.PartyAdmissionProfiles.Add(model);
 					_context.SaveChanges();
 
@@ -684,7 +680,7 @@ namespace III.Admin.Controllers
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (string.IsNullOrEmpty(model.Major) || string.IsNullOrEmpty(model.Class) || string.IsNullOrEmpty(model.Certificate) ||
+				if ( string.IsNullOrEmpty(model.Class) || string.IsNullOrEmpty(model.Certificate) ||
 					string.IsNullOrEmpty(model.SchoolName) || model.From!=null || model.To!=null
 
 					)
@@ -714,7 +710,7 @@ namespace III.Admin.Controllers
 			try
 			{
 				if (
-					string.IsNullOrEmpty(model.Reason) || string.IsNullOrEmpty(model.GrantOfDecision)
+					model!=null
 					)
 				{
 					_context.HistorySpecialists.Add(model);
@@ -773,7 +769,7 @@ namespace III.Admin.Controllers
 			try
 			{
 				if (
-					string.IsNullOrEmpty(model.Reason)||string.IsNullOrEmpty(model.Reason)|| string.IsNullOrEmpty(model.GrantOfDecision)
+					!string.IsNullOrEmpty(model.Reason)||!string.IsNullOrEmpty(model.Reason)|| !string.IsNullOrEmpty(model.GrantOfDecision)
 					)
 				{
 					_context.Awards.Add(model);
@@ -827,7 +823,7 @@ namespace III.Admin.Controllers
 
 		#region delete
 		[HttpDelete]
-		public object DeleteFamily([FromBody] int Id)
+		public object DeleteFamily( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -853,12 +849,12 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteIntroducerOfParty([FromBody] int Id)
+		public object DeleteIntroducerOfParty( string profileCode)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				var data = _context.IntroducerOfParties.FirstOrDefault(x => x.id == Id);
+				var data = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == profileCode);
 				if (data != null)
 				{
 					data.IsDeleted = true;
@@ -879,19 +875,39 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeletePartyAdmissionProfile([FromBody] int Id)
+		public object DeletePartyAdmissionProfile( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
 				var data = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
-				if (data != null)
+				string profileCode = "2024126";
+
+                if (data != null)
 				{
 					data.IsDeleted = true;
 					_context.PartyAdmissionProfiles.Remove(data);
-					_context.SaveChanges();
+					var listFamilies=_context.Set<Family>().Where(x=>x.ProfileCode==profileCode).ToList();
+					_context.Set<Family>().RemoveRange(listFamilies);
+					var introducer= _context.Set<IntroducerOfParty>().Where(x => x.ProfileCode == profileCode).ToList();
+					var award= _context.Set<Award>().Where(x => x.ProfileCode == profileCode).ToList();
+					var goAboard = _context.Set<GoAboard>().Where(x => x.ProfileCode == profileCode).ToList();
+                    var perhistory = _context.Set<PersonalHistory>().Where(x => x.ProfileCode == profileCode).ToList();
+                    var trainingcertipass = _context.Set<TrainingCertificatedPass>().Where(x => x.ProfileCode == profileCode).ToList();
+                    var workingtracking = _context.Set<WorkingTracking>().Where(x => x.ProfileCode == profileCode).ToList();
+                    var warningdisciplined = _context.Set<WarningDisciplined>().Where(x => x.ProfileCode == profileCode).ToList();
+                    var histories = _context.Set<HistorySpecialist>().Where(x => x.ProfileCode == profileCode).ToList();
+					_context.Set<IntroducerOfParty>().RemoveRange(introducer);
+                    _context.Set<Award>().RemoveRange(award);
+                    _context.Set<GoAboard>().RemoveRange(goAboard);
+                    _context.Set<PersonalHistory>().RemoveRange(perhistory);
+                    _context.Set<TrainingCertificatedPass>().RemoveRange(trainingcertipass);
+                    _context.Set<WorkingTracking>().RemoveRange(workingtracking);
+                    _context.Set<WarningDisciplined>().RemoveRange(warningdisciplined);
+                    _context.SaveChanges();
 					msg.Title = "Xóa Hồ sơ lý lịch thành công";
 				}
+                
 				else
 				{
 					msg.Title = "Không tìm thấy Hồ sơ lí lịch";
@@ -905,7 +921,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteAward([FromBody] int Id)
+		public object DeleteAward( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -958,7 +974,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeletePersonalHistory([FromBody] int Id)
+		public object DeletePersonalHistory( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -984,12 +1000,13 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteWorkingTracking([FromBody] int Id)
+		public object DeleteWorkingTracking(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
 				var data = _context.WorkingTrackings.FirstOrDefault(x => x.Id == Id);
+				
 				if (data != null)
 				{
 					data.IsDeleted = true;
@@ -1010,7 +1027,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteTrainingCertificatedPass([FromBody] int Id)
+		public object DeleteTrainingCertificatedPass( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1036,7 +1053,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteWarningDisciplined([FromBody] int Id)
+		public object DeleteWarningDisciplined( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1062,7 +1079,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteHistorySpecialist([FromBody] int Id)
+		public object DeleteHistorySpecialist( int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try

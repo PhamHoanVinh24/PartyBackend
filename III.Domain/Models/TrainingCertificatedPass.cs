@@ -11,12 +11,12 @@ namespace ESEIM.Models
 		public int Id { get; set; }
 		[MaxLength(50)]
         public string SchoolName { get; set; }
-        [MaxLength(50)]
-        public string Major { get; set; }
+       
+ 
         [MaxLength(50)]
         public string Class { get; set; }
-        public DateTime? From { get; set; }
-        public DateTime? To { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
         [MaxLength(100)]
         public string Certificate { get; set; }
 		public string ProfileCode { get; set; }
