@@ -63,6 +63,10 @@ namespace III.Admin.Controllers
         {
             return View();
         }
+        public IActionResult Userinfor()
+        {
+            return View();
+        }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
@@ -97,6 +101,15 @@ namespace III.Admin.Controllers
             return Ok(msg);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(LoginViewModel model)
+        {
+            await _signInManager.SignOutAsync();
+            HttpContext.Session.Remove("UserSession");
+            // Nếu bạn muốn chuyển hướng sau khi đăng xuất
+            return RedirectToAction("Index", "Home");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -165,7 +178,7 @@ namespace III.Admin.Controllers
 
                             HttpContext.Session.Set("UserSession", session);
 
-                            return RedirectToLocal(nameof(Index));
+                            return RedirectToAction("Index", "Home");
                         }
                         if (result.IsLockedOut)
                         {
