@@ -562,64 +562,31 @@
                             </div>
 
                         </div>
-        <div class="toggle-header" id="LLGD" style="display: flex; justify-content: space-between; " >
-            <div ng-click="showFamily=!showFamily">
-                <i ng-show="showFamily" class="fa fa-caret-down"></i>
-                <i ng-show="!showFamily" class="fa fa-caret-right"></i>
-                <label>Lý lịch gia đình</label>
-            </div>
-            <div ng-click="getFamilyByProfileCode()">
-                <i class="fa fa-floppy-o fs-1" style=" width: 4rem; height:4rem"></i>
-            </div>
-        </div>
-        <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily">
-            <div ng-repeat="x in Relation">
-                <div class="toggle-header" style="display: flex; justify-content: space-between;">
-                    <div ng-click="showFamily2=!showFamily2">
-                        <i ng-show="showFamily2" class="fa fa-caret-down"></i>
-                        <i ng-show="!showFamily2" class="fa fa-caret-right"></i>
-                        <label class="fs-18">Thông tin của {{x.Relation}}</label>
-                    </div>
-                    <div style="font-size: 20px; color: red;"><i class="fa fa-trash" ng-click="deleteFamily(x)"></i></div>
-                </div>
-                <div class="mt-2" style="padding-left: 15px;" ng-show="showFamily2">
-                    <div class="form-group row">
-                        <div class="col-md-4 pr-0">
-                            <i class="fa fa-user"></i>
-                            <label class="displayInfo control-label require custom-title-code-bold">Họ và tên</label>
-                        </div>
-
-
-                        <div class="col-md-8" style="display: flex;">
-                            <div class="br24 form-control custom-title-code-bold">
-                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
-
-                                </i>
-                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.Name" type="text" placeholder="Từ ngày" />
+                        <div class="toggle-header" id="LLGD" style="display: flex; justify-content: space-between; opacity:0.3 ;pointer-events: none">
+                            <div ng-click="showFamily=!showFamily">
+                                <i ng-show="showFamily" class="fa fa-caret-down"></i>
+                                <i ng-show="!showFamily" class="fa fa-caret-right"></i>
+                                <label>Lý lịch gia đình</label>
+                            </div>
+                            <div ng-click="getFamilyByProfileCode()">
+                                <i class="fa fa-floppy-o fs-1" style=" width: 4rem; height:4rem"></i>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-4 pr-0">
-                            <i class="fa fa-calendar-o"></i>
-                            <label class="control-label require custom-title-code-bold">Năm sinh</label>
-                        </div>
-                        <!--<div class="col-md-8">
-        <input class="form-control br24 custom-title-code-bold" name="CusCode" ng-model="x.Year.YearBirth" type="text" placeholder="Năm sinh" ng-readonly="CustomerId !=''" />
-    </div>-->
-                        <div class="col-md-8" style="display: flex;">
-                            <div class="displayInfo br24 form-control custom-title-code-bold">
-                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
-
-                                </i>
-                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.BirthYear" type="text" placeholder="Từ ngày" />
-                            </div>
-                        </div>
-                    </div>
+                        <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily">
+                            <div ng-repeat="x in Relationship">
+                                <div class="toggle-header" style="display: flex; justify-content: space-between;">
+                                    <div ng-click="showFamily2=!showFamily2">
+                                        <i ng-show="showFamily2" class="fa fa-caret-down"></i>
+                                        <i ng-show="!showFamily2" class="fa fa-caret-right"></i>
+                                        <label class="fs-18">Thông tin của {{x.Relation}}</label>
+                                    </div>
+                                    <div style="font-size: 20px; color: red;"><i class="fa fa-trash"></i></div>
+                                </div>
+                                <div class="mt-2" style="padding-left: 15px;" ng-show="showFamily2">
                                     <div class="form-group row">
                                         <div class="col-md-4 pr-0">
-                                            <i class="fa fa-calendar-o"></i>
-                                            <label class="displayInfo control-label require custom-title-code-bold">Năm mất</label>
+                                            <i class="fa fa-user"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Họ và tên</label>
                                         </div>
                                         <div class="col-md-8" style="display: flex;">
                                             <div class="br24 form-control custom-title-code-bold">
@@ -1493,7 +1460,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4 ml-10 col-right" id="TTPD" style="display: none">
+    <div class="col-lg-4 ml-10 col-right" id="TTPD" >
         <div class="title" style="padding-top: 10px;padding-bottom: 10px;"><h2>Thông tin phê duyệt</h2></div>
         <div class="toggle-header" ng-click="showFamily=!showFamily">
             <i ng-show="showFamily" class="fa fa-caret-down"></i>
@@ -1540,7 +1507,75 @@
         padding: 10px;
         border-bottom: #000;
     }
+    #uploadSuccessPopup {
+        z-index: 9999;
+    }
+
 </style>
+<!--popup-->
+<script>
+    const fileInput = document.getElementById('yourFileInputId'); // Thay thế bằng id thật của input file
+    const uploadSuccessPopup = document.getElementById('uploadSuccessPopup');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupFilePath = document.getElementById('popupFilePath');
+
+    fileInput.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('your-backend-endpoint', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.Success) {
+                    // Hiển thị popup
+                    uploadSuccessPopup.style.display = 'block';
+
+                    // Cập nhật nội dung trong popup
+                    popupMessage.textContent = 'File uploaded successfully.';
+                    popupFilePath.textContent = 'File path: ' + data.FilePath;
+                } else {
+                    alert('File upload failed. Server response: ' + data.Message);
+                }
+            } else {
+                alert('File upload failed. Server returned ' + response.status + ' ' + response.statusText);
+            }
+        } catch (error) {
+            console.error('File upload failed. Error: ', error);
+        }
+    });
+
+    function closePopup() {
+        // Đóng popup khi người dùng nhấp vào nút đóng
+        uploadSuccessPopup.style.display = 'none';
+    }
+
+</script>
+<script>
+    function addFileInput() {
+        var container = document.getElementById('fileInputContainer');
+        var inputCountInput = document.getElementById('fileInputCount');
+        var inputCount = parseInt(inputCountInput.value);
+        inputCount++;
+        var newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'uploadedFiles[]';
+        newInput.className = 'file';
+        newInput.setAttribute('data-show-upload', 'false');
+        newInput.setAttribute('data-show-caption', 'true');
+        newInput.setAttribute('multiple', '');
+        newInput.addEventListener('change', addFileInput);
+        container.appendChild(newInput);
+        inputCountInput.value = inputCount;
+    }
+</script>
+
 <script>
     function addFileInput() {
         var container = document.getElementById('fileInputContainer');
