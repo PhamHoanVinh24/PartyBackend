@@ -63,7 +63,7 @@ namespace III.Admin.Controllers
         {
             return View();
         }
-        public IActionResult Userinfor()
+        public IActionResult UserInfo()
         {
             return View();
         }
