@@ -1,5 +1,6 @@
 ﻿var ctxfolder = "/views/front-end/Home";
-var app = angular.module('App_ESEIM', [ "ngRoute" ])
+var app = angular.module('App_ESEIM', ["ngRoute"])
+
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -32,7 +33,31 @@ app.config(function ($routeProvider, $locationProvider) {
         })
 });
 
-app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter) {
+app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
+    var listNew = document.querySelector(".list-news");
+    
+        $http.get("Admin/CMSVideo/GetNews")
+            .then(function (response) {
+                // Xử lý dữ liệu nhận được từ server
+                console.log(response.data);
 
-});
+                var render = "";
+                response.data.forEach(ele => {
+                    render += `
+                <div class="item">
+                    <div class="wrap">
+                        <a href="${ele.LinkRef}">${ele.Title}</a>
+                        <p class="post-date">${ele.created_date}</p>
+                    </div>
+                </div>
+                `;
+                });
 
+                // Sử dụng $scope để gán dữ liệu vào biến trong scope
+                $scope.listNew = render;
+            })
+            .catch(function (error) {
+                // Xử lý lỗi nếu có
+                console.error("Error:", error);
+            });
+})
