@@ -10,8 +10,7 @@ namespace ESEIM.Models
         [Key]
         public int Id { get; set; } 
         public string MonthYear { get; set; }
-        public string   Content { get; set; }
-       
+        public string Content { get; set; }
 		public string ProfileCode { get; set; }
         public bool IsDeleted {  get; set; }
 	}

@@ -1,16 +1,27 @@
 ﻿using ESEIM.Models;
 using ESEIM.Utils;
+using FTU.Utils.HelperNet;
 using Hot.Models.AccountViewModels;
 using III.Domain.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
+using OpenXmlPowerTools;
 using Syncfusion.EJ2.DocumentEditor;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static III.Admin.Controllers.AccountController;
 
 namespace III.Admin.Controllers
 {
@@ -18,12 +29,24 @@ namespace III.Admin.Controllers
 	{
 
 		private readonly EIMDBContext _context;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly IStringLocalizer<AccountLoginController> _stringLocalizer;
+        private readonly IParameterService _parameterService;
 
-		public UserProfileController(EIMDBContext context)
-		{
-			_context = context;
-		}
-		public IActionResult Index()
+        public UserProfileController(EIMDBContext context,
+            UserManager<AspNetUser> userManager,
+            SignInManager<AspNetUser> signInManager,
+            IStringLocalizer<AccountLoginController> stringLocalizer,
+            IParameterService parameterService)
+        {
+            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _stringLocalizer = stringLocalizer;
+            _parameterService = parameterService;
+        }
+        public IActionResult Index()
 		{
 			return View();
 		}
@@ -35,12 +58,149 @@ namespace III.Admin.Controllers
 		{
 			return View();
 		}
+        public IActionResult Admin()
+        {
+            return View();
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        {
+			var msg = new JMessage() { Error = false };
+            if (ModelState.IsValid)
+            {
+				var user = new AspNetUser {
+					UserName = model.UserName,
+					Email = model.Email,
+					GivenName=model.GivenName,
+					PhoneNumber = model.PhoneNumber,
+					Gender=model.Gender,
+					Area="User"
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-		[HttpPost]
-		public IActionResult Login(LoginViewModel model)
-		{
-			return Redirect("/Home/Index");
-		}
+                if (result.Succeeded)
+                {
+                    // Tùy chọn: Đăng nhập người dùng sau khi đăng ký
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+					msg.Title = "Đăng ký thành công hãy chờ ban quản trị duyệt !";
+                    // Trả về mã thông báo, thông tin người dùng, hoặc thông tin khác tùy thuộc vào yêu cầu của ứng dụng di động
+                    return Ok(msg);
+                }
+				msg.Error = true;
+				msg.Title = "Đăng ký thất bại";
+                return Ok(msg);
+            }
+
+            msg.Error = true;
+			msg.Title = "Invalid model state";
+            return Ok(msg);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+                {
+                    ModelState.AddModelError(string.Empty, _stringLocalizer["LN_USR_PASS_NOT_EMPTY"]);
+                    return View(model);
+                }
+                Regex rx = new Regex(@"\p{Cs}");
+                MatchCollection matches = rx.Matches(model.Username);
+                if (matches.Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
+                }
+                else
+                {
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
+                    }
+                    else if (user.Active == false)
+                    {
+                        ModelState.AddModelError(string.Empty, "Tài khoản chưa được kích hoạt !");
+                    }
+                    else
+                    {
+                        var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: false);
+                        //if (result.RequiresTwoFactor)
+                        //{
+                        //    result = await _signInManager.SignInOrTwoFactorAsync()
+                        //}
+                        if (result.Succeeded || result.RequiresTwoFactor)
+                        {
+                            var authenProps = new AuthenticationProperties
+                            {
+                                IsPersistent = model.RememberLogin,
+                                ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(model.RememberLogin ? (15 * 24 * 60) : _parameterService.GetSessionTimeoutAdmin()),
+                            };
+                            var timeStamp = DateTime.Now;
+
+                            user.IsOnline = 1;
+                            user.LoginTime = DateTime.Now;
+                            user.LoginFailCount = 0;
+
+
+                            await _signInManager.SignInAsync(user, authenProps);
+
+                            var session = new SessionUserLogin();
+                            session.UserId = user.Id;
+                            session.UserName = user.UserName;
+                            session.FullName = user.GivenName;
+                            session.Email = user.Email;
+                            session.EmployeeCode = user.EmployeeCode;
+                            session.SessionTimeOut = _parameterService.GetSessionTimeout();
+                            session.ExpireTimeSpan = DateTime.Now.AddMinutes(session.SessionTimeOut);
+                            session.Picture = user.Picture;
+                            session.BranchId = user.BranchId != null ? user.BranchId : null;
+                            session.TimeStamp = timeStamp;
+
+                            HttpContext.Session.Set("UserSession", session);
+
+                            return RedirectToLocal(nameof(Index));
+                        }
+                        if (result.IsLockedOut)
+                        {
+                            return RedirectToAction(nameof(Lockout));
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INVALID_LOGIN"]);
+                            return View(model);
+                        }
+                    }
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return Redirect("/admin");
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Lockout()
+        {
+            return View();
+        }
+
 
         #region get
         public object GetPartyAdmissionProfile()
@@ -97,7 +257,7 @@ namespace III.Admin.Controllers
         }
         public object GetIntroducerOfPartyByProfileCode( string profileCode)
         {
-            var rs = _context.IntroducerOfParties.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -241,7 +401,7 @@ namespace III.Admin.Controllers
 				obj.Name = model.Name;
 				obj.WorkingProgress = model.WorkingProgress;
 				obj.Relation = model.Relation;
-				obj.Class_Composition = model.Class_Composition;
+				obj.ClassComposition = model.ClassComposition;
 				obj.PartyMember = model.PartyMember;
 				obj.BirthYear = model.BirthYear;
 				obj.DeathReason = model.DeathReason;
@@ -251,7 +411,7 @@ namespace III.Admin.Controllers
 				obj.Job = model.Job;
 				obj.WorkingProgress = model.WorkingProgress;
 				obj.Name = model.Name;
-				_context.Families.Add(obj);
+				_context.Families.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Hoàn cảnh gia đình thành công";
 			}
@@ -338,7 +498,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object UpdatePersonalHistory([FromBody] PersonalHistory[] model)
+		public object UpdatePersonalHistories([FromBody] PersonalHistory[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -355,7 +515,7 @@ namespace III.Admin.Controllers
                             obj.End = x.Begin;
                             obj.Content = x.Content;
 
-                            _context.PersonalHistories.Add(obj);
+                            _context.PersonalHistories.Update(obj);
 							_context.SaveChanges() ;
                         }
   
@@ -380,7 +540,43 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 
-		[HttpPost]
+        [HttpPost]
+        public object UpdatePersonalHistory([FromBody] PersonalHistory model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                if (model != null)
+                {
+                    var obj = _context.PersonalHistories.FirstOrDefault(y => y.Id == model.Id);
+
+                    obj.Begin = model.Begin;
+                    obj.End = model.End;
+                    obj.Content = model.Content;
+
+                    _context.PersonalHistories.Update(obj);
+                    _context.SaveChanges();
+                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                    return msg;
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                    return msg;
+                }
+
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Cập nhật Lịch sử cá nhân thất bại";
+            }
+            return msg;
+        }
+
+        [HttpPost]
 		public object UpdateGoAboard([FromBody] GoAboard model)
 		{
 			var msg = new JMessage() { Error = false };
@@ -393,7 +589,7 @@ namespace III.Admin.Controllers
 				obj.Contact = model.Contact;
 				obj.Country = model.Country;
 
-				_context.GoAboards.Add(obj);
+				_context.GoAboards.Update(obj);
 				_context.SaveChanges();
 
 				msg.Title = "Cập nhật Đi nước ngoài thành công";
@@ -420,7 +616,7 @@ namespace III.Admin.Controllers
 				obj.Class = model.Class;
 				obj.Certificate = model.Certificate;
 
-				_context.TrainingCertificatedPasses.Add(obj);
+				_context.TrainingCertificatedPasses.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Những lớp đào tạo bồi dưỡng đã qua thành công";
 			}
@@ -442,7 +638,8 @@ namespace III.Admin.Controllers
 
 				obj.MonthYear = model.MonthYear;
 				obj.Content = model.Content;
-				_context.HistorySpecialists.Add(obj);
+
+				_context.HistorySpecialists.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Đặc điểm lịch sử thành công";
 			}
@@ -466,7 +663,7 @@ namespace III.Admin.Controllers
 				obj.Reason = model.Reason;
 				obj.GrantOfDecision = model.GrantOfDecision;
 
-				_context.WarningDisciplineds.Add(obj);
+				_context.WarningDisciplineds.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Kỷ luật thành công";
 			}
@@ -489,7 +686,7 @@ namespace III.Admin.Controllers
 				obj.Reason = model.Reason;
 				obj.GrantOfDecision = model.GrantOfDecision;
 
-				_context.Awards.Add(obj);
+				_context.Awards.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Khen thưởng thành công";
 			}
@@ -513,7 +710,7 @@ namespace III.Admin.Controllers
 				obj.Work = model.Work;
 				obj.Role = model.Role;
 
-				_context.WorkingTrackings.Add(obj);
+				_context.WorkingTrackings.Update(obj);
 				_context.SaveChanges();
 				msg.Title = "Cập nhật Những công tác và chức vụ đã qua thành công";
 			}
@@ -530,29 +727,32 @@ namespace III.Admin.Controllers
 		#region insert
 
 		[HttpPost]
-		public object InsertFamily([FromBody] Family model)
+		public object InsertFamily([FromBody] Family[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Relation) || !string.IsNullOrEmpty(x.ClassComposition)
+                    || !string.IsNullOrEmpty(x.BirthYear) || !string.IsNullOrEmpty(x.HomeTown)
+                    || !string.IsNullOrEmpty(x.Residence) || !string.IsNullOrEmpty(x.Job)
+                    || !string.IsNullOrEmpty(x.WorkingProgress) || x.PartyMember != null)
+                    {
+                        _context.Families.Add(x);
+                        
 
-				if (string.IsNullOrEmpty(model.Relation)||string.IsNullOrEmpty(model.Class_Composition)
-					|| string.IsNullOrEmpty(model.BirthYear) || string.IsNullOrEmpty(model.HomeTown)
-					|| string.IsNullOrEmpty(model.Residence) || string.IsNullOrEmpty(model.Job)
-					|| string.IsNullOrEmpty(model.WorkingProgress) || model.PartyMember!=null
-					)
-				{
-					_context.Families.Add(model);
-					_context.SaveChanges();
-
-					msg.Title = "Thêm mới Hoàn cảnh gia đình thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Hoàn cảnh gia đình chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -675,27 +875,29 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertTrainingCertificatedPass([FromBody] TrainingCertificatedPass model)
+		public object InsertTrainingCertificatedPass([FromBody] TrainingCertificatedPass[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if ( string.IsNullOrEmpty(model.Class) || string.IsNullOrEmpty(model.Certificate) ||
-					string.IsNullOrEmpty(model.SchoolName) || model.From!=null || model.To!=null
-
-					)
-				{
-					_context.TrainingCertificatedPasses.Add(model);
-					_context.SaveChanges();
-
-					msg.Title = "Thêm mới Đi nước ngoài thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đi nước ngoài chưa hợp lệ";
-				}
-			}
+                foreach (var x in model)
+                {
+                    if ( string.IsNullOrEmpty(x.Class) || string.IsNullOrEmpty(x.Certificate) ||
+                    string.IsNullOrEmpty(x.SchoolName) || x.From != null || x.To != null
+)
+                    {
+                        _context.TrainingCertificatedPasses.Add(x);
+                        msg.Title = "Thêm mới Đi nước ngoài thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+						msg.Title = "Đi nước ngoài chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -704,26 +906,28 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertHistorySpecialist([FromBody] HistorySpecialist model)
+		public object InsertHistorysSpecialist([FromBody] HistorySpecialist[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					model!=null
-					)
-				{
-					_context.HistorySpecialists.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Content) || x.MonthYear != null)
+                    {
+                        _context.HistorySpecialists.Add(x);
 
-					msg.Title = "Thêm mới Đặc điểm lịch sử thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Đặc điểm lịch sử chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -763,26 +967,30 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertAward([FromBody] Award model)
+		public object InsertAward([FromBody] Award[] model)
 		{
 			var msg = new JMessage() { Error = false };
+
 			try
 			{
-				if (
-					!string.IsNullOrEmpty(model.Reason)||!string.IsNullOrEmpty(model.Reason)|| !string.IsNullOrEmpty(model.GrantOfDecision)
-					)
+				foreach (var x in model)
 				{
-					_context.Awards.Add(model);
-					_context.SaveChanges();
+					if (!string.IsNullOrEmpty(x.Reason) || x.MonthYear != null || x.GrantOfDecision != null)
+					{
+						_context.Awards.Add(x);
 
-					msg.Title = "Thêm mới Khen thưởng thành công";
+						msg.Title = "Thêm mới Lịch sử bản thân thành công";
+					}
+					else
+					{
+						msg.Error = true;
+						msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+					}
 				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Khen thưởng chưa hợp lệ";
-				}
-			}
+                _context.SaveChanges();
+
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -791,26 +999,28 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpPost]
-		public object InsertWorkingTracking([FromBody] WorkingTracking model)
+		public object InsertWorkingTracking([FromBody] WorkingTracking[] model)
 		{
 			var msg = new JMessage() { Error = false };
 			try
 			{
-				if (
-					string.IsNullOrEmpty(model.Role)||string.IsNullOrEmpty(model.Work)||model.To!=null||model.From!=null
-					)
-				{
-					_context.WorkingTrackings.Add(model);
-					_context.SaveChanges();
+                foreach (var x in model)
+                {
+                    if (!string.IsNullOrEmpty(x.Role) || x.To != null || x.ProfileCode != null)
+                    {
+                        _context.WorkingTrackings.Add(x);
 
-					msg.Title = "Thêm mới Quá trình công tác thành công";
-				}
-				else
-				{
-					msg.Error = true;
-					msg.Title = "Quá trình công tác chưa hợp lệ";
-				}
-			}
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+						return msg;
+                    }
+                }
+                _context.SaveChanges();
+            }
 			catch (Exception err)
 			{
 				msg.Error = true;
@@ -921,7 +1131,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteAward( int Id)
+		public object DeleteAward(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -948,7 +1158,7 @@ namespace III.Admin.Controllers
 		}
 
 		[HttpDelete]
-		public object DeleteGoAboard([FromBody] int Id)
+		public object DeleteGoAboard(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -974,7 +1184,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeletePersonalHistory( int Id)
+		public object DeletePersonalHistory(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1027,7 +1237,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteTrainingCertificatedPass( int Id)
+		public object DeleteTrainingCertificatedPass(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1053,7 +1263,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteWarningDisciplined( int Id)
+		public object DeleteWarningDisciplined(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1079,7 +1289,7 @@ namespace III.Admin.Controllers
 			return msg;
 		}
 		[HttpDelete]
-		public object DeleteHistorySpecialist( int Id)
+		public object DeleteHistorySpecialist(int Id)
 		{
 			var msg = new JMessage() { Error = false };
 			try
@@ -1104,8 +1314,127 @@ namespace III.Admin.Controllers
 			}
 			return msg;
 		}
-		#endregion
-		
+        #endregion
+        public class JTableModelFile : JTableModel
+        {
+            public string Name { get; set; }
+            public bool Gender { get; set; }
+            public string Nation { get; set; }
+            public string Religion { get; set; }
+            public string GeneralEducation { get; set; }
+            public string JobEducation { get; set; }
+            public string Degree { get; set; }
+            public string ForeignLanguage { get; set; }
+            public string ItDegree { get; set; }
+            public string MinorityLanguage { get; set; }
+            public string PermanentResidence { get; set; }
+            public string Job { get; set; }
+            public string TemporaryAddress { get; set; }
+            public string HomeTown { get; set; }
+            public string FromDate { get; set; }
+            public string ToDate { get; set; }
+            public int UserCode { get; set; }
+        }
+
+        [HttpPost]
+        public object JTable([FromBody] JTableModelFile jTablePara)
+        {
+            try
+            {
+                int intBegin = (jTablePara.CurrentPage - 1) * jTablePara.Length;
+                var fromDate = !string.IsNullOrEmpty(jTablePara.FromDate) ? DateTime.ParseExact(jTablePara.FromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+                var toDate = !string.IsNullOrEmpty(jTablePara.ToDate) ? DateTime.ParseExact(jTablePara.ToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+                var query = from a in _context.PartyAdmissionProfiles
+                            
+                            where (fromDate == null || (fromDate <= a.Birthday))
+                                   && (toDate == null || (toDate >= a.Birthday ))
+                                   && (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.GeneralEducation) || a.GeneralEducation.ToLower().Contains(jTablePara.GeneralEducation.ToLower()))
+
+                                   && (string.IsNullOrEmpty(jTablePara.Degree) || a.Degree.ToLower().Contains(jTablePara.Degree.ToLower()))
+								   
+                                   && (string.IsNullOrEmpty(jTablePara.ForeignLanguage) || a.ForeignLanguage.ToLower().Contains(jTablePara.ForeignLanguage.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.ItDegree) || a.ItDegree.ToLower().Contains(jTablePara.ItDegree.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.MinorityLanguage) || a.MinorityLanguages.ToLower().Contains(jTablePara.MinorityLanguage.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.PermanentResidence) || a.PermanentResidence.ToLower().Contains(jTablePara.PermanentResidence.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Job) || a.Job.ToLower().Contains(jTablePara.Job.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.TemporaryAddress) || a.TemporaryAddress.ToLower().Contains(jTablePara.TemporaryAddress.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.HomeTown) || a.HomeTown.ToLower().Contains(jTablePara.HomeTown.ToLower()))
+                                  
+                            select new
+                            {
+                                a.Id,
+                                a.CurrentName,
+								a.BirthName,
+                                a.Birthday,
+                                a.Gender,
+                                a.Nation,
+                                a.Religion,
+								a.Phone,
+                                a.JobEducation,
+                                a.Degree,
+                                a.ForeignLanguage,
+                                a.ItDegree,
+                                a.MinorityLanguages,
+                                a.PermanentResidence,
+                                a.Job,
+								a.Picture,
+                                a.TemporaryAddress,
+                                a.HomeTown,
+                                a.UnderPostGraduateEducation,
+                                a.GeneralEducation,
+                                a.PoliticalTheory,
+                                a.PlaceBirth,
+                                a.SelfComment,
+								a.CreatedPlace,
+								a.ResumeNumber
+                                //ModuleCount = (a != null) ? _context.CustomerModuleRequests.Count(x => x.ReqCode == b.ReqCode) : 0
+                            };
+
+                //int total = _context.PartyAdmissionProfiles.Count();
+                var query_row_number = query.AsEnumerable().Select((x, index) => new
+                {
+                    stt = index + 1,
+                    x.Id,
+                    x.CurrentName,
+					x.BirthName,
+                    x.Birthday,
+                    x.Gender,
+                    x.Nation,
+                    x.Religion,
+					x.Phone,
+                    x.JobEducation,
+                    x.Degree,
+                    x.ForeignLanguage,
+                    x.ItDegree,
+                    x.MinorityLanguages,
+                    x.PermanentResidence,
+                    x.Job,
+                    x.Picture,
+                    x.TemporaryAddress,
+                    x.HomeTown,
+                    x.UnderPostGraduateEducation,
+                    x.GeneralEducation,
+                    x.PoliticalTheory,
+                    x.PlaceBirth,
+                    x.SelfComment,
+                    x.CreatedPlace,
+					x.ResumeNumber
+                }).ToList();
+                int count = query_row_number.Count();
+                var data = query_row_number.AsQueryable().OrderBy(x => x.stt);
+                
+                return Json(data);
+            }
+            catch (Exception err)
+            {
+                return Json(null);
+            }
+        }
+
         public string Import(IFormCollection data)
         {
             if (data.Files.Count == 0)
@@ -1130,7 +1459,7 @@ namespace III.Admin.Controllers
             return value;
         }
 
-        internal static FormatType GetFormatType(string format)
+         static FormatType GetFormatType(string format)
         {
             if (string.IsNullOrEmpty(format))
                 throw new System.NotSupportedException("EJ2 DocumentEditor does not support this file format.");
@@ -1380,5 +1709,30 @@ namespace III.Admin.Controllers
             public string Business { get; set; }
         }
         #endregion*/
+    }
+
+    public class RegisterDto
+    {
+        [Required]
+        public string UserName { get;  set; }
+
+        [Required]
+        public bool Gender { get;  set; }
+
+        [Required]
+        public string PhoneNumber { get;  set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get;  set; }
+
+        [Required]
+        public string Password { get;  set; }
+
+        [Required]
+        public string ConfrimPassword { get;  set; }
+
+        [Required]
+        public string GivenName { get;  set; }
     }
 }

@@ -22,9 +22,11 @@ namespace ESEIM.Models
 		public string PlaceTimeJoinParty { get; set; }
 		
 		[StringLength(maximumLength: 150)]
+
 		public string PlaceTimeRecognize { get; set; }
 		public string ProfileCode {  get; set; }
 		public bool IsDeleted { get; set; }
+
 
 	}
 }

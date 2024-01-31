@@ -180,6 +180,7 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: ctxfolder + '/index.html',
             controller: 'index'
         })
+       
 });
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter,$http) {
@@ -705,13 +706,26 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 PlaceTimeRecognize: $scope.infUser.PlaceRecognize + ", " + $scope.infUser.DateRecognize
             };
             console.log($scope.infUser);
+            var JSONobj = {
+                InformationUser: $scope.infUser,
+                Create: $scope.PlaceCreatedTime,
+                PersonalHistory: $scope.PersonalHistory,
+                BusinessNDuty: $scope.BusinessNDuty,
+                PassedTrainingClasses: $scope.PassedTrainingClasses,
+                GoAboard: $scope.GoAboard,
+                Disciplined: $scope.Disciplined,
+                SelfComment: $scope.SelfComment,
+                Relationship: $scope.Relationship
+            }
+
+            console.log($scope.listDetail1[0])
             setTimeout(function () {
                 $scope.$apply();
             }, 100);
         }, 100);
     }
     
-    $scope.getPartyAdmissionProfileById = function (id) {
+    $scope.getPartyAdmissionProfileById = function (id = 3) {
         dataservice.getItemPartyAdmissionProfileById(id, function(rs){
             rs = rs.data;
         })
@@ -791,7 +805,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.model);
     }
 
-
     $scope.updateFamily = function (x) {
         $scope.modelPersonal = x ;
         
@@ -842,27 +855,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
         console.log("Vào");
     }
+
+    //
     
+    // AdmissionProfile
+    $scope.isUpdate = false;
+
+    //ĐẶC ĐIỂM LỊCH SỬ
+
     $scope.submitPartyAdmissionProfile = function () {
         $scope.model = {}
-        var currentDate = new Date();
-        //**ktra xem user da co profile chua*/
-        // getPartyAdmissionProfileByResumeNumber()
-        
-       getPartyAdmissionProfileByUserCode()
-        console.log($scope.ProfileList)
-        
-        if ($scope.ProfileList.length > 0) {
-
-            $scope.isUpdateProfile = true;
-        }
-        else {
-            $scope.isUpdateProfile = false;
-            $scope.model.ResumeNumber = currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear();
-        }
-        console.log($scope.model.ResumeNumber);
-        console.log($scope.isUpdateProfile);
-        $scope.UserCode = $scope.user.id;
         $scope.model.CurrentName = $scope.infUser.LastName;
         var fullDate = new Date($scope.infUser.DateofBird);
         var onlyDate = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
@@ -889,24 +891,24 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
         $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
         $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
-        $scope.modComment = $scope.SelfComment.context;
+        $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
+        $scope.model.SelfComment = $scope.SelfComment.context;
         $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
-      //  $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
-        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', modeel.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
-        console.log($scope.model);
-
-        if ($scope.isUpdateProfile){
+        $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        
+        if($scope.isUpdate){
             dataservice.update($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
-                console.log("update")
             });
         }else {
             dataservice.insert($scope.model, function (rs) {
                 rs = rs.data;
-                console.log('Theem');
+                console.log('gui du lieu');
             });
         }
+        console.log($scope.model);
     }
     
     $scope.submitPersonalHistory = function () {
@@ -1108,6 +1110,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     }
     //getById
+    $scope.getBusinessNDutyById = function () {
+        $scope.id = 2;
+        dataservice.getBusinessNDutyById($scope.id, function (rs) {
+                rs = rs.data;
+                console.log(rs.data);
+            })
+        console.log($scope.id);
+    }
+
     $scope.getHistorySpecialistById = function () {
         $scope.id = 2;
         dataservice.getHistorySpecialistById($scope.id, function (rs) {
@@ -1116,6 +1127,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             })
         console.log($scope.id);
     }
+
     $scope.getAwardById = function () {
         $scope.id = 2;
         dataservice.getAwardById($scope.id, function (rs) {
@@ -1280,7 +1292,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
         console.log("Vào");
     }
-    
+    $scope.Introducer = {};
 
     $scope.getIntroducerOfPartyByProfileCode = function () {
         $.ajax({
@@ -1710,5 +1722,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     }, 50);
 });
+
 
 
