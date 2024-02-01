@@ -11,8 +11,8 @@ namespace ESEIM.Models
 		[Key]
 		public int Id { get; set; }
 
-        public DateTime? From { get; set; }
-        public DateTime?  To { get; set; }
+        public string From { get; set; }
+        public string  To { get; set; }
         public string Contact { get; set; }
         public string Country { get; set; }
         public string ProfileCode { get; set; }
