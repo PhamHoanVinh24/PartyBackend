@@ -768,6 +768,44 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+
+        [HttpPost]
+        public object InsertFamily2([FromBody] Family model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var data=_context.PartyAdmissionProfiles.FirstOrDefault(a=>a.ResumeNumber== model.ProfileCode); 
+                if (data == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy mã hồ sơ";
+                    return msg;
+                }
+                if (!(!string.IsNullOrEmpty(model.Relation) || !string.IsNullOrEmpty(model.ClassComposition)
+                || !string.IsNullOrEmpty(model.BirthYear) || !string.IsNullOrEmpty(model.HomeTown)
+                || !string.IsNullOrEmpty(model.Residence) || !string.IsNullOrEmpty(model.Job)
+                || !string.IsNullOrEmpty(model.WorkingProgress) || model.PartyMember != null))
+                {
+                    msg.Error = true;
+                    msg.Title = "Hoàn cảnh gia đình chưa hợp lệ";
+                    return msg;
+                }
+                else
+                {
+                    _context.Families.Add(model);
+                    _context.SaveChanges();
+                    msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                }
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Hoàn cảnh gia đình thất bại";
+            }
+            return msg;
+        }
+
         [HttpPost]
         public object InsertPartyAdmissionProfile([FromBody] PartyAdmissionProfile model)
         {
@@ -810,6 +848,14 @@ namespace III.Admin.Controllers
                     model != null
                     )
                 {
+
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Mã hồ sơ không tồn tại";
+                        return msg;
+                    }
                     _context.IntroducerOfParties.Add(model);
                     _context.SaveChanges();
 
