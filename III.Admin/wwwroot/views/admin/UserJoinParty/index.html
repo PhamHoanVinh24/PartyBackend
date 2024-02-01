@@ -1,0 +1,204 @@
+<style>
+    @media (min-width: 1200px) and (max-width:1500px) {
+        .col-custom-lg-2 {
+            float: left !important;
+            width: 25% !important;
+        }
+    }
+    
+
+    .app-content {
+        width: 100%;
+    }
+
+    .breadcrumb>li {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+        text-decoration: underline;
+    }
+
+    #contentMain {
+        position: relative;
+    }
+
+    #searchBox {
+        position: absolute;
+        z-index: 12;
+        width: calc(100% - 80px);
+        right: 30px;
+    }
+
+    #searchBox .bordered {
+        border: 1px solid #80808057 !important;
+        box-shadow: 1px 3px 8px 0px #888888c2;
+    }
+
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+        z-index: 1032 !important;
+    }
+    .main-menu-editWorkflow {
+      position: absolute;
+      right: -20px;
+      display: flex;
+    }
+    .main-right-editWorkflow {
+      position: absolute;
+      right: -20px;
+      display: flex;
+    }
+</style>
+<link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
+<div class="col">
+  <div class="col">
+    <div class="btn-group pt5 pb-1 pull-right actions d-flex">
+      <div class="text-center mt10 pr30">
+          <a class="" ng-click="reload()">
+              <span><i class="fas fa-arrows-rotate fs30"></i></span>
+          </a>
+          <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_REFRESH' | translate}}</p>
+      </div>
+      <div class="text-center mt10 pr30">
+          <a class="" ng-click="showSearch()">
+              <span><i class="fas fa-search fs30"></i></span>
+          </a>
+          <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_SEARCH' | translate}}</p>
+      </div>
+      <div class="text-center mt10 pr30">
+          <a class="" ng-click="add()">
+              <span><i class="fa-solid fa-plus fs30"></i></span>
+          </a>
+          <p class="text-underline fs9 mb5 pt3">{{'COM_BTN_ADD' | translate}}</p>
+      </div>
+    </div>
+    <div id="searchBox" ng-show="isSearch">
+      <div class="table-toolbar">
+        <div class="portlet light bordered input-search mb5">
+          <div class="portlet-body">
+            <div class="col-md-12" style="height:20px">
+              <i ng-click="showSearch()" style="margin-top:9px !important; margin-right:5px !important; font-size:25px" class="fas fa-times  pull-right h28 w28  close-input-search" role="button" title="Ẩn tìm kiếm"></i>
+          </div>
+            <div class="row pt5 mb5">
+              <div class="col-md-2">
+                <label class="fw600 text-underline">{{'AU_FROM_DATE' | translate}}</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    class="form-control"
+                    placeholder="{{'AU_FROM_DATE' | translate}}..."
+                    ng-model="searchModel.FromDate"
+                    id="PostFromDate"
+                  />
+                  <span class="input-group-btn">
+                    <button
+                      type="button"
+                      ng-click="searchModel.FromDate='';"
+                      class="btn btn-default no-shadow start-post-date"
+                    >
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+      
+              <div class="col-md-2">
+                <label class="fw600 text-underline">{{'AU_TO_DATE' | translate}}</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    class="form-control"
+                    placeholder="{{'AU_TO_DATE' | translate}}..."
+                    ng-model="searchModel.ToDate"
+                    id="PostToDate"
+                  />
+                  <span class="input-group-btn">
+                    <button
+                      type="button"
+                      ng-click="searchModel.ToDate='';"
+                      class="btn btn-default no-shadow end-post-date"
+                    >
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="btn-group pt20 actions d-flex">
+                  <div class="text-center">
+                    <a
+                      class="btn btn-icon-only btn-circle btn-outline purple-custom"
+                      ng-click="search()"
+                    >
+                      <span><i class="fa fa-search"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">
+                      {{'COM_BTN_SEARCH' | translate}}
+                    </p>
+                  </div>
+                  <div class="pl20 text-center">
+                    <a
+                      class="btn btn-icon-only btn-circle btn-outline green-custom"
+                      ng-click="add()">
+                      <span><i class="fa fa-plus"></i></span>
+                    </a>
+                    <p class="text-underline fs9 mb5 pt3">
+                      {{'COM_BTN_ADD' | translate}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
+    
+    <div class="row pr-2">
+      <div class="" id="dropzone">
+        <table
+          class="table dataTable table-hover table-striped"
+          datatable
+          dt-options="dtOptions"
+          dt-columns="dtColumns"
+          dt-instance="dtInstance"
+          id="tblData"
+        ></table>
+      </div>
+    </div>
+
+    
+    <div class="main-menu-editWorkflow" style="top:40px;width:480px;height:80vh; display:flex; background-color: #fff; border: 1px solid gray;" ng-show="isEditWorkflow">
+      <div class="portlet-body form baolo" style="width:100%; position:absolute; background:#fff;">
+          <div class="modal-header" style="background-color: #ffffff; border: 1px solid gray; padding: 5px;">
+              <div class="col-md-10 pl-0">
+                  <i class="fa fa-edit black icon-insert fs20"></i>
+                  <span class="label-lg" id="modal-title" style="vertical-align: 5px; color: black;">{{'WFAI_TITLE_EDIT_WF'|translate}}</span>
+              </div>
+              <!-- <div class="col-md-2 text-right">
+                  <i class="fa-solid fa-caret-right icon-scalet fs20 mt5" ng-click="editWorkflow()"></i>
+              </div> -->
+          </div>
+          <div class="modal-body" style="padding-bottom: 0px;">
+              <!-- luồng duyệt -->
+          </div>
+      </div>
+      
+  </div>
+
+    <div class="main-right-editWorkflow" style="top:40px;width:35px;height:40px; display:flex; background-color: #cccccc;">
+      <div class="create-box create-box-r" ng-click="editWorkflow()">
+          <!-- <img src="/images/notepad/notepad/activity/left.png" ng-show="!isEditWorkflow" style="border: 2px solid gray;"/>
+          <img src="/images/notepad/notepad/activity/right.png" ng-show="isEditWorkflow" style="border: 2px solid gray;"/> -->
+          <i class="fa-solid fa-caret-right icon-scalet fs25 mt10" style="margin-left: 12px;" ng-show="isEditWorkflow"></i>
+          <i class="fa-solid fa-caret-left icon-scalet fs25 mt10" style="margin-left: 12px;" ng-show="!isEditWorkflow"></i>
+      </div>
+    </div>
+
+  </div>
+</div>

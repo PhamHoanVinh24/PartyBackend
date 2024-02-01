@@ -525,7 +525,7 @@ namespace III.Admin.Controllers
             public string Username { get; set; }
         }
         [HttpPut]
-        public object UpdatePartyAdmissionProfile([FromBody] ModelViewPAMP model)
+        public async Task<object> UpdatePartyAdmissionProfile([FromBody] ModelViewPAMP model)
         {
             var msg = new JMessage() { Error = false };
             try
@@ -536,14 +536,16 @@ namespace III.Admin.Controllers
                     msg.Title = "không có dữ liệu";
                     return msg;
                 }
-                var user = _userManager.FindByNameAsync(model.Username);
+                var user = await _userManager.FindByNameAsync(model.Username);
                 if (user == null)
                 {
                     msg.Error = true;
                     msg.Title = "không tìm thấy người dùng";
                     return msg;
                 }
-                var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ResumeNumber&& x.Username==model.Username);
+                var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false &&
+                x.ResumeNumber == model.ResumeNumber&& x.Username==model.Username);
+
                 if (obj == null)
                 {
                     msg.Error = true;
@@ -916,13 +918,50 @@ namespace III.Admin.Controllers
                 }
                 _context.SaveChanges();
             }
-			catch (Exception err)
-			{
-				msg.Error = true;
-				msg.Title = "Thêm Hoàn cảnh gia đình thất bại";
-			}
-			return msg;
-		}
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Hoàn cảnh gia đình thất bại";
+            }
+            return msg;
+        }
+
+        [HttpPost]
+        public object InsertFamily2([FromBody] Family model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var data=_context.PartyAdmissionProfiles.FirstOrDefault(a=>a.ResumeNumber== model.ProfileCode); 
+                if (data == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy mã hồ sơ";
+                    return msg;
+                }
+                if (!(!string.IsNullOrEmpty(model.Relation) || !string.IsNullOrEmpty(model.ClassComposition)
+                || !string.IsNullOrEmpty(model.BirthYear) || !string.IsNullOrEmpty(model.HomeTown)
+                || !string.IsNullOrEmpty(model.Residence) || !string.IsNullOrEmpty(model.Job)
+                || !string.IsNullOrEmpty(model.WorkingProgress) || model.PartyMember != null))
+                {
+                    msg.Error = true;
+                    msg.Title = "Hoàn cảnh gia đình chưa hợp lệ";
+                    return msg;
+                }
+                else
+                {
+                    _context.Families.Add(model);
+                    _context.SaveChanges();
+                    msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                }
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Hoàn cảnh gia đình thất bại";
+            }
+            return msg;
+        }
 		[HttpPost]
 		public object InsertPartyAdmissionProfile([FromBody] ModelViewPAMP model)
 		{
@@ -1001,6 +1040,14 @@ namespace III.Admin.Controllers
                     model != null
                     )
                 {
+
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Mã hồ sơ không tồn tại";
+                        return msg;
+                    }
                     _context.IntroducerOfParties.Add(model);
                     _context.SaveChanges();
 
