@@ -1,4 +1,5 @@
-﻿using ESEIM.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ESEIM.Models;
 using ESEIM.Utils;
 using FTU.Utils.HelperNet;
 using Hot.Models.AccountViewModels;
@@ -79,7 +80,7 @@ namespace III.Admin.Controllers
                     GivenName = model.GivenName,
                     PhoneNumber = model.PhoneNumber,
                     Gender = model.Gender,
-                    Area = "User"
+                    Area = "User",
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -101,9 +102,8 @@ namespace III.Admin.Controllers
             return Ok(msg);
         }
 
-        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout(LoginViewModel model)
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             HttpContext.Session.Remove("UserSession");
@@ -136,7 +136,7 @@ namespace III.Admin.Controllers
                     {
                         ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
                     }
-                    else if (user.Active == false)
+                    else if (user.Active != false)
                     {
                         ModelState.AddModelError(string.Empty, "Tài khoản chưa được kích hoạt !");
                     }
@@ -232,12 +232,32 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
             return user;
         }*/
-        public object GetPartyAdmissionProfileByUserCode(int Id)
+        public object GetPartyAdmissionProfileByUsername(string Username)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Username == Username);
+                if (user == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Bạn chưa có hồ sơ vui lòng nhập hồ sơ";
+                }
+                msg.Object = user;
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Có lỗi xảy ra";
+            }
+
+            return msg;
+        }
+        public object GetPartyAdmissionProfileById(int Id)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
             return user;
         }
-
         public object GetFamily()
         {
             var rs = _context.Families.ToList();
@@ -250,7 +270,7 @@ namespace III.Admin.Controllers
         }
         public object GetFamilyByProfileCode(string profileCode)
         {
-            var rs = _context.Families.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.Families.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -282,7 +302,7 @@ namespace III.Admin.Controllers
         }
         public object GetAwardByProfileCode(string profileCode)
         {
-            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetGoAboard()
@@ -297,7 +317,7 @@ namespace III.Admin.Controllers
         }
         public object GetGoAboardByProfileCode(string profileCode)
         {
-            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -314,7 +334,7 @@ namespace III.Admin.Controllers
         }
         public object GetPersonalHistoryByProfileCode(string profileCode)
         {
-            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetTrainingCertificatedPass()
@@ -329,7 +349,7 @@ namespace III.Admin.Controllers
         }
         public object GetTrainingCertificatedPassByProfileCode(string profileCode)
         {
-            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -345,7 +365,7 @@ namespace III.Admin.Controllers
         }
         public object GetWorkingTrackingByProfileCode(string profileCode)
         {
-            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -361,7 +381,7 @@ namespace III.Admin.Controllers
         }
         public object GetHistorySpecialistByProfileCode(string profileCode)
         {
-            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -377,7 +397,7 @@ namespace III.Admin.Controllers
         }
         public object GetWarningDisciplinedByProfileCode(string profileCode)
         {
-            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode);
+            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode).ToList();
             return rs;
         }
         #endregion
@@ -431,22 +451,114 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+        public class ModelViewPAMP
+        {
+            [StringLength(maximumLength: 50)]
+            public string CurrentName { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string BirthName { get; set; }
+
+            public string Gender { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string Nation { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string Religion { get; set; }
+
+            public string Birthday { get; set; }
+
+            [StringLength(maximumLength: 200)]
+            public string PermanentResidence { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string Phone { get; set; }
+
+            [StringLength(maximumLength: 255)]
+            public string Picture { get; set; }
+
+            [StringLength(maximumLength: 100)]
+            public string HomeTown { get; set; }
+
+            [StringLength(maximumLength: 100)]
+            public string PlaceBirth { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string Job { get; set; }
+
+            [StringLength(maximumLength: 250)]
+            public string TemporaryAddress { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string GeneralEducation { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string JobEducation { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string UnderPostGraduateEducation { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string Degree { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string PoliticalTheory { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string ForeignLanguage { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string ItDegree { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string MinorityLanguages { get; set; }
+
+            [StringLength(maximumLength: 50)]
+            public string ResumeNumber { get; set; }
+
+            //public DateTime CreatedTime { get; set; }
+            public string SelfComment { get; set; }
+            public string CreatedPlace { get; set; }
+          
+     
+            public string Username { get; set; }
+        }
         [HttpPut]
-        public object UpdatePartyAdmissionProfile([FromBody] PartyAdmissionProfile model)
+        public async Task<object> UpdatePartyAdmissionProfile([FromBody] ModelViewPAMP model)
         {
             var msg = new JMessage() { Error = false };
-            var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ResumeNumber);
             try
             {
+                if (model == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không có dữ liệu";
+                    return msg;
+                }
+                var user = await _userManager.FindByNameAsync(model.Username);
+                if (user == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy người dùng";
+                    return msg;
+                }
+                var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false &&
+                x.ResumeNumber == model.ResumeNumber&& x.Username==model.Username);
 
-
+                if (obj == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy hồ sơ";
+                    return msg;
+                }
                 //    obj.CurrentName = currentName;
                 obj.CurrentName = model.CurrentName;
-                obj.Birthday = model.Birthday;
+                obj.Birthday = !string.IsNullOrEmpty(model.Birthday) ? DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
                 obj.BirthName = model.BirthName;
-                obj.Gender = obj.Gender;
-                obj.Nation = obj.Nation;
-                obj.Religion = obj.Religion;
+                obj.Gender = model.Gender == "Nam" ? 0 : 1;
+                obj.Nation = model.Nation;
+                obj.Religion = model.Religion;
                 obj.PermanentResidence = model.PermanentResidence;
                 obj.Phone = model.Phone;
                 obj.Picture = model.Picture;
@@ -464,9 +576,7 @@ namespace III.Admin.Controllers
                 obj.MinorityLanguages = model.MinorityLanguages;
                 obj.SelfComment = model.SelfComment;
                 obj.CreatedPlace = model.CreatedPlace;
-                obj.ResumeNumber = model.ResumeNumber;
-
-
+                obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
 
                 _context.PartyAdmissionProfiles.Update(obj);
                 _context.SaveChanges();
@@ -486,8 +596,20 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == model.ProfileCode);
-
+                var ptm= _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (ptm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
+                var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.id == model.id);
+                if (obj == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy Người giới thiệu";
+                    return msg;
+                }
                 obj.PersonIntroduced = model.PersonIntroduced;
                 obj.PlaceTimeJoinParty = model.PlaceTimeJoinParty;
                 obj.PlaceTimeJoinUnion = model.PlaceTimeJoinUnion;
@@ -555,6 +677,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (pm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 if (model != null)
                 {
                     var obj = _context.PersonalHistories.FirstOrDefault(y => y.Id == model.Id);
@@ -591,6 +720,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (pm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 var obj = _context.GoAboards.Find(model.Id);
 
                 obj.From = model.From;
@@ -616,6 +752,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (pm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 var obj = _context.TrainingCertificatedPasses.Find(model.Id);
 
                 obj.SchoolName = model.SchoolName;
@@ -642,6 +785,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (pm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 var obj = _context.HistorySpecialists.Find(model.Id);
 
                 obj.MonthYear = model.MonthYear;
@@ -665,6 +815,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                if (pm == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 var obj = _context.WarningDisciplineds.Find(model.Id);
 
                 obj.MonthYear = model.MonthYear;
@@ -805,23 +962,58 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
-
-        [HttpPost]
-        public object InsertPartyAdmissionProfile([FromBody] PartyAdmissionProfile model)
-        {
-            var msg = new JMessage() { Error = false };
-            try
-            {
-                if (string.IsNullOrEmpty(model.CurrentName) || string.IsNullOrEmpty(model.BirthName) || string.IsNullOrEmpty(model.Nation) || string.IsNullOrEmpty(model.Religion)
-                    || string.IsNullOrEmpty(model.PermanentResidence) || string.IsNullOrEmpty(model.Phone) || string.IsNullOrEmpty(model.Picture)
-                    || string.IsNullOrEmpty(model.HomeTown) || string.IsNullOrEmpty(model.PlaceBirth) || string.IsNullOrEmpty(model.Job) || string.IsNullOrEmpty(model.TemporaryAddress)
-                    || string.IsNullOrEmpty(model.GeneralEducation) || string.IsNullOrEmpty(model.JobEducation) || string.IsNullOrEmpty(model.UnderPostGraduateEducation)
-                    || string.IsNullOrEmpty(model.Degree) || string.IsNullOrEmpty(model.PoliticalTheory) || string.IsNullOrEmpty(model.ForeignLanguage)
-                    || string.IsNullOrEmpty(model.ItDegree) || string.IsNullOrEmpty(model.MinorityLanguages) || string.IsNullOrEmpty(model.SelfComment) || string.IsNullOrEmpty(model.ResumeNumber)
-                    || model.Birthday != null
-                    ) {
-                    _context.PartyAdmissionProfiles.Add(model);
-                    _context.SaveChanges();
+		[HttpPost]
+		public object InsertPartyAdmissionProfile([FromBody] ModelViewPAMP model)
+		{
+			var msg = new JMessage() { Error = false };
+			try
+			{
+				if(model!=null) {
+                    if (string.IsNullOrEmpty(model.Username))
+                    {
+                        msg.Error = true;
+                        msg.Title = "Chưa có tài khoản";
+                        return msg;
+                    }
+                    var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Username == model.Username);
+                    if (user!=null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Tài khoản này đã có hồ sơ";
+                        return msg;
+                    }
+                    string ResumeCode = "Profile_" + DateTime.Now.ToString("ddMMyyyy") + '_';
+                    var obj = new PartyAdmissionProfile();
+                    //    obj.CurrentName = currentName;
+                    obj.CurrentName = model.CurrentName;
+                    obj.Birthday = !string.IsNullOrEmpty(model.Birthday) ? DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", CultureInfo.InvariantCulture) : (DateTime?)null; 
+                    obj.BirthName = model.BirthName;
+                    obj.Gender = model.Gender == "Nam" ? 0 : 1;
+                    obj.Nation = model.Nation;
+                    obj.Religion = model.Religion;
+                    obj.PermanentResidence = model.PermanentResidence;
+                    obj.Phone = model.Phone;
+                    obj.Picture = model.Picture;
+                    obj.Username = model.Username;
+                    obj.HomeTown = model.HomeTown;
+                    obj.PlaceBirth = model.PlaceBirth;
+                    obj.Job = model.Job;
+                    obj.TemporaryAddress = model.TemporaryAddress;
+                    obj.GeneralEducation = model.GeneralEducation;
+                    obj.JobEducation = model.JobEducation;
+                    obj.ItDegree = model.ItDegree;
+                    obj.Degree = model.Degree;
+                    obj.PoliticalTheory = model.PoliticalTheory;
+                    obj.ForeignLanguage = model.ForeignLanguage;
+                    obj.ItDegree = model.ItDegree;
+                    obj.MinorityLanguages = model.MinorityLanguages;
+                    obj.SelfComment = model.SelfComment;
+                    obj.CreatedPlace = model.CreatedPlace;
+                    obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
+                    obj.ResumeNumber = ResumeCode
+                        + _context.PartyAdmissionProfiles.Count(x => x.ResumeNumber.Contains(ResumeCode));
+                    _context.PartyAdmissionProfiles.Add(obj);
+					_context.SaveChanges();
 
                     msg.Title = "Thêm mới Sơ yêu lí lịch thành công";
                 }
@@ -1555,232 +1747,7 @@ namespace III.Admin.Controllers
                     throw new System.NotSupportedException("EJ2 DocumentEditor does not support this file format.");
             }
         }
-        /* #region Model
-         public class AwardModel
-         {
-             public string MonthYear { get; set; }
-             public string Reason { get; set; }
-             public string GrantOfDecision { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class FamilyModel
-         {
-             public string PoliticalAttitude { get; set; }
-             public string Relation { get; set; }
-             public string ClassComposition { get; set; }
-             public bool? PartyMember { get; set; }
-             public string BirthYear { get; set; }
-             public string DeathYear { get; set; }
-             public string DeathReason { get; set; }
-             public string HomeTown { get; set; }
-             public string Residence { get; set; }
-             public string Job { get; set; }
-             public string WorkingProgress { get; set; }
-             public string Name { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class HistorySpecialistModel
-         {
-             public DateTime? MonthYear { get; set; }
-             public string Reason { get; set; }
-             public string GrantOfDecision { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class PersonalHistoryModel
-         {
-             public DateTime? Begin { get; set; }
-             public DateTime? End { get; set; }
-             public string Content { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class TrainingCertificatedPassModel
-         {
-             public string SchoolName { get; set; }
-             public string Major { get; set; }
-             public string Class { get; set; }
-             public DateTime? From { get; set; }
-             public DateTime? To { get; set; }
-             public string Certificate { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class GoAboardModel
-         {
-             public DateTime? From { get; set; }
-             public DateTime? To { get; set; }
-             public string Contact { get; set; }
-             public string Country { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class IntroducerOfPartyModel
-         {
-             public string PersonIntroduced { get; set; }
-             public string PlaceNTimeJoinUnion { get; set; }
-             public string PlaceNTimeJoinParty1st { get; set; }
-             public string PlaceNTimeRecognize1st { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class WorkingTrackingModel
-         {
-             public int ID { get; set; }
-             public DateTime? From { get; set; }
-             public DateTime? To { get; set; }
-             public string Work { get; set; }
-             public string Role { get; set; }
-             public string ProfileCode { get; set; }
-             public bool? IsDeleted { get; set; }
-         }
-         public class WarningDisciplinedModel
-         {
-             public DateTime? MonthYear { get; set; }
-             public string Reason { get; set; }
-             public string GrantOfDecision { get; set; }
-             public string ProfileCode { get; set; }
-         }
-         public class PartyAdmissionProfileModel
-         {
-             public string CurrentName { get; set; }
-             public string BirthName { get; set; }
-             public int? Gender { get; set; }
-             public string Nation { get; set; }
-             public string Religion { get; set; }
-             public DateTime? Birthday { get; set; }
-             public string PermanentResidence { get; set; }
-             public string Phone { get; set; }
-             public string Picture { get; set; }
-             public string HomeTown { get; set; }
-             public string PlaceBirth { get; set; }
-             public string Job { get; set; }
-             public string TemporaryAddress { get; set; }
-             public string GeneralEducation { get; set; }
-             public string JobEducation { get; set; }
-             public string UnderNPostGraduateEducation { get; set; }
-             public string Degree { get; set; }
-             public string PoliticalTheory { get; set; }
-             public string ForeignLanguage { get; set; }
-             public string ITDegree { get; set; }
-             public string MinorityLanguages { get; set; }
-             public string PhoneContact { get; set; }
-             public string SelfComment { get; set; }
-             public string CreatedPlace { get; set; }
-             public string ResumeNumber { get; set; }
-             public string UserCode { get; set; }
-         }
-
-         #endregion
-         #region object parse from json
-         public class TimePeriodObj
-         {
-             public string Begin { get; set; }
-             public string End { get; set; }
-         }
-
-         public class RelationshipObj
-         {
-             public string Relation { get; set; }
-             public string ClassComposition { get; set; }
-             public bool PartyMember { get; set; }
-             public string Name { get; set; }
-             public TimePeriodObj Year { get; set; }
-             public string HomeTown { get; set; }
-             public string Residence { get; set; }
-             public string Job { get; set; }
-             public List<string> WorkingProcess { get; set; }
-             public List<string> PoliticalAttitude { get; set; }
-         }
-
-         public class GoAboardObj
-         {
-             public string Purpose { get; set; }
-             public string Country { get; set; }
-         }
-
-         public class DisciplinedObj
-         {
-             public string Time { get; set; }
-             public string OfficialReason { get; set; }
-             public string GrantDecision { get; set; }
-         }
-
-         public class PersonalHistoryObj
-         {
-             public TimePeriodObj Time { get; set; }
-             public string Infor { get; set; }
-         }
-
-         public class CreateObj
-         {
-             public string Place { get; set; }
-             public string CreatedTime { get; set; }
-         }
-
-         public class SelfCommentObj
-         {
-             public string Context { get; set; }
-         }
-
-         public class InformationUserObj
-         {
-             public class LevelEducationObj
-             {
-                 public List<string> Undergraduate { get; set; }
-                 public List<string> PoliticalTheory { get; set; }
-                 public List<string> ForeignLanguage { get; set; }
-                 public List<string> It { get; set; }
-                 public List<string> MinorityLanguage { get; set; }
-                 public string GeneralEducation { get; set; }
-                 public string VocationalTraining { get; set; }
-                 public string RankAcademic { get; set; }
-             }
-
-             public LevelEducationObj Education { get; set; }
-             public string FistName { get; set; }
-             public string Sex { get; set; }
-             public string LastName { get; set; }
-             public string DateofBird { get; set; }
-             public string HomeTown { get; set; }
-             public string PlaceofBirth { get; set; }
-             public string Nation { get; set; }
-             public string Religion { get; set; }
-             public string NowEmployee { get; set; }
-             public string PlaceinGroup { get; set; }
-             public string DateInGroup { get; set; }
-             public string PlaceInParty { get; set; }
-             public string DateInParty { get; set; }
-             public string PlaceRecognize { get; set; }
-             public string DateRecognize { get; set; }
-             public string Presenter { get; set; }
-             public string Phone { get; set; }
-             public string PhoneLL { get; set; }
-         }
-
-         public class BusinessNDutyObj
-         {
-             public TimePeriodObj Time { get; set; }
-             public string Business { get; set; }
-             public string Duty { get; set; }
-         }
-
-         public class MyDataModel
-         {
-             public InformationUserObj InformationUser { get; set; }
-             public CreateObj Create { get; set; }
-             public List<PersonalHistory> PersonalHistory { get; set; }
-             public List<BusinessNDutyObj> BusinessNDuty { get; set; }
-             public List<PassedTrainingClassObj> PassedTrainingClasses { get; set; }
-             public List<GoAboardObj> GoAboard { get; set; }
-             public List<DisciplinedObj> Disciplined { get; set; }
-             public SelfCommentObj SelfComment { get; set; }
-             public List<RelationshipObj> Relationship { get; set; }
-         }
-
-         public class PassedTrainingClassObj
-         {
-             public string School { get; set; }
-             public string Class { get; set; }
-             public TimePeriodObj Time { get; set; }
-             public string Business { get; set; }
-         }
-         #endregion*/
+       
     }
 
     public class RegisterDto

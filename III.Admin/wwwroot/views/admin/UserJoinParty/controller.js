@@ -52,8 +52,8 @@ app.factory('dataservice', function ($http) {
         // console.log($http.get('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=' + data))
             $http.post('/UserProfile/GetPersonalHistoryById?Id=' + data).then(callback);
         },
-        getPartyAdmissionProfileByUserCode: function (data, callback) {
-            $http.get('/UserProfile/GetPartyAdmissionProfileByUserCode?Id=' + data).then(callback);
+        GetPartyAdmissionProfileByResumeNumber: function (data, callback) {
+            $http.get('/UserProfile/GetPartyAdmissionProfileByResumeNumber?resumeNumber=' + data).then(callback);
         },
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
@@ -285,7 +285,7 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
         templateUrl: ctxfolder + '/index.html',
         controller: 'index'
     })
-    .when('/edit/:id', {
+    .when('/edit/:resumeNumber', {
         templateUrl: ctxfolder + '/edit.html',
         controller: 'edit'
     })
@@ -444,7 +444,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 $scope.$apply();
             });
         });
-
     vm.dtColumns = [];
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('Id').withOption('sClass', 'hidden').withTitle(titleHtml).renderWith(function (data, type) {
@@ -467,13 +466,14 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         return data
     }));
     
-    vm.dtColumns.push(DTColumnBuilder.newColumn('ProfileLink').withOption('sClass', '').withTitle('{{"File" | translate}}').renderWith(function (data, type) {
+    vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"File" | translate}}').renderWith(function (data, type) {
         return data
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('action').notSortable().withOption('sClass', ' w50 nowrap')
         .withTitle('{{ "COM_LIST_COL_ACTION" | translate }}').renderWith(function (data, type, full, meta) {
-            return '<a title="{{&quot;COM_BTN_EDIT&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px" ng-click="edit(' + full.Id + ')"><i class="fa-solid fa-edit  fs25"></i></a>' +
+            return '<a title="{{&quot;COM_BTN_EDIT&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px" '
+            +'ng-click="edit('+"'" + full.resumeNumber + "'" +')"><i class="fa-solid fa-edit  fs25"></i></a>' +
                 '<a title="{{&quot;COM_BTN_DELETE&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px" ng-click="delete(' + full.Id + ')"><i class="fa-solid fa-trash  fs25"></i></a>';
         }));
     vm.reloadData = reloadData;
@@ -642,15 +642,28 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         //quan hệ gia đình
         $scope.Relationship = [];
         $scope.SelfComment={};
+        function DateParse(rs){
+            var date = new Date(rs);
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Tháng bắt đầu từ 0
+            var year = date.getFullYear();
+            if (day < 10) {
+                day = '0' + day;
+            }
+            if (month < 10) {
+                month = '0' + month;
+            }
+            return day + '-' + month + '-' + year;
+        }
         $scope.PlaceCreatedTime={}
-            dataservice.getPartyAdmissionProfileByUserCode($routeParams.id, function(rs){
+            dataservice.GetPartyAdmissionProfileByResumeNumber($routeParams.resumeNumber, function(rs){
                 rs = rs.data;
                 $scope.infUser.LastName = rs.CurrentName;
             
-                $scope.infUser.Birthday = rs.Birthday;
+                $scope.infUser.Birthday = DateParse(rs.Birthday)
                 $scope.infUser.FirstName = rs.BirthName;
                 
-                $scope.infUser.Sex = rs.Gender
+                $scope.infUser.Sex = rs.Gender == 0?"Nam" : "Nữ";
                 $scope.infUser.Nation = rs.Nation;
                 $scope.infUser.Religion = rs.Religion;
                 $scope.infUser.Residence = rs.PermanentResidence;
@@ -671,7 +684,8 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.SelfComment.context = rs.SelfComment;
                 $scope.PlaceCreatedTime.place =rs.CreatedPlace;
                 $scope.infUser.ResumeNumber =  rs.ResumeNumber;
-                    console.log($scope.infUser);
+                $scope.Username=rs.Username;
+                console.log($scope.infUser);
                 //Get By Profilecode
                 $scope.getFamilyByProfileCode()
                 $scope.getPersonalHistoryByProfileCode()
@@ -739,7 +753,54 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     
     // AdmissionProfile
     $scope.isUpdate = false;
+    
+    $scope.submitPartyAdmissionProfile = function () {
+        
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        if($scope.Username!=null && $scope.Username!=undefined){
+            $scope.model = {}
+                $scope.model.CurrentName = $scope.infUser.LastName;
+                $scope.model.Birthday = $scope.infUser.Birthday;
+                $scope.model.BirthName = $scope.infUser.FirstName;
+                $scope.model.Gender = $scope.infUser.Sex;
+                $scope.model.Nation = $scope.infUser.Nation;
+                $scope.model.Religion = $scope.infUser.Religion;
+                $scope.model.PermanentResidence = $scope.infUser.Residence;
+                $scope.model.Phone = $scope.infUser.Phone;
+                $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
+                $scope.model.Job = $scope.infUser.NowEmployee;
+                $scope.model.HomeTown = $scope.infUser.HomeTown;
+                $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
+                $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
+                $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
+                $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate;
+                $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
+                $scope.model.Picture = '';
+                $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
+                $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
+                $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
+                $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
+                $scope.model.SelfComment = $scope.SelfComment.context;
+                $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
+                $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
+                $scope.model.Username=$scope.Username;
 
+            if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&
+            $scope.Username!='' && $scope.Username!=undefined){
+                console.log($scope.model);
+                dataservice.update($scope.model, function (result) {
+                    result= result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                    }
+                });
+            }
+            
+            console.log($scope.model);
+        }
+    }
     // //getById
     // $scope.getBusinessNDutyById = function () {
     //     $scope.id = 2;

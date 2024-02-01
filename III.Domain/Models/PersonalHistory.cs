@@ -12,9 +12,9 @@ namespace ESEIM.Models
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
-		public DateTime? Begin { get; set; }
+		public string Begin { get; set; }
         
-        public DateTime? End { get; set; }
+        public string End { get; set; }
         
         [MaxLength(150)]
         public string Content { get; set; }

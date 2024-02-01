@@ -11,6 +11,8 @@ namespace ESEIM.Models
 		public int Id { get; set; }
 		[MaxLength(50)]
         public string SchoolName { get; set; }
+       
+ 
         [MaxLength(50)]
         public string Class { get; set; }
         public string From { get; set; }

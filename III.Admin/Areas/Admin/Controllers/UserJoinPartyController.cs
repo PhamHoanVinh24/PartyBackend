@@ -87,7 +87,8 @@ namespace III.Admin.Controllers
                                 a.Status,
                                 a.Username,
                                 CreatedBy= b!=null ? b.GivenName: "",
-                                a.ProfileLink
+                                a.ProfileLink,
+                                resumeNumber=a.ResumeNumber
                             };
 
                 //int total = _context.PartyAdmissionProfiles.Count();
@@ -100,17 +101,18 @@ namespace III.Admin.Controllers
                     x.Status,
                     x.Username,
                     x.CreatedBy,
-                    x.ProfileLink
+                    x.ProfileLink,
+                    x.resumeNumber
                 }).ToList();
                 int count = query_row_number.Count();
                 var data = query_row_number.AsQueryable().OrderBy(x => x.stt).Skip(intBegin).Take(jTablePara.Length);
 
-                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink");
+                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber");
                 return Json(jdata);
             }
             catch (Exception err)
             {
-                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink");
+                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber");
                 return Json(jdata);
             }
         }

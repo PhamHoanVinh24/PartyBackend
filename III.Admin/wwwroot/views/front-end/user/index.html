@@ -208,7 +208,7 @@
     }
     .popup{
         width: 400px;
-        background = #fff;
+        background: #fff;
         border-radius : 6px;
         position : absolute;
         top : 0;
@@ -250,10 +250,10 @@
         <div class="form-body pt-0">
 
             <div class="input-file">
-                <form name="addData" class="" method="post" ng-validate="validationOptions" style="padding-left: 10px; padding-right: 30px;">
+                <form name="addData" class="" method="post" ng-validate="validationOptions" style="padding-left: 10px;">
                     <div class="" style="display:flex; justify-content:space-between;">
-                        <div class="form-group flex-grow-full" style="display: flex; justify-content: space-between;">
-                            <div class="input-group input-file ">
+                        <div class="form-group flex-grow-full" style="display: flex; justify-content: space-between; width: 100%">
+                            <div class="input-group input-file " style="width: 38%">
                                 <div class=" form-control custom-title-code-bold" style="border-radius: 24px;background-color: #EEF1F5;">
                                     <input class="form-control inputFile" style="border: #FFFF;width: 300px;height: 25px; border-right:1px solid #C9CDCF" placeholder="Chọn tệp" readonly />
                                     <span class="input-group-btn">
@@ -263,16 +263,25 @@
                                 </div>
                             </div>
                             <!-- <a class="pr15 fs11 text-underline pull-right" ng-click="chooseFileServer()">Chọn file từ server'</a> -->
-                            <div class="text-center " style="padding-left: 30px;" ng-class="{'disabled-element': !openExcel}">
-                                <button class="btn btn-primary" style="border-radius: 10px;height: 34px;" ng-click="uploadFile()">
+                            <div style="display:flex; justify-content: space-between;">
+                                <div class="" style="margin-right: 140px; width: 180px; padding-top: 5px;color:#0c7de6d7;font-size:24px;">
                                     
-                                    <span style="font-size:16px">Tải xuống</span>
-                                </button>
+                                    <a style="padding-left: 0px ; width : 100%" href="wwwroot/files/Mẫu 2- KNĐ năm 2023.docx" download="Mẫu 2- KNĐ năm 2023.docx">
+                                        <i class="fa fa-file" aria-hidden="true"></i>
+                                        <span style="font-size:16px ; font-weight: 500;">Tải file mẫu dữ liệu</span>
+                                    </a>
+                                
+                            </div>
+                            <div class="text-center pull-right" style="font-size:24px;padding-left: 170px; padding-top : 5px ; color:#0c7de6d7" ng-class="{'disabled-element': !openExcel}">
+                                <a href="" ng-click="uploadFile()">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                    <span style="font-size:16px; font-weight: 500;">Load dữ liệu</span>
+                                </a>
+                                    
                                 <!--<p class="text-underline mb-0 btn-name pt3">{{'Nhập excel' | translate}}</p>-->
                             </div>
-                        </div>
-                        <div ng-click="getFamilyByProfileCode()">
-                            <i class="fa fa-floppy-o fs-1" style=" width: 4rem; height:4rem"></i>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="tab-content pt10" style="display: none;">
@@ -293,7 +302,7 @@
                                 <i ng-show="!showInfor" class="fa fa-caret-right"></i>
                                 <label>Thông tin sơ yếu lý lịch</label>
                             </div>
-                            <div ng-click="getPartyAdmissionProfileByUserCode()">
+                            <div ng-click="submitPartyAdmissionProfile()">
                                 <i class="fa fa-floppy-o fs-1" style=" width: 4rem; height:4rem"></i>
                             </div>
 
@@ -325,7 +334,7 @@
                                             <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ:'05-11-1998'">
 
                                             </i>
-                                            <input class="displayInfo" style="width: 300px;height: 25px;" name="CusCode" ng-model="infUser.DateofBird" type="text" placeholder="Ngày sinh" />
+                                            <input class="displayInfo" style="width: 300px;height: 25px;" name="CusCode" ng-model="infUser.Birthday" type="text" placeholder="Ngày sinh" />
                                         </div>
 
                                     </div>
@@ -366,7 +375,7 @@
                                     <div class="col-md-8">
                                         <div class="br24 form-control custom-title-code-bold">
                                             <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="Ví dụ: 'email@gmail.com'"></i>
-                                            <input class="displayInfo" style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="Email" type="text" placeholder="email@gmail.com" />
+                                            <input class="displayInfo" style="border: #FFFF;width: 300px;height: 25px" name="CusCode" ng-model="infUser.Email" type="text" placeholder="email@gmail.com" />
                                         </div>
 
                                     </div>
@@ -613,7 +622,7 @@
                             </div>
                         </div>
                         <div class="" style="padding-left: 20px; font-size: 13px;" ng-show="showFamily">
-                            <div ng-repeat="x in Relationship">
+                            <div ng-repeat="x in Relation">
                                 <div class="toggle-header" style="display: flex; justify-content: space-between;">
                                     <div ng-click="showFamily2=!showFamily2">
                                         <i ng-show="showFamily2" class="fa fa-caret-down"></i>
@@ -626,6 +635,19 @@
                                     <div class="form-group row">
                                         <div class="col-md-4 pr-0">
                                             <i class="fa fa-user"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Quan hệ</label>
+                                        </div>
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
+                                                </i>
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.Relation" type="text" placeholder="Quan hệ" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0">
+                                            <i class="fa fa-user"></i>
                                             <label class="displayInfo control-label require custom-title-code-bold">Họ và tên</label>
                                         </div>
                                         <div class="col-md-8" style="display: flex;">
@@ -633,7 +655,33 @@
                                                 <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:01-01-2024">
 
                                                 </i>
-                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.DeathYear" type="text" placeholder="Từ ngày" />
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.Name" type="text" placeholder="Từ ngày" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0">
+                                            <i class="fa fa-calendar-o"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Năm sinh</label>
+                                        </div>
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:'Mất vì tuổi già'">
+                                                </i>
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.BirthYear" type="text" placeholder="Năm sinh" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0">
+                                            <i class="fa fa-calendar-o"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">Năm mất</label>
+                                        </div>
+                                        <div class="col-md-8" style="display: flex;">
+                                            <div class="br24 form-control custom-title-code-bold">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD:'Mất vì tuổi già'">
+                                                </i>
+                                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="x.DeathYear" type="text" placeholder="Năm mất" />
                                             </div>
                                         </div>
                                     </div>
@@ -753,7 +801,7 @@
                                 </div>
                             </div>
                         </div>
-        <div class="toggle-header" id="LSBT" style="display: flex; justify-content: space-between; opacity: 0.3; pointer-events: none ">
+        <div class="toggle-header" id="LSBT" style="display: flex; justify-content: space-between; ">
             <div ng-click="showWorkingProcess=!showWorkingProcess">
                 <i ng-show="showWorkingProcess" class="fa fa-caret-down"></i>
                 <i ng-show="!showWorkingProcess" class="fa fa-caret-right"></i>
@@ -955,21 +1003,7 @@
 
             <div class="mt-15" style="padding-left: 15px;" ng-show="showWorkingProcess3">
                 <div class="form-group row">
-                    <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
-                        <div class="col-md-4 pr-0" style="padding-left: 7px;">
-                            <i class="fa fa-calendar"></i>
-                            <label class="displayInfo control-label require custom-title-code-bold">Từ ngày</label>
-                        </div>
-
-                        <div class="col-md-8" style="display: flex; padding-left: 8px;">
-                            <div class="br24 form-control custom-title-code-bold">
-                                <i class="fa fa-info-circle" data-bs-toggle="popover" title="Popover Header" data-bs-placement="bottom" data-bs-content="VD: 01-01-2024">
-
-                                </i>
-                                <input class="displayInfo" style="border: #FFFF;" name="CusCode" ng-model="" type="text" placeholder="Từ ngày" />
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
                         <div class="col-md-4 pr-0">
                             <i class="fa fa-calendar"></i>
@@ -1398,7 +1432,7 @@
             </div>
         </div>
 
-                        <div id="GTVD" style="display: flex; justify-content: space-between; opacity: 0.3; pointer-events: none">
+                        <div id="GTVD" style="display: flex; justify-content: space-between;">
                             <div class="toggle-header" ng-click="showDegree=!showDegree">
                                 <i ng-show="showDegree" class="fa fa-caret-down"></i>
                                 <i ng-show="!showDegree" class="fa fa-caret-right"></i>
@@ -1409,7 +1443,6 @@
                             </div>
                         </div>
                         <div class="mt-15" style="padding-left: 20px;font-size: 13px;" ng-show="showDegree">
-
                             <div class="form-group row">
                                 <div class="col-md-4 pr-0">
                                     <i class="fa fa-user"></i>
