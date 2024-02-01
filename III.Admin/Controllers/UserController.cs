@@ -334,7 +334,7 @@ namespace III.Admin.Controllers
         }
         public object GetPersonalHistoryByProfileCode(string profileCode)
         {
-            var rs = _context.PersonalHistories.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.PersonalHistories.Where(p =>p.IsDeleted==false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetTrainingCertificatedPass()
@@ -1028,16 +1028,80 @@ namespace III.Admin.Controllers
                 foreach (var x in model) {
                     if (!string.IsNullOrEmpty(x.Content) || x.Begin != null || x.End != null)
                     {
-                        _context.PersonalHistories.Add(x);
-                        _context.SaveChanges();
-
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.PersonalHistories.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.PersonalHistories.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.Begin = x.Begin;
+                                a.End = x.End;
+                                a.Content = x.Content;
+                                a.IsDeleted = false;
+                                _context.PersonalHistories.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
                         msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        return msg;
                     }
+                }
+
+                _context.SaveChanges();
+
+                msg.Title = "Thêm mới Lịch sử bản thân thành công";
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Lịch sử bản thân thất bại";
+            }
+            return msg;
+        }
+        public class PerHis
+        {
+
+            public string Begin { get; set; }
+
+            public string End { get; set; }
+
+            public string Content { get; set; }
+     
+        }
+        [HttpPost]
+        public object InsertPersonalHistories([FromBody] PerHis model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                if (!string.IsNullOrEmpty(model.Content) || model.Begin != null || model.End != null)
+                {
+                    var  obj = new PersonalHistory();
+                    obj.Begin = model.Begin;
+                    obj.End = model.End;
+                    obj.Content = model.Content;
+                    _context.PersonalHistories.Add(obj);
+                    _context.SaveChanges();
+
+                    msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Lịch sử bản thân chưa hợp lệ";
                 }
 
             }
@@ -1048,6 +1112,7 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+
         [HttpPost]
         public object InsertGoAboard([FromBody] GoAboard[] model)
         {

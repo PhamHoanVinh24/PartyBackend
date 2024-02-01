@@ -968,34 +968,46 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
         console.log($scope.model);
     }
+    $scope.addToPersonalHistory = function () {
+        var model = {}
+        model.Begin = $scope.selectedPersonHistory.Begin
+        model.End = $scope.selectedPersonHistory.End
+        model.Content = $scope.selectedPersonHistory.Content
+        model.Id=0;
+        $scope.PersonalHistory.push(model)
+    }
     
-    $scope.submitPersonalHistory = function () {
+    $scope.submitPersonalHistorys = function () {
         $scope.model = [];
         $scope.PersonalHistory.forEach(function (personalHistory) {
             var obj = {};
-            obj.Begin = personalHistory.time.begin;
-            obj.End = personalHistory.time.end;
-            obj.Content = personalHistory.infor;
-            obj.ProfileCode = "202418884";
+            obj.Begin = personalHistory.Begin;
+            obj.End = personalHistory.End;
+            obj.Content = personalHistory.Content;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id=personalHistory.Id;
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
 
-        if ($scope.isUpdate) {
-            dataservice.updatePersonalHistory($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
             dataservice.insertPersonalHistory($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             });
-        }
 
         console.log($scope.model);
     }
 
+    $scope.submitPersonalHistory = function () {
+        $scope.model = {
+            Begin:$scope.selectedWorkingTracking.From,
+            End:$scope.selectedWorkingTracking.To,
+            Content:$scope.selectedWorkingTracking.Work,
+            ProfileCode:$scope.infUser.ResumeNumber,
+            Id:0
+        };
+        $scope.PersonalHistory.push($scope.model);
+        console.log($scope.model);
+    }
     $scope.submitDisciplined = function () {
         console.log($scope.Disciplined)
         $scope.model = [];
@@ -1005,7 +1017,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.MonthYear = e.time;
             obj.Reason = e.officialReason;
             obj.GrantOfDecision = e.grantDecision;
-            obj.ProfileCode = "20241888411";
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
         
@@ -1023,7 +1035,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.To = businessNDuty.time.end.trim();
             obj.Work = businessNDuty.business;
             obj.Role = businessNDuty.duty;
-            obj.ProfileCode = "2024124";
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
@@ -1046,9 +1058,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.model = [];
         $scope.HistoricalFeatures.forEach(function (historicalFeatures) {
             var obj = {};
-            obj.MonthYear = historicalFeatures.time;
-            obj.Content = historicalFeatures.content;
-            obj.ProfileCode = "2024124";
+            obj.MonthYear = historicalFeatures.MonthYear;
+            obj.Content = historicalFeatures.Content;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
@@ -1076,7 +1088,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.From = passedTrainingClasses.time.begin;
             obj.To = passedTrainingClasses.time.end;
             obj.Certificate = passedTrainingClasses.business;
-            obj.ProfileCode = "2024124";
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
    
@@ -1133,7 +1145,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.To = e.time.end
             obj.Contact = e.purpose;
             obj.Country = e.country;
-            obj.ProfileCode ="20241888411";
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
         dataservice.insertGoAboard($scope.model, function (rs) {
@@ -1237,7 +1249,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-            success: function (response) {
+            success: function (response) {   
                 $scope.PersonalHistory = response;
                 console.log($scope.PersonalHistory);
             },
@@ -1377,6 +1389,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
     }
 
+    //Insert
+    
     //Update
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
@@ -1431,15 +1445,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.updatePersonalHistory = function () {
-        $scope.modelPersonal = $scope.selectedPersonHistory;
 
-        dataservice.updatePersonalHistory($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updatePersonalHistory( $scope.selectedPersonHistory, function (rs) {
+            console.log( $scope.selectedPersonHistory);
             rs = rs.data;
             console.log(rs);
+            $scope.selectedPersonHistory = {};
+            
         })
-        $scope.selectedPersonHistory = {};
-        console.log($scope.modelPersonal);
     }
 
     $scope.updateWarningDisciplined = function () {
