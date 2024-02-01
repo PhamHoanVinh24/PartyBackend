@@ -1,8 +1,18 @@
-﻿@{
+﻿@using ESEIM.Utils;
+@using Microsoft.AspNetCore.Http;
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Quản lý module khách hàng";
     Layout = "~/Views/Shared/_LayoutApp.cshtml";
 }
 <div id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+    @if (User.Identity.IsAuthenticated)
+    {
+        var userSession = HttpContextAccessor.HttpContext.Session.Get<SessionUserLogin>("UserSession");
+
+        <div ng-hide="true" ng-init="UserName='@userSession.UserName'"></div>
+    }
     <div ng-view></div>
 </div>
 <script src="~/views/front-end/User/controller.js" type="text/javascript"></script>

@@ -26,7 +26,7 @@ namespace ESEIM.Models
         [StringLength(maximumLength: 50)]
         public string Religion { get; set; }
 
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
 
         [StringLength(maximumLength: 200)]
         public string PermanentResidence { get; set; }
@@ -81,5 +81,7 @@ namespace ESEIM.Models
         public string CreatedPlace { get; set; }
         public int UserCode { get; set; }
         public bool IsDeleted { get; set; }
+        public string Status {  get; set; }
+        public string Username { get; set; }
     }
 }
