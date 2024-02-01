@@ -957,7 +957,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.ProfileCode = "2024124";
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
    
         if ($scope.isUpdate) {
             dataservice.updateHistorySpecialist($scope.model, function (rs) {

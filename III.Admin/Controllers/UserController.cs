@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using OpenXmlPowerTools;
+using Quartz.Impl.Triggers;
 using Syncfusion.EJ2.DocumentEditor;
 using System;
 using System.Collections.Generic;
@@ -405,24 +406,41 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.Families.Find(model.Id);
-
-                obj.Name = model.Name;
-                obj.WorkingProgress = model.WorkingProgress;
-                obj.Relation = model.Relation;
-                obj.ClassComposition = model.ClassComposition;
-                obj.PartyMember = model.PartyMember;
-                obj.BirthYear = model.BirthYear;
-                obj.DeathReason = model.DeathReason;
-                obj.DeathYear = model.DeathYear;
-                obj.HomeTown = model.HomeTown;
-                obj.Residence = model.Residence;
-                obj.Job = model.Job;
-                obj.WorkingProgress = model.WorkingProgress;
-                obj.Name = model.Name;
-                _context.Families.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Hoàn cảnh gia đình thành công";
+                if (model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.Families.Find(model.Id);
+                    if (obj != null && obj.ProfileCode != null)
+                    {
+                        obj.Name = model.Name;
+                        obj.WorkingProgress = model.WorkingProgress;
+                        obj.Relation = model.Relation;
+                        obj.ClassComposition = model.ClassComposition;
+                        obj.PartyMember = model.PartyMember;
+                        obj.BirthYear = model.BirthYear;
+                        obj.DeathReason = model.DeathReason;
+                        obj.DeathYear = model.DeathYear;
+                        obj.HomeTown = model.HomeTown;
+                        obj.Residence = model.Residence;
+                        obj.Job = model.Job;
+                        obj.WorkingProgress = model.WorkingProgress;
+                        obj.Name = model.Name;
+                        _context.Families.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Hoàn cảnh gia đình thành công";
+                    } 
+                }
+                else
+                {
+                    msg.Error = false;
+                    msg.Title = "Hoàn cảnh gia đình không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -435,48 +453,59 @@ namespace III.Admin.Controllers
         public object UpdatePartyAdmissionProfile([FromBody] PartyAdmissionProfile model)
         {
             var msg = new JMessage() { Error = false };
-            var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ResumeNumber);
+            
             try
             {
+                if (model != null)
+                {
+                    var obj = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ResumeNumber);
+                    if (obj != null && obj.ResumeNumber != null)
+                    {
+                        obj.CurrentName = model.CurrentName;
+                        obj.Birthday = model.Birthday;
+                        obj.BirthName = model.BirthName;
+                        obj.Gender = obj.Gender;
+                        obj.Nation = obj.Nation;
+                        obj.Religion = obj.Religion;
+                        obj.PermanentResidence = model.PermanentResidence;
+                        obj.Phone = model.Phone;
+                        obj.Picture = model.Picture;
+                        obj.HomeTown = model.HomeTown;
+                        obj.PlaceBirth = model.PlaceBirth;
+                        obj.Job = model.Job;
+                        obj.TemporaryAddress = model.TemporaryAddress;
+                        obj.GeneralEducation = model.GeneralEducation;
+                        obj.JobEducation = model.JobEducation;
+                        obj.ItDegree = model.ItDegree;
+                        obj.Degree = model.Degree;
+                        obj.PoliticalTheory = model.PoliticalTheory;
+                        obj.ForeignLanguage = model.ForeignLanguage;
+                        obj.ItDegree = model.ItDegree;
+                        obj.MinorityLanguages = model.MinorityLanguages;
+                        obj.SelfComment = model.SelfComment;
+                        obj.CreatedPlace = model.CreatedPlace;
 
+                        _context.PartyAdmissionProfiles.Update(obj);
+                        _context.SaveChanges();
 
-                //    obj.CurrentName = currentName;
-                obj.CurrentName = model.CurrentName;
-                obj.Birthday = model.Birthday;
-                obj.BirthName = model.BirthName;
-                obj.Gender = obj.Gender;
-                obj.Nation = obj.Nation;
-                obj.Religion = obj.Religion;
-                obj.PermanentResidence = model.PermanentResidence;
-                obj.Phone = model.Phone;
-                obj.Picture = model.Picture;
-                obj.HomeTown = model.HomeTown;
-                obj.PlaceBirth = model.PlaceBirth;
-                obj.Job = model.Job;
-                obj.TemporaryAddress = model.TemporaryAddress;
-                obj.GeneralEducation = model.GeneralEducation;
-                obj.JobEducation = model.JobEducation;
-                obj.ItDegree = model.ItDegree;
-                obj.Degree = model.Degree;
-                obj.PoliticalTheory = model.PoliticalTheory;
-                obj.ForeignLanguage = model.ForeignLanguage;
-                obj.ItDegree = model.ItDegree;
-                obj.MinorityLanguages = model.MinorityLanguages;
-                obj.SelfComment = model.SelfComment;
-                obj.CreatedPlace = model.CreatedPlace;
-                obj.ResumeNumber = model.ResumeNumber;
-
-
-
-                _context.PartyAdmissionProfiles.Update(obj);
-                _context.SaveChanges();
-
-                msg.Title = "Cập nhật Sơ yếu lí lịch thành công";
+                        msg.Title = "Cập nhật Sơ yếu lí lịch thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy sơ yếu lí lích";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Sơ yếu lí lịch không đúng";
+                }
             }
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Cập nhật Sơ yếu lí lịch thất bại";
+                msg.Title = "Cập nhật sơ yếu lí lịch thất bại";
             }
             return msg;
         }
@@ -486,18 +515,40 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == model.ProfileCode);
+                if (model != null)
+                {
 
-                obj.PersonIntroduced = model.PersonIntroduced;
-                obj.PlaceTimeJoinParty = model.PlaceTimeJoinParty;
-                obj.PlaceTimeJoinUnion = model.PlaceTimeJoinUnion;
-                obj.PlaceTimeRecognize = model.PlaceTimeRecognize;
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == model.ProfileCode);
+                    if (obj != null && obj.ProfileCode != null)
+                    {
+                        obj.PersonIntroduced = model.PersonIntroduced;
+                        obj.PlaceTimeJoinParty = model.PlaceTimeJoinParty;
+                        obj.PlaceTimeJoinUnion = model.PlaceTimeJoinUnion;
+                        obj.PlaceTimeRecognize = model.PlaceTimeRecognize;
 
-                _context.IntroducerOfParties.Update(obj);
-                _context.SaveChanges();
+                        _context.IntroducerOfParties.Update(obj);
+                        _context.SaveChanges();
 
-                msg.Title = "Cập nhật Người giới thiệu thành công";
-
+                        msg.Title = "Cập nhật Người giới thiệu thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy người giới thiệu";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Người giới thiệu không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -512,34 +563,48 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+
                 if (model != null && model.Length > 0)
                 {
                     foreach (var x in model)
                     {
+                        var check = _context.PartyAdmissionProfiles.FirstOrDefault(y => y.ResumeNumber == x.ProfileCode);
+                        if (check == null)
+                        {
+                            msg.Error = true;
+                            msg.Title = "Không tìm thấy mã hồ sơ";
+                            return msg;
+                        }
                         if (x.End != null || x.Begin != null || !string.IsNullOrEmpty(x.Content))
                         {
                             var obj = _context.PersonalHistories.FirstOrDefault(y => y.ProfileCode == x.ProfileCode);
+                            if (obj != null && obj.ProfileCode != null)
+                            {
+                                obj.Begin = x.Begin;
+                                obj.End = x.Begin;
+                                obj.Content = x.Content;
 
-                            obj.Begin = x.Begin;
-                            obj.End = x.Begin;
-                            obj.Content = x.Content;
-
-                            _context.PersonalHistories.Update(obj);
-                            _context.SaveChanges();
+                                _context.PersonalHistories.Update(obj);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Không tìm thấy Lịch sử cá nhân";
+                            }
+                            
                         }
 
                     }
+                    _context.SaveChanges();
                     msg.Title = "Cập nhật Lịch sử cá nhân thành công";
                     return msg;
                 }
                 else
                 {
                     msg.Error = true;
-                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
-                    return msg;
+                    msg.Title = "Lịch sử cá nhân không đúng";
+                    
                 }
-
-
             }
             catch (Exception err)
             {
@@ -557,21 +622,35 @@ namespace III.Admin.Controllers
             {
                 if (model != null)
                 {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     var obj = _context.PersonalHistories.FirstOrDefault(y => y.Id == model.Id);
+                    if (obj != null && obj.ProfileCode != null)
+                    {
+                        obj.Begin = model.Begin;
+                        obj.End = model.End;
+                        obj.Content = model.Content;
 
-                    obj.Begin = model.Begin;
-                    obj.End = model.End;
-                    obj.Content = model.Content;
-
-                    _context.PersonalHistories.Update(obj);
-                    _context.SaveChanges();
-                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
-                    return msg;
+                        _context.PersonalHistories.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                        return msg;
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy Lịch sử cá nhân";
+                    }
                 }
                 else
                 {
                     msg.Error = true;
-                    msg.Title = "Cập nhật Lịch sử cá nhân thành công";
+                    msg.Title = "Lịch sử cá nhân không đúng";
                     return msg;
                 }
 
@@ -591,17 +670,39 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.GoAboards.Find(model.Id);
+                if (model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.GoAboards.Find(model.Id);
+                    if (obj != null && obj.ProfileCode != null)
+                    {
+                        obj.From = model.From;
+                        obj.To = model.To;
+                        obj.Contact = model.Contact;
+                        obj.Country = model.Country;
 
-                obj.From = model.From;
-                obj.To = model.To;
-                obj.Contact = model.Contact;
-                obj.Country = model.Country;
+                        _context.GoAboards.Update(obj);
+                        _context.SaveChanges();
 
-                _context.GoAboards.Update(obj);
-                _context.SaveChanges();
-
-                msg.Title = "Cập nhật Đi nước ngoài thành công";
+                        msg.Title = "Cập nhật Đi nước ngoài thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy Đi nước ngoài";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Đi nước ngoài không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -616,17 +717,39 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.TrainingCertificatedPasses.Find(model.Id);
+                if(model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.TrainingCertificatedPasses.Find(model.Id);
+                    if(obj!= null && obj.ProfileCode != null)
+                    {
+                        obj.SchoolName = model.SchoolName;
+                        obj.From = model.From;
+                        obj.To = model.To;
+                        obj.Class = model.Class;
+                        obj.Certificate = model.Certificate;
 
-                obj.SchoolName = model.SchoolName;
-                obj.From = model.From;
-                obj.To = model.To;
-                obj.Class = model.Class;
-                obj.Certificate = model.Certificate;
-
-                _context.TrainingCertificatedPasses.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Những lớp đào tạo bồi dưỡng đã qua thành công";
+                        _context.TrainingCertificatedPasses.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Những lớp đào tạo bồi dưỡng đã qua thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy Những lớp đào tạo bồi dưỡng đã qua";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Những lớp đào tạo bồi dưỡng đã qua không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -642,14 +765,36 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.HistorySpecialists.Find(model.Id);
+                if(model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.HistorySpecialists.Find(model.Id);
+                    if(obj!=null && obj.ProfileCode != null)
+                    {
+                        obj.MonthYear = model.MonthYear;
+                        obj.Content = model.Content;
 
-                obj.MonthYear = model.MonthYear;
-                obj.Content = model.Content;
-
-                _context.HistorySpecialists.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Đặc điểm lịch sử thành công";
+                        _context.HistorySpecialists.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Đặc điểm lịch sử thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Đặc điểm lịch sử không tìm thấy";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Đặc điểm lịch sử không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -665,15 +810,37 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.WarningDisciplineds.Find(model.Id);
+                if(model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.WarningDisciplineds.Find(model.Id);
+                    if( obj!=null && obj.ProfileCode !=null)
+                    {
+                        obj.MonthYear = model.MonthYear;
+                        obj.Reason = model.Reason;
+                        obj.GrantOfDecision = model.GrantOfDecision;
 
-                obj.MonthYear = model.MonthYear;
-                obj.Reason = model.Reason;
-                obj.GrantOfDecision = model.GrantOfDecision;
-
-                _context.WarningDisciplineds.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Kỷ luật thành công";
+                        _context.WarningDisciplineds.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Kỷ luật thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Kỷ luật không tìm thấy";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Kỷ luật không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -688,15 +855,37 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.Awards.Find(model.Id);
+                if(model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.Awards.Find(model.Id);
+                    if(obj!=null && obj.ProfileCode != null)
+                    {
+                        obj.MonthYear = model.MonthYear;
+                        obj.Reason = model.Reason;
+                        obj.GrantOfDecision = model.GrantOfDecision;
 
-                obj.MonthYear = model.MonthYear;
-                obj.Reason = model.Reason;
-                obj.GrantOfDecision = model.GrantOfDecision;
-
-                _context.Awards.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Khen thưởng thành công";
+                        _context.Awards.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Khen thưởng thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Khen thưởng không tìm thấy";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Khen thưởng không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -711,16 +900,38 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var obj = _context.WorkingTrackings.Find(model.Id);
+                if(model != null)
+                {
+                    var check = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (check == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
+                    var obj = _context.WorkingTrackings.Find(model.Id);
+                    if(obj!=null && obj.ProfileCode != null)
+                    {
+                        obj.From = model.From;
+                        obj.To = model.To;
+                        obj.Work = model.Work;
+                        obj.Role = model.Role;
 
-                obj.From = model.From;
-                obj.To = model.To;
-                obj.Work = model.Work;
-                obj.Role = model.Role;
-
-                _context.WorkingTrackings.Update(obj);
-                _context.SaveChanges();
-                msg.Title = "Cập nhật Những công tác và chức vụ đã qua thành công";
+                        _context.WorkingTrackings.Update(obj);
+                        _context.SaveChanges();
+                        msg.Title = "Cập nhật Những công tác và chức vụ đã qua thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Những công tác và chức vụ đã qua không tìm thấy";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Những công tác và chức vụ đã qua không đúng";
+                }
             }
             catch (Exception err)
             {
@@ -774,14 +985,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                if (string.IsNullOrEmpty(model.CurrentName) || string.IsNullOrEmpty(model.BirthName) || string.IsNullOrEmpty(model.Nation) || string.IsNullOrEmpty(model.Religion)
-                    || string.IsNullOrEmpty(model.PermanentResidence) || string.IsNullOrEmpty(model.Phone) || string.IsNullOrEmpty(model.Picture)
-                    || string.IsNullOrEmpty(model.HomeTown) || string.IsNullOrEmpty(model.PlaceBirth) || string.IsNullOrEmpty(model.Job) || string.IsNullOrEmpty(model.TemporaryAddress)
-                    || string.IsNullOrEmpty(model.GeneralEducation) || string.IsNullOrEmpty(model.JobEducation) || string.IsNullOrEmpty(model.UnderPostGraduateEducation)
-                    || string.IsNullOrEmpty(model.Degree) || string.IsNullOrEmpty(model.PoliticalTheory) || string.IsNullOrEmpty(model.ForeignLanguage)
-                    || string.IsNullOrEmpty(model.ItDegree) || string.IsNullOrEmpty(model.MinorityLanguages) || string.IsNullOrEmpty(model.SelfComment) || string.IsNullOrEmpty(model.ResumeNumber)
-                    || model.Birthday != null
-                    ) {
+                if (model!=null) {
+                    Random random = new Random();
+                    int randomNumber = random.Next(0, 999);
+                    string date = DateTime.Today.ToString();
+                    model.ResumeNumber = date + randomNumber.ToString();
                     _context.PartyAdmissionProfiles.Add(model);
                     _context.SaveChanges();
 
