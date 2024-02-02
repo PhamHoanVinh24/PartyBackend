@@ -162,12 +162,8 @@ app.factory('dataservice', function ($http) {
         getGoAboardById: function (data, callback) {
             $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);  
         },
-        insertGoAboards: function (data, callback) {
-            $http.post('/UserProfile/InsertGoAboard/', data).then(callback);
-        },
-        
         insertGoAboard: function (data, callback) {
-            $http.post('/UserProfile/InsertGoAboardOnly/', data).then(callback);
+            $http.post('/UserProfile/InsertGoAboard/', data).then(callback);
         },
         updateGoAboard: function (data, callback) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
@@ -972,42 +968,32 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
         console.log($scope.model);
     }
-    $scope.addToPersonalHistory = function () {
-        var model = {}
-        model.Begin = $scope.selectedPersonHistory.Begin
-        model.End = $scope.selectedPersonHistory.End
-        model.Content = $scope.selectedPersonHistory.Content
-        model.Id=0;
-        $scope.PersonalHistory.push(model)
-    }
     
-    $scope.submitPersonalHistorys = function () {
+    $scope.submitPersonalHistory = function () {
         $scope.model = [];
         $scope.PersonalHistory.forEach(function (personalHistory) {
             var obj = {};
-            obj.Begin = personalHistory.Begin;
-            obj.End = personalHistory.End;
-            obj.Content = personalHistory.Content;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id=personalHistory.Id;
+            obj.Begin = personalHistory.time.begin;
+            obj.End = personalHistory.time.end;
+            obj.Content = personalHistory.infor;
+            obj.ProfileCode = "202418884";
             $scope.model.push(obj)
         });
+    //    $scope.modelUpdate = [];
 
+        if ($scope.isUpdate) {
+            dataservice.updatePersonalHistory($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
             dataservice.insertPersonalHistory($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             });
+        }
 
         console.log($scope.model);
-    }
-
-    $scope.addToDisciplined = function () {
-        var model = {}
-        model.MonthYear = $scope.selectedWarningDisciplined.MonthYear
-        model.GrantOfDecision = $scope.selectedWarningDisciplined.GrantOfDecision
-        model.Reason = $scope.selectedWarningDisciplined.Reason
-        model.Id=0;
-        $scope.Disciplined.push(model)
     }
 
     $scope.submitDisciplined = function () {
@@ -1016,11 +1002,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
         $scope.Disciplined.forEach(function (e) {
             var obj = {};
-            obj.MonthYear = e.MonthYear;
-            obj.Reason = e.Reason;
-            obj.GrantOfDecision = e.GrantOfDecision;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id=e.Id;
+            obj.MonthYear = e.time;
+            obj.Reason = e.officialReason;
+            obj.GrantOfDecision = e.grantDecision;
+            obj.ProfileCode = "20241888411";
             $scope.model.push(obj)
         });
         
@@ -1029,169 +1014,130 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log(rs);
         })
     }
-    $scope.addToBusinessNDuty = function () {
-        var model = {}
-        model.From = $scope.selectedWorkingTracking.From
-        model.To = $scope.selectedWorkingTracking.To
-        model.Work = $scope.selectedWorkingTracking.Work
-        model.Role = $scope.selectedWorkingTracking.Role
-      
-        model.Id=0;
-        $scope.BusinessNDuty.push(model)
-    }
 
     $scope.submitBusinessNDuty = function () {
         $scope.model = [];
         $scope.BusinessNDuty.forEach(function (businessNDuty) {
             var obj = {};
-            obj.From = businessNDuty.From;
-            obj.To = businessNDuty.To;
-            obj.Work = businessNDuty.Work;
-            obj.Role = businessNDuty.Role;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id = businessNDuty.Id;
+            obj.From = businessNDuty.time.begin.trim();
+            obj.To = businessNDuty.time.end.trim();
+            obj.Work = businessNDuty.business;
+            obj.Role = businessNDuty.duty;
+            obj.ProfileCode = "2024124";
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
    
-        
+        if ($scope.isUpdate) {
+            dataservice.updateBusinessNDuty($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
             dataservice.insertBusinessNDuty($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        
+        }  
         console.log($scope.model);
-    }
-
-    $scope.addToHistorySpecialist = function () {
-        var model = {}
-        model.MonthYear = $scope.selectedHistorySpecialist.MonthYear
-        model.Content = $scope.selectedHistorySpecialist.Content
-        
-        model.Id=0;
-        $scope.HistoricalFeatures.push(model)
     }
 
     $scope.submitHistorySpecialist = function () {
         $scope.model = [];
         $scope.HistoricalFeatures.forEach(function (historicalFeatures) {
             var obj = {};
-            obj.MonthYear = historicalFeatures.MonthYear;
-            obj.Content = historicalFeatures.Content;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id = historicalFeatures.Id;
+            obj.MonthYear = historicalFeatures.time;
+            obj.Content = historicalFeatures.content;
+            obj.ProfileCode = "2024124";
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
    
-        
+        if ($scope.isUpdate) {
+            dataservice.updateHistorySpecialist($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
             dataservice.insertHistorySpecialist($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-    
+        }  
         console.log($scope.model);
     }
     
-
-    $scope.addToTrainingCertificatedPass = function () {
-        var model = {}
-        model.SchoolName = $scope.selectedTrainingCertificatedPass.SchoolName
-        model.Class = $scope.selectedTrainingCertificatedPass.Class
-        model.From = $scope.selectedTrainingCertificatedPass.From
-        model.To = $scope.selectedTrainingCertificatedPass.To
-        model.Certificate = $scope.selectedTrainingCertificatedPass.Certificate
-        model.Id=0;
-        $scope.PassedTrainingClasses.push(model)
-    }
-
-
     $scope.submitTrainingCertificatedPass = function () {
         $scope.model = [];
         $scope.PassedTrainingClasses.forEach(function (passedTrainingClasses) {
             var obj = {};
-            obj.SchoolName = passedTrainingClasses.SchoolName;
-            obj.Class = passedTrainingClasses.Class;
-            obj.From = passedTrainingClasses.From;
-            obj.To = passedTrainingClasses.To;
-            obj.Certificate = passedTrainingClasses.Certificate;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id = passedTrainingClasses.Id;
+            obj.SchoolName = passedTrainingClasses.school;
+            obj.Class = passedTrainingClasses.class;
+            obj.From = passedTrainingClasses.time.begin;
+            obj.To = passedTrainingClasses.time.end;
+            obj.Certificate = passedTrainingClasses.business;
+            obj.ProfileCode = "2024124";
             $scope.model.push(obj)
         });
    
-        
+        if ($scope.isUpdate) {
+            dataservice.updateTrainingCertificatedPass($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
             dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        
+        }  
         console.log($scope.model);
-    }
-
-    $scope.addToAward = function () {
-        var model = {}
-        model.MonthYear = $scope.selectedLaudatory.MonthYear
-        model.GrantOfDecision = $scope.selectedLaudatory.GrantOfDecision
-        model.Reason = $scope.selectedLaudatory.Reason
-        model.Id=0;
-        $scope.Laudatory.push(model)
     }
 
     $scope.submitAward = function () {
         $scope.model = [];
         $scope.Laudatory.forEach(function (laudatory) {
             var obj = {};
-            obj.MonthYear = laudatory.MonthYear;
-            obj.Reason = laudatory.Reason;
-            obj.GrantOfDecision = laudatory.GrantOfDecision;
+            obj.MonthYear = laudatory.time;
+            obj.Reason = laudatory.officialReason;
+            obj.GrantOfDecision = laudatory.grantDecision;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id = laudatory.Id;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
-        dataservice.insertAward($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
-        })
-        
-            
-        
+   
+        if ($scope.isUpdate) {
+            dataservice.updateAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+            })
+        } else {
+            dataservice.insertAward($scope.model, function (rs) {
+                rs = rs.data;
+                console.log(rs);
+                dataservice.getAwardByProfileCode($scope.infUser.ResumeNumber, function (rs){
+                    rs = rs.data
+                    console.log(rs);
+                })
+            })
+        }  
         console.log($scope.model);
     }
 
-    $scope.addToGoAboard = function () {
-        var model = {}
-        model.From = $scope.selectedGoAboard.From
-        model.To = $scope.selectedGoAboard.To
-        model.Contact = $scope.selectedGoAboard.Contact
-        model.Country = $scope.selectedGoAboard.Country
-        model.ProfileCode = $scope.infUser.ResumeNumber;
-        model.Id=0;
-        dataservice.insertGoAboard(model, function (rs) {
-            rs = rs.data;
-            $scope.getGoAboardByProfileCode()
-            console.log(rs);
-        })
-        console.log(model);
-    }
-
     $scope.submitGoAboard = function () {
-        
+        console.log($scope.Disciplined)
         $scope.model = [];
         $scope.GoAboard.forEach(function (e) {
             var obj = {};
-            obj.From = e.From;
-            obj.To = e.To;
-            obj.Contact = e.Contact;
-            obj.Country = e.Country;
-            obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id = e.Id;
+            obj.From = e.time.begin;
+            obj.To = e.time.end
+            obj.Contact = e.purpose;
+            obj.Country = e.country;
+            obj.ProfileCode ="20241888411";
             $scope.model.push(obj)
         });
-        dataservice.insertGoAboards($scope.model, function (rs) {
+        dataservice.insertGoAboard($scope.model, function (rs) {
             rs = rs.data;
-            $scope.getGoAboardByProfileCode()
             console.log(rs);
         })
     }
@@ -1291,9 +1237,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-            success: function (response) {   
+            success: function (response) {
                 $scope.PersonalHistory = response;
-                $scope.$apply();
                 console.log($scope.PersonalHistory);
             },
             error: function (error) {
@@ -1304,14 +1249,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.getGoAboardByProfileCode = function () {
+        var requestData = { id: $scope.id };
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "/UserProfile/GetGoAboardByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.GoAboard = response;
-                $scope.$apply();
                 console.log($scope.GoAboard);
             },
             error: function (error) {
@@ -1330,7 +1276,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Laudatory = response;
-                $scope.$apply();
                 console.log($scope.Laudatory);
             },
             error: function (error) {
@@ -1350,7 +1295,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.BusinessNDuty = response;
-                $scope.$apply();
                 console.log($scope.BusinessNDuty);
             },
             error: function (error) {
@@ -1369,7 +1313,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.HistoricalFeatures = response;
-                $scope.$apply();
                 console.log($scope.HistoricalFeatures);
             },
             error: function (error) {
@@ -1389,7 +1332,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PassedTrainingClasses = response;
-                $scope.$apply();
                 console.log($scope.PassedTrainingClasses);
             },
             error: function (error) {
@@ -1409,7 +1351,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Disciplined = response;
-                $scope.$apply();
                 console.log($scope.Disciplined);
             },
             error: function (error) {
@@ -1427,7 +1368,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 $scope.Introducer = response;
-                $scope.$apply();
                 console.log($scope.Introducer);
             },
             error: function (error) {
@@ -1437,8 +1377,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
     }
 
-    //Insert
-    
     //Update
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
@@ -1493,14 +1431,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.updatePersonalHistory = function () {
+        $scope.modelPersonal = $scope.selectedPersonHistory;
 
-        dataservice.updatePersonalHistory( $scope.selectedPersonHistory, function (rs) {
-            console.log( $scope.selectedPersonHistory);
+        dataservice.updatePersonalHistory($scope.modelPersonal , function (rs) {
+            console.log($scope.modelPersonal );
             rs = rs.data;
             console.log(rs);
-            $scope.selectedPersonHistory = {};
-            
         })
+        $scope.selectedPersonHistory = {};
+        console.log($scope.modelPersonal);
     }
 
     $scope.updateWarningDisciplined = function () {
@@ -1587,7 +1526,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    
+    
                     console.log(response.Title);
     
                 },
@@ -1597,10 +1536,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    
-                            
-                           
-                            
+
     $scope.deletePesonalHistory = function (e) {
         console.log(e);
         var isDeleted = confirm("Ban co muon xoa?");
@@ -1612,7 +1548,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getPersonalHistoryByProfileCode();
+    
                     console.log(response.Title);
     
                 },
@@ -1634,7 +1570,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
                     console.log(response.Title);
-                    $scope.getHistorySpecialistByProfileCode();
+    
                     
                 },
                 error: function (error) {
@@ -1654,7 +1590,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getAwardByProfileCode();
+    
                     console.log(response.Title);
                     
                 },
@@ -1670,12 +1606,12 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         if (isDeleted) {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWarningDisciplined?id=" + e.Id,
+                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getWarningDisciplinedByProfileCode();
+    
                     console.log(response.Title);
                     ;
                 },
@@ -1696,7 +1632,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getGoAboardByProfileCode();
+    
                     console.log(response.Title);
                     
                 },
@@ -1712,13 +1648,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         if (isDeleted) {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
+                url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getTrainingCertificatedPassByProfileCode();
+    
                     console.log(response.Title);
+                    
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1737,7 +1674,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getWorkingTrackingByProfileCode();
+                    
                     console.log(response.Title);
                    
                 },
@@ -1802,7 +1739,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getFamilyByProfileCode();
+    
                     console.log(response.Title);
                    
                 },

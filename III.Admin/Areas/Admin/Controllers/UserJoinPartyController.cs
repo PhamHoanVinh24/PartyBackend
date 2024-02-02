@@ -204,5 +204,59 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+
+        [HttpPost]
+        public object InsertAwardOnly([FromBody] Award x)
+        {
+            var msg = new JMessage() { Error = false };
+
+            try
+            {
+                var check = _context.PartyAdmissionProfiles.FirstOrDefault(y => y.ResumeNumber == x.ProfileCode && y.IsDeleted == false);
+                if(check != null || x.ProfileCode==null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Mã hồ sơ không tồn tại";
+                    return msg;
+                }
+
+                if (!string.IsNullOrEmpty(x.MonthYear) || x.Reason != null || x.GrantOfDecision != null)
+                {
+                    if (x.Id == 0)
+                    {
+                        _context.Awards.Add(x);
+                    }
+                    else
+                    {
+                        var a = _context.Awards.Find(x.Id);
+                        if (a != null)
+                        {
+                            a.MonthYear = x.MonthYear;
+                            a.Reason = x.Reason;
+                            a.GrantOfDecision = x.GrantOfDecision;
+                            a.IsDeleted = false;
+                            _context.Awards.Update(a);
+                        }
+                        else
+                        {
+                            msg.Error = true;
+                            msg.Title = "Khen thưởng chưa hợp lệ";
+                            return msg;
+                        }
+                    }
+
+
+                }
+                _context.SaveChanges();
+                msg.Title = "Thêm mới Khen thưởng thành công";
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm mới Khen thưởng thất bại";
+            }
+            return msg;
+        }
     }
 }
