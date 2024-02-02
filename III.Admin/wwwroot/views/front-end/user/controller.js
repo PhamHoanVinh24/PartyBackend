@@ -219,12 +219,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             var txt = await resultImp.text();
             $scope.defaultRTE
             // console.log($scope.defaultRTE)
-            $scope.JSONobjj = handleTextUpload(txt)
+            $scope.JSONobjj = handleTextUpload(txt);
+
             console.log($scope.JSONobj);
         }
     };
-    //Thêm data vào PersonalHistory
-    $scope.PersonalHistory = [];
 
     $scope.infUser = {
         LevelEducation: {
@@ -733,6 +732,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }, 100);
         }, 100);
     }
+    // $scope.insertAllData = function () {
+    //     $scope.submitPartyAdmissionProfile();
+    //     $scope.submitPersonalHistorys();
+    //     $scope.submitAward();
+    //     $scope.submitBusinessNDuty();
+    //     $scope.submitGoAboard();
+    //     $scope.submitIntroducer();
+    //     $scope.submitDisciplined();
+    //     $scope.submitHistorySpecialist();
+    //     $scope.insertFamily();
+    // }
     $scope.getPartyAdmissionProfileByUsername = function () {
         if($scope.UserName==null||$scope.UserName==undefined){
             //thông báo không lấy được username
@@ -839,29 +849,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.ClassComposition = e.ClassComposition;
             obj.PartyMember = e.PartyMember;
             obj.Name = e.Name;
-            obj.BirthYear = '';//e.Year.YearBirth;
-            obj.DeathYear = '';//e.Year.YearDeath;
-            obj.DeathReason = '';//e.Year.Reason;
+            obj.BirthYear = e.Year.YearBirth;
+            obj.DeathYear = e.Year.YearDeath;
+            obj.DeathReason = e.Year.Reason;
             obj.Residence = e.Residence;
             obj.PoliticalAttitude = e.PoliticalAttitude.join(',');
             obj.HomeTown = e.HomeTown;
             obj.Job = e.Job;
             obj.WorkingProgress = e.WorkingProcess.join(',');
-            obj.ProfileCode = "2024124";
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
             $scope.model.push(obj)
         });
-   
-        if ($scope.isUpdate) {
-            dataservice.updateFamily($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
             dataservice.insertFamily($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+        
         console.log($scope.model);
     }
 
@@ -1162,10 +1165,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     $scope.addToGoAboard = function () {
         var model = {}
-        model.From = $scope.selectedGoAboard.From
-        model.To = $scope.selectedGoAboard.To
-        model.Contact = $scope.selectedGoAboard.Contact
-        model.Country = $scope.selectedGoAboard.Country
+        model.From = $scope.selectedGoAboard.From;
+        model.To = $scope.selectedGoAboard.To;
+        model.Contact = $scope.selectedGoAboard.Contact;
+        model.Country = $scope.selectedGoAboard.Country;
+        
         model.ProfileCode = $scope.infUser.ResumeNumber;
         model.Id=0;
         dataservice.insertGoAboard(model, function (rs) {
@@ -1599,22 +1603,27 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
     
                             
-                           
-                            
-    $scope.deletePesonalHistory = function (e) {
-        console.log(e);
+                                            
+    $scope.deletePesonalHistory = function (index) {
+        console.log(index);
         var isDeleted = confirm("Ban co muon xoa?");
+    
         if (isDeleted) {
+            if($scope.PersonalHistory[index].Id == undefined || $scope.PersonalHistory[index].Id == 0 ) {
+                $scope.PersonalHistory.splice(index,1);
+            }
+            else
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeletePersonalHistory?id=" + e.Id,
-                contentType: "application/json; charset=utf-8",
+                url: "/UserProfile/DeletePersonalHistory?id=" +  $scope.PersonalHistory[index].Id ,
+                contentType: "application/json; charset=utf-8", 
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getPersonalHistoryByProfileCode();
+                    if(response.Error==false)
+                        $scope.PersonalHistory.splice(index,1);
+                        $scope.$apply()
                     console.log(response.Title);
-    
                 },
                 error: function (error) {
                     console.log(error.Title);

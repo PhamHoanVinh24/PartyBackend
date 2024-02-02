@@ -644,7 +644,7 @@ namespace III.Admin.Controllers
                             var obj = _context.PersonalHistories.FirstOrDefault(y => y.ProfileCode == x.ProfileCode);
 
                             obj.Begin = x.Begin;
-                            obj.End = x.Begin;
+                            obj.End = x.End;
                             obj.Content = x.Content;
 
                             _context.PersonalHistories.Update(obj);
@@ -751,6 +751,7 @@ namespace III.Admin.Controllers
         public object UpdateTrainingCertificatedPass([FromBody] TrainingCertificatedPass model)
         {
             var msg = new JMessage() { Error = false };
+            
             try
             {
                 var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
@@ -784,8 +785,10 @@ namespace III.Admin.Controllers
         public object UpdateHistorySpecialist([FromBody] HistorySpecialist model)
         {
             var msg = new JMessage() { Error = false };
+            
             try
             {
+
                 var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
@@ -814,8 +817,10 @@ namespace III.Admin.Controllers
         public object UpdateWarningDisciplined([FromBody] WarningDisciplined model)
         {
             var msg = new JMessage() { Error = false };
+            
             try
             {
+                
                 var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
@@ -844,8 +849,16 @@ namespace III.Admin.Controllers
         public object UpdateAward([FromBody] Award model)
         {
             var msg = new JMessage() { Error = false };
+            
             try
             {
+                var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                if (data == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy mã hồ sơ";
+                    return msg;
+                }
                 var obj = _context.Awards.Find(model.Id);
 
                 obj.MonthYear = model.MonthYear;
@@ -867,6 +880,13 @@ namespace III.Admin.Controllers
         public object UpdateWorkingTracking([FromBody] WorkingTracking model)
         {
             var msg = new JMessage() { Error = false };
+            var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+            if (data == null)
+            {
+                msg.Error = true;
+                msg.Title = "Không tìm thấy mã hồ sơ";
+                return msg;
+            }
             try
             {
                 var obj = _context.WorkingTrackings.Find(model.Id);
@@ -898,8 +918,16 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+            
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.Relation) || !string.IsNullOrEmpty(x.ClassComposition)
                     || !string.IsNullOrEmpty(x.BirthYear) || !string.IsNullOrEmpty(x.HomeTown)
                     || !string.IsNullOrEmpty(x.Residence) || !string.IsNullOrEmpty(x.Job)
@@ -1074,6 +1102,13 @@ namespace III.Admin.Controllers
             try
             {
                 foreach (var x in model) {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.Content) || x.Begin != null || x.End != null)
                     {
                         if (x.Id == 0)
@@ -1159,6 +1194,7 @@ namespace III.Admin.Controllers
             return msg;
         }
 
+
         [HttpPost]
         public object InsertGoAboard([FromBody] GoAboard[] model)
         {
@@ -1167,6 +1203,13 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.Contact) || x.Country != null)
                     {
                         if (x.Id == 0)
@@ -1220,6 +1263,13 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.SchoolName) || x.Class != null || string.IsNullOrEmpty(x.Certificate))
                     {
                         if (x.Id == 0)
@@ -1275,6 +1325,13 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.MonthYear) || !string.IsNullOrEmpty(x.Content))
                     {
                         if (x.Id == 0)
@@ -1324,8 +1381,16 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.MonthYear) || x.Reason != null || x.GrantOfDecision != null)
                     {
                         if (x.Id == 0)
@@ -1379,6 +1444,13 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.MonthYear) || x.Reason != null || x.GrantOfDecision != null)
                     {
                         if (x.Id == 0)
@@ -1431,6 +1503,13 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Không tìm thấy mã hồ sơ";
+                        return msg;
+                    }
                     if (!string.IsNullOrEmpty(x.From) || x.To != null || x.Work != null || !string.IsNullOrEmpty(x.From))
                     {
                         if (x.Id == 0)
