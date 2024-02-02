@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using OpenXmlPowerTools;
@@ -270,7 +271,7 @@ namespace III.Admin.Controllers
         }
         public object GetFamilyByProfileCode(string profileCode)
         {
-            var rs = _context.Families.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.Families.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -286,7 +287,7 @@ namespace III.Admin.Controllers
         }
         public object GetIntroducerOfPartyByProfileCode(string profileCode)
         {
-            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.ProfileCode == profileCode);
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.IsDeleted == false && p.ProfileCode == profileCode);
             return rs;
         }
 
@@ -302,7 +303,7 @@ namespace III.Admin.Controllers
         }
         public object GetAwardByProfileCode(string profileCode)
         {
-            var rs = _context.Awards.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.Awards.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
         public object GetGoAboard()
@@ -317,7 +318,7 @@ namespace III.Admin.Controllers
         }
         public object GetGoAboardByProfileCode(string profileCode)
         {
-            var rs = _context.GoAboards.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.GoAboards.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -349,7 +350,7 @@ namespace III.Admin.Controllers
         }
         public object GetTrainingCertificatedPassByProfileCode(string profileCode)
         {
-            var rs = _context.TrainingCertificatedPasses.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.TrainingCertificatedPasses.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -365,7 +366,7 @@ namespace III.Admin.Controllers
         }
         public object GetWorkingTrackingByProfileCode(string profileCode)
         {
-            var rs = _context.WorkingTrackings.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.WorkingTrackings.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -381,7 +382,7 @@ namespace III.Admin.Controllers
         }
         public object GetHistorySpecialistByProfileCode(string profileCode)
         {
-            var rs = _context.HistorySpecialists.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.HistorySpecialists.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
 
@@ -397,7 +398,7 @@ namespace III.Admin.Controllers
         }
         public object GetWarningDisciplinedByProfileCode(string profileCode)
         {
-            var rs = _context.WarningDisciplineds.Where(p => p.ProfileCode == profileCode).ToList();
+            var rs = _context.WarningDisciplineds.Where(p => p.IsDeleted == false && p.ProfileCode == profileCode).ToList();
             return rs;
         }
         #endregion
@@ -1128,6 +1129,45 @@ namespace III.Admin.Controllers
         }
        
 
+
+
+
+        [HttpPost]
+        public object InsertGoAboardOnly([FromBody] GoAboard x)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var check = _context.PartyAdmissionProfiles.FirstOrDefault(y => y.IsDeleted == false && y.ResumeNumber.Equals(x.ProfileCode));
+                if (check == null || x.ProfileCode==null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy hồ sơ";
+                    return msg;
+                }
+                    if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.Contact) || x.Country != null)
+                    {
+                            _context.GoAboards.Add(x);
+
+                            _context.SaveChanges();
+
+                            msg.Title = "Thêm Đi nước ngoài thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Đi nước ngoài chưa hợp lệ";
+                        return msg;
+                    }
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Đi nước ngoài thất bại";
+            }
+            return msg;
+        }
+
         [HttpPost]
         public object InsertGoAboard([FromBody] GoAboard[] model)
         {
@@ -1136,13 +1176,31 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (!string.IsNullOrEmpty(x.Contact) || !string.IsNullOrEmpty(x.Country)
-                        || x.From != null || x.To != null
-                        )
+                    if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.Contact) || x.Country != null)
                     {
-                        _context.GoAboards.Add(x);
-
-                        msg.Title = "Thêm mới Đi nước ngoài thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.GoAboards.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.GoAboards.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.From = x.From;
+                                a.To = x.To;
+                                a.Contact = x.Contact;
+                                a.Country = x.Country;
+                                a.IsDeleted = false;
+                                _context.GoAboards.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Đi nước ngoài chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
@@ -1150,8 +1208,11 @@ namespace III.Admin.Controllers
                         msg.Title = "Đi nước ngoài chưa hợp lệ";
                         return msg;
                     }
+                    
                 }
                 _context.SaveChanges();
+
+                msg.Title = "Thêm Đi nước ngoài thành công";
             }
             catch (Exception err)
             {
@@ -1168,26 +1229,50 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (string.IsNullOrEmpty(x.Class) || string.IsNullOrEmpty(x.Certificate) ||
-                    string.IsNullOrEmpty(x.SchoolName) || x.From != null || x.To != null
-)
+                    if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.SchoolName) || x.Class != null || string.IsNullOrEmpty(x.Certificate))
                     {
-                        _context.TrainingCertificatedPasses.Add(x);
-                        msg.Title = "Thêm mới Đi nước ngoài thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.TrainingCertificatedPasses.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.TrainingCertificatedPasses.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.From = x.From;
+                                a.To = x.To;
+                                a.SchoolName = x.SchoolName;
+                                a.Certificate = x.Certificate;
+                                a.Class = x.Class;
+                                a.IsDeleted = false;
+                                _context.TrainingCertificatedPasses.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Những lớp đào tạo đã qua chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Đi nước ngoài chưa hợp lệ";
+                        msg.Title = "Những lớp đào tạo đã qua chưa hợp lệ";
                         return msg;
                     }
+
+                    
                 }
                 _context.SaveChanges();
+
+                msg.Title = "Thêm những lớp đào tạo đã qua chưa thành công";
             }
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Cập nhật Hoàn cảnh gia đình thất bại";
+                msg.Title = "Cập nhật Những lớp đào tạo đã qua thất bại";
             }
             return msg;
         }
@@ -1199,20 +1284,41 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (!string.IsNullOrEmpty(x.Content) || x.MonthYear != null)
+                    if (!string.IsNullOrEmpty(x.MonthYear) || !string.IsNullOrEmpty(x.Content))
                     {
-                        _context.HistorySpecialists.Add(x);
-
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.HistorySpecialists.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.HistorySpecialists.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.MonthYear = x.MonthYear;
+                                a.Content = x.Content;
+                      
+                                a.IsDeleted = false;
+                                _context.HistorySpecialists.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Đặc điểm lịch sử chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        msg.Title = "Đặc điểm lịch sử chưa hợp lệ";
                         return msg;
                     }
+                    
                 }
                 _context.SaveChanges();
+                msg.Title = "Thêm Đặc điểm lịch sử thành công";
             }
             catch (Exception err)
             {
@@ -1229,21 +1335,42 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (!string.IsNullOrEmpty(x.MonthYear) || !string.IsNullOrEmpty(x.Reason) || !string.IsNullOrEmpty(x.GrantOfDecision))
+                    if (!string.IsNullOrEmpty(x.MonthYear) || x.Reason != null || x.GrantOfDecision != null)
                     {
-                        _context.WarningDisciplineds.Add(x);
-
-
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.WarningDisciplineds.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.WarningDisciplineds.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.MonthYear = x.MonthYear;
+                                a.Reason = x.Reason;
+                                a.GrantOfDecision = x.GrantOfDecision;
+                                a.IsDeleted = false;
+                                _context.WarningDisciplineds.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Kỷ luật chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        msg.Title = "Kỷ luật chưa hợp lệ";
                         return msg;
                     }
+              
                 }
                 _context.SaveChanges();
+
+                msg.Title = "Thêm kỷ luật thành công";
             }
             catch (Exception err)
             {
@@ -1261,20 +1388,41 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (!string.IsNullOrEmpty(x.Reason) || x.MonthYear != null || x.GrantOfDecision != null)
+                    if (!string.IsNullOrEmpty(x.MonthYear) || x.Reason != null || x.GrantOfDecision != null)
                     {
-                        _context.Awards.Add(x);
-
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.Awards.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.Awards.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.MonthYear = x.MonthYear;
+                                a.Reason = x.Reason;
+                                a.GrantOfDecision = x.GrantOfDecision;
+                                a.IsDeleted = false;
+                                _context.Awards.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Khen thưởng chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        msg.Title = "Khen thưởng chưa hợp lệ";
                         return msg;
                     }
+                   
                 }
                 _context.SaveChanges();
+                msg.Title = "Thêm mới Khen thưởng thành công";
 
             }
             catch (Exception err)
@@ -1292,20 +1440,42 @@ namespace III.Admin.Controllers
             {
                 foreach (var x in model)
                 {
-                    if (!string.IsNullOrEmpty(x.Role) || x.To != null || x.ProfileCode != null)
+                    if (!string.IsNullOrEmpty(x.From) || x.To != null || x.Work != null || !string.IsNullOrEmpty(x.From))
                     {
-                        _context.WorkingTrackings.Add(x);
-
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        if (x.Id == 0)
+                        {
+                            _context.WorkingTrackings.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.WorkingTrackings.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.From = x.From;
+                                a.To = x.To;
+                                a.Work = x.Work;
+                                a.Role = x.Role;
+                                a.IsDeleted = false;
+                                _context.WorkingTrackings.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Quá trình công tác chưa hợp lệ";
+                                return msg;
+                            }
+                        }
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        msg.Title = "Quá trình công tác chưa hợp lệ";
                         return msg;
                     }
+                    
                 }
                 _context.SaveChanges();
+                msg.Title = "Thêm mới Quá trình công tác thành công";
             }
             catch (Exception err)
             {
@@ -1324,11 +1494,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.Families.FirstOrDefault(x => x.Id == Id);
+                var data = _context.Families.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.Families.Remove(data);
+                    _context.Families.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa hoàn cảnh gia đình thành công";
                 }
@@ -1350,11 +1520,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.IntroducerOfParties.FirstOrDefault(x => x.id == Id);
+                var data = _context.IntroducerOfParties.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.IntroducerOfParties.Remove(data);
+                    _context.IntroducerOfParties.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa người giới thiệu thành công";
                 }
@@ -1376,7 +1546,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Id == Id);
+                var data = _context.PartyAdmissionProfiles.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
@@ -1402,11 +1572,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.Awards.FirstOrDefault(x => x.Id == Id);
+                var data = _context.Awards.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.Awards.Remove(data);
+                    _context.Awards.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Khen thưởng thành công";
                 }
@@ -1429,11 +1599,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.GoAboards.FirstOrDefault(x => x.Id == Id);
+                var data = _context.GoAboards.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.GoAboards.Remove(data);
+                    _context.GoAboards.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Đi nước ngoài thành công";
                 }
@@ -1455,7 +1625,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.PersonalHistories.FirstOrDefault(x => x.Id == Id);
+                var data = _context.PersonalHistories.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
@@ -1482,11 +1652,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.WorkingTrackings.FirstOrDefault(x => x.Id == Id);
+                var data = _context.WorkingTrackings.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.WorkingTrackings.Remove(data);
+                    _context.WorkingTrackings.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Công tác thành công";
                 }
@@ -1508,16 +1678,17 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.TrainingCertificatedPasses.FirstOrDefault(x => x.Id == Id);
+                var data = _context.TrainingCertificatedPasses.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.TrainingCertificatedPasses.Remove(data);
+                    _context.TrainingCertificatedPasses.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Những lớp đào tạo bồi dưỡng đã qua thành công";
                 }
                 else
                 {
+                    msg.Error = true;
                     msg.Title = "Không tìm thấy Những lớp đào tạo bồi dưỡng đã qua";
                 }
             }
@@ -1534,11 +1705,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.WarningDisciplineds.FirstOrDefault(x => x.Id == Id);
+                var data = _context.WarningDisciplineds.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.WarningDisciplineds.Remove(data);
+                    _context.WarningDisciplineds.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Cảnh cáo kỉ luật thành công";
                 }
@@ -1560,11 +1731,11 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data = _context.HistorySpecialists.FirstOrDefault(x => x.Id == Id);
+                var data = _context.HistorySpecialists.Find(Id);
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.HistorySpecialists.Remove(data);
+                    _context.HistorySpecialists.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Đặc điểm lịch sử thành công";
                 }
