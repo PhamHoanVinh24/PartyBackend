@@ -66,24 +66,7 @@ app.factory('dataservice', function ($http) {
         delete: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
         },
-        //PersonalHistory
-        getPersonalHistoryByProfileCode: function (data, callback) {
-            $http.post('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=', data).then(callback);  
-        },
-
-        getPersonalHistoryById: function (data, callback) {
-            $http.post('/UserProfile/GetPersonalHistoryById?id=', data).then(callback);  
-        },
-
-        updatePersonalHistories: function (data, callback) {
-            $http.post('/UserProfile/UpdatePersonalHistories/', data).then(callback);  
-        },
-        updatePersonalHistory: function (data, callback) {
-            $http.post('/UserProfile/UpdatePersonalHistory/', data).then(callback);  
-        },
-        deletePersonalHistory: function (data, callback) {
-            $http.delete('/UserProfile/DeletePersonalHistory/', data).then(callback);  
-        },
+        
 
         //BusinessNDuty
         getBusinessNDutyById: function (data, callback) {
@@ -164,10 +147,19 @@ app.factory('dataservice', function ($http) {
             $http.post('/UserProfile/UpdateIntroduceOfParty/', data).then(callback);
 
         },
-        insertPersonalHistory: function (data, callback) {
-            $http.post('/UserProfile/InsertPersonalHistory/', data).then(callback);
 
+        //lịch sử bản thân
+        insertPersonalHistory: function (data, callback) {
+            $http.post('/Admin/UserJoinParty/InsertPersonalHistory', data).then(callback);
         },
+        updatePersonalHistory: function (data, callback) {
+            $http.post('/Admin/UserJoinParty/UpdatePersonalHistory', data).then(callback);
+        },
+        getPersonalHistoryByProfileCode: function (data, callback) {
+            $http.post('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=', data).then(callback);  
+        },
+
+        //WarningDisciplined
         insertWarningDisciplined: function (data, callback) {
             $http.post('/UserProfile/InsertWarningDisciplined/', data).then(callback);
 
@@ -324,7 +316,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $scope.isSearch = false;
         }
     }
-    
     
     $scope.isEditWorkflow = false;
     $scope.editWorkflow = function(){
@@ -597,21 +588,7 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
     };
 });
 
-app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataservice, $filter,$http) {
-    /* $scope.upload = function () {
-         var modalInstance = $uibModal.open({
-             animation: true,
-             templateUrl: ctxfolder + '/word.html',
-             controller: 'word',
-             backdrop: 'static',
-             size: '70'
-         });
-         modalInstance.result.then(function (d) {
-             reloadData(true);
-         }, function () { });
-         console.log("ok");
-     };*/
-   
+app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataservice, $filter,$http) {   
     $scope.initData=function(){
         //Thêm data vào PersonalHistory
         $scope.PersonalHistory = [];
@@ -702,6 +679,28 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.Introducer = {};
 
                 $scope.getIntroducerOfPartyByProfileCode()
+                setTimeout(function () {
+                    $("#PersonalHistorysFromDate").datepicker({
+                        inline: false,
+                        autoclose: true,
+                        format: "dd-mm-yyyy",
+                        fontAwesome: true,
+                    }).on('changeDate', function (selected) {
+                        var maxDate = new Date(selected.date.valueOf());
+                        $('#PersonalHistorysToDate').datepicker('setStartDate', maxDate);
+                    });
+                    $("#PersonalHistorysToDate").datepicker({
+                        inline: false,
+                        autoclose: true,
+                        format: "dd-mm-yyyy",
+                        fontAwesome: true,
+                    }).on('changeDate', function (selected) {
+                        var maxDate = new Date(selected.date.valueOf());
+                        $('#PersonalHistorysFromDate').datepicker('setEndDate', maxDate);
+                    });
+                    
+                }, 500);
+                
             })
 
     }
@@ -709,6 +708,110 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.senddata = function () {
         var data = $rootScope.ProjectCode;
         $rootScope.$emit('eventName', data);
+    }
+
+    //Lịch sử bản thân
+    $scope.selectedPersonHistory={}
+    $scope.selectPersonHistory = function (x) {
+        $scope.selectedPersonHistory.Begin=x.Begin
+        $scope.selectedPersonHistory.End=x.End 
+        $scope.selectedPersonHistory.Content=model.Content 
+        $scope.selectedPersonHistory.Id= model.Id;
+        $scope.selectedPersonHistory.ProfileCode= model.ProfileCode;
+    };
+    
+    $scope.addToPersonalHistory = function () {
+        var model = {}
+        model.Begin = $scope.selectedPersonHistory.Begin
+        model.End = $scope.selectedPersonHistory.End
+        model.Content = $scope.selectedPersonHistory.Content
+        model.Id=0;
+        model.ProfileCode= $scope.selectedPersonHistory.ProfileCode;
+
+        dataservice.insertPersonalHistory(model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getPersonalHistoryByProfileCode();
+            }
+        });
+    }
+    
+    $scope.UpdatePersonalHistorys = function () {
+        var model = {}
+        model.Begin = $scope.selectedPersonHistory.Begin
+        model.End = $scope.selectedPersonHistory.End
+        model.Content = $scope.selectedPersonHistory.Content
+        model.Id= $scope.selectedPersonHistory.Id;
+        model.ProfileCode= $scope.selectedPersonHistory.ProfileCode;
+
+        dataservice.updatePersonalHistory(model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getPersonalHistoryByProfileCode();
+                $scope.selectedPersonHistory={}
+            }
+        });
+    }
+
+    $scope.deletePesonalHistory = function (e) {
+        console.log(e);
+            $.ajax({
+                type: "DELETE",
+                url: "/UserProfile/DeletePersonalHistory?id=" + e.Id,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                success: function (result) {
+                    console.log(result.Title);
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.getPersonalHistoryByProfileCode();
+                    }
+                },
+                error: function (error) {
+                    console.log(error.Title);
+                }
+            });
+    }
+    
+    $scope.getPersonalHistoryByProfileCode = function () {
+        var requestData = { id: $scope.id };
+        $.ajax({
+            type: "POST",
+            url: "/UserProfile/GetPersonalHistoryByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+            success: function (response) {
+                $scope.PersonalHistory = response;
+                $scope.$apply()
+                setTimeout(function(){
+                    $('#PersonalHistorys').DataTable({
+                        paging: false,
+                        searching: false,
+                        retrieve: true,
+                        "aoColumns": [
+                            { "mData": "Begin" },
+                            { "mData": "End" },
+                            { "mData": "Content" },
+                            { "mData": "" }
+                        ]
+                    })
+                },500)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        console.log("Vào");
     }
 
     //insertFamily
@@ -731,7 +834,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.HomeTown = e.HomeTown;
             obj.Job = e.Job;
             obj.WorkingProgress = e.WorkingProcess.join(',');
-            obj.ProfileCode = "2024124";
+            obj.ProfileCode = e.ProfileCode;
             $scope.model.push(obj)
         });
    
@@ -847,25 +950,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             success: function (response) {
                 $scope.Relationship = response;
                 console.log($scope.Relationship);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        console.log("Vào");
-    }
-
-    $scope.getPersonalHistoryByProfileCode = function () {
-        var requestData = { id: $scope.id };
-        $.ajax({
-            type: "POST",
-            url: "/UserProfile/GetPersonalHistoryByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-            success: function (response) {
-                $scope.PersonalHistory = response;
-                console.log($scope.PersonalHistory);
             },
             error: function (error) {
                 console.log(error);
@@ -1004,7 +1088,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     }
 
     //Update
-    $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
     $scope.selectedHistorySpecialist = {};
     $scope.selectedWorkingTracking = {};
@@ -1012,9 +1095,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.selectedTrainingCertificatedPass = {};
     $scope.selectedGoAboard = {};
 
-    $scope.selectPersonHistory = function (x) {
-        $scope.selectedPersonHistory = x;
-      };
     $scope.selectWarningDisciplined = function (x) {
         $scope.selectedWarningDisciplined = x;
     };
@@ -1038,18 +1118,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         $scope.modelPersonal = x ;
         
         dataservice.updateFamily($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
-            rs = rs.data;
-            console.log(rs);
-        })
-        $scope.selectedPersonHistory = {};
-        console.log($scope.modelPersonal);
-    }
-
-    $scope.updatePersonalHistory = function () {
-        $scope.modelPersonal = $scope.selectedPersonHistory;
-
-        dataservice.updatePersonalHistory($scope.modelPersonal , function (rs) {
             console.log($scope.modelPersonal );
             rs = rs.data;
             console.log(rs);
@@ -1134,28 +1202,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.deletePartyAdmissionProfile = function () {
 
     }
-
-    $scope.deletePesonalHistory = function (e) {
-        console.log(e);
-        var isDeleted = confirm("Ban co muon xoa?");
-        if (isDeleted) {
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeletePersonalHistory?id=" + e.Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-    
-                    console.log(response.Title);
-    
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
-        }
-    }
     $scope.deleteHistorySpecialist = function (e) {
         console.log(e);
         var isDeleted = confirm("Ban co muon xoa?");
@@ -1166,13 +1212,17 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    console.log(response.Title);
-    
+                success: function (result) {
+                    console.log(result.Title);
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                    }
                     
                 },
                 error: function (error) {
-                    console.log(error.Title);
+                    App.toastrSuccess(error);
                 }
             });
         }

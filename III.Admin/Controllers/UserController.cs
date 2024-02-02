@@ -1072,7 +1072,15 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
+                var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model[0].ProfileCode);
+                if (data == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Mã hồ sơ không tồn tại";
+                    return msg;
+                }
                 foreach (var x in model) {
+                    x.ProfileCode = data.ResumeNumber;
                     if (!string.IsNullOrEmpty(x.Content) || x.Begin != null || x.End != null)
                     {
                         if (x.Id == 0)
@@ -1118,47 +1126,7 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
-        public class PerHis
-        {
-
-            public string Begin { get; set; }
-
-            public string End { get; set; }
-
-            public string Content { get; set; }
-     
-        }
-        [HttpPost]
-        public object InsertPersonalHistories([FromBody] PerHis model)
-        {
-            var msg = new JMessage() { Error = false };
-            try
-            {
-                if (!string.IsNullOrEmpty(model.Content) || model.Begin != null || model.End != null)
-                {
-                    var  obj = new PersonalHistory();
-                    obj.Begin = model.Begin;
-                    obj.End = model.End;
-                    obj.Content = model.Content;
-                    _context.PersonalHistories.Add(obj);
-                    _context.SaveChanges();
-
-                    msg.Title = "Thêm mới Lịch sử bản thân thành công";
-                }
-                else
-                {
-                    msg.Error = true;
-                    msg.Title = "Lịch sử bản thân chưa hợp lệ";
-                }
-
-            }
-            catch (Exception err)
-            {
-                msg.Error = true;
-                msg.Title = "Thêm Lịch sử bản thân thất bại";
-            }
-            return msg;
-        }
+       
 
         [HttpPost]
         public object InsertGoAboard([FromBody] GoAboard[] model)
@@ -1412,7 +1380,7 @@ namespace III.Admin.Controllers
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.PartyAdmissionProfiles.Remove(data);
+                    _context.PartyAdmissionProfiles.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Hồ sơ lý lịch thành công";
                 }
@@ -1491,12 +1459,13 @@ namespace III.Admin.Controllers
                 if (data != null)
                 {
                     data.IsDeleted = true;
-                    _context.PersonalHistories.Remove(data);
+                    _context.PersonalHistories.Update(data);
                     _context.SaveChanges();
                     msg.Title = "Xóa Lịch sử cá nhân thành công";
                 }
                 else
                 {
+                    msg.Error = true;
                     msg.Title = "Không tìm thấy Lịch sử cá nhân";
                 }
             }

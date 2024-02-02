@@ -28,6 +28,7 @@ using System.Text;
 using static Dropbox.Api.Files.SearchMatchType;
 using PdfSharp.Charting;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.VariantTypes;
 
 namespace III.Admin.Controllers
 {
@@ -35,7 +36,6 @@ namespace III.Admin.Controllers
     public class UserJoinPartyController : BaseController
     {
         private readonly EIMDBContext _context;
-        private readonly IUploadService _upload;
         private readonly IStringLocalizer<SharedResources> _sharedResources;
 
 
@@ -46,7 +46,6 @@ namespace III.Admin.Controllers
         }
 
         [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(SaleWareHouseHomeController))]
-        [AllowAnonymous]
         public IActionResult Index()
         {
             ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
@@ -116,7 +115,94 @@ namespace III.Admin.Controllers
                 return Json(jdata);
             }
         }
-       
 
+        [HttpPost]
+        [AllowAnonymous]
+        public object InsertPersonalHistory([FromBody] PersonalHistory model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                if (!string.IsNullOrEmpty(model.Content) || model.Begin != null || model.End != null)
+                {
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Mã hồ sơ không tồn tại";
+                        return msg;
+                    }
+                    var obj = new PersonalHistory();
+                    obj.Begin = model.Begin;
+                    obj.End = model.End;
+                    obj.Content = model.Content;
+                    obj.ProfileCode = model.ProfileCode;
+                    _context.PersonalHistories.Add(obj);
+                    _context.SaveChanges();
+                    msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                }
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Lịch sử bản thân thất bại";
+            }
+            return msg;
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public object UpdatePersonalHistory([FromBody] PersonalHistory model)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                if (!string.IsNullOrEmpty(model.Content) || model.Begin != null || model.End != null)
+                {
+
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                    if (data == null)
+                    {
+                        msg.Error = true;
+                        msg.Title = "Mã hồ sơ không tồn tại";
+                        return msg;
+                    }
+                    var a = _context.PersonalHistories.Find(model.Id);
+                    if (a != null)
+                    {
+                        a.Begin = model.Begin;
+                        a.End = model.End;
+                        a.Content = model.Content;
+                        a.IsDeleted = false;
+                        _context.PersonalHistories.Update(a);
+                        _context.SaveChanges();
+                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        return msg;
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                }
+
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Lịch sử bản thân thất bại";
+            }
+            return msg;
+        }
     }
 }
