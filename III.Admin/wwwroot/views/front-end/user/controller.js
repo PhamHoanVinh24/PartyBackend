@@ -19,131 +19,131 @@ app.factory('dataservice', function ($http) {
     return {
         //InsertFamily
         insertFamily: function (data, callback) {
-            $http.post('/UserProfile/InsertFamily/', data).then(callback); 
+            $http.post('/UserProfile/InsertFamily/', data).then(callback);
         },
         getFamilyByProfileCode: function (data, callback) {
-            $http.post('/UserProfile/GetFamilyByProfileCode?profileCode=', data).then(callback); 
+            $http.post('/UserProfile/GetFamilyByProfileCode?profileCode=', data).then(callback);
         },
 
         updateFamily: function (data, callback) {
-            $http.post('/UserProfile/UpdateFamily/', data).then(callback); 
+            $http.post('/UserProfile/UpdateFamily/', data).then(callback);
         },
         //PartyAdmissionProfile
         getPartyAdmissionProfileByUsername: function (data, callback) {
             $http.get('/UserProfile/GetPartyAdmissionProfileByUsername?Username=' + data).then(callback);
         },
-        
+
         getPartyAdmissionProfileByUserCode: function (data, callback) {
             $http.get('/UserProfile/GetPartyAdmissionProfileByUserCode?Id=' + data).then(callback);
         },
-        
+
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
-            
+
         },
         update: function (data, callback) {
             $http.put('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
-            
+
         },
         delete: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile?Id=', data).then(callback);
         },
         //PersonalHistory
         getPersonalHistoryByProfileCode: function (data, callback) {
-            $http.post('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=', data).then(callback);  
+            $http.post('/UserProfile/GetPersonalHistoryByProfileCode?profileCode=', data).then(callback);
         },
-        
+
         getPersonalHistoryById: function (data, callback) {
-            $http.post('/UserProfile/GetPersonalHistoryById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetPersonalHistoryById?id=', data).then(callback);
         },
-        
+
         updatePersonalHistories: function (data, callback) {
-            $http.post('/UserProfile/UpdatePersonalHistories/', data).then(callback);  
+            $http.post('/UserProfile/UpdatePersonalHistories/', data).then(callback);
         },
         updatePersonalHistory: function (data, callback) {
-            $http.post('/UserProfile/UpdatePersonalHistory/', data).then(callback);  
+            $http.post('/UserProfile/UpdatePersonalHistory/', data).then(callback);
         },
         deletePersonalHistory: function (data, callback) {
-            $http.delete('/UserProfile/DeletePersonalHistory/', data).then(callback);  
+            $http.delete('/UserProfile/DeletePersonalHistory/', data).then(callback);
         },
-        
+
         //BusinessNDuty
         getBusinessNDutyById: function (data, callback) {
-            $http.post('/UserProfile/GetWorkingTrackingById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetWorkingTrackingById?id=', data).then(callback);
         },
         insertBusinessNDuty: function (data, callback) {
-            $http.post('/UserProfile/InsertWorkingTracking/', data).then(callback); 
+            $http.post('/UserProfile/InsertWorkingTracking/', data).then(callback);
         },
         updateWorkingTracking: function (data, callback) {
-            $http.post('/UserProfile/UpdateWorkingTracking/', data).then(callback);  
+            $http.post('/UserProfile/UpdateWorkingTracking/', data).then(callback);
         },
         deleteBusinessNDuty: function (data, callback) {
-            $http.delete('/UserProfile/DeleteWorkingTracking/', data).then(callback);  
+            $http.delete('/UserProfile/DeleteWorkingTracking/', data).then(callback);
         },
 
         //HistorySpecialist
         getHistorySpecialistById: function (data, callback) {
-            $http.post('/UserProfile/GetHistorySpecialistById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetHistorySpecialistById?id=', data).then(callback);
         },
         insertHistorySpecialist: function (data, callback) {
-            $http.post('/UserProfile/InsertHistorysSpecialist/', data).then(callback); 
+            $http.post('/UserProfile/InsertHistorysSpecialist/', data).then(callback);
         },
         updateHistorySpecialist: function (data, callback) {
-            $http.post('/UserProfile/UpdateHistorySpecialist/', data).then(callback);  
+            $http.post('/UserProfile/UpdateHistorySpecialist/', data).then(callback);
         },
         deleteHistorySpecialist: function (data, callback) {
-            $http.delete('/UserProfile/DeleteHistorysSpecialist/', data).then(callback);  
+            $http.delete('/UserProfile/DeleteHistorysSpecialist/', data).then(callback);
         },
-        getPartyAdmissionProfileByUserCode: function (data, callback) { 
-            $http.post('"/UserProfile/GetPartyAdmissionProfileByUserCode?Id="', data).then(callback); 
+        getPartyAdmissionProfileByUserCode: function (data, callback) {
+            $http.post('"/UserProfile/GetPartyAdmissionProfileByUserCode?Id="', data).then(callback);
         },
 
         //award 
         getAwardById: function (data, callback) {
-            $http.post('/UserProfile/GetAwardById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetAwardById?id=', data).then(callback);
         },
         getAwardByProfileCode: function (data, callback) {
-            $http.post('/UserProfile/GetAwardByProfileCode?profileCode=', data).then(callback);  
+            $http.post('/UserProfile/GetAwardByProfileCode?profileCode=', data).then(callback);
         },
         insertAward: function (data, callback) {
-            $http.post('/UserProfile/InsertAward/', data).then(callback); 
+            $http.post('/UserProfile/InsertAward/', data).then(callback);
         },
         updateAward: function (data, callback) {
-            $http.post('/UserProfile/UpdateAward/', data).then(callback);  
+            $http.post('/UserProfile/UpdateAward/', data).then(callback);
         },
         deleteAward: function (data, callback) {
-            $http.delete('/UserProfile/DeleteAward/', data).then(callback);  
+            $http.delete('/UserProfile/DeleteAward/', data).then(callback);
         },
 
         //WarningDisciplined
         getWarningDisciplinedById: function (data, callback) {
-            $http.post('/UserProfile/GetWarningDisciplinedById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetWarningDisciplinedById?id=', data).then(callback);
         },
         updateWarningDisciplined: function (data, callback) {
-            $http.post('/UserProfile/UpdateWarningDisciplined/', data).then(callback);  
+            $http.post('/UserProfile/UpdateWarningDisciplined/', data).then(callback);
         },
         deleteWarningDisciplined: function (data, callback) {
-            $http.delete('/UserProfile/DeleteWarningDisciplined/', data).then(callback);  
+            $http.delete('/UserProfile/DeleteWarningDisciplined/', data).then(callback);
         },
 
         //TrainingCertificatedPass
         getTrainingCertificatedPassById: function (data, callback) {
-            $http.post('/UserProfile/GetTrainingCertificatedPassById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetTrainingCertificatedPassById?id=', data).then(callback);
         },
         insertTrainingCertificatedPass: function (data, callback) {
-            $http.post('/UserProfile/InsertTrainingCertificatedPass/', data).then(callback); 
+            $http.post('/UserProfile/InsertTrainingCertificatedPass/', data).then(callback);
         },
         updateTrainingCertificatedPass: function (data, callback) {
-            $http.post('/UserProfile/UpdateTrainingCertificatedPass/', data).then(callback);  
+            $http.post('/UserProfile/UpdateTrainingCertificatedPass/', data).then(callback);
         },
         deleteTrainingCertificatedPass: function (data, callback) {
-            $http.delete('/UserProfile/DeleteTrainingCertificatedPass/', data).then(callback);  
+            $http.delete('/UserProfile/DeleteTrainingCertificatedPass/', data).then(callback);
         },
 
         //Ngưới giới thiệu
         insertIntroducer: function (data, callback) {
             $http.post('/UserProfile/InsertIntroduceOfParty/', data).then(callback);
-  
+
         },
         updateIntroducer: function (data, callback) {
             $http.post('/UserProfile/UpdateIntroduceOfParty/', data).then(callback);
@@ -160,18 +160,21 @@ app.factory('dataservice', function ($http) {
 
         //Đi du lịch
         getGoAboardById: function (data, callback) {
-            $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);  
+            $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);
         },
         insertGoAboards: function (data, callback) {
             $http.post('/UserProfile/InsertGoAboard/', data).then(callback);
         },
-        
+
         insertGoAboard: function (data, callback) {
             $http.post('/UserProfile/InsertGoAboardOnly/', data).then(callback);
         },
         updateGoAboard: function (data, callback) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
 
+        },
+        getListFile: function (callback) {
+            $http.get('/UserProfile/GetFileList').then(callback);
         },
     }
 });
@@ -186,15 +189,40 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: ctxfolder + '/index.html',
             controller: 'index'
         })
-        .when('/err',{
+        .when('/err', {
             templateUrl: ctxfolder + '/index.html',
             controller: 'err'
         })
 });
 
-app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter,$http) {
+app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
-    
+    //
+    //
+    //
+    $scope.deleteFile = function (e) {
+        console.log(e.FileName);
+        var isDeleted = confirm("Bạn có muốn xóa?");
+        if (isDeleted) {
+            $.ajax({
+                type: "DELETE",
+                url: "/UserProfile/DeleteFile?FileName=" + e.FileName,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                success: function (response) {
+
+                    console.log(response.Title);
+                    confirm("Xóa thành công");
+
+                },
+                error: function (error) {
+                    console.log(error.Title);
+                    confirm("Có lỗi khi xóa, thử lại");
+                }
+            });
+        }
+    }
     $scope.fileNameChanged = function () {
         $scope.openExcel = true;
         setTimeout(function () {
@@ -223,6 +251,40 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.JSONobj);
         }
     };
+    $scope.fileList = [];
+    $scope.uploadExtensionFile = async function () {
+        var file = document.getElementById("file").files[0];
+        if (file == null || file == undefined || file == "") {
+            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+        }
+        else {
+            var formdata = new FormData();
+            formdata.append("file", file);
+
+            var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+            };
+            var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
+            var txt = await resultImp.text();
+            console.log(resultImp);
+            $scope.defaultRTE
+            // console.log($scope.defaultRTE)
+            $scope.JSONobjj = handleTextUpload(txt)
+            console.log($scope.JSONobj);
+            alert("tải lên tệp thành công");
+        }
+    };
+
+    $scope.getListFile = function () {
+        dataservice.getListFile(function (rs) {
+            rs = rs.data;
+            $scope.fileList = rs;
+            console.log(rs);
+        })
+    }
+    $scope.getListFile();
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
 
@@ -234,10 +296,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             It: [],
             MinorityLanguage: []
         },
-        
+
     }
     var today = new Date();
-    
+
     //lịch sử bản thân
     $scope.PersonalHistory = [];
     //quá trình công tác
@@ -273,20 +335,20 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
 
             //đối tượng lưu thông tin lịch sử bản thân dưới bằng mảng
-            
+
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
-                PersonHis['Begin']= objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') - 7, 7).trim(),
-                PersonHis['End'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') + 1, 7).trim(),
-                // Sửa lỗi ở đây, sử dụng split(':') để tách thời gian và thông tin
-                PersonHis['Content'] = objPage1[i].innerText.split(':')[1];
+                PersonHis['Begin'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') - 7, 7).trim(),
+                    PersonHis['End'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') + 1, 7).trim(),
+                    // Sửa lỗi ở đây, sử dụng split(':') để tách thời gian và thông tin
+                    PersonHis['Content'] = objPage1[i].innerText.split(':')[1];
                 $scope.PersonalHistory.push(PersonHis);
             }
             console.log('PersonalHistory', $scope.PersonalHistory)
 
-            
-            
+
+
             //Page3 Những nơi công tác và chức vụ đã qua
             var datapage2 = Array.from(listPage[2].querySelectorAll('tr:nth-child(2) > td > p'))
                 .filter(function (element) {
@@ -306,7 +368,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });;
                 pElementP2s.push(pInTr);
             })
-            
+
             for (let i = 0; i < pElementP2s.length; i++) {
                 var begin = pElementP2s[i][0].substr(pElementP2s[i][0].indexOf('-') - 2, 7);
                 var end = pElementP2s[i][0].substr(pElementP2s[i][0].lastIndexOf('-') - 2, 7);
@@ -381,7 +443,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             function isTime(e) {
                 return (e.includes('Ngày') && e.includes('tháng') && e.includes('năm')) ? true : false;
             }
-            
+
             for (let i = 0; i < data.length; i++) {
                 var obj = {
                     time: null,
@@ -391,7 +453,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     obj.MonthYear = data[i].substr(data[i].indexOf("Ngày") + 4, 4).trim() + '-' +
                         data[i].substr(data[i].indexOf("tháng") + 5, 4).trim() + '-' +
                         data[i].substr(data[i].indexOf("năm") + 4, 5),
-                    obj.Content = data[i + 1];
+                        obj.Content = data[i + 1];
                 }
                 if (obj.MonthYear != null && obj.Content != null) {
                     $scope.HistoricalFeatures.push(obj);
@@ -453,7 +515,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pElementP7s.push(pInTr);
             })
-    
+
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
                     MonthYear: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
@@ -474,7 +536,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
                 pE8.push(pInTr);
             })
-            
+
             let RelationshipIndex = 0;
             for (let y = 0; y < pE8.length; y++) {
                 for (let i = 0; i < pE8[y].length; i++) {
@@ -595,7 +657,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                     $scope.Relationship[RelationshipIndex].WorkingProcess = [];
                                     for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
                                         let inputString = pE8[y][j];
-                                        
+
                                         $scope.Relationship[RelationshipIndex].WorkingProcess.push(inputString);
                                         i = j;
                                     }
@@ -667,7 +729,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.listDetail9 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(1) > td > p:nth-child(29) > span:last-child').text();
 
-      
+
             $scope.infUser.FirstName = $scope.listDetail1[0];
             $scope.infUser.Sex = $scope.listDetail1[1];
             $scope.infUser.LastName = $scope.listDetail1[2];
@@ -710,7 +772,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             //Nguoi gioi thieu
             $scope.Introducer = {
                 PersonIntroduced: $scope.infUser.Presenter,
-                PlaceTimeJoinUnion: $scope.infUser.PlaceinGroup+", " + $scope.infUser.DateInGroup,
+                PlaceTimeJoinUnion: $scope.infUser.PlaceinGroup + ", " + $scope.infUser.DateInGroup,
                 PlaceTimeJoinParty: $scope.infUser.PlaceInParty + ", " + $scope.infUser.DateInParty,
                 PlaceTimeRecognize: $scope.infUser.PlaceRecognize + ", " + $scope.infUser.DateRecognize
             };
@@ -734,75 +796,75 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }, 100);
     }
     $scope.getPartyAdmissionProfileByUsername = function () {
-        if($scope.UserName==null||$scope.UserName==undefined){
+        if ($scope.UserName == null || $scope.UserName == undefined) {
             //thông báo không lấy được username
         }
-        else{
-            dataservice.getPartyAdmissionProfileByUsername($scope.UserName, function(rs){
+        else {
+            dataservice.getPartyAdmissionProfileByUsername($scope.UserName, function (rs) {
                 rs = rs.data;
                 console.log(rs);
-                    if(rs.Error){
+                if (rs.Error) {
 
+                }
+                else {
+                    rs = rs.Object;
+                    $scope.infUser.LastName = rs.CurrentName;
+                    var date = new Date(rs.Birthday);
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1; // Tháng bắt đầu từ 0
+                    var year = date.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
                     }
-                    else{
-                        rs=rs.Object;
-                        $scope.infUser.LastName = rs.CurrentName;
-                        var date = new Date(rs.Birthday);
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1; // Tháng bắt đầu từ 0
-                        var year = date.getFullYear();
-                        if (day < 10) {
-                            day = '0' + day;
-                        }
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
-                        $scope.infUser.Birthday = day + '-' + month + '-' + year;
-                        $scope.infUser.FirstName = rs.BirthName;
-                        
-                        $scope.infUser.Sex = rs.Gender == 1?"Nam" : "Nữ";
-                        $scope.infUser.Nation = rs.Nation;
-                        $scope.infUser.Religion = rs.Religion;
-                        $scope.infUser.Residence = rs.PermanentResidence;
-                        $scope.infUser.Phone = rs.Phone;
-                        $scope.infUser.PlaceofBirth = rs.PlaceBirth;
-                        $scope.infUser.NowEmployee = rs.Job;
-                        $scope.infUser.HomeTown = rs.HomeTown;
-                        $scope.infUser.TemporaryAddress =rs.TemporaryAddress;
-                        $scope.infUser.LevelEducation.GeneralEducation =  rs.GeneralEducation;
-                        $scope.infUser.LevelEducation.VocationalTraining = rs.JobEducation;
-                        $scope.infUser.LevelEducation.Undergraduate = rs.UnderPostGraduateEducation;
-                        $scope.infUser.LevelEducation.RankAcademic = rs.Degree;
-                        
-                        $scope.infUser.LevelEducation.ForeignLanguage = rs.ForeignLanguage;
-                        $scope.infUser.LevelEducation.MinorityLanguage =  rs.MinorityLanguages;
-                        $scope.infUser.LevelEducation.It = rs.ItDegree;
-                        $scope.infUser.LevelEducation.PoliticalTheory = rs.PoliticalTheory ;
-                        $scope.PlaceCreatedTime={place:rs.CreatedPlace};
-                        $scope.SelfComment.context = rs.SelfComment;
-                        
-                        $scope.infUser.ResumeNumber =  rs.ResumeNumber;
-                        console.log($scope.infUser);
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    $scope.infUser.Birthday = day + '-' + month + '-' + year;
+                    $scope.infUser.FirstName = rs.BirthName;
 
-                        if($scope.infUser.ResumeNumber){
-                            $scope.getFamilyByProfileCode();
-                            $scope.getPersonalHistoryByProfileCode();
-                            $scope.getGoAboardByProfileCode();
-                            $scope.getAwardByProfileCode();
-                            $scope.getWorkingTrackingByProfileCode();
-                            $scope.getHistorySpecialistByProfileCode();
-                            $scope.getTrainingCertificatedPassByProfileCode();
-                            $scope.getWarningDisciplinedByProfileCode();
-                            $scope.getIntroducerOfPartyByProfileCode();
-                        }
+                    $scope.infUser.Sex = rs.Gender == 1 ? "Nam" : "Nữ";
+                    $scope.infUser.Nation = rs.Nation;
+                    $scope.infUser.Religion = rs.Religion;
+                    $scope.infUser.Residence = rs.PermanentResidence;
+                    $scope.infUser.Phone = rs.Phone;
+                    $scope.infUser.PlaceofBirth = rs.PlaceBirth;
+                    $scope.infUser.NowEmployee = rs.Job;
+                    $scope.infUser.HomeTown = rs.HomeTown;
+                    $scope.infUser.TemporaryAddress = rs.TemporaryAddress;
+                    $scope.infUser.LevelEducation.GeneralEducation = rs.GeneralEducation;
+                    $scope.infUser.LevelEducation.VocationalTraining = rs.JobEducation;
+                    $scope.infUser.LevelEducation.Undergraduate = rs.UnderPostGraduateEducation;
+                    $scope.infUser.LevelEducation.RankAcademic = rs.Degree;
+
+                    $scope.infUser.LevelEducation.ForeignLanguage = rs.ForeignLanguage;
+                    $scope.infUser.LevelEducation.MinorityLanguage = rs.MinorityLanguages;
+                    $scope.infUser.LevelEducation.It = rs.ItDegree;
+                    $scope.infUser.LevelEducation.PoliticalTheory = rs.PoliticalTheory;
+                    $scope.PlaceCreatedTime = { place: rs.CreatedPlace };
+                    $scope.SelfComment.context = rs.SelfComment;
+
+                    $scope.infUser.ResumeNumber = rs.ResumeNumber;
+                    console.log($scope.infUser);
+
+                    if ($scope.infUser.ResumeNumber) {
+                        $scope.getFamilyByProfileCode();
+                        $scope.getPersonalHistoryByProfileCode();
+                        $scope.getGoAboardByProfileCode();
+                        $scope.getAwardByProfileCode();
+                        $scope.getWorkingTrackingByProfileCode();
+                        $scope.getHistorySpecialistByProfileCode();
+                        $scope.getTrainingCertificatedPassByProfileCode();
+                        $scope.getWarningDisciplinedByProfileCode();
+                        $scope.getIntroducerOfPartyByProfileCode();
                     }
-                })
-            }
+                }
+            })
         }
+    }
 
-    $scope.ProfileList=[];
-    
-    $scope.initdata=function(){
+    $scope.ProfileList = [];
+
+    $scope.initdata = function () {
         $scope.getPartyAdmissionProfileByUsername()
     }
     $scope.initdata()
@@ -813,14 +875,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 console.log(response);
-                
+
             },
             error: function (error) {
                 console.log(error);
 
             }
         });
-        
+
     }
     $scope.senddata = function () {
         var data = $rootScope.ProjectCode;
@@ -832,7 +894,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     $scope.insertFamily = function () {
         $scope.model = [];
-        
+
         $scope.Relationship.forEach(function (e) {
             var obj = {};
             obj.Relation = e.Relation;
@@ -850,7 +912,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.ProfileCode = "2024124";
             $scope.model.push(obj)
         });
-   
+
         if ($scope.isUpdate) {
             dataservice.updateFamily($scope.model, function (rs) {
                 rs = rs.data;
@@ -861,15 +923,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+        }
         console.log($scope.model);
     }
 
     $scope.updateFamily = function (x) {
-        $scope.modelPersonal = x ;
-        
-        dataservice.updateFamily($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        $scope.modelPersonal = x;
+
+        dataservice.updateFamily($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -877,17 +939,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.modelPersonal);
     }
     //
-    
+
     // AdmissionProfile
-    
-    
+
+
     //Những công tác và chức vụ đã qua
     $scope.getBusinessNDutyById = function () {
         $scope.id = 2;
         dataservice.getBusinessNDutyById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
     //ĐẶC ĐIỂM LỊCH SỬ
@@ -917,51 +979,51 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     // }
 
     //
-    
+
     // AdmissionProfile
     $scope.isUpdate = false;
 
     //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
-        
-        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
-        if($scope.UserName!=null && $scope.UserName!=undefined){
-            $scope.model = {}
-                $scope.model.CurrentName = $scope.infUser.LastName;
-                $scope.model.Birthday = $scope.infUser.Birthday;
-                $scope.model.BirthName = $scope.infUser.FirstName;
-                $scope.model.Gender = $scope.infUser.Sex;
-                $scope.model.Nation = $scope.infUser.Nation;
-                $scope.model.Religion = $scope.infUser.Religion;
-                $scope.model.PermanentResidence = $scope.infUser.Residence;
-                $scope.model.Phone = $scope.infUser.Phone;
-                $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
-                $scope.model.Job = $scope.infUser.NowEmployee;
-                $scope.model.HomeTown = $scope.infUser.HomeTown;
-                $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
-                $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
-                $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
-                $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate;
-                $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
-                $scope.model.Picture = '';
-                $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
-                $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
-                $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
-                $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
-                $scope.model.SelfComment = $scope.SelfComment.context;
-                $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
-                $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
-                $scope.model.Username=$scope.UserName;
 
-            if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined){
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        if ($scope.UserName != null && $scope.UserName != undefined) {
+            $scope.model = {}
+            $scope.model.CurrentName = $scope.infUser.LastName;
+            $scope.model.Birthday = $scope.infUser.Birthday;
+            $scope.model.BirthName = $scope.infUser.FirstName;
+            $scope.model.Gender = $scope.infUser.Sex;
+            $scope.model.Nation = $scope.infUser.Nation;
+            $scope.model.Religion = $scope.infUser.Religion;
+            $scope.model.PermanentResidence = $scope.infUser.Residence;
+            $scope.model.Phone = $scope.infUser.Phone;
+            $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
+            $scope.model.Job = $scope.infUser.NowEmployee;
+            $scope.model.HomeTown = $scope.infUser.HomeTown;
+            $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
+            $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
+            $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
+            $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate;
+            $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
+            $scope.model.Picture = '';
+            $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
+            $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
+            $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
+            $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
+            $scope.model.SelfComment = $scope.SelfComment.context;
+            $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
+            $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
+            $scope.model.Username = $scope.UserName;
+
+            if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
                 console.log($scope.model);
                 dataservice.update($scope.model, function (rs) {
                     rs = rs.data;
                     console.log(rs);
                 });
-            }else {
-                
+            } else {
+
                 dataservice.insert($scope.model, function (rs) {
                     rs = rs.data;
                     console.log('rs');
@@ -969,7 +1031,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             }
         }
-        
+
         console.log($scope.model);
     }
     $scope.addToPersonalHistory = function () {
@@ -977,10 +1039,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.Begin = $scope.selectedPersonHistory.Begin
         model.End = $scope.selectedPersonHistory.End
         model.Content = $scope.selectedPersonHistory.Content
-        model.Id=0;
+        model.Id = 0;
         $scope.PersonalHistory.push(model)
     }
-    
+
     $scope.submitPersonalHistorys = function () {
         $scope.model = [];
         $scope.PersonalHistory.forEach(function (personalHistory) {
@@ -989,14 +1051,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.End = personalHistory.End;
             obj.Content = personalHistory.Content;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id=personalHistory.Id;
+            obj.Id = personalHistory.Id;
             $scope.model.push(obj)
         });
 
-            dataservice.insertPersonalHistory($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            });
+        dataservice.insertPersonalHistory($scope.model, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+        });
 
         console.log($scope.model);
     }
@@ -1006,7 +1068,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.MonthYear = $scope.selectedWarningDisciplined.MonthYear
         model.GrantOfDecision = $scope.selectedWarningDisciplined.GrantOfDecision
         model.Reason = $scope.selectedWarningDisciplined.Reason
-        model.Id=0;
+        model.Id = 0;
         $scope.Disciplined.push(model)
     }
 
@@ -1020,10 +1082,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Reason = e.Reason;
             obj.GrantOfDecision = e.GrantOfDecision;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id=e.Id;
+            obj.Id = e.Id;
             $scope.model.push(obj)
         });
-        
+
         dataservice.insertWarningDisciplined($scope.model, function (rs) {
             rs = rs.data;
             console.log(rs);
@@ -1035,8 +1097,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.To = $scope.selectedWorkingTracking.To
         model.Work = $scope.selectedWorkingTracking.Work
         model.Role = $scope.selectedWorkingTracking.Role
-      
-        model.Id=0;
+
+        model.Id = 0;
         $scope.BusinessNDuty.push(model)
     }
 
@@ -1052,14 +1114,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = businessNDuty.Id;
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
-   
-        
-            dataservice.insertBusinessNDuty($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        
+        //    $scope.modelUpdate = [];
+
+
+        dataservice.insertBusinessNDuty($scope.model, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+        })
+
         console.log($scope.model);
     }
 
@@ -1067,8 +1129,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         var model = {}
         model.MonthYear = $scope.selectedHistorySpecialist.MonthYear
         model.Content = $scope.selectedHistorySpecialist.Content
-        
-        model.Id=0;
+
+        model.Id = 0;
         $scope.HistoricalFeatures.push(model)
     }
 
@@ -1082,17 +1144,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = historicalFeatures.Id;
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
-   
-        
-            dataservice.insertHistorySpecialist($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-    
+        //    $scope.modelUpdate = [];
+
+
+        dataservice.insertHistorySpecialist($scope.model, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+        })
+
         console.log($scope.model);
     }
-    
+
 
     $scope.addToTrainingCertificatedPass = function () {
         var model = {}
@@ -1101,7 +1163,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.From = $scope.selectedTrainingCertificatedPass.From
         model.To = $scope.selectedTrainingCertificatedPass.To
         model.Certificate = $scope.selectedTrainingCertificatedPass.Certificate
-        model.Id=0;
+        model.Id = 0;
         $scope.PassedTrainingClasses.push(model)
     }
 
@@ -1119,13 +1181,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = passedTrainingClasses.Id;
             $scope.model.push(obj)
         });
-   
-        
-            dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        
+
+
+        dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
+            rs = rs.data;
+            console.log(rs);
+        })
+
         console.log($scope.model);
     }
 
@@ -1134,7 +1196,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.MonthYear = $scope.selectedLaudatory.MonthYear
         model.GrantOfDecision = $scope.selectedLaudatory.GrantOfDecision
         model.Reason = $scope.selectedLaudatory.Reason
-        model.Id=0;
+        model.Id = 0;
         $scope.Laudatory.push(model)
     }
 
@@ -1149,14 +1211,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = laudatory.Id;
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
+        //    $scope.modelUpdate = [];
         dataservice.insertAward($scope.model, function (rs) {
             rs = rs.data;
             console.log(rs);
         })
-        
-            
-        
+
+
+
         console.log($scope.model);
     }
 
@@ -1167,7 +1229,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.Contact = $scope.selectedGoAboard.Contact
         model.Country = $scope.selectedGoAboard.Country
         model.ProfileCode = $scope.infUser.ResumeNumber;
-        model.Id=0;
+        model.Id = 0;
         dataservice.insertGoAboard(model, function (rs) {
             rs = rs.data;
             $scope.getGoAboardByProfileCode()
@@ -1177,7 +1239,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.submitGoAboard = function () {
-        
+
         $scope.model = [];
         $scope.GoAboard.forEach(function (e) {
             var obj = {};
@@ -1225,35 +1287,35 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.getBusinessNDutyById = function () {
         $scope.id = 2;
         dataservice.getBusinessNDutyById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
 
     $scope.getHistorySpecialistById = function () {
         $scope.id = 2;
         dataservice.getHistorySpecialistById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
 
     $scope.getAwardById = function () {
         $scope.id = 2;
         dataservice.getAwardById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
     $scope.getWarningDisciplinedById = function () {
         $scope.id = 2;
         dataservice.getWarningDisciplinedById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
 
@@ -1271,7 +1333,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     // $scope.getFamilyByProfileCode = function () {
@@ -1291,7 +1353,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-            success: function (response) {   
+            success: function (response) {
                 $scope.PersonalHistory = response;
                 $scope.$apply();
                 console.log($scope.PersonalHistory);
@@ -1300,7 +1362,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     $scope.getGoAboardByProfileCode = function () {
@@ -1318,7 +1380,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
     $scope.getAwardByProfileCode = function () {
         var requestData = { id: $scope.id };
@@ -1337,7 +1399,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     $scope.getWorkingTrackingByProfileCode = function () {
@@ -1357,7 +1419,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
     $scope.getHistorySpecialistByProfileCode = function () {
         var requestData = { id: $scope.id };
@@ -1376,7 +1438,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     $scope.getTrainingCertificatedPassByProfileCode = function () {
@@ -1396,7 +1458,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     $scope.getWarningDisciplinedByProfileCode = function () {
@@ -1416,7 +1478,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
     $scope.Introducer = {};
 
@@ -1434,11 +1496,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 console.log(error);
             }
         });
-        
+
     }
 
     //Insert
-    
+
     //Update
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
@@ -1450,7 +1512,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     $scope.selectPersonHistory = function (x) {
         $scope.selectedPersonHistory = x;
-      };
+    };
     $scope.selectWarningDisciplined = function (x) {
         $scope.selectedWarningDisciplined = x;
     };
@@ -1481,10 +1543,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.modelPersonal);
     }
     $scope.updateFamily = function (x) {
-        $scope.modelPersonal = x ;
-        
-        dataservice.updateFamily($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        $scope.modelPersonal = x;
+
+        dataservice.updateFamily($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1494,20 +1556,20 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     $scope.updatePersonalHistory = function () {
 
-        dataservice.updatePersonalHistory( $scope.selectedPersonHistory, function (rs) {
-            console.log( $scope.selectedPersonHistory);
+        dataservice.updatePersonalHistory($scope.selectedPersonHistory, function (rs) {
+            console.log($scope.selectedPersonHistory);
             rs = rs.data;
             console.log(rs);
             $scope.selectedPersonHistory = {};
-            
+
         })
     }
 
     $scope.updateWarningDisciplined = function () {
         $scope.modelPersonal = $scope.selectedWarningDisciplined;
 
-        dataservice.updateWarningDisciplined($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateWarningDisciplined($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1518,8 +1580,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.updateHistorySpecialist = function () {
         $scope.modelPersonal = $scope.selectedHistorySpecialist;
 
-        dataservice.updateHistorySpecialist($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateHistorySpecialist($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1530,8 +1592,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.updateWorkingTracking = function () {
         $scope.modelPersonal = $scope.selectedWorkingTracking;
 
-        dataservice.updateWorkingTracking($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateWorkingTracking($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1542,8 +1604,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.updateLaudatory = function () {
         $scope.modelPersonal = $scope.selectedLaudatory;
 
-        dataservice.updateAward($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateAward($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1554,8 +1616,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.updateTrainingCertificatedPass = function () {
         $scope.modelTrainingCertificate = $scope.selectedTrainingCertificatedPass;
 
-        dataservice.updateTrainingCertificatedPass($scope.modelTrainingCertificate , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateTrainingCertificatedPass($scope.modelTrainingCertificate, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1566,8 +1628,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.updateGoAboard = function () {
         $scope.modelPersonal = $scope.selectedGoAboard;
 
-        dataservice.updateGoAboard($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updateGoAboard($scope.modelPersonal, function (rs) {
+            console.log($scope.modelPersonal);
             rs = rs.data;
             console.log(rs);
         })
@@ -1587,9 +1649,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    
+
                     console.log(response.Title);
-    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1597,10 +1659,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    
-                            
-                           
-                            
+
+
+
+
     $scope.deletePesonalHistory = function (e) {
         console.log(e);
         var isDeleted = confirm("Ban co muon xoa?");
@@ -1614,7 +1676,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 success: function (response) {
                     $scope.getPersonalHistoryByProfileCode();
                     console.log(response.Title);
-    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1635,7 +1697,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 success: function (response) {
                     console.log(response.Title);
                     $scope.getHistorySpecialistByProfileCode();
-                    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1656,7 +1718,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 success: function (response) {
                     $scope.getAwardByProfileCode();
                     console.log(response.Title);
-                    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1698,7 +1760,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 success: function (response) {
                     $scope.getGoAboardByProfileCode();
                     console.log(response.Title);
-                    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1735,11 +1797,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-               // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
                     $scope.getWorkingTrackingByProfileCode();
                     console.log(response.Title);
-                   
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1758,9 +1820,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+
                     console.log(response.Title);
-                    
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1780,9 +1842,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
- 
+
                     console.log(response.Title);
- 
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1790,7 +1852,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    
+
     $scope.deleteFamily = function (e) {
         console.log(e);
         var isDeleted = confirm("Ban co muon xoa?");
@@ -1804,7 +1866,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 success: function (response) {
                     $scope.getFamilyByProfileCode();
                     console.log(response.Title);
-                   
+
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1827,21 +1889,21 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.getTrainingCertificatedPassById = function () {
         $scope.id = 2;
         dataservice.getTrainingCertificatedPassById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
-    
+
 
 
     //getGetPersonalHistoryById
     $scope.getPersonalHistoryById = function () {
         $scope.id = 2;
         dataservice.getPersonalHistoryById($scope.id, function (rs) {
-                rs = rs.data;
-                console.log(rs.data);
-            })
+            rs = rs.data;
+            console.log(rs.data);
+        })
         console.log($scope.id);
     }
 
