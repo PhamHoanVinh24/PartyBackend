@@ -591,11 +591,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                 if (pE8[y][a].startsWith("- Quá trình công tác:")) {
                                     let regex = /^(\d{4})-(.*)$/;
 
-                                    $scope.Relationship[RelationshipIndex].WorkingProcess = [];
+                                    $scope.Relationship[RelationshipIndex].WorkingProgress = [];
                                     for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
                                         let inputString = pE8[y][j];
                                         
-                                        $scope.Relationship[RelationshipIndex].WorkingProcess.push(inputString);
+                                        $scope.Relationship[RelationshipIndex].WorkingProgress.push(inputString);
                                         i = j;
                                     }
                                 }
@@ -838,7 +838,34 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     //insertFamily
-    $scope.Relation = [];
+    
+    $scope.selectedFamily = {}
+    $scope.addToFamily = function () {
+        var model = {}
+        model.Relation = $scope.selectedFamily.Relation;
+        model.Residence = $scope.selectedFamily.Residence;
+        model.PartyMember = $scope.selectedFamily.PartyMember;
+        model.Name = $scope.selectedFamily.Name;
+        model.BirthYear = $scope.selectedFamily.BirthYear;
+        model.PoliticalAttitude = $scope.selectedFamily.PoliticalAttitude;
+        model.HomeTown = $scope.selectedFamily.HomeTown;
+        model.Job = $scope.selectedFamily.Job;
+        model.WorkingProgress = $scope.selectedFamily.WorkingProgress;
+        model.Id=0;
+        $scope.Relationship.push(model);
+    }
+
+    $scope.FamilyWorkTracking = [];
+    $scope.selectedFamilyWorkTracking = '';
+    $scope.addToFamilyWorkTracking = function () {
+        if($scope.selectedFamilyWorkTracking == undefined || $scope.selectedFamilyWorkTracking==null || $scope.selectedFamilyWorkTracking==''){
+            return
+        }
+        var model = {} ;
+        model.str = $scope.selectedFamilyWorkTracking;
+        $scope.FamilyWorkTracking.push(model);
+        $scope.selectedFamilyWorkTracking = '';
+    }
 
     $scope.insertFamily = function () {
         $scope.model = [];
@@ -846,18 +873,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.Relationship.forEach(function (e) {
             var obj = {};
             obj.Relation = e.Relation;
-            obj.ClassComposition = e.ClassComposition;
             obj.PartyMember = e.PartyMember;
             obj.Name = e.Name;
-            obj.BirthYear = e.Year.YearBirth;
-            obj.DeathYear = e.Year.YearDeath;
-            obj.DeathReason = e.Year.Reason;
+            obj.BirthYear = e.BirthYear;
             obj.Residence = e.Residence;
-            obj.PoliticalAttitude = e.PoliticalAttitude.join(',');
+            obj.PoliticalAttitude = e.PoliticalAttitude;
             obj.HomeTown = e.HomeTown;
             obj.Job = e.Job;
-            obj.WorkingProgress = e.WorkingProcess.join(',');
+            obj.WorkingProgress = e.WorkingProgress;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id=e.Id;
             $scope.model.push(obj)
         });
             dataservice.insertFamily($scope.model, function (rs) {
@@ -922,8 +947,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //
     
     // AdmissionProfile
-    $scope.isUpdate = false;
-
+    
     //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
@@ -1200,6 +1224,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         })
     }
 
+
     $scope.submitIntroducer = function () {
         console.log($scope.infUser)
         $scope.model = {};
@@ -1268,7 +1293,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             url: "/UserProfile/GetFamilyByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
-                $scope.Relation = response;
+                $scope.Relationship = response;
                 console.log($scope.Relation);
             },
             error: function (error) {
@@ -1581,7 +1606,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     //Delete
     $scope.deletePartyAdmissionProfile = function () {
-        console.log(Id);
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
             $.ajax({
@@ -1601,13 +1626,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    
-                            
+         
                                             
     $scope.deletePesonalHistory = function (index) {
-        console.log(index);
+       
         var isDeleted = confirm("Ban co muon xoa?");
-    
         if (isDeleted) {
             if($scope.PersonalHistory[index].Id == undefined || $scope.PersonalHistory[index].Id == 0 ) {
                 $scope.PersonalHistory.splice(index,1);
@@ -1631,19 +1654,23 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteHistorySpecialist = function (e) {
-        console.log(e);
+    $scope.deleteHistorySpecialist = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0 ) {
+                $scope.HistoricalFeatures.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteHistorySpecialist?id=" + e.Id,
+                url: "/UserProfile/DeleteHistorySpecialist?id=" + $scope.HistoricalFeatures[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
                     console.log(response.Title);
-                    $scope.getHistorySpecialistByProfileCode();
+                    $scope.HistoricalFeatures.splice(index,1);
+                    $scope.$apply()
                     
                 },
                 error: function (error) {
@@ -1652,18 +1679,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteAward = function (e) {
-        console.log(e);
+    $scope.deleteAward = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Laudatory[index].Id == undefined || $scope.Laudatory[index].Id == 0 ) {
+                $scope.Laudatory.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteAward?id=" + e.Id,
+                url: "/UserProfile/DeleteAward?id=" + $scope.Laudatory[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getAwardByProfileCode();
+                    $scope.Laudatory.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     
                 },
@@ -1673,18 +1704,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteWarningDisciplined = function (e) {
-        console.log(e);
+    $scope.deleteWarningDisciplined = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Disciplined[index].Id == undefined || $scope.Disciplined[index].Id == 0 ) {
+                $scope.Disciplined.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWarningDisciplined?id=" + e.Id,
+                url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getWarningDisciplinedByProfileCode();
+                    $scope.Disciplined.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     ;
                 },
@@ -1694,18 +1729,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteGoAboard = function (e) {
-        console.log(e);
+    $scope.deleteGoAboard = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.GoAboard[index].Id == undefined || $scope.GoAboard[index].Id == 0 ) {
+                $scope.GoAboard.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteGoAboard?id=" + e.Id,
+                url: "/UserProfile/DeleteGoAboard?id=" + $scope.GoAboard[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getGoAboardByProfileCode();
+                    $scope.GoAboard.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     
                 },
@@ -1715,18 +1754,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteTrainingCertificatedPass = function (e) {
-        console.log(e);
+    $scope.deleteTrainingCertificatedPass = function (index) {
+       
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.PassedTrainingClasses[index].Id == undefined || $scope.PassedTrainingClasses[index].Id == 0 ) {
+                $scope.PassedTrainingClasses.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
+                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getTrainingCertificatedPassByProfileCode();
+                    $scope.PassedTrainingClasses.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                 },
                 error: function (error) {
@@ -1735,18 +1778,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteWorkingTracking = function (e) {
-        console.log(e);
+    $scope.deleteWorkingTracking = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.BusinessNDuty[index].Id == undefined || $scope.BusinessNDuty[index].Id == 0 ) {
+                $scope.BusinessNDuty.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
+                url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.BusinessNDuty[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getWorkingTrackingByProfileCode();
+                    $scope.BusinessNDuty.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                    
                 },
@@ -1756,10 +1803,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteIntroducer = function (e) {
-        console.log(e);
+    $scope.deleteIntroducer = function () {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+        
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteIntroducerOfParty?profileCode=" + $scope.infUser.ResumeNumber,
@@ -1778,8 +1826,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     }
 
-    $scope.deletePartyAdmissionProfile = function () {
-        console.log(e);
+    $scope.deletePartyAdmissionProfile = function (e) {
+       
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
             $.ajax({
@@ -1800,18 +1848,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     }
     
-    $scope.deleteFamily = function (e) {
-        console.log(e);
+    $scope.deleteFamily = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Relationship[index].Id == undefined || $scope.Relationship[index].Id == 0 ) {
+                $scope.Relationship.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteFamily?Id=" + e.Id,
+                url: "/UserProfile/DeleteFamily?Id=" + $scope.Relationship[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    $scope.getFamilyByProfileCode();
+                    $scope.Relationship.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                    
                 },

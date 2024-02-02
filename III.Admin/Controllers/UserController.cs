@@ -434,8 +434,6 @@ namespace III.Admin.Controllers
                 obj.ClassComposition = model.ClassComposition;
                 obj.PartyMember = model.PartyMember;
                 obj.BirthYear = model.BirthYear;
-                obj.DeathReason = model.DeathReason;
-                obj.DeathYear = model.DeathYear;
                 obj.HomeTown = model.HomeTown;
                 obj.Residence = model.Residence;
                 obj.Job = model.Job;
@@ -932,16 +930,43 @@ namespace III.Admin.Controllers
                     || !string.IsNullOrEmpty(x.BirthYear) || !string.IsNullOrEmpty(x.HomeTown)
                     || !string.IsNullOrEmpty(x.Residence) || !string.IsNullOrEmpty(x.Job)
                     || !string.IsNullOrEmpty(x.WorkingProgress) || x.PartyMember != null)
+
                     {
-                        _context.Families.Add(x);
+                        if (x.Id == 0)
+                        {
+                            _context.Families.Add(x);
+                        }
+                        else
+                        {
+                            var a = _context.Families.Find(x.Id);
+                            if (a != null)
+                            {
+                                a.Relation = x.Relation;
+                                a.BirthYear = x.BirthYear;
+                                a.HomeTown = x.HomeTown;
+                                a.Residence = x.Residence;
+                                a.Job = x.Job;
+                                a.WorkingProgress = x.WorkingProgress;
+                                a.ClassComposition = x.ClassComposition;
+                                a.IsDeleted = false;
+                                _context.Families.Update(a);
+                            }
+                            else
+                            {
+                                msg.Error = true;
+                                msg.Title = "Lý lịch gia đình chưa hợp lệ";
+                                return msg;
+                            }
+                        }
+                        _context.SaveChanges();
 
 
-                        msg.Title = "Thêm mới Lịch sử bản thân thành công";
+                        msg.Title = "Thêm mới lý lịch gia đình thành công";
                     }
                     else
                     {
                         msg.Error = true;
-                        msg.Title = "Lịch sử bản thân chưa hợp lệ";
+                        msg.Title = "Lý lịch gia đình chưa hợp lệ";
                         return msg;
                     }
                 }
@@ -950,7 +975,7 @@ namespace III.Admin.Controllers
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Thêm Hoàn cảnh gia đình thất bại";
+                msg.Title = "Thêm Lý lịch gia đình thất bại";
             }
             return msg;
         }
@@ -1193,6 +1218,7 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+
 
 
         [HttpPost]
