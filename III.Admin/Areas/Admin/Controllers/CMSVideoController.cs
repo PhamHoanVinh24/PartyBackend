@@ -15,6 +15,7 @@ using System.Globalization;
 using Microsoft.Extensions.Localization;
 using SmartBreadcrumbs.Attributes;
 using Syncfusion.EJ2.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace III.Admin.Controllers
 {
@@ -158,9 +159,10 @@ namespace III.Admin.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public object GetNews()
         {
-            var data = _context.cms_extra_fields_value.OrderByDescending(date => date.date_post).Take(3).ToList();
+            var data = _context.cms_extra_fields_value.Take(3).ToList();
             
             return data;
 
