@@ -162,8 +162,12 @@ app.factory('dataservice', function ($http) {
         getGoAboardById: function (data, callback) {
             $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);  
         },
-        insertGoAboard: function (data, callback) {
+        insertGoAboards: function (data, callback) {
             $http.post('/UserProfile/InsertGoAboard/', data).then(callback);
+        },
+        
+        insertGoAboard: function (data, callback) {
+            $http.post('/UserProfile/InsertGoAboardOnly/', data).then(callback);
         },
         updateGoAboard: function (data, callback) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
@@ -1162,8 +1166,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.To = $scope.selectedGoAboard.To
         model.Contact = $scope.selectedGoAboard.Contact
         model.Country = $scope.selectedGoAboard.Country
+        model.ProfileCode = $scope.infUser.ResumeNumber;
         model.Id=0;
-        $scope.GoAboard.push(model)
+        dataservice.insertGoAboard(model, function (rs) {
+            rs = rs.data;
+            $scope.getGoAboardByProfileCode()
+            console.log(rs);
+        })
         console.log(model);
     }
 
@@ -1180,8 +1189,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = e.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertGoAboard($scope.model, function (rs) {
+        dataservice.insertGoAboards($scope.model, function (rs) {
             rs = rs.data;
+            $scope.getGoAboardByProfileCode()
             console.log(rs);
         })
     }
@@ -1294,13 +1304,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.getGoAboardByProfileCode = function () {
-        var requestData = { id: $scope.id };
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/UserProfile/GetGoAboardByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.GoAboard = response;
                 $scope.$apply();
@@ -1662,7 +1670,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         if (isDeleted) {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
+                url: "/UserProfile/DeleteWarningDisciplined?id=" + e.Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
@@ -1704,14 +1712,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         if (isDeleted) {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
+                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
                     $scope.getTrainingCertificatedPassByProfileCode();
                     console.log(response.Title);
-                    
                 },
                 error: function (error) {
                     console.log(error.Title);

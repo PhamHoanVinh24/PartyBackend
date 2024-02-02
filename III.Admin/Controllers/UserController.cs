@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using OpenXmlPowerTools;
@@ -1118,9 +1119,45 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
-        
-       
-   
+
+
+
+
+        [HttpPost]
+        public object InsertGoAboardOnly([FromBody] GoAboard x)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var check = _context.PartyAdmissionProfiles.FirstOrDefault(y => y.IsDeleted == false && y.ResumeNumber.Equals(x.ProfileCode));
+                if (check == null || x.ProfileCode==null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy hồ sơ";
+                    return msg;
+                }
+                    if (!string.IsNullOrEmpty(x.From) || !string.IsNullOrEmpty(x.To) || !string.IsNullOrEmpty(x.Contact) || x.Country != null)
+                    {
+                            _context.GoAboards.Add(x);
+
+                            _context.SaveChanges();
+
+                            msg.Title = "Thêm Đi nước ngoài thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = "Đi nước ngoài chưa hợp lệ";
+                        return msg;
+                    }
+            }
+            catch (Exception err)
+            {
+                msg.Error = true;
+                msg.Title = "Thêm Đi nước ngoài thất bại";
+            }
+            return msg;
+        }
 
         [HttpPost]
         public object InsertGoAboard([FromBody] GoAboard[] model)
@@ -1641,6 +1678,7 @@ namespace III.Admin.Controllers
                 }
                 else
                 {
+                    msg.Error = true;
                     msg.Title = "Không tìm thấy Những lớp đào tạo bồi dưỡng đã qua";
                 }
             }
