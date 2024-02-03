@@ -162,8 +162,12 @@ app.factory('dataservice', function ($http) {
         getGoAboardById: function (data, callback) {
             $http.post('/UserProfile/GetGoAboardById?id=', data).then(callback);  
         },
-        insertGoAboard: function (data, callback) {
+        insertGoAboards: function (data, callback) {
             $http.post('/UserProfile/InsertGoAboard/', data).then(callback);
+        },
+        
+        insertGoAboard: function (data, callback) {
+            $http.post('/UserProfile/InsertGoAboardOnly/', data).then(callback);
         },
         updateGoAboard: function (data, callback) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
@@ -215,12 +219,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             var txt = await resultImp.text();
             $scope.defaultRTE
             // console.log($scope.defaultRTE)
-            $scope.JSONobjj = handleTextUpload(txt)
+            $scope.JSONobjj = handleTextUpload(txt);
+
             console.log($scope.JSONobj);
         }
     };
-    //Thêm data vào PersonalHistory
-    $scope.PersonalHistory = [];
 
     $scope.infUser = {
         LevelEducation: {
@@ -588,11 +591,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                 if (pE8[y][a].startsWith("- Quá trình công tác:")) {
                                     let regex = /^(\d{4})-(.*)$/;
 
-                                    $scope.Relationship[RelationshipIndex].WorkingProcess = [];
+                                    $scope.Relationship[RelationshipIndex].WorkingProgress = [];
                                     for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
                                         let inputString = pE8[y][j];
                                         
-                                        $scope.Relationship[RelationshipIndex].WorkingProcess.push(inputString);
+                                        $scope.Relationship[RelationshipIndex].WorkingProgress.push(inputString);
                                         i = j;
                                     }
                                 }
@@ -729,6 +732,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }, 100);
         }, 100);
     }
+    // $scope.insertAllData = function () {
+    //     $scope.submitPartyAdmissionProfile();
+    //     $scope.submitPersonalHistorys();
+    //     $scope.submitAward();
+    //     $scope.submitBusinessNDuty();
+    //     $scope.submitGoAboard();
+    //     $scope.submitIntroducer();
+    //     $scope.submitDisciplined();
+    //     $scope.submitHistorySpecialist();
+    //     $scope.insertFamily();
+    // }
     $scope.getPartyAdmissionProfileByUsername = function () {
         if($scope.UserName==null||$scope.UserName==undefined){
             //thông báo không lấy được username
@@ -824,7 +838,34 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     //insertFamily
-    $scope.Relation = [];
+    
+    $scope.selectedFamily = {}
+    $scope.addToFamily = function () {
+        var model = {}
+        model.Relation = $scope.selectedFamily.Relation;
+        model.Residence = $scope.selectedFamily.Residence;
+        model.PartyMember = $scope.selectedFamily.PartyMember;
+        model.Name = $scope.selectedFamily.Name;
+        model.BirthYear = $scope.selectedFamily.BirthYear;
+        model.PoliticalAttitude = $scope.selectedFamily.PoliticalAttitude;
+        model.HomeTown = $scope.selectedFamily.HomeTown;
+        model.Job = $scope.selectedFamily.Job;
+        model.WorkingProgress = $scope.selectedFamily.WorkingProgress;
+        model.Id=0;
+        $scope.Relationship.push(model);
+    }
+
+    $scope.FamilyWorkTracking = [];
+    $scope.selectedFamilyWorkTracking = '';
+    $scope.addToFamilyWorkTracking = function () {
+        if($scope.selectedFamilyWorkTracking == undefined || $scope.selectedFamilyWorkTracking==null || $scope.selectedFamilyWorkTracking==''){
+            return
+        }
+        var model = {} ;
+        model.str = $scope.selectedFamilyWorkTracking;
+        $scope.FamilyWorkTracking.push(model);
+        $scope.selectedFamilyWorkTracking = '';
+    }
 
     $scope.insertFamily = function () {
         $scope.model = [];
@@ -832,32 +873,23 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         $scope.Relationship.forEach(function (e) {
             var obj = {};
             obj.Relation = e.Relation;
-            obj.ClassComposition = e.ClassComposition;
             obj.PartyMember = e.PartyMember;
             obj.Name = e.Name;
-            obj.BirthYear = '';//e.Year.YearBirth;
-            obj.DeathYear = '';//e.Year.YearDeath;
-            obj.DeathReason = '';//e.Year.Reason;
+            obj.BirthYear = e.BirthYear;
             obj.Residence = e.Residence;
-            obj.PoliticalAttitude = e.PoliticalAttitude.join(',');
+            obj.PoliticalAttitude = e.PoliticalAttitude;
             obj.HomeTown = e.HomeTown;
             obj.Job = e.Job;
-            obj.WorkingProgress = e.WorkingProcess.join(',');
-            obj.ProfileCode = "2024124";
+            obj.WorkingProgress = e.WorkingProgress;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id=e.Id;
             $scope.model.push(obj)
         });
-   
-        if ($scope.isUpdate) {
-            dataservice.updateFamily($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
             dataservice.insertFamily($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+        
         console.log($scope.model);
     }
 
@@ -915,8 +947,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //
     
     // AdmissionProfile
-    $scope.isUpdate = false;
-
+    
     //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
@@ -968,32 +999,42 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
         console.log($scope.model);
     }
+    $scope.addToPersonalHistory = function () {
+        var model = {}
+        model.Begin = $scope.selectedPersonHistory.Begin
+        model.End = $scope.selectedPersonHistory.End
+        model.Content = $scope.selectedPersonHistory.Content
+        model.Id=0;
+        $scope.PersonalHistory.push(model)
+    }
     
-    $scope.submitPersonalHistory = function () {
+    $scope.submitPersonalHistorys = function () {
         $scope.model = [];
         $scope.PersonalHistory.forEach(function (personalHistory) {
             var obj = {};
-            obj.Begin = personalHistory.time.begin;
-            obj.End = personalHistory.time.end;
-            obj.Content = personalHistory.infor;
-            obj.ProfileCode = "202418884";
+            obj.Begin = personalHistory.Begin;
+            obj.End = personalHistory.End;
+            obj.Content = personalHistory.Content;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id=personalHistory.Id;
             $scope.model.push(obj)
         });
-    //    $scope.modelUpdate = [];
 
-        if ($scope.isUpdate) {
-            dataservice.updatePersonalHistory($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
             dataservice.insertPersonalHistory($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             });
-        }
 
         console.log($scope.model);
+    }
+
+    $scope.addToDisciplined = function () {
+        var model = {}
+        model.MonthYear = $scope.selectedWarningDisciplined.MonthYear
+        model.GrantOfDecision = $scope.selectedWarningDisciplined.GrantOfDecision
+        model.Reason = $scope.selectedWarningDisciplined.Reason
+        model.Id=0;
+        $scope.Disciplined.push(model)
     }
 
     $scope.submitDisciplined = function () {
@@ -1002,10 +1043,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
         $scope.Disciplined.forEach(function (e) {
             var obj = {};
-            obj.MonthYear = e.time;
-            obj.Reason = e.officialReason;
-            obj.GrantOfDecision = e.grantDecision;
-            obj.ProfileCode = "20241888411";
+            obj.MonthYear = e.MonthYear;
+            obj.Reason = e.Reason;
+            obj.GrantOfDecision = e.GrantOfDecision;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id=e.Id;
             $scope.model.push(obj)
         });
         
@@ -1014,133 +1056,174 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log(rs);
         })
     }
+    $scope.addToBusinessNDuty = function () {
+        var model = {}
+        model.From = $scope.selectedWorkingTracking.From
+        model.To = $scope.selectedWorkingTracking.To
+        model.Work = $scope.selectedWorkingTracking.Work
+        model.Role = $scope.selectedWorkingTracking.Role
+      
+        model.Id=0;
+        $scope.BusinessNDuty.push(model)
+    }
 
     $scope.submitBusinessNDuty = function () {
         $scope.model = [];
         $scope.BusinessNDuty.forEach(function (businessNDuty) {
             var obj = {};
-            obj.From = businessNDuty.time.begin.trim();
-            obj.To = businessNDuty.time.end.trim();
-            obj.Work = businessNDuty.business;
-            obj.Role = businessNDuty.duty;
-            obj.ProfileCode = "2024124";
+            obj.From = businessNDuty.From;
+            obj.To = businessNDuty.To;
+            obj.Work = businessNDuty.Work;
+            obj.Role = businessNDuty.Role;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id = businessNDuty.Id;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
    
-        if ($scope.isUpdate) {
-            dataservice.updateBusinessNDuty($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
+        
             dataservice.insertBusinessNDuty($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+        
         console.log($scope.model);
+    }
+
+    $scope.addToHistorySpecialist = function () {
+        var model = {}
+        model.MonthYear = $scope.selectedHistorySpecialist.MonthYear
+        model.Content = $scope.selectedHistorySpecialist.Content
+        
+        model.Id=0;
+        $scope.HistoricalFeatures.push(model)
     }
 
     $scope.submitHistorySpecialist = function () {
         $scope.model = [];
         $scope.HistoricalFeatures.forEach(function (historicalFeatures) {
             var obj = {};
-            obj.MonthYear = historicalFeatures.time;
-            obj.Content = historicalFeatures.content;
-            obj.ProfileCode = "2024124";
+            obj.MonthYear = historicalFeatures.MonthYear;
+            obj.Content = historicalFeatures.Content;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id = historicalFeatures.Id;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
    
-        if ($scope.isUpdate) {
-            dataservice.updateHistorySpecialist($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
+        
             dataservice.insertHistorySpecialist($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+    
         console.log($scope.model);
     }
     
+
+    $scope.addToTrainingCertificatedPass = function () {
+        var model = {}
+        model.SchoolName = $scope.selectedTrainingCertificatedPass.SchoolName
+        model.Class = $scope.selectedTrainingCertificatedPass.Class
+        model.From = $scope.selectedTrainingCertificatedPass.From
+        model.To = $scope.selectedTrainingCertificatedPass.To
+        model.Certificate = $scope.selectedTrainingCertificatedPass.Certificate
+        model.Id=0;
+        $scope.PassedTrainingClasses.push(model)
+    }
+
+
     $scope.submitTrainingCertificatedPass = function () {
         $scope.model = [];
         $scope.PassedTrainingClasses.forEach(function (passedTrainingClasses) {
             var obj = {};
-            obj.SchoolName = passedTrainingClasses.school;
-            obj.Class = passedTrainingClasses.class;
-            obj.From = passedTrainingClasses.time.begin;
-            obj.To = passedTrainingClasses.time.end;
-            obj.Certificate = passedTrainingClasses.business;
-            obj.ProfileCode = "2024124";
+            obj.SchoolName = passedTrainingClasses.SchoolName;
+            obj.Class = passedTrainingClasses.Class;
+            obj.From = passedTrainingClasses.From;
+            obj.To = passedTrainingClasses.To;
+            obj.Certificate = passedTrainingClasses.Certificate;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id = passedTrainingClasses.Id;
             $scope.model.push(obj)
         });
    
-        if ($scope.isUpdate) {
-            dataservice.updateTrainingCertificatedPass($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
+        
             dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
                 rs = rs.data;
                 console.log(rs);
             })
-        }  
+        
         console.log($scope.model);
+    }
+
+    $scope.addToAward = function () {
+        var model = {}
+        model.MonthYear = $scope.selectedLaudatory.MonthYear
+        model.GrantOfDecision = $scope.selectedLaudatory.GrantOfDecision
+        model.Reason = $scope.selectedLaudatory.Reason
+        model.Id=0;
+        $scope.Laudatory.push(model)
     }
 
     $scope.submitAward = function () {
         $scope.model = [];
         $scope.Laudatory.forEach(function (laudatory) {
             var obj = {};
-            obj.MonthYear = laudatory.time;
-            obj.Reason = laudatory.officialReason;
-            obj.GrantOfDecision = laudatory.grantDecision;
+            obj.MonthYear = laudatory.MonthYear;
+            obj.Reason = laudatory.Reason;
+            obj.GrantOfDecision = laudatory.GrantOfDecision;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id = laudatory.Id;
             $scope.model.push(obj)
         });
     //    $scope.modelUpdate = [];
-   
-        if ($scope.isUpdate) {
-            dataservice.updateAward($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-            })
-        } else {
-            dataservice.insertAward($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
-                dataservice.getAwardByProfileCode($scope.infUser.ResumeNumber, function (rs){
-                    rs = rs.data
-                    console.log(rs);
-                })
-            })
-        }  
-        console.log($scope.model);
-    }
-
-    $scope.submitGoAboard = function () {
-        console.log($scope.Disciplined)
-        $scope.model = [];
-        $scope.GoAboard.forEach(function (e) {
-            var obj = {};
-            obj.From = e.time.begin;
-            obj.To = e.time.end
-            obj.Contact = e.purpose;
-            obj.Country = e.country;
-            obj.ProfileCode ="20241888411";
-            $scope.model.push(obj)
-        });
-        dataservice.insertGoAboard($scope.model, function (rs) {
+        dataservice.insertAward($scope.model, function (rs) {
             rs = rs.data;
             console.log(rs);
         })
+        
+            
+        
+        console.log($scope.model);
     }
+
+    $scope.addToGoAboard = function () {
+        var model = {}
+        model.From = $scope.selectedGoAboard.From;
+        model.To = $scope.selectedGoAboard.To;
+        model.Contact = $scope.selectedGoAboard.Contact;
+        model.Country = $scope.selectedGoAboard.Country;
+        
+        model.ProfileCode = $scope.infUser.ResumeNumber;
+        model.Id=0;
+        dataservice.insertGoAboard(model, function (rs) {
+            rs = rs.data;
+            $scope.getGoAboardByProfileCode()
+            console.log(rs);
+        })
+        console.log(model);
+    }
+
+    $scope.submitGoAboard = function () {
+        
+        $scope.model = [];
+        $scope.GoAboard.forEach(function (e) {
+            var obj = {};
+            obj.From = e.From;
+            obj.To = e.To;
+            obj.Contact = e.Contact;
+            obj.Country = e.Country;
+            obj.ProfileCode = $scope.infUser.ResumeNumber;
+            obj.Id = e.Id;
+            $scope.model.push(obj)
+        });
+        dataservice.insertGoAboards($scope.model, function (rs) {
+            rs = rs.data;
+            $scope.getGoAboardByProfileCode()
+            console.log(rs);
+        })
+    }
+
 
     $scope.submitIntroducer = function () {
         console.log($scope.infUser)
@@ -1210,7 +1293,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             url: "/UserProfile/GetFamilyByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
-                $scope.Relation = response;
+                $scope.Relationship = response;
                 console.log($scope.Relation);
             },
             error: function (error) {
@@ -1237,8 +1320,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-            success: function (response) {
+            success: function (response) {   
                 $scope.PersonalHistory = response;
+                $scope.$apply();
                 console.log($scope.PersonalHistory);
             },
             error: function (error) {
@@ -1249,15 +1333,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.getGoAboardByProfileCode = function () {
-        var requestData = { id: $scope.id };
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/UserProfile/GetGoAboardByProfileCode?profileCode=" + $scope.infUser.ResumeNumber,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.GoAboard = response;
+                $scope.$apply();
                 console.log($scope.GoAboard);
             },
             error: function (error) {
@@ -1276,6 +1359,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Laudatory = response;
+                $scope.$apply();
                 console.log($scope.Laudatory);
             },
             error: function (error) {
@@ -1295,6 +1379,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.BusinessNDuty = response;
+                $scope.$apply();
                 console.log($scope.BusinessNDuty);
             },
             error: function (error) {
@@ -1313,6 +1398,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.HistoricalFeatures = response;
+                $scope.$apply();
                 console.log($scope.HistoricalFeatures);
             },
             error: function (error) {
@@ -1332,6 +1418,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PassedTrainingClasses = response;
+                $scope.$apply();
                 console.log($scope.PassedTrainingClasses);
             },
             error: function (error) {
@@ -1351,6 +1438,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Disciplined = response;
+                $scope.$apply();
                 console.log($scope.Disciplined);
             },
             error: function (error) {
@@ -1368,6 +1456,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 $scope.Introducer = response;
+                $scope.$apply();
                 console.log($scope.Introducer);
             },
             error: function (error) {
@@ -1377,6 +1466,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         
     }
 
+    //Insert
+    
     //Update
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
@@ -1431,15 +1522,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.updatePersonalHistory = function () {
-        $scope.modelPersonal = $scope.selectedPersonHistory;
 
-        dataservice.updatePersonalHistory($scope.modelPersonal , function (rs) {
-            console.log($scope.modelPersonal );
+        dataservice.updatePersonalHistory( $scope.selectedPersonHistory, function (rs) {
+            console.log( $scope.selectedPersonHistory);
             rs = rs.data;
             console.log(rs);
+            $scope.selectedPersonHistory = {};
+            
         })
-        $scope.selectedPersonHistory = {};
-        console.log($scope.modelPersonal);
     }
 
     $scope.updateWarningDisciplined = function () {
@@ -1516,7 +1606,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     //Delete
     $scope.deletePartyAdmissionProfile = function () {
-        console.log(Id);
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
             $.ajax({
@@ -1526,7 +1616,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    
                     console.log(response.Title);
     
                 },
@@ -1536,21 +1626,27 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-
-    $scope.deletePesonalHistory = function (e) {
-        console.log(e);
+         
+                                            
+    $scope.deletePesonalHistory = function (index) {
+       
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.PersonalHistory[index].Id == undefined || $scope.PersonalHistory[index].Id == 0 ) {
+                $scope.PersonalHistory.splice(index,1);
+            }
+            else
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeletePersonalHistory?id=" + e.Id,
-                contentType: "application/json; charset=utf-8",
+                url: "/UserProfile/DeletePersonalHistory?id=" +  $scope.PersonalHistory[index].Id ,
+                contentType: "application/json; charset=utf-8", 
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    if(response.Error==false)
+                        $scope.PersonalHistory.splice(index,1);
+                        $scope.$apply()
                     console.log(response.Title);
-    
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1558,19 +1654,23 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteHistorySpecialist = function (e) {
-        console.log(e);
+    $scope.deleteHistorySpecialist = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0 ) {
+                $scope.HistoricalFeatures.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteHistorySpecialist?id=" + e.Id,
+                url: "/UserProfile/DeleteHistorySpecialist?id=" + $scope.HistoricalFeatures[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
                     console.log(response.Title);
-    
+                    $scope.HistoricalFeatures.splice(index,1);
+                    $scope.$apply()
                     
                 },
                 error: function (error) {
@@ -1579,18 +1679,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteAward = function (e) {
-        console.log(e);
+    $scope.deleteAward = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Laudatory[index].Id == undefined || $scope.Laudatory[index].Id == 0 ) {
+                $scope.Laudatory.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteAward?id=" + e.Id,
+                url: "/UserProfile/DeleteAward?id=" + $scope.Laudatory[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    $scope.Laudatory.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     
                 },
@@ -1600,18 +1704,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteWarningDisciplined = function (e) {
-        console.log(e);
+    $scope.deleteWarningDisciplined = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Disciplined[index].Id == undefined || $scope.Disciplined[index].Id == 0 ) {
+                $scope.Disciplined.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + e.Id,
+                url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    $scope.Disciplined.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     ;
                 },
@@ -1621,18 +1729,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteGoAboard = function (e) {
-        console.log(e);
+    $scope.deleteGoAboard = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.GoAboard[index].Id == undefined || $scope.GoAboard[index].Id == 0 ) {
+                $scope.GoAboard.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteGoAboard?id=" + e.Id,
+                url: "/UserProfile/DeleteGoAboard?id=" + $scope.GoAboard[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    $scope.GoAboard.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                     
                 },
@@ -1642,20 +1754,23 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteTrainingCertificatedPass = function (e) {
-        console.log(e);
+    $scope.deleteTrainingCertificatedPass = function (index) {
+       
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.PassedTrainingClasses[index].Id == undefined || $scope.PassedTrainingClasses[index].Id == 0 ) {
+                $scope.PassedTrainingClasses.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
+                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    $scope.PassedTrainingClasses.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
-                    
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1663,18 +1778,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteWorkingTracking = function (e) {
-        console.log(e);
+    $scope.deleteWorkingTracking = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.BusinessNDuty[index].Id == undefined || $scope.BusinessNDuty[index].Id == 0 ) {
+                $scope.BusinessNDuty.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + e.Id,
+                url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.BusinessNDuty[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-                    
+                    $scope.BusinessNDuty.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                    
                 },
@@ -1684,10 +1803,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    $scope.deleteIntroducer = function (e) {
-        console.log(e);
+    $scope.deleteIntroducer = function () {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+        
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteIntroducerOfParty?profileCode=" + $scope.infUser.ResumeNumber,
@@ -1706,8 +1826,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     }
 
-    $scope.deletePartyAdmissionProfile = function () {
-        console.log(e);
+    $scope.deletePartyAdmissionProfile = function (e) {
+       
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
             $.ajax({
@@ -1728,18 +1848,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     }
     
-    $scope.deleteFamily = function (e) {
-        console.log(e);
+    $scope.deleteFamily = function (index) {
+        
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
+            if($scope.Relationship[index].Id == undefined || $scope.Relationship[index].Id == 0 ) {
+                $scope.Relationship.splice(index,1);
+            }
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteFamily?Id=" + e.Id,
+                url: "/UserProfile/DeleteFamily?Id=" + $scope.Relationship[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (response) {
-    
+                    $scope.Relationship.splice(index,1);
+                    $scope.$apply()
                     console.log(response.Title);
                    
                 },

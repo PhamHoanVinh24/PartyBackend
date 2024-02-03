@@ -27,12 +27,6 @@ namespace ESEIM.Models
 		public string BirthYear { get; set; }
 
 	
-		public string DeathYear { get; set; }
-
-		
-		public string DeathReason { get; set; }
-
-	
 		public string HomeTown { get; set; }
 
 	
