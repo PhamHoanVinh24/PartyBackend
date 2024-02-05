@@ -917,6 +917,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     } else {
                         App.toastrSuccess(result.Title);
                         $scope.GoAboard.splice(index,1);
+                        $scope.$apply()
                     }
                 },
                 error: function (error) {
@@ -1566,7 +1567,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         }else {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.Disciplined[index].Id,
+                url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
@@ -1592,7 +1593,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         }else {
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.PassedTrainingClasses[index].Id,
+                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -1627,6 +1628,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     } else {
                         App.toastrSuccess(result.Title);
                         $scope.BusinessNDuty.splice(index,1);
+                        $scope.$apply();
                     }
                 },
                 error: function (error) {
@@ -1675,6 +1677,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     } else {
                         App.toastrSuccess(result.Title);
                         $scope.Laudatory.splice(index,1);
+                        $scope.$apply();
                     }
                 },
                 error: function (result) {

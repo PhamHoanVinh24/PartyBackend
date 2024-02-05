@@ -937,7 +937,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.Families.Find(x.Id);
+                            var a = _context.Families.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.Relation = x.Relation;
@@ -1156,7 +1156,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.PersonalHistories.Find(x.Id);
+                            var a = _context.PersonalHistories.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.Begin = x.Begin;
@@ -1260,7 +1260,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.GoAboards.Find(x.Id);
+                            var a = _context.GoAboards.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.From = x.From;
@@ -1320,7 +1320,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.TrainingCertificatedPasses.Find(x.Id);
+                            var a = _context.TrainingCertificatedPasses.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.From = x.From;
@@ -1382,7 +1382,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.HistorySpecialists.Find(x.Id);
+                            var a = _context.HistorySpecialists.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.MonthYear = x.MonthYear;
@@ -1441,7 +1441,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.WarningDisciplineds.Find(x.Id);
+                            var a = _context.WarningDisciplineds.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.MonthYear = x.MonthYear;
@@ -1501,7 +1501,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.Awards.Find(x.Id);
+                            var a = _context.Awards.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.MonthYear = x.MonthYear;
@@ -1560,7 +1560,7 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            var a = _context.WorkingTrackings.Find(x.Id);
+                            var a = _context.WorkingTrackings.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
                                 a.From = x.From;

@@ -975,9 +975,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id=e.Id;
             $scope.model.push(obj)
         });
-            dataservice.insertFamily($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
+            dataservice.insertFamily($scope.model, function (result) {
+                result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getPersonalHistoryByProfileCode();
+            }
             })
         
         console.log($scope.model);
@@ -1307,7 +1312,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
 
 
-        dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
+        dataservice.insertTrainingCertificatedPass($scope.model, function (result) {
             result = result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -1421,8 +1426,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.submitIntroducer = function () {
-        if($scope.Username!=null && $scope.Username!=undefined) {
-            $scope.model = {};
+        $scope.model = {};
+        if($scope.UserName!=null && $scope.UserName!=undefined) {
             $scope.model.PersonIntroduced = $scope.Introducer.PersonIntroduced;
             $scope.model.PlaceTimeJoinUnion = $scope.Introducer.PlaceTimeJoinUnion;
             $scope.model.PlaceTimeJoinParty = $scope.Introducer.PlaceTimeJoinParty;
