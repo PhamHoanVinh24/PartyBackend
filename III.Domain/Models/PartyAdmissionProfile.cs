@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -84,6 +85,25 @@ namespace ESEIM.Models
         public string CreatedBy { get; set; }
         public string Username { get; set; }
         public string Status { get; set; }
-        public string ProfileLink { get; set; }
+        public string ProfileLink {
+            get
+            {
+                return JsonConvert.SerializeObject(JsonProfileLinks);
+            }
+            set
+            {
+                JsonProfileLinks = string.IsNullOrEmpty(value)
+                ? new List<JsonFile>()
+                : JsonConvert.DeserializeObject<List<JsonFile>>(value);
+            }
+        }
+        [NotMapped]
+        public List<JsonFile> JsonProfileLinks { get; set; }
+    }
+
+    public class JsonFile
+    {
+        public string FileName { get; set; }
+        public long FileSize { get; set; }
     }
 }
