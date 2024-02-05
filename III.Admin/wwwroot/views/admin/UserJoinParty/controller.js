@@ -183,6 +183,11 @@ app.factory('dataservice', function ($http) {
         insertAwardAndUpdate: function (data, callback) {
             $http.post('/Admin/UserJoinParty/InsertAwardOnly', data).then(callback); 
         },
+
+        
+        getListFile: function (data,callback) {
+            $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
+        },
     }
 });
 
@@ -646,6 +651,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         $scope.Relationship = [];
         $scope.Introducer = {};
         $scope.SelfComment={};
+        $scope.fileList=[];
         function DateParse(rs){
             var date = new Date(rs);
             var day = date.getDate();
@@ -705,6 +711,9 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.getWarningDisciplinedByProfileCode()
 
                 $scope.getIntroducerOfPartyByProfileCode()
+                
+                $scope.getListFile();
+                
                 setTimeout(function () {
                     $("#PersonalHistorysFromDate").datepicker({
                         inline: false,
@@ -731,6 +740,44 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     }
     $scope.initData();
+
+    $scope.getListFile = function () {
+        dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
+            rs = rs.data;
+            $scope.fileList = rs.JsonProfileLinks;
+            $scope.$apply();
+            console.log(rs);
+        })
+    }
+    $scope.uploadExtensionFile = async function () {
+        var file = document.getElementById("file").files[0];
+        if (file == null || file == undefined || file == "") {
+            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+        }
+        else {
+            var formdata = new FormData();
+            formdata.append("file", file);
+            formdata.append("ResumeNumber", $scope.infUser.ResumeNumber);
+    
+            var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+            };
+
+            var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
+            var txt = JSON.parse(await resultImp.text());
+            console.log(txt);
+                if (txt.Error) {
+                    App.toastrError(txt.Title);
+                } else {
+                    App.toastrSuccess(txt.Title);
+                    $scope.getListFile();
+                }   
+        }
+    };
+    
+    $scope.fileList = [];
 
     $scope.senddata = function () {
         var data = $rootScope.ProjectCode;

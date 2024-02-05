@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Aspose.Pdf.Operators;
+using DocumentFormat.OpenXml.Spreadsheet;
 using ESEIM.Models;
 using ESEIM.Utils;
 using FTU.Utils.HelperNet;
@@ -25,6 +26,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static III.Admin.Controllers.AccountController;
+using static III.Admin.Controllers.MobileLoginController;
 
 namespace III.Admin.Controllers
 {
@@ -215,8 +217,71 @@ namespace III.Admin.Controllers
             }
         }
 
+        #region Profile doc
+
+        [HttpPost]
+        public async Task<object> fileUpload(IFormFile file,string ResumeNumber)
+        {
+            var msg = new JMessage() { Error = false };
+
+            if (file == null || file.Length == 0 || ResumeNumber==null|| ResumeNumber=="")
+            {
+                msg.Error = true;
+                msg.Title = "Bạn chưa chọn file";
+                return msg;
+            }
+
+            try
+            {
+                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == ResumeNumber);
+                if (user == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Bạn chưa có hồ sơ vui lòng nhập hồ sơ";
+                    return msg;
+                }
+
+                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                string newFileName = $"{user.ResumeNumber}_{file.FileName}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}";
+                string filePath = Path.Combine(uploadPath, newFileName);
+                
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                await file.CopyToAsync(stream);
+                }
+                user.JsonProfileLinks.Add(new JsonFile()
+                {
+                    FileName = newFileName,
+                    FileSize = file.Length
+                });
+                _context.PartyAdmissionProfiles.Update(user);
+                _context.SaveChanges();
+                msg.Title = "Tải file lên thành công";
+                
+                return msg;
+            }
+            catch (Exception ex)
+            {
+                msg.Error = true;
+                msg.Title = $"Internal server error: {ex.Message}";
+                return msg;
+            }
+        }
+        [HttpGet]
+        public object GetListProfile(string ResumeNumber)
+        {
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == ResumeNumber);
+            return user;
+        }
+
+        #endregion
 
         #region get
+
         public object GetPartyAdmissionProfile()
         {
             var user = _context.PartyAdmissionProfiles.ToList();
@@ -1984,38 +2049,6 @@ namespace III.Admin.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> fileUpload(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("File empty or not selected");
-            }
-
-            try
-            {
-                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                if (!Directory.Exists(uploadPath))
-                {
-                    Directory.CreateDirectory(uploadPath);
-                }
-                string filePath = Path.Combine(uploadPath, file.FileName);
-                if (System.IO.File.Exists(filePath))
-                {
-                    return Conflict("File with the same name already exists");
-                }
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                return Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
 
         [HttpGet]
         public object GetFileList()
