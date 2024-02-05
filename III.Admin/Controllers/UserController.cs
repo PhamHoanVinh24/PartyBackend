@@ -1970,6 +1970,7 @@ namespace III.Admin.Controllers
                 return Json(null);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> fileUpload(IFormFile file)
         {
@@ -2000,6 +2001,73 @@ namespace III.Admin.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        public object GetFileList()
+        {
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+            if (Directory.Exists(uploadPath))
+            {
+                var files = Directory.GetFiles(uploadPath).Select(f => new FileInfo(f));
+
+                var fileList = files.Select(file => new
+                {
+                    FilePath = file.FullName,
+                    FileExtension = file.Extension,
+                    FileName = file.Name,
+                    FileSize = file.Length,
+                    FileIconBase64 = GetFileIconBase64(file.FullName),
+                }).ToList();
+
+                return fileList;
+            }
+            else
+            {
+                return NotFound("Upload folder not found");
+            }
+        }
+        private string GetFileIconBase64(string filePath)
+        {
+            try
+            {
+                System.Drawing.Icon icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    icon.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    return "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception (e.g., file not found, no associated icon)
+                return null;
+            }
+        }
+        [HttpDelete]
+        public IActionResult DeleteFile(string FileName)
+        {
+            try
+            {
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", FileName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    return Json(new { success = true, message = "File deleted successfully" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "File not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
             }
         }
 

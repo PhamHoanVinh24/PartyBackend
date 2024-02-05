@@ -6,13 +6,18 @@
     ViewData["Title"] = "Quản lý module khách hàng";
     Layout = "~/Views/Shared/_LayoutApp.cshtml";
 }
-<div id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+<style>
+/* #contentMain{
+    display: flex;
+} */
+</style>
+<div class="row" id="contentMain" ng-app="App_ESEIM" ng-controller="Ctrl_ESEIM">
+    @await Html.PartialAsync("_Partial_Menu_Header")
     @if (User.Identity.IsAuthenticated)
     {
         var userSession = HttpContextAccessor.HttpContext.Session.Get<SessionUserLogin>("UserSession");
-
         <div ng-hide="true" ng-init="UserName='@userSession.UserName'"></div>
     }
-    <div ng-view></div>
+    <div class="col-10" ng-view></div>
 </div>
 <script src="~/views/front-end/User/controller.js" type="text/javascript"></script>

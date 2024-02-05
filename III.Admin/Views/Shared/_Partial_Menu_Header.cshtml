@@ -1,84 +1,91 @@
-﻿<div class="tab-bar col-2 " style="height:100vh;background-color:#FFF;box-shadow: 1px 3px 8px 0px #888888c2;padding-left:0;padding-right:0;">
-    <div class="" style="padding-top:10px">
-        <ul class="page-sidebar-menu" style="padding-left: 0rem">
-            <li class="nav-item" style="" id="Home">
-                <a class="nav-link" asp-controller="Home" asp-action="Index">
-                    <i class="fa fa-home icon"></i>
-                    <span>TRANG CHỦ</span>
-                </a>
-            </li>
-            <li class="nav-item" id="Help">
+﻿@using ESEIM.Utils;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<div class="header-nav" style="margin-left: 0rem">
+    <div class="container d-flex flex-row">
+        <div class="ms-2 item-menu" style="" id="Home">
+            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                <i class="fa fa-home icon"></i>
+            </a>
+        </div>
+        <div class="ms-2 item-menu" id="Help">
+            <a class="nav-link" href="#">
+                <span>PHẢN ÁNH KIẾN NGHỊ</span>
+            </a>
+        </div>
+
+        <div class="ms-2 item-menu" id="Help">
+            <a class="nav-link" href="#">
+                <span>THỦ TỤC HÀNH CHÍNH</span>
+            </a>
+        </div>
+
+        <div class="ms-2 item-menu" id="Help">
+            <a class="nav-link" href="#">
+                <span>HỖ TRỢ</span>
+            </a>
+        </div>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            //nút đăng nhập đăng ký
+            <div class="ms-2 item-menu" style="padding-right: 30px;text-align: center; color: white">
                 <a class="nav-link" href="#">
-                    <i class="fa fa-question-circle icon"></i>
-                    <span>HỖ TRỢ</span>
+                    <span>TÀI KHOẢN</span>
                 </a>
-            </li>
-            
-            @if (User.Identity.IsAuthenticated)
-            {
-                <li class="nav-item" style="" id="User">
-                    <a class="nav-link" asp-controller="UserProfile" asp-action="UserInfo">
-                        <i class="fa fa-user icon"></i>
-                        <span>THÔNG TIN CÁ NHÂN</span>
-                    </a>
-                </li>
-
-                <li class="nav-item" id="Resume">
-                    <a class="nav-link" asp-controller="UserProfile" asp-action="Index">
-                        <i class="fa fa-info-circle icon"></i>
-                        <span>LÝ LỊCH ĐẢNG VIÊN</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="Resume">
-                    <a class="nav-link" asp-controller="UserProfile" asp-action="Admin">
-                        <i class="fa fa-info-circle icon"></i>
-                        <span>DANH SÁCH ĐẢNG VIÊN</span>
-                    </a>
-                </li>
-
-                <li class="nav-item" id="iconut">
-                    <a class="nav-link"  asp-controller="UserProfile" asp-action="Logout">
-                        <i class="fa fa-sign-out icon"></i>
-                        <span>THOÁT</span>
-                    </a>
-                </li>
-            }
-        </ul>
-    </div>
-</div>
-<style>
-    .nav-item {
-        margin: 1rem;
-    }
-
-    .nav-item {
-        display: block;
-        margin: 0;
-        padding: 15px;
-        border: 0px;
-        font-size: 18px
-    }
-
-        .nav-item:hover {
-            font-size:20px;
-            transition: font-size 0.3s;
-            color: #903938;
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item fs-4" asp-controller="UserProfile" asp-action="Login">Đăng nhập</a></li>
+                        <li><a class="dropdown-item fs-4" asp-controller="UserProfile" asp-action="Register">Đăng ký</a></li>
+                    </ul>
+            </div>
+        }else{
+            var userSession = HttpContextAccessor.HttpContext.Session.Get<SessionUserLogin>("UserSession");
+            <div class="ms-2 item-menu" style="padding-right: 30px;text-align: center; color: white">
+                <a class="nav-link" href="#">
+                        <span>@userSession.FullName</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item fs-4" asp-controller="UserProfile" asp-action="Logout">Đăng xuất</a></li>
+                        <li><a class="dropdown-item fs-4" asp-controller="UserProfile" asp-action="Index">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item fs-4" asp-controller="UserProfile" asp-action="Register">Lý lịch đảng viên</a></li>
+                </ul>
+            </div>
         }
 
-    .active {
-        background-color: #CE7A58;
-        color: #fff;
+    </div>
+
+</div>
+<style>
+    .item-menu {
+        position: relative;
+        display: inline-block;
     }
 
+    /* Style for the dropdown links */
     .nav-link {
-        padding-left: 10px;
-        font-weight:600;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+        display: block;
     }
-   .icon{   
-       padding-right:7px;
-   }
+    /* Style for the dropdown menu */
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #dadce0;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+    /* Style for the dropdown items */
+    .dropdown-item {
+        color: black;
+        padding: 10px;
+        text-decoration: none;
+        display: block;
+    }
 
-    .left-menu{
-        
+    /* Show the dropdown menu on hover */
+    .item-menu:hover .dropdown-menu {
+        display: block;
     }
 </style>
