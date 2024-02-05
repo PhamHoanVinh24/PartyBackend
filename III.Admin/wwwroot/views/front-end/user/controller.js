@@ -906,6 +906,31 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     
     $scope.selectedFamily = {}
     $scope.addToFamily = function () {
+        if($scope.selectedFamily.Relation==null||$scope.selectedFamily.Relation==undefined||$scope.selectedFamily.Relation==''){
+            return
+        }
+        if($scope.selectedFamily.Residence==null||$scope.selectedFamily.Residence==undefined||$scope.selectedFamily.Residence==''){
+            return
+        }
+        
+        if($scope.selectedFamily.Name==null||$scope.selectedFamily.Name==undefined||$scope.selectedFamily.Name==''){
+            return
+        }
+        if($scope.selectedFamily.BirthYear==null||$scope.selectedFamily.BirthYear==undefined||$scope.selectedFamily.BirthYear==''){
+            return
+        }
+        if($scope.selectedFamily.PoliticalAttitude==null||$scope.selectedFamily.PoliticalAttitude==undefined||$scope.selectedFamily.PoliticalAttitude==''){
+            return
+        }
+        if($scope.selectedFamily.HomeTown==null||$scope.selectedFamily.HomeTown==undefined||$scope.selectedFamily.HomeTown==''){
+            return
+        }
+        if($scope.selectedFamily.Job==null||$scope.selectedFamily.Job==undefined||$scope.selectedFamily.Job==''){
+            return
+        }
+        if($scope.selectedFamily.WorkingProgress==null||$scope.selectedFamily.WorkingProgress==undefined||$scope.selectedFamily.WorkingProgress==''){
+            return
+        }
         var model = {}
         model.Relation = $scope.selectedFamily.Relation;
         model.Residence = $scope.selectedFamily.Residence;
@@ -1108,6 +1133,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToDisciplined = function () {
+        if($scope.selectedWarningDisciplined.MonthYear==null||$scope.selectedWarningDisciplined.MonthYear==undefined||$scope.selectedWarningDisciplined.MonthYear==''){
+            return
+        }
+        if($scope.selectedWarningDisciplined.Reason==null||$scope.selectedWarningDisciplined.Reason==undefined||$scope.selectedWarningDisciplined.Reason==''){
+            return
+        }
+        if($scope.selectedWarningDisciplined.GrantOfDecision==null||$scope.selectedWarningDisciplined.GrantOfDecision==undefined||$scope.selectedWarningDisciplined.GrantOfDecision==''){
+            return
+        }
         var model = {}
         model.MonthYear = $scope.selectedWarningDisciplined.MonthYear
         model.GrantOfDecision = $scope.selectedWarningDisciplined.GrantOfDecision
@@ -1141,6 +1175,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         })
     }
     $scope.addToBusinessNDuty = function () {
+        if($scope.selectedWorkingTracking.From==null||$scope.selectedWorkingTracking.From==undefined||$scope.selectedWorkingTracking.From==''){
+            return
+        }
+        if($scope.selectedWorkingTracking.To==null||$scope.selectedWorkingTracking.To==undefined||$scope.selectedWorkingTracking.To==''){
+            return
+        }
+        if($scope.selectedWorkingTracking.Work==null||$scope.selectedWorkingTracking.Work==undefined||$scope.selectedWorkingTracking.Work==''){
+            return
+        }
+        if($scope.selectedWorkingTracking.Role==null||$scope.selectedWorkingTracking.Role==undefined||$scope.selectedWorkingTracking.Role==''){
+            return
+        }
         var model = {}
         model.From = $scope.selectedWorkingTracking.From
         model.To = $scope.selectedWorkingTracking.To
@@ -1180,6 +1226,12 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToHistorySpecialist = function () {
+        if($scope.selectedHistorySpecialist.MonthYear==null||$scope.selectedHistorySpecialist.MonthYear==undefined||$scope.selectedHistorySpecialist.MonthYear==''){
+            return
+        }
+        if($scope.selectedHistorySpecialist.Content==null||$scope.selectedHistorySpecialist.Content==undefined||$scope.selectedHistorySpecialist.Content==''){
+            return
+        }
         var model = {}
         model.MonthYear = $scope.selectedHistorySpecialist.MonthYear
         model.Content = $scope.selectedHistorySpecialist.Content
@@ -1216,6 +1268,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.addToTrainingCertificatedPass = function () {
+        if($scope.selectedTrainingCertificatedPass.From==null||$scope.selectedTrainingCertificatedPass.From==undefined||$scope.selectedTrainingCertificatedPass.From==''){
+            return
+        }
+        if($scope.selectedTrainingCertificatedPass.To==null||$scope.selectedTrainingCertificatedPass.To==undefined||$scope.selectedTrainingCertificatedPass.To==''){
+            return
+        }
+        if($scope.selectedTrainingCertificatedPass.SchoolName==null||$scope.selectedTrainingCertificatedPass.SchoolName==undefined||$scope.selectedTrainingCertificatedPass.SchoolName==''){
+            return
+        }
+        if($scope.selectedTrainingCertificatedPass.Certificate==null||$scope.selectedTrainingCertificatedPass.Certificate==undefined||$scope.selectedTrainingCertificatedPass.Certificate==''){
+            return
+        }
         var model = {}
         model.SchoolName = $scope.selectedTrainingCertificatedPass.SchoolName
         model.Class = $scope.selectedTrainingCertificatedPass.Class
@@ -1228,6 +1292,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.submitTrainingCertificatedPass = function () {
+        
         $scope.model = [];
         $scope.PassedTrainingClasses.forEach(function (passedTrainingClasses) {
             var obj = {};
@@ -1256,6 +1321,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToAward = function () {
+        if($scope.selectedLaudatory.MonthYear==null||$scope.selectedLaudatory.MonthYear==undefined||$scope.selectedLaudatory.MonthYear==''){
+            return
+        }
+        if($scope.selectedLaudatory.GrantOfDecision==null||$scope.selectedLaudatory.GrantOfDecision==undefined||$scope.selectedLaudatory.GrantOfDecision==''){
+            return
+        }
+        if($scope.selectedLaudatory.Reason==null||$scope.selectedLaudatory.Reason==undefined||$scope.selectedLaudatory.Reason==''){
+            return
+        }
         var model = {}
         model.MonthYear = $scope.selectedLaudatory.MonthYear
         model.GrantOfDecision = $scope.selectedLaudatory.GrantOfDecision
@@ -1292,6 +1366,19 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToGoAboard = function () {
+        if($scope.selectedGoAboard.From==null||$scope.selectedGoAboard.From==undefined||$scope.selectedGoAboard.From==''){
+            return
+        }
+        if($scope.selectedGoAboard.To==null||$scope.selectedGoAboard.To==undefined||$scope.selectedGoAboard.To==''){
+            return
+        }
+        if($scope.selectedGoAboard.Contact==null||$scope.selectedGoAboard.Contact==undefined||$scope.selectedGoAboard.Contact==''){
+            return
+        }
+        if($scope.selectedGoAboard.Country==null||$scope.selectedGoAboard.Country==undefined||$scope.selectedGoAboard.Country==''){
+            return
+        }
+        var obj = {};
         var model = {}
         model.From = $scope.selectedGoAboard.From;
         model.To = $scope.selectedGoAboard.To;
@@ -1334,37 +1421,24 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.submitIntroducer = function () {
-        console.log($scope.infUser)
-        $scope.model = {};
-        $scope.isUpdate = 1;
-
-        if ($scope.isUpdate) {
-            $scope.model = $scope.Introducer;
-            dataservice.updateIntroducer($scope.model, function (result) {
-                result = result.data;
-                if (result.Error) {
-                    App.toastrError(result.Title);
-                } else {
-                    App.toastrSuccess(result.Title);
-                }
-            })
-        } else {
-            $scope.model.PersonIntroduced = $scope.infUser.Presenter;
-            $scope.model.PlaceTimeJoinUnion = $scope.infUser.PlaceinGroup + "," + $scope.infUser.DateInGroup;
-            $scope.model.PlaceTimeJoinParty = $scope.infUser.PlaceInParty + "," + $scope.infUser.DateInParty;
-            $scope.model.PlaceTimeRecognize = $scope.infUser.PlaceRecognize + "," + $scope.infUser.DateRecognize;
+        if($scope.Username!=null && $scope.Username!=undefined) {
+            $scope.model = {};
+            $scope.model.PersonIntroduced = $scope.Introducer.PersonIntroduced;
+            $scope.model.PlaceTimeJoinUnion = $scope.Introducer.PlaceTimeJoinUnion;
+            $scope.model.PlaceTimeJoinParty = $scope.Introducer.PlaceTimeJoinParty;
+            $scope.model.PlaceTimeRecognize = $scope.Introducer.PlaceTimeRecognize;
             $scope.model.ProfileCode = $scope.infUser.ResumeNumber;
-            console.log($scope.model);
-
-            dataservice.insertIntroducer($scope.model, function (rs) {
-                result = result.data;
-                if (result.Error) {
-                    App.toastrError(result.Title);
-                } else {
-                    App.toastrSuccess(result.Title);
-                }
-            })
-        }
+            $scope.model.Id = $scope.Introducer.Id;
+        };
+        dataservice.insertIntroducer($scope.model, function (result) {
+            result= result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.getIntroducerOfPartyByProfileCode()
+                    }
+        })
     }
     //getById
     $scope.getBusinessNDutyById = function () {
@@ -1762,7 +1836,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1791,7 +1865,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1820,7 +1894,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1849,7 +1923,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1878,7 +1952,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1907,7 +1981,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1936,7 +2010,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1963,7 +2037,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -1988,7 +2062,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -2016,7 +2090,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    result = result.data;
+                    
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
