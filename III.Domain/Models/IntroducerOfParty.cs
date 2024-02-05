@@ -10,7 +10,7 @@ namespace ESEIM.Models
 	public class IntroducerOfParty
 	{
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int id { get; set; }
+		public int Id { get; set; }
 
 		[StringLength(maximumLength: 150)]
 		public string PersonIntroduced { get; set; }

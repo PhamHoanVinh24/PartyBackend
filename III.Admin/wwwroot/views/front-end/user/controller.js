@@ -541,16 +541,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         $scope.Relationship[RelationshipIndex].Name = pE8[y][i].slice(('- Họ và tên:').length).trim()
                     }
                     if (pE8[y][i].startsWith('- Năm sinh:')) {
-                        let regex = /^(\d{4})-(\d{4})(?:\(([^)]*)\))?$/;
-                        let match = pE8[y][i].slice(('- Năm sinh:').length).trim().match(regex);
+                        //let regex = /^(\d{4})-(\d{4})(?:\(([^)]*)\))?$/;
+                        let match = pE8[y][i].slice(('- Năm sinh:').length).trim()//.match(regex);
 
-                        if (match) {
-                            $scope.Relationship[RelationshipIndex].Year = {
-                                YearBirth: match[1],
-                                YearDeath: match[2],
-                                Reason: match[3] ? match[3].trim() : ''  // Kiểm tra xem có thông tin lý do không
-                            };
-                        }
+                        // if (match) {
+                        //     $scope.Relationship[RelationshipIndex].Year = {
+                        //         YearBirth: match[1],
+                        //         YearDeath: match[2],
+                        //         Reason: match[3] ? match[3].trim() : ''  // Kiểm tra xem có thông tin lý do không
+                        //     };
+                        // }
+                        $scope.Relationship[RelationshipIndex].BirthYear = match;
                     }
                     if (pE8[y][i].startsWith("- Quê quán:")) {
                         $scope.Relationship[RelationshipIndex].HomeTown = pE8[y][i].slice(('- Quê quán:').length).trim()
@@ -568,7 +569,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     if (pE8[y][i].startsWith("- Quá trình công tác:")) {
                         // let regex = /^(\d{4})-(.*)$/;
 
-                        $scope.Relationship[RelationshipIndex].WorkingProcess = [];
+                        $scope.Relationship[RelationshipIndex].WorkingProgress = '';
                         for (j = i + 1; !pE8[y][j].startsWith('-') && !pE8[y][j].startsWith('*'); j++) {
                             let inputString = pE8[y][j];
                             //let match = inputString.match(regex);
@@ -578,16 +579,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                             //     Year: match[1],
                             //     Job: match[2].trim()  // Loại bỏ khoảng trắng ở đầu và cuối của công việc
                             //   };
-                            //  $scope.Relationship[RelationshipIndex].WorkingProcess.push(resultObject);
-                            $scope.Relationship[RelationshipIndex].WorkingProcess.push(inputString);
+                            //  $scope.Relationship[RelationshipIndex].WorkingProgress.push(resultObject);
+                            $scope.Relationship[RelationshipIndex].WorkingProgress+= inputString + ',';
                             i = j;
                             //}
                         }
                     }
                     if (pE8[y][i].startsWith("- Thái độ chính trị:")) {
-                        $scope.Relationship[RelationshipIndex].PoliticalAttitude = [];
+                        $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
                         for (j = i + 1; pE8[y][j].startsWith('+'); j++) {
-                            $scope.Relationship[RelationshipIndex].PoliticalAttitude.push(pE8[y][j].slice(1).trim());
+                            $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
                             i = j;
                         }
                     }
@@ -624,16 +625,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                     $scope.Relationship[RelationshipIndex].Name = pE8[y][a].slice(('- Họ và tên:').length).trim()
                                 }
                                 if (pE8[y][a].startsWith('- Năm sinh:')) {
-                                    let regex = /^(\d{4})-(\d{4})(?:\(([^)]*)\))?$/;
-                                    let match = pE8[y][a].slice(('- Năm sinh:').length).trim().match(regex);
+                                    //let regex = /^(\d{4})-(\d{4})(?:\(([^)]*)\))?$/;
+                                    let match = pE8[y][a].slice(('- Năm sinh:').length).trim()//.match(regex);
 
-                                    if (match) {
-                                        $scope.Relationship[RelationshipIndex].Year = {
-                                            YearBirth: match[1],
-                                            YearDeath: match[2],
-                                            Reason: match[3] ? match[3].trim() : ''  // Kiểm tra xem có thông tin lý do không
-                                        };
-                                    }
+                                    // if (match) {
+                                    //     $scope.Relationship[RelationshipIndex].Year = {
+                                    //         YearBirth: match[1],
+                                    //         YearDeath: match[2],
+                                    //         Reason: match[3] ? match[3].trim() : ''  // Kiểm tra xem có thông tin lý do không
+                                    //     };
+                                    // }
+                                    $scope.Relationship[RelationshipIndex].BirthYear = match;
                                 }
                                 if (pE8[y][a].startsWith("- Quê quán:")) {
                                     $scope.Relationship[RelationshipIndex].HomeTown = pE8[y][a].slice(('- Quê quán:').length).trim()
@@ -651,18 +653,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                 if (pE8[y][a].startsWith("- Quá trình công tác:")) {
                                     let regex = /^(\d{4})-(.*)$/;
 
-                                    $scope.Relationship[RelationshipIndex].WorkingProgress = [];
+                                    $scope.Relationship[RelationshipIndex].WorkingProgress = '';
                                     for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
                                         let inputString = pE8[y][j];
                                         
-                                        $scope.Relationship[RelationshipIndex].WorkingProcess.push(inputString);
+                                        $scope.Relationship[RelationshipIndex].WorkingProgress += inputString + ',';
                                         i = j;
                                     }
                                 }
                                 if (pE8[y][a].startsWith("- Thái độ chính trị:")) {
-                                    $scope.Relationship[RelationshipIndex].PoliticalAttitude = [];
+                                    $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
                                     for (j = a + 1; pE8[y][j].startsWith('+'); j++) {
-                                        $scope.Relationship[RelationshipIndex].PoliticalAttitude.push(pE8[y][j].slice(1).trim());
+                                        $scope.Relationship[RelationshipIndex].PoliticalAttitude += (pE8[y][j].slice(1).trim()) + ',';
                                         i = j;
                                     }
                                 }
