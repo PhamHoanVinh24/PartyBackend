@@ -1098,13 +1098,8 @@ namespace III.Admin.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.PersonIntroduced) || !string.IsNullOrEmpty(model.PlaceTimeJoinUnion) || !string.IsNullOrEmpty(model.PlaceTimeJoinParty) || model.PlaceTimeRecognize != null)
                 {
-                    if (model.Id == 0)
-                    {
-                        _context.IntroducerOfParties.Add(model);
-                    }
-                    else
-                    {
-                        var a = _context.IntroducerOfParties.Find(model.Id);
+                    
+                        var a = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == model.ProfileCode);
                         if (a != null)
                         {
                             a.PersonIntroduced = model.PersonIntroduced;
@@ -1117,11 +1112,10 @@ namespace III.Admin.Controllers
                         }
                         else
                         {
-                            msg.Error = true;
-                            msg.Title = "Giới thiệu vào đảng chưa hợp lệ";
-                            return msg;
+                            _context.IntroducerOfParties.Add(model);
+                            
                         }
-                    }
+               
                 }
                 else
                 {
