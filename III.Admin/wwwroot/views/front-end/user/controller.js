@@ -885,13 +885,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             type: "POST",
             url: "/UserProfile/GetPartyAdmissionProfile",
             contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                console.log(response);
-
+            success: function (result) {
+                console.log(result);
+                if (result.Error) {
+                    App.toastrError(result.Title);
+                } else {
+                    App.toastrSuccess(result.Title);
+                }
             },
             error: function (error) {
-                console.log(error);
-
+                App.toastrError(error);
             }
         });
 
