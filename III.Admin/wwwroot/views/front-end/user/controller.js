@@ -321,10 +321,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
         setTimeout(function () {
-            $scope.Email = 'NguyenHuy@gmail.com';
-            var today = new Date();
-            var resumeNumber = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
-            console.log(resumeNumber);
             var listPage = document.querySelectorAll(".Section0 > div > table");
             console.log(listPage)
             //Page2 Lịch sử bản thân
@@ -1050,15 +1046,24 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
                 console.log($scope.model);
-                dataservice.update($scope.model, function (rs) {
-                    rs = rs.data;
-                    console.log(rs);
+                dataservice.update($scope.model, function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                    }
                 });
             } else {
 
-                dataservice.insert($scope.model, function (rs) {
-                    rs = rs.data;
-                    console.log('rs');
+                dataservice.insert($scope.model, function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.infUser.ResumeNumber = rs.Object.ResumeNumber;
+                    }
                 });
 
             }
@@ -1087,9 +1092,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.model.push(obj)
         });
 
-        dataservice.insertPersonalHistory($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+        dataservice.insertPersonalHistory($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getPersonalHistoryByProfileCode();
+            }
         });
 
         console.log($scope.model);
@@ -1118,9 +1128,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.model.push(obj)
         });
 
-        dataservice.insertWarningDisciplined($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+        dataservice.insertWarningDisciplined($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getWarningDisciplinedByProfileCode();
+            }
         })
     }
     $scope.addToBusinessNDuty = function () {
@@ -1149,9 +1164,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         //    $scope.modelUpdate = [];
 
 
-        dataservice.insertBusinessNDuty($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+        dataservice.insertBusinessNDuty($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getWorkingTrackingByProfileCode();
+            }
         })
 
         console.log($scope.model);
@@ -1179,9 +1199,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         //    $scope.modelUpdate = [];
 
 
-        dataservice.insertHistorySpecialist($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+        dataservice.insertHistorySpecialist($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getHistorySpecialistByProfileCode();
+            }
         })
 
         console.log($scope.model);
@@ -1216,8 +1241,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
         dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getTrainingCertificatedPassByProfileCode();
+            }
         })
 
         console.log($scope.model);
@@ -1244,9 +1274,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.model.push(obj)
         });
         //    $scope.modelUpdate = [];
-        dataservice.insertAward($scope.model, function (rs) {
-            rs = rs.data;
-            console.log(rs);
+        dataservice.insertAward($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getAwardByProfileCode();
+            }
         })
 
 
@@ -1284,10 +1319,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id = e.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertGoAboards($scope.model, function (rs) {
-            rs = rs.data;
-            $scope.getGoAboardByProfileCode()
-            console.log(rs);
+        dataservice.insertGoAboards($scope.model, function (result) {
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getGoAboardByProfileCode();
+            }
         })
     }
 
@@ -1299,9 +1338,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
         if ($scope.isUpdate) {
             $scope.model = $scope.Introducer;
-            dataservice.updateIntroducer($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
+            dataservice.updateIntroducer($scope.model, function (result) {
+                result = result.data;
+                if (result.Error) {
+                    App.toastrError(result.Title);
+                } else {
+                    App.toastrSuccess(result.Title);
+                }
             })
         } else {
             $scope.model.PersonIntroduced = $scope.infUser.Presenter;
@@ -1312,8 +1355,12 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.model);
 
             dataservice.insertIntroducer($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
+                result = result.data;
+                if (result.Error) {
+                    App.toastrError(result.Title);
+                } else {
+                    App.toastrSuccess(result.Title);
+                }
             })
         }
     }
@@ -1671,28 +1718,31 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.modelPersonal);
     }
 
-    //Delete
-    $scope.deletePartyAdmissionProfile = function () {
+    ////Delete
+    //$scope.deletePartyAdmissionProfile = function () {
         
-        var isDeleted = confirm("Ban co muon xoa?");
-        if (isDeleted) {
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-
-                    console.log(response.Title);
-
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
-        }
-    }
+    //    var isDeleted = confirm("Ban co muon xoa?");
+    //    if (isDeleted) {
+    //        $.ajax({
+    //            type: "DELETE",
+    //            url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
+    //            contentType: "application/json; charset=utf-8",
+    //            dataType: "json",
+    //            // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+    //            success: function (result) {
+    //                result = result.data;
+    //                if (result.Error) {
+    //                    App.toastrError(result.Title);
+    //                } else {
+    //                    App.toastrSuccess(result.Title);
+    //                }
+    //            },
+    //            error: function (result) {
+    //                App.toastrError(result.Title);
+    //            }
+    //        });
+    //    }
+    //}
          
                                             
     $scope.deletePesonalHistory = function (index) {
@@ -1709,12 +1759,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8", 
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    if(response.Error==false)
-                        $scope.PersonalHistory.splice(index,1);
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.PersonalHistory.splice(index, 1);
                         $scope.$apply()
-                    console.log(response.Title);
-    
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1735,14 +1788,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    console.log(response.Title);
-                    $scope.HistoricalFeatures.splice(index,1);
-                    $scope.$apply()
-                    
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.HistoricalFeatures.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
-                    console.log(error.Title);
+                    App.toastrError(error.Title);
                 }
             });
         }
@@ -1760,11 +1817,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.Laudatory.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.Laudatory.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1785,11 +1846,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.Disciplined.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
-                    ;
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.Disciplined.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1810,11 +1875,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.GoAboard.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.GoAboard.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1835,10 +1904,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.PassedTrainingClasses.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.PassedTrainingClasses.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1859,11 +1933,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.BusinessNDuty.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.BusinessNDuty.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1882,10 +1960,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1904,10 +1985,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);
@@ -1929,11 +2013,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-                    $scope.Relationship.splice(index,1);
-                    $scope.$apply()
-                    console.log(response.Title);
-
+                success: function (result) {
+                    result = result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
+                        $scope.Relationship.splice(index, 1);
+                        $scope.$apply()
+                    }
                 },
                 error: function (error) {
                     console.log(error.Title);

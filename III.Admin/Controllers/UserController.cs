@@ -49,6 +49,7 @@ namespace III.Admin.Controllers
             _stringLocalizer = stringLocalizer;
             _parameterService = parameterService;
         }
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -61,10 +62,14 @@ namespace III.Admin.Controllers
         {
             return View();
         }
+
+        [Authorize]
         public IActionResult Admin()
         {
             return View();
         }
+
+        [Authorize]
         public IActionResult UserInfo()
         {
             return View();
@@ -103,6 +108,7 @@ namespace III.Admin.Controllers
             return Ok(msg);
         }
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
@@ -183,7 +189,7 @@ namespace III.Admin.Controllers
                         }
                         if (result.IsLockedOut)
                         {
-                            return RedirectToAction(nameof(Lockout));
+                            return RedirectToAction(nameof(Logout));
                         }
                         else
                         {
@@ -207,13 +213,6 @@ namespace III.Admin.Controllers
             {
                 return Redirect("/admin");
             }
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Lockout()
-        {
-            return View();
         }
 
 
