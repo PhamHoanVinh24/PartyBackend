@@ -282,7 +282,7 @@ namespace III.Admin.Controllers
         }
         public object GetIntroducerOfPartyById(int id)
         {
-            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.id == id);
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.Id == id);
             return rs;
         }
         public object GetIntroducerOfPartyByProfileCode(string profileCode)
@@ -602,7 +602,7 @@ namespace III.Admin.Controllers
                     msg.Title = "không tìm thấy mã hồ sơ";
                     return msg;
                 }
-                var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.id == model.id);
+                var obj = _context.IntroducerOfParties.FirstOrDefault(x => x.Id == model.Id);
                 if (obj == null)
                 {
                     msg.Error = true;
@@ -958,10 +958,7 @@ namespace III.Admin.Controllers
                                 return msg;
                             }
                         }
-                        _context.SaveChanges();
-
-
-                        msg.Title = "Thêm mới lý lịch gia đình thành công";
+                
                     }
                     else
                     {
@@ -971,6 +968,7 @@ namespace III.Admin.Controllers
                     }
                 }
                 _context.SaveChanges();
+                msg.Title = "Thêm mới lý lịch gia đình thành công";
             }
             catch (Exception err)
             {
@@ -1085,39 +1083,61 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+
         [HttpPost]
         public object InsertIntroduceOfParty([FromBody] IntroducerOfParty model)
         {
             var msg = new JMessage() { Error = false };
             try
             {
-                if (
-                    model != null
-                    )
+                var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                if (data == null)
                 {
-
-                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
-                    if (data == null)
+                    msg.Error = true;
+                    msg.Title = "Không tìm thấy mã hồ sơ";
+                    return msg;
+                }
+                if (!string.IsNullOrEmpty(model.PersonIntroduced) || !string.IsNullOrEmpty(model.PlaceTimeJoinUnion) || !string.IsNullOrEmpty(model.PlaceTimeJoinParty) || model.PlaceTimeRecognize != null)
+                {
+                    if (model.Id == 0)
                     {
-                        msg.Error = true;
-                        msg.Title = "Mã hồ sơ không tồn tại";
-                        return msg;
+                        _context.IntroducerOfParties.Add(model);
                     }
-                    _context.IntroducerOfParties.Add(model);
-                    _context.SaveChanges();
-
-                    msg.Title = "Thêm mới Người giới thiệu thành công";
+                    else
+                    {
+                        var a = _context.IntroducerOfParties.Find(model.Id);
+                        if (a != null)
+                        {
+                            a.PersonIntroduced = model.PersonIntroduced;
+                            a.PlaceTimeJoinUnion = model.PlaceTimeJoinUnion;
+                            a.PlaceTimeJoinParty = model.PlaceTimeJoinParty;
+                            a.PlaceTimeRecognize = model.PlaceTimeRecognize;
+                         
+                            a.IsDeleted = false;
+                            _context.IntroducerOfParties.Update(a);
+                        }
+                        else
+                        {
+                            msg.Error = true;
+                            msg.Title = "Giới thiệu vào đảng chưa hợp lệ";
+                            return msg;
+                        }
+                    }
                 }
                 else
                 {
                     msg.Error = true;
-                    msg.Title = "Người giới thiệu chưa hợp lệ";
+                    msg.Title = "Giới thiệu vào đảng chưa hợp lệ";
+                    return msg;
                 }
+                _context.SaveChanges();
+
+                msg.Title = "Thêm mới Giới thiệu vào đảng thành công";
             }
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Cập nhật Người giới thiệu thất bại";
+                msg.Title = "Cập nhật Giới thiệu vào đảng thất bại";
             }
             return msg;
         }
