@@ -45,7 +45,7 @@ app.factory('dataservice', function ($http) {
             $http.put('/UserProfile/UpdatePartyAdmissionProfile/', data).then(callback);
 
         },
-        delete: function (data, callback) {
+        deletePartyAdmissionProfile: function (data, callback) {
             $http.delete('/UserProfile/DeletePartyAdmissionProfile?Id=', data).then(callback);
         },
         //PersonalHistory
@@ -697,10 +697,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.listDetail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+15)').toArray()
                 .map(t => $(t).find('> span:last-child').text());
-
-            $scope.listDetail2 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(even)').toArray()
-                .map(z => $(z).text());
+            
+            $scope.Detail1 = $($scope.listPage[0])
+                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(2)').text()
+                //.map(z => $(z).text());
+            console.log($scope.listDetail2)
+            $scope.Detail2 = $($scope.listPage[0])
+            .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(4)').text()
             $scope.listDetail3 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(17) > span:last-child').text()
 
@@ -732,8 +735,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.Residence = $scope.listDetail1[7];
             $scope.infUser.TemporaryAddress = $scope.listDetail1[8];
 
-            $scope.infUser.Nation = $scope.listDetail2[0];
-            $scope.infUser.Religion = $scope.listDetail2[1];
+            $scope.infUser.Nation = $scope.Detail1;
+            $scope.infUser.Religion = $scope.Detail2;
 
             $scope.infUser.NowEmployee = $scope.listDetail3;
 
@@ -1798,32 +1801,32 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         console.log($scope.modelPersonal);
     }
 
-    ////Delete
-    //$scope.deletePartyAdmissionProfile = function () {
+    //Delete
+    $scope.deletePartyAdmissionProfile = function () {
         
-    //    var isDeleted = confirm("Ban co muon xoa?");
-    //    if (isDeleted) {
-    //        $.ajax({
-    //            type: "DELETE",
-    //            url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
-    //            contentType: "application/json; charset=utf-8",
-    //            dataType: "json",
-    //            // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-    //            success: function (result) {
-    //                result = result.data;
-    //                if (result.Error) {
-    //                    App.toastrError(result.Title);
-    //                } else {
-    //                    App.toastrSuccess(result.Title);
-    //                }
-    //            },
-    //            error: function (result) {
-    //                App.toastrError(result.Title);
-    //            }
-    //        });
-    //    }
-    //}
-         
+       var isDeleted = confirm("Ban co muon xoa?");
+       if (isDeleted) {
+           $.ajax({
+               type: "DELETE",
+               url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+               success: function (result) {
+                   result = result.data;
+                   if (result.Error) {
+                       App.toastrError(result.Title);
+                   } else {
+                       App.toastrSuccess(result.Title);
+                   }
+               },
+               error: function (result) {
+                   App.toastrError(result.Title);
+               }
+           });
+       }
+    }
+      
                                             
     $scope.deletePesonalHistory = function (index) {
        

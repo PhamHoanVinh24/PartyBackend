@@ -289,7 +289,7 @@ namespace III.Admin.Controllers
         }
         public object GetPartyAdmissionProfileByResumeNumber(string resumeNumber)
         {
-            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == resumeNumber);
+            var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == resumeNumber);
             return user;
         }
         /*public object GetPartyAdmissionProfileByUserCode([FromBody] int userCode)
@@ -302,7 +302,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Username == Username);
+                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.Username == Username);
                 if (user == null)
                 {
                     msg.Error = true;
@@ -330,7 +330,7 @@ namespace III.Admin.Controllers
         }
         public object GetFamilyById(int id)
         {
-            var rs = _context.Families.FirstOrDefault(p => p.Id == id);
+            var rs = _context.Families.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetFamilyByProfileCode(string profileCode)
@@ -346,7 +346,7 @@ namespace III.Admin.Controllers
         }
         public object GetIntroducerOfPartyById(int id)
         {
-            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.Id == id);
+            var rs = _context.IntroducerOfParties.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetIntroducerOfPartyByProfileCode(string profileCode)
@@ -362,7 +362,7 @@ namespace III.Admin.Controllers
         }
         public object GetAwardById(int id)
         {
-            var rs = _context.Awards.FirstOrDefault(p => p.Id == id);
+            var rs = _context.Awards.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetAwardByProfileCode(string profileCode)
@@ -377,7 +377,7 @@ namespace III.Admin.Controllers
         }
         public object GetGoAboardById(int id)
         {
-            var rs = _context.GoAboards.FirstOrDefault(p => p.Id == id);
+            var rs = _context.GoAboards.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetGoAboardByProfileCode(string profileCode)
@@ -394,7 +394,7 @@ namespace III.Admin.Controllers
 
         public object GetPersonalHistoryById(int id)
         {
-            var rs = _context.PersonalHistories.FirstOrDefault(p => p.Id == id);
+            var rs = _context.PersonalHistories.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetPersonalHistoryByProfileCode(string profileCode)
@@ -409,7 +409,7 @@ namespace III.Admin.Controllers
         }
         public object GetTrainingCertificatedPassById(int id)
         {
-            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.Id == id);
+            var rs = _context.TrainingCertificatedPasses.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetTrainingCertificatedPassByProfileCode(string profileCode)
@@ -425,7 +425,7 @@ namespace III.Admin.Controllers
         }
         public object GetWorkingTrackingById(int id)
         {
-            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.Id == id);
+            var rs = _context.WorkingTrackings.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetWorkingTrackingByProfileCode(string profileCode)
@@ -441,7 +441,7 @@ namespace III.Admin.Controllers
         }
         public object GetHistorySpecialistById(int id)
         {
-            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.Id == id);
+            var rs = _context.HistorySpecialists.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetHistorySpecialistByProfileCode(string profileCode)
@@ -457,7 +457,7 @@ namespace III.Admin.Controllers
         }
         public object GetWarningDisciplinedById(int id)
         {
-            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.Id == id);
+            var rs = _context.WarningDisciplineds.FirstOrDefault(p => p.IsDeleted == false && p.Id == id);
             return rs;
         }
         public object GetWarningDisciplinedByProfileCode(string profileCode)
@@ -659,7 +659,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var ptm= _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var ptm= _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (ptm == null)
                 {
                     msg.Error = true;
@@ -740,7 +740,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
                     msg.Error = true;
@@ -783,7 +783,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
                     msg.Error = true;
@@ -816,7 +816,7 @@ namespace III.Admin.Controllers
             
             try
             {
-                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
                     msg.Error = true;
@@ -851,7 +851,7 @@ namespace III.Admin.Controllers
             try
             {
 
-                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
                     msg.Error = true;
@@ -883,7 +883,7 @@ namespace III.Admin.Controllers
             try
             {
                 
-                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == model.ProfileCode);
+                var pm = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == model.ProfileCode);
                 if (pm == null)
                 {
                     msg.Error = true;
@@ -914,7 +914,7 @@ namespace III.Admin.Controllers
             
             try
             {
-                var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+                var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.IsDeleted == false && a.ResumeNumber == model.ProfileCode);
                 if (data == null)
                 {
                     msg.Error = true;
@@ -942,7 +942,7 @@ namespace III.Admin.Controllers
         public object UpdateWorkingTracking([FromBody] WorkingTracking model)
         {
             var msg = new JMessage() { Error = false };
-            var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == model.ProfileCode);
+            var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.IsDeleted == false && a.ResumeNumber == model.ProfileCode);
             if (data == null)
             {
                 msg.Error = true;
@@ -983,7 +983,7 @@ namespace III.Admin.Controllers
             
                 foreach (var x in model)
                 {
-                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.ResumeNumber == x.ProfileCode);
+                    var data = _context.PartyAdmissionProfiles.FirstOrDefault(a => a.IsDeleted == false && a.ResumeNumber == x.ProfileCode);
                     if (data == null)
                     {
                         msg.Error = true;
@@ -1048,7 +1048,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             try
             {
-                var data=_context.PartyAdmissionProfiles.FirstOrDefault(a=>a.ResumeNumber== model.ProfileCode); 
+                var data=_context.PartyAdmissionProfiles.FirstOrDefault(a=> a.IsDeleted == false && a.ResumeNumber== model.ProfileCode); 
                 if (data == null)
                 {
                     msg.Error = true;
@@ -1091,7 +1091,7 @@ namespace III.Admin.Controllers
                         msg.Title = "Chưa có tài khoản";
                         return msg;
                     }
-                    var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.Username == model.Username);
+                    var user = _context.PartyAdmissionProfiles.FirstOrDefault(x =>x.IsDeleted == false && x.Username == model.Username);
                     if (user!=null)
                     {
                         msg.Error = true;
