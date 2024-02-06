@@ -173,8 +173,9 @@ app.factory('dataservice', function ($http) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
 
         },
-        getListFile: function (callback) {
-            $http.get('/UserProfile/GetFileList').then(callback);
+        //
+        getListFile: function (data,callback) {
+            $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
         },
     }
 });
@@ -278,14 +279,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     };
 
-    $scope.getListFile = function () {
-        dataservice.getListFile(function (rs) {
-            rs = rs.data;
-            $scope.fileList = rs;
-            console.log(rs);
-        })
-    }
-    $scope.getListFile();
+    
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
 
@@ -405,29 +399,29 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     Certificate: pElementP4s[i][1]
                 };
                 $scope.PassedTrainingClasses.push(obj);
-                check = 1;
+                //check = 1;
             }
-            if (check === 1) {
-                var ttpd = document.getElementById("TTPD")
-                var llgd = document.getElementById("LLGD")
-                var lsbt = document.getElementById("LSBT")
-                var gtvd = document.getElementById("GTVD")
+            // if (check === 1) {
+            //     var ttpd = document.getElementById("TTPD")
+            //     var llgd = document.getElementById("LLGD")
+            //     var lsbt = document.getElementById("LSBT")
+            //     var gtvd = document.getElementById("GTVD")
 
-                console.log(llgd)
+            //     console.log(llgd)
 
-                llgd.style.opacity = 1;
-                llgd.style.pointerEvents = "auto";
+            //     llgd.style.opacity = 1;
+            //     llgd.style.pointerEvents = "auto";
 
-                lsbt.style.opacity = 1;
-                lsbt.style.pointerEvents = "auto";
+            //     lsbt.style.opacity = 1;
+            //     lsbt.style.pointerEvents = "auto";
 
-                gtvd.style.opacity = 1;
-                gtvd.style.pointerEvents = "auto";
+            //     gtvd.style.opacity = 1;
+            //     gtvd.style.pointerEvents = "auto";
 
-                ttpd.style.display = "block";
+            //     ttpd.style.display = "block";
 
-                check = 0;
-            }
+            //     check = 0;
+            // }
             console.log('PassedTrainingClasses', $scope.PassedTrainingClasses)
 
 
@@ -866,6 +860,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         $scope.getTrainingCertificatedPassByProfileCode();
                         $scope.getWarningDisciplinedByProfileCode();
                         $scope.getIntroducerOfPartyByProfileCode();
+                        $scope.getListFile();
                     }
                 }
             })
@@ -975,9 +970,14 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Id=e.Id;
             $scope.model.push(obj)
         });
-            dataservice.insertFamily($scope.model, function (rs) {
-                rs = rs.data;
-                console.log(rs);
+            dataservice.insertFamily($scope.model, function (result) {
+                result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getPersonalHistoryByProfileCode();
+            }
             })
         
         console.log($scope.model);
@@ -1307,7 +1307,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         });
 
 
-        dataservice.insertTrainingCertificatedPass($scope.model, function (rs) {
+        dataservice.insertTrainingCertificatedPass($scope.model, function (result) {
             result = result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -1421,8 +1421,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.submitIntroducer = function () {
-        if($scope.Username!=null && $scope.Username!=undefined) {
-            $scope.model = {};
+        $scope.model = {};
+        if($scope.UserName!=null && $scope.UserName!=undefined) {
             $scope.model.PersonIntroduced = $scope.Introducer.PersonIntroduced;
             $scope.model.PlaceTimeJoinUnion = $scope.Introducer.PlaceTimeJoinUnion;
             $scope.model.PlaceTimeJoinParty = $scope.Introducer.PlaceTimeJoinParty;
@@ -1659,6 +1659,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //Insert
 
     //Update
+    $scope.selectedFamily={};
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
     $scope.selectedHistorySpecialist = {};
@@ -1667,6 +1668,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.selectedTrainingCertificatedPass = {};
     $scope.selectedGoAboard = {};
 
+    $scope.selectFamily = function (x) {
+        $scope.selectedFamily = x;
+    };
     $scope.selectPersonHistory = function (x) {
         $scope.selectedPersonHistory = x;
     };
@@ -2149,6 +2153,44 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
         console.log($scope.id);
     }
+    //Add file
+    $scope.getListFile = function () {
+        dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
+            rs = rs.data;
+            $scope.fileList = rs.JsonProfileLinks;
+            $scope.$apply();
+            console.log(rs);
+        })
+    }
+    $scope.uploadExtensionFile = async function () {
+        var file = document.getElementById("file").files[0];
+        if (file == null || file == undefined || file == "") {
+            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+        }
+        else {
+            var formdata = new FormData();
+            formdata.append("file", file);
+            formdata.append("ResumeNumber", $scope.infUser.ResumeNumber);
+    
+            var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+            };
+
+            var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
+            var txt = JSON.parse(await resultImp.text());
+            console.log(txt);
+                if (txt.Error) {
+                    App.toastrError(txt.Title);
+                } else {
+                    App.toastrSuccess(txt.Title);
+                    $scope.getListFile();
+                }   
+        }
+    };
+    
+    $scope.fileList = [];
 
     setTimeout(async function () {
         //  loadDate();
