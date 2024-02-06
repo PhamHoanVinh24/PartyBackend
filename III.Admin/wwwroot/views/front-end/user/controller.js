@@ -399,29 +399,29 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     Certificate: pElementP4s[i][1]
                 };
                 $scope.PassedTrainingClasses.push(obj);
-                check = 1;
+                //check = 1;
             }
-            if (check === 1) {
-                var ttpd = document.getElementById("TTPD")
-                var llgd = document.getElementById("LLGD")
-                var lsbt = document.getElementById("LSBT")
-                var gtvd = document.getElementById("GTVD")
+            // if (check === 1) {
+            //     var ttpd = document.getElementById("TTPD")
+            //     var llgd = document.getElementById("LLGD")
+            //     var lsbt = document.getElementById("LSBT")
+            //     var gtvd = document.getElementById("GTVD")
 
-                console.log(llgd)
+            //     console.log(llgd)
 
-                llgd.style.opacity = 1;
-                llgd.style.pointerEvents = "auto";
+            //     llgd.style.opacity = 1;
+            //     llgd.style.pointerEvents = "auto";
 
-                lsbt.style.opacity = 1;
-                lsbt.style.pointerEvents = "auto";
+            //     lsbt.style.opacity = 1;
+            //     lsbt.style.pointerEvents = "auto";
 
-                gtvd.style.opacity = 1;
-                gtvd.style.pointerEvents = "auto";
+            //     gtvd.style.opacity = 1;
+            //     gtvd.style.pointerEvents = "auto";
 
-                ttpd.style.display = "block";
+            //     ttpd.style.display = "block";
 
-                check = 0;
-            }
+            //     check = 0;
+            // }
             console.log('PassedTrainingClasses', $scope.PassedTrainingClasses)
 
 
