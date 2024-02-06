@@ -246,7 +246,8 @@ namespace III.Admin.Controllers
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
-                string newFileName = $"{user.ResumeNumber}_{file.FileName}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}";
+
+                string newFileName = $"{user.ResumeNumber}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}_{file.FileName}";
                 string filePath = Path.Combine(uploadPath, newFileName);
                 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -277,7 +278,45 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == ResumeNumber);
             return user;
         }
+        public object DeleteFile(string fileName,string ResumeNumber)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
 
+                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == ResumeNumber);
+
+                var files = user.JsonProfileLinks;
+                if (files.Count>0)
+                {
+                    var file= files.FirstOrDefault(x => x.FileName == fileName);
+                    if(file != null)
+                    {
+                        user.JsonProfileLinks.Remove(file);
+                        _context.PartyAdmissionProfiles.Update(user);
+                        _context.SaveChanges();
+                        msg.Title = "Xóa file thành công";
+                    }
+                    else
+                    {
+                        msg.Error = true;
+                        msg.Title = $"Không tìm thấy file trong danh sách";
+                    }
+                }
+                else
+                {
+                    msg.Error = true;
+                    msg.Title = $"Không tìm thấy danh sách tải lên";
+                }
+            }
+            catch(Exception ex)
+            {
+                msg.Error = true;
+                msg.Title = $"Internal server error: {ex.Message}";
+            }
+
+            return msg;
+        }
         #endregion
 
         #region get

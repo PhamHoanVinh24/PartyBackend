@@ -188,6 +188,9 @@ app.factory('dataservice', function ($http) {
         getListFile: function (data,callback) {
             $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
         },
+        deleteFile: function(fileName,ResumeNumber,callback){
+            $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
+        }
     }
 });
 
@@ -745,8 +748,21 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
             rs = rs.data;
             $scope.fileList = rs.JsonProfileLinks;
-            $scope.$apply();
+            //$scope.$apply();
             console.log(rs);
+        })
+    }
+    
+    $scope.deleteFile = function (x) {
+        dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
+            txt=txt.data;
+            console.log(txt);
+                if (txt.Error) {
+                    App.toastrError(txt.Title);
+                } else {
+                    App.toastrSuccess(txt.Title);
+                    $scope.getListFile();
+                }
         })
     }
     $scope.uploadExtensionFile = async function () {
@@ -2272,3 +2288,4 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     }, 50);
 });
+
