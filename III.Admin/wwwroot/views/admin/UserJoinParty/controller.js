@@ -2288,3 +2288,4 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     }, 50);
 });
+
