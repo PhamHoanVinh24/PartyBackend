@@ -504,14 +504,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 }).map(function (element) {
                     return element.innerText.trim();
                 });
-                pElementP7s.push(pInTr);
+                if(pInTr.length == 3){
+                    pElementP7s.push(pInTr);
+                }
             })
 
             for (let i = 0; i < pElementP7s.length; i++) {
                 var DisciplinedObj = {
-                    MonthYear: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][0].substr(pElementP6s[i][0].indexOf('-') - 2, 7) : 'None',
-                    Reason: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][1] : "None",
-                    GrantOfDecision: pElementP7s[i][0].includes('-', 2) ? pElementP7s[i][2] : "None",
+                    MonthYear: pElementP7s[i][0] ? pElementP7s[i][0] : 'None',
+                    Reason: pElementP7s[i][0] ? pElementP7s[i][1] : "None",
+                    GrantOfDecision: pElementP7s[i][0] ? pElementP7s[i][2] : "None",
                 };
                 $scope.Disciplined.push(DisciplinedObj);
             }
@@ -802,6 +804,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //     $scope.submitHistorySpecialist();
     //     $scope.insertFamily();
     // }
+
+    
     $scope.getPartyAdmissionProfileByUsername = function () {
         if ($scope.UserName == null || $scope.UserName == undefined) {
             //thông báo không lấy được username
@@ -811,7 +815,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 rs = rs.data;
                 console.log(rs);
                 if (rs.Error) {
-
+                   
                 }
                 else {
                     rs = rs.Object;
@@ -865,6 +869,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         $scope.getIntroducerOfPartyByProfileCode();
                         $scope.getListFile();
                     }
+                    
                 }
             })
         }
@@ -1097,6 +1102,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 });
 
             }
+
+            $scope.getPartyAdmissionProfileByUsername()
+            
         }
 
         console.log($scope.model);
