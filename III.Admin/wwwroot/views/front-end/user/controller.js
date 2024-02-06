@@ -173,8 +173,9 @@ app.factory('dataservice', function ($http) {
             $http.post('/UserProfile/UpdateGoAboard/', data).then(callback);
 
         },
-        getListFile: function (callback) {
-            $http.get('/UserProfile/GetFileList').then(callback);
+        //
+        getListFile: function (data,callback) {
+            $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
         },
     }
 });
@@ -278,14 +279,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
     };
 
-    $scope.getListFile = function () {
-        dataservice.getListFile(function (rs) {
-            rs = rs.data;
-            $scope.fileList = rs;
-            console.log(rs);
-        })
-    }
-    $scope.getListFile();
+    
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
 
@@ -866,6 +860,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         $scope.getTrainingCertificatedPassByProfileCode();
                         $scope.getWarningDisciplinedByProfileCode();
                         $scope.getIntroducerOfPartyByProfileCode();
+                        $scope.getListFile();
                     }
                 }
             })
@@ -1664,6 +1659,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //Insert
 
     //Update
+    $scope.selectedFamily={};
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
     $scope.selectedHistorySpecialist = {};
@@ -1672,6 +1668,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.selectedTrainingCertificatedPass = {};
     $scope.selectedGoAboard = {};
 
+    $scope.selectFamily = function (x) {
+        $scope.selectedFamily = x;
+    };
     $scope.selectPersonHistory = function (x) {
         $scope.selectedPersonHistory = x;
     };
@@ -2154,6 +2153,44 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
         console.log($scope.id);
     }
+    //Add file
+    $scope.getListFile = function () {
+        dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
+            rs = rs.data;
+            $scope.fileList = rs.JsonProfileLinks;
+            $scope.$apply();
+            console.log(rs);
+        })
+    }
+    $scope.uploadExtensionFile = async function () {
+        var file = document.getElementById("file").files[0];
+        if (file == null || file == undefined || file == "") {
+            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+        }
+        else {
+            var formdata = new FormData();
+            formdata.append("file", file);
+            formdata.append("ResumeNumber", $scope.infUser.ResumeNumber);
+    
+            var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+            };
+
+            var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
+            var txt = JSON.parse(await resultImp.text());
+            console.log(txt);
+                if (txt.Error) {
+                    App.toastrError(txt.Title);
+                } else {
+                    App.toastrSuccess(txt.Title);
+                    $scope.getListFile();
+                }   
+        }
+    };
+    
+    $scope.fileList = [];
 
     setTimeout(async function () {
         //  loadDate();
