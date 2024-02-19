@@ -380,7 +380,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             console.log(pElementP4s)
 
-            $scope.PassedTrainingClasses = [];
             let check = 0;
 
             for (let i = 0; i < pElementP4s.length; i++) {

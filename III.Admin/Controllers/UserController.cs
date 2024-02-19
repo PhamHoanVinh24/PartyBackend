@@ -1052,6 +1052,7 @@ namespace III.Admin.Controllers
                                 a.HomeTown = x.HomeTown;
                                 a.Residence = x.Residence;
                                 a.Job = x.Job;
+                                a.PartyMember = x.PartyMember;
                                 a.WorkingProgress = x.WorkingProgress;
                                 a.ClassComposition = x.ClassComposition;
                                 a.IsDeleted = false;
