@@ -58,6 +58,9 @@ namespace III.Admin.Controllers
         {
             public string FromDate { get; set; }
             public string ToDate { get; set; }
+            public string Name { get; set; }
+            public string Username { get; set; }
+            public string Status { get; set; }
         }
 
         [HttpPost]
@@ -73,11 +76,13 @@ namespace III.Admin.Controllers
                             from b in b1.DefaultIfEmpty()
                             where (fromDate == null || (fromDate <= a.Birthday))
                                    && (toDate == null || (toDate >= a.Birthday))
-                                   //&& (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
-                                   //&& (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
-                                   //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
-                                   //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
-                                   //&& (string.IsNullOrEmpty(jTablePara.Degree) || a.JobEducation.ToLower().Contains(jTablePara.Degree.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Status) || a.Status==jTablePara.Status)
+                                   && (string.IsNullOrEmpty(jTablePara.Username) || a.Username.ToLower().Contains(jTablePara.Username.ToLower()) || a.ResumeNumber.ToLower().Contains(jTablePara.Username.ToLower()))
+                            //&& (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
+                            //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
+                            //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
+                            //&& (string.IsNullOrEmpty(jTablePara.Degree) || a.JobEducation.ToLower().Contains(jTablePara.Degree.ToLower()))
                             select new
                             {
                                 a.Id,

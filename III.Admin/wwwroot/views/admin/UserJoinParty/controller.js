@@ -374,7 +374,22 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         vm.selectAll = true;
     }
 
-    
+    $scope.ListStatus = [{
+        Name: 'Chọn trạng thái',
+        Code: ''
+    },
+    {
+        Name: 'Mới đẩy lên',
+        Code: 'Mới đẩy lên'
+    },
+    {
+        Name: 'Mới cập nhật',
+        Code: 'Mới cập nhật'
+    },
+    {
+        Name: 'Đã duyệt',
+        Code: 'Đã duyệt'
+    }]
     $scope.delete = function (id) {
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
@@ -401,14 +416,17 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.search = function () {
         reloadData(true);
     }
+    $scope.searchModel={
+        FromDate:'',
+        ToDate:'',
+        Name:'',
+        Username:'',
+        Status:''
+    }
     $scope.initData = function () {
-        dataservice.getCatId(function (rs) {
-            rs = rs.data;
-
-            $scope.listModuleId = rs;
-        });
-
+       
     };
+    $scope.initData()
     $scope.edit=function(id){
         $location.path('/edit/'+id);
     }
@@ -425,8 +443,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             },
             type: 'POST',
             data: function (d) {
-                d.FromDate='',
-                d.ToDate=''
+                d.FromDate=$scope.searchModel.FromDate,
+                d.ToDate=$scope.searchModel.ToDate,
+                d.Name=$scope.searchModel.Name,
+                d.Username=$scope.searchModel.Username
+                d.Status=$scope.searchModel.Status
             },
             complete: function () {
                 App.unblockUI("#contentMain");
@@ -476,14 +497,12 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     .renderWith(function (data, type,full) {
         return `<p class="bold"><span style="color: blue">[Mã: ${full.Username}]</span> ${data}</p>`;
     }));
-    vm.dtColumns.push(DTColumnBuilder.newColumn('CreatedBy').withOption('sClass', '').withTitle('{{"Người tạo" | translate}}').renderWith(function (data, type) {
-        return data
-    }));
+
     vm.dtColumns.push(DTColumnBuilder.newColumn('Status').withOption('sClass', '').withTitle('{{"Trạng thái" | translate}}').renderWith(function (data, type) {
         return data
     }));
     
-    vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"File" | translate}}').renderWith(function (data, type) {
+    vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
         return data
     }));
 
@@ -619,6 +638,10 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.initData=function(){
             
         $scope.ListStatus = [{
+            Name: 'Mới đẩy lên',
+            Code: 'Mới đẩy lên'
+        },
+        {
             Name: 'Mới cập nhật',
             Code: 'Mới cập nhật'
         },
