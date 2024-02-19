@@ -64,7 +64,7 @@ app.factory('dataservice', function ($http) {
             
         },
         delete: function (data, callback) {
-            $http.delete('/UserProfile/DeletePartyAdmissionProfile/', data).then(callback);
+            $http.delete('/UserProfile/DeletePartyAdmissionProfile?Id='+ data).then(callback);
         },
         
 
@@ -378,19 +378,16 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.delete = function (id) {
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    console.log(result.Title);
-                },
-                error: function (error) {
-                    console.log(error.Title);
+            dataservice.delete(id,function(result){
+                result=result.data;
+                console.log(result);
+                if (result.Error) {
+                    App.toastrError(result.Title);
+                } else {
+                    App.toastrSuccess(result.Title);
+                    $scope.reload();
                 }
-            });
+            })
         }
     }
 
@@ -411,10 +408,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $scope.listModuleId = rs;
         });
 
-    };
-
-    $scope.delete = function (id) {
-       
     };
     $scope.edit=function(id){
         $location.path('/edit/'+id);
