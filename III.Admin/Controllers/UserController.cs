@@ -625,6 +625,7 @@ namespace III.Admin.Controllers
           
      
             public string Username { get; set; }
+            public string Status { get; set; }
         }
         [HttpPut]
         public async Task<object> UpdatePartyAdmissionProfile([FromBody] ModelViewPAMP model)
@@ -679,6 +680,8 @@ namespace III.Admin.Controllers
                 obj.SelfComment = model.SelfComment;
                 obj.CreatedPlace = model.CreatedPlace;
                 obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
+                if(model.Status!=null||model.Status!="")
+                    obj.Status = model.Status;
 
                 _context.PartyAdmissionProfiles.Update(obj);
                 _context.SaveChanges();

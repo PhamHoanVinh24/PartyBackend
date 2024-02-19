@@ -77,6 +77,7 @@
         /*border-bottom: 1px solid #d3d3d3;*/
         font-weight: 600;
     }
+
     .nav-tabs li:first-child div {
         border-radius: 5px 0 0 0px;
     }
@@ -126,37 +127,44 @@
     input {
         border: none;
     }
-    .mb-10{
+
+    .mb-10 {
         margin-bottom: 10px;
     }
+
     .nav-tabs {
-        display: flex; /* Sử dụng flexbox để các tab không bao giờ xuống hàng */
-        overflow-x: auto; /* Tạo thanh cuộn ngang nếu cần */
-        white-space: nowrap; /* Ngăn các tab xuống hàng */
-        -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị cảm ứng */
-        scrollbar-width: thin; /* Hiển thị thanh cuộn mỏng */
+        display: flex;
+        /* Sử dụng flexbox để các tab không bao giờ xuống hàng */
+        overflow-x: auto;
+        /* Tạo thanh cuộn ngang nếu cần */
+        white-space: nowrap;
+        /* Ngăn các tab xuống hàng */
+        -webkit-overflow-scrolling: touch;
+        /* Hỗ trợ cuộn mượt trên thiết bị cảm ứng */
+        scrollbar-width: thin;
+        /* Hiển thị thanh cuộn mỏng */
         overflow-y: hidden;
-      }
-    
-      .nav-tabs li {
-        flex: 0 0 auto; /* Không co giãn các tab */
-      }
+    }
+
+    .nav-tabs li {
+        flex: 0 0 auto;
+        /* Không co giãn các tab */
+    }
 </style>
 <div class="portlet-body form row" style="margin-top: 15px">
     <div class="col-lg-12" method="post">
         <div class="col-md-3 mb-10">
             <div class="input-group br24">
-                <input class="form-control inputFile" placeholder="Chọn tệp"
-                    readonly />
+                <input class="form-control inputFile" placeholder="Chọn tệp" readonly />
                 <span class="input-group-btn">
                     <button type="button" onclick="$(this).parent().find('input[type=file]').click();"
                         class="btn btn-default no-shadow end-date">
                         <span class="">Chọn tệp</span>
                     </button>
                     <input class="form-control hidden input-custom" id="FileItem" custom-on-change="FileItem"
-                            name="FileItem"
-                            onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)"
-                            type="file">
+                        name="FileItem"
+                        onchange="$('.inputFile').val($(this).val().split('\\').pop()); angular.element(this).scope().fileNameChanged(this)"
+                        type="file">
                 </span>
             </div>
         </div>
@@ -168,11 +176,35 @@
                 </a>
             </div>
         </div>
-        <div class="col-md-3">
-            <div ng-click="submitPartyAdmissionProfile()">
-                <i class="fa fa-floppy-o fs-1" style="font-size: 25px;"></i>
+        <!-- trạng thái -->
+        <div class="col-md-6">
+            <label class="col-md-4 fw600 text-underline">{{'Trạng thái' | translate}}</label>
+            <div class="col-md-5">
+                <div class="input-group br24">
+                    <ui-select tagging ng-model="infUser.Status" theme="bootstrap">
+                        <ui-select-match
+                            placeholder="{{'Trạng thái' | translate}}...">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="x.Code as x in ListStatus | filter: $select.search">
+                            {{x.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="infUser.Status='';"
+                            class="btn btn-default no-shadow start-date">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div ng-click="submitPartyAdmissionProfile()">
+                    <i class="fa fa-floppy-o fs-1" style="font-size: 25px;"></i>
+                </div>
             </div>
         </div>
+        
+
         <div class="tab-content pt10" style="display: none;">
             <div role="tabpanel" class="tab-pane fade in active" id="Word">
                 <textarea id="defaultRTE">
@@ -562,7 +594,7 @@
             </div>
         </form>
     </div>
-    
+
     <div class="row">
         <div class="col-lg-12 " style="padding-inline-end: 30px;padding-inline-start: 30px;">
             <div class="tab" role="tabpanel" style="width:100%">

@@ -617,6 +617,16 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
 
 app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataservice, $filter,$http) {   
     $scope.initData=function(){
+            
+        $scope.ListStatus = [{
+            Name: 'Mới cập nhật',
+            Code: 'Mới cập nhật'
+        },
+        {
+            Name: 'Đã duyệt',
+            Code: 'Đã duyệt'
+        }]
+
         //Thêm data vào PersonalHistory
         $scope.PersonalHistory = [];
 
@@ -690,6 +700,8 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.SelfComment.context = rs.SelfComment;
                 $scope.PlaceCreatedTime.place =rs.CreatedPlace;
                 $scope.infUser.ResumeNumber =  rs.ResumeNumber;
+                $scope.infUser.Status =  rs.Status;
+                
                 $scope.Username=rs.Username;
                 console.log($scope.infUser);
                 //Get By Profilecode
@@ -745,7 +757,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             console.log(rs);
         })
     }
-    
     $scope.deleteFile = function (x) {
         dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
             txt=txt.data;
@@ -1165,6 +1176,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.model.SelfComment = $scope.SelfComment.context;
                 $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
+                $scope.model.Status = $scope.infUser.Status;
                 $scope.model.Username=$scope.Username;
 
             if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&

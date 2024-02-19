@@ -177,6 +177,9 @@ app.factory('dataservice', function ($http) {
         getListFile: function (data,callback) {
             $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
         },
+        deleteFile: function(fileName,ResumeNumber,callback){
+            $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
+        }
     }
 });
 
@@ -201,28 +204,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //
     //
     //
-    $scope.deleteFile = function (e) {
-        console.log(e.FileName);
-        var isDeleted = confirm("Bạn có muốn xóa?");
-        if (isDeleted) {
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteFile?FileName=" + e.FileName,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (response) {
-
-                    console.log(response.Title);
-                    confirm("Xóa thành công");
-
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                    confirm("Có lỗi khi xóa, thử lại");
+    
+    $scope.deleteFile = function (x) {
+        dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
+            txt=txt.data;
+            console.log(txt);
+                if (txt.Error) {
+                    App.toastrError(txt.Title);
+                } else {
+                    App.toastrSuccess(txt.Title);
+                    $scope.getListFile();
                 }
-            });
-        }
+        })
     }
     $scope.fileNameChanged = function () {
         $scope.openExcel = true;
