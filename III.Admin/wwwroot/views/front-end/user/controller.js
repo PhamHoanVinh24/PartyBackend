@@ -558,9 +558,12 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     if (pE8[y][i].startsWith("- Nghề nghiệp:")) {
                         $scope.Relationship[RelationshipIndex].Job = pE8[y][i].slice(('- Nghề nghiệp:').length).trim()
                     }
-                    if (pE8[y][i].startsWith("- Là đảng viên")) {
-                        $scope.Relationship[RelationshipIndex].ClassComposition = pE8[y][i].slice(('-').length).trim()
-                        $scope.Relationship[RelationshipIndex].PartyMember = true
+                    if (pE8[y][i].startsWith("- Đảng viên:")) {
+                        var partyMember = pE8[y][i].slice(('- Đảng viên:').length).trim()
+                        if(partyMember.toLowerCase() == "không"){
+                            $scope.Relationship[RelationshipIndex].PartyMember = false;
+                        }
+                        else $scope.Relationship[RelationshipIndex].PartyMember = true;
                     }
                     if (pE8[y][i].startsWith("- Quá trình công tác:")) {
                         // let regex = /^(\d{4})-(.*)$/;
@@ -589,18 +592,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         }
                     }
                     if ((pE8[y][i].startsWith('*'))) {
-                        let regex = /^\*(.+?)\s:$/;
-                        let match = pE8[y][i].match(regex);
-
-                        if (match) {
-                            let relationship = match[1];
-                            RelationshipIndex = $scope.Relationship.length;
-                            $scope.Relationship[RelationshipIndex] = {
-                                Relation: relationship.trim(),
-                                ClassComposition: '',
-                                PartyMember: false,
-                            }
-                        }
                         if (pE8[y][i] == "* Anh, chị, em ruột: khai đầy đủ anh chị em"
                             || pE8[y][i] == "* Anh, chị, em ruột của vợ (chồng):"
                             || pE8[y][i] == "* Các con ruột và con nuôi có đăng ký hợp pháp : khai đầy đủ các con") {
@@ -642,9 +633,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                 if (pE8[y][a].startsWith("- Nghề nghiệp:")) {
                                     $scope.Relationship[RelationshipIndex].Job = pE8[y][a].slice(('- Nghề nghiệp:').length).trim()
                                 }
-                                if (pE8[y][a].startsWith("- Là đảng viên")) {
-                                    $scope.Relationship[RelationshipIndex].ClassComposition = pE8[y][a].slice(('-').length).trim()
-                                    $scope.Relationship[RelationshipIndex].PartyMember = true
+                                if (pE8[y][a].startsWith("- Đảng viên:")) {
+                                    var partyMember = pE8[y][a].slice(('- Đảng viên:').length).trim()
+                                    if(partyMember.toLowerCase() != "không"){
+                                        $scope.Relationship[RelationshipIndex].PartyMember = true;
+                                    }
+                                    else $scope.Relationship[RelationshipIndex].PartyMember = false;
+                                    console.log($scope.Relationship[RelationshipIndex].Relation,partyMember);
                                 }
                                 if (pE8[y][a].startsWith("- Quá trình công tác:")) {
                                     let regex = /^(\d{4})-(.*)$/;
@@ -665,6 +660,19 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                     }
                                 }
                                 i = a;
+                            }
+                        }else{
+                            let regex = /^\*(.+?):$/;
+                            let match = pE8[y][i].match(regex);
+    
+                            if (match) {
+                                let relationship = match[1];
+                                RelationshipIndex = $scope.Relationship.length;
+                                $scope.Relationship[RelationshipIndex] = {
+                                    Relation: relationship.trim(),
+                                    ClassComposition: '',
+                                    PartyMember: false,
+                                }
                             }
                         }
                     }
