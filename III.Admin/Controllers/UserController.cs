@@ -1168,6 +1168,8 @@ namespace III.Admin.Controllers
                     obj.ResumeNumber = ResumeCode
                         + _context.PartyAdmissionProfiles.Count(x => x.ResumeNumber.Contains(ResumeCode));
                     obj.Status = "Mới đẩy lên";
+                    obj.JsonProfileLinks = new List<JsonFile>();
+
                     _context.PartyAdmissionProfiles.Add(obj);
 					_context.SaveChanges();
                     msg.Object= obj;

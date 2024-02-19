@@ -1087,6 +1087,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         App.toastrError(result.Title);
                     } else {
                         App.toastrSuccess(result.Title);
+                        console.log(result);
                     }
                 });
             } else {
@@ -1097,7 +1098,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         App.toastrError(result.Title);
                     } else {
                         App.toastrSuccess(result.Title);
-                        $scope.infUser.ResumeNumber = rs.Object.ResumeNumber;
+                        $scope.infUser.ResumeNumber = result.Object.ResumeNumber;
                     }
                 });
 
