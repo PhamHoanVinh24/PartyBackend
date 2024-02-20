@@ -1047,14 +1047,17 @@ namespace III.Admin.Controllers
                             var a = _context.Families.FirstOrDefault(y => y.Id == x.Id);
                             if (a != null)
                             {
+                                a.Name = x.Name;
                                 a.Relation = x.Relation;
                                 a.BirthYear = x.BirthYear;
                                 a.HomeTown = x.HomeTown;
                                 a.Residence = x.Residence;
                                 a.Job = x.Job;
                                 a.PartyMember = x.PartyMember;
+                                
+                                a.PoliticalAttitude = x.PoliticalAttitude;
                                 a.WorkingProgress = x.WorkingProgress;
-                                a.ClassComposition = x.ClassComposition;
+                               
                                 a.IsDeleted = false;
                                 _context.Families.Update(a);
                             }
