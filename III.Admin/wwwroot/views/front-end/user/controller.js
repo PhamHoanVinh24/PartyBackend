@@ -323,7 +323,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             for (let i = 0; i < objPage1.length; i++) {
                 var PersonHis = {};
                 // Sửa lỗi ở đây, sử dụng indexOf thay vì search và sửa lỗi về cú pháp của biểu thức chấm phẩy
-                PersonHis['Begin'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') - 7, 7).trim(),
+                PersonHis['Begin'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') - 8, 7).trim(),
                     PersonHis['End'] = objPage1[i].innerText.split(':')[0].substr(objPage1[i].innerText.indexOf('-') + 1, 7).trim(),
                     // Sửa lỗi ở đây, sử dụng split(':') để tách thời gian và thông tin
                     PersonHis['Content'] = objPage1[i].innerText.split(':')[1];
@@ -584,78 +584,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         }
                     }
                     if ((pE8[y][i].startsWith('*'))) {
-                        if (pE8[y][i] == "* Anh, chị, em ruột: khai đầy đủ anh chị em"
-                            || pE8[y][i] == "* Anh, chị, em ruột của vợ (chồng):"
-                            || pE8[y][i] == "* Các con ruột và con nuôi có đăng ký hợp pháp : khai đầy đủ các con") {
-                            for (let a = i + 1; !pE8[y][a].startsWith("*") && a < pE8[y].length - 1; a++) {
-                                let regex = /^(\d+)\.\s(.+)$/;
-                                let match = pE8[y][a].match(regex);
-
-                                if (match) {
-                                    let relationship = match[2];
-                                    RelationshipIndex = $scope.Relationship.length;
-                                    $scope.Relationship[RelationshipIndex] = {
-                                        Relation: relationship.trim(),
-                                        ClassComposition: '',
-                                        PartyMember: false,
-                                    }
-                                }
-                                if (pE8[y][a].startsWith('- Họ và tên:')) {
-                                    $scope.Relationship[RelationshipIndex].Name = pE8[y][a].slice(('- Họ và tên:').length).trim()
-                                }
-                                if (pE8[y][a].startsWith('- Năm sinh:')) {
-                                    //let regex = /^(\d{4})-(\d{4})(?:\(([^)]*)\))?$/;
-                                    let match = pE8[y][a].slice(('- Năm sinh:').length).trim()//.match(regex);
-
-                                    // if (match) {
-                                    //     $scope.Relationship[RelationshipIndex].Year = {
-                                    //         YearBirth: match[1],
-                                    //         YearDeath: match[2],
-                                    //         Reason: match[3] ? match[3].trim() : ''  // Kiểm tra xem có thông tin lý do không
-                                    //     };
-                                    // }
-                                    $scope.Relationship[RelationshipIndex].BirthYear = match;
-                                }
-                                if (pE8[y][a].startsWith("- Quê quán:")) {
-                                    $scope.Relationship[RelationshipIndex].HomeTown = pE8[y][a].slice(('- Quê quán:').length).trim()
-                                }
-                                if (pE8[y][a].startsWith("- Nơi cư trú:")) {
-                                    $scope.Relationship[RelationshipIndex].Residence = pE8[y][a].slice(('- Nơi cư trú:').length).trim()
-                                }
-                                if (pE8[y][a].startsWith("- Nghề nghiệp:")) {
-                                    $scope.Relationship[RelationshipIndex].Job = pE8[y][a].slice(('- Nghề nghiệp:').length).trim()
-                                }
-                                if (pE8[y][a].startsWith("- Đảng viên:")) {
-                                    var partyMember = pE8[y][a].slice(('- Đảng viên:').length).trim()
-                                    if(partyMember.toLowerCase() != "không"){
-                                        $scope.Relationship[RelationshipIndex].PartyMember = true;
-                                    }
-                                    else $scope.Relationship[RelationshipIndex].PartyMember = false;
-                                    console.log($scope.Relationship[RelationshipIndex].Relation,partyMember);
-                                }
-                                if (pE8[y][a].startsWith("- Quá trình công tác:")) {
-                                    let regex = /^(\d{4})-(.*)$/;
-
-                                    $scope.Relationship[RelationshipIndex].WorkingProgress = '';
-                                    for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
-                                        let inputString = pE8[y][j];
-                                        
-                                        $scope.Relationship[RelationshipIndex].WorkingProgress += inputString + ',';
-                                        i = j;
-                                    }
-                                }
-                                if (pE8[y][a].startsWith("- Thái độ chính trị:")) {
-                                    $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
-                                    for (j = a + 1; pE8[y][j].startsWith('+'); j++) {
-                                        $scope.Relationship[RelationshipIndex].PoliticalAttitude += (pE8[y][j].slice(1).trim()) + ',';
-                                        i = j;
-                                    }
-                                }
-                                i = a;
-                            }
-                        }else{
-                            let regex = /^\*(.+?):$/;
-                            let match = pE8[y][i].match(regex);
+                        let regex = /^\*(.+?):$/;
+                        let match = pE8[y][i].match(regex);
     
                             if (match) {
                                 let relationship = match[1];
@@ -666,7 +596,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                                     PartyMember: false,
                                 }
                             }
-                        }
                     }
                 }
             }
