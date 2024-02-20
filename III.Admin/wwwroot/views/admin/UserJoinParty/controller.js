@@ -390,6 +390,18 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         Name: 'Đã duyệt',
         Code: 'Đã duyệt'
     }]
+    $scope.ListGender = [{
+        Name: 'Chọn giới tính',
+        Code: -1
+    },
+    {
+        Name: 'Nam',
+        Code: 0
+    },
+    {
+        Name: 'Nữ',
+        Code: 1
+    }]
     $scope.delete = function (id) {
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
@@ -421,7 +433,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         ToDate:'',
         Name:'',
         Username:'',
-        Status:''
+        Status:'',
+        Nation:'',
+        Religion:'',
+        ItDegree:'',
+        Job:'',
+        ForeignLanguage:'',
+        UnderPostGraduateEducation:'',
+        MinorityLanguages:'',
+        Gender: -1,
     }
     $scope.initData = function () {
        
@@ -446,8 +466,17 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 d.FromDate=$scope.searchModel.FromDate,
                 d.ToDate=$scope.searchModel.ToDate,
                 d.Name=$scope.searchModel.Name,
-                d.Username=$scope.searchModel.Username
-                d.Status=$scope.searchModel.Status
+                d.Username=$scope.searchModel.Username,
+                d.Status=$scope.searchModel.Status,
+                d.Nation=$scope.searchModel.Nation,
+                d.Religion=$scope.searchModel.Religion,
+                d.ItDegree=$scope.searchModel.ItDegree,
+                d.Job=$scope.searchModel.Job,
+                d.ForeignLanguage=$scope.searchModel.ForeignLanguage,
+                d.UnderPostGraduateEducation=$scope.searchModel.UnderPostGraduateEducation,
+                d.MinorityLanguages=$scope.searchModel.MinorityLanguages,
+                d.Gender=$scope.searchModel.Gender,
+                d.KeyWord=''
             },
             complete: function () {
                 App.unblockUI("#contentMain");

@@ -61,6 +61,15 @@ namespace III.Admin.Controllers
             public string Name { get; set; }
             public string Username { get; set; }
             public string Status { get; set; }
+            public string Nation { get; set; }
+            public string Religion { get; set; }
+            public string ItDegree { get; set; }
+            public string Job { get; set; }
+            public string ForeignLanguage { get; set; }
+            public string UnderPostGraduateEducation { get; set; }
+            public string MinorityLanguages { get; set; }
+            public int Gender { get; set; }
+            public string KeyWord { get; set; }
         }
 
         [HttpPost]
@@ -79,6 +88,16 @@ namespace III.Admin.Controllers
                                    && (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
                                    && (string.IsNullOrEmpty(jTablePara.Status) || a.Status==jTablePara.Status)
                                    && (string.IsNullOrEmpty(jTablePara.Username) || a.Username.ToLower().Contains(jTablePara.Username.ToLower()) || a.ResumeNumber.ToLower().Contains(jTablePara.Username.ToLower()))
+
+                                   && (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
+
+                                   && (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.ItDegree) || a.ItDegree.ToLower().Contains(jTablePara.ItDegree.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Job) || a.Job.ToLower().Contains(jTablePara.Job.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.ForeignLanguage) || a.ForeignLanguage.ToLower().Contains(jTablePara.ForeignLanguage.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.UnderPostGraduateEducation) || a.UnderPostGraduateEducation.ToLower().Contains(jTablePara.UnderPostGraduateEducation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.MinorityLanguages) || a.MinorityLanguages.ToLower().Contains(jTablePara.MinorityLanguages.ToLower()))
+                                   && (jTablePara.Gender == -1 || a.Gender==jTablePara.Gender)
                             //&& (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
