@@ -204,7 +204,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //
     //
     //
-    
+    $scope.downloadFile=function() {
+        // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
+        var link = document.createElement("a");
+        link.href = "/files/Mẫu 2- KNĐ năm 2023 2.docx"; // Đặt đường dẫn đến tệp Word
+        link.download = "Mẫu 2- KNĐ năm 2023.docx"; // Đặt tên cho tệp khi được tải xuống
+        // Kích hoạt sự kiện nhấp vào liên kết
+        link.click();
+    }
+
     $scope.deleteFile = function (x) {
         dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
             txt=txt.data;
