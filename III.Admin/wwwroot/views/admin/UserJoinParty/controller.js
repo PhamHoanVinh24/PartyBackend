@@ -1845,10 +1845,6 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
         setTimeout(function () {
-            $scope.Email = 'NguyenHuy@gmail.com';
-            var today = new Date();
-            var resumeNumber = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
-            console.log(resumeNumber);
             var listPage = document.querySelectorAll(".Section0 > div > table");
             console.log(listPage)
             //Page2 Lịch sử bản thân
@@ -1933,9 +1929,29 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     Certificate: pElementP4s[i][1]
                 };
                 $scope.PassedTrainingClasses.push(obj);
-                
+                //check = 1;
             }
-            
+            // if (check === 1) {
+            //     var ttpd = document.getElementById("TTPD")
+            //     var llgd = document.getElementById("LLGD")
+            //     var lsbt = document.getElementById("LSBT")
+            //     var gtvd = document.getElementById("GTVD")
+
+            //     console.log(llgd)
+
+            //     llgd.style.opacity = 1;
+            //     llgd.style.pointerEvents = "auto";
+
+            //     lsbt.style.opacity = 1;
+            //     lsbt.style.pointerEvents = "auto";
+
+            //     gtvd.style.opacity = 1;
+            //     gtvd.style.pointerEvents = "auto";
+
+            //     ttpd.style.display = "block";
+
+            //     check = 0;
+            // }
             console.log('PassedTrainingClasses', $scope.PassedTrainingClasses)
 
 
@@ -2072,9 +2088,12 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     if (pE8[y][i].startsWith("- Nghề nghiệp:")) {
                         $scope.Relationship[RelationshipIndex].Job = pE8[y][i].slice(('- Nghề nghiệp:').length).trim()
                     }
-                    if (pE8[y][i].startsWith("- Là đảng viên")) {
-                        $scope.Relationship[RelationshipIndex].ClassComposition = pE8[y][i].slice(('-').length).trim()
-                        $scope.Relationship[RelationshipIndex].PartyMember = true
+                    if (pE8[y][i].startsWith("- Đảng viên:")) {
+                        var partyMember = pE8[y][i].slice(('- Đảng viên:').length).trim()
+                        if(partyMember.toLowerCase() == "không"){
+                            $scope.Relationship[RelationshipIndex].PartyMember = false;
+                        }
+                        else $scope.Relationship[RelationshipIndex].PartyMember = true;
                     }
                     if (pE8[y][i].startsWith("- Quá trình công tác:")) {
                         // let regex = /^(\d{4})-(.*)$/;
@@ -2090,7 +2109,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                             //     Job: match[2].trim()  // Loại bỏ khoảng trắng ở đầu và cuối của công việc
                             //   };
                             //  $scope.Relationship[RelationshipIndex].WorkingProgress.push(resultObject);
-                            $scope.Relationship[RelationshipIndex].WorkingProgress += inputString + ',';
+                            $scope.Relationship[RelationshipIndex].WorkingProgress+= inputString + ',';
                             i = j;
                             //}
                         }
@@ -2098,23 +2117,11 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     if (pE8[y][i].startsWith("- Thái độ chính trị:")) {
                         $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
                         for (j = i + 1; pE8[y][j].startsWith('+'); j++) {
-                            $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim())+',';
+                            $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
                             i = j;
                         }
                     }
                     if ((pE8[y][i].startsWith('*'))) {
-                        let regex = /^\*(.+?)\s:$/;
-                        let match = pE8[y][i].match(regex);
-
-                        if (match) {
-                            let relationship = match[1];
-                            RelationshipIndex = $scope.Relationship.length;
-                            $scope.Relationship[RelationshipIndex] = {
-                                Relation: relationship.trim(),
-                                ClassComposition: '',
-                                PartyMember: false,
-                            }
-                        }
                         if (pE8[y][i] == "* Anh, chị, em ruột: khai đầy đủ anh chị em"
                             || pE8[y][i] == "* Anh, chị, em ruột của vợ (chồng):"
                             || pE8[y][i] == "* Các con ruột và con nuôi có đăng ký hợp pháp : khai đầy đủ các con") {
@@ -2156,9 +2163,13 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                                 if (pE8[y][a].startsWith("- Nghề nghiệp:")) {
                                     $scope.Relationship[RelationshipIndex].Job = pE8[y][a].slice(('- Nghề nghiệp:').length).trim()
                                 }
-                                if (pE8[y][a].startsWith("- Là đảng viên")) {
-                                    $scope.Relationship[RelationshipIndex].ClassComposition = pE8[y][a].slice(('-').length).trim()
-                                    $scope.Relationship[RelationshipIndex].PartyMember = true
+                                if (pE8[y][a].startsWith("- Đảng viên:")) {
+                                    var partyMember = pE8[y][a].slice(('- Đảng viên:').length).trim()
+                                    if(partyMember.toLowerCase() != "không"){
+                                        $scope.Relationship[RelationshipIndex].PartyMember = true;
+                                    }
+                                    else $scope.Relationship[RelationshipIndex].PartyMember = false;
+                                    console.log($scope.Relationship[RelationshipIndex].Relation,partyMember);
                                 }
                                 if (pE8[y][a].startsWith("- Quá trình công tác:")) {
                                     let regex = /^(\d{4})-(.*)$/;
@@ -2167,18 +2178,31 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                                     for (j = a + 1; !pE8[y][j].startsWith('-'); j++) {
                                         let inputString = pE8[y][j];
                                         
-                                        $scope.Relationship[RelationshipIndex].WorkingProgress+= inputString + ',';
+                                        $scope.Relationship[RelationshipIndex].WorkingProgress += inputString + ',';
                                         i = j;
                                     }
                                 }
                                 if (pE8[y][a].startsWith("- Thái độ chính trị:")) {
                                     $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
                                     for (j = a + 1; pE8[y][j].startsWith('+'); j++) {
-                                        $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
+                                        $scope.Relationship[RelationshipIndex].PoliticalAttitude += (pE8[y][j].slice(1).trim()) + ',';
                                         i = j;
                                     }
                                 }
                                 i = a;
+                            }
+                        }else{
+                            let regex = /^\*(.+?):$/;
+                            let match = pE8[y][i].match(regex);
+    
+                            if (match) {
+                                let relationship = match[1];
+                                RelationshipIndex = $scope.Relationship.length;
+                                $scope.Relationship[RelationshipIndex] = {
+                                    Relation: relationship.trim(),
+                                    ClassComposition: '',
+                                    PartyMember: false,
+                                }
                             }
                         }
                     }
@@ -2213,10 +2237,13 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             $scope.listDetail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+15)').toArray()
                 .map(t => $(t).find('> span:last-child').text());
-
-            $scope.listDetail2 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(even)').toArray()
-                .map(z => $(z).text());
+            
+            $scope.Detail1 = $($scope.listPage[0])
+                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(2)').text()
+                //.map(z => $(z).text());
+            console.log($scope.listDetail2)
+            $scope.Detail2 = $($scope.listPage[0])
+            .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(4)').text()
             $scope.listDetail3 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(17) > span:last-child').text()
 
@@ -2248,8 +2275,8 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             $scope.infUser.Residence = $scope.listDetail1[7];
             $scope.infUser.TemporaryAddress = $scope.listDetail1[8];
 
-            $scope.infUser.Nation = $scope.listDetail2[0];
-            $scope.infUser.Religion = $scope.listDetail2[1];
+            $scope.infUser.Nation = $scope.Detail1;
+            $scope.infUser.Religion = $scope.Detail2;
 
             $scope.infUser.NowEmployee = $scope.listDetail3;
 
