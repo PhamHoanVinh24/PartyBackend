@@ -234,7 +234,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.uploadFile = async function () {
         var file = document.getElementById("FileItem").files[0];
         if (file == null || file == undefined || file == "") {
-            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+            App.toastrError("Bạn chưa chọn file");
         }
         else {
             var formdata = new FormData();
@@ -1816,6 +1816,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0 ) {
                 $scope.HistoricalFeatures.splice(index,1);
             }
+            else{
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteHistorySpecialist?id=" + $scope.HistoricalFeatures[index].Id,
@@ -1835,7 +1836,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 error: function (error) {
                     App.toastrError(error.Title);
                 }
-            });
+            });}
         }
     }
     $scope.deleteAward = function (index) {
@@ -1845,6 +1846,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.Laudatory[index].Id == undefined || $scope.Laudatory[index].Id == 0 ) {
                 $scope.Laudatory.splice(index,1);
             }
+            else
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteAward?id=" + $scope.Laudatory[index].Id,
@@ -1874,6 +1876,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.Disciplined[index].Id == undefined || $scope.Disciplined[index].Id == 0 ) {
                 $scope.Disciplined.splice(index,1);
             }
+            else
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
@@ -1903,6 +1906,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.GoAboard[index].Id == undefined || $scope.GoAboard[index].Id == 0 ) {
                 $scope.GoAboard.splice(index,1);
             }
+            else
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteGoAboard?id=" + $scope.GoAboard[index].Id,
@@ -1932,6 +1936,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.PassedTrainingClasses[index].Id == undefined || $scope.PassedTrainingClasses[index].Id == 0 ) {
                 $scope.PassedTrainingClasses.splice(index,1);
             }
+            else
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
@@ -1961,6 +1966,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             if($scope.BusinessNDuty[index].Id == undefined || $scope.BusinessNDuty[index].Id == 0 ) {
                 $scope.BusinessNDuty.splice(index,1);
             }
+            else
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.BusinessNDuty[index].Id,
@@ -2119,7 +2125,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     $scope.uploadExtensionFile = async function () {
         var file = document.getElementById("file").files[0];
         if (file == null || file == undefined || file == "") {
-            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+            App.toastrError("Bạn chưa chọn file để gửi");
         }
         else {
             var formdata = new FormData();

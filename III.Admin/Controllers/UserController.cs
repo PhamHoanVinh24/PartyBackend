@@ -1460,7 +1460,7 @@ namespace III.Admin.Controllers
                 }
                 _context.SaveChanges();
 
-                msg.Title = "Thêm những lớp đào tạo đã qua chưa thành công";
+                msg.Title = "Thêm những lớp đào tạo đã qua thành công";
             }
             catch (Exception err)
             {
@@ -1583,7 +1583,7 @@ namespace III.Admin.Controllers
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Thêm cảnh cáo kỷ luật thất bại";
+                msg.Title = "Thêm kỷ luật thất bại";
             }
             return msg;
         }
@@ -1637,13 +1637,13 @@ namespace III.Admin.Controllers
                    
                 }
                 _context.SaveChanges();
-                msg.Title = "Thêm mới Khen thưởng thành công";
+                msg.Title = "Thêm khen thưởng thành công";
 
             }
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Thêm mới Khen thưởng thất bại";
+                msg.Title = "Thêm khen thưởng thất bại";
             }
             return msg;
         }
@@ -1697,12 +1697,12 @@ namespace III.Admin.Controllers
                     
                 }
                 _context.SaveChanges();
-                msg.Title = "Thêm mới Quá trình công tác thành công";
+                msg.Title = "Thêm quá trình công tác thành công";
             }
             catch (Exception err)
             {
                 msg.Error = true;
-                msg.Title = "Thêm mới Quá trình công tác thất bại";
+                msg.Title = "Thêm quá trình công tác thất bại";
             }
             return msg;
         }

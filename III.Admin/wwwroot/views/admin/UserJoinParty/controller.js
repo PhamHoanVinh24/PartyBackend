@@ -795,7 +795,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.uploadExtensionFile = async function () {
         var file = document.getElementById("file").files[0];
         if (file == null || file == undefined || file == "") {
-            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+            App.toastrError("Bạn chưa chọn file để gửi");
         }
         else {
             var formdata = new FormData();
@@ -1605,6 +1605,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             if($scope.Relationship[index].Id == undefined || $scope.Relationship[index].Id == 0 ) {
                 $scope.Relationship.splice(index,1);
             }
+            else{
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteFamily?Id=" + $scope.Relationship[index].Id,
@@ -1624,7 +1625,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 error: function (error) {
                     App.toastrSuccess(error);
                 }
-            });
+            });}
     }
     $scope.deleteHistorySpecialist = function (index) {
         if ($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0){
@@ -1821,7 +1822,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     $scope.uploadFile = async function () {
         var file = document.getElementById("FileItem").files[0];
         if (file == null || file == undefined || file == "") {
-            App.toastrError(caption.COM_MSG_CHOSE_FILE);
+            App.toastrError("Bạn chưa chọn file");
         }
         else {
             var formdata = new FormData();
