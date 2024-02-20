@@ -2099,7 +2099,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                         // let regex = /^(\d{4})-(.*)$/;
 
                         $scope.Relationship[RelationshipIndex].WorkingProgress = '';
-                        for (j = i + 1; !pE8[y][j].startsWith('-') && !pE8[y][j].startsWith('*'); j++) {
+                        for (j = i + 1;j<=pE8[y].length-1 && !pE8[y][j].startsWith('-') && !pE8[y][j].startsWith('*'); j++) {
                             let inputString = pE8[y][j];
                             //let match = inputString.match(regex);
 
@@ -2116,11 +2116,17 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                     }
                     if (pE8[y][i].startsWith("- Thái độ chính trị:")) {
                         $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
-                        for (j = i + 1; pE8[y][j].startsWith('+'); j++) {
-                            $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
-                            i = j;
+                        try{
+                            for (j = i + 1; j<=pE8[y].length-1 && pE8[y][j].startsWith('+'); j++) {
+                                $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
+                                i = j;
+                            }
+                        }
+                        catch{
+                            console.log(pE8[y]);
                         }
                     }
+
                     if ((pE8[y][i].startsWith('*'))) {
                         let regex = /^\*(.+?):$/;
                             let match = pE8[y][i].match(regex);
