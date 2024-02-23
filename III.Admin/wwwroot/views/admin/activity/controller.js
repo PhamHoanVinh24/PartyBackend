@@ -2456,14 +2456,16 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 parseJsonData.bgColor = "rgba(60, 179, 113, 1)";
                 parseJsonData.color = "rgba(60, 179, 113, 1)";
             }
-
+            $scope.modelEditActivity.ShapeJson=JSON.stringify(parseJsonData);
+            
             dataservice.updateActivity($scope.modelEditActivity, function (rs) {
                 rs = rs.data;
                 if (rs.Error) {
                     App.toastrError(rs.Title);
                 } else {
                     App.toastrSuccess(rs.Title);
-                    $uibModalInstance.close();
+                    //$uibModalInstance.close();
+                    var node = $rootScope.canvas2.getPrimarySelection();
                     node.children.data[0].figure.attr({
                         text: $scope.modelEditActivity.Title
                     });
@@ -2488,6 +2490,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                         node.bgColor.hashString = "#3CB371";
                         node.bgColor.red = 60;
                     }
+                    node.repaint(); 
                 }
             });
         }
@@ -2495,7 +2498,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.save = function () {
         var obj = {
-            ActivityCode: $rootScope.ActivityCode,
+            ActivityCode: $scope.modelEditActivity.ActivityCode,
             ListGroupData: $scope.model.ListGroupData.join(",")
         };
 
