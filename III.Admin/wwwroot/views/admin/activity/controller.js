@@ -2434,20 +2434,21 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.submit = function () {
         var data = CKEDITOR.instances['description'].getData();
-        $scope.model.Desc = data;
-        validationSelect($scope.model);
-        if ($scope.addform.validate() && !validationSelect($scope.model).Status) {
-            var temp = $rootScope.checkData($scope.model);
+        $scope.modelEditActivity.Desc = data;
+        validationSelect($scope.modelEditActivity);
+        console.log("Activity Update",$scope.modelEditActivity)
+        if ($scope.addform.validate() && !validationSelect($scope.modelEditActivity).Status) {
+            var temp = $rootScope.checkData($scope.modelEditActivity);
             if (temp.Status) {
                 App.toastrError(temp.Title);
                 return;
             }
-            var parseJsonData = JSON.parse($scope.model.ShapeJson);
-            if ($scope.model.Type == "TYPE_ACTIVITY_INITIAL") {
+            var parseJsonData = JSON.parse($scope.modelEditActivity.ShapeJson);
+            if ($scope.modelEditActivity.Type == "TYPE_ACTIVITY_INITIAL") {
                 parseJsonData.bgColor = "rgba(0,99,177,1)";
                 parseJsonData.color = "rgba(0,99,177,1)";
             }
-            else if ($scope.model.Type == "TYPE_ACTIVITY_END") {
+            else if ($scope.modelEditActivity.Type == "TYPE_ACTIVITY_END") {
                 parseJsonData.bgColor = "rgba(165,42,42,1)";
                 parseJsonData.color = "rgba(165,42,42,1)";
             }
@@ -2456,7 +2457,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 parseJsonData.color = "rgba(60, 179, 113, 1)";
             }
 
-            dataservice.updateActivity($scope.model, function (rs) {
+            dataservice.updateActivity($scope.modelEditActivity, function (rs) {
                 rs = rs.data;
                 if (rs.Error) {
                     App.toastrError(rs.Title);
@@ -2464,16 +2465,16 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                     App.toastrSuccess(rs.Title);
                     $uibModalInstance.close();
                     node.children.data[0].figure.attr({
-                        text: $scope.model.Title
+                        text: $scope.modelEditActivity.Title
                     });
-                    if ($scope.model.Type == "TYPE_ACTIVITY_INITIAL") {
+                    if ($scope.modelEditActivity.Type == "TYPE_ACTIVITY_INITIAL") {
                         node.bgColor.alpha = 1;
                         node.bgColor.blue = 177;
                         node.bgColor.green = 99;
                         node.bgColor.hashString = "#0063B1";
                         node.bgColor.red = 0;
                     }
-                    else if ($scope.model.Type == "TYPE_ACTIVITY_END") {
+                    else if ($scope.modelEditActivity.Type == "TYPE_ACTIVITY_END") {
                         node.bgColor.alpha = 1;
                         node.bgColor.blue = 42;
                         node.bgColor.green = 42;

@@ -479,6 +479,7 @@ namespace III.Admin.Controllers
                     data.Level = obj.Level;
                     data.UpdatedBy = ESEIM.AppContext.UserName;
                     data.UpdatedTime = DateTime.Now;
+                    data.ShapeJson = obj.ShapeJson;
 
                     if (!string.IsNullOrEmpty(obj.MileStone))
                     {
@@ -490,6 +491,7 @@ namespace III.Admin.Controllers
                     }
                     _context.Activitys.Update(data);
                     _context.SaveChanges();
+
                     msg.Title = _sharedResources["COM_UPDATE_SUCCESS"];
                 }
                 else
