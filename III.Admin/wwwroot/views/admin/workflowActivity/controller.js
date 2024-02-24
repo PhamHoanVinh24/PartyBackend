@@ -4011,7 +4011,14 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
 
     $scope.isEditWorkflow = false;
-    $scope.editWorkflow = function(){        
+    $scope.editWorkflow = function(){   
+        if ($scope.isEditWorkflow == true) {
+            $('#main-table').css('width', '1030px');
+        }else{
+            $('#main-table').css('width', '');
+        }
+        
+        //setTimeout(() => $scope.$apply());     
         //setTimeout(() => $scope.$apply());
     }
 
@@ -5186,7 +5193,7 @@ app.controller('setting-transition', function ($scope, $rootScope, $compile, $ui
     }, 200);
 });
 
-app.controller('edit-activity-instance', function ($scope, $rootScope, $compile, $uibModal,$uibModalInstance, $confirm, dataservice, $translate, $filter, para) {
+app.controller('edit-activity-instance', function ($scope, $rootScope, $compile, $uibModal, $confirm, dataservice, $translate, $filter) {
     $scope.model = {
         Template: "",
         Status: ""
@@ -5202,9 +5209,8 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
 
     $scope.isAll = true;
 
-    $scope.ObjectCode = para.ObjCode;
 
-    $scope.isAccepted = true;
+    $rootScope.isAccepted = true;
 
     $rootScope.countCommand = function () {
         dataservice.getDesActivity($rootScope.ActInstCode, function (rs) {
@@ -5226,10 +5232,15 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
             $rootScope.lstCommandFromExtra = rs;
         })
     }
-    $scope.initEdit=function(Data,ObjCode){
-        $scope.Data=Data;
-        $scope.ObjectCode=ObjCode
-        $scope.initData();
+    $scope.initEdit=function(id,ObjCode){
+        
+        dataservice.getItemActInst(id, function (rs) {
+                    $rootScope.IsLock = rs.data.IsLock;
+                    $scope.ActCatCode = rs.data.DataActInst.ActivityCode
+                    $scope.Data = rs.data;
+                    $scope.ObjectCode=ObjCode;
+                    $scope.initData();
+        });
     }
     $scope.initData = function () {
         $scope.model = $scope.Data.DataActInst;
@@ -5410,7 +5421,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
 
     $scope.submit = function () {
         validationSelect($scope.model);
-        if ($scope.addform.validate() && !validationSelect($scope.model).Status) {
+        if ( !validationSelect($scope.model).Status) {
             //if ($rootScope.IsLock) {
             //    return App.toastrError(caption.WFAI_MSG_ACT_IS_LOCKED);
             //}
@@ -5457,7 +5468,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
     }
 
     $scope.fileManage = function () {
-        if ($rootScope.IsLock) {
+        if ($scope.IsLock) {
             return App.toastrError(caption.WFAI_MSG_ACT_IS_LOCKED);
         }
         if (!$rootScope.isAccepted) {
@@ -5857,6 +5868,16 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
 
     function validationSelect(data) {
         var mess = { Status: false, Title: "" }
+
+        angular.forEach($rootScope.validationOptionsActivity.rules, function(rule, fieldName) {
+            if (rule.required && !data[fieldName]) {
+                // Nếu trường bắt buộc mà không có giá trị
+                $scope["error" + fieldName] = true;
+                mess.Status = true;
+            } else {
+                $scope["error" + fieldName] = false;
+            }
+        });
 
         if (data.Unit == "") {
             $scope.errorUnit = true;
