@@ -2684,31 +2684,21 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('initComplete', function (settings, json) {
         })
         .withOption('rowCallback', function (tabRow, data) {
-            if (data.IsRead == 'False') {
-                $(tabRow).addClass('row-no-read');
-            }
-            var tr = $(tabRow);
-            var table = $scope.dt.dtInstanceList.DataTable;
-            var row = table.row(tr);
-            if (data.ListAct != '' && data.ListAct != null && data.ListAct != '[]') {
-                row.child(formatRow(row.data())).show();
-                const contextScope = $scope.$new(true);
-                $compile(angular.element(row.child()).contents())($scope);
-                contextScope.data = data;
-                angular.element(row.child()).addClass('no-border-top');
-                if (data._STT % 2 == 1) {
-                    angular.element(row.child()).addClass('odd');
-                }
-            }
+            
         })
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
-            $(row).find('td:not(:has(label.mt-checkbox))').on('dblclick', function (evt) {
+            $(row).find('td:not(:has(label.mt-checkbox))').on('click', function (evt) {
+                // Xóa lớp active khỏi tất cả các hàng
+                $(this).closest('table').find('tr').removeClass('active');
+                        
+                // Thêm lớp active vào hàng đã được click
+                $(this).closest('tr').addClass('active');
 
-                if (evt.target.localName == 'input' && evt.target.type == 'checkbox') {
+                var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
+                var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
+                formatRow(rowData);
 
-                } else {
-                }
             });
         });
     vm.dtColumnsList = [];
@@ -2808,6 +2798,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     function formatRow(full) {
         var lstAct = JSON.parse(full.ListAct);
+        $scope.listActs = lstAct;
+        $scope.isEditWorkflow = true;
+        $scope.editWorkflow();
+        console.log($scope.listActs);
         var domActs = ''; /*'<div class="d-flex">';*/
         for (var i = 0; i < lstAct.length; i++) {
             var actName = "";
@@ -4085,7 +4079,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.isEditWorkflow = false;
     $scope.editWorkflow = function(){
-        $scope.isEditWorkflow = !$scope.isEditWorkflow;
         if ($scope.isEditWorkflow == true) {
             $('#main-table').css('width', '1200px');
         }else{
@@ -4101,40 +4094,47 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.checkHiddenEmployee = false;
     $scope.checkHiddenObject = false;
 
-    document.getElementById("toggleInforWf").addEventListener("click", function() {
-        $scope.$apply(function() {
-            $scope.checkHiddenInforWf = !$scope.checkHiddenInforWf;
-            toggleContent("InforWf");
-        });
-    });
+    // document.getElementById("toggleActWf").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenActWf = !$scope.checkHiddenActWf;
+    //         toggleContent("ActWf");
+    //     });
+    // });
 
-    document.getElementById("toggleFileHistory").addEventListener("click", function() {
-        $scope.$apply(function() {
-            $scope.checkHiddenFileHistory = !$scope.checkHiddenFileHistory;
-            toggleContent("FileHistory");
-        });
-    });
+    // document.getElementById("toggleInforWf").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenInforWf = !$scope.checkHiddenInforWf;
+    //         toggleContent("InforWf");
+    //     });
+    // });
 
-    document.getElementById("toggleCmdTo").addEventListener("click", function() {
-        $scope.$apply(function() {
-            $scope.checkHiddenCmdTo = !$scope.checkHiddenCmdTo;
-            toggleContent("CmdTo");
-        });
-    });
+    // document.getElementById("toggleFileHistory").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenFileHistory = !$scope.checkHiddenFileHistory;
+    //         toggleContent("FileHistory");
+    //     });
+    // });
 
-    document.getElementById("toggleEmployee").addEventListener("click", function() {
-        $scope.$apply(function() {
-            $scope.checkHiddenEmployee = !$scope.checkHiddenEmployee;
-            toggleContent("Employee");
-        });
-    });
+    // document.getElementById("toggleCmdTo").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenCmdTo = !$scope.checkHiddenCmdTo;
+    //         toggleContent("CmdTo");
+    //     });
+    // });
 
-    document.getElementById("toggleObject").addEventListener("click", function() {
-        $scope.$apply(function() {
-            $scope.checkHiddenObject = !$scope.checkHiddenObject;
-            toggleContent("Object");
-        });
-    });
+    // document.getElementById("toggleEmployee").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenEmployee = !$scope.checkHiddenEmployee;
+    //         toggleContent("Employee");
+    //     });
+    // });
+
+    // document.getElementById("toggleObject").addEventListener("click", function() {
+    //     $scope.$apply(function() {
+    //         $scope.checkHiddenObject = !$scope.checkHiddenObject;
+    //         toggleContent("Object");
+    //     });
+    // });
 
     function toggleContent(contentId) {
         var content = document.getElementById(contentId);
