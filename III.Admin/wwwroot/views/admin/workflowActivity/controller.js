@@ -1585,43 +1585,44 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
 
     //Instance Activity
-    $scope.editInstAct = function (id, objCode) {
-        dataservice.checkPermissionEditActivityById(id, function (rs) {
-            rs = rs.data;
-            if (!rs) {
-                return App.toastrError(caption.WFAI_MSG_U_NOT_PERMISSION);
-            }
-            dataservice.getItemActInst(id, function (rs) {
-                $rootScope.IsLock = rs.data.IsLock;
-                $rootScope.ActCatCode = rs.data.DataActInst.ActivityCode
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: ctxfolder + '/add-activity-instance.html',
-                    controller: 'edit-activity-instance',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: '50',
-                    resolve: {
-                        para: function () {
-                            return {
-                                Data: rs.data,
-                                ObjCode: objCode
-                            }
-                        }
-                    }
-                });
-                modalInstance.result.then(function (d) {
-                    dataservice.getInstance($rootScope.WfInstCode, function (rs) {
-                        rs = rs.data;
-                        $scope.lstActInst = rs;
-                    })
-                    afterEditActInst(d);
-                    $scope.search();
-                }, function () {
-                });
-            })
-        })
-    }
+    // $scope.editInstAct = function (id, objCode) {
+    //     console.log(id, objCode)
+    //     dataservice.checkPermissionEditActivityById(id, function (rs) {
+    //         rs = rs.data;
+    //         if (!rs) {
+    //             return App.toastrError(caption.WFAI_MSG_U_NOT_PERMISSION);
+    //         }
+    //         dataservice.getItemActInst(id, function (rs) {
+    //             $rootScope.IsLock = rs.data.IsLock;
+    //             $rootScope.ActCatCode = rs.data.DataActInst.ActivityCode
+    //             var modalInstance = $uibModal.open({
+    //                 animation: true,
+    //                 templateUrl: ctxfolder + '/add-activity-instance.html',
+    //                 controller: 'edit-activity-instance',
+    //                 backdrop: 'static',
+    //                 keyboard: false,
+    //                 size: '50',
+    //                 resolve: {
+    //                     para: function () {
+    //                         return {
+    //                             Data: rs.data,
+    //                             ObjCode: objCode
+    //                         }
+    //                     }
+    //                 }
+    //             });
+    //             modalInstance.result.then(function (d) {
+    //                 dataservice.getInstance($rootScope.WfInstCode, function (rs) {
+    //                     rs = rs.data;
+    //                     $scope.lstActInst = rs;
+    //                 })
+    //                 afterEditActInst(d);
+    //                 $scope.search();
+    //             }, function () {
+    //             });
+    //         })
+    //     })
+    // }
 
     function afterEditActInst(obj) {
         dataservice.getDetailActInst(obj.ActInstCode, function (rs) {
@@ -2698,7 +2699,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
                 var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
                 formatRow(rowData);
-
             });
         });
     vm.dtColumnsList = [];
@@ -2800,76 +2800,9 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         var lstAct = JSON.parse(full.ListAct);
         $scope.listActs = lstAct;
         $scope.isEditWorkflow = true;
-        $scope.editWorkflow();
-        console.log($scope.listActs);
-        var domActs = ''; /*'<div class="d-flex">';*/
-        for (var i = 0; i < lstAct.length; i++) {
-            var actName = "";
-            if (lstAct[i].IsLock && lstAct[i].ActStatus != "Khóa hoạt động" && lstAct[i].ActStatus != "Không kích hoạt") {
-                actName = '<span>' + (lstAct[i].ActName.length > 20 ? lstAct[i].ActName.substr(0, 20) + " ..." : lstAct[i].ActName) + '</span>';
-            }
-            else {
-                actName = lstAct[i].ActName.length > 20 ? lstAct[i].ActName.substr(0, 20) + " ..." : lstAct[i].ActName;
-            }
-            //if (i % 4 != 0) {
-            //    domActs += '<div class="mnh70 col-lg-3 col-md-6 pl-0 pr5 mt5">';
-            //}
-            //else {
-            //    domActs += '<div class="row">'
-            //}
-            domActs += '<div class="mnh70 col-xl-2 col-lg-3 col-md-6 pr5 mt5">';
-            domActs += '<div class="d-flex">';
-            domActs += '<div style="display: inline-block; vertical-align:top">';
-            if (/*data == "True"*/(lstAct[i].ActType == "Bắt đầu" && lstAct[i].ActStatus == "Kích hoạt") || lstAct[i].ActStatus == "Đã xử lý") {
-                domActs += '<a title="Xét duyệt" type="button" ng-click="approve(\'' + lstAct[i].ActivityInstCode + '\', \'' + lstAct[i].ActStatus + '\')" style1 = "width: 28px; height: 28px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline"><i class="fas fa-check-circle" style="--fa-secondary-color:green; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-right: 10px;"></i></a>';
-            }
-            else if (lstAct[i].ActStatus == "Hủy" || lstAct[i].ActStatus == "Dừng lại") {
-                domActs += '<a title="Xét duyệt" type="button" ng-click="approve(\'' + lstAct[i].ActivityInstCode + '\', \'' + lstAct[i].ActStatus + '\')" style1 = "width: 28px; height: 28px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline"><i class="fas fa-circle" style="color:orange;font-size: 25px;margin-right: 10px;"></i></a>';
-            }
-            else if (lstAct[i].ActStatus == "Đang xử lý") {
-                domActs += '<a title="Xét duyệt" type="button" ng-click="approve(\'' + lstAct[i].ActivityInstCode + '\', \'' + lstAct[i].ActStatus + '\')" style1 = "width: 28px; height: 28px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline"><i class="fas fa-circle" style="color:green;font-size: 25px;margin-right: 10px;"></i></button>';
-            }
-            else {
-                domActs += '<a title="Xét duyệt" type="button" ng-click="approve(\'' + lstAct[i].ActivityInstCode + '\', \'' + lstAct[i].ActStatus + '\')" style1 = "width: 28px; height: 28px; padding: 0px" class1="btn btn-icon-only btn-circle btn-outline"><i class="fas fa-circle" style="color:grey;font-size: 25px;margin-right: 10px;"></i></button>';
-            }
-            domActs += '</div>';
-            domActs += '<div style="display: inline-block; margin-left: 5px; font-weight: 500">';
-            if (lstAct[i].ActStatus == "Đã xử lý") {
-                domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: #009933;" style="display: inline">(' + (lstAct[i].Level) + ')</div>  ' + actName + '</a>' + '<br /><span class="badge-customer badge-customer-success">' + lstAct[i].ActStatus + '</span>';
-            }
-            else if (lstAct[i].ActStatus == "Đang xử lý" || lstAct[i].ActStatus == "Chưa xử lý" || lstAct[i].ActStatus == "Kích hoạt") {
-                var pending = '';
-                if (lstAct[i].ActStatus != "Chưa xử lý") {
-                    domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: #FF9900;" style="display: inline">(' + (lstAct[i].Level) + ')</div>  ' + actName + '</a>' + '<br /><span class="badge-customer badge-customer-warning">' + lstAct[i].ActStatus + '</span>';
-                }
-                else {
-                    domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: #a59f9f;" style="display: inline">(' + (lstAct[i].Level) + ')</div>  ' + actName + '</a>' + '<br /><span class="badge-customer badge-customer-lock">' + lstAct[i].ActStatus + '</span>';
-                }
-            }
-            else if (lstAct[i].ActStatus == "Hủy") {
-                domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: red;" style="display: inline">(' + (lstAct[i].Level) + ')</div>' + actName + '</a>' + '<br /><span class="badge-customer badge-customer-danger">' + lstAct[i].ActStatus + '</span>';
-            }
-            else if (lstAct[i].ActStatus == "Dừng lại") {
-                domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: #FF9800;" style="display: inline">(' + (lstAct[i].Level) + ')</div>' + actName + '</a>' + '<br /><span class="badge-customer badge-customer-pause">' + lstAct[i].ActStatus + '</span>';
-            }
-            else {
-                domActs += '<a class="actName" title="' + lstAct[i].ActName + '" ng-click="editInstAct(' + lstAct[i].Id + ',\'' + full.ObjectCode + '\')"><div class="numberStep1" style1="background: #FF9800;" style="display: inline">(' + (lstAct[i].Level) + ')</div>' + actName + '</a>' + '<br />';
-            }
-            if (lstAct[i].IsApprovable) {
-                domActs += '<img class="blink-act" src="/images/default/green-blink.png" style="width: 17px;height: 17px;margin-top: -5px;" />';
-            }
-            domActs += '</div>';
-            domActs += '</div>';
-            if (lstAct[i].ActStatus == "Đã xử lý" && lstAct[i].Log) {
-                domActs += '<span class="fs10"><span class="bold fs12">' + lstAct[i].Log.CreatedBy + '</span><br/> [' + lstAct[i].Log.sCreatedTime + ']</span>';
-            }
-            //if (i % 3 == 0 && i != 0) {
-            //    domActs += '</div>';
-            //}
-            domActs += '</div>';
-        }
-        //domActs += '</div>';
-        return domActs;
+        console.log($scope.isEditWorkflow,$scope.listActs);
+        $scope.full=full;
+        $scope.$apply()
     }
 
     $scope.search = function () {
@@ -4078,14 +4011,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
 
     $scope.isEditWorkflow = false;
-    $scope.editWorkflow = function(){
-        if ($scope.isEditWorkflow == true) {
-            $('#main-table').css('width', '1200px');
-        }else{
-            $('#main-table').css('width', '');
-        }
-        
-        setTimeout(() => $scope.$apply());
+    $scope.editWorkflow = function(){        
+        //setTimeout(() => $scope.$apply());
     }
 
     $scope.checkHiddenInforWf = false;
@@ -5259,16 +5186,7 @@ app.controller('setting-transition', function ($scope, $rootScope, $compile, $ui
     }, 200);
 });
 
-app.controller('edit-activity-instance', function ($scope, $rootScope, $compile, $uibModal, $confirm, $uibModalInstance, dataservice, $translate, $filter, para) {
-    $scope.cancel = function () {
-        var obj = {
-            ActInstCode: $rootScope.ActInstCode,
-            LstActInst: []
-        }
-        clearInterval($scope.interval);
-        $uibModalInstance.close(obj);
-    }
-
+app.controller('edit-activity-instance', function ($scope, $rootScope, $compile, $uibModal,$uibModalInstance, $confirm, dataservice, $translate, $filter, para) {
     $scope.model = {
         Template: "",
         Status: ""
@@ -5284,9 +5202,9 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
 
     $scope.isAll = true;
 
-    $rootScope.ObjectCode = para.ObjCode;
+    $scope.ObjectCode = para.ObjCode;
 
-    $rootScope.isAccepted = true;
+    $scope.isAccepted = true;
 
     $rootScope.countCommand = function () {
         dataservice.getDesActivity($rootScope.ActInstCode, function (rs) {
@@ -5308,14 +5226,18 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
             $rootScope.lstCommandFromExtra = rs;
         })
     }
-
+    $scope.initEdit=function(Data,ObjCode){
+        $scope.Data=Data;
+        $scope.ObjectCode=ObjCode
+        $scope.initData();
+    }
     $scope.initData = function () {
-        $scope.model = para.Data.DataActInst;
+        $scope.model = $scope.Data.DataActInst;
 
         $scope.model.sStartTime = $scope.model.StartTime != '' ? $filter('date')($scope.model.StartTime, 'dd/MM/yyyy') : '';
         $scope.model.sEndTime = $scope.model.EndTime != '' ? $filter('date')($scope.model.EndTime, 'dd/MM/yyyy') : '';
 
-        $scope.isBack = para.Data.IsBack;
+        $scope.isBack = $scope.Data.IsBack;
         $rootScope.IsLock = $scope.model.Status == "STATUS_ACTIVITY_LOCK" ? true : false;
         $scope.statusOld = angular.copy($scope.model.Status);
         $rootScope.ActivityCode = $scope.model.ActivityCode;
@@ -5405,7 +5327,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
         $scope.interval = setInterval(sessionAct, 3000);
     }
 
-    $scope.initData();
+    
 
     $rootScope.reloadHeader = function () {
         dataservice.getItemActInstByCode($rootScope.ActInstCode, function (rs) {
@@ -5525,8 +5447,6 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
                                     ActInstCode: $rootScope.ActInstCode,
                                     LstActInst: lstActInst
                                 }
-
-                                $uibModalInstance.close(obj);
                             }
                         })
                     }
@@ -11817,4 +11737,15 @@ app.controller('log-status-wf', function ($scope, $rootScope, $compile, $uibModa
     setTimeout(function () {
         setModalDraggable(".modal-dialog");
     }, 400);
+});
+
+
+app.directive("myFormEditInstance", function () {
+    return {
+        restrict: "E",
+        templateUrl: ctxfolder + "edit-activity-instance.html",
+        scope:{
+            para: '='
+        }
+    };
 });
