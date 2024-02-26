@@ -2355,7 +2355,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $('.menu-3').css('height', 'auto');
             $('.menu-right').css('left', '1050px');
             $('.menu-bottom').css('left', '800px');
-            console.log($scope.modelEditActivity.ActivityCode);
         }else{
             $('.parent_svg').css('width', '2000px');
             $('.milestone').css('width', '2000px');
@@ -6266,7 +6265,7 @@ app.controller('assign-member', function ($scope, $rootScope, $confirm, $compile
         })
 
         var creator = {
-            UserId: item.ID,
+            UserId: $scope.model.Creator,
             ActivityCode: $rootScope.ActivityCode,
             Role: "ROLE_ACT_REPOSITIVE"
         }
@@ -6276,15 +6275,45 @@ app.controller('assign-member', function ($scope, $rootScope, $confirm, $compile
                 App.toastrError(rs.Title);
             } else {
                 App.toastrSuccess(rs.Title);
-                var data = {
-                    ActivityCode: $rootScope.ActivityCode,
-                };
-                dataservice.getMemberAssign(data, function (rs) {
-                    rs = rs.data;
-                    $scope.lstMemberAssign = rs;
-                })
+                $scope.resetTable()
             }
         })
+    }
+
+    $scope.SaveCreator=function(){
+        if($scope.model.Creator!=''){
+            var wfData = {
+                WfCode: $rootScope.WfCatCode,
+                UserList: JSON.stringify($rootScope.ListUser)
+            }
+            dataservice.updateWfUserList(wfData, function (rs) {
+                rs = rs.data;
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                }
+                else {
+    
+                }
+            })
+    
+            var creator = {
+                UserId: $scope.model.Creator,
+                ActivityCode: $rootScope.ActivityCode,
+                Role: "ROLE_ACT_REPOSITIVE"
+            }
+            dataservice.assign(creator, function (rs) {
+                rs = rs.data;
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                } else {
+                    App.toastrSuccess(rs.Title);
+                    $scope.resetTable()
+                }
+            })
+        }
+        else{
+           
+        }
     }
 
     $scope.changeRole = function (id, role, userName) {
@@ -6379,67 +6408,6 @@ app.controller('assign-member', function ($scope, $rootScope, $confirm, $compile
     }
 
     $scope.submit = function (item) {
-        //if (item.UserId == "ALL") {
-        //    if ($scope.listUser.length > 0) {
-        //        if ($scope.lstAssign.length > 0) {
-        //            for (var i = 0; i < $scope.listUser.length; i++) {
-        //                var isExits = false;
-        //                for (var j = 0; j < $scope.lstAssign.length; j++) {
-        //                    if ($scope.listUser[i].UserId == $scope.lstAssign[j].UserId && $scope.listUser[i].UserId != "ALL") {
-        //                        isExits = true;
-        //                        break;
-        //                    }
-        //                }
-        //                if (!isExits) {
-        //                    id = id - 1;
-        //                    if ($scope.listUser[i].UserId != "ALL") {
-        //                        var assign = {
-        //                            Id: id,
-        //                            UserId: $scope.listUser[i].UserId,
-        //                            Role: "ROLE_STAFF",
-        //                            Group: $scope.groupAssignCode,
-        //                            Depart: $scope.departmentAssignCode,
-        //                            GivenName: $scope.listUser[i].GivenName,
-        //                            CardCode: obj.CardCode,
-        //                            Approve: true,
-        //                            RoleSys: $scope.listUser[i].RoleSys,
-        //                            DepartmentName: $scope.listUser[i].DepartmentName,
-        //                            Branch: $scope.listUser[i].Branch,
-        //                            CreatedBy: userName,
-        //                            IsInteract: false,
-        //                            Status: "ASSIGN_STATUS_WORK"
-        //                        }
-        //                        $scope.lstAssign.unshift(assign);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else {
-        //            for (var i = 0; i < $scope.listUser.length; i++) {
-        //                id = id - 1;
-        //                if ($scope.listUser[i].UserId != "ALL") {
-        //                    var assign = {
-        //                        Id: id,
-        //                        UserId: $scope.listUser[i].UserId,
-        //                        Role: "ROLE_STAFF",
-        //                        Group: $scope.groupAssignCode,
-        //                        Depart: $scope.departmentAssignCode,
-        //                        GivenName: $scope.listUser[i].GivenName,
-        //                        CardCode: obj.CardCode,
-        //                        Approve: true,
-        //                        RoleSys: $scope.listUser[i].RoleSys,
-        //                        DepartmentName: $scope.listUser[i].DepartmentName,
-        //                        Branch: $scope.listUser[i].Branch,
-        //                        CreatedBy: userName,
-        //                        IsInteract: false,
-        //                        Status: "ASSIGN_STATUS_WORK"
-        //                    }
-        //                    $scope.lstAssign.unshift(assign);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
         if (!$rootScope.isAdded) {
             $scope.model.UserId = "";
             return App.toastrError(caption.ACT_MSG_PLS_ADD_ACT_FIRST);
@@ -6501,16 +6469,20 @@ app.controller('assign-member', function ($scope, $rootScope, $confirm, $compile
                     App.toastrError(rs.Title);
                 } else {
                     App.toastrSuccess(rs.Title);
-                    var data = {
-                        ActivityCode: $rootScope.ActivityCode,
-                    };
-                    dataservice.getMemberAssign(data, function (rs) {
-                        rs = rs.data;
-                        $scope.lstMemberAssign = rs;
-                    })
+                    $scope.resetTable()
                 }
             })
         }
+    }
+    
+    $scope.resetTable=function(){
+        var data = {
+            ActivityCode: $rootScope.ActivityCode,
+        };
+        dataservice.getMemberAssign(data, function (rs) {
+            rs = rs.data;
+            $scope.lstMemberAssign = rs;
+        })
     }
 
     function validationSelect(data) {
