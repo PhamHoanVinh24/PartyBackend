@@ -2699,6 +2699,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
                 var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
                 formatRow(rowData);
+                $scope.editWorkflow();
             });
         });
     vm.dtColumnsList = [];
@@ -4567,7 +4568,13 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
         return mess;
     };
-
+    $scope.CloseAll=function(act1){
+        var actCheck=act1.checkHiddenActWf
+        $scope.listActs.forEach(function(act) {
+            act.checkHiddenActWf = false;
+        });
+        act1.checkHiddenActWf=!actCheck;
+    }
     setTimeout(function () {
         initDateTime();
     }, 200);

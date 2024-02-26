@@ -1997,6 +1997,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 dataservice.getItemActivity(obj, function (rs) {
                     rs = rs.data;
                     $scope.modelEditActivity = rs;
+                    $rootScope.ActivityCode=$scope.modelEditActivity.ActivityCode;
                     if ($scope.modelEditActivity.ListGroupData != '' && $scope.modelEditActivity.ListGroupData != null && $scope.modelEditActivity.ListGroupData != undefined)
                         $scope.modelEditActivity.ListGroupData = $scope.modelEditActivity.ListGroupData.split(',');
                     $rootScope.ActivityName = $scope.modelEditActivity.Title;
@@ -2354,6 +2355,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $('.menu-3').css('height', 'auto');
             $('.menu-right').css('left', '1050px');
             $('.menu-bottom').css('left', '800px');
+            console.log($scope.modelEditActivity.ActivityCode);
         }else{
             $('.parent_svg').css('width', '2000px');
             $('.milestone').css('width', '2000px');
