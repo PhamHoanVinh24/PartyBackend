@@ -22,7 +22,7 @@ app.factory('dataservice', function ($http) {
             $http.get('/Admin/CMSVideo/GetNews').then(callback);
         },
         getCMSItems: function (data,callback) {
-            $http.post('/Admin/CMSItem/GetListItemByCateId/',data).then(callback);
+            $http.get('/Admin/CMSItem/GetListItemByCateId?catId='+ data).then(callback);
         },
     }
 });
@@ -76,12 +76,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             rs = rs.data;
             $scope.CmsItems=rs;
             console.log(rs);
-        })
-        
+        }) 
     }
     $scope.getCMSItems();
-    
-    
 })
 
 function chuyenDoiNgayThang(chuoiNgay) {
