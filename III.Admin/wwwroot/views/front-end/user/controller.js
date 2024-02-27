@@ -180,6 +180,7 @@ app.factory('dataservice', function ($http) {
         deleteFile: function(fileName,ResumeNumber,callback){
             $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
         }
+        //
     }
 });
 

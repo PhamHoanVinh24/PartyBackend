@@ -1468,6 +1468,7 @@ namespace III.Admin.Controllers
                                 msg.Object = wfInstance;
                                 _context.SaveChanges();
                                 msg.Title = _sharedResources["COM_ADD_SUCCESS"];
+                                msg.Code = wfInstance.WfInstCode;
                                 InsertInstRunning(wfInstance.WfInstCode, obj.WorkflowCode);
                             }
                             else

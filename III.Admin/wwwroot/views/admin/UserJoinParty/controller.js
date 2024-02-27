@@ -190,7 +190,11 @@ app.factory('dataservice', function ($http) {
         },
         deleteFile: function(fileName,ResumeNumber,callback){
             $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
-        }
+        },
+        //Khởi tạo luồng hoạt động
+        createWfInstance: function (data, callback) {
+            $http.post('/Admin/WorkflowActivity/CreateWfInstance', data).then(callback)
+        },
     }
 });
 
@@ -753,6 +757,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.PlaceCreatedTime.place =rs.CreatedPlace;
                 $scope.infUser.ResumeNumber =  rs.ResumeNumber;
                 $scope.infUser.Status =  rs.Status;
+                $scope.infUser.WfInstCode =  rs.WfInstCode;
                 
                 $scope.Username=rs.Username;
                 console.log($scope.infUser);
@@ -801,6 +806,36 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     }
     $scope.initData();
 
+    
+
+    $scope.createWfInstance = function () {
+        $scope.modelWfInst = {
+            WorkflowCode: "PARTY_ADMISSION_PROFILE",
+            ObjectType: "CUSTOMER",
+            ObjectInst: "",
+            WfInstName: "Quy trình khai báo và xét duyệt vào Đảng của Đảng uỷ Thành Phố Hà Nội",
+            WfDesc: "",
+            WfType: "WF_TYPE20240226102033",
+            WfGroup: "WF_GROUP20240226092621"
+        };
+        console.log($scope.modelWfInst);
+        //validationSelect($scope.model);
+        if ($scope.infUser.WfInstCode==null || $scope.infUser.WfInstCode==undefined || $scope.infUser.WfInstCode=="" ) {
+            dataservice.createWfInstance($scope.modelWfInst, function (rs) {
+                rs = rs.data;
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                }
+                else {
+                    App.toastrSuccess(rs.Title);
+                    $scope.infUser.WfInstCode = rs.Code;
+                }
+                console.log(rs.data);
+                $scope.submitPartyAdmissionProfile();
+                
+            })
+        }
+    }
     $scope.getListFile = function () {
         dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
             rs = rs.data;
@@ -1230,6 +1265,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
                 $scope.model.Status = $scope.infUser.Status;
                 $scope.model.Username=$scope.Username;
+                $scope.model.WfInstCode=$scope.infUser.WfInstCode;
 
             if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&
             $scope.Username!='' && $scope.Username!=undefined){

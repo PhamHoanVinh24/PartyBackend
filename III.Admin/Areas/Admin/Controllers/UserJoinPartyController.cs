@@ -111,7 +111,8 @@ namespace III.Admin.Controllers
                                 a.Username,
                                 CreatedBy= b!=null ? b.GivenName: "",
                                 a.ProfileLink,
-                                resumeNumber=a.ResumeNumber
+                                resumeNumber=a.ResumeNumber,
+                                a.WfInstCode
                             };
 
                 //int total = _context.PartyAdmissionProfiles.Count();

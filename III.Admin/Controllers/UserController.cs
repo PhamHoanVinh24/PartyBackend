@@ -622,8 +622,9 @@ namespace III.Admin.Controllers
             //public DateTime CreatedTime { get; set; }
             public string SelfComment { get; set; }
             public string CreatedPlace { get; set; }
-          
-     
+            public string WfInstCode { get; set; }
+
+
             public string Username { get; set; }
             public string Status { get; set; }
         }
@@ -680,7 +681,8 @@ namespace III.Admin.Controllers
                 obj.SelfComment = model.SelfComment;
                 obj.CreatedPlace = model.CreatedPlace;
                 obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
-                if(model.Status!=null||model.Status!="")
+                obj.WfInstCode = model.WfInstCode;
+                if (model.Status!=null||model.Status!="")
                     obj.Status = model.Status;
 
                 _context.PartyAdmissionProfiles.Update(obj);

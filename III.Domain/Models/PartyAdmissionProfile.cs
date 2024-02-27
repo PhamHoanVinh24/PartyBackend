@@ -99,6 +99,7 @@ namespace ESEIM.Models
         }
         [NotMapped]
         public List<JsonFile> JsonProfileLinks { get; set; }
+        public string WfInstCode { get; set; }
     }
 
     public class JsonFile
