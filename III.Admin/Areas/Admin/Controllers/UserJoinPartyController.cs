@@ -126,17 +126,18 @@ namespace III.Admin.Controllers
                     x.Username,
                     x.CreatedBy,
                     x.ProfileLink,
-                    x.resumeNumber
+                    x.resumeNumber,
+                    x.WfInstCode
                 }).ToList();
                 int count = query_row_number.Count();
                 var data = query_row_number.AsQueryable().OrderBy(x => x.stt).Skip(intBegin).Take(jTablePara.Length);
 
-                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber");
+                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber", "WfInstCode");
                 return Json(jdata);
             }
             catch (Exception err)
             {
-                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber");
+                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber", "WfInstCode");
                 return Json(jdata);
             }
         }
