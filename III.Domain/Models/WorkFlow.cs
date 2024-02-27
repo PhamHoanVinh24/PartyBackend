@@ -49,6 +49,7 @@ namespace ESEIM.Models
         public DateTime? PublicTime { get; set; }
 
         public string ObjectType { get; set; }
+
         public string UserList { get; set; }
     }
 }

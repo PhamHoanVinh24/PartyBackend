@@ -9801,7 +9801,13 @@ app.controller('fileActivity', function ($scope, $rootScope, $compile, $uibModal
     $scope.progressModal = {};
     $scope.isProgressModelOpen = false;
     $scope.lstAttach = [];
-
+    $scope.$watch('$rootScope.ActInstCode', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            // Thực hiện các thao tác khi giá trị thay đổi
+            $rootScope.reloadFile()
+        }
+    });
+    
     var titleHtml = '<label class="mt-checkbox"><input type="checkbox" ng-model="selectAll" ng-change="toggleAll(selectAll, selected)"/><span></span></label>';
     vm.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {

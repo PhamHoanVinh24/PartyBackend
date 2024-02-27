@@ -9400,33 +9400,35 @@ namespace III.Admin.Controllers
                                  IsSign = c.IsSign,
                                  SignatureJson = c.SignatureJson,
                                  ListUserShare = g.ListUserShare
-                             }).Union(
-                            from a in _context.FilesShareObjectUsers.Where(x => !x.IsDeleted)
-                            join c in _context.EDMSRepoCatFiles on a.FileID equals c.FileCode
-                            join b in _context.EDMSFiles on c.FileCode equals b.FileCode
-                            join f in _context.EDMSRepositorys on c.ReposCode equals f.ReposCode into f1
-                            from f in f1.DefaultIfEmpty()
-                            let rela = JsonConvert.DeserializeObject<ObjRelative>(a.ObjectRelative)
-                            where rela.ObjectInstance.Equals(jTablePara.ActInstCode) && rela.ObjectType.Equals("ACT_INST")
-                            select new
-                            {
-                                Id = c.Id,
-                                FileCode = b.FileCode,
-                                FileName = b.FileName,
-                                FileTypePhysic = b.FileTypePhysic,
-                                Desc = b.Desc,
-                                CreatedTime = b.CreatedTime.Value,
-                                CloudFileId = b.CloudFileId,
-                                ReposName = f != null ? f.ReposName : "",
-                                FileID = b.FileID,
-                                SizeOfFile = b.FileSize.HasValue ? b.FileSize.Value : 0,
-                                Type = "SHARE",
-                                SignatureRequire = false,
-                                Url = b.Url,
-                                IsSign = false,
-                                SignatureJson = "",
-                                ListUserShare = a.ListUserShare
-                            }).DistinctBy(x => x.Id);
+                             });
+                            // .Union(
+                            //from a in _context.FilesShareObjectUsers.Where(x => !x.IsDeleted)
+                            //join c in _context.EDMSRepoCatFiles on a.FileID equals c.FileCode
+                            //join b in _context.EDMSFiles on c.FileCode equals b.FileCode
+                            //join f in _context.EDMSRepositorys on c.ReposCode equals f.ReposCode into f1
+                            //from f in f1.DefaultIfEmpty()
+                            //let rela = JsonConvert.DeserializeObject<ObjRelative>(a.ObjectRelative)
+                            //where rela.ObjectInstance.Equals(jTablePara.ActInstCode) && rela.ObjectType.Equals("ACT_INST")
+                            //select new
+                            //{
+                            //    Id = c.Id,
+                            //    FileCode = b.FileCode,
+                            //    FileName = b.FileName,
+                            //    FileTypePhysic = b.FileTypePhysic,
+                            //    Desc = b.Desc,
+                            //    CreatedTime = b.CreatedTime.Value,
+                            //    CloudFileId = b.CloudFileId,
+                            //    ReposName = f != null ? f.ReposName : "",
+                            //    FileID = b.FileID,
+                            //    SizeOfFile = b.FileSize.HasValue ? b.FileSize.Value : 0,
+                            //    Type = "SHARE",
+                            //    SignatureRequire = false,
+                            //    Url = b.Url,
+                            //    IsSign = false,
+                            //    SignatureJson = "",
+                            //    ListUserShare = a.ListUserShare
+                            //});
+                
                 int count = query.Count();
                 var data = query.Skip(intBeginFor).Take(jTablePara.Length).ToList();
                 var jdata = JTableHelper.JObjectTable(data, jTablePara.Draw, count, "Id", "FileCode", "FileName", "FileTypePhysic",
@@ -11498,7 +11500,24 @@ namespace III.Admin.Controllers
 
             return Json(actArranged);
         }
+        [HttpGet]
+        public JsonResult GetActivityInsGrid(string wfCode)
+        {
+            var activities = (_context.ActivityInstances.Where(x => !x.IsDeleted && x.WorkflowCode.Equals(wfCode))
+                .Join(_context.CommonSettings.Where(x => x.IsDeleted == false), x => x.Status, y => y.CodeSet, (x, y) => new
+                {
+                    ActivityInstCode = x.ActivityCode,
+                    ActName = x.Title,
+                    ActStatus = y.ValueSet,
+                    ActType = x.Type,
+                    Id = x.ID,
+                    IsLock = false,
+                    Level = 0,
+                    IsInstance = false
+                })).ToList().OrderByDescending(x=>x.Level);
 
+            return Json(activities);
+        }
         [HttpPost]
         public object GetActInstArranged(string objInst, string objType)
         {

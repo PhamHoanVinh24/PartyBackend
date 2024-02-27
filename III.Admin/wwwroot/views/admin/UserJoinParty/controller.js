@@ -1,7 +1,10 @@
-var ctxfolder = "/views/admin/UserJoinParty";
+var ctxfolderJoinParty = "/views/admin/UserJoinParty";
 var ctxfolderMessage = "/views/message-box";
-var app = angular.module('App_ESEIM', ["ui.bootstrap", "ngRoute", "ngValidate", "datatables", "datatables.bootstrap", 'datatables.colvis', "ui.bootstrap.contextMenu", 'datatables.colreorder', 'angular-confirm', "ngJsTree", "treeGrid", "ui.select", "ngCookies", "pascalprecht.translate"]);
-app.factory('dataservice', function ($http) {
+
+var app = angular.module('App_ESEIM_USER_JOIN_PARTY', ['App_ESEIM', "ui.bootstrap", "ngRoute", "ngValidate", "datatables", "datatables.bootstrap",
+  'datatables.colvis', "ui.bootstrap.contextMenu", 'datatables.colreorder', 'angular-confirm', "ngJsTree", "treeGrid", "ui.select", "ngCookies", "pascalprecht.translate", 'dynamicNumber', 'ngFileUpload', 'FBAngular']);
+
+app.factory('dataserviceJoinParty', function ($http) {
     $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -29,6 +32,12 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
+
+        //WF
+        getActivity: function (data, callback) {
+            $http.get('/Admin/WorkflowActivity/GetActivityInsGrid?wfCode=' + data).then(callback)
+        },
+
         getItemFile: function (data, data1, data2, callback) {
             $http.get('/Admin/EDMSRepository/GetItemFile?id=' + data + '&&IsEdit=' + data1 + '&mode=' + data2).then(callback);
         },
@@ -199,7 +208,7 @@ app.factory('dataservice', function ($http) {
 });
 
 
-app.controller('Ctrl_ESEIM', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, dataservice, $cookies, $translate) {
+app.controller('Ctrl_USER_JOIN_PARTY', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, dataserviceJoinParty, $cookies, $translate) {
     $rootScope.go = function (path) {
         $location.path(path); return false;
     };
@@ -287,13 +296,14 @@ app.controller('Ctrl_ESEIM', function ($scope, $rootScope, $compile, $uibModal, 
         $rootScope.IsTranslate = true;
     });
 });
+
 app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
-    $translateProvider.useUrlLoader('/Admin/InventoryAudit/Translation');
+    $translateProvider.useUrlLoader('/Admin/WorkflowActivity/Translation');
     //$translateProvider.preferredLanguage('en-US');
     caption = $translateProvider.translations();
     $routeProvider
     .when('/', {
-        templateUrl: ctxfolder + '/index.html',
+        templateUrl: ctxfolderJoinParty + '/index.html',
         controller: 'index'
     })
     .when('/edit/:resumeNumber', {
@@ -325,7 +335,7 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
         }
     });
 });
-app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $location, $translate) {
+app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceJoinParty, $location, $translate) {
     var vm = $scope;
     
     $scope.showSearch = function () {
@@ -337,17 +347,40 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
     
     $scope.isEditWorkflow = false;
-    $scope.editWorkflow = function(){
-        $scope.isEditWorkflow = !$scope.isEditWorkflow;
+    $scope.editWorkflow = function(WfInstCode){
         if ($scope.isEditWorkflow == true) {
-            $('#main-table').css('width', '1200px');
+            $('#tblData_wrapper').css('width', '50%');
         }else{
-            $('#main-table').css('width', '');
+            $('#tblData_wrapper').css('width', '');
+            return
         }
-        
-        setTimeout(() => $scope.$apply());
+        $scope.$apply()
+        if(WfInstCode==0||WfInstCode==''||WfInstCode==null||WfInstCode==undefined){
+            
+        }else{
+            //gọi api lấy dữ liệu theo WfInstCode
+        }
     }
-    
+
+    function formatRow(full) {
+        dataserviceJoinParty.getActivity("12593",function(rs){
+            console.log(rs.data)
+            $scope.listActs=rs.data;
+        })
+    }
+    formatRow(null);
+
+    $scope.listActs=[]
+
+
+    $scope.CloseAll=function(act1){
+        var actCheck=act1.checkHiddenActWf
+        $scope.listActs.forEach(function(act) {
+            act.checkHiddenActWf = false;
+        });
+        act1.checkHiddenActWf=!actCheck;
+    }
+
     $scope.selected = [];
     $scope.selectAll = false;
     $scope.toggleAll = toggleAll;
@@ -409,7 +442,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.delete = function (id) {
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            dataservice.delete(id,function(result){
+            dataserviceJoinParty.delete(id,function(result){
                 result=result.data;
                 console.log(result);
                 if (result.Error) {
@@ -513,20 +546,19 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('initComplete', function (settings, json) {
         })
         .withOption('createdRow', function (row, data, dataIndex) {
-            const contextScope = $scope.$new(true);
-            contextScope.data = data;
-            contextScope.contextMenu = $scope.contextMenu;
-            $compile(angular.element(row).contents())($scope);
-            $compile(angular.element(row).attr('context-menu', 'contextMenu'))(contextScope);
-            $(row).find('td:not(:has(label.mt-checkbox))').on('click', function (evt) {
-                var self = $(this).parent();
-                if ($(self).hasClass('selected')) {
-                    $(self).removeClass('selected');
-                } else {
-                    $('#tblDataEmployee').DataTable().$('tr.selected').removeClass('selected');
-                    $(self).addClass('selected');
-                }
-                $scope.$apply();
+            $compile(angular.element(row))($scope);
+            $(row).find('td').on('click', function (evt) {
+                // Xóa lớp active khỏi tất cả các hàng
+                $(this).closest('table').find('tr').removeClass('active');
+                        
+                // Thêm lớp active vào hàng đã được click
+                $(this).closest('tr').addClass('active');
+
+                //var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
+                // var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
+                // formatRow(rowData);
+                $scope.isEditWorkflow = true
+                $scope.editWorkflow('');
             });
         });
     vm.dtColumns = [];
@@ -584,7 +616,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     });
 });
 
-app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter) {
+app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceJoinParty, $filter) {
     var vm = $scope;
     $scope.selected = [];
     $scope.selectAll = false;
@@ -612,7 +644,7 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
         } else {
 
             if (userModel.SizeOfFile < 20971520) {
-                dataservice.getItemFile(id, true, mode, function (rs) {
+                dataserviceJoinParty.getItemFile(id, true, mode, function (rs) {
                     rs = rs.data;
                     if (rs.Error) {
                         if (rs.ID === -1) {
@@ -661,17 +693,17 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
         var pdf = ['PDF'];
         var excel = ['XLS', 'XLSX'];
         if (word.indexOf(extension.toUpperCase()) !== -1) {
-            dataservice.viewFileOnline(data, function (rs) {
+            dataserviceJoinParty.viewFileOnline(data, function (rs) {
                 window.open('/Admin/Docman#', '_blank');
             });
         }
         else if (pdf.indexOf(extension.toUpperCase()) !== -1) {
-            dataservice.viewFileOnline(data, function (rs) {
+            dataserviceJoinParty.viewFileOnline(data, function (rs) {
                 window.open('/Admin/PDF#', '_blank');
             });
         }
         else if (excel.indexOf(extension.toUpperCase()) !== -1) {
-            dataservice.viewFileOnline(data, function (rs) {
+            dataserviceJoinParty.viewFileOnline(data, function (rs) {
                 window.open('/Admin/Excel#', '_blank');
             });
         }
@@ -681,7 +713,7 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
     };
 });
 
-app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataservice, $filter,$http) {   
+app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataserviceJoinParty, $filter,$http) {   
     $scope.initData=function(){
             
         $scope.ListStatus = [{
@@ -742,7 +774,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             return day + '-' + month + '-' + year;
         }
         $scope.PlaceCreatedTime={}
-            dataservice.GetPartyAdmissionProfileByResumeNumber($routeParams.resumeNumber, function(rs){
+            dataserviceJoinParty.GetPartyAdmissionProfileByResumeNumber($routeParams.resumeNumber, function(rs){
                 rs = rs.data;
                 $scope.infUser.LastName = rs.CurrentName;
             
@@ -835,7 +867,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         console.log($scope.modelWfInst);
         //validationSelect($scope.model);
         if ($scope.infUser.WfInstCode==null || $scope.infUser.WfInstCode==undefined || $scope.infUser.WfInstCode=="" ) {
-            dataservice.createWfInstance($scope.modelWfInst, function (rs) {
+            dataserviceJoinParty.createWfInstance($scope.modelWfInst, function (rs) {
                 rs = rs.data;
                 if (rs.Error) {
                     App.toastrError(rs.Title);
@@ -851,7 +883,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         }
     }
     $scope.getListFile = function () {
-        dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
+        dataserviceJoinParty.getListFile($scope.infUser.ResumeNumber,function (rs) {
             rs = rs.data;
             $scope.fileList = rs.JsonProfileLinks;
             //$scope.$apply();
@@ -859,7 +891,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         })
     }
     $scope.deleteFile = function (x) {
-        dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
+        dataserviceJoinParty.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
             txt=txt.data;
             console.log(txt);
                 if (txt.Error) {
@@ -934,7 +966,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.Id=personalHistory.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertPersonalHistorys($scope.model, function (result) {
+        dataserviceJoinParty.insertPersonalHistorys($scope.model, function (result) {
             result = result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -988,7 +1020,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             $scope.model.push(obj)
         });
         
-        dataservice.insertWarningDisciplined($scope.model, function (result) {
+        dataserviceJoinParty.insertWarningDisciplined($scope.model, function (result) {
             result = result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -1013,7 +1045,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
         });
        
         
-            dataservice.insertTrainingCertificatedPass($scope.model, function (result) {
+            dataserviceJoinParty.insertTrainingCertificatedPass($scope.model, function (result) {
                 result = result.data;
                 if (result.Error) {
                     App.toastrError(result.Title);
@@ -1142,7 +1174,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             $scope.model.push(obj)
             
         });
-            dataservice.insertFamily($scope.model, function (result) {
+            dataserviceJoinParty.insertFamily($scope.model, function (result) {
                 result= result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
@@ -1167,7 +1199,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.Id = e.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertGoAboards($scope.model, function (result) {
+        dataserviceJoinParty.insertGoAboards($scope.model, function (result) {
             result= result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -1189,7 +1221,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.Id = businessNDuty.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertBusinessNDuty($scope.model, function (result) {
+        dataserviceJoinParty.insertBusinessNDuty($scope.model, function (result) {
             result= result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
@@ -1213,7 +1245,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.Id = historicalFeatures.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertHistorySpecialist($scope.model, function (result) {
+        dataserviceJoinParty.insertHistorySpecialist($scope.model, function (result) {
             result= result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
@@ -1236,7 +1268,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             obj.Id = laudatory.Id;
             $scope.model.push(obj)
         });
-        dataservice.insertAwards($scope.model, function (result) {
+        dataserviceJoinParty.insertAwards($scope.model, function (result) {
             result= result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
@@ -1284,7 +1316,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&
             $scope.Username!='' && $scope.Username!=undefined){
                 console.log($scope.model);
-                dataservice.update($scope.model, function (result) {
+                dataserviceJoinParty.update($scope.model, function (result) {
                     result= result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
@@ -1310,7 +1342,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
             $scope.model.Id = $scope.Introducer.Id;
             
         };
-        dataservice.insertIntroducer($scope.model, function (result) {
+        dataserviceJoinParty.insertIntroducer($scope.model, function (result) {
             result= result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
@@ -1324,7 +1356,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     // //getById
     // $scope.getBusinessNDutyById = function () {
     //     $scope.id = 2;
-    //     dataservice.getBusinessNDutyById($scope.id, function (rs) {
+    //     dataserviceJoinParty.getBusinessNDutyById($scope.id, function (rs) {
     //             rs = rs.data;
     //             console.log(rs.data);
     //         })
@@ -1333,7 +1365,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     // $scope.getHistorySpecialistById = function () {
     //     $scope.id = 2;
-    //     dataservice.getHistorySpecialistById($scope.id, function (rs) {
+    //     dataserviceJoinParty.getHistorySpecialistById($scope.id, function (rs) {
     //             rs = rs.data;
     //             console.log(rs.data);
     //         })
@@ -1342,7 +1374,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     // $scope.getAwardById = function () {
     //     $scope.id = 2;
-    //     dataservice.getAwardById($scope.id, function (rs) {
+    //     dataserviceJoinParty.getAwardById($scope.id, function (rs) {
     //             rs = rs.data;
     //             console.log(rs.data);
     //         })
@@ -1351,7 +1383,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
 
     // $scope.getWarningDisciplinedById = function () {
     //     $scope.id = 2;
-    //     dataservice.getWarningDisciplinedById($scope.id, function (rs) {
+    //     dataserviceJoinParty.getWarningDisciplinedById($scope.id, function (rs) {
     //             rs = rs.data;
     //             console.log(rs.data);
     //         })
@@ -1860,7 +1892,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     //getGoAboardById
     $scope.getGoAboardById = function () {
         $scope.id = 2;
-        dataservice.getGoAboardById($scope.id, function (rs) {
+        dataserviceJoinParty.getGoAboardById($scope.id, function (rs) {
             rs = rs.data;
             console.log(rs.data);
 
@@ -1870,7 +1902,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     }
     $scope.getTrainingCertificatedPassById = function () {
         $scope.id = 2;
-        dataservice.getTrainingCertificatedPassById($scope.id, function (rs) {
+        dataserviceJoinParty.getTrainingCertificatedPassById($scope.id, function (rs) {
                 rs = rs.data;
                 console.log(rs.data);
             })
@@ -1879,7 +1911,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     //getGetPersonalHistoryById
     $scope.getPersonalHistoryById = function () {
         $scope.id = 2;
-        dataservice.getPersonalHistoryById($scope.id, function (rs) {
+        dataserviceJoinParty.getPersonalHistoryById($scope.id, function (rs) {
                 rs = rs.data;
                 console.log(rs.data);
             })
@@ -1889,7 +1921,7 @@ app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dat
     //getGoAboardById
     $scope.getGoAboardById = function () {
         $scope.id = 2;
-        dataservice.getGoAboardById($scope.id, function (rs) {
+        dataserviceJoinParty.getGoAboardById($scope.id, function (rs) {
             rs = rs.data;
             console.log(rs.data);
 
