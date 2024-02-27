@@ -396,7 +396,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }]
     $scope.ListGender = [{
         Name: 'Chọn giới tính',
-        Code: -1
+        Code: null
     },
     {
         Name: 'Nam',
@@ -435,7 +435,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.searchModel={
         FromDate:'',
         ToDate:'',
+        FromAge: null,
+        ToAge: null,
         Name:'',
+        HomeTown:'',
         Username:'',
         Status:'',
         Nation:'',
@@ -445,7 +448,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         ForeignLanguage:'',
         UnderPostGraduateEducation:'',
         MinorityLanguages:'',
-        Gender: -1,
+        JobEducation:'',
+        Degree:'',
+        PoliticalTheory:'',
+        GeneralEducation:'',
+        Gender: null,
     }
     $scope.initData = function () {
        
@@ -469,8 +476,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             data: function (d) {
                 d.FromDate=$scope.searchModel.FromDate,
                 d.ToDate=$scope.searchModel.ToDate,
+                d.FromAge=$scope.searchModel.FromAge,
+                d.ToAge=$scope.searchModel.ToAge,
                 d.Name=$scope.searchModel.Name,
                 d.Username=$scope.searchModel.Username,
+                d.HomeTown=$scope.searchModel.HomeTown,
                 d.Status=$scope.searchModel.Status,
                 d.Nation=$scope.searchModel.Nation,
                 d.Religion=$scope.searchModel.Religion,
@@ -480,7 +490,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 d.UnderPostGraduateEducation=$scope.searchModel.UnderPostGraduateEducation,
                 d.MinorityLanguages=$scope.searchModel.MinorityLanguages,
                 d.Gender=$scope.searchModel.Gender,
-                d.KeyWord=''
+                d.KeyWord='',
+                d.JobEducation=$scope.searchModel.JobEducation,
+                d.Degree=$scope.searchModel.Degree,
+                d.PoliticalTheory=$scope.searchModel.PoliticalTheory,
+                d.GeneralEducation=$scope.searchModel.GeneralEducation
             },
             complete: function () {
                 App.unblockUI("#contentMain");
