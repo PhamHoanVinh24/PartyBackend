@@ -306,9 +306,9 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
         templateUrl: ctxfolderJoinParty + '/index.html',
         controller: 'index'
     })
-    .when('/edit/:resumeNumber', {
-        templateUrl: ctxfolder + '/edit.html',
-        controller: 'edit'
+    .when('/edit-user/:resumeNumber', {
+        templateUrl: ctxfolderJoinParty + '/edit.html',
+        controller: 'edit-user-join-party'
     })
     $validatorProvider.setDefaults({
         errorElement: 'span',
@@ -354,21 +354,20 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $('#tblData_wrapper').css('width', '');
             return
         }
-        $scope.$apply()
         if(WfInstCode==0||WfInstCode==''||WfInstCode==null||WfInstCode==undefined){
             
         }else{
             //gọi api lấy dữ liệu theo WfInstCode
+            formatActIns(WfInstCode);
         }
     }
 
-    function formatRow(full) {
+    function formatActIns(WfInstCode) {
         dataserviceJoinParty.getActivity("12593",function(rs){
             console.log(rs.data)
             $scope.listActs=rs.data;
         })
     }
-    formatRow(null);
 
     $scope.listActs=[]
 
@@ -484,9 +483,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
        
     };
     $scope.initData()
+
     $scope.edit=function(id){
-        $location.path('/edit/'+id);
+        $location.path('/edit-user/'+id);
     }
+
     var titleHtml = '<label class="mt-checkbox"><input type="checkbox" ng-model="selectAll" ng-click="toggleAll(selectAll, selected)"/><span></span></label>';
     vm.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {
@@ -569,6 +570,12 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     
     vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
         return data
+    }));
+
+    vm.dtColumns.push(DTColumnBuilder.newColumn('WfInstCode').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
+        if(data!=null)
+            return `<span class='have-wf'>Chỉnh sửa luồng</span>`
+        return
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('action').notSortable().withOption('sClass', ' w50 nowrap')
@@ -699,7 +706,7 @@ app.controller('file-version', function ($scope, $rootScope, $compile, $uibModal
     };
 });
 
-app.controller('edit', function ($scope, $rootScope, $compile, $routeParams, dataserviceJoinParty, $filter,$http) {   
+app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $routeParams, dataserviceJoinParty, $filter,$http) {   
     $scope.initData=function(){
             
         $scope.ListStatus = [{
