@@ -5427,8 +5427,8 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
     }
 
     $scope.submit = function () {
-        validationSelect($scope.model);
-        if ( !validationSelect($scope.model).Status) {
+        
+        if (!validationSelect($scope.model).Status) {
             //if ($rootScope.IsLock) {
             //    return App.toastrError(caption.WFAI_MSG_ACT_IS_LOCKED);
             //}
@@ -5876,15 +5876,15 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
     function validationSelect(data) {
         var mess = { Status: false, Title: "" }
 
-        angular.forEach($rootScope.validationOptionsActivity.rules, function(rule, fieldName) {
-            if (rule.required && !data[fieldName]) {
-                // Nếu trường bắt buộc mà không có giá trị
-                $scope["error" + fieldName] = true;
-                mess.Status = true;
-            } else {
-                $scope["error" + fieldName] = false;
-            }
-        });
+        // angular.forEach($rootScope.validationOptionsActivity.rules, function(rule, fieldName) {
+        //     if (rule.required && !data[fieldName]) {
+        //         // Nếu trường bắt buộc mà không có giá trị
+        //         $scope["error" + fieldName] = true;
+        //         mess.Status = true;
+        //     } else {
+        //         $scope["error" + fieldName] = false;
+        //     }
+        // });
 
         if (data.Unit == "") {
             $scope.errorUnit = true;
