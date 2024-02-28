@@ -494,7 +494,9 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         Gender: null,
     }
     $scope.initData = function () {
-       
+       if($rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=''){
+            $scope.editWorkflow($rootScope.WorkflowInstCode);
+       }
     };
     $scope.initData()
 
@@ -890,6 +892,7 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
                 else {
                     App.toastrSuccess(rs.Title);
                     $scope.infUser.WfInstCode = rs.Code;
+                    $rootScope.WorkflowInstCode=rs.Code;
                 }
                 console.log(rs.data);
                 $scope.submitPartyAdmissionProfile();
