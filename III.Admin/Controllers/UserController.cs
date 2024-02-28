@@ -145,10 +145,6 @@ namespace III.Admin.Controllers
                     {
                         ModelState.AddModelError(string.Empty, _stringLocalizer["LN_INCORRECT_USR_PASS"]);
                     }
-                    else if (user.Active != false)
-                    {
-                        ModelState.AddModelError(string.Empty, "Tài khoản chưa được kích hoạt !");
-                    }
                     else
                     {
                         var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: false);
