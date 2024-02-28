@@ -18,7 +18,7 @@ app.factory('dataservice', function ($http) {
     };
     return {
         Register:function(data,callback){
-            $http.post('/register',data).then(callback);
+            $http.post('/register2',data).then(callback);
         }
     }
 });

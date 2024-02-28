@@ -76,8 +76,8 @@ namespace III.Admin.Controllers
         {
             return View();
         }
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        [HttpPost("register2")]
+        public async Task<IActionResult> Register2([FromBody] RegisterDto model)
         {
             var msg = new JMessage() { Error = false };
             if (ModelState.IsValid)
