@@ -355,17 +355,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             //gọi api lấy dữ liệu theo WfInstCode
             formatActIns(WfInstCode);
         }
-        $scope.$apply();
         
-    }
-    function fixContent(){
-        if ($scope.isEditWorkflow == true) {
-            $('#tblData_wrapper').css('width', '50%');
-            
-        }else{
-            $('#tblData_wrapper').css('width', '');
-            return
-        }
     }
     function formatActIns(WfInstCode) {
         dataserviceJoinParty.getActivity(WfInstCode,function(rs){
@@ -374,6 +364,16 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             $scope.isEditWorkflow = true
             fixContent()
         })
+    }
+
+    function fixContent(){
+        if ($scope.isEditWorkflow == true) {
+            $('#tblData_wrapper').css('width', '50%');
+            
+        }else{
+            $('#tblData_wrapper').css('width', '');
+            return
+        }
     }
 
     $scope.listActs=[]
@@ -496,9 +496,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.initData = function () {
        if($rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=''){
             $scope.editWorkflow($rootScope.WorkflowInstCode);
+            $rootScope.WorkflowInstCode=''
        }
+       reloadData();
     };
-    $scope.initData()
 
     $scope.edit=function(id){
         $location.path('/edit-user/'+id);
@@ -551,6 +552,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             if (!$scope.headerCompiled) {
                 $scope.headerCompiled = true;
                 $compile(angular.element(header).contents())($scope);
+                
+                $scope.initData()
             }
         })
         .withOption('initComplete', function (settings, json) {
@@ -569,6 +572,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 // formatRow(rowData);
                 //$scope.editWorkflow('');
             });
+            if ($rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!='' 
+                && data.WfInstCode === $rootScope.WorkflowInstCode) {
+                $(row).addClass('active');
+            }
         });
     vm.dtColumns = [];
 

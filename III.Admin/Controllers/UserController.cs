@@ -325,6 +325,16 @@ namespace III.Admin.Controllers
         public object GetPartyAdmissionProfileByResumeNumber(string resumeNumber)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == resumeNumber);
+            if (user != null)
+            {
+
+                var wf2 = _context.WorkflowInstances.FirstOrDefault(x => x.IsDeleted == false && x.WfInstCode == user.WfInstCode);
+                if (wf2 == null)
+                {
+                    user.WfInstCode = null;
+                }
+            }
+
             return user;
         }
         /*public object GetPartyAdmissionProfileByUserCode([FromBody] int userCode)
