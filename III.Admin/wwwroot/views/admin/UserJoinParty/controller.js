@@ -348,24 +348,30 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     
     $scope.isEditWorkflow = false;
     $scope.editWorkflow = function(WfInstCode){
+        if(WfInstCode==0||WfInstCode==''||WfInstCode==null||WfInstCode==undefined){
+            $scope.isEditWorkflow = false
+            fixContent()
+        }else{
+            //gọi api lấy dữ liệu theo WfInstCode
+            formatActIns(WfInstCode);
+        }
+        $scope.$apply();
+        
+    }
+    function fixContent(){
         if ($scope.isEditWorkflow == true) {
             $('#tblData_wrapper').css('width', '50%');
         }else{
             $('#tblData_wrapper').css('width', '');
             return
         }
-        if(WfInstCode==0||WfInstCode==''||WfInstCode==null||WfInstCode==undefined){
-            
-        }else{
-            //gọi api lấy dữ liệu theo WfInstCode
-            formatActIns(WfInstCode);
-        }
     }
-
     function formatActIns(WfInstCode) {
-        dataserviceJoinParty.getActivity("12593",function(rs){
+        dataserviceJoinParty.getActivity(WfInstCode,function(rs){
             console.log(rs.data)
             $scope.listActs=rs.data;
+            $scope.isEditWorkflow = true
+            fixContent()
         })
     }
 
@@ -558,8 +564,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 //var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
                 // var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
                 // formatRow(rowData);
-                $scope.isEditWorkflow = true
-                $scope.editWorkflow('');
+                //$scope.editWorkflow('');
             });
         });
     vm.dtColumns = [];
@@ -587,8 +592,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('WfInstCode').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
-        if(data!=null)
-            return `<span class='have-wf'>Chỉnh sửa luồng</span>`
+        if(data!=null && data!=undefined && data!='')
+            return `<span class='have-wf' ng-click="editWorkflow('`+data+`')">Chỉnh sửa luồng</span>`
         return
     }));
 
