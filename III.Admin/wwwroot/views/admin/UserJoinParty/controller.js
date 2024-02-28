@@ -337,7 +337,12 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 });
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceJoinParty, $location, $translate) {
     var vm = $scope;
-    
+    $scope.tabnav = 'Section3'; // Initialize tabnav variable
+
+    $scope.saveTabNav = function(href) {
+        $scope.tabnav = href; // Save href to tabnav variable
+    };
+
     $scope.showSearch = function () {
         if (!$scope.isSearch) {
             $scope.isSearch = true;

@@ -951,6 +951,12 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 });
 
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter, myService, $location) {
+    $scope.tabnav = 'Section3'; // Initialize tabnav variable
+
+    $scope.saveTabNav = function(href) {
+        $scope.tabnav = href; // Save href to tabnav variable
+    };
+
     $('.menu-toggle').addClass('hidden');
     $(".content-wrapper").removeClass("padding-right-80");
     $(".content-wrapper").addClass("padding-right-90");
@@ -5792,10 +5798,10 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
         var data = {
             ActivityCode: $rootScope.ActInstCode
         }
-
         dataservice.getMemberAssign(data, function (rs) {
             rs = rs.data;
             $rootScope.lstMemberAssign = rs;
+            console.log($rootScope.lstMemberAssign)
         });
 
         dataservice.getObjectProcess($rootScope.ActInstCode, function (rs) {
@@ -6365,6 +6371,7 @@ app.controller('assign-member', function ($scope, $rootScope, $uibModal, $confir
         dataservice.getMemberAssign(data, function (rs) {
             rs = rs.data;
             $rootScope.lstMemberAssign = rs;
+            console.log($rootScope.lstMemberAssign)
         })
     }
 
