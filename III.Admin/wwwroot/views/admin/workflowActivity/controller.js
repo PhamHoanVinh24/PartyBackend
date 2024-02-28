@@ -4021,7 +4021,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.isEditWorkflow = false;
     $scope.editWorkflow = function(){   
         if ($scope.isEditWorkflow == true) {
-            $('#main-table').css('width', '1030px');
+            $('#main-table').css('width', '50%');
         }else{
             $('#main-table').css('width', '');
         }
