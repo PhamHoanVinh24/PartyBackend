@@ -2160,6 +2160,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
 
     $scope.deleteWfInstance = function (code) {
+        
         dataservice.deleteWfInstance(code, function (rs) {
             rs = rs.data;
             if (rs.Error) {
@@ -2689,7 +2690,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         })
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
-            $(row).find('td:not(:has(label.mt-checkbox))').on('click', function (evt) {
+            $(row).find('td:not(.listaction):not(:has(label.mt-checkbox))').on('click', function (evt) {
                 // Xóa lớp active khỏi tất cả các hàng
                 $(this).closest('table').find('tr').removeClass('active');
                         
@@ -2761,7 +2762,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         var lstAct = JSON.parse(full.ListAct);
         return lstAct.length > 0 ? '<button title="Xem danh sách hoạt động" ng-click="showActivityList(\'' + full.WfCode + '\')" style = "width: 32px; height: 32px; padding: 0px; border: none;color: #183153; background: transparent" class1="btn btn-icon-only primary btn-circle btn-outline blue"><i class="fas fa-tasks-alt fs25" style="line-height:32px"></i></button>' : '';
     }));
-    vm.dtColumnsList.push(DTColumnBuilder.newColumn('action').withTitle("{{'COM_LIST_COL_ACTION' | translate}}").withOption('sClass', 'w20 nowrap').renderWith(function (data, type, full) {
+    vm.dtColumnsList.push(DTColumnBuilder.newColumn('action').withTitle("{{'COM_LIST_COL_ACTION' | translate}}").withOption('sClass', 'w20 nowrap listaction').renderWith(function (data, type, full) {
         return '<button title="Sửa" ng-click="editWfInst(\'' + full.WfCode + '\')" style = "width: 25px; height: 25px; padding: 0px; border: none; color: #183153; background: transparent; margin-right: 10px" class1="btn btn-icon-only btn-circle btn-outline blue"><i class="fas fa-edit fs20"></i></button>' +
             '<button title="Xem sơ đồ" ng-click="wfInstanceClick(\'' + full.WfCode + '\')" style = "width: 25px; height: 25px; padding: 0px; border: none; color: #183153; background: transparent; margin-right: 10px" class1="btn btn-icon-only btn-circle btn-outline green"><i class="fas fa-project-diagram fs20"></i></button>' +
             '<button title="Xoá" ng-click="deleteWfInstance(\'' + full.WfCode + '\')" style="width: 25px; height: 25px; padding: 0px; border: none; color: #183153; background: transparent; margin-right: 10px" class1="btn btn-icon-only btn-circle btn-outline red"><i class="fas fa-trash-alt fs20"></i></button>';
