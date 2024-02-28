@@ -728,8 +728,8 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
             Code: 'Mới đẩy lên'
         },
         {
-            Name: 'Mới cập nhật',
-            Code: 'Mới cập nhật'
+            Name: 'Đang xử lý',
+            Code: 'Đang xử lý'
         },
         {
             Name: 'Đã duyệt',
