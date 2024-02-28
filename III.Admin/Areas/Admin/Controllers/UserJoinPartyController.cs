@@ -68,8 +68,15 @@ namespace III.Admin.Controllers
             public string ForeignLanguage { get; set; }
             public string UnderPostGraduateEducation { get; set; }
             public string MinorityLanguages { get; set; }
-            public int Gender { get; set; }
+            public int? Gender { get; set; }
             public string KeyWord { get; set; }
+            public int? FromAge { get; set; }
+            public int? ToAge { get; set; }
+            public string HomeTown { get; set; }
+            public string JobEducation { get; set; }
+            public string Degree { get; set; }
+            public string PoliticalTheory { get; set; }
+            public string GeneralEducation { get; set; }
         }
 
         [HttpPost]
@@ -80,11 +87,14 @@ namespace III.Admin.Controllers
                 int intBegin = (jTablePara.CurrentPage - 1) * jTablePara.Length;
                 var fromDate = !string.IsNullOrEmpty(jTablePara.FromDate) ? DateTime.ParseExact(jTablePara.FromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
                 var toDate = !string.IsNullOrEmpty(jTablePara.ToDate) ? DateTime.ParseExact(jTablePara.ToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+                var getYear = DateTime.Now.Year;
                 var query = from a in _context.PartyAdmissionProfiles.Where(x => x.IsDeleted == false)
                             join b in _context.Users on a.CreatedBy equals b.UserName into b1
                             from b in b1.DefaultIfEmpty()
                             where (fromDate == null || (fromDate <= a.Birthday))
                                    && (toDate == null || (toDate >= a.Birthday))
+                                   && (jTablePara.FromAge == null || (jTablePara.FromAge <= (getYear - a.Birthday.Value.Year))) 
+                                   && (jTablePara.ToAge == null || (jTablePara.ToAge >= (getYear - a.Birthday.Value.Year)))
                                    && (string.IsNullOrEmpty(jTablePara.Name) || a.CurrentName.ToLower().Contains(jTablePara.Name.ToLower()))
                                    && (string.IsNullOrEmpty(jTablePara.Status) || a.Status==jTablePara.Status)
                                    && (string.IsNullOrEmpty(jTablePara.Username) || a.Username.ToLower().Contains(jTablePara.Username.ToLower()) || a.ResumeNumber.ToLower().Contains(jTablePara.Username.ToLower()))
@@ -97,7 +107,12 @@ namespace III.Admin.Controllers
                                    && (string.IsNullOrEmpty(jTablePara.ForeignLanguage) || a.ForeignLanguage.ToLower().Contains(jTablePara.ForeignLanguage.ToLower()))
                                    && (string.IsNullOrEmpty(jTablePara.UnderPostGraduateEducation) || a.UnderPostGraduateEducation.ToLower().Contains(jTablePara.UnderPostGraduateEducation.ToLower()))
                                    && (string.IsNullOrEmpty(jTablePara.MinorityLanguages) || a.MinorityLanguages.ToLower().Contains(jTablePara.MinorityLanguages.ToLower()))
-                                   && (jTablePara.Gender == -1 || a.Gender==jTablePara.Gender)
+                                   && (string.IsNullOrEmpty(jTablePara.HomeTown) || a.HomeTown.ToLower().Contains(jTablePara.HomeTown.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.Degree) || a.Degree.ToLower().Contains(jTablePara.Degree.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.PoliticalTheory) || a.PoliticalTheory.ToLower().Contains(jTablePara.PoliticalTheory.ToLower()))
+                                   && (string.IsNullOrEmpty(jTablePara.GeneralEducation) || a.GeneralEducation.ToLower().Contains(jTablePara.GeneralEducation.ToLower()))
+                                   && (jTablePara.Gender == null || a.Gender==jTablePara.Gender)
                             //&& (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))

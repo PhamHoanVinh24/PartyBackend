@@ -363,7 +363,31 @@ namespace III.Admin.Controllers
 
             return obj;
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public object GetListItemByCateId(int catId)
+        {
+            var obj = (from a in _context.cms_items
+                       where a.cat_id == catId
+                       orderby a.created descending
+                       select new
+                       {
+                           title = a.title,
+                           id = a.id,
+                           hits = a.hits,
+                           full_text = a.full_text,
+                           extra_fields = a.extra_fields,
+                           featured_ordering = a.featured_ordering,
+                           cat_id = a.cat_id,
+                           alias = a.alias,
+                           created = a.created.HasValue ? a.created.Value.ToString("dd/MM/yyyy") : "",
+                           
+                       }).Take(3).ToList();
 
+            RemoveUserInNotify(catId.ToString(), EnumHelper<NotificationType>.GetDisplayValue(NotificationType.Cms), false);
+
+            return obj;
+        }
         [HttpPost]
         public JsonResult InsertFile(cms_attachments obj, IFormFile fileUpload)
         {

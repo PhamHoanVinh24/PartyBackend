@@ -21,6 +21,9 @@ app.factory('dataservice', function ($http) {
         getNews: function (callback) {
             $http.get('/Admin/CMSVideo/GetNews').then(callback);
         },
+        getCMSItems: function (data,callback) {
+            $http.get('/Admin/CMSItem/GetListItemByCateId?catId='+ data).then(callback);
+        },
     }
 });
 
@@ -65,8 +68,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }
         })
     }
-
-    $scope.getNews();
+    $scope.CmsItems = [];
+    $scope.getCMSItems = function () {
+        var catId=1420;
+        dataservice.getCMSItems(catId,function (rs) {
+        //    console.log($scope.modelPersonal );
+            rs = rs.data;
+            $scope.CmsItems=rs;
+            console.log(rs);
+        }) 
+    }
+    $scope.getCMSItems();
 })
 
 function chuyenDoiNgayThang(chuoiNgay) {
