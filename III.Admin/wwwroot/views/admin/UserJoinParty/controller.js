@@ -361,6 +361,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     function fixContent(){
         if ($scope.isEditWorkflow == true) {
             $('#tblData_wrapper').css('width', '50%');
+            
         }else{
             $('#tblData_wrapper').css('width', '');
             return
@@ -493,7 +494,9 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         Gender: null,
     }
     $scope.initData = function () {
-       
+       if($rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=''){
+            $scope.editWorkflow($rootScope.WorkflowInstCode);
+       }
     };
     $scope.initData()
 
@@ -580,7 +583,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('CurrentName').withOption('sClass', '').withTitle('{{"Mã và tên" | translate}}')
     .renderWith(function (data, type,full) {
-        return `<p class="bold"><span style="color: blue">[Mã: ${full.Username}]</span> ${data}</p>`;
+        var res1=``;
+        var func='';
+        if(full.WfInstCode!=null && full.WfInstCode!=undefined && full.WfInstCode!=''){
+            res1= `<span style='color: green'>[Đã tạo luồng hoạt động]</span>`
+            func=`ng-click="editWorkflow('${full.WfInstCode}')"`
+        }
+
+        var res=`<p class="bold" ${func}><span style="color: blue">[Mã: ${full.Username}]</span>${res1}<br><span>${data}</span></p>`;
+        return res;
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('Status').withOption('sClass', '').withTitle('{{"Trạng thái" | translate}}').renderWith(function (data, type) {
@@ -589,12 +600,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     
     vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
         return data
-    }));
-
-    vm.dtColumns.push(DTColumnBuilder.newColumn('WfInstCode').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
-        if(data!=null && data!=undefined && data!='')
-            return `<span class='have-wf' ng-click="editWorkflow('`+data+`')">Chỉnh sửa luồng</span>`
-        return
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('action').notSortable().withOption('sClass', ' w50 nowrap')
@@ -887,6 +892,7 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
                 else {
                     App.toastrSuccess(rs.Title);
                     $scope.infUser.WfInstCode = rs.Code;
+                    $rootScope.WorkflowInstCode=rs.Code;
                 }
                 console.log(rs.data);
                 $scope.submitPartyAdmissionProfile();

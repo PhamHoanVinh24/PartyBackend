@@ -90,7 +90,10 @@ namespace III.Admin.Controllers
                 var getYear = DateTime.Now.Year;
                 var query = from a in _context.PartyAdmissionProfiles.Where(x => x.IsDeleted == false)
                             join b in _context.Users on a.CreatedBy equals b.UserName into b1
+                            
                             from b in b1.DefaultIfEmpty()
+                            join wf in _context.WorkflowInstances.Where(x => x.IsDeleted == false) on a.WfInstCode equals wf.WfInstCode into wf1
+                            from wf in wf1.DefaultIfEmpty()
                             where (fromDate == null || (fromDate <= a.Birthday))
                                    && (toDate == null || (toDate >= a.Birthday))
                                    && (jTablePara.FromAge == null || (jTablePara.FromAge <= (getYear - a.Birthday.Value.Year))) 
@@ -127,7 +130,7 @@ namespace III.Admin.Controllers
                                 CreatedBy= b!=null ? b.GivenName: "",
                                 a.ProfileLink,
                                 resumeNumber=a.ResumeNumber,
-                                a.WfInstCode
+                                WfInstCode=wf!=null?wf.WfInstCode:""
                             };
 
                 //int total = _context.PartyAdmissionProfiles.Count();
