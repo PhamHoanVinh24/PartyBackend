@@ -394,7 +394,7 @@ namespace ESEIM
                    template: "{controller=Home}/{action=Index}");
                 routes.MapRoute(
                     name: "admin",
-                    template: "{area:exists}/{controller=DashBoard}/{action=Index}/{id?}");
+                    template: "{area:exists}/{controller=WorkflowActivity}/{action=Index}/{id?}");
                 routes.MapRoute(
                  name: "angular",
                  template: "{*url}",

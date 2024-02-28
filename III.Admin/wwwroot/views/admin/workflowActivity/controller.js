@@ -2668,7 +2668,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             data: function (d) {
                 d.FromDate = $scope.modelSearch.FromDate;
                 d.ToDate = $scope.modelSearch.ToDate;
-                d.Workflow = $scope.modelSearch.Workflow;
+                d.Workflow = 'PARTY_ADMISSION_PROFILE'
                 d.Status = $scope.modelSearch.Status;
                 d.WfInstName = $scope.modelSearch.WfInstName;
                 d.WfGroup = $scope.modelSearch.WfGroup;
