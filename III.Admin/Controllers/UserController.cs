@@ -691,9 +691,15 @@ namespace III.Admin.Controllers
                 obj.CreatedPlace = model.CreatedPlace;
                 obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
                 obj.WfInstCode = model.WfInstCode;
-                if (model.Status!=null||model.Status!="")
-                    obj.Status = model.Status;
-
+                if (model.Status != null && model.Status != "")
+                {
+                    obj.JsonStaus.Add(new PartyStatus
+                    {
+                        CtreateTime = DateTime.Now.ToString(),
+                        Title = model.Status,
+                        Status = model.Status,
+                    });
+                }
                 _context.PartyAdmissionProfiles.Update(obj);
                 _context.SaveChanges();
 
@@ -2131,6 +2137,13 @@ namespace III.Admin.Controllers
                 }
 
                 user.WfInstCode = wfInst.WfInstCode;
+                user.JsonStaus.Add(new PartyStatus
+                {
+                    CtreateTime = DateTime.Now.ToString(),
+                    Title = "Quần chúng tải lên sơ yếu lý lịch",
+                    Status = "Tiếp nhận",
+                });
+
                 _context.PartyAdmissionProfiles.Update(user);
                 _context.SaveChanges();
                 msg.Title = "Cập nhật luồng cho hồ sơ thành công";
