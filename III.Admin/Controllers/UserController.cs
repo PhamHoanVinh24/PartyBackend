@@ -1185,7 +1185,7 @@ namespace III.Admin.Controllers
                     obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
                     obj.ResumeNumber = ResumeCode
                         + _context.PartyAdmissionProfiles.Count(x => x.ResumeNumber.Contains(ResumeCode));
-                    obj.Status = "Mới đẩy lên";
+                    obj.JsonStaus = new List<PartyStatus>();
                     obj.JsonProfileLinks = new List<JsonFile>();
 
                     _context.PartyAdmissionProfiles.Add(obj);

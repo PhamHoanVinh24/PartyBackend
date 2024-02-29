@@ -84,7 +84,20 @@ namespace ESEIM.Models
         public bool IsDeleted { get; set; }
         public string CreatedBy { get; set; }
         public string Username { get; set; }
-        public string Status { get; set; }
+        public string Status
+        {
+            get
+            {
+                return JsonConvert.SerializeObject(JsonStaus);
+            }
+            set
+            {
+                JsonStaus = string.IsNullOrEmpty(value)
+                ? new List<PartyStatus>()
+                : JsonConvert.DeserializeObject<List<PartyStatus>>(value);
+            }
+        }
+
         public string ProfileLink {
             get
             {
@@ -99,6 +112,8 @@ namespace ESEIM.Models
         }
         [NotMapped]
         public List<JsonFile> JsonProfileLinks { get; set; }
+        [NotMapped]
+        public List<PartyStatus> JsonStaus { get; set; }
         public string WfInstCode { get; set; }
     }
 
@@ -106,5 +121,11 @@ namespace ESEIM.Models
     {
         public string FileName { get; set; }
         public long FileSize { get; set; }
+    }
+    public class PartyStatus
+    {
+        public string Title { get; set; }
+        public string Status { get; set; }
+        public string CtreateTime { get; set; }
     }
 }
