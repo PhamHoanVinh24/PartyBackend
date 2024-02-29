@@ -37,24 +37,22 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter) {
     $scope.model={
-        UserName:'huynq_test1',
-        GivenName:'Nguyễn Quang Huy',
-        PhoneNumber:'0397638979',
+        UserName:'',
+        GivenName:'',
+        PhoneNumber:'',
         Gender: false,
-        Email: 'test_backend@gmail.com',
-        Password:'123456',
-        ConfrimPassword:'123456'
+        Email: '',
+        Password:'',
+        ConfrimPassword:''
     }
     $scope.Register=function(){
         
         dataservice.Register($scope.model,function(rs){
             rs=rs.data;
-            if(rs.Error){
-                if (rs.Error) {
-                    App.toastrError(rs.Title)
-                } else {
-                    App.toastrSuccess(rs.Title)
-                }
+            if (rs.Error) {
+                App.toastrError(rs.Title)
+            } else {
+                App.toastrSuccess(rs.Title)
             }
         })
     }

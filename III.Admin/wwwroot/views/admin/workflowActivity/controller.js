@@ -951,12 +951,7 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 });
 
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter, myService, $location) {
-    $scope.tabnav = 'Section3'; // Initialize tabnav variable
-
-    $scope.saveTabNav = function(href) {
-        $scope.tabnav = href; // Save href to tabnav variable
-    };
-
+    
     // $('.menu-toggle').addClass('hidden');
     // $(".content-wrapper").removeClass("padding-right-80");
     // $(".content-wrapper").addClass("padding-right-90");
@@ -2223,7 +2218,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             })
             dataservice.getMemberAssignWF(code, function (rs) {
                 rs = rs.data;
-                $rootScope.lstMemberAssign = rs;
+                $scope.lstMemberAssign = rs;
             })
             dataservice.getAllMemberAssignWF(code, function (rs) {
                 rs = rs.data;
@@ -4370,7 +4365,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                     App.toastrSuccess(rs.Title);
                     dataservice.getMemberAssignWF(para, function (rs) {
                         rs = rs.data;
-                        $rootScope.lstMemberAssign = rs;
+                        $scope.lstMemberAssign = rs;
                     })
                 }
             })
@@ -4387,7 +4382,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 App.toastrSuccess(rs.Title);
                 dataservice.getMemberAssignWF(para, function (rs) {
                     rs = rs.data;
-                    $rootScope.lstMemberAssign = rs;
+                    $scope.lstMemberAssign = rs;
                 })
             }
         })
@@ -5208,6 +5203,12 @@ app.controller('setting-transition', function ($scope, $rootScope, $compile, $ui
 });
 
 app.controller('edit-activity-instance', function ($scope, $rootScope, $compile, $uibModal, $confirm, dataservice, $translate, $filter) {
+    $scope.tabnav = 'Section3'; // Initialize tabnav variable
+
+    $scope.saveTabNav = function(href) {
+        $scope.tabnav = href; // Save href to tabnav variable
+    };
+    
     $scope.model = {
         Template: "",
         Status: ""
@@ -5258,7 +5259,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
     }
     $scope.initData = function () {
         $scope.model = $scope.Data.DataActInst;
-
+        $rootScope.ActInstCode = $scope.model.ActivityInstCode;
         $scope.model.sStartTime = $scope.model.StartTime != '' ? $filter('date')($scope.model.StartTime, 'dd/MM/yyyy') : '';
         $scope.model.sEndTime = $scope.model.EndTime != '' ? $filter('date')($scope.model.EndTime, 'dd/MM/yyyy') : '';
 
@@ -5436,9 +5437,9 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
     $scope.submit = function () {
         
         if (!validationSelect($scope.model).Status) {
-            //if ($rootScope.IsLock) {
-            //    return App.toastrError(caption.WFAI_MSG_ACT_IS_LOCKED);
-            //}
+            if ($rootScope.IsLock) {
+                return App.toastrError(caption.WFAI_MSG_ACT_IS_LOCKED);
+            }
             if (!$rootScope.isAccepted) {
                 return App.toastrError(caption.WFAI_MSG_PLS_ACCEPT_ACT);
             }
@@ -5800,8 +5801,8 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
         }
         dataservice.getMemberAssign(data, function (rs) {
             rs = rs.data;
-            $rootScope.lstMemberAssign = rs;
-            console.log($rootScope.lstMemberAssign)
+            $scope.lstMemberAssign = rs;
+            console.log($scope.lstMemberAssign)
         });
 
         dataservice.getObjectProcess($rootScope.ActInstCode, function (rs) {
@@ -6258,7 +6259,16 @@ app.controller('nested-wf', function ($scope, $rootScope, $uibModal, $confirm, $
     }
 
     $scope.initData();
-
+    
+    $scope.$watch(function() {
+        return $rootScope.ActInstCode;
+    }, function(newVal, oldVal) {
+        // Check if the value has changed
+        if (newVal !== oldVal) {
+            // If the value has changed, call init function
+            $scope.initData();
+        }
+    });
     var lastObjectType = "";
 
     $scope.changeSelect = function (selectType, item, wfCode) {
@@ -6339,9 +6349,15 @@ app.controller('assign-member', function ($scope, $rootScope, $uibModal, $confir
         Role: ""
     }
 
-    var data = {
-        ActivityCode: $rootScope.ActInstCode
-    }
+    $scope.$watch(function() {
+        return $rootScope.ActInstCode;
+    }, function(newVal, oldVal) {
+        // Check if the value has changed
+        if (newVal !== oldVal) {
+            // If the value has changed, call init function
+            $scope.initLoad();
+        }
+    });
 
     $scope.initLoad = function () {
         dataservice.getGroupAct(function (rs) {
@@ -6368,10 +6384,12 @@ app.controller('assign-member', function ($scope, $rootScope, $uibModal, $confir
             rs = rs.data;
             $scope.lstStatusAssign = rs;
         })
-        dataservice.getMemberAssign(data, function (rs) {
+        dataservice.getMemberAssign({
+            ActivityCode: $rootScope.ActInstCode
+        }, function (rs) {
             rs = rs.data;
-            $rootScope.lstMemberAssign = rs;
-            console.log($rootScope.lstMemberAssign)
+            $scope.lstMemberAssign = rs;
+            console.log($scope.lstMemberAssign)
         })
     }
 
@@ -6480,7 +6498,7 @@ app.controller('assign-member', function ($scope, $rootScope, $uibModal, $confir
                 App.toastrSuccess(rs.Title);
                 dataservice.getMemberAssign(data, function (rs) {
                     rs = rs.data;
-                    $rootScope.lstMemberAssign = rs;
+                    $scope.lstMemberAssign = rs;
                 })
             }
         })
@@ -6502,7 +6520,7 @@ app.controller('assign-member', function ($scope, $rootScope, $uibModal, $confir
                     App.toastrSuccess(rs.Title);
                     dataservice.getMemberAssign(data, function (rs) {
                         rs = rs.data;
-                        $rootScope.lstMemberAssign = rs;
+                        $scope.lstMemberAssign = rs;
                     })
                     $rootScope.infoLog();
                 }
@@ -8736,7 +8754,7 @@ app.controller('edit-wf-instance', function ($scope, $rootScope, $compile, $uibM
         })
         dataservice.getMemberAssignWF(para, function (rs) {
             rs = rs.data;
-            $rootScope.lstMemberAssign = rs;
+            $scope.lstMemberAssign = rs;
         })
         dataservice.getAllMemberAssignWF(para, function (rs) {
             rs = rs.data;
@@ -9044,7 +9062,7 @@ app.controller('edit-wf-instance', function ($scope, $rootScope, $compile, $uibM
                     App.toastrSuccess(rs.Title);
                     dataservice.getMemberAssignWF(para, function (rs) {
                         rs = rs.data;
-                        $rootScope.lstMemberAssign = rs;
+                        $scope.lstMemberAssign = rs;
                     })
                 }
             })
@@ -9060,7 +9078,7 @@ app.controller('edit-wf-instance', function ($scope, $rootScope, $compile, $uibM
                 App.toastrSuccess(rs.Title);
                 dataservice.getMemberAssignWF(para, function (rs) {
                     rs = rs.data;
-                    $rootScope.lstMemberAssign = rs;
+                    $scope.lstMemberAssign = rs;
                 })
             }
         })

@@ -99,7 +99,7 @@ namespace III.Admin.Controllers
                 {
                     // Tùy chọn: Đăng nhập người dùng sau khi đăng ký
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    msg.Title = "Đăng ký thành công hãy chờ ban quản trị duyệt !";
+                    msg.Title = "Đăng ký thành công !";
                     // Trả về mã thông báo, thông tin người dùng, hoặc thông tin khác tùy thuộc vào yêu cầu của ứng dụng di động
                     return Ok(msg);
                 }
