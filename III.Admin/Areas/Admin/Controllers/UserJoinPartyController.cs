@@ -45,13 +45,13 @@ namespace III.Admin.Controllers
             _sharedResources = sharedResources;
         }
 
-        [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(SaleWareHouseHomeController))]
+        [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(CardWorkHomeController))]
         public IActionResult Index()
         {
             ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-            ViewData["CrumbSaleWHHome"] = _sharedResources["COM_CRUMB_SALE_WH"];
-            ViewData["UserJoinParty"] = "Hồ sơ gia nhập đảng";
+            ViewData["CrumbMenuCenter"] = _sharedResources["COM_CRUMB_MENU_CENTER"];
+            ViewData["CrumbCardWorkHome"] = _sharedResources["COM_CRUMB_CARD_WORK_HOME"];
+            ViewData["UserJoinParty"] = "Hồ sơ lý lịch đảng viên";
             return View();
         }
         public class JTableModelFile : JTableModel
