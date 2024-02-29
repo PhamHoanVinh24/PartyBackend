@@ -957,10 +957,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         $scope.tabnav = href; // Save href to tabnav variable
     };
 
-    $('.menu-toggle').addClass('hidden');
-    $(".content-wrapper").removeClass("padding-right-80");
-    $(".content-wrapper").addClass("padding-right-90");
-    $("#breadcrumb").appendTo("#breadcrumb-container");
+    // $('.menu-toggle').addClass('hidden');
+    // $(".content-wrapper").removeClass("padding-right-80");
+    // $(".content-wrapper").addClass("padding-right-90");
+    // $("#breadcrumb").appendTo("#breadcrumb-container");
     var itemmmm;
     var canvas2;
     var dataweb = "";
