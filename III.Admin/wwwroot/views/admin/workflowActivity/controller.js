@@ -10094,7 +10094,7 @@ app.controller('fileActivity', function ($scope, $rootScope, $compile, $uibModal
     }
 
     $rootScope.reloadFile = function () {
-        debugger
+        
         $scope.reload();
     }
 

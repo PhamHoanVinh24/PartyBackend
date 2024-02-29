@@ -690,15 +690,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withTitle('{{ "COM_LIST_COL_ACTION" | translate }}').renderWith(function (data, type, full, meta) {
             var wfbtn='';
             if(full.WfInstCode==null||full.WfInstCode==undefined||full.WfInstCode==''){
-                wfbtn=`<a title="{{'Tạo luồng'| translate}}" class="width: 25px; height: 25px; padding: 0px;"
+                wfbtn=`<a title="{{'Tạo luồng'| translate}}" style="width: 25px; height: 25px; padding: 0px; color: #008000"
                             ng-click="createWfInstance('${full.resumeNumber}')">
-                                <i class="fa-regular fa-light fa-circle-play fs25" style="--fa-primary-color: green"></i>
+                                <i class="fa-regular fa-light fa-circle-play fs25"></i>
                         </a>`
             }
             else{
-                wfbtn=`<a title="{{'Xóa luồng'| translate}}" class="width: 25px; height: 25px; padding: 0px
+                wfbtn=`<a title="{{'Xóa luồng'| translate}}" style="width: 25px; height: 25px; padding: 0px;color: #FF0000"
                             ng-click="DeleteWFIns('${full.resumeNumber}')">
-                                <i class="fa-regular fa-light fa-circle-stop fs25 " style="--fa-primary-color: red"></i>
+                                <i class="fa-regular fa-light fa-circle-stop fs25 "></i>
                         </a>`
             }
             return `
