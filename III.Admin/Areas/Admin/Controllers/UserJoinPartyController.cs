@@ -130,7 +130,13 @@ namespace III.Admin.Controllers
                                 CreatedBy= b!=null ? b.GivenName: "",
                                 a.ProfileLink,
                                 resumeNumber=a.ResumeNumber,
-                                WfInstCode=wf!=null?wf.WfInstCode:""
+                                WfInstCode=wf!=null?wf.WfInstCode:"",
+                                BirthYear = a.Birthday.HasValue ? a.Birthday.Value.Year.ToString() : "",
+                                a.TemporaryAddress,
+                                a.UnderPostGraduateEducation,
+                                a.Degree,
+                                a.GeneralEducation,
+                                a.Gender
                             };
 
                 //int total = _context.PartyAdmissionProfiles.Count();
@@ -145,17 +151,25 @@ namespace III.Admin.Controllers
                     x.CreatedBy,
                     x.ProfileLink,
                     x.resumeNumber,
-                    x.WfInstCode
+                    x.WfInstCode,
+                    x.UnderPostGraduateEducation,
+                    x.Degree,
+                    x.GeneralEducation,
+                    x.TemporaryAddress,
+                    x.BirthYear,
+                    x.Gender
                 }).ToList();
                 int count = query_row_number.Count();
                 var data = query_row_number.AsQueryable().OrderBy(x => x.stt).Skip(intBegin).Take(jTablePara.Length);
 
-                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber", "WfInstCode");
+                var jdata = JTableHelper.JObjectTable(Enumerable.ToList(data), jTablePara.Draw, count, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", 
+                    "CreatedBy", "ProfileLink", "resumeNumber", "WfInstCode", "UnderPostGraduateEducation", "Degree", "GeneralEducation", "TemporaryAddress", "BirthYear", "Gender");
                 return Json(jdata);
             }
             catch (Exception err)
             {
-                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", "ProfileLink", "resumeNumber", "WfInstCode");
+                var jdata = JTableHelper.JObjectTable(null, jTablePara.Draw, 0, "stt", "Id", "CurrentName", "UserCode", "Status", "Username", "CreatedBy", 
+                    "ProfileLink", "resumeNumber", "WfInstCode", "UnderPostGraduateEducation", "Degree", "GeneralEducation", "TemporaryAddress", "BirthYear", "Gender");
                 return Json(jdata);
             }
         }

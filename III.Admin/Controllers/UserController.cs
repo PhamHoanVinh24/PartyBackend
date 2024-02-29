@@ -76,7 +76,10 @@ namespace III.Admin.Controllers
         {
             return View();
         }
-        [HttpPost("register2")]
+
+
+        [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register2([FromBody] RegisterDto model)
         {
             var msg = new JMessage() { Error = false };
@@ -2105,6 +2108,42 @@ namespace III.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public object UpdateWfInstByResumeCode(string WfInstCode,string ResumeNumber)
+        {
+            var msg = new JMessage() { Error = false };
+            try
+            {
+                var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.ResumeNumber == ResumeNumber);
+                if (user == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Bạn chưa có hồ sơ vui lòng nhập hồ sơ";
+                    return msg;
+                }
+
+                var wfInst = _context.WorkflowInstances.FirstOrDefault(x => x.WfInstCode == WfInstCode);
+                if (wfInst == null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Bạn chưa có luồng";
+                    return msg;
+                }
+
+                user.WfInstCode = wfInst.WfInstCode;
+                _context.PartyAdmissionProfiles.Update(user);
+                _context.SaveChanges();
+                msg.Title = "Cập nhật luồng cho hồ sơ thành công";
+
+            }
+            catch(Exception ex)
+            {
+                msg.Error = true;
+                msg.Title = "Có lỗi xảy ra";
+            }
+
+            return msg;
+        }
 
         [HttpGet]
         public object GetFileList()
@@ -2172,6 +2211,7 @@ namespace III.Admin.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
 
         public string Import(IFormCollection data)
         {

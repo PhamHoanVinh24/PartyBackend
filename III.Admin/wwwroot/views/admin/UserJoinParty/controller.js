@@ -201,8 +201,15 @@ app.factory('dataserviceJoinParty', function ($http) {
             $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
         },
         //Khởi tạo luồng hoạt động
+        
         createWfInstance: function (data, callback) {
             $http.post('/Admin/WorkflowActivity/CreateWfInstance', data).then(callback)
+        },
+        UpdateWfInstByResumeCode: function (WfInstCode,ResumeNumber, callback) {
+            $http.get(`/UserProfile/UpdateWfInstByResumeCode?WfInstCode=${WfInstCode}&ResumeNumber=${ResumeNumber}`).then(callback)
+        },
+        DeleteWfInstance: function (WfInstCode, callback) {
+            $http.get(`/Admin/WorkflowActivity/DeleteWfInstance?wfInstCode=${WfInstCode}`).then(callback)
         },
     }
 });
@@ -391,6 +398,48 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         });
         act1.checkHiddenActWf=!actCheck;
     }
+    $scope.createWfInstance = function (ResumeNumber) {
+        $scope.modelWfInst = {
+            WorkflowCode: "PARTY_ADMISSION_PROFILE",
+            ObjectType: "CUSTOMER",
+            ObjectInst: "",
+            WfInstName: "Quy trình khai báo và xét duyệt vào Đảng của Đảng uỷ Thành Phố Hà Nội",
+            WfDesc: "",
+            WfType: "WF_TYPE20240226102033",
+            WfGroup: "WF_GROUP20240226092621"
+        };
+        console.log($scope.modelWfInst);
+        console.log(ResumeNumber);
+        //validationSelect($scope.model);
+        if (ResumeNumber!=null && ResumeNumber!=undefined && ResumeNumber!="" ) {
+            console.log(ResumeNumber);
+            dataserviceJoinParty.createWfInstance($scope.modelWfInst, function (rs) {
+                rs = rs.data;
+                if (rs.Error) {
+                    App.toastrError(rs.Title);
+                }
+                else {
+                    App.toastrSuccess(rs.Title);
+                    var WfInstCode = rs.Code;
+                    $rootScope.WorkflowInstCode=rs.Code;
+                }
+                console.log(rs);
+                dataserviceJoinParty.UpdateWfInstByResumeCode(WfInstCode,ResumeNumber,function(rs2){
+                    
+                console.log(rs2);
+                    rs2=rs2.data;
+                    if (rs2.Error) {
+                        App.toastrError(rs2.Title);
+                    }
+                    else {
+                        App.toastrSuccess(rs2.Title);
+                        $rootScope.WorkflowInstCode=$scope.WfInstCode;
+                        reloadData(false);
+                    }
+                });
+            })
+        }
+    }
 
     $scope.selected = [];
     $scope.selectAll = false;
@@ -566,11 +615,14 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
             $(row).find('td').on('click', function (evt) {
-                // Xóa lớp active khỏi tất cả các hàng
-                $(this).closest('table').find('tr').removeClass('active');
-                        
-                // Thêm lớp active vào hàng đã được click
-                $(this).closest('tr').addClass('active');
+                if(data.WfInstCode!=''&&data.WfInstCode!=null&&data.WfInstCode!=undefined){
+                    // Xóa lớp active khỏi tất cả các hàng
+                    $(this).closest('table').find('tr').removeClass('active');
+                            
+                    // Thêm lớp active vào hàng đã được click
+                    $(this).closest('tr').addClass('active');
+                    $scope.editWorkflow(data.WfInstCode)
+                }
 
                 //var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
                 // var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
@@ -579,7 +631,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             });
             if ($rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!='' 
                 && data.WfInstCode === $rootScope.WorkflowInstCode) {
-                $(row).addClass('active');
+                $(this).closest('table').find('tr').removeClass('active');
+                $(row).addClass('active').css('font-size', '16px !impotant');;
             }
         });
     vm.dtColumns = [];
@@ -593,33 +646,72 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         return data;
     }));
 
-    vm.dtColumns.push(DTColumnBuilder.newColumn('CurrentName').withOption('sClass', '').withTitle('{{"Mã và tên" | translate}}')
+    vm.dtColumns.push(DTColumnBuilder.newColumn('CurrentName').withOption('sClass', '').withTitle('{{"Mã và tên người" | translate}}')
     .renderWith(function (data, type,full) {
         var res1=``;
-        var func='';
         if(full.WfInstCode!=null && full.WfInstCode!=undefined && full.WfInstCode!=''){
             res1= `<span style='color: green'>[Đã tạo luồng hoạt động]</span>`
-            func=`ng-click="editWorkflow('${full.WfInstCode}')"`
         }
 
-        var res=`<p class="bold" ${func}><span style="color: blue">[Mã: ${full.Username}]</span>${res1}<br><span>${data}</span></p>`;
+        var res=`<p class="bold isEdit"><span style="color: blue">[Mã: ${full.Username}]</span>${res1}<br><span>${data}</span></p>`;
         return res;
+    }));
+
+    vm.dtColumns.push(DTColumnBuilder.newColumn('BirthYear').withOption('sClass', '').withTitle('{{"Năm sinh" | translate}}').renderWith(function (data, type) {
+        return data
+    }));
+
+    vm.dtColumns.push(DTColumnBuilder.newColumn('Gender').withOption('sClass', '').withTitle('{{"Giới tính" | translate}}').renderWith(function (data, type) {
+        return data == 0?"Nam" : "Nữ";
+    }));
+
+    vm.dtColumns.push(DTColumnBuilder.newColumn('TemporaryAddress').withOption('sClass', '').withTitle('{{"Địa chỉ" | translate}}').renderWith(function (data, type) {
+        return data
+    }));
+
+    vm.dtColumns.push(DTColumnBuilder.newColumn('UnderPostGraduateEducation').withOption('sClass', '')
+    .withTitle('{{"Trình độ" | translate}}').renderWith(function (data, type,full) {
+        return `<ul>
+            <li>${data}</li>
+            <li>${full.Degree}</li>
+            <li>${full.GeneralEducation}</li>
+        </ul>`
     }));
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('Status').withOption('sClass', '').withTitle('{{"Trạng thái" | translate}}').renderWith(function (data, type) {
         return data
     }));
     
-    vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
-        return data
-    }));
+    // vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
+    //     return data
+    // }));<i class="fs24 h-25 fa-solid fa-diagram-project" style="font-size: 25px; padding-left: 25px;"></i>
 
     vm.dtColumns.push(DTColumnBuilder.newColumn('action').notSortable().withOption('sClass', 'listaction w50 nowrap')
         .withTitle('{{ "COM_LIST_COL_ACTION" | translate }}').renderWith(function (data, type, full, meta) {
-            return '<a title="{{&quot;COM_BTN_EDIT&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px" '
-            +'ng-click="edit('+"'" + full.resumeNumber + "'" +')"><i class="fa-solid fa-edit  fs25"></i></a>' +
-                '<a title="{{&quot;COM_BTN_DELETE&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px"'+
-                ' ng-click="delete(' + full.Id + ')"><i class="fa-solid fa-trash  fs25"></i></a>';
+            var wfbtn='';
+            if(full.WfInstCode==null||full.WfInstCode==undefined||full.WfInstCode==''){
+                wfbtn=`<a title="{{'Tạo luồng'| translate}}" class="width: 25px; height: 25px; padding: 0px;"
+                            ng-click="createWfInstance('${full.resumeNumber}')">
+                                <i class="fa-regular fa-light fa-circle-play fs25" style="--fa-primary-color: green"></i>
+                        </a>`
+            }
+            else{
+                wfbtn=`<a title="{{'Xóa luồng'| translate}}" class="width: 25px; height: 25px; padding: 0px
+                            ng-click="DeleteWFIns('${full.resumeNumber}')">
+                                <i class="fa-regular fa-light fa-circle-stop fs25 " style="--fa-primary-color: red"></i>
+                        </a>`
+            }
+            return `
+            <a title="{{&quot;COM_BTN_EDIT&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px" 
+                ng-click="edit('${full.resumeNumber}')"><i class="fa-solid fa-edit  fs25"></i>
+            </a>
+            <a title="{{&quot;COM_BTN_DELETE&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px"
+                ng-click="delete('${full.Id}')"><i class="fa-solid fa-trash  fs25"></i>
+            </a>
+            ${wfbtn}
+            `
+            ;
+            
         }));
     vm.reloadData = reloadData;
     vm.dtInstance = {};

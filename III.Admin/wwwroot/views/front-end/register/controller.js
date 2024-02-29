@@ -18,7 +18,7 @@ app.factory('dataservice', function ($http) {
     };
     return {
         Register:function(data,callback){
-            $http.post('/register2',data).then(callback);
+            $http.post('/UserProfile/Register2',data).then(callback);
         }
     }
 });
@@ -37,15 +37,16 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter) {
     $scope.model={
-        UserName:'hgbao140599_test',
-        GivenName:'Hồ Gia Bảo',
-        PhoneNumber:'0357285373',
-        Gender: true,
+        UserName:'huynq_test1',
+        GivenName:'Nguyễn Quang Huy',
+        PhoneNumber:'0397638979',
+        Gender: false,
         Email: 'test_backend@gmail.com',
         Password:'123456',
         ConfrimPassword:'123456'
     }
     $scope.Register=function(){
+        
         dataservice.Register($scope.model,function(rs){
             rs=rs.data;
             if(rs.Error){
