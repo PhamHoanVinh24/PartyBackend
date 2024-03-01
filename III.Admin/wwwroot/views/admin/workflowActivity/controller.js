@@ -4573,7 +4573,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.CloseAll=function(act1){
         if(!act1.IsApprovable){
             act1.checkHiddenActWf = false;
-            App.toastrError(caption.WFAI_MSG_PLS_ACCEPT_ACT);
+            App.toastrError(caption.WFAI_MSG_U_NOT_PER_APPROVE_ACT);
             return
         }
         var actCheck=act1.checkHiddenActWf
