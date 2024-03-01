@@ -325,17 +325,20 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.ToList();
             return user;
         }
-        public object GetPartyAdmissionProfileByResumeNumber(string resumeNumber)
+        public async Task<object> GetPartyAdmissionProfileByResumeNumber(string resumeNumber)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == resumeNumber);
             if (user != null)
             {
-
-                var wf2 = _context.WorkflowInstances.FirstOrDefault(x => x.IsDeleted == false && x.WfInstCode == user.WfInstCode);
-                if (wf2 == null)
+                foreach(var a in user.JsonStaus)
                 {
-                    user.WfInstCode = null;
+                    var userCreatedBy = await _userManager.FindByNameAsync(a.CreatedBy);
+                    if (userCreatedBy != null)
+                    {
+                        a.CreatedBy = userCreatedBy.GivenName;
+                    }
                 }
+               
             }
 
             return user;
