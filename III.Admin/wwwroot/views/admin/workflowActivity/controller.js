@@ -4571,6 +4571,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         return mess;
     };
     $scope.CloseAll=function(act1){
+        if(!act1.IsApprovable){
+            act1.checkHiddenActWf = false;
+            App.toastrError(caption.WFAI_MSG_PLS_ACCEPT_ACT);
+            return
+        }
         var actCheck=act1.checkHiddenActWf
         $scope.listActs.forEach(function(act) {
             act.checkHiddenActWf = false;
