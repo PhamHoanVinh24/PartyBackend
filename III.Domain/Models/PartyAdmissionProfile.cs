@@ -127,5 +127,7 @@ namespace ESEIM.Models
         public string Title { get; set; }
         public string Status { get; set; }
         public string CtreateTime { get; set; }
+        public string ActInst { get; set; }
+        public string UserName { get; set; }
     }
 }

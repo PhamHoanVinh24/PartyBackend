@@ -796,9 +796,9 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     $scope.infUser.LevelEducation.PoliticalTheory = rs.PoliticalTheory;
                     $scope.PlaceCreatedTime = { place: rs.CreatedPlace };
                     $scope.SelfComment.context = rs.SelfComment;
-
+                    $scope.status = rs.Status;
                     $scope.infUser.ResumeNumber = rs.ResumeNumber;
-                    console.log($scope.infUser);
+                    console.log($scope.status);
 
                     if ($scope.infUser.ResumeNumber) {
                         $scope.getFamilyByProfileCode();
