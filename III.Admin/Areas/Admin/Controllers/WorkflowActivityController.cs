@@ -11513,7 +11513,7 @@ namespace III.Admin.Controllers
                                     ActStatus = y.ValueSet,
                                     ActType = x.Type,
                                     Id = x.ID,
-                                    IsLock = false,
+                                    IsLock = (x.Status.Equals("STATUS_ACTIVITY_NOT_DOING") || x.Status.Equals("STATUS_ACTIVITY_LOCK")) ? true : false,
                                     Level = Acti.Level.Value,
                                     IsInstance = false
                                 }).ToList().OrderBy(x=>x.Level);
@@ -11548,10 +11548,10 @@ namespace III.Admin.Controllers
                                   IsInstance = true,
                                   ObjectCode = c.ObjectInst
                               }).ToList();
-            //foreach (var item in activities)
-            //{
-            //    item.IsApprovable = GetPermission(item.ActivityInstCode).PermisstionApprove;
-            //}
+            foreach (var item in activities)
+            {
+                item.IsApprovable = GetPermission(item.ActivityInstCode).PermisstionApprove;
+            }
             var actInit = activities.FirstOrDefault(x => x.ActType.Equals(EnumHelper<TypeActivity>.GetDisplayValue(TypeActivity.Initial)));
 
             var actArranged = ArrangeActInst(activities, 1, actInit, new List<ActInstInfo>());
