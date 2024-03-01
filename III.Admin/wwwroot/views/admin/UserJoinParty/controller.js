@@ -214,6 +214,9 @@ app.factory('dataserviceJoinParty', function ($http) {
         GetActInstArranged:function (data, callback) {
             $http.post(`/Admin/WorkflowActivity/GetActInstArranged?objInst=${data}&objType=TEST_JOIN_PARTY`).then(callback)
         },
+        GetLogStatusOfWFInst:function (data, callback) {
+            $http.get(`/Admin/WorkflowActivity/GetLogStatusOfWFInst?wfCode=${data}`).then(callback)
+        },
     }
 });
 
@@ -349,22 +352,32 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     var vm = $scope;
     $scope.tabnav = 'Section3'; // Initialize tabnav variable
     $scope.callApi = function () {
-        var objInst = "Profile_29022024_1"; // 
-        var objType = "TEST_JOIN_PARTY"; 
-
-        // Dữ liệu bạn muốn gửi đi
-        var requestData = {
-            objInst: objInst,
-            objType: objType
-        };
+        requestData = '12645';
 
         // Gọi hàm trong service dataserviceJoinParty để thực hiện yêu cầu API
-        dataserviceJoinParty.GetActInstArranged(requestData, function(response) {
+        dataserviceJoinParty.GetLogStatusOfWFInst(requestData, function(response) {
             // Xử lý phản hồi từ API ở đây
             console.log(response.data); // In ra dữ liệu trả về từ API
         });
     };
     $scope.callApi()
+
+    $scope.viewLogStatus = function (WfCode) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: ctxfolder + '/view-status-log.html',
+            controller: 'log-status-wf-full',
+            size: '40',
+            resolve: {
+                para: function () {
+                    return WfCode;
+                }
+            }
+        });
+        modalInstance.result.then(function (d) {
+        });
+    }
+
     $scope.saveTabNav = function(href) {
         $scope.tabnav = href; // Save href to tabnav variable
     };
@@ -624,7 +637,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         })
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
-            $(row).find('td').on('click', function (evt) {
+            $(row).find('td:not(.listaction)').on('click', function (evt) {
                 if(data.resumeNumber!=''&&data.resumeNumber!=null&&data.resumeNumber!=undefined){
                     // Xóa lớp active khỏi tất cả các hàng
                     $(this).closest('table').find('tr').removeClass('active');
@@ -684,8 +697,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         </ul>`
     }));
 
-    vm.dtColumns.push(DTColumnBuilder.newColumn('Status').withOption('sClass', '').withTitle('{{"Trạng thái" | translate}}').renderWith(function (data, type) {
-        return data
+    vm.dtColumns.push(DTColumnBuilder.newColumn('WfInstCode').withOption('sClass', 'listaction').withTitle('{{"Trạng thái" | translate}}')
+    .renderWith(function (data, type,full) {
+        var wfbtn='';
+        if(full.WfInstCode=!null&&full.WfInstCode!=undefined&&full.WfInstCode!=''){
+            wfbtn=`
+            <a ng-click="viewLogStatus('${data}')"> Xem danh sách trạng thái</a>
+            `
+        }
+        return wfbtn
     }));
     
     // vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', '').withTitle('{{"Mã hồ sơ" | translate}}').renderWith(function (data, type) {
@@ -2521,3 +2541,18 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
     }, 50);
 });
 
+app.controller('log-status-wf-full', function ($scope, $rootScope, $compile, $uibModal, $uibModalInstance, dataserviceJoinParty, para) {
+    $scope.cancel = function () {
+        $uibModalInstance.close();
+    }
+    $scope.initData = function () {
+        dataserviceJoinParty.GetLogStatusOfWFInst(para, function (rs) {
+            rs = rs.data;
+            $scope.lstStatus = rs;
+        });
+    }
+    $scope.initData();
+    setTimeout(function () {
+        setModalDraggable(".modal-dialog");
+    }, 400);
+});

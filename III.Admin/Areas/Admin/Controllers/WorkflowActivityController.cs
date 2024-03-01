@@ -2467,6 +2467,31 @@ namespace III.Admin.Controllers
             return Json(data);
         }
 
+        [HttpGet]
+        public JsonResult GetLogStatusOfWFInst(string wfCode)
+        {
+            var lstStatus = new List<LogStatus>();
+            var list = _context.ActivityInstances.Where(x => !x.IsDeleted
+                    && x.WorkflowCode.Equals(wfCode)).ToList();
+            foreach(var inst in list)
+            if (inst != null)
+            {
+                if (!string.IsNullOrEmpty(inst.JsonStatusLog))
+                {
+                      lstStatus.AddRange(JsonConvert.DeserializeObject<List<LogStatus>>(inst.JsonStatusLog));
+                }
+            }
+            var data = (from a in lstStatus
+                        join b in _context.CommonSettings.Where(x => !x.IsDeleted) on a.Status equals b.CodeSet
+                        join c in _context.Users on a.CreatedBy equals c.UserName
+                        select new
+                        {
+                            Status = b.ValueSet,
+                            CreatedBy = c.GivenName,
+                            CreatedTime = a.CreatedTime.ToString("HH:mm dd/MM/yyyy")
+                        });
+            return Json(data);
+        }
         //[NonAction]
         //private void AddLogStatus(string objType, string objInst, string status, string actName)
         //{

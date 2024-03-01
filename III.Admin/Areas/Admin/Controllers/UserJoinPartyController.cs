@@ -92,7 +92,7 @@ namespace III.Admin.Controllers
                             join b in _context.Users on a.CreatedBy equals b.UserName into b1
                             
                             from b in b1.DefaultIfEmpty()
-                            join wf in _context.WorkflowInstances.Where(x => x.IsDeleted == false) on a.WfInstCode equals wf.WfInstCode into wf1
+                            join wf in _context.WorkflowInstances.Where(x => x.IsDeleted == false && x.ObjectType == "TEST_JOIN_PARTY") on a.ResumeNumber equals wf.ObjectInst into wf1
                             from wf in wf1.DefaultIfEmpty()
                             where (fromDate == null || (fromDate <= a.Birthday))
                                    && (toDate == null || (toDate >= a.Birthday))
