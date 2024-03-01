@@ -348,7 +348,7 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.UserCode == userCode);
             return user;
         }*/
-        public object GetPartyAdmissionProfileByUsername(string Username)
+        public async Task<object> GetPartyAdmissionProfileByUsername(string Username)
         {
             var msg = new JMessage() { Error = false };
             try
@@ -358,6 +358,17 @@ namespace III.Admin.Controllers
                 {
                     msg.Error = true;
                     msg.Title = "Bạn chưa có hồ sơ vui lòng nhập hồ sơ";
+                }
+                else
+                {
+                    foreach (var a in user.JsonStaus)
+                    {
+                        var userCreatedBy = await _userManager.FindByNameAsync(a.CreatedBy);
+                        if (userCreatedBy != null)
+                        {
+                            a.CreatedBy = userCreatedBy.GivenName;
+                        }
+                    }
                 }
                 msg.Object = user;
             }
