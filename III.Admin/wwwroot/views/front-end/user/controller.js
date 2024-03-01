@@ -796,7 +796,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     $scope.infUser.LevelEducation.PoliticalTheory = rs.PoliticalTheory;
                     $scope.PlaceCreatedTime = { place: rs.CreatedPlace };
                     $scope.SelfComment.context = rs.SelfComment;
-                    $scope.status = JSON.parse(rs.Status).slice(0, 4);;
+                    $scope.status = JSON.parse(rs.Status).slice(-4);
                     $scope.infUser.ResumeNumber = rs.ResumeNumber;
                     console.log($scope.status);
 
