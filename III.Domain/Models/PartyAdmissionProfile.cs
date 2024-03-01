@@ -93,8 +93,8 @@ namespace ESEIM.Models
             set
             {
                 JsonStaus = string.IsNullOrEmpty(value)
-                ? new List<PartyStatus>()
-                : JsonConvert.DeserializeObject<List<PartyStatus>>(value);
+                ? new List<JsonLog>()
+                : JsonConvert.DeserializeObject<List<JsonLog>>(value);
             }
         }
 
@@ -113,7 +113,7 @@ namespace ESEIM.Models
         [NotMapped]
         public List<JsonFile> JsonProfileLinks { get; set; }
         [NotMapped]
-        public List<PartyStatus> JsonStaus { get; set; }
+        public List<JsonLog> JsonStaus { get; set; }
         public string WfInstCode { get; set; }
     }
 

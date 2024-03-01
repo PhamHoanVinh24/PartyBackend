@@ -888,6 +888,16 @@ namespace ESEIM.Utils
                     }
 
                     break;
+                case "TEST_JOIN_PARTY":
+                    var party_profile =
+                        _context.PartyAdmissionProfiles.FirstOrDefault(x =>
+                            /*!x.IsDeleted &&*/ x.ResumeNumber.ToString().Equals(objInst));
+                    if (party_profile != null)
+                    {
+                        party_profile.JsonStaus.Add(log);
+                        _context.PartyAdmissionProfiles.Update(party_profile);
+                    }
+                    break;
             }
         }
         #endregion
