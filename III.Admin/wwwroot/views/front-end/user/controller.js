@@ -927,7 +927,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 App.toastrError(result.Title);
             } else {
                 App.toastrSuccess(result.Title);
-                $scope.getPersonalHistoryByProfileCode();
+                $scope.getFamilyByProfileCode();
             }
             })
         
