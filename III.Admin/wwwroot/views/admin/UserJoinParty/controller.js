@@ -362,15 +362,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     };
     $scope.callApi()
 
-    $scope.viewLogStatus = function (WfCode) {
+    $scope.viewLogStatus = function (resumeNumber) {
         var modalInstance = $uibModal.open({
             animation: true,
-            templateUrl: ctxfolder + '/view-status-log.html',
+            templateUrl: ctxfolderJoinParty + '/view-status-log.html',
             controller: 'log-status-wf-full',
             size: '40',
             resolve: {
                 para: function () {
-                    return WfCode;
+                    return resumeNumber;
                 }
             }
         });
@@ -697,14 +697,12 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         </ul>`
     }));
 
-    vm.dtColumns.push(DTColumnBuilder.newColumn('WfInstCode').withOption('sClass', 'listaction').withTitle('{{"Trạng thái" | translate}}')
+    vm.dtColumns.push(DTColumnBuilder.newColumn('resumeNumber').withOption('sClass', 'listaction').withTitle('{{"Trạng thái" | translate}}')
     .renderWith(function (data, type,full) {
         var wfbtn='';
-        if(full.WfInstCode=!null&&full.WfInstCode!=undefined&&full.WfInstCode!=''){
-            wfbtn=`
-            <a ng-click="viewLogStatus('${data}')"> Xem danh sách trạng thái</a>
-            `
-        }
+        wfbtn=`
+        <a ng-click="viewLogStatus('${data}')"> Xem danh sách trạng thái</a>
+        `
         return wfbtn
     }));
     
@@ -949,7 +947,7 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
                 $scope.SelfComment.context = rs.SelfComment;
                 $scope.PlaceCreatedTime.place =rs.CreatedPlace;
                 $scope.infUser.ResumeNumber =  rs.ResumeNumber;
-                $scope.infUser.Status =  rs.Status;
+                //$scope.infUser.Status =  rs.Status;
                 $scope.infUser.WfInstCode =  rs.WfInstCode;
                 
                 $scope.Username=rs.Username;
@@ -2546,9 +2544,11 @@ app.controller('log-status-wf-full', function ($scope, $rootScope, $compile, $ui
         $uibModalInstance.close();
     }
     $scope.initData = function () {
-        dataserviceJoinParty.GetLogStatusOfWFInst(para, function (rs) {
+        $scope.lstStatus=[]
+        dataserviceJoinParty.GetPartyAdmissionProfileByResumeNumber(para, function (rs) {
             rs = rs.data;
-            $scope.lstStatus = rs;
+            $scope.lstStatus = JSON.parse(rs.Status);
+            console.log($scope.lstStatus);
         });
     }
     $scope.initData();
