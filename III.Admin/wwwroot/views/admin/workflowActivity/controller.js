@@ -5342,6 +5342,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
             rs = rs.data;
             $rootScope.permisstionApprove = rs.PermisstionApprove;
             $rootScope.permissionChangeRoleAssign = rs.PermissionChangeRole;
+            console.log(rs);
         });
 
         $rootScope.countCommand();

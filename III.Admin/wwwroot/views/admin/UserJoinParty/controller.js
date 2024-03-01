@@ -211,6 +211,9 @@ app.factory('dataserviceJoinParty', function ($http) {
         DeleteWfInstance: function (WfInstCode, callback) {
             $http.get(`/Admin/WorkflowActivity/DeleteWfInstance?wfInstCode=${WfInstCode}`).then(callback)
         },
+        GetActInstArranged:function (data, callback) {
+            $http.post(`/Admin/WorkflowActivity/GetActInstArranged?objInst=${data}&objType=TEST_JOIN_PARTY`).then(callback)
+        },
     }
 });
 
@@ -345,7 +348,23 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceJoinParty, $location, $translate) {
     var vm = $scope;
     $scope.tabnav = 'Section3'; // Initialize tabnav variable
+    $scope.callApi = function () {
+        var objInst = "Profile_29022024_1"; // 
+        var objType = "TEST_JOIN_PARTY"; 
 
+        // Dữ liệu bạn muốn gửi đi
+        var requestData = {
+            objInst: objInst,
+            objType: objType
+        };
+
+        // Gọi hàm trong service dataserviceJoinParty để thực hiện yêu cầu API
+        dataserviceJoinParty.GetActInstArranged(requestData, function(response) {
+            // Xử lý phản hồi từ API ở đây
+            console.log(response.data); // In ra dữ liệu trả về từ API
+        });
+    };
+    $scope.callApi()
     $scope.saveTabNav = function(href) {
         $scope.tabnav = href; // Save href to tabnav variable
     };
@@ -359,20 +378,25 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
     
     $scope.isEditWorkflow = false;
-    $scope.editWorkflow = function(WfInstCode){
-        if(WfInstCode==0||WfInstCode==''||WfInstCode==null||WfInstCode==undefined){
+    $scope.editWorkflow = function(resumeNumber){
+        if(resumeNumber==0||resumeNumber==''||resumeNumber==null||resumeNumber==undefined){
             $scope.isEditWorkflow = false
             fixContent()
         }else{
             //gọi api lấy dữ liệu theo WfInstCode
-            formatActIns(WfInstCode);
+            formatActIns(resumeNumber);
         }
         
     }
-    function formatActIns(WfInstCode) {
-        dataserviceJoinParty.getActivity(WfInstCode,function(rs){
+    function formatActIns(resumeNumber) {
+        dataserviceJoinParty.GetActInstArranged(resumeNumber,function(rs){
             console.log(rs.data)
-            $scope.listActs=rs.data;
+            if(rs.data.ActArranged==[]){
+                $scope.isEditWorkflow = false
+                fixContent()
+                return
+            }
+            $scope.listActs=rs.data.ActArranged;
             $scope.isEditWorkflow = true
             fixContent()
         })
@@ -401,8 +425,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.createWfInstance = function (ResumeNumber) {
         $scope.modelWfInst = {
             WorkflowCode: "PARTY_ADMISSION_PROFILE",
-            ObjectType: "CUSTOMER",
-            ObjectInst: "",
+            ObjectType: "TEST_JOIN_PARTY",
+            ObjectInst: ResumeNumber,
             WfInstName: "Quy trình khai báo và xét duyệt vào Đảng của Đảng uỷ Thành Phố Hà Nội",
             WfDesc: "",
             WfType: "WF_TYPE20240226102033",
@@ -410,7 +434,6 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         };
         console.log($scope.modelWfInst);
         console.log(ResumeNumber);
-        //validationSelect($scope.model);
         if (ResumeNumber!=null && ResumeNumber!=undefined && ResumeNumber!="" ) {
             console.log(ResumeNumber);
             dataserviceJoinParty.createWfInstance($scope.modelWfInst, function (rs) {
@@ -424,20 +447,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                     $rootScope.WorkflowInstCode=rs.Code;
                 }
                 console.log(rs);
-                dataserviceJoinParty.UpdateWfInstByResumeCode(WfInstCode,ResumeNumber,function(rs2){
-                    
-                console.log(rs2);
-                    rs2=rs2.data;
-                    if (rs2.Error) {
-                        App.toastrError(rs2.Title);
-                    }
-                    else {
-                        App.toastrSuccess(rs2.Title);
-                        $rootScope.WorkflowInstCode=$scope.WfInstCode;
-                        reloadData(false);
-                    }
-                });
-            })
+            });
         }
     }
 
@@ -615,19 +625,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
             $(row).find('td').on('click', function (evt) {
-                if(data.WfInstCode!=''&&data.WfInstCode!=null&&data.WfInstCode!=undefined){
+                if(data.resumeNumber!=''&&data.resumeNumber!=null&&data.resumeNumber!=undefined){
                     // Xóa lớp active khỏi tất cả các hàng
                     $(this).closest('table').find('tr').removeClass('active');
                             
                     // Thêm lớp active vào hàng đã được click
                     $(this).closest('tr').addClass('active');
-                    $scope.editWorkflow(data.WfInstCode)
+                    $scope.editWorkflow(data.resumeNumber)
                 }
 
-                //var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
-                // var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
-                // formatRow(rowData);
-                //$scope.editWorkflow('');
             });
             if ($rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!='' 
                 && data.WfInstCode === $rootScope.WorkflowInstCode) {
