@@ -40,13 +40,19 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         UserName:'',
         GivenName:'',
         PhoneNumber:'',
-        Gender: false,
+        Gender: true,
         Email: '',
         Password:'',
         ConfrimPassword:''
     }
+    $scope.Gender="Nam"
     $scope.Register=function(){
-        
+        var msg=ValidityState($scope.model)
+        if(msg.Error){
+            App.toastrError(msg.Title)
+            return
+        }
+        $scope.model.Gender=$scope.Gender=="Nam"?true:false
         dataservice.Register($scope.model,function(rs){
             rs=rs.data;
             if (rs.Error) {
@@ -55,6 +61,40 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 App.toastrSuccess(rs.Title)
             }
         })
+    }
+    function ValidityState(model){
+        var msg={
+            Error:false,
+            Title:``
+        }
+        var Title=``;
+        if(model.UserName==''||model.UserName==undefined||model.UserName==null){
+            msg.Error=true;
+            $scope.UserNameError=true;
+            Title+=`<p style="font-size:13px;">Tên đăng nhập không được để trống</p></br>`
+        }if(model.GivenName==''||model.GivenName==undefined||model.GivenName==null){
+            msg.Error=true;
+            $scope.GivenNameError=true;
+            Title+=`<p style="font-size:13px;">Tên người dùng không được để trống</p></br>`
+            
+        }if(model.PhoneNumber==''||model.PhoneNumber==undefined||model.PhoneNumber==null){
+            msg.Error=true;
+            $scope.PhoneNumberError=true;
+            Title+=`<p style="font-size:13px;">Số điện thoại không được để trống</p></br>`
+            
+        }if(model.Password==''||model.Password==undefined||model.Password==null){
+            msg.Error=true;
+            $scope.PasswordError=true;  
+            Title+=`<p style="font-size:13px;">Mật khẩu không được để trống</p></br>`
+
+        }if(model.ConfrimPassword!=model.Password){            
+            msg.Error=true;
+            $scope.ConfrimPasswordError=true;
+            
+            Title+=`<p style="font-size:13px;">Xác nhận mật khẩu chưa trùng khớp</p></br>`
+        }
+        msg.Title=Title
+        return msg;
     }
 });
 
