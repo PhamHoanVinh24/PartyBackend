@@ -462,9 +462,9 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 else {
                     App.toastrSuccess(rs.Title);
                     var WfInstCode = rs.Code;
-                    $rootScope.WorkflowInstCode=rs.Code;
+                    reloadData()
+                    $scope.editWorkflow(ResumeNumber)
                 }
-                console.log(rs);
             });
         }
     }
@@ -653,11 +653,11 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 }
 
             });
-            if ($rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!='' 
-                && data.WfInstCode === $rootScope.WorkflowInstCode) {
-                $(this).closest('table').find('tr').removeClass('active');
-                $(row).addClass('active').css('font-size', '16px !impotant');;
-            }
+            // if ($rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!='' 
+            //     && data.WfInstCode === $rootScope.WorkflowInstCode) {
+            //     $(this).closest('table').find('tr').removeClass('active');
+            //     $(row).addClass('active').css('font-size', '16px !impotant');;
+            // }
         });
     vm.dtColumns = [];
 

@@ -85,6 +85,13 @@ namespace III.Admin.Controllers
             var msg = new JMessage() { Error = false };
             if (ModelState.IsValid)
             {
+                var check = _userManager.FindByNameAsync(model.UserName).Result;
+                if (check!=null)
+                {
+                    msg.Error = true;
+                    msg.Title = "Tài khoản đã tồn tại";
+                    return Ok(msg);
+                }
                 var user = new AspNetUser {
                     UserName = model.UserName,
                     Email = model.Email,
@@ -92,6 +99,7 @@ namespace III.Admin.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Gender = model.Gender,
                     Area = "User",
+                    Active=true
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -99,7 +107,7 @@ namespace III.Admin.Controllers
                 {
                     // Tùy chọn: Đăng nhập người dùng sau khi đăng ký
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    msg.Title = "Đăng ký thành công !";
+                    msg.Title = "Đăng ký thành công ! bạn có thể quay lại trang đăng nhập";
                     // Trả về mã thông báo, thông tin người dùng, hoặc thông tin khác tùy thuộc vào yêu cầu của ứng dụng di động
                     return Ok(msg);
                 }
@@ -109,7 +117,7 @@ namespace III.Admin.Controllers
             }
 
             msg.Error = true;
-            msg.Title = "Invalid model state";
+            msg.Title = "Bạn chưa nhập đủ thông tin";
             return Ok(msg);
         }
 
