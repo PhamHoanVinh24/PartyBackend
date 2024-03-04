@@ -25,15 +25,15 @@ namespace III.Admin.Controllers
             _stringLocalizer = stringLocalizer;
             _sharedResources = sharedResources;
         }
-        [Breadcrumb("ViewData.CrumbMaterialType", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        public IActionResult Index()
-        {
-            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-            ViewData["CrumbMaterialType"] = _sharedResources["COM_CRUMB_MATERIAL_TYPE"];
-            return View();
-        }
+        //[Breadcrumb("ViewData.CrumbMaterialType", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        //public IActionResult Index()
+        //{
+        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+        //    ViewData["CrumbMaterialType"] = _sharedResources["COM_CRUMB_MATERIAL_TYPE"];
+        //    return View();
+        //}
 
         public class JTableModelMaterial : JTableModel
         {

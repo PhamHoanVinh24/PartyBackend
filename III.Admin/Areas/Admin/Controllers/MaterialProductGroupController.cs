@@ -37,15 +37,15 @@ namespace III.Admin.Controllers
             _stringLocalizer = stringLocalizer;
             _sharedResources = sharedResources;
         }
-        [Breadcrumb("ViewData.CrumbProdGrp", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        public IActionResult Index()
-        {
-            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-            ViewData["CrumbProdGrp"] = _sharedResources["COM_CRUMB_PROD_GROUP"];
-            return View("Index");
-        }
+        //[Breadcrumb("ViewData.CrumbProdGrp", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        //public IActionResult Index()
+        //{
+        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+        //    ViewData["CrumbProdGrp"] = _sharedResources["COM_CRUMB_PROD_GROUP"];
+        //    return View("Index");
+        //}
         [HttpPost]
         public object JTable([FromBody]JTableModelCustom jTablePara)
         {

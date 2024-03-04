@@ -26,15 +26,15 @@ namespace III.Admin.Controllers
             _sharedResources = sharedResources;
             _stringLocalizer = stringLocalizer;
         }
-        [Breadcrumb("ViewData.CrumbSvCatType", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
-        public IActionResult Index()
-        {
-            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-            ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
-            ViewData["CrumbSvCatType"] = _sharedResources["COM_CRUMB_SERVICE_TYPE"];
-            return View();
-        }
+        //[Breadcrumb("ViewData.CrumbSvCatType", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
+        //public IActionResult Index()
+        //{
+        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+        //    ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
+        //    ViewData["CrumbSvCatType"] = _sharedResources["COM_CRUMB_SERVICE_TYPE"];
+        //    return View();
+        //}
 
         public class JTableModelMaterial : JTableModel
         {

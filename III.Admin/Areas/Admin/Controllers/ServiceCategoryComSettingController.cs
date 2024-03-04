@@ -12,14 +12,14 @@ namespace III.Admin.Controllers
         {
             _sharedResources = sharedResources;
         }
-        [Breadcrumb("ViewData.CrumbSvCatCommon", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
-        public IActionResult Index()
-        {
-            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-            ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
-            ViewData["CrumbSvCatCommon"] = _sharedResources["COM_CRUMB_COMMON_SETTING"];
-            return View();
-        }
+        //[Breadcrumb("ViewData.CrumbSvCatCommon", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
+        //public IActionResult Index()
+        //{
+        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+        //    ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
+        //    ViewData["CrumbSvCatCommon"] = _sharedResources["COM_CRUMB_COMMON_SETTING"];
+        //    return View();
+        //}
     }
 }

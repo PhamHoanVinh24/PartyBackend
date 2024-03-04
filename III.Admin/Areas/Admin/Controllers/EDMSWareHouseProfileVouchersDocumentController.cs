@@ -39,15 +39,15 @@ namespace III.Admin.Controllers
             _fileObjectShareController = fileObjectShareController;
             _sharedResources = sharedResources;
         }
-        [Breadcrumb("ViewData.Title", AreaName = "Admin", FromAction = "Index", FromController = typeof(WarehouseDigitalHomeController))]
-        public IActionResult Index()
-        {
-            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuCenter"] = _sharedResources["COM_CRUMB_MENU_CENTER"];
-            ViewData["CrumbWHDHome"] = _sharedResources["COM_CRUMB_WH_DIGITAL_HOME"];
-            ViewData["CrumbEdmsWHProfileDoc"] = _sharedResources["COM_CRUMB_EDMS_WAREHOUSE_CAT"];
-            return View();
-        }
+        //[Breadcrumb("ViewData.Title", AreaName = "Admin", FromAction = "Index", FromController = typeof(WarehouseDigitalHomeController))]
+        //public IActionResult Index()
+        //{
+        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+        //    ViewData["CrumbMenuCenter"] = _sharedResources["COM_CRUMB_MENU_CENTER"];
+        //    ViewData["CrumbWHDHome"] = _sharedResources["COM_CRUMB_WH_DIGITAL_HOME"];
+        //    ViewData["CrumbEdmsWHProfileDoc"] = _sharedResources["COM_CRUMB_EDMS_WAREHOUSE_CAT"];
+        //    return View();
+        //}
 
         #region Ware House
         [HttpPost]
