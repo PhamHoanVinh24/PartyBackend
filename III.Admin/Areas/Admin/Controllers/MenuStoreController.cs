@@ -57,12 +57,12 @@ namespace III.Admin.Controllers
             _googleAPI = googleAPI;
             _sharedResources = sharedResources;
         }
-        //[Breadcrumb("ViewData.CrumbMenuStore", AreaName = "Admin", FromAction = "Index", FromController = typeof(DashBoardController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbMenuStore", AreaName = "Admin", FromAction = "Index", FromController = typeof(DashBoardController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            return View();
+        }
     }
 }
