@@ -45,12 +45,10 @@ namespace III.Admin.Controllers
             _sharedResources = sharedResources;
         }
 
-        [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(CardWorkHomeController))]
+        [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(DashBoardController))]
         public IActionResult Index()
         {
             ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-            ViewData["CrumbMenuCenter"] = _sharedResources["COM_CRUMB_MENU_CENTER"];
-            ViewData["CrumbCardWorkHome"] = _sharedResources["COM_CRUMB_CARD_WORK_HOME"];
             ViewData["UserJoinParty"] = "Hồ sơ lý lịch đảng viên";
             return View();
         }
