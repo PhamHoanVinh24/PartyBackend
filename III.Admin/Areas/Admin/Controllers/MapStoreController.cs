@@ -22,15 +22,15 @@ namespace III.Admin.Controllers
             _stringLocalizer = stringLocalizer;
             _sharedResources = sharedResources;
         }
-        //[Breadcrumb("ViewData.CrumbMapStore", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-        //    ViewData["CrumbMapStore"] = "Bản đồ kho";
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbMapStore", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+            ViewData["CrumbMapStore"] = "Bản đồ kho";
+            return View();
+        }
         #region Store
         [HttpPost]
         public object SearchStore([FromBody]MapSearch search)

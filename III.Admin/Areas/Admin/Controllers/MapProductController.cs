@@ -33,15 +33,15 @@ namespace III.Admin.Controllers
             _stringMpLocalizer = stringMpLocalizer;
             Console.WriteLine("MpLocalizer");
         }
-        //[Breadcrumb("ViewData.CrumbMapProduct", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-        //    ViewData["CrumbMapProduct"] = "Bản đồ vật tư thiết bị";
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbMapProduct", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+            ViewData["CrumbMapProduct"] = "Bản đồ vật tư thiết bị";
+            return View();
+        }
         #region Product
         [HttpPost]
         public object SearchProduct([FromBody] MapSearch search)

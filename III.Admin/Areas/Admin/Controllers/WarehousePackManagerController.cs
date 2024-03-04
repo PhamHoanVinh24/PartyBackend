@@ -29,15 +29,15 @@ namespace III.Admin.Controllers
             _stringLocalizerZm = stringLocalizerZm;
             _sharedResources = sharedResources;
         }
-        //[Breadcrumb("ViewData.CrumbPackManager", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-        //    ViewData["CrumbPackManager"] = _sharedResources["WPM_PACK"];
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbPackManager", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+            ViewData["CrumbPackManager"] = _sharedResources["WPM_PACK"];
+            return View();
+        }
 
         #region Combo box
 

@@ -45,14 +45,14 @@ namespace III.Admin.Controllers
             _sharedResources = sharedResources;
             _stringLocalizerEdms = stringLocalizerEdms;
         }
-        //[Breadcrumb("ViewData.Title", AreaName = "Admin", FromAction = "Index", FromController = typeof(MenuAssetOperationController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuAsset"] = _sharedResources["COM_CRUMB_ASSET_OPERATION"];
-        //    ViewData["CrumbWHDHome"] = _stringLocalizer["EDMSWHPV_CURD_LBL_WAREHOUSE"];
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.Title", AreaName = "Admin", FromAction = "Index", FromController = typeof(MenuAssetOperationController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuAsset"] = _sharedResources["COM_CRUMB_ASSET_OPERATION"];
+            ViewData["CrumbWHDHome"] = _stringLocalizer["EDMSWHPV_CURD_LBL_WAREHOUSE"];
+            return View();
+        }
 
         #region Ware House
         [HttpPost]

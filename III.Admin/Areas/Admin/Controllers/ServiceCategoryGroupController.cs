@@ -38,15 +38,15 @@ namespace III.Admin.Controllers
             _sharedResources = sharedResources;
             _stringLocalizer = stringLocalizer;
         }
-        //[Breadcrumb("ViewData.CrumbSvCatGrp", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
-        //    ViewData["CrumbSvCatGrp"] = _stringLocalizer["SCG_LINK_SCG"];
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbSvCatGrp", AreaName = "Admin", FromAction = "Index", FromController = typeof(ServiceHomeController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            ViewData["CrumbServiceHome"] = _sharedResources["COM_CRUMB_SV_HOME"];
+            ViewData["CrumbSvCatGrp"] = _stringLocalizer["SCG_LINK_SCG"];
+            return View();
+        }
         [HttpPost]
         public object JTable([FromBody]JTableModelCustom jTablePara)
         {

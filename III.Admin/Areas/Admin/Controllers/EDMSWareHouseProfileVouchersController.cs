@@ -51,15 +51,15 @@ namespace III.Admin.Controllers
             _stringLocalizerEdms = stringLocalizerEdms;
             _stringLocalizerFp = stringLocalizerFp;
         }
-        //[Breadcrumb("ViewData.CrumbWarehouseManager", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
-        //public IActionResult Index()
-        //{
-        //    ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
-        //    ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
-        //    ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
-        //    ViewData["CrumbWarehouseManager"] = "Quản lý kho";
-        //    return View();
-        //}
+        [Breadcrumb("ViewData.CrumbWarehouseManager", AreaName = "Admin", FromAction = "Index", FromController = typeof(NomalListWareHouseHomeController))]
+        public IActionResult Index()
+        {
+            ViewData["CrumbDashBoard"] = _sharedResources["COM_CRUMB_DASH_BOARD"];
+            ViewData["CrumbMenuStore"] = _sharedResources["COM_CRUMB_MENU_STORE"];
+            ViewData["CrumbNormalWHHome"] = _sharedResources["COM_BREAD_CRUMB_COMMON_CATE"];
+            ViewData["CrumbWarehouseManager"] = "Quản lý kho";
+            return View();
+        }
 
         #region Ware House
         [HttpPost]

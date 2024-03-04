@@ -50,10 +50,10 @@ namespace III.Admin.Areas.Admin.Controllers
             _repositoryService = repositoryService;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         public JsonResult JTable([FromBody] JTableModelServiceRegist jTablePara)
         {
