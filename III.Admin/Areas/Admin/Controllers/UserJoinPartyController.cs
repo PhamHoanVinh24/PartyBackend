@@ -29,6 +29,9 @@ using static Dropbox.Api.Files.SearchMatchType;
 using PdfSharp.Charting;
 using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.VariantTypes;
+using log4net;
+using System.Reflection;
+using System.Data;
 
 namespace III.Admin.Controllers
 {
@@ -36,13 +39,19 @@ namespace III.Admin.Controllers
     public class UserJoinPartyController : BaseController
     {
         private readonly EIMDBContext _context;
+        private readonly IUploadService _upload;
+        private readonly ILuceneService _luceneService;
+        private readonly IRepositoryService _repositoryService;
         private readonly IStringLocalizer<SharedResources> _sharedResources;
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
-
-        public UserJoinPartyController(EIMDBContext context, IStringLocalizer<SharedResources> sharedResources)
+        public UserJoinPartyController(EIMDBContext context, IStringLocalizer<SharedResources> sharedResources, IUploadService upload, ILuceneService luceneService, IRepositoryService repositoryService)
         {
             _context = context;
             _sharedResources = sharedResources;
+            _upload = upload;
+            _luceneService = luceneService;
+            _repositoryService = repositoryService;
         }
 
         [Breadcrumb("ViewData.UserJoinParty", AreaName = "Admin", FromAction = "Index", FromController = typeof(DashBoardController))]
@@ -82,16 +91,45 @@ namespace III.Admin.Controllers
         {
             try
             {
+                List<string> fileCodes = new List<string>();
+                if (!string.IsNullOrEmpty(jTablePara.KeyWord))
+                {
+                    string[] keywords = { "PROFILE_JOIN_PARTY" };
+                    var session = HttpContext.GetSessionUser();
+                    JtableFileModel jTable = new JtableFileModel()
+                    {
+                        Content = jTablePara.KeyWord,
+                        ListRepository = keywords,
+                        ObjectType = "All",
+                        Length = jTablePara.Length,
+                    };
+                    var listType = new string[] { };
+                    listType = new[] { ".docx", ".doc" };
+                    var actintCodes = JtableWithContent(jTable, null, null, session, listType, 0);
+                    fileCodes = actintCodes.Split(';').ToList();
+                }
+                List<string> codes= new List<string>();
+                if (fileCodes.Count > 0)
+                {
+                    codes = _context.EDMSRepoCatFiles.Where(x => fileCodes.Contains(x.FileCode)).Select(x => x.ObjectCode).ToList();
+                }
                 int intBegin = (jTablePara.CurrentPage - 1) * jTablePara.Length;
                 var fromDate = !string.IsNullOrEmpty(jTablePara.FromDate) ? DateTime.ParseExact(jTablePara.FromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
                 var toDate = !string.IsNullOrEmpty(jTablePara.ToDate) ? DateTime.ParseExact(jTablePara.ToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
                 var getYear = DateTime.Now.Year;
                 var query = from a in _context.PartyAdmissionProfiles.Where(x => x.IsDeleted == false)
                             join b in _context.Users on a.CreatedBy equals b.UserName into b1
-                            
                             from b in b1.DefaultIfEmpty()
-                            join wf in _context.WorkflowInstances.Where(x => x.IsDeleted == false && x.ObjectType == "TEST_JOIN_PARTY") on a.ResumeNumber equals wf.ObjectInst into wf1
+                            join wf in _context.WorkflowInstances.Where(x => x.IsDeleted == false && x.ObjectType == "TEST_JOIN_PARTY")
+                            .Select(wfa => new
+                            {
+                                actCode=_context.ActivityInstances.Where(x => x.IsDeleted == false && wfa.WfInstCode==x.WorkflowCode).Select(a=>a.ActivityInstCode).ToList(),
+                                wfa.WfInstCode,
+                                wfa.ObjectInst,
+                            })
+                            on a.ResumeNumber equals wf.ObjectInst into wf1
                             from wf in wf1.DefaultIfEmpty()
+
                             where (fromDate == null || (fromDate <= a.Birthday))
                                    && (toDate == null || (toDate >= a.Birthday))
                                    && (jTablePara.FromAge == null || (jTablePara.FromAge <= (getYear - a.Birthday.Value.Year))) 
@@ -114,6 +152,7 @@ namespace III.Admin.Controllers
                                    && (string.IsNullOrEmpty(jTablePara.PoliticalTheory) || a.PoliticalTheory.ToLower().Contains(jTablePara.PoliticalTheory.ToLower()))
                                    && (string.IsNullOrEmpty(jTablePara.GeneralEducation) || a.GeneralEducation.ToLower().Contains(jTablePara.GeneralEducation.ToLower()))
                                    && (jTablePara.Gender == null || a.Gender==jTablePara.Gender)
+                                   && (string.IsNullOrEmpty(jTablePara.KeyWord)||codes.Count != 0 && wf!=null && wf.actCode.Intersect(codes).Any())
                             //&& (string.IsNullOrEmpty(jTablePara.Nation) || a.Nation.ToLower().Contains(jTablePara.Nation.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
@@ -136,15 +175,8 @@ namespace III.Admin.Controllers
                                 GeneralEducation = a.GeneralEducation,
                                 Gender = a.Gender
                             };
-                //if (!string.IsNullOrEmpty(jTablePara.KeyWord))
-                //{
-                //    //query = query.Where(item => item.GetType().GetProperties()
-                //    //    .Any(prop => prop.PropertyType == typeof(string)
-                //    //            && prop.GetValue(item).ToString().Contains(jTablePara.KeyWord)));
-                //    var results= SearchPersonalHistory(jTablePara.KeyWord,query);
-                //    query = query.Where(item => results.Any(x => x.ResumeNumberstring.Equals(item.resumeNumber)));
-                //}
-                    
+               
+
 
                 //int total = _context.PartyAdmissionProfiles.Count();
                 var query_row_number = query.AsEnumerable().Select((x, index) => new
@@ -182,6 +214,102 @@ namespace III.Admin.Controllers
         }
 
         #region search
+
+
+        [NonAction]
+        private string JtableWithContent(JtableFileModel jTablePara, DateTime? fromDate, DateTime? toDate, SessionUserLogin session, string[] listType, int intBeginFor)
+        {
+            var queryLucene = SearchLuceneFile(jTablePara.Content, intBeginFor, jTablePara.Length);
+            Console.WriteLine(queryLucene);
+            Console.WriteLine(queryLucene.listLucene);
+            var fileCodeSequence = string.Join(";", queryLucene.listLucene.Select(x => x.FileCode));
+            //var listTypeSequence = string.Join(";", listType.Select(x => x));
+
+            //Log.Info($"countQueryLucene: ${queryLucene.listLucene.Count()}");
+            //Log.Info(fileCodeSequence);
+            //string[] param = { "@PageNo", "@PageSize", "@fromDate", "@toDate", "@Name", "@Tags",
+            //    "@ObjectType", "@ObjectCode", "@UserUpload", "@FileCodeSequence", "@ListTypeSequence"};
+            //object[] val = { jTablePara.CurrentPage, jTablePara.Length,
+            //    fromDate != null ? (object)fromDate : "", toDate != null ? (object)toDate : "",
+            //    !string.IsNullOrEmpty(jTablePara.Name) ? jTablePara.Name : "",
+            //    !string.IsNullOrEmpty(jTablePara.Tags) ? jTablePara.Tags : "",
+            //    !string.IsNullOrEmpty(jTablePara.ObjectType) ? jTablePara.ObjectType : "",
+            //    !string.IsNullOrEmpty(jTablePara.ObjectCode) ? jTablePara.ObjectCode : "",
+            //    !string.IsNullOrEmpty(jTablePara.UserUpload) ? jTablePara.UserUpload : "",
+            //    fileCodeSequence, listTypeSequence};
+            //// the code that you want to measure comes here
+            //DataTable rs = _repositoryService.GetDataTableProcedureSql("P_GET_FILE_EDMS_LUCENE", param, val);
+            //var queryDataLucene = CommonUtil.ConvertDataTable<EDMSJtableFileModel>(rs);
+            //var capacity = decimal.Parse(queryDataLucene.FirstOrDefault()?.TotalCapacity ?? "0");
+            ////var paggingLucene = queryDataLucene.Skip(intBeginFor).Take(jTablePara.Length).ToList();
+
+            //var listRecordsPack = _context.RecordsPacks.Where(x => !x.IsDeleted).ToList();
+            //foreach (var item in queryDataLucene)
+            //{
+            //    item.FileSize = capacity;
+            //    item.Content = queryLucene.listLucene.FirstOrDefault(x => x.FileCode == item.FileCode)?.Content;
+            //    if (item.IsScan.HasValue && item.IsScan.Value)
+            //    {
+            //        item.PackHierarchy =
+            //                    !string.IsNullOrEmpty(item.PackCode) ? GetHierarchyPack(listRecordsPack, item.PackCode, "") : "Chưa đóng gói";
+            //        item.ZoneHierarchy = !string.IsNullOrEmpty(item.PackZoneLocation) ? item.PackZoneLocation : "Chưa xếp";
+            //    }
+            //}
+
+            return fileCodeSequence;
+        }
+
+        [NonAction]
+        private (IEnumerable<EDMSJtableFileModel> listLucene, int total) SearchLuceneFile(string content, int page, int length)
+        {
+            try
+            {
+                var moduleObj = (EDMSCatRepoSetting)_upload.GetPathByModule("DB_LUCENE_INDEX").Object;
+                var luceneCategory = _context.EDMSCategorys.FirstOrDefault(x => x.CatCode == moduleObj.CatCode);
+
+
+                //LuceneExtension.SearchHighligh(content, luceneCategory.PathServerPhysic, page, length, "Content");
+                return LuceneExtension.SearchHighligh(content, luceneCategory.PathServerPhysic, page, length, "Content");
+
+            }
+            catch (Exception ex)
+            {
+                return (new List<EDMSJtableFileModel>(), 0);
+            }
+        }
+
+        [NonAction]
+        private string GetHierarchyPack(List<RecordsPack> recordsPacks, string packCode, string hierarchy)
+        {
+            var obj = recordsPacks.FirstOrDefault(x => !x.IsDeleted && x.PackCode.Equals(packCode));
+            if (obj != null)
+            {
+                if (!string.IsNullOrEmpty(obj.PackParent))
+                {
+                    hierarchy = obj.PackCode + (!string.IsNullOrEmpty(hierarchy) ? ("/" + hierarchy) : "");
+                    var packParent = recordsPacks.FirstOrDefault(x => !x.IsDeleted && x.PackCode.Equals(obj.PackParent));
+                    if (packParent != null)
+                    {
+                        hierarchy = packParent.PackCode + "/" + hierarchy;
+                        if (!string.IsNullOrEmpty(packParent.PackParent))
+                        {
+                            var record = recordsPacks.FirstOrDefault(x => !x.IsDeleted && x.PackCode.Equals(packParent.PackParent));
+                            hierarchy = GetHierarchyPack(recordsPacks, packParent.PackParent, hierarchy);
+                        }
+                    }
+                }
+                else
+                {
+                    hierarchy = obj.PackCode + (!string.IsNullOrEmpty(hierarchy) ? ("/" + hierarchy) : "");
+                }
+            }
+            else
+            {
+                return "";
+            }
+
+            return hierarchy;
+        }
 
         //public List<ResumeNumber> SearchPersonalHistory(string keyword, IQueryable<ModelUserJoinPartyTable> list)
         //{
@@ -244,7 +372,7 @@ namespace III.Admin.Controllers
         //    return result;
         //}
 
-        
+
         #endregion
 
         [HttpPost]
