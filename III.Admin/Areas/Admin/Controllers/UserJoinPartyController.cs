@@ -118,24 +118,33 @@ namespace III.Admin.Controllers
                             //&& (string.IsNullOrEmpty(jTablePara.Religion) || a.Religion.ToLower().Contains(jTablePara.Religion.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.JobEducation) || a.JobEducation.ToLower().Contains(jTablePara.JobEducation.ToLower()))
                             //&& (string.IsNullOrEmpty(jTablePara.Degree) || a.JobEducation.ToLower().Contains(jTablePara.Degree.ToLower()))
-                            select new
+                            select new ModelUserJoinPartyTable
                             {
-                                a.Id,
-                                a.CurrentName,
-                                a.UserCode,
-                                a.Status,
-                                a.Username,
+                                Id=a.Id,
+                                CurrentName=a.CurrentName,
+                                UserCode = a.UserCode,
+                                Status = a.Status,
+                                Username = a.Username,
                                 CreatedBy= b!=null ? b.GivenName: "",
-                                a.ProfileLink,
+                                ProfileLink = a.ProfileLink,
                                 resumeNumber=a.ResumeNumber,
                                 WfInstCode=wf!=null?wf.WfInstCode:"",
                                 BirthYear = a.Birthday.HasValue ? a.Birthday.Value.Year.ToString() : "",
-                                a.TemporaryAddress,
-                                a.UnderPostGraduateEducation,
-                                a.Degree,
-                                a.GeneralEducation,
-                                a.Gender
+                                TemporaryAddress = a.TemporaryAddress,
+                                UnderPostGraduateEducation = a.UnderPostGraduateEducation,
+                                Degree = a.Degree,
+                                GeneralEducation = a.GeneralEducation,
+                                Gender = a.Gender
                             };
+                //if (!string.IsNullOrEmpty(jTablePara.KeyWord))
+                //{
+                //    //query = query.Where(item => item.GetType().GetProperties()
+                //    //    .Any(prop => prop.PropertyType == typeof(string)
+                //    //            && prop.GetValue(item).ToString().Contains(jTablePara.KeyWord)));
+                //    var results= SearchPersonalHistory(jTablePara.KeyWord,query);
+                //    query = query.Where(item => results.Any(x => x.ResumeNumberstring.Equals(item.resumeNumber)));
+                //}
+                    
 
                 //int total = _context.PartyAdmissionProfiles.Count();
                 var query_row_number = query.AsEnumerable().Select((x, index) => new
@@ -171,6 +180,72 @@ namespace III.Admin.Controllers
                 return Json(jdata);
             }
         }
+
+        #region search
+
+        //public List<ResumeNumber> SearchPersonalHistory(string keyword, IQueryable<ModelUserJoinPartyTable> list)
+        //{
+        //    var papList = list.Select(p => p.resumeNumber).ToList();
+
+        //    var phList = _context.PersonalHistories
+        //        .Where(ph => !ph.IsDeleted)
+        //        .ToList();
+
+        //    var aList = _context.Awards
+        //        .Where(a => !a.IsDeleted)
+        //        .ToList();
+
+        //    var fList = _context.Families
+        //        .Where(f => !f.IsDeleted)
+        //        .ToList();
+
+        //    var iopList = _context.IntroducerOfParties
+        //        .Where(iop => !iop.IsDeleted)
+        //        .ToList();
+
+        //    var hsList = _context.HistorySpecialists
+        //        .Where(hs => !hs.IsDeleted)
+        //        .ToList();
+
+        //    var tcList = _context.TrainingCertificatedPasses
+        //        .Where(tc => !tc.IsDeleted)
+        //        .ToList();
+
+        //    var wdList = _context.WarningDisciplineds
+        //        .Where(wd => !wd.IsDeleted)
+        //        .ToList();
+
+        //    var wtList = _context.WorkingTrackings
+        //        .Where(wt => !wt.IsDeleted)
+        //        .ToList();
+
+        //    var gaList = _context.GoAboards
+        //        .Where(ga => !ga.IsDeleted)
+        //        .ToList();
+
+        //    var query = from pap in list
+        //                select new
+        //                {
+        //                    pap,
+        //                    ph = phList.FirstOrDefault(ph => ph.ProfileCode == pap.resumeNumber),
+        //                    a = aList.FirstOrDefault(a => a.ProfileCode == pap.resumeNumber),
+        //                    f = fList.FirstOrDefault(f => f.ProfileCode == pap.resumeNumber),
+        //                    iop = iopList.FirstOrDefault(iop => iop.ProfileCode == pap.resumeNumber),
+        //                    hs = hsList.FirstOrDefault(hs => hs.ProfileCode == pap.resumeNumber),
+        //                    tc = tcList.FirstOrDefault(tc => tc.ProfileCode == pap.resumeNumber),
+        //                    wd = wdList.FirstOrDefault(wd => wd.ProfileCode == pap.resumeNumber),
+        //                    wt = wtList.FirstOrDefault(wt => wt.ProfileCode == pap.resumeNumber),
+        //                    ga = gaList.FirstOrDefault(ga => ga.ProfileCode == pap.resumeNumber)
+        //                };
+
+
+        //    var result=
+
+        //    return result;
+        //}
+
+        
+        #endregion
 
         [HttpPost]
         [AllowAnonymous]
@@ -314,5 +389,29 @@ namespace III.Admin.Controllers
             }
             return msg;
         }
+    }
+
+    public class ModelUserJoinPartyTable
+    {
+        public int Id { get; set; }
+        public string CurrentName { get; set; }
+        public int UserCode { get; set; }
+        public string Status { get; set; }
+        public string Username { get; set; }
+        public string CreatedBy { get; set; }
+        public string ProfileLink { get; set; }
+        public string resumeNumber { get; set; }
+        public string WfInstCode { get; set; }
+        public string BirthYear { get; set; }
+        public string TemporaryAddress { get; set; }
+        public string UnderPostGraduateEducation { get; set; }
+        public string Degree { get; set; }
+        public string GeneralEducation { get; set; }
+        public int Gender { get; set; }
+    }
+
+    public class ResumeNumber
+    {
+        public string ResumeNumberstring { get; set; }
     }
 }

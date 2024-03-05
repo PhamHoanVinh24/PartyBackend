@@ -574,6 +574,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         PoliticalTheory:'',
         GeneralEducation:'',
         Gender: null,
+        KeyWord:''
     }
     $scope.initData = function () {
        if($rootScope.WorkflowInstCode!=undefined&&$rootScope.WorkflowInstCode!=null&&$rootScope.WorkflowInstCode!=''){
@@ -616,7 +617,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 d.UnderPostGraduateEducation=$scope.searchModel.UnderPostGraduateEducation,
                 d.MinorityLanguages=$scope.searchModel.MinorityLanguages,
                 d.Gender=$scope.searchModel.Gender,
-                d.KeyWord='',
+                d.KeyWord=$scope.searchModel.KeyWord,
                 d.JobEducation=$scope.searchModel.JobEducation,
                 d.Degree=$scope.searchModel.Degree,
                 d.PoliticalTheory=$scope.searchModel.PoliticalTheory,
