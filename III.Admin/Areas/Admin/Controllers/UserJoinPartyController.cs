@@ -312,81 +312,81 @@ namespace III.Admin.Controllers
             return hierarchy;
         }
 
-        public List<ResumeNumber> SearchPersonalHistory(string keyword, IQueryable<ModelUserJoinPartyTable> list)
-        {
-           var papList = list.Select(p => p.resumeNumber).ToList();
+        //public List<ResumeNumber> SearchPersonalHistory(string keyword, IQueryable<ModelUserJoinPartyTable> list)
+        //{
+        //   var papList = list.Select(p => p.resumeNumber).ToList();
 
-            var phList = _context.PersonalHistories
-                .Where(ph => !ph.IsDeleted)
-                .ToList();
+        //    var phList = _context.PersonalHistories
+        //        .Where(ph => !ph.IsDeleted)
+        //        .ToList();
 
-            var aList = _context.Awards
-                .Where(a => !a.IsDeleted)
-                .ToList();
+        //    var aList = _context.Awards
+        //        .Where(a => !a.IsDeleted)
+        //        .ToList();
 
-            var fList = _context.Families
-                .Where(f => !f.IsDeleted)
-                .ToList();
+        //    var fList = _context.Families
+        //        .Where(f => !f.IsDeleted)
+        //        .ToList();
 
-            var iopList = _context.IntroducerOfParties
-                .Where(iop => !iop.IsDeleted)
-                .ToList();
+        //    var iopList = _context.IntroducerOfParties
+        //        .Where(iop => !iop.IsDeleted)
+        //        .ToList();
 
-            var hsList = _context.HistorySpecialists
-                .Where(hs => !hs.IsDeleted)
-                .ToList();
+        //    var hsList = _context.HistorySpecialists
+        //        .Where(hs => !hs.IsDeleted)
+        //        .ToList();
 
-            var tcList = _context.TrainingCertificatedPasses
-                .Where(tc => !tc.IsDeleted)
-                .ToList();
+        //    var tcList = _context.TrainingCertificatedPasses
+        //        .Where(tc => !tc.IsDeleted)
+        //        .ToList();
 
-            var wdList = _context.WarningDisciplineds
-                .Where(wd => !wd.IsDeleted)
-                .ToList();
+        //    var wdList = _context.WarningDisciplineds
+        //        .Where(wd => !wd.IsDeleted)
+        //        .ToList();
 
-            var wtList = _context.WorkingTrackings
-                .Where(wt => !wt.IsDeleted)
-                .ToList();
+        //    var wtList = _context.WorkingTrackings
+        //        .Where(wt => !wt.IsDeleted)
+        //        .ToList();
 
-            var gaList = _context.GoAboards
-                .Where(ga => !ga.IsDeleted)
-                .ToList();
+        //    var gaList = _context.GoAboards
+        //        .Where(ga => !ga.IsDeleted)
+        //        .ToList();
 
-            var query = from pap in list
-                        select new
-                        {
-                            pap,
-                            ph = phList.FirstOrDefault(ph => ph.ProfileCode == pap.resumeNumber),
-                            a = aList.FirstOrDefault(a => a.ProfileCode == pap.resumeNumber),
-                            f = fList.FirstOrDefault(f => f.ProfileCode == pap.resumeNumber),
-                            iop = iopList.FirstOrDefault(iop => iop.ProfileCode == pap.resumeNumber),
-                            hs = hsList.FirstOrDefault(hs => hs.ProfileCode == pap.resumeNumber),
-                            tc = tcList.FirstOrDefault(tc => tc.ProfileCode == pap.resumeNumber),
-                            wd = wdList.FirstOrDefault(wd => wd.ProfileCode == pap.resumeNumber),
-                            wt = wtList.FirstOrDefault(wt => wt.ProfileCode == pap.resumeNumber),
-                            ga = gaList.FirstOrDefault(ga => ga.ProfileCode == pap.resumeNumber)
-                        };
+        //    var query = from pap in list
+        //                select new
+        //                {
+        //                    pap,
+        //                    ph = phList.FirstOrDefault(ph => ph.ProfileCode == pap.resumeNumber),
+        //                    a = aList.FirstOrDefault(a => a.ProfileCode == pap.resumeNumber),
+        //                    f = fList.FirstOrDefault(f => f.ProfileCode == pap.resumeNumber),
+        //                    iop = iopList.FirstOrDefault(iop => iop.ProfileCode == pap.resumeNumber),
+        //                    hs = hsList.FirstOrDefault(hs => hs.ProfileCode == pap.resumeNumber),
+        //                    tc = tcList.FirstOrDefault(tc => tc.ProfileCode == pap.resumeNumber),
+        //                    wd = wdList.FirstOrDefault(wd => wd.ProfileCode == pap.resumeNumber),
+        //                    wt = wtList.FirstOrDefault(wt => wt.ProfileCode == pap.resumeNumber),
+        //                    ga = gaList.FirstOrDefault(ga => ga.ProfileCode == pap.resumeNumber)
+        //                };
 
 
-            var result = query.AsEnumerable()
-                .Where(item => item.GetType().GetProperties()
-                    .Any(prop => prop.PropertyType.GetInterface(nameof(IEnumerable)) != null && prop.GetValue(item) != null &&
-                        (prop.GetValue(item) as IEnumerable)?.OfType<object>().Any(listItem =>
-                            listItem.GetType().GetProperties().Any(subProp =>
-                                subProp.PropertyType == typeof(string) &&
-                                subProp.GetValue(listItem) != null &&
-                                subProp.GetValue(listItem).ToString().Contains(keyword)
-                            )
-                        ) == true
-                    )
-                )
-                .Select(item => new ResumeNumber
-                {
-                    ResumeNumberstring = item.pap.resumeNumber
-                }).ToList();
+        //    var result = query.AsEnumerable()
+        //        .Where(item => item.GetType().GetProperties()
+        //            .Any(prop => prop.PropertyType.GetInterface(nameof(IEnumerable)) != null && prop.GetValue(item) != null &&
+        //                (prop.GetValue(item) as IEnumerable)?.OfType<object>().Any(listItem =>
+        //                    listItem.GetType().GetProperties().Any(subProp =>
+        //                        subProp.PropertyType == typeof(string) &&
+        //                        subProp.GetValue(listItem) != null &&
+        //                        subProp.GetValue(listItem).ToString().Contains(keyword)
+        //                    )
+        //                ) == true
+        //            )
+        //        )
+        //        .Select(item => new ResumeNumber
+        //        {
+        //            ResumeNumberstring = item.pap.resumeNumber
+        //        }).ToList();
 
-            return result;
-        }
+        //    return result;
+        //}
 
 
         #endregion
