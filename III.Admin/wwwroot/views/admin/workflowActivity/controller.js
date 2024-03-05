@@ -9896,7 +9896,6 @@ app.controller('fileActivity', function ($scope, $rootScope, $compile, $uibModal
     vm.dtColumns.push(DTColumnBuilder.newColumn("Id").withTitle(titleHtml).notSortable().renderWith(function (data, type, full, meta) {
         $scope.selected[data] = false;
         var dataRs = '<label class="mt-checkbox"><input type="checkbox" ng-model="selected[' + full.Id + ']" ng-change="toggleOne(selected)"/><span></span></label>';
-        $scope.$apply();
         return dataRs;
     }).withOption('sClass', ''));
     vm.dtColumns.push(DTColumnBuilder.newColumn('FileName').withTitle($translate("WFAI_LIST_COL_TITLE")).renderWith(function (data, type, full) {

@@ -1996,11 +1996,18 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 }
                 dataservice.getItemActivity(obj, function (rs) {
                     rs = rs.data;
+                    var listGroup=rs.ListGroupData;
                     $scope.modelEditActivity = rs;
                     $rootScope.ActivityCode=$scope.modelEditActivity.ActivityCode;
-                    if ($scope.modelEditActivity.ListGroupData != '' && $scope.modelEditActivity.ListGroupData != null && $scope.modelEditActivity.ListGroupData != undefined)
-                        $scope.modelEditActivity.ListGroupData = $scope.modelEditActivity.ListGroupData.split(',');
+
+                    if (listGroup != '' && listGroup != null && listGroup != undefined)
+                        $scope.modelEditActivity.ListGroupData = listGroup.split(',');
+                    else  $scope.modelEditActivity.ListGroupData=[];
+
                     $rootScope.ActivityName = $scope.modelEditActivity.Title;
+                    
+                    $scope.$apply()
+                    
                     dataservice.getMileStoneAct(para, function (rs) {
                         rs = rs.data;
                         $scope.modelEditActivity.MileStone = rs;
