@@ -952,10 +952,11 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter, myService, $location) {
     
-    // $('.menu-toggle').addClass('hidden');
-    // $(".content-wrapper").removeClass("padding-right-80");
-    // $(".content-wrapper").addClass("padding-right-90");
-    // $("#breadcrumb").appendTo("#breadcrumb-container");
+    $(".content-wrapper").removeClass("padding-right-80");
+    $(".content-wrapper").addClass("padding-right-90");
+    $("#breadcrumb").appendTo("#breadcrumb-container");
+    $('.main-menu').removeClass('hidden');
+    
     var itemmmm;
     var canvas2;
     var dataweb = "";
@@ -2663,7 +2664,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             data: function (d) {
                 d.FromDate = $scope.modelSearch.FromDate;
                 d.ToDate = $scope.modelSearch.ToDate;
-                d.Workflow = $scope.modelSearch.Workflow;
+                d.Workflow = 'PARTY_ADMISSION_PROFILE'
                 d.Status = $scope.modelSearch.Status;
                 d.WfInstName = $scope.modelSearch.WfInstName;
                 d.WfGroup = $scope.modelSearch.WfGroup;
