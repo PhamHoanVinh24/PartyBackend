@@ -996,7 +996,33 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
-
+        if($scope.infUser.LastName == ""||$scope.infUser.LastName == null||$scope.infUser.LastName == undefined){
+            App.toastrError("Không được để trường Họ và tên trống")
+        }else if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
+            App.toastrError("Không được để trường Ngày sinh trống")
+        }else if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
+            App.toastrError("Không được để trường Họ và tên khai sinh trống")
+        }else if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
+            App.toastrError("Không được để trường Giới tính trống")
+        }else if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
+            App.toastrError("Không được để trường Dân tộc trống")
+        }else if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
+            App.toastrError("Không được để trường Tôn giáo trống")
+        }else if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
+            App.toastrError("Không được để trường Địa chỉ thường trú trống")
+        }else if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
+            App.toastrError("Không được để trường Nơi sinh trống")
+        }else if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
+            App.toastrError("Không được để trường Công việc hiện tại trống")
+        }else if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
+            App.toastrError("Không được để trường Quê quán trống")
+        }else if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
+            App.toastrError("Không được để trường Địa chỉ tạm trú trống")
+        }else if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
+            App.toastrError("Không được để trường Giáo dục phổ thông trống")
+        }else if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
+            App.toastrError("Không được để trường Số điện thoại trống")
+        }else{
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
         if ($scope.UserName != null && $scope.UserName != undefined) {
             $scope.model = {}
@@ -1055,7 +1081,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             }
             
         }
-        
+    }
         
     }
     $scope.addToPersonalHistory = function () {
