@@ -956,7 +956,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $(".content-wrapper").addClass("padding-right-90");
     $("#breadcrumb").appendTo("#breadcrumb-container");
     $('.main-menu').removeClass('hidden');
-    
+
     var itemmmm;
     var canvas2;
     var dataweb = "";
