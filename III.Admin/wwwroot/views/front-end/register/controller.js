@@ -72,7 +72,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             msg.Error=true;
             $scope.UserNameError=true;
             Title+=`<p style="font-size:13px;">Tên đăng nhập không được để trống</p></br>`
-        }if(model.GivenName==''||model.GivenName==undefined||model.GivenName==null){
+        }if(model.UserName.length < 4 ||model.UserName.length > 30 ){
+            msg.Error=true;
+            $scope.PasswordError=true;  
+            Title+=`<p style="font-size:13px;">Tài khoản phải có từ 4 đến 30 ký tự</p></br>`
+
+        }
+        if(model.GivenName==''||model.GivenName==undefined||model.GivenName==null){
             msg.Error=true;
             $scope.GivenNameError=true;
             Title+=`<p style="font-size:13px;">Tên người dùng không được để trống</p></br>`
@@ -87,7 +93,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.PasswordError=true;  
             Title+=`<p style="font-size:13px;">Mật khẩu không được để trống</p></br>`
 
-        }if(model.ConfrimPassword!=model.Password){            
+        }if(model.Password.length < 8){
+            msg.Error=true;
+            $scope.PasswordError=true;  
+            Title+=`<p style="font-size:13px;">Mật khẩu có ít nhất 8 ký tự</p></br>`
+
+        }
+        if(model.ConfrimPassword!=model.Password){            
             msg.Error=true;
             $scope.ConfrimPasswordError=true;
             
