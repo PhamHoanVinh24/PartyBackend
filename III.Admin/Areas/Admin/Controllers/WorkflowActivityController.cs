@@ -7005,7 +7005,7 @@ namespace III.Admin.Controllers
                             table.ResetCells(1, 2); // Tạo một hàng và hai ô cho bảng
 
                             // Thêm hình ảnh chữ ký vào ô đầu tiên
-                            IWParagraph cell1Paragraph = table.Rows[0].Cells[0].AddParagraph();
+                            IWParagraph cell1Paragraph = table.Rows[0].Cells[0].Paragraphs[0];
 
                             cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
 
@@ -7018,23 +7018,15 @@ namespace III.Admin.Controllers
                     }
                     else
                     {
-                        var tables = document.LastSection.Tables;
+                        WTable table = section.Tables[section.Tables.Count-1] as WTable;
+                        
+                        bool foundEmptyCell = table[0, 1].Paragraphs.Count > 1;
 
-                        IWTable lastTable = null;
-
-                        // Kiểm tra nếu có ít nhất một bảng trong tài liệu
-                        if (tables.Count > 0)
+                        if (foundEmptyCell)
                         {
-                            // Lấy bảng cuối cùng trong danh sách bảng
-                            lastTable = tables[tables.Count - 1];
-                        }
-                        bool foundEmptyCell = false;
-
-                        if (lastTable[0, 1].Paragraphs.Count > 0)
-                        {
-                            IWTable table = section.AddTable();
+                            IWTable table2 = section.AddTable();
                             //Specifies the total number of rows & columns
-                            table.ResetCells(1, 2);
+                            table2.ResetCells(1, 2);
                             using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
                             {
                                 // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
@@ -7043,7 +7035,7 @@ namespace III.Admin.Controllers
 
                                 byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
 
-                                IWParagraph cell1Paragraph = table[0, 0].AddParagraph();
+                                IWParagraph cell1Paragraph = table2[0, 0].Paragraphs[0];
 
                                 cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
 
@@ -7065,7 +7057,7 @@ namespace III.Admin.Controllers
                                 byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
 
                                 // Thêm hình ảnh chữ ký vào ô đầu tiên
-                                IWParagraph cell1Paragraph = lastTable[0, 1].AddParagraph();
+                                IWParagraph cell1Paragraph = table[0, 1].Paragraphs[0];
                                 // Thêm hình ảnh chữ ký vào ô đầu tiên
 
                                 cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
