@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Spreadsheet;
 using ESEIM.Models;
 using ESEIM.Utils;
 using FTU.Utils.HelperNet;
@@ -24,6 +25,7 @@ using Newtonsoft.Json.Linq;
 using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransformations;
 using SmartBreadcrumbs.Attributes;
 using Syncfusion.DocIO.DLS;
+using Syncfusion.Presentation;
 using ActGrid = ESEIM.Utils.ActGrid;
 
 namespace III.Admin.Controllers
@@ -6631,6 +6633,8 @@ namespace III.Admin.Controllers
                 PDFController.pathFileFTP = string.Empty;
 
                 var aseanDoc = new AseanDocument();
+                bool listSig = IsSign(obj.FileCode, obj.ActInstCode);
+
                 var edms = (from a in _context.EDMSRepoCatFiles.Where(x => x.FileCode.Equals(obj.FileCode))
                             join b in _context.EDMSRepositorys on a.ReposCode equals b.ReposCode into b2
                             from b in b2.DefaultIfEmpty()
@@ -6682,7 +6686,7 @@ namespace III.Admin.Controllers
                     {
                         if (obj.IsSign)
                         {
-                            var jMess = GenerateSign(obj.Url);
+                            var jMess = GenerateSign(obj.Url, listSig);
                             if (jMess.Error)
                             {
                                 msg.Error = true;
@@ -6703,7 +6707,7 @@ namespace III.Admin.Controllers
 
                                 var version = fileVersions.Count > 0 ? fileVersions.Max(x => x.Version + 1) : 1;
 
-                                var fVersion = new FileVersion
+                                var fVersion = new ESEIM.Models.FileVersion
                                 {
                                     Version = version,
                                     CreatedBy = ESEIM.AppContext.UserName,
@@ -6824,7 +6828,7 @@ namespace III.Admin.Controllers
                                 if (obj.IsSign)
                                 {
                                     var filePath = string.Empty;
-                                    var jMess = GenerateSign(pathConvert);
+                                    var jMess = GenerateSign(pathConvert, listSig);
                                     if (jMess.Error)
                                     {
                                         msg.Error = true;
@@ -6844,7 +6848,7 @@ namespace III.Admin.Controllers
 
                                         var version = fileVersions.Count > 0 ? fileVersions.Max(x => x.Version + 1) : 1;
 
-                                        var fVersion = new FileVersion
+                                        var fVersion = new ESEIM.Models.FileVersion
                                         {
                                             Version = version,
                                             CreatedBy = ESEIM.AppContext.UserName,
@@ -6857,27 +6861,7 @@ namespace III.Admin.Controllers
                                         _context.FileVersions.Add(fVersion);
                                     }
 
-                                    var fileInst = _context.ActivityInstFiles.FirstOrDefault(x => !x.IsDeleted && x.ActivityInstCode == obj.ActInstCode && x.FileID == obj.FileCode);
-                                    if (fileInst != null)
-                                    {
-                                        var lstJsonSign = new List<JsonSignature>();
-                                        if (!string.IsNullOrEmpty(fileInst.SignatureJson))
-                                        {
-                                            lstJsonSign = JsonConvert.DeserializeObject<List<JsonSignature>>(fileInst.SignatureJson);
-                                        }
-                                        var jsonSign = new JsonSignature
-                                        {
-                                            Signer = ESEIM.AppContext.UserName,
-                                            SignTime = DateTime.Now
-                                        };
-                                        lstJsonSign.Add(jsonSign);
-
-                                        fileInst.SignatureJson = JsonConvert.SerializeObject(lstJsonSign);
-                                        fileInst.FilePath = filePath;
-                                        fileInst.IsSign = true;
-                                        fileInst.LstUserSign += string.Join(",", ESEIM.AppContext.UserId);
-                                        _context.ActivityInstFiles.Update(fileInst);
-                                    }
+                                    
                                     _context.SaveChanges();
 
                                     aseanDoc.ObjType = EnumHelper<PublishEnum>.GetDisplayValue(PublishEnum.FileVersionActInst);
@@ -6981,7 +6965,7 @@ namespace III.Admin.Controllers
         }
 
         [NonAction]
-        public JMessage GenerateSign(string path)
+        public JMessage GenerateSign(string path,bool isSign = false)
         {
             var msg = new JMessage { Title = _sharedResources["COM_MSG_SUCCES_SAVE"], Error = false };
 
@@ -7003,43 +6987,109 @@ namespace III.Admin.Controllers
                 WordDocument document = new WordDocument(fileStream, Syncfusion.DocIO.FormatType.Docx);
                 if (!string.IsNullOrEmpty(userSignImage))
                 {
+                    var textQrCode = string.Concat(user.GivenName, " đã ký ", DateTime.Now.ToString("HH:mm dd/MM/yyyy"));
                     //Add Bookmark  
                     IWSection section = document.Sections[0];
-                    //section.Paragraphs[section.Paragraphs.Count-1].AppendBookmarkStart("signature");
-
-                    ////Creates the bookmark navigator instance to access the bookmark
-                    //BookmarksNavigator bookmarkNavigator = new BookmarksNavigator(document);
-                    ////Moves the virtual cursor to the location before the end of the bookmark "signature"
-                    //bookmarkNavigator.MoveToBookmark("signature");
-                    //WPicture picture = bookmarkNavigator.InsertParagraphItem(ParagraphItemType.Picture) as WPicture;
-                    //picture.LoadImage(signBytes);
-
-                    //Adds a new section into the Word Document
-                    using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
+                    if (!isSign)
                     {
-                        // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
-                        byte[] signBytes = new byte[stream.Length];
-                        stream.Read(signBytes, 0, (int)stream.Length);
+                        using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
+                        {
+                            // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
+                            byte[] signBytes = new byte[stream.Length];
+                            stream.Read(signBytes, 0, (int)stream.Length);
 
+                            byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
 
-                        byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
-                        section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
-                        section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(resizedSignature);
+                            // Tạo một bảng trong lần ký đầu tiên
+                            IWTable table = section.AddTable();
+                            table.ResetCells(1, 2); // Tạo một hàng và hai ô cho bảng
 
-                        // Sau khi có mảng byte của hình ảnh, bạn có thể sử dụng nó để chèn vào tài liệu Word
-                        // Image resizedSignature = CommonUtil.ResizeImage(signBytes, newWidth, newHeight);
-                        // section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(resizedSignature);
+                            // Thêm hình ảnh chữ ký vào ô đầu tiên
+                            IWParagraph cell1Paragraph = table.Rows[0].Cells[0].AddParagraph();
+
+                            cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
+
+                            cell1Paragraph.AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
+                            cell1Paragraph.AppendText("\n");
+                            cell1Paragraph.AppendText(textQrCode);
+                            // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
+                            cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                        }
+                    }
+                    else
+                    {
+                        var tables = document.LastSection.Tables;
+
+                        IWTable lastTable = null;
+
+                        // Kiểm tra nếu có ít nhất một bảng trong tài liệu
+                        if (tables.Count > 0)
+                        {
+                            // Lấy bảng cuối cùng trong danh sách bảng
+                            lastTable = tables[tables.Count - 1];
+                        }
+                        bool foundEmptyCell = false;
+
+                        if (lastTable[0, 1].Paragraphs.Count > 0)
+                        {
+                            IWTable table = section.AddTable();
+                            //Specifies the total number of rows & columns
+                            table.ResetCells(1, 2);
+                            using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
+                            {
+                                // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
+                                byte[] signBytes = new byte[stream.Length];
+                                stream.Read(signBytes, 0, (int)stream.Length);
+
+                                byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
+
+                                IWParagraph cell1Paragraph = table[0, 0].AddParagraph();
+
+                                cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
+
+                                cell1Paragraph.AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
+                                cell1Paragraph.AppendText("\n");
+                                cell1Paragraph.AppendText(textQrCode);
+                                // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
+                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                            }
+                        }
+                        else
+                        {
+                            using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
+                            {
+                                // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
+                                byte[] signBytes = new byte[stream.Length];
+                                stream.Read(signBytes, 0, (int)stream.Length);
+
+                                byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
+
+                                // Thêm hình ảnh chữ ký vào ô đầu tiên
+                                IWParagraph cell1Paragraph = lastTable[0, 1].AddParagraph();
+                                // Thêm hình ảnh chữ ký vào ô đầu tiên
+
+                                cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
+
+                                cell1Paragraph.AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
+                                cell1Paragraph.AppendText("\n");
+                                cell1Paragraph.AppendText(textQrCode);
+                                // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
+                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                            }
+
+                        }
+                        
                     }
 
-                    IWSection section1 = document.AddSection();
+                    //IWSection section1 = document.AddSection();
 
 
-                    var textQrCode = string.Concat(user.GivenName, " đã ký ", DateTime.Now.ToString("HH:mm dd/MM/yyyy"));
+                    
                     // Mở FileStream
 
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendText(textQrCode);
+                    //section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
+                    //section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
+                    //section.Paragraphs[section.Paragraphs.Count - 1].AppendText(textQrCode);
                     //bookmarkNavigator.InsertText(string.Concat(User.Identity.Name, "_", DateTime.Now.ToString("ddMMyyyy_HH:mm")));
                     #region Saving document
                     MemoryStream memoryStream = new MemoryStream();
@@ -7311,6 +7361,21 @@ namespace III.Admin.Controllers
             return Json(msg);
         }
 
+        [NonAction]
+        public bool IsSign(string fileCode, string actInst)
+        {
+            var file = _context.ActivityInstFiles.FirstOrDefault(x => !x.IsDeleted && x.ActivityInstCode == actInst
+                        && x.FileID == fileCode);
+            var lstLogSign = new List<JsonSignature>();
+            if (file != null)
+            {
+                if (file.SignatureJson != null)
+                {
+                    lstLogSign = JsonConvert.DeserializeObject<List<JsonSignature>>(file.SignatureJson);
+                }
+            }
+            return lstLogSign.Count() > 0;
+        }
         [HttpPost]
         public JsonResult GetLogSignFile(string fileCode, string actInst)
         {
