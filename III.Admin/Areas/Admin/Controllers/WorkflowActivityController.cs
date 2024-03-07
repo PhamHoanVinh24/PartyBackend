@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -6997,7 +6998,6 @@ namespace III.Admin.Controllers
                 return msg;
 
             }
-            var signBytes = new FileStream(userSignImage, FileMode.Open);
             try
             {
                 WordDocument document = new WordDocument(fileStream, Syncfusion.DocIO.FormatType.Docx);
@@ -7015,17 +7015,31 @@ namespace III.Admin.Controllers
                     //picture.LoadImage(signBytes);
 
                     //Adds a new section into the Word Document
+                    using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
+                    {
+                        // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
+                        byte[] signBytes = new byte[stream.Length];
+                        stream.Read(signBytes, 0, (int)stream.Length);
+
+
+                        byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
+                        section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
+                        section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(resizedSignature);
+
+                        // Sau khi có mảng byte của hình ảnh, bạn có thể sử dụng nó để chèn vào tài liệu Word
+                        // Image resizedSignature = CommonUtil.ResizeImage(signBytes, newWidth, newHeight);
+                        // section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(resizedSignature);
+                    }
+
                     IWSection section1 = document.AddSection();
 
 
                     var textQrCode = string.Concat(user.GivenName, " đã ký ", DateTime.Now.ToString("HH:mm dd/MM/yyyy"));
+                    // Mở FileStream
 
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(signBytes);
+                    section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
                     section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
                     section.Paragraphs[section.Paragraphs.Count - 1].AppendText(textQrCode);
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendText("\n");
-                    section.Paragraphs[section.Paragraphs.Count - 1].AppendPicture(CommonUtil.ResizeImage(CommonUtil.GeneratorQRCode(textQrCode), 100, 100));
                     //bookmarkNavigator.InsertText(string.Concat(User.Identity.Name, "_", DateTime.Now.ToString("ddMMyyyy_HH:mm")));
                     #region Saving document
                     MemoryStream memoryStream = new MemoryStream();
@@ -7033,7 +7047,6 @@ namespace III.Admin.Controllers
                     document.Save(memoryStream, Syncfusion.DocIO.FormatType.Docx);
                     //Closes the Word document instance
                     document.Close();
-                    fileStream.Dispose();
 
                     //Lưu 1 file sinh chữ ký
                     var pathVersion = "/uploads/files/fileVersion/";
@@ -7051,7 +7064,7 @@ namespace III.Admin.Controllers
                     //memoryStream.WriteTo(file);
                     //file.Close();
 
-                    signBytes.Close();
+                    //signBytes.Close();
                     memoryStream.Position = 0;
 
                     msg.Object = string.Concat(pathVersion, fileName);
@@ -7068,10 +7081,10 @@ namespace III.Admin.Controllers
                 msg.Error = true;
                 msg.Title = _stringLocalizer["WFAI_MSG_SIGN_FAILED"];
                 msg.Object = path;
-                signBytes.Close();
-                fileStream.Dispose();
+                //signBytes.Close();
             }
 
+            fileStream.Dispose();
             return msg;
             #endregion
         }

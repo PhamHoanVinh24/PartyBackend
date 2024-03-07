@@ -9847,7 +9847,7 @@ app.controller('fileActivity', function ($scope, $rootScope, $compile, $uibModal
             url: "/Admin/WorkflowActivity/JTableFile",
             beforeSend: function (jqXHR, settings) {
                 App.blockUI({
-                    target: "#contentMain",
+                    target: "#tblDataWorkflowFile",
                     boxed: true,
                     message: 'loading...'
                 });
@@ -9859,7 +9859,7 @@ app.controller('fileActivity', function ($scope, $rootScope, $compile, $uibModal
                 d.ToDate = $scope.model.ToDate;
             },
             complete: function () {
-                App.unblockUI("#contentMain");
+                App.unblockUI("#tblDataWorkflowFile");
                 heightTableManual(250, "#tblDataWorkflowFile");
                 $scope.selectAll = false;
             }
