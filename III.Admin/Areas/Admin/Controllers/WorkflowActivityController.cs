@@ -3166,13 +3166,14 @@ namespace III.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetFileWfInst(string wfInstCode)
+        public JsonResult GetFileWfInst(string wfInstCode,string ActInsCode)
         {
             var listFile = (from act in _context.ActivityInstances.Where(x => !x.IsDeleted && x.WorkflowCode.Equals(wfInstCode))
                             join repoCat in _context.EDMSRepoCatFiles.Where(x => x.ObjectType == EnumHelper<ActivityInst>.GetDisplayValue(ActivityInst.ActivityInst)) on act.ActivityInstCode equals repoCat.ObjectCode
                             join file in _context.EDMSFiles.Where(x => !x.IsDeleted && (x.IsFileMaster == true || x.IsFileMaster == null)) on repoCat.FileCode equals file.FileCode
                             join repo in _context.EDMSRepositorys on repoCat.ReposCode equals repo.ReposCode into repo1
                             from repo in repo1.DefaultIfEmpty()
+                            where (string.IsNullOrEmpty(ActInsCode)||act.ActivityInstCode==ActInsCode)
                             select new
                             {
                                 FileCode = file.FileCode,
@@ -3190,7 +3191,8 @@ namespace III.Admin.Controllers
                                         from f in f1.DefaultIfEmpty()
                                         let rela = JsonConvert.DeserializeObject<ObjRelative>(fileShare.ObjectRelative)
                                         join act in _context.ActivityInstances.Where(x => !x.IsDeleted && x.WorkflowCode.Equals(wfInstCode)) on rela.ObjectInstance equals act.ActivityInstCode
-                                        where rela.ObjectType.Equals("ACT_INST") && act.ActivityInstCode.Equals(rela.ObjectInstance)
+                                        where rela.ObjectType.Equals("ACT_INST") && act.ActivityInstCode.Equals(rela.ObjectInstance) &&
+                                            (string.IsNullOrEmpty(ActInsCode) || act.ActivityInstCode == ActInsCode)
                                         select new
                                         {
                                             FileCode = file.FileCode,

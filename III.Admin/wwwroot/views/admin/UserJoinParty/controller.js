@@ -427,6 +427,29 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.listActs=[]
 
+    $scope.moreFile = function (wfCode,ActInsCode) {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: ctxfolder + "/more-file.html",
+            controller: 'more-file',
+            size: '40',
+            windowClass: "message-center",
+            backdrop: 'static',
+            resolve: {
+                para: function () {
+                    return {
+                        wfInstCode: wfCode,
+                        ActInsCode: ActInsCode
+                    };
+                }
+            }
+        });
+        modalInstance.result.then(function (d) {
+
+        }, function () { });
+    }
+
 
     $scope.CloseAll=function(act1){
         if(!act1.IsApprovable){
