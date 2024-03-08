@@ -499,7 +499,7 @@ namespace III.Admin.Controllers
                 if(file!=null)
                 {
                     file.FileSize = fileUpload.Length;
-                    file.FileName = Path.GetExtension(fileUpload.FileName);
+                    file.FileName = fileUpload.FileName;
                     file.Url = urlFile;
                     file.MimeType = mimeType;
                     file.CloudFileId = fileId;
@@ -521,7 +521,8 @@ namespace III.Admin.Controllers
                     var jsonSign = new JsonSignature
                     {
                         Signer = ESEIM.AppContext.UserName,
-                        SignTime = DateTime.Now
+                        SignTime = DateTime.Now,
+                        Actins = edmsReposCatFile.ObjectCode
                     };
                     lstJsonSign.Add(jsonSign);
 

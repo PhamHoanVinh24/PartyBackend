@@ -26,6 +26,7 @@ using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransfor
 using SmartBreadcrumbs.Attributes;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.Presentation;
+using static III.Admin.Controllers.RMCommandOrderTruckController;
 using ActGrid = ESEIM.Utils.ActGrid;
 
 namespace III.Admin.Controllers
@@ -6623,6 +6624,16 @@ namespace III.Admin.Controllers
             var msg = new JMessage { Error = false, Title = "" };
             try
             {
+                IsSigne IsSigned = IsSign(obj.FileCode, obj.ActInstCode);
+
+                var listSig = IsSigned.IsNotFrist;
+                if (IsSigned.IsSigned)
+                {
+                    msg.Error = true;
+                    msg.Title = "Bạn đã ký tài liệu này rồi";
+                    return Json(msg);
+                }
+
                 DocmanController.pathFile = string.Empty;
                 DocmanController.pathFileFTP = string.Empty;
 
@@ -6633,7 +6644,7 @@ namespace III.Admin.Controllers
                 PDFController.pathFileFTP = string.Empty;
 
                 var aseanDoc = new AseanDocument();
-                bool listSig = IsSign(obj.FileCode, obj.ActInstCode);
+                
 
                 var edms = (from a in _context.EDMSRepoCatFiles.Where(x => x.FileCode.Equals(obj.FileCode))
                             join b in _context.EDMSRepositorys on a.ReposCode equals b.ReposCode into b2
@@ -6686,7 +6697,7 @@ namespace III.Admin.Controllers
                     {
                         if (obj.IsSign)
                         {
-                            var jMess = GenerateSign(obj.Url, listSig);
+                            var jMess = GenerateSign(obj.Url, listSig, actInst.Title);
                             if (jMess.Error)
                             {
                                 msg.Error = true;
@@ -6828,7 +6839,7 @@ namespace III.Admin.Controllers
                                 if (obj.IsSign)
                                 {
                                     var filePath = string.Empty;
-                                    var jMess = GenerateSign(pathConvert, listSig);
+                                    var jMess = GenerateSign(pathConvert, listSig, actInst.Title);
                                     if (jMess.Error)
                                     {
                                         msg.Error = true;
@@ -6965,7 +6976,7 @@ namespace III.Admin.Controllers
         }
 
         [NonAction]
-        public JMessage GenerateSign(string path,bool isSign = false)
+        public JMessage GenerateSign(string path,bool isSign,string WhoSign)
         {
             var msg = new JMessage { Title = _sharedResources["COM_MSG_SUCCES_SAVE"], Error = false };
 
@@ -6999,13 +7010,19 @@ namespace III.Admin.Controllers
                             stream.Read(signBytes, 0, (int)stream.Length);
 
                             byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
+                            IWParagraph paragraph = section.AddParagraph();
+                            //Adds new text to the paragraph
+                            paragraph.AppendText(WhoSign);
+                            paragraph.ApplyStyle(BuiltinStyle.Heading5);
 
                             // Tạo một bảng trong lần ký đầu tiên
                             IWTable table = section.AddTable();
+                            table.TableFormat.Borders.BorderType = BorderStyle.None;
+
                             table.ResetCells(1, 2); // Tạo một hàng và hai ô cho bảng
 
                             // Thêm hình ảnh chữ ký vào ô đầu tiên
-                            IWParagraph cell1Paragraph = table.Rows[0].Cells[0].Paragraphs[0];
+                            IWParagraph cell1Paragraph = table[0,0].AddParagraph();
 
                             cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
 
@@ -7019,14 +7036,13 @@ namespace III.Admin.Controllers
                     else
                     {
                         WTable table = section.Tables[section.Tables.Count-1] as WTable;
-                        
-                        bool foundEmptyCell = table[0, 1].Paragraphs.Count > 1;
+                        WTableRow LastRow = table.LastRow as WTableRow;
+                        WTableCell LastCell = LastRow.Cells[LastRow.Cells.Count - 1] as WTableCell;
+                        bool foundEmptyCell = LastCell.Paragraphs.Count > 1;
 
                         if (foundEmptyCell)
                         {
-                            IWTable table2 = section.AddTable();
-                            //Specifies the total number of rows & columns
-                            table2.ResetCells(1, 2);
+                            WTableRow row = table.AddRow();
                             using (FileStream stream = new FileStream(userSignImage, FileMode.Open))
                             {
                                 // Đọc dữ liệu từ FileStream và chuyển đổi thành mảng byte
@@ -7035,7 +7051,11 @@ namespace III.Admin.Controllers
 
                                 byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
 
-                                IWParagraph cell1Paragraph = table2[0, 0].Paragraphs[0];
+                                LastRow = table.LastRow as WTableRow;
+
+                                WTableCell FristCell = LastRow.Cells[0] as WTableCell;
+
+                                IWParagraph cell1Paragraph = FristCell.AddParagraph();
 
                                 cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
 
@@ -7057,7 +7077,7 @@ namespace III.Admin.Controllers
                                 byte[] resizedSignature = CommonUtil.ResizeImage(signBytes, 100, 100);
 
                                 // Thêm hình ảnh chữ ký vào ô đầu tiên
-                                IWParagraph cell1Paragraph = table[0, 1].Paragraphs[0];
+                                IWParagraph cell1Paragraph = LastCell.Paragraphs[0];
                                 // Thêm hình ảnh chữ ký vào ô đầu tiên
 
                                 cell1Paragraph.AppendPicture(resizedSignature); // Chèn hình ảnh chữ ký
@@ -7293,8 +7313,9 @@ namespace III.Admin.Controllers
                                             CreatedBy = ESEIM.AppContext.UserName,
                                             CreatedTime = DateTime.Now,
                                             IsSign = false,
-                                            SignatureRequire = file.SignatureRequire,
+                                            SignatureRequire = file.SignatureRequire
                                         };
+                                        
                                         _context.ActivityInstFiles.Add(actInstFile);
                                     }
                                 }
@@ -7354,19 +7375,37 @@ namespace III.Admin.Controllers
         }
 
         [NonAction]
-        public bool IsSign(string fileCode, string actInst)
+        public IsSigne IsSign(string fileCode, string actInst)
         {
             var file = _context.ActivityInstFiles.FirstOrDefault(x => !x.IsDeleted && x.ActivityInstCode == actInst
                         && x.FileID == fileCode);
             var lstLogSign = new List<JsonSignature>();
+            bool IsSigned = false;
             if (file != null)
             {
+                var session = HttpContext.GetSessionUser();
                 if (file.SignatureJson != null)
                 {
                     lstLogSign = JsonConvert.DeserializeObject<List<JsonSignature>>(file.SignatureJson);
+                    foreach(JsonSignature sign in lstLogSign)
+                    {
+                        if (sign.Signer == session.UserName && sign.Actins== actInst)
+                        {
+                            IsSigned = true;
+                            break;
+                        }
+                    }
                 }
             }
-            return lstLogSign.Count() > 0;
+            return new IsSigne {
+                IsNotFrist = lstLogSign.Count() > 0
+                , IsSigned = IsSigned
+            };
+        }
+        public class IsSigne
+        {
+            public bool IsSigned { get; set; }
+            public bool IsNotFrist { get; set; }
         }
         [HttpPost]
         public JsonResult GetLogSignFile(string fileCode, string actInst)
@@ -7428,6 +7467,8 @@ namespace III.Admin.Controllers
         {
             public string Signer { get; set; }
             public DateTime SignTime { get; set; }
+            public string Actins { get; set; }
+
         }
         public class ModelAddActShare
         {
