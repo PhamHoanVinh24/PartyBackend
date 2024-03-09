@@ -2717,7 +2717,6 @@ app.controller('index', function ($scope ,$timeout, $rootScope, $compile, $uibMo
         $scope.full=full;
         $timeout(function() {
             $scope.$apply();
-            console.log($scope.model.checkHiddenFileWfActivity);
         });
     }
 
@@ -11751,25 +11750,31 @@ app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservi
             rs = rs.data;
             $scope.lstFile = rs;
             $scope.lstFile.forEach(element => {
-                var icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fas fa-align-justify pr5" aria-hidden="true"></i>';
-
+                element.iconClass = 'fas fa-align-justify pr5'; // Default icon class
+                element.iconColor = 'rgb(42,42,42)'; // Default icon color
+            
                 if (excel.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(106,170,89);font-size: 15px;" class="fa fa-file-excel-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-file-excel-o pr5';
+                    element.iconColor = 'rgb(106,170,89)';
                 } else if (word.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(13,118,206);font-size: 15px;" class="fa fa-file-word-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-file-word-o pr5';
+                    element.iconColor = 'rgb(13,118,206)';
                 } else if (document.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(0,0,0);font-size: 15px;" class="fa fa-file-text-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-file-text-o pr5';
+                    element.iconColor = 'rgb(0,0,0)';
                 } else if (pdf.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-pdf-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-file-pdf-o pr5';
+                    element.iconColor = 'rgb(226,165,139)';
                 } else if (powerPoint.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-powerpoint-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-file-powerpoint-o pr5';
+                    element.iconColor = 'rgb(226,165,139)';
                 } else if (image.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
-                    icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fa fa-picture-o pr5" aria-hidden="true"></i>';
+                    element.iconClass = 'fa fa-picture-o pr5';
+                    element.iconColor = 'rgb(42,42,42)';
                 }
-
-                element.icon=icon;
-                })
-            })
+            });
+            
+        })
     }
 
     $scope.viewFile = function (id, fileType, cloudId) {

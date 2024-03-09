@@ -484,7 +484,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 }
                 else {
                     App.toastrSuccess(rs.Title);
-                    var WfInstCode = rs.Code;
+                    $scope.WfCode=rs.Code;
                     reloadData()
                     $scope.editWorkflow(ResumeNumber)
                 }
@@ -667,13 +667,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
             $(row).find('td:not(.listaction)').on('click', function (evt) {
-                if(data.resumeNumber!=''&&data.resumeNumber!=null&&data.resumeNumber!=undefined){
+                if(data.WfInstCode!=''&&data.WfInstCode!=null&&data.WfInstCode!=undefined){
                     // Xóa lớp active khỏi tất cả các hàng
                     $(this).closest('table').find('tr').removeClass('active');
                             
                     // Thêm lớp active vào hàng đã được click
                     $(this).closest('tr').addClass('active');
                     $scope.editWorkflow(data.resumeNumber)
+                    $scope.WfCode=data.WfInstCode;
+                    $scope.model.checkHiddenFileWfActivity=false;
                 }
 
             });

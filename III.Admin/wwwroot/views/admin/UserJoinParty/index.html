@@ -48,39 +48,51 @@
     display: flex;
     background-color: #fff;
     box-shadow: -2px -2px 2px 0px rgb(0 0 0 / 30%);
-    overflow-y: auto;overflow-x: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .main-right-editWorkflow {
     position: absolute;
     right: -10px;
     display: flex;
-    top:68px;
-    width:35px;
-    height:40px; 
-    display:flex; 
+    top: 68px;
+    width: 35px;
+    height: 40px;
+    display: flex;
     background-color: #cccccc;
   }
+
   .toggle-header {
     cursor: pointer;
     background-color: #EEEEEE;
     padding-left: 10px;
   }
-  #tblData_wrapper{
+
+  #tblData_wrapper {
     box-shadow: 2px -2px 2px 0px rgb(0 0 0 / 30%);
     min-height: 80vh;
   }
+
   .actName {
     font-weight: bold;
     color: black;
   }
-  .listaction a{
+
+  .listaction a {
     margin-right: 10px;
   }
-    tr.active {
-        background-color: #44d9ec; /* Màu nền khi hàng được chọn */
-        font-weight: bold;
-    }
+
+  tr.active {
+    background-color: #44d9ec;
+    /* Màu nền khi hàng được chọn */
+    font-weight: bold;
+  }
+  .table-scrollable {
+    max-height: 80vh; /* Chiều cao tối đa của phần tử chứa bảng */
+    max-width: 100%; /* Chiều rộng tối đa của phần tử chứa bảng */
+    overflow: auto; 
+  }
 </style>
 <link href="../../../css/admin/site/search-control.css" rel="stylesheet" />
 <div class="col">
@@ -272,7 +284,8 @@
                 <label class="fw600 text-underline">{{'Giáo dục phổ thông' | translate}}</label>
                 <div class="input-group br24">
                   <input ng-model="searchModel.GeneralEducation" class="form-control" type="text"
-                    placeholder="{{'Giáo dục phổ thông' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    placeholder="{{'Giáo dục phổ thông' | translate}}..."
+                    ng-keydown="($event.keyCode == 13) && reload()" />
                   <span class="input-group-btn">
                     <button type="button" ng-click="searchModel.GeneralEducation=''" class="btn btn-default no-shadow">
                       <span class="glyphicon glyphicon-remove"></span>
@@ -298,7 +311,8 @@
                 <label class="fw600 text-underline">{{'Giáo dục nghề nghiệp' | translate}}</label>
                 <div class="input-group br24">
                   <input ng-model="searchModel.JobEducation" class="form-control" type="text"
-                    placeholder="{{'Giáo dục nghề nghiệp' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    placeholder="{{'Giáo dục nghề nghiệp' | translate}}..."
+                    ng-keydown="($event.keyCode == 13) && reload()" />
                   <span class="input-group-btn">
                     <button type="button" ng-click="searchModel.JobEducation=''" class="btn btn-default no-shadow">
                       <span class="glyphicon glyphicon-remove"></span>
@@ -310,7 +324,8 @@
                 <label class="fw600 text-underline">{{'Lý luận chính trị' | translate}}</label>
                 <div class="input-group br24">
                   <input ng-model="searchModel.PoliticalTheory" class="form-control" type="text"
-                    placeholder="{{'Lý luận chính trị' | translate}}..." ng-keydown="($event.keyCode == 13) && reload()" />
+                    placeholder="{{'Lý luận chính trị' | translate}}..."
+                    ng-keydown="($event.keyCode == 13) && reload()" />
                   <span class="input-group-btn">
                     <button type="button" ng-click="searchModel.PoliticalTheory=''" class="btn btn-default no-shadow">
                       <span class="glyphicon glyphicon-remove"></span>
@@ -354,10 +369,10 @@
                     </ui-select-choices>
                   </ui-select>
                   <span class="input-group-btn">
-                      <button type="button" ng-click="searchModel.Gender=null;"
-                          class="btn btn-default no-shadow start-date">
-                          <span class="glyphicon glyphicon-remove"></span>
-                      </button>
+                    <button type="button" ng-click="searchModel.Gender=null;"
+                      class="btn btn-default no-shadow start-date">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
                   </span>
                 </div>
               </div>
@@ -385,7 +400,7 @@
                   </span>
                 </div>
               </div>
-              
+
               <div class="col-md-2">
                 <div class="btn-group pt20 actions d-flex">
                   <div class="text-center">
@@ -416,8 +431,7 @@
     </div>
 
 
-    <div class="main-menu-editWorkflow"
-      ng-show="isEditWorkflow">
+    <div class="main-menu-editWorkflow" ng-show="isEditWorkflow">
       <div class="portlet-body form baolo" style="width:100%; position:absolute; background:#fff;">
         <div class="modal-header" style="background-color: #ffffff; padding: 5px;">
           <div class="col-md-10 pl-0">
@@ -432,16 +446,18 @@
         <div class="modal-body" style="padding-bottom: 0px;">
           <div class="row" ng-repeat="act in listActs">
             <div class="col-md-12 pl-0 pr-0" style="margin: 1px;">
-              <div class="toggle-header"  style="display: flex;  min-height: 40px;">
+              <div class="toggle-header" style="display: flex;  min-height: 40px;">
                 <i ng-show="act[0].checkHiddenActWf" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
                 <i ng-show="!act[0].checkHiddenActWf" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
-                <label ng-click="CloseAll(act[0]);" class="label-lg" style="vertical-align: 7px;display: flex; align-items: center;">
+                <label ng-click="CloseAll(act[0]);" class="label-lg"
+                  style="vertical-align: 7px;display: flex; align-items: center;">
                   <div>
                     <div class="d-flex">
 
                       <div style="display: inline-block; margin-left: 5px; font-weight: 500">
                         <div ng-if="act[0].ActStatus == 'Đã xử lý'">
-                          <a class="actName" title="{{ act[0].ActName }}" ng-click="editInstAct(act[0].Id, full.ObjectCode)">
+                          <a class="actName" title="{{ act[0].ActName }}"
+                            ng-click="editInstAct(act[0].Id, full.ObjectCode)">
                             <div class="numberStep1" style="display: inline"><span>{{ act[0].ActName }}</span></div>
                           </a>
 
@@ -474,7 +490,8 @@
                         </div>
 
                         <div ng-if="act[0].ActStatus == 'Hủy'">
-                          <a class="actName" title="{{ act[0].ActName }}" ng-click="editInstAct(act[0].Id, full.ObjectCode)">
+                          <a class="actName" title="{{ act[0].ActName }}"
+                            ng-click="editInstAct(act[0].Id, full.ObjectCode)">
                             <div class="numberStep1" style="display: inline"><span>{{ act[0].ActName }}</span></div>
                           </a>
 
@@ -483,7 +500,8 @@
                             style="width: 17px;height: 17px;margin-top: -5px;" />
                         </div>
                         <div ng-if="act[0].ActStatus == 'Dừng lại'">
-                          <a class="actName" title="{{ act[0].ActName }}" ng-click="editInstAct(act[0].Id, full.ObjectCode)">
+                          <a class="actName" title="{{ act[0].ActName }}"
+                            ng-click="editInstAct(act[0].Id, full.ObjectCode)">
                             <div class="numberStep1" style="display: inline"><span>{{ act[0].ActName }}</span></div>
                           </a>
 
@@ -493,7 +511,8 @@
                         </div>
                         <div
                           ng-if="act[0].ActStatus != 'Hủy' && act[0].ActStatus != 'Dừng lại' && act[0].ActStatus != 'Đã xử lý' && act[0].ActStatus != 'Đang xử lý' && act[0].ActStatus != 'Chưa xử lý' && act[0].ActStatus != 'Kích hoạt'">
-                          <a class="actName" title="{{ act[0].ActName }}" ng-click="editInstAct(act[0].Id, full.ObjectCode)">
+                          <a class="actName" title="{{ act[0].ActName }}"
+                            ng-click="editInstAct(act[0].Id, full.ObjectCode)">
                             <div class="numberStep1" style="display: inline"><span>{{ act[0].ActName }}</span></div>
                           </a>
                           <img ng-if="act[0].IsApprovable" class="blink-act" src="/images/default/green-blink.png"
@@ -510,18 +529,45 @@
                   </div>
                 </label>
                 <div style="display: flex;align-items: center;margin-left: auto;margin-right: 20px;">
-                  <a title="Xem danh sách file" type="button"
-                      ng-click="moreFile(full.WfCode, act[0].ActivityInstCode)"
-                      style="width: 28px; height: 28px">
-                      <i class="fa-solid fa-file" style="--fa-secondary-color:blue; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-top: 5px;"></i>
+                  <a title="Xem danh sách file" type="button" ng-click="moreFile(WfCode, act[0].ActivityInstCode)"
+                    style="width: 28px; height: 28px">
+                    <i class="fa-solid fa-file"
+                      style="--fa-secondary-color:blue; --fa-secondary-opacity: 1; --fa-primary-color: white; font-size: 25px;margin-top: 5px;"></i>
                   </a>
-              </div>
+                </div>
               </div>
             </div>
             <div class="col-md-12" style="padding: 0px;" ng-if="act[0].checkHiddenActWf">
               <div ng-include="'../views/admin/workflowActivity/edit-activity-instance.html'"
                 ng-controller="edit-activity-instance" ng-init="initEdit(act[0].Id, full.ObjectCode)"></div>
             </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 pl-0 pr-0" style="margin: 1px;">
+              <div class="toggle-header" style="display: flex;  min-height: 40px;">
+                <i ng-show="model.checkHiddenFileWfActivity" class="fa-solid fa-caret-down icon-scalet fs30 mt10"></i>
+                <i ng-show="!model.checkHiddenFileWfActivity" class="fa-solid fa-caret-right icon-scalet fs30 mt10"></i>
+                <label ng-click="model.checkHiddenFileWfActivity=!model.checkHiddenFileWfActivity" class="label-lg"
+                  style="vertical-align: 7px;display: flex; align-items: center;">
+                  <div>
+                    <div class="d-flex">
+                      <div style="display: inline-block; margin-left: 5px; font-weight: 500">
+                        <a class="actName" title="Danh sách tệp đính kèm">
+                          <div class="numberStep1" style="display: inline">
+                            <span>{{"Danh sách tệp đính kèm" }}</span>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" style="padding: 0px;" ng-if="model.checkHiddenFileWfActivity">
+            <div ng-include="'../views/admin/workflowActivity/more-file.html'" ng-controller="more-file-wf"
+              ng-init="InitNotModal(WfCode)"></div>
           </div>
         </div>
       </div>
