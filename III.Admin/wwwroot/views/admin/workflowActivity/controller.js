@@ -955,7 +955,7 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
     });
 });
 
-app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter, myService, $location) {
+app.controller('index', function ($scope ,$timeout, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataservice, $filter, myService, $location) {
     
     $(".content-wrapper").removeClass("padding-right-80");
     $(".content-wrapper").addClass("padding-right-90");
@@ -976,6 +976,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.isShowDiagram = false;
     $scope.isShowCard = false;
     $scope.isShowListWf = true;
+    $scope.checkHiddenFileWfActivity=false;
 
     $scope.showDiagram = function () {
         $scope.isShowDiagram = true;
@@ -999,7 +1000,8 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.model = {
         WfInst: "",
-        WfCode: ""
+        WfCode: "",
+        checkHiddenFileWfActivity:false
     };
     $scope.modelSearch = {
         WfInst: "",
@@ -2606,6 +2608,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
                 var rowData = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).data(); // Lấy dữ liệu của hàng
                 var childRow = $scope.dt.dtInstanceList.DataTable.row($(this).closest('tr')).child; // Lấy child của hàng
+
                 formatRow(rowData);
                 $scope.editWorkflow();
             });
@@ -2709,10 +2712,13 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         var lstAct = JSON.parse(full.ListAct);
         $scope.listActs = lstAct;
         $scope.isEditWorkflow = true;
+        $scope.model.checkHiddenFileWfActivity=false;
         //console.log($scope.isEditWorkflow,$scope.listActs);
         $scope.full=full;
-        $scope.$apply()
-        console.log(full)
+        $timeout(function() {
+            $scope.$apply();
+            console.log($scope.model.checkHiddenFileWfActivity);
+        });
     }
 
     $scope.search = function () {
@@ -3938,7 +3944,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     }
 
     $scope.checkHiddenInforWf = false;
-    $scope.checkHiddenFileHistory = false;
+    $scope.checkHiddenFileWfActivityHistory = false;
     $scope.checkHiddenCmdTo = false;
     $scope.checkHiddenEmployee = false;
     $scope.checkHiddenObject = false;
@@ -3959,7 +3965,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     // document.getElementById("toggleFileHistory").addEventListener("click", function() {
     //     $scope.$apply(function() {
-    //         $scope.checkHiddenFileHistory = !$scope.checkHiddenFileHistory;
+    //         $scope.checkHiddenFileWfActivityHistory = !$scope.checkHiddenFileWfActivityHistory;
     //         toggleContent("FileHistory");
     //     });
     // });
@@ -5141,6 +5147,7 @@ app.controller('edit-activity-instance', function ($scope, $rootScope, $compile,
 
     $scope.isAll = true;
 
+    
 
     $rootScope.isAccepted = true;
 
@@ -11516,12 +11523,39 @@ app.controller('more-file', function ($scope, $rootScope, $compile, $uibModal, $
         $rootScope.IsOpenModal=false;
         $uibModalInstance.close(true);
     }
+        var excel = ['.XLSM', '.XLSX', '.XLS'];
+        var document = ['.TXT'];
+        var word = ['.DOCX', '.DOC'];
+        var pdf = ['.PDF'];
+        var powerPoint = ['.PPS', '.PPTX', '.PPT'];
+        var image = ['.JPG', '.PNG', '.TIF', '.TIFF'];
+
     $scope.IsOpenModal=true;
     $scope.initData = function () {
         dataservice.getFileWfInst(para, function (rs) {
                 rs = rs.data;
                 $scope.lstFile = rs;
-        })
+                $scope.lstFile.forEach(element => {
+                    var icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fas fa-align-justify pr5" aria-hidden="true"></i>';
+
+                    if (excel.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(106,170,89);font-size: 15px;" class="fa fa-file-excel-o pr5" aria-hidden="true"></i>';
+                    } else if (word.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(13,118,206);font-size: 15px;" class="fa fa-file-word-o pr5" aria-hidden="true"></i>';
+                    } else if (document.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(0,0,0);font-size: 15px;" class="fa fa-file-text-o pr5" aria-hidden="true"></i>';
+                    } else if (pdf.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-pdf-o pr5" aria-hidden="true"></i>';
+                    } else if (powerPoint.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-powerpoint-o pr5" aria-hidden="true"></i>';
+                    } else if (image.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                        icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fa fa-picture-o pr5" aria-hidden="true"></i>';
+                    }
+
+                    element.icon=icon;
+                });
+                console.log(rs)
+        }) 
     }
 
     $scope.initData();
@@ -11702,6 +11736,13 @@ app.controller('more-file', function ($scope, $rootScope, $compile, $uibModal, $
 });
 app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservice) {
     $scope.IsOpenModal=false;
+    var excel = ['.XLSM', '.XLSX', '.XLS'];
+        var document = ['.TXT'];
+        var word = ['.DOCX', '.DOC'];
+        var pdf = ['.PDF'];
+        var powerPoint = ['.PPS', '.PPTX', '.PPT'];
+        var image = ['.JPG', '.PNG', '.TIF', '.TIFF'];
+        
     $scope.InitNotModal=function(WfCode){
         var model = {
             wfInstCode: WfCode
@@ -11709,7 +11750,26 @@ app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservi
         dataservice.getFileWfInst(model, function (rs) {
             rs = rs.data;
             $scope.lstFile = rs;
-        })
+            $scope.lstFile.forEach(element => {
+                var icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fas fa-align-justify pr5" aria-hidden="true"></i>';
+
+                if (excel.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(106,170,89);font-size: 15px;" class="fa fa-file-excel-o pr5" aria-hidden="true"></i>';
+                } else if (word.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(13,118,206);font-size: 15px;" class="fa fa-file-word-o pr5" aria-hidden="true"></i>';
+                } else if (document.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(0,0,0);font-size: 15px;" class="fa fa-file-text-o pr5" aria-hidden="true"></i>';
+                } else if (pdf.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-pdf-o pr5" aria-hidden="true"></i>';
+                } else if (powerPoint.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(226,165,139);font-size: 15px;" class="fa fa-file-powerpoint-o pr5" aria-hidden="true"></i>';
+                } else if (image.indexOf(element.FileTypePhysic.toUpperCase()) !== -1) {
+                    icon = '<i style="color: rgb(42,42,42);font-size: 15px;" class="fa fa-picture-o pr5" aria-hidden="true"></i>';
+                }
+
+                element.icon=icon;
+                })
+            })
     }
 
     $scope.viewFile = function (id, fileType, cloudId) {

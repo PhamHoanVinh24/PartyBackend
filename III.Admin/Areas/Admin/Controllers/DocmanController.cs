@@ -510,28 +510,33 @@ namespace III.Admin.Controllers
                     msg.Title = _sharedResources["COM_MSG_ERR"];
                 }
                 _context.EDMSFiles.Update(file);
-                var fileInst = _context.ActivityInstFiles.FirstOrDefault(x => !x.IsDeleted && x.ActivityInstCode== edmsReposCatFile.ObjectCode && x.FileID == obj.FileCode);
-                if (fileInst != null)
-                {
-                    var lstJsonSign = new List<JsonSignature>();
-                    if (!string.IsNullOrEmpty(fileInst.SignatureJson))
-                    {
-                        lstJsonSign = JsonConvert.DeserializeObject<List<JsonSignature>>(fileInst.SignatureJson);
-                    }
-                    var jsonSign = new JsonSignature
-                    {
-                        Signer = ESEIM.AppContext.UserName,
-                        SignTime = DateTime.Now,
-                        Actins = edmsReposCatFile.ObjectCode
-                    };
-                    lstJsonSign.Add(jsonSign);
 
-                    fileInst.SignatureJson = JsonConvert.SerializeObject(lstJsonSign);
-                    fileInst.FilePath = "";
-                    fileInst.IsSign = true;
-                    fileInst.LstUserSign += string.Join(",", ESEIM.AppContext.UserId);
-                    _context.ActivityInstFiles.Update(fileInst);
+                if (docmodel.IsSign)
+                {
+                    var fileInst = _context.ActivityInstFiles.FirstOrDefault(x => !x.IsDeleted && x.ActivityInstCode == edmsReposCatFile.ObjectCode && x.FileID == obj.FileCode);
+                    if (fileInst != null)
+                    {
+                        var lstJsonSign = new List<JsonSignature>();
+                        if (!string.IsNullOrEmpty(fileInst.SignatureJson))
+                        {
+                            lstJsonSign = JsonConvert.DeserializeObject<List<JsonSignature>>(fileInst.SignatureJson);
+                        }
+                        var jsonSign = new JsonSignature
+                        {
+                            Signer = ESEIM.AppContext.UserName,
+                            SignTime = DateTime.Now,
+                            Actins = edmsReposCatFile.ObjectCode
+                        };
+                        lstJsonSign.Add(jsonSign);
+
+                        fileInst.SignatureJson = JsonConvert.SerializeObject(lstJsonSign);
+                        fileInst.FilePath = "";
+                        fileInst.IsSign = true;
+                        fileInst.LstUserSign += string.Join(",", ESEIM.AppContext.UserId);
+                        _context.ActivityInstFiles.Update(fileInst);
+                    }
                 }
+                
                 _context.SaveChanges();
                 msg.Title = _sharedResources["COM_ADD_FILE_SUCCESS"];
                 msg.Object = edmsReposCatFile.Id;

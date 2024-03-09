@@ -6626,15 +6626,7 @@ namespace III.Admin.Controllers
             var msg = new JMessage { Error = false, Title = "" };
             try
             {
-                IsSigne IsSigned = IsSign(obj.FileCode, obj.ActInstCode);
-
-                var listSig = IsSigned.IsNotFrist;
-                if (IsSigned.IsSigned)
-                {
-                    msg.Error = true;
-                    msg.Title = "Bạn đã ký tài liệu này rồi";
-                    return Json(msg);
-                }
+                
 
                 DocmanController.pathFile = string.Empty;
                 DocmanController.pathFileFTP = string.Empty;
@@ -6699,6 +6691,16 @@ namespace III.Admin.Controllers
                     {
                         if (obj.IsSign)
                         {
+                            IsSigne IsSigned = IsSign(obj.FileCode, obj.ActInstCode);
+
+                            var listSig = IsSigned.IsNotFrist;
+                            if (IsSigned.IsSigned)
+                            {
+                                msg.Error = true;
+                                msg.Title = "Bạn đã ký tài liệu này rồi";
+                                return Json(msg);
+                            }
+
                             var jMess = GenerateSign(obj.Url, listSig, actInst.Title);
                             if (jMess.Error)
                             {
@@ -6840,6 +6842,15 @@ namespace III.Admin.Controllers
                             {
                                 if (obj.IsSign)
                                 {
+                                    IsSigne IsSigned = IsSign(obj.FileCode, obj.ActInstCode);
+
+                                    var listSig = IsSigned.IsNotFrist;
+                                    if (IsSigned.IsSigned)
+                                    {
+                                        msg.Error = true;
+                                        msg.Title = "Bạn đã ký tài liệu này rồi";
+                                        return Json(msg);
+                                    }
                                     var filePath = string.Empty;
                                     var jMess = GenerateSign(pathConvert, listSig, actInst.Title);
                                     if (jMess.Error)
@@ -6881,6 +6892,8 @@ namespace III.Admin.Controllers
                                     aseanDoc.File_Code = obj.FileCode;
                                     aseanDoc.File_Path = pathConvert;
                                     aseanDoc.FullPathView = ftpfilepath;
+                                    aseanDoc.IsSign = true;
+
                                     DocmanController.docmodel = aseanDoc;
                                     DocmanController.pathFile = filePath;
                                     //DocmanController.cardCode = obj.ActInstCode;
