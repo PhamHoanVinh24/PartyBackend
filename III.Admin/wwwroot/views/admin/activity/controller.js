@@ -2507,7 +2507,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
     $scope.save = function () {
         var obj = {
             ActivityCode: $scope.modelEditActivity.ActivityCode,
-            ListGroupData: $scope.model.ListGroupData.join(",")
+            ListGroupData: $scope.modelEditActivity.ListGroupData.join(",")
         };
 
         dataservice.updateGroupDataActivity(obj, function (rs) {

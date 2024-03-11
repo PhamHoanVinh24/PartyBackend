@@ -76,7 +76,6 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             msg.Error=true;
             $scope.PasswordError=true;  
             Title+=`<p style="font-size:13px;">Tài khoản phải có từ 4 đến 30 ký tự</p></br>`
-
         }
         if(model.GivenName==''||model.GivenName==undefined||model.GivenName==null){
             msg.Error=true;
@@ -88,6 +87,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.PhoneNumberError=true;
             Title+=`<p style="font-size:13px;">Số điện thoại không được để trống</p></br>`
             
+        }if (!isValidEmail(model.Email)) {
+            msg.Error=true;
+            $scope.EmailError=true;
+            
+            Title+=`<p style="font-size:13px;">Email sai định dạng</p></br>`
         }if(model.Password==''||model.Password==undefined||model.Password==null){
             msg.Error=true;
             $scope.PasswordError=true;  
@@ -107,6 +111,11 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
         msg.Title=Title
         return msg;
+    }
+    function isValidEmail(email) {
+        // Biểu thức chính quy kiểm tra định dạng email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
     }
 });
 

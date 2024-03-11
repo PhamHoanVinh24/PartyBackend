@@ -201,20 +201,22 @@ namespace III.Admin.Controllers
                             fileUpload.CopyTo(stream);
                             stream.Close();
                         }
+                        if (docmodel.IsSign)
+                        {
+                            //Xóa file trên ftp
+                            var msg2 = DeleteFile(edmsRepoCatFiles.Id);
+                            if (msg2.Error == true)
+                            {
+                                return Json(msg2);
+                            }
+                            EDMSRepoCatFileModel model = new EDMSRepoCatFileModel();
 
-                        //Xóa file trên ftp
-                        var msg2 = DeleteFile(edmsRepoCatFiles.Id);
-                        if (msg2.Error==true)
-                        {
-                            return Json(msg2);
-                        }
-                        EDMSRepoCatFileModel model=new EDMSRepoCatFileModel();
-                        
-                        //Update to server and update to database
-                        msg2 = InsertFile(edmsFile, fileUpload);
-                        if (msg2.Error == true)
-                        {
-                            return Json(msg2);
+                            //Update to server and update to database
+                            msg2 = InsertFile(edmsFile, fileUpload);
+                            if (msg2.Error == true)
+                            {
+                                return Json(msg2);
+                            }
                         }
 
                         var path = _hostingEnvironment.WebRootPath + "/" + docmodel.File_Path;

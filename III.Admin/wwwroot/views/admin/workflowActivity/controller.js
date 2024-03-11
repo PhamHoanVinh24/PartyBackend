@@ -11587,7 +11587,7 @@ app.controller('more-file', function ($scope, $rootScope, $compile, $uibModal, $
             rs = rs.data;
             if (rs.Error) {
                 if (rs.ID === -1) {
-                    App.toastrError(rs.Title);
+                    //App.toastrError(rs.Title);
                     setTimeout(function () {
                         window.open('/Admin/Excel#', '_blank');
                     }, 2000);
@@ -11610,7 +11610,7 @@ app.controller('more-file', function ($scope, $rootScope, $compile, $uibModal, $
                 rs = rs.data;
                 if (rs.Error) {
                     if (rs.ID === -1) {
-                        App.toastrError(rs.Title);
+                        //App.toastrError(rs.Title);
                         setTimeout(function () {
                             window.open('/Admin/Docman#', '_blank');
                         }, 2000);
@@ -11634,7 +11634,7 @@ app.controller('more-file', function ($scope, $rootScope, $compile, $uibModal, $
                 rs = rs.data;
                 if (rs.Error) {
                     if (rs.ID === -1) {
-                        App.toastrError(rs.Title);
+                        //App.toastrError(rs.Title);
                         setTimeout(function () {
                             window.open('/Admin/PDF#', '_blank');
                         }, 2000);
@@ -11805,7 +11805,7 @@ app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservi
             rs = rs.data;
             if (rs.Error) {
                 if (rs.ID === -1) {
-                    App.toastrError(rs.Title);
+                    //App.toastrError(rs.Title);
                     setTimeout(function () {
                         window.open('/Admin/Excel#', '_blank');
                     }, 2000);
@@ -11828,7 +11828,7 @@ app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservi
                 rs = rs.data;
                 if (rs.Error) {
                     if (rs.ID === -1) {
-                        App.toastrError(rs.Title);
+                        //App.toastrError(rs.Title);
                         setTimeout(function () {
                             window.open('/Admin/Docman#', '_blank');
                         }, 2000);
@@ -11852,7 +11852,7 @@ app.controller('more-file-wf', function ($scope, $rootScope, $compile, dataservi
                 rs = rs.data;
                 if (rs.Error) {
                     if (rs.ID === -1) {
-                        App.toastrError(rs.Title);
+                        // App.toastrError(rs.Title);
                         setTimeout(function () {
                             window.open('/Admin/PDF#', '_blank');
                         }, 2000);
