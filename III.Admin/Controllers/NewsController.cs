@@ -1,0 +1,99 @@
+﻿using ESEIM.Models;
+using ESEIM.Utils;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
+using Microsoft.AspNetCore.Authorization;
+
+namespace III.Admin.Controllers
+{
+
+    [AllowAnonymous]
+    public class NewsController : Controller
+    {
+
+        private readonly EIMDBContext _context;
+
+        public NewsController(EIMDBContext context)
+        {
+            _context = context;
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(int id)
+        {
+            var obj = (from a in _context.cms_items
+                       where a.id == id &&
+                            a.published == true
+                       select new ModelViewPost
+                       {
+                           title = a.title,
+                           id = a.id,
+                           hits = a.hits,
+                           full_text = a.full_text,
+                           extra_fields = a.extra_fields,
+                           featured_ordering = a.featured_ordering,
+                           cat_id = a.cat_id,
+                           alias = a.alias,
+                           created = a.created.HasValue ? a.created.Value.ToString("dd/MM/yyyy HH:mm:ss") : "",
+                           checked_out = a.checked_out,
+                           date_post = a.date_post,
+                           intro_text = a.intro_text,
+                           published = a.published,
+                           @params = a.@params,
+                           extra_fields_search = a.extra_fields_search,
+                           template = a.template,
+                           language = a.language,
+                           checked_out_time = a.checked_out_time,
+                           gallery = a.gallery,
+                           image_caption = a.image_caption,
+                           image_credits = a.image_credits,
+                           hash_tag=a.hash_tag,
+                           multiple_language = a.multiple_language,
+                           ordering=a.ordering
+                       }).FirstOrDefault();
+            if (obj == null)
+            {
+                return RedirectToAction("NotFound");
+            }
+            return View(obj);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> NotFound()
+        {
+            ViewData["Content"] = "Không tìm thấy bài viết";
+            return View();
+        }
+
+    }
+
+    public class ModelViewPost
+    {
+        public string title { get; set; }
+        public int id { get; set; }
+        public int? hits { get; set; }
+        public string full_text { get; set; }
+        public string extra_fields { get; set; }
+        public int? featured_ordering { get; set; }
+        public int? cat_id { get; set; }
+        public string alias { get; set; }
+        public string created { get; set; }
+        public int? checked_out { get; set; }
+        public DateTime? date_post { get; set; }
+        public string intro_text { get; set; }
+        public bool published { get; set; }
+        public string @params { get; set; }
+        public string extra_fields_search { get; set; }
+        public string template { get; set; }
+        public string language { get; set; }
+        public DateTime? checked_out_time { get; set; }
+        public string gallery { get; set; }
+        public string image_caption { get; set; }
+        public string image_credits { get; set; }
+        public string multiple_language { get; set; }
+        public int? ordering { get; set; }
+        public string hash_tag { get; set; }
+    }
+}
