@@ -105,6 +105,7 @@ app.controller('search', function ($scope, $rootScope, $compile, dataservice, $f
         CurrentPage:1,
         Length:10,
     };
+    $scope.searchKeyWord=$routeParams.para;
     $scope.search=function(){
         dataservice.search($scope.model,function(rs){
             console.log(rs.data);

@@ -118,48 +118,17 @@ namespace III.Admin.Controllers
             {
                 return RedirectToAction("NotFound");
             }
-            return View(obj);
-        }
-
-        public async Task<IActionResult> Page(int id)
-        {
-            var obj = (from a in _context.cms_items
-                       where a.id == id &&
-                            a.published == true
-                            && a.cat_id== 1421
-                       select new ModelViewPost
-                       {
-                           title = a.title,
-                           id = a.id,
-                           hits = a.hits,
-                           full_text = a.full_text,
-                           extra_fields = a.extra_fields,
-                           featured_ordering = a.featured_ordering,
-                           cat_id = a.cat_id,
-                           alias = a.alias,
-                           created = a.created.HasValue ? a.created.Value.ToString("dd/MM/yyyy HH:mm:ss") : "",
-                           checked_out = a.checked_out,
-                           date_post = a.date_post,
-                           intro_text = a.intro_text,
-                           published = a.published,
-                           @params = a.@params,
-                           extra_fields_search = a.extra_fields_search,
-                           template = a.template,
-                           language = a.language,
-                           checked_out_time = a.checked_out_time,
-                           gallery = a.gallery,
-                           image_caption = a.image_caption,
-                           image_credits = a.image_credits,
-                           hash_tag = a.hash_tag,
-                           multiple_language = a.multiple_language,
-                           ordering = a.ordering
-                       }).FirstOrDefault();
-            if (obj == null)
+            if(obj.cat_id== 1421)
             {
-                return RedirectToAction("NotFound");
+                return View("Page", obj);
             }
             return View(obj);
         }
+
+        //public async Task<IActionResult> Page()
+        //{
+        //    return View();
+        //}
 
 
         [AllowAnonymous]
