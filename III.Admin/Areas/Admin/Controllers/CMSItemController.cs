@@ -366,7 +366,7 @@ namespace III.Admin.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public object GetListItemByCateId(int catId,string Search)
+        public object GetListItemByCateId(int catId)
         {
             var obj = (from a in _context.cms_items
                        where a.cat_id == catId && a.published == true

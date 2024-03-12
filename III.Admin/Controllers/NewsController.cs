@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using FTU.Utils.HelperNet;
+using System.Collections.Generic;
+using System.Globalization;
+using static Dropbox.Api.Files.SearchMatchType;
 
 namespace III.Admin.Controllers
 {
@@ -20,12 +24,66 @@ namespace III.Admin.Controllers
         {
             _context = context;
         }
-        [AllowAnonymous]
+
+        public object JTable([FromBody] CMSItemsJTableModel jTablePara)
+        {
+            var PostFromDate = !string.IsNullOrEmpty(jTablePara.PostFromDate) ? DateTime.ParseExact(jTablePara.PostFromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+            var PostToDate = !string.IsNullOrEmpty(jTablePara.PostToDate) ? DateTime.ParseExact(jTablePara.PostToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+            var CreFromDate = !string.IsNullOrEmpty(jTablePara.CreFromDate) ? DateTime.ParseExact(jTablePara.CreFromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+            var CreToDate = !string.IsNullOrEmpty(jTablePara.CreToDate) ? DateTime.ParseExact(jTablePara.CreToDate, "dd/MM/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null;
+
+            int intBegin = (jTablePara.CurrentPage - 1) * jTablePara.Length;
+            var query = from a in _context.cms_items.Where(x=>x.published==true)
+                        join b in _context.cms_categories on a.cat_id equals b.id
+                        orderby a.created descending
+                        where
+                        (PostFromDate == null || (PostFromDate <= a.date_post))
+                        && (PostToDate == null || (PostToDate >= a.date_post))
+                        && (CreFromDate == null || (a.created.HasValue && CreFromDate <= a.created.Value.Date))
+                        && (CreToDate == null || (a.created.HasValue && CreToDate >= a.created.Value.Date))
+                        && (jTablePara.Category == null || (jTablePara.Category != null && a.cat_id.Equals(jTablePara.Category)))
+                        && (string.IsNullOrEmpty(jTablePara.Title) || (!string.IsNullOrEmpty(a.title) &&
+                                                                     a.title.ToLower().Contains(jTablePara.Title))
+                                                                 || (!string.IsNullOrEmpty(a.hash_tag) &&
+                                                                     a.hash_tag.ToLower().Contains(jTablePara.Title)))
+                        //&& (jTablePara.Status == null || jTablePara.Status.Equals(a.published))
+                        //&& (jTablePara.TypeItem == null || jTablePara.TypeItem.Equals(a.featured_ordering))
+                        && (jTablePara.Category == null || a.cat_id.Equals(jTablePara.Category))
+                        select new CMSItemModel
+                        {
+                            Id = a.id,
+                            Title = a.title,
+                            Alias = a.alias,
+                            Name = b.name,
+                            Published = a.published,
+                            Created = a.created,
+                            Modified = a.modified,
+                            DatePost = a.date_post,
+                            Ordering = a.ordering
+                        };
+
+            int count = query.Count();
+            var data = new List<CMSItemModel>();
+
+            data = query.OrderBy(x => x.Ordering).Skip(intBegin).Take(jTablePara.Length).ToList();
+
+            var jdata = new
+            {
+                data = data,
+                count = count,
+                Length = jTablePara.Length,
+                CurrentPage = jTablePara.CurrentPage,
+            };
+            return jdata;
+
+        }
+
         public async Task<IActionResult> Index(int id)
         {
             var obj = (from a in _context.cms_items
                        where a.id == id &&
                             a.published == true
+
                        select new ModelViewPost
                        {
                            title = a.title,
@@ -67,6 +125,19 @@ namespace III.Admin.Controllers
             return View();
         }
 
+    }
+
+    public class CMSItemsJTableModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string PostFromDate { get; set; }
+        public string PostToDate { get; set; }
+        public string CreFromDate { get; set; }
+        public string CreToDate { get; set; }
+        public int? Category { get; set; }
+        public int Length { get; set; }
+        public int CurrentPage { get; set; }
     }
 
     public class ModelViewPost
