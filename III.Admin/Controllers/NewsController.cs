@@ -49,7 +49,7 @@ namespace III.Admin.Controllers
                         //&& (jTablePara.Status == null || jTablePara.Status.Equals(a.published))
                         //&& (jTablePara.TypeItem == null || jTablePara.TypeItem.Equals(a.featured_ordering))
                         && (jTablePara.Category == null || a.cat_id.Equals(jTablePara.Category))
-                        select new CMSItemModel
+                        select new CMSItemModelUser
                         {
                             Id = a.id,
                             Title = a.title,
@@ -59,11 +59,14 @@ namespace III.Admin.Controllers
                             Created = a.created,
                             Modified = a.modified,
                             DatePost = a.date_post,
-                            Ordering = a.ordering
+                            Ordering = a.ordering,
+                            Galery=a.gallery,
+                            image_caption = a.image_caption,
+                            image_credits = a.image_credits
                         };
 
             int count = query.Count();
-            var data = new List<CMSItemModel>();
+            var data = new List<CMSItemModelUser>();
 
             data = query.OrderBy(x => x.Ordering).Skip(intBegin).Take(jTablePara.Length).ToList();
 
@@ -125,6 +128,22 @@ namespace III.Admin.Controllers
             return View();
         }
 
+    }
+
+    public class CMSItemModelUser
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Alias { get; set; }
+        public string Name { get; set; }
+        public bool Published { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public DateTime? DatePost { get; set; }
+        public int? Ordering { get; set; }
+        public string Galery { get; set; }
+        public string image_caption { get;  set; }
+        public string image_credits { get; set; }
     }
 
     public class CMSItemsJTableModel

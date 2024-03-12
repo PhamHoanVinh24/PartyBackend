@@ -109,9 +109,6 @@ app.controller('search', function ($scope, $rootScope, $compile, dataservice, $f
         dataservice.search($scope.model,function(rs){
             console.log(rs.data);
             $scope.post=rs.data;
-                
-            $('.active').removeClass('active');
-            $('#'+$scope.post.CurrentPage).addClass("active")
         })
     }
     $scope.setCurrentPage = function(page) {
