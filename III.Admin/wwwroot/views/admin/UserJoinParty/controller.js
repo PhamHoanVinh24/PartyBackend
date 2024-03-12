@@ -1509,9 +1509,12 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
             App.toastrError("Không được để trường Số điện thoại trống")
         }
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
-        if($scope.err==false){
-            if ($scope.UserName != null && $scope.UserName != undefined ) {
-                $scope.model = {}
+        if($scope.err==true){
+            return
+        }
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        if($scope.Username!=null && $scope.Username!=undefined){
+            $scope.model = {}
                 $scope.model.CurrentName = $scope.infUser.LastName;
                 $scope.model.Birthday = $scope.infUser.Birthday;
                 $scope.model.BirthName = $scope.infUser.FirstName;
@@ -1536,26 +1539,26 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
                 $scope.model.SelfComment = $scope.SelfComment.context;
                 $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
-                $scope.model.Username = $scope.UserName;
-        
-                if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
-                    console.log($scope.model);
-                    dataservice.update($scope.model, function (result) {
-                        result = result.data;
-                        if (result.Error) {
-                            App.toastrError(result.Title);
-                        } else {
-                            App.toastrSuccess(result.Title);
-                            $scope.getPartyAdmissionProfileByUsername();
-                        }
+                $scope.model.Status = $scope.infUser.Status;
+                $scope.model.Username=$scope.Username;
+                $scope.model.WfInstCode=$scope.infUser.WfInstCode;
+
+            if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&
+            $scope.Username!='' && $scope.Username!=undefined){
+                console.log($scope.model);
+                dataserviceJoinParty.update($scope.model, function (result) {
+                    result= result.data;
+                    if (result.Error) {
+                        App.toastrError(result.Title);
+                    } else {
+                        App.toastrSuccess(result.Title);
                         
-                    });
-                } else {
-                    App.toastrError("Không tìm thấy mã hồ sơ")
-                }
-                
+                    }
+                });
             }
-        }     
+            
+            console.log($scope.model);
+        }
     }
 
     
