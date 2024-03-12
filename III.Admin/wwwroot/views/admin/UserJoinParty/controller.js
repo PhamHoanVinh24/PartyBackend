@@ -1467,10 +1467,51 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
     }
     // AdmissionProfile
     $scope.submitPartyAdmissionProfile = function () {
-        
+        $scope.err=false
+        if($scope.infUser.LastName == ""||$scope.infUser.LastName == null||$scope.infUser.LastName == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Họ và tên trống")
+        } if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Ngày sinh trống")
+        } if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Họ và tên khai sinh trống")
+        } if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Giới tính trống")
+        } if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Dân tộc trống")
+        } if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Tôn giáo trống")
+        } if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Địa chỉ thường trú trống")
+        } if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Nơi sinh trống")
+        } if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Công việc hiện tại trống")
+        } if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Quê quán trống")
+        } if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Địa chỉ tạm trú trống")
+        } if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Giáo dục phổ thông trống")
+        } if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Số điện thoại trống")
+        }
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
-        if($scope.Username!=null && $scope.Username!=undefined){
-            $scope.model = {}
+        if($scope.err==false){
+            if ($scope.UserName != null && $scope.UserName != undefined ) {
+                $scope.model = {}
                 $scope.model.CurrentName = $scope.infUser.LastName;
                 $scope.model.Birthday = $scope.infUser.Birthday;
                 $scope.model.BirthName = $scope.infUser.FirstName;
@@ -1495,26 +1536,26 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
                 $scope.model.SelfComment = $scope.SelfComment.context;
                 $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
-                $scope.model.Status = $scope.infUser.Status;
-                $scope.model.Username=$scope.Username;
-                $scope.model.WfInstCode=$scope.infUser.WfInstCode;
-
-            if($scope.infUser.ResumeNumber!='' && $scope.infUser.ResumeNumber!=undefined &&
-            $scope.Username!='' && $scope.Username!=undefined){
-                console.log($scope.model);
-                dataserviceJoinParty.update($scope.model, function (result) {
-                    result= result.data;
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
+                $scope.model.Username = $scope.UserName;
+        
+                if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
+                    console.log($scope.model);
+                    dataservice.update($scope.model, function (result) {
+                        result = result.data;
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.getPartyAdmissionProfileByUsername();
+                        }
                         
-                    }
-                });
+                    });
+                } else {
+                    App.toastrError("Không tìm thấy mã hồ sơ")
+                }
+                
             }
-            
-            console.log($scope.model);
-        }
+        }     
     }
 
     
