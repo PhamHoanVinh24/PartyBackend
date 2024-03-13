@@ -45,10 +45,28 @@
     @RenderSection("plugin_style", false)
     @RenderSection("plugin_script", false)
     @RenderSection("Styles", required: false)
+    <style>
+        .validation-summary-errors ul, .validation-summary-errors li {
+            list-style: none;
+            display: inline;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
+    <div class="col-md-12 login-text-app pt-2">
+        <div class="pull-right pt10" style="width: 300px">
+            <div class="col-md-12">
+                @if (ViewData?.ModelState[""]?.Errors?.Any() == true)
+                {
+                    <div asp-validation-summary="All" class="text-danger alert alert-danger" style="color: red !important;"></div>
+                }
+            </div>
+        </div>
+    </div>
 
     <div class="container">
+        
         <div class="content-wrapper">
             <main class="center-segment" style="margin-top:20px">
                 <div class="ui medium aligned middle aligned">

@@ -996,93 +996,107 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
+        $scope.err=false
         if($scope.infUser.LastName == ""||$scope.infUser.LastName == null||$scope.infUser.LastName == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Họ và tên trống")
-        }else if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
+        } if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Ngày sinh trống")
-        }else if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
+        } if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Họ và tên khai sinh trống")
-        }else if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
+        } if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Giới tính trống")
-        }else if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
+        } if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Dân tộc trống")
-        }else if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
+        } if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Tôn giáo trống")
-        }else if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
+        } if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Địa chỉ thường trú trống")
-        }else if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
+        } if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Nơi sinh trống")
-        }else if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
+        } if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Công việc hiện tại trống")
-        }else if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
+        } if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Quê quán trống")
-        }else if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
+        } if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Địa chỉ tạm trú trống")
-        }else if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
+        } if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Giáo dục phổ thông trống")
-        }else if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
+        } if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
+            $scope.err=true
             App.toastrError("Không được để trường Số điện thoại trống")
-        }else{
-        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
-        if ($scope.UserName != null && $scope.UserName != undefined) {
-            $scope.model = {}
-            $scope.model.CurrentName = $scope.infUser.LastName;
-            $scope.model.Birthday = $scope.infUser.Birthday;
-            $scope.model.BirthName = $scope.infUser.FirstName;
-            $scope.model.Gender = $scope.infUser.Sex;
-            $scope.model.Nation = $scope.infUser.Nation;
-            $scope.model.Religion = $scope.infUser.Religion;
-            $scope.model.PermanentResidence = $scope.infUser.Residence;
-            $scope.model.Phone = $scope.infUser.Phone;
-            $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
-            $scope.model.Job = $scope.infUser.NowEmployee;
-            $scope.model.HomeTown = $scope.infUser.HomeTown;
-            $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
-            $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
-            $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
-            $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate;
-            $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
-            $scope.model.Picture = '';
-            $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
-            $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
-            $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
-            $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
-            $scope.model.SelfComment = $scope.SelfComment.context;
-            $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
-            $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
-            $scope.model.Username = $scope.UserName;
-       
-            if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
-                console.log($scope.model);
-                dataservice.update($scope.model, function (result) {
-                    result = result.data;
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.getPartyAdmissionProfileByUsername();
-                    }
-                    
-                });
-            } else {
-
-                dataservice.insert($scope.model, function (result) {
-                    result = result.data;
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.infUser.ResumeNumber = result.Object.ResumeNumber;
-                        $scope.getPartyAdmissionProfileByUsername();
-                    }
-                    
-                });
-
-            }
-            
         }
-    }
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        if($scope.err==false){
+            if ($scope.UserName != null && $scope.UserName != undefined ) {
+                $scope.model = {}
+                $scope.model.CurrentName = $scope.infUser.LastName;
+                $scope.model.Birthday = $scope.infUser.Birthday;
+                $scope.model.BirthName = $scope.infUser.FirstName;
+                $scope.model.Gender = $scope.infUser.Sex;
+                $scope.model.Nation = $scope.infUser.Nation;
+                $scope.model.Religion = $scope.infUser.Religion;
+                $scope.model.PermanentResidence = $scope.infUser.Residence;
+                $scope.model.Phone = $scope.infUser.Phone;
+                $scope.model.PlaceBirth = $scope.infUser.PlaceofBirth;
+                $scope.model.Job = $scope.infUser.NowEmployee;
+                $scope.model.HomeTown = $scope.infUser.HomeTown;
+                $scope.model.TemporaryAddress = $scope.infUser.TemporaryAddress;
+                $scope.model.GeneralEducation = $scope.infUser.LevelEducation.GeneralEducation;
+                $scope.model.JobEducation = $scope.infUser.LevelEducation.VocationalTraining;
+                $scope.model.UnderPostGraduateEducation = $scope.infUser.LevelEducation.Undergraduate;
+                $scope.model.Degree = $scope.infUser.LevelEducation.RankAcademic;
+                $scope.model.Picture = '';
+                $scope.model.ForeignLanguage = $scope.infUser.LevelEducation.ForeignLanguage;
+                $scope.model.MinorityLanguages = $scope.infUser.LevelEducation.MinorityLanguage;
+                $scope.model.ItDegree = $scope.infUser.LevelEducation.It;
+                $scope.model.PoliticalTheory = $scope.infUser.LevelEducation.PoliticalTheory;
+                $scope.model.SelfComment = $scope.SelfComment.context;
+                $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
+                $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
+                $scope.model.Username = $scope.UserName;
         
+                if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
+                    console.log($scope.model);
+                    dataservice.update($scope.model, function (result) {
+                        result = result.data;
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.getPartyAdmissionProfileByUsername();
+                        }
+                        
+                    });
+                } else {
+
+                    dataservice.insert($scope.model, function (result) {
+                        result = result.data;
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.infUser.ResumeNumber = result.Object.ResumeNumber;
+                            $scope.getPartyAdmissionProfileByUsername();
+                        }
+                        
+                    });
+
+                }
+                
+            }
+        }        
     }
     $scope.addToPersonalHistory = function () {
         if($scope.selectedPersonHistory.Begin==null||$scope.selectedPersonHistory.Begin==undefined||$scope.selectedPersonHistory.Begin==''){

@@ -327,6 +327,7 @@ namespace III.Admin.Controllers
             }
         }
         [HttpPost]
+        [AllowAnonymous]
         public object GetItem([FromBody] int id)
         {
             var obj = (from a in _context.cms_items
@@ -368,7 +369,7 @@ namespace III.Admin.Controllers
         public object GetListItemByCateId(int catId)
         {
             var obj = (from a in _context.cms_items
-                       where a.cat_id == catId
+                       where a.cat_id == catId && a.published == true
                        orderby a.created descending
                        select new
                        {
@@ -382,7 +383,7 @@ namespace III.Admin.Controllers
                            alias = a.alias,
                            created = a.created.HasValue ? a.created.Value.ToString("dd/MM/yyyy") : "",
                            
-                       }).Take(3).ToList();
+                       }).ToList();
 
             RemoveUserInNotify(catId.ToString(), EnumHelper<NotificationType>.GetDisplayValue(NotificationType.Cms), false);
 

@@ -30,7 +30,7 @@ app.factory('dataservice', function ($http) {
             submitFormUpload('/Admin/User/Update', data, callback);
         },
         UploadImageAsync:function (data, callback) {
-            submitFormUpload('/Admin/User/UploadImageAsync', data, callback);
+            $http.post('/Admin/User/UploadImageAsync', data).then(callback);
         },
         getItem: function (callback) {
             $http.post('/Admin/AccountLogin/Getitem/').then(callback);

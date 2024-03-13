@@ -512,11 +512,9 @@ namespace III.Admin.Controllers
                 string imageUrl = Url.Content($"~/uploads/{fileName}");
 
                 var filePath = Path.Combine(pathUpload, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    // Lưu mảng byte vào tệp
-                    System.IO.File.WriteAllBytes(filePath, imageBytes); ;
-                }
+
+                System.IO.File.WriteAllBytes(filePath, imageBytes);
+                
                 url = "/uploads/images/" + fileName;
                 us.SignImage = url;
                 _context.Update(us);

@@ -427,6 +427,29 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
 
     $scope.listActs=[]
 
+    $scope.moreFile = function (wfCode,ActInsCode) {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: ctxfolder + "/more-file.html",
+            controller: 'more-file',
+            size: '40',
+            windowClass: "message-center",
+            backdrop: 'static',
+            resolve: {
+                para: function () {
+                    return {
+                        wfInstCode: wfCode,
+                        ActInsCode: ActInsCode
+                    };
+                }
+            }
+        });
+        modalInstance.result.then(function (d) {
+
+        }, function () { });
+    }
+
 
     $scope.CloseAll=function(act1){
         if(!act1.IsApprovable){
@@ -461,7 +484,7 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
                 }
                 else {
                     App.toastrSuccess(rs.Title);
-                    var WfInstCode = rs.Code;
+                    $scope.WfCode=rs.Code;
                     reloadData()
                     $scope.editWorkflow(ResumeNumber)
                 }
@@ -644,13 +667,15 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
         .withOption('createdRow', function (row, data, dataIndex) {
             $compile(angular.element(row))($scope);
             $(row).find('td:not(.listaction)').on('click', function (evt) {
-                if(data.resumeNumber!=''&&data.resumeNumber!=null&&data.resumeNumber!=undefined){
+                if(data.WfInstCode!=''&&data.WfInstCode!=null&&data.WfInstCode!=undefined){
                     // Xóa lớp active khỏi tất cả các hàng
                     $(this).closest('table').find('tr').removeClass('active');
                             
                     // Thêm lớp active vào hàng đã được click
                     $(this).closest('tr').addClass('active');
                     $scope.editWorkflow(data.resumeNumber)
+                    $scope.WfCode=data.WfInstCode;
+                    $scope.model.checkHiddenFileWfActivity=false;
                 }
 
             });
@@ -1442,7 +1467,51 @@ app.controller('edit-user-join-party', function ($scope, $rootScope, $compile, $
     }
     // AdmissionProfile
     $scope.submitPartyAdmissionProfile = function () {
-        
+        $scope.err=false
+        if($scope.infUser.LastName == ""||$scope.infUser.LastName == null||$scope.infUser.LastName == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Họ và tên trống")
+        } if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Ngày sinh trống")
+        } if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Họ và tên khai sinh trống")
+        } if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Giới tính trống")
+        } if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Dân tộc trống")
+        } if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Tôn giáo trống")
+        } if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Địa chỉ thường trú trống")
+        } if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Nơi sinh trống")
+        } if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Công việc hiện tại trống")
+        } if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Quê quán trống")
+        } if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Địa chỉ tạm trú trống")
+        } if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Giáo dục phổ thông trống")
+        } if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
+            $scope.err=true
+            App.toastrError("Không được để trường Số điện thoại trống")
+        }
+        //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
+        if($scope.err==true){
+            return
+        }
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
         if($scope.Username!=null && $scope.Username!=undefined){
             $scope.model = {}
