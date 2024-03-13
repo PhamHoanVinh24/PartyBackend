@@ -816,7 +816,7 @@ app.controller('addCmsItm', function ($scope, $rootScope, $compile, $uibModal, $
             $scope.modelJson.title = "";
             $scope.modelJson.short_content = "";
         }
-        CKEDITOR.instances['ckEditorItem'].setData("");
+        dataEditor.setData("");
         $rootScope.language = code;
         //$rootScope.changeLanguageAttribute(code);
     }
@@ -839,22 +839,22 @@ app.controller('addCmsItm', function ($scope, $rootScope, $compile, $uibModal, $
     };
     $scope.initData();
     $scope.cancel = function () {
-        var check = CKEDITOR.instances['ckEditorItem'];
+        var check = dataEditor;
         if (check !== undefined) {
-            CKEDITOR.instances['ckEditorItem'].destroy();
+            dataEditor.destroy();
         }
         $uibModalInstance.close();
         $rootScope.alias = null;
         $rootScope.id = -1;
     }
     $scope.submit = function () {
-        var check = CKEDITOR.instances['ckEditorItem'];
+        var check = dataEditor;
         if (check !== undefined && $scope.model.language == "CMS_LANGUAGE20211027001") {
-            var data = CKEDITOR.instances['ckEditorItem'].getData();
+            var data = dataEditor.getData();
             $scope.model.full_text = data;
         }
         else if (check !== undefined && $scope.model.language != "CMS_LANGUAGE20211027001") {
-            var data = CKEDITOR.instances['ckEditorItem'].getData();
+            var data = dataEditor.getData();
             $scope.modelJson.content = data;
         }
         var json = null;
@@ -985,9 +985,9 @@ app.controller('editCmsItm', function ($scope, $rootScope, $compile, $uibModal, 
     //];
 
     $scope.cancel = function () {
-        var check = CKEDITOR.instances['ckEditorItem'];
+        var check = dataEditor;
         if (check !== undefined) {
-            CKEDITOR.instances['ckEditorItem'].destroy();
+            dataEditor.destroy();
         }
         $uibModalInstance.close();
         $rootScope.isAdded = false;
@@ -1023,10 +1023,10 @@ app.controller('editCmsItm', function ($scope, $rootScope, $compile, $uibModal, 
                 $scope.modelJson.short_content = "";
             }
             if (code !== 'CMS_LANGUAGE20211027001') {
-                CKEDITOR.instances['ckEditorItem'].setData($scope.modelJson.content);
+                dataEditor.setData($scope.modelJson.content);
             }
             else {
-                CKEDITOR.instances['ckEditorItem'].setData($scope.model.full_text);
+                dataEditor.setData($scope.model.full_text);
             }
         }
         else {
@@ -1034,10 +1034,10 @@ app.controller('editCmsItm', function ($scope, $rootScope, $compile, $uibModal, 
             $scope.modelJson.title = "";
             $scope.modelJson.short_content = "";
             if (code !== 'CMS_LANGUAGE20211027001') {
-                CKEDITOR.instances['ckEditorItem'].setData('');
+                dataEditor.setData('');
             }
             else {
-                CKEDITOR.instances['ckEditorItem'].setData($scope.model.full_text);
+                dataEditor.setData($scope.model.full_text);
             }
         }
         $scope.modelJson.lgn = code;
@@ -1158,13 +1158,14 @@ app.controller('editCmsItm', function ($scope, $rootScope, $compile, $uibModal, 
     }
 
     $scope.submit = function () {
-        var check = CKEDITOR.instances['ckEditorItem'];
+        var check = dataEditor;
+        console.log(dataEditor.getData());
         if (check !== undefined && $scope.model.language == "CMS_LANGUAGE20211027001") {
-            var data = CKEDITOR.instances['ckEditorItem'].getData();
+            var data = dataEditor.getData();
             $scope.model.full_text = data;
         }
         else if (check !== undefined && $scope.model.language != "CMS_LANGUAGE20211027001") {
-            var data = CKEDITOR.instances['ckEditorItem'].getData();
+            var data = dataEditor.getData();
             $scope.modelJson.content = data;
         }
         var json = null;
@@ -1248,7 +1249,7 @@ app.controller('editCmsItm', function ($scope, $rootScope, $compile, $uibModal, 
     }
 
     function refreshData() {
-        var check = CKEDITOR.instances['ckEditorItem'];
+        var check = dataEditor;
         if (check !== undefined) {
             check.setData($scope.model.full_text);
         }
@@ -1490,10 +1491,10 @@ app.controller('articlecommon', function ($scope, $rootScope, $compile, $uibModa
     //            $scope.modelJson.title = "";
     //        }
     //        //if (code != 'CMS_LANGUAGE20211027001') {
-    //        //    CKEDITOR.instances['ckEditorItem'].setData($scope.modelJson.content);
+    //        //    dataEditor.setData($scope.modelJson.content);
     //        //}
     //        //else {
-    //        //    CKEDITOR.instances['ckEditorItem'].setData($scope.model.full_text);
+    //        //    dataEditor.setData($scope.model.full_text);
     //        //}
     //    }
     //    $scope.modelJson.lgn = code;
