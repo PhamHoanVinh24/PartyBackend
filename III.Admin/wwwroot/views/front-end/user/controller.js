@@ -1,5 +1,5 @@
 ﻿var ctxfolder = "/views/front-end/user";
-var app = angular.module('App_ESEIM', ["ngRoute"])
+var app = angular.module('App_ESEIM', ["ngRoute", 'ui.select'])
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -17,6 +17,9 @@ app.factory('dataservice', function ($http) {
         $http(req).then(callback);
     };
     return {
+        GetGroupUser: function (callback) {
+            $http.get('/UserProfile/GetGroupUser').then(callback);
+        },
         //InsertFamily
         insertFamily: function (data, callback) {
             $http.post('/UserProfile/InsertFamily/', data).then(callback);
@@ -33,9 +36,6 @@ app.factory('dataservice', function ($http) {
             $http.get('/UserProfile/GetPartyAdmissionProfileByUsername?Username=' + data).then(callback);
         },
 
-        getPartyAdmissionProfileByUserCode: function (data, callback) {
-            $http.get('/UserProfile/GetPartyAdmissionProfileByUserCode?Id=' + data).then(callback);
-        },
 
         insert: function (data, callback) {
             $http.post('/UserProfile/InsertPartyAdmissionProfile/', data).then(callback);
@@ -260,9 +260,19 @@ app.directive("voiceRecognition", function () {
 });
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
-    //
-    //
-    //
+
+    $scope.GroupUsers = [];
+    $scope.getGrupUsers = function () {
+        dataservice.GetGroupUser(function (rs) {
+            console.log(rs)
+            $scope.GroupUsers = rs.data;
+        })
+    }
+    $scope.onItemSelect = function (item) {
+
+    }
+    $scope.getGrupUsers();
+
     $scope.downloadFile=function() {
         // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
         var link = document.createElement("a");
@@ -313,6 +323,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             console.log($scope.JSONobj);
         }
     };
+    
     $scope.fileList = [];
     $scope.uploadExtensionFile = async function () {
         var file = document.getElementById("file").files[0];
@@ -376,6 +387,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //quan hệ gia đình
     $scope.Relationship = [];
     $scope.SelfComment = {};
+    $scope.GroupUser = '';
     function handleTextUpload(txt) {
         $scope.defaultRTE.value = txt;
         setTimeout(function () {
@@ -860,6 +872,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     $scope.SelfComment.context = rs.SelfComment;
                     $scope.status = JSON.parse(rs.Status).slice(-4);
                     $scope.infUser.ResumeNumber = rs.ResumeNumber;
+                    $scope.GroupUser = rs.GroupUserCode;
+
                     console.log($scope.status);
 
                     if ($scope.infUser.ResumeNumber) {
@@ -1091,9 +1105,12 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         } if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
             $scope.err=true
             App.toastrError("Không được để trường Giáo dục phổ thông trống")
-        } if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Phone == "" || $scope.infUser.Phone == null || $scope.infUser.Phone == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Số điện thoại trống")
+        } if ($scope.GroupUser == "" || $scope.GroupUser == null || $scope.GroupUser == undefined) {
+            $scope.err = true
+            App.toastrError("Bạn chưa chọn nhóm chi bộ để xử lý")
         }
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
         if($scope.err==false){
@@ -1124,6 +1141,8 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
                 $scope.model.Username = $scope.UserName;
+                $scope.model.GroupUserCode = $scope.GroupUser;
+
         
                 if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
                     console.log($scope.model);

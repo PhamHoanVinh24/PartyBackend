@@ -230,7 +230,22 @@
         width: 25%;
         font-size: 12px;
     }
-
+    .ui-select-bootstrap div, .ui-select-bootstrap span, .ui-select-bootstrap input, .ui-select-bootstrap .btn-default-focus,
+    .ui-select-choices{
+        height: 24.5px;
+        border: none;
+        background-color:white;
+        outline:none;
+        box-shadow: none;
+        font-size:15px;
+    }
+    .ui-select-bootstrap .ui-select-choices-row.active > a{
+        background-color:white;
+        color: black
+    }
+    .ui-select-choices{
+        border: 1px solid
+    }
 </style>
 
 <div class="notifi" style="height: 70px">
@@ -574,9 +589,11 @@
                                                    title="Popover Header" data-bs-placement="bottom"
                                                    data-bs-content="Ví dụ:'Tôi cảm thấy mình có đủ điều kiện để ra nhập Đảng'"></i>
                                                 <input class="displayInfo"
-                                                        name="CusCode"
+                                                       name="CusCode"
                                                        ng-model="SelfComment.context" type="text"
                                                        placeholder="Tự nhận xét" ng-required="true">
+
+                                                <i class="fa fa-microphone" voice-recognition ng-model="SelfComment.context"></i>
                                             </div>
 
                                         </div>
@@ -791,7 +808,29 @@
 
                                         </div>
                                     </div>
-                                    
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0 ">
+                                            <i class="fa fa-map-marker"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">
+                                                Nhóm chi bộ
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="br24 form-control custom-title-code-bold" style="display:flex">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover"
+                                                   title="Popover Header" data-bs-placement="bottom"
+                                                   data-bs-content="Ví dụ: 'Hà Nội'" style="vertical-align: 7px; display: flex; align-items: center;"></i>
+                                                <ui-select ng-model="GroupUser" theme="bootstrap" class="displayInfo" on-select="onItemSelect($item)
+                                                       style="border: none; height: 24.5px; display: inline-block;">
+                                                    <ui-select-match placeholder="Chọn nhóm chi bộ" style="height:24.5px">{{$select.selected.Title}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in GroupUsers | filter: $select.search">
+                                                        <div>{{x.Title}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
 
                         </div>
