@@ -174,11 +174,11 @@ app.factory('dataservice', function ($http) {
 
         },
         //
-        getListFile: function (data,callback) {
-            $http.get('/UserProfile/GetListProfile?ResumeNumber='+data).then(callback);
+        getListFile: function (data, callback) {
+            $http.get('/UserProfile/GetListProfile?ResumeNumber=' + data).then(callback);
         },
-        deleteFile: function(fileName,ResumeNumber,callback){
-            $http.get('/UserProfile/DeleteFile?ResumeNumber='+ResumeNumber+'&fileName='+fileName).then(callback);
+        deleteFile: function (fileName, ResumeNumber, callback) {
+            $http.get('/UserProfile/DeleteFile?ResumeNumber=' + ResumeNumber + '&fileName=' + fileName).then(callback);
         }
         //
     }
@@ -202,10 +202,14 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
-    //
-    //
-    //
-    $scope.downloadFile=function() {
+
+    
+
+    $scope.$watch('Voice', function(newValue, oldValue) {
+        //nếu có sự thay đổi thì dựa vào $scope.input để thêm 
+    });
+
+    $scope.downloadFile = function () {
         // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
         var link = document.createElement("a");
         link.href = "/files/Mẫu 2- KNĐ năm 2023.docx"; // Đặt đường dẫn đến tệp Word
@@ -215,15 +219,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.deleteFile = function (x) {
-        dataservice.deleteFile(x.FileName,$scope.infUser.ResumeNumber,function (txt) {
-            txt=txt.data;
+        dataservice.deleteFile(x.FileName, $scope.infUser.ResumeNumber, function (txt) {
+            txt = txt.data;
             console.log(txt);
-                if (txt.Error) {
-                    App.toastrError(txt.Title);
-                } else {
-                    App.toastrSuccess(txt.Title);
-                    $scope.getListFile();
-                }
+            if (txt.Error) {
+                App.toastrError(txt.Title);
+            } else {
+                App.toastrSuccess(txt.Title);
+                $scope.getListFile();
+            }
         })
     }
     $scope.fileNameChanged = function () {
@@ -276,16 +280,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.defaultRTE
             // console.log($scope.defaultRTE)
             $scope.JSONobjj = handleTextUpload(txt)
-            if($scope.infUser = {}) {
+            if ($scope.infUser = {}) {
                 App.toastrError("File bạn tải không hợp lệ");
-            }else {
+            } else {
                 App.toastrSuccess("Tải file thành công")
             }
             console.log($scope.infUser);
         }
     };
 
-    
+
     //Thêm data vào PersonalHistory
     $scope.PersonalHistory = [];
 
@@ -509,7 +513,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 }).map(function (element) {
                     return element.innerText.trim();
                 });
-                if(pInTr.length == 3){
+                if (pInTr.length == 3) {
                     pElementP7s.push(pInTr);
                 }
             })
@@ -565,7 +569,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                     }
                     if (pE8[y][i].startsWith("- Đảng viên:")) {
                         var partyMember = pE8[y][i].slice(('- Đảng viên:').length).trim()
-                        if(partyMember.toLowerCase() == "không"){
+                        if (partyMember.toLowerCase() == "không") {
                             $scope.Relationship[RelationshipIndex].PartyMember = false;
                         }
                         else $scope.Relationship[RelationshipIndex].PartyMember = true;
@@ -574,7 +578,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         // let regex = /^(\d{4})-(.*)$/;
 
                         $scope.Relationship[RelationshipIndex].WorkingProgress = '';
-                        for (j = i + 1; j<=pE8[y].length-1 && !pE8[y][j].startsWith('-') && !pE8[y][j].startsWith('*'); j++) {
+                        for (j = i + 1; j <= pE8[y].length - 1 && !pE8[y][j].startsWith('-') && !pE8[y][j].startsWith('*'); j++) {
                             let inputString = pE8[y][j];
                             //let match = inputString.match(regex);
 
@@ -584,36 +588,36 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                             //     Job: match[2].trim()  // Loại bỏ khoảng trắng ở đầu và cuối của công việc
                             //   };
                             //  $scope.Relationship[RelationshipIndex].WorkingProgress.push(resultObject);
-                            $scope.Relationship[RelationshipIndex].WorkingProgress+= inputString + ',';
+                            $scope.Relationship[RelationshipIndex].WorkingProgress += inputString + ',';
                             i = j;
                             //}
                         }
                     }
                     if (pE8[y][i].startsWith("- Thái độ chính trị:")) {
                         $scope.Relationship[RelationshipIndex].PoliticalAttitude = '';
-                        try{
-                            for (j = i + 1; j<=pE8[y].length-1 && pE8[y][j].startsWith('+'); j++) {
-                                $scope.Relationship[RelationshipIndex].PoliticalAttitude+= (pE8[y][j].slice(1).trim()) + ',';
+                        try {
+                            for (j = i + 1; j <= pE8[y].length - 1 && pE8[y][j].startsWith('+'); j++) {
+                                $scope.Relationship[RelationshipIndex].PoliticalAttitude += (pE8[y][j].slice(1).trim()) + ',';
                                 i = j;
                             }
                         }
-                        catch{
+                        catch {
                             console.log(pE8[y]);
                         }
                     }
                     if ((pE8[y][i].startsWith('*'))) {
                         let regex = /^\*(.+?):$/;
                         let match = pE8[y][i].match(regex);
-    
-                            if (match) {
-                                let relationship = match[1];
-                                RelationshipIndex = $scope.Relationship.length;
-                                $scope.Relationship[RelationshipIndex] = {
-                                    Relation: relationship.trim(),
-                                    ClassComposition: '',
-                                    PartyMember: false,
-                                }
+
+                        if (match) {
+                            let relationship = match[1];
+                            RelationshipIndex = $scope.Relationship.length;
+                            $scope.Relationship[RelationshipIndex] = {
+                                Relation: relationship.trim(),
+                                ClassComposition: '',
+                                PartyMember: false,
                             }
+                        }
                     }
                 }
             }
@@ -646,13 +650,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.listDetail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+15)').toArray()
                 .map(t => $(t).find('> span:last-child').text());
-            
+
             $scope.Detail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(2)').text()
-                //.map(z => $(z).text());
+            //.map(z => $(z).text());
             console.log($scope.listDetail2)
             $scope.Detail2 = $($scope.listPage[0])
-            .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(4)').text()
+                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(4)').text()
             $scope.listDetail3 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(17) > span:last-child').text()
 
@@ -752,7 +756,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //     $scope.insertFamily();
     // }
 
-    
+
     $scope.getPartyAdmissionProfileByUsername = function () {
         if ($scope.UserName == null || $scope.UserName == undefined) {
             //thông báo không lấy được username
@@ -762,7 +766,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 rs = rs.data;
                 console.log(rs);
                 if (rs.Error) {
-                   
+
                 }
                 else {
                     rs = rs.Object;
@@ -816,7 +820,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                         $scope.getIntroducerOfPartyByProfileCode();
                         $scope.getListFile();
                     }
-                    
+
                 }
             })
         }
@@ -853,32 +857,32 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     //insertFamily
-    
+
     $scope.selectedFamily = {}
     $scope.addToFamily = function () {
-        if($scope.selectedFamily.Relation==null||$scope.selectedFamily.Relation==undefined||$scope.selectedFamily.Relation==''){
+        if ($scope.selectedFamily.Relation == null || $scope.selectedFamily.Relation == undefined || $scope.selectedFamily.Relation == '') {
             return
         }
-        if($scope.selectedFamily.Residence==null||$scope.selectedFamily.Residence==undefined||$scope.selectedFamily.Residence==''){
+        if ($scope.selectedFamily.Residence == null || $scope.selectedFamily.Residence == undefined || $scope.selectedFamily.Residence == '') {
             return
         }
-        
-        if($scope.selectedFamily.Name==null||$scope.selectedFamily.Name==undefined||$scope.selectedFamily.Name==''){
+
+        if ($scope.selectedFamily.Name == null || $scope.selectedFamily.Name == undefined || $scope.selectedFamily.Name == '') {
             return
         }
-        if($scope.selectedFamily.BirthYear==null||$scope.selectedFamily.BirthYear==undefined||$scope.selectedFamily.BirthYear==''){
+        if ($scope.selectedFamily.BirthYear == null || $scope.selectedFamily.BirthYear == undefined || $scope.selectedFamily.BirthYear == '') {
             return
         }
-        if($scope.selectedFamily.PoliticalAttitude==null||$scope.selectedFamily.PoliticalAttitude==undefined||$scope.selectedFamily.PoliticalAttitude==''){
+        if ($scope.selectedFamily.PoliticalAttitude == null || $scope.selectedFamily.PoliticalAttitude == undefined || $scope.selectedFamily.PoliticalAttitude == '') {
             return
         }
-        if($scope.selectedFamily.HomeTown==null||$scope.selectedFamily.HomeTown==undefined||$scope.selectedFamily.HomeTown==''){
+        if ($scope.selectedFamily.HomeTown == null || $scope.selectedFamily.HomeTown == undefined || $scope.selectedFamily.HomeTown == '') {
             return
         }
-        if($scope.selectedFamily.Job==null||$scope.selectedFamily.Job==undefined||$scope.selectedFamily.Job==''){
+        if ($scope.selectedFamily.Job == null || $scope.selectedFamily.Job == undefined || $scope.selectedFamily.Job == '') {
             return
         }
-        if($scope.selectedFamily.WorkingProgress==null||$scope.selectedFamily.WorkingProgress==undefined||$scope.selectedFamily.WorkingProgress==''){
+        if ($scope.selectedFamily.WorkingProgress == null || $scope.selectedFamily.WorkingProgress == undefined || $scope.selectedFamily.WorkingProgress == '') {
             return
         }
         var model = {}
@@ -891,17 +895,17 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.HomeTown = $scope.selectedFamily.HomeTown;
         model.Job = $scope.selectedFamily.Job;
         model.WorkingProgress = $scope.selectedFamily.WorkingProgress;
-        model.Id=0;
+        model.Id = 0;
         $scope.Relationship.push(model);
     }
 
     $scope.FamilyWorkTracking = [];
     $scope.selectedFamilyWorkTracking = '';
     $scope.addToFamilyWorkTracking = function () {
-        if($scope.selectedFamilyWorkTracking == undefined || $scope.selectedFamilyWorkTracking==null || $scope.selectedFamilyWorkTracking==''){
+        if ($scope.selectedFamilyWorkTracking == undefined || $scope.selectedFamilyWorkTracking == null || $scope.selectedFamilyWorkTracking == '') {
             return
         }
-        var model = {} ;
+        var model = {};
         model.str = $scope.selectedFamilyWorkTracking;
         $scope.FamilyWorkTracking.push(model);
         $scope.selectedFamilyWorkTracking = '';
@@ -922,19 +926,19 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             obj.Job = e.Job;
             obj.WorkingProgress = e.WorkingProgress;
             obj.ProfileCode = $scope.infUser.ResumeNumber;
-            obj.Id=e.Id;
+            obj.Id = e.Id;
             $scope.model.push(obj)
         });
-            dataservice.insertFamily($scope.model, function (result) {
-                result = result.data;
+        dataservice.insertFamily($scope.model, function (result) {
+            result = result.data;
             if (result.Error) {
                 App.toastrError(result.Title);
             } else {
                 App.toastrSuccess(result.Title);
                 $scope.getFamilyByProfileCode();
             }
-            })
-        
+        })
+
         console.log($scope.model);
     }
 
@@ -971,75 +975,52 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         }
         else $scope.isUpdate = false;
     }
-    // $scope.user = { id: 13 }
-    // $scope.getPartyAdmissionProfileByUserCode = function () {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/UserProfile/GetPartyAdmissionProfileByUserCode?userCode=" + $scope.user.id,// gán $scope.infUser.resumenumber
-    //         contentType: "application/json; charset=utf-8",
-    //         success: function (response) {
-    //             console.log(response);
-    //             $scope.ProfileList = response;
-    //             return response
-    //         },
-    //         error: function (error) {
-    //             console.log(error);
-    //         }
-    //     });
-    //     
-    // }
-
-    //
-
-    // AdmissionProfile
-    
-    //ĐẶC ĐIỂM LỊCH SỬ
 
     $scope.submitPartyAdmissionProfile = function () {
-        $scope.err=false
-        if($scope.infUser.LastName == ""||$scope.infUser.LastName == null||$scope.infUser.LastName == undefined){
-            $scope.err=true
+        $scope.err = false
+        if ($scope.infUser.LastName == "" || $scope.infUser.LastName == null || $scope.infUser.LastName == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Họ và tên trống")
-        } if($scope.infUser.Birthday == ""||$scope.infUser.Birthday == null||$scope.infUser.Birthday == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Birthday == "" || $scope.infUser.Birthday == null || $scope.infUser.Birthday == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Ngày sinh trống")
-        } if($scope.infUser.FirstName == ""||$scope.infUser.FirstName == null||$scope.infUser.FirstName == undefined){
-            $scope.err=true
+        } if ($scope.infUser.FirstName == "" || $scope.infUser.FirstName == null || $scope.infUser.FirstName == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Họ và tên khai sinh trống")
-        } if($scope.infUser.Sex == ""||$scope.infUser.Sex == null||$scope.infUser.Sex == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Sex == "" || $scope.infUser.Sex == null || $scope.infUser.Sex == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Giới tính trống")
-        } if($scope.infUser.Nation == ""||$scope.infUser.Nation == null||$scope.infUser.Nation == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Nation == "" || $scope.infUser.Nation == null || $scope.infUser.Nation == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Dân tộc trống")
-        } if($scope.infUser.Religion == ""||$scope.infUser.Religion == null||$scope.infUser.Religion == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Religion == "" || $scope.infUser.Religion == null || $scope.infUser.Religion == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Tôn giáo trống")
-        } if($scope.infUser.Residence == ""||$scope.infUser.Residence == null||$scope.infUser.Residence == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Residence == "" || $scope.infUser.Residence == null || $scope.infUser.Residence == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Địa chỉ thường trú trống")
-        } if($scope.infUser.PlaceofBirth == ""||$scope.infUser.PlaceofBirth == null||$scope.infUser.PlaceofBirth == undefined){
-            $scope.err=true
+        } if ($scope.infUser.PlaceofBirth == "" || $scope.infUser.PlaceofBirth == null || $scope.infUser.PlaceofBirth == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Nơi sinh trống")
-        } if($scope.infUser.NowEmployee == ""||$scope.infUser.NowEmployee == null||$scope.infUser.NowEmployee == undefined){
-            $scope.err=true
+        } if ($scope.infUser.NowEmployee == "" || $scope.infUser.NowEmployee == null || $scope.infUser.NowEmployee == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Công việc hiện tại trống")
-        } if($scope.infUser.HomeTown == ""||$scope.infUser.HomeTown == null||$scope.infUser.HomeTown == undefined){
-            $scope.err=true
+        } if ($scope.infUser.HomeTown == "" || $scope.infUser.HomeTown == null || $scope.infUser.HomeTown == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Quê quán trống")
-        } if($scope.infUser.TemporaryAddress == ""||$scope.infUser.TemporaryAddress == null||$scope.infUser.TemporaryAddress == undefined){
-            $scope.err=true
+        } if ($scope.infUser.TemporaryAddress == "" || $scope.infUser.TemporaryAddress == null || $scope.infUser.TemporaryAddress == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Địa chỉ tạm trú trống")
-        } if($scope.infUser.LevelEducation.GeneralEducation == ""||$scope.infUser.LevelEducation.GeneralEducation == null||$scope.infUser.LevelEducation.GeneralEducation == undefined){
-            $scope.err=true
+        } if ($scope.infUser.LevelEducation.GeneralEducation == "" || $scope.infUser.LevelEducation.GeneralEducation == null || $scope.infUser.LevelEducation.GeneralEducation == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Giáo dục phổ thông trống")
-        } if($scope.infUser.Phone == ""||$scope.infUser.Phone == null||$scope.infUser.Phone == undefined){
-            $scope.err=true
+        } if ($scope.infUser.Phone == "" || $scope.infUser.Phone == null || $scope.infUser.Phone == undefined) {
+            $scope.err = true
             App.toastrError("Không được để trường Số điện thoại trống")
         }
         //$http.post('/UserProfile/UpdatePartyAdmissionProfile/', model)
-        if($scope.err==false){
-            if ($scope.UserName != null && $scope.UserName != undefined ) {
+        if ($scope.err == false) {
+            if ($scope.UserName != null && $scope.UserName != undefined) {
                 $scope.model = {}
                 $scope.model.CurrentName = $scope.infUser.LastName;
                 $scope.model.Birthday = $scope.infUser.Birthday;
@@ -1066,7 +1047,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 $scope.model.CreatedPlace = $scope.PlaceCreatedTime.place;
                 $scope.model.ResumeNumber = $scope.infUser.ResumeNumber;
                 $scope.model.Username = $scope.UserName;
-        
+
                 if ($scope.infUser.ResumeNumber != '' && $scope.infUser.ResumeNumber != undefined) {
                     console.log($scope.model);
                     dataservice.update($scope.model, function (result) {
@@ -1077,7 +1058,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                             App.toastrSuccess(result.Title);
                             $scope.getPartyAdmissionProfileByUsername();
                         }
-                        
+
                     });
                 } else {
 
@@ -1090,22 +1071,22 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                             $scope.infUser.ResumeNumber = result.Object.ResumeNumber;
                             $scope.getPartyAdmissionProfileByUsername();
                         }
-                        
+
                     });
 
                 }
-                
+
             }
-        }        
+        }
     }
     $scope.addToPersonalHistory = function () {
-        if($scope.selectedPersonHistory.Begin==null||$scope.selectedPersonHistory.Begin==undefined||$scope.selectedPersonHistory.Begin==''){
+        if ($scope.selectedPersonHistory.Begin == null || $scope.selectedPersonHistory.Begin == undefined || $scope.selectedPersonHistory.Begin == '') {
             return
         }
-        if($scope.selectedPersonHistory.End==null||$scope.selectedPersonHistory.End==undefined||$scope.selectedPersonHistory.End==''){
+        if ($scope.selectedPersonHistory.End == null || $scope.selectedPersonHistory.End == undefined || $scope.selectedPersonHistory.End == '') {
             return
         }
-        if($scope.selectedPersonHistory.Content==null||$scope.selectedPersonHistory.Content==undefined||$scope.selectedPersonHistory.Content==''){
+        if ($scope.selectedPersonHistory.Content == null || $scope.selectedPersonHistory.Content == undefined || $scope.selectedPersonHistory.Content == '') {
             return
         }
         var model = {}
@@ -1117,7 +1098,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.submitPersonalHistorys = function () {
-        
+
         $scope.model = [];
         $scope.PersonalHistory.forEach(function (personalHistory) {
             var obj = {};
@@ -1143,13 +1124,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToDisciplined = function () {
-        if($scope.selectedWarningDisciplined.MonthYear==null||$scope.selectedWarningDisciplined.MonthYear==undefined||$scope.selectedWarningDisciplined.MonthYear==''){
+        if ($scope.selectedWarningDisciplined.MonthYear == null || $scope.selectedWarningDisciplined.MonthYear == undefined || $scope.selectedWarningDisciplined.MonthYear == '') {
             return
         }
-        if($scope.selectedWarningDisciplined.Reason==null||$scope.selectedWarningDisciplined.Reason==undefined||$scope.selectedWarningDisciplined.Reason==''){
+        if ($scope.selectedWarningDisciplined.Reason == null || $scope.selectedWarningDisciplined.Reason == undefined || $scope.selectedWarningDisciplined.Reason == '') {
             return
         }
-        if($scope.selectedWarningDisciplined.GrantOfDecision==null||$scope.selectedWarningDisciplined.GrantOfDecision==undefined||$scope.selectedWarningDisciplined.GrantOfDecision==''){
+        if ($scope.selectedWarningDisciplined.GrantOfDecision == null || $scope.selectedWarningDisciplined.GrantOfDecision == undefined || $scope.selectedWarningDisciplined.GrantOfDecision == '') {
             return
         }
         var model = {}
@@ -1185,16 +1166,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         })
     }
     $scope.addToBusinessNDuty = function () {
-        if($scope.selectedWorkingTracking.From==null||$scope.selectedWorkingTracking.From==undefined||$scope.selectedWorkingTracking.From==''){
+        if ($scope.selectedWorkingTracking.From == null || $scope.selectedWorkingTracking.From == undefined || $scope.selectedWorkingTracking.From == '') {
             return
         }
-        if($scope.selectedWorkingTracking.To==null||$scope.selectedWorkingTracking.To==undefined||$scope.selectedWorkingTracking.To==''){
+        if ($scope.selectedWorkingTracking.To == null || $scope.selectedWorkingTracking.To == undefined || $scope.selectedWorkingTracking.To == '') {
             return
         }
-        if($scope.selectedWorkingTracking.Work==null||$scope.selectedWorkingTracking.Work==undefined||$scope.selectedWorkingTracking.Work==''){
+        if ($scope.selectedWorkingTracking.Work == null || $scope.selectedWorkingTracking.Work == undefined || $scope.selectedWorkingTracking.Work == '') {
             return
         }
-        if($scope.selectedWorkingTracking.Role==null||$scope.selectedWorkingTracking.Role==undefined||$scope.selectedWorkingTracking.Role==''){
+        if ($scope.selectedWorkingTracking.Role == null || $scope.selectedWorkingTracking.Role == undefined || $scope.selectedWorkingTracking.Role == '') {
             return
         }
         var model = {}
@@ -1236,10 +1217,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToHistorySpecialist = function () {
-        if($scope.selectedHistorySpecialist.MonthYear==null||$scope.selectedHistorySpecialist.MonthYear==undefined||$scope.selectedHistorySpecialist.MonthYear==''){
+        if ($scope.selectedHistorySpecialist.MonthYear == null || $scope.selectedHistorySpecialist.MonthYear == undefined || $scope.selectedHistorySpecialist.MonthYear == '') {
             return
         }
-        if($scope.selectedHistorySpecialist.Content==null||$scope.selectedHistorySpecialist.Content==undefined||$scope.selectedHistorySpecialist.Content==''){
+        if ($scope.selectedHistorySpecialist.Content == null || $scope.selectedHistorySpecialist.Content == undefined || $scope.selectedHistorySpecialist.Content == '') {
             return
         }
         var model = {}
@@ -1278,16 +1259,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.addToTrainingCertificatedPass = function () {
-        if($scope.selectedTrainingCertificatedPass.From==null||$scope.selectedTrainingCertificatedPass.From==undefined||$scope.selectedTrainingCertificatedPass.From==''){
+        if ($scope.selectedTrainingCertificatedPass.From == null || $scope.selectedTrainingCertificatedPass.From == undefined || $scope.selectedTrainingCertificatedPass.From == '') {
             return
         }
-        if($scope.selectedTrainingCertificatedPass.To==null||$scope.selectedTrainingCertificatedPass.To==undefined||$scope.selectedTrainingCertificatedPass.To==''){
+        if ($scope.selectedTrainingCertificatedPass.To == null || $scope.selectedTrainingCertificatedPass.To == undefined || $scope.selectedTrainingCertificatedPass.To == '') {
             return
         }
-        if($scope.selectedTrainingCertificatedPass.SchoolName==null||$scope.selectedTrainingCertificatedPass.SchoolName==undefined||$scope.selectedTrainingCertificatedPass.SchoolName==''){
+        if ($scope.selectedTrainingCertificatedPass.SchoolName == null || $scope.selectedTrainingCertificatedPass.SchoolName == undefined || $scope.selectedTrainingCertificatedPass.SchoolName == '') {
             return
         }
-        if($scope.selectedTrainingCertificatedPass.Certificate==null||$scope.selectedTrainingCertificatedPass.Certificate==undefined||$scope.selectedTrainingCertificatedPass.Certificate==''){
+        if ($scope.selectedTrainingCertificatedPass.Certificate == null || $scope.selectedTrainingCertificatedPass.Certificate == undefined || $scope.selectedTrainingCertificatedPass.Certificate == '') {
             return
         }
         var model = {}
@@ -1302,7 +1283,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
 
     $scope.submitTrainingCertificatedPass = function () {
-        
+
         $scope.model = [];
         $scope.PassedTrainingClasses.forEach(function (passedTrainingClasses) {
             var obj = {};
@@ -1331,13 +1312,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToAward = function () {
-        if($scope.selectedLaudatory.MonthYear==null||$scope.selectedLaudatory.MonthYear==undefined||$scope.selectedLaudatory.MonthYear==''){
+        if ($scope.selectedLaudatory.MonthYear == null || $scope.selectedLaudatory.MonthYear == undefined || $scope.selectedLaudatory.MonthYear == '') {
             return
         }
-        if($scope.selectedLaudatory.GrantOfDecision==null||$scope.selectedLaudatory.GrantOfDecision==undefined||$scope.selectedLaudatory.GrantOfDecision==''){
+        if ($scope.selectedLaudatory.GrantOfDecision == null || $scope.selectedLaudatory.GrantOfDecision == undefined || $scope.selectedLaudatory.GrantOfDecision == '') {
             return
         }
-        if($scope.selectedLaudatory.Reason==null||$scope.selectedLaudatory.Reason==undefined||$scope.selectedLaudatory.Reason==''){
+        if ($scope.selectedLaudatory.Reason == null || $scope.selectedLaudatory.Reason == undefined || $scope.selectedLaudatory.Reason == '') {
             return
         }
         var model = {}
@@ -1376,16 +1357,16 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.addToGoAboard = function () {
-        if($scope.selectedGoAboard.From==null||$scope.selectedGoAboard.From==undefined||$scope.selectedGoAboard.From==''){
+        if ($scope.selectedGoAboard.From == null || $scope.selectedGoAboard.From == undefined || $scope.selectedGoAboard.From == '') {
             return
         }
-        if($scope.selectedGoAboard.To==null||$scope.selectedGoAboard.To==undefined||$scope.selectedGoAboard.To==''){
+        if ($scope.selectedGoAboard.To == null || $scope.selectedGoAboard.To == undefined || $scope.selectedGoAboard.To == '') {
             return
         }
-        if($scope.selectedGoAboard.Contact==null||$scope.selectedGoAboard.Contact==undefined||$scope.selectedGoAboard.Contact==''){
+        if ($scope.selectedGoAboard.Contact == null || $scope.selectedGoAboard.Contact == undefined || $scope.selectedGoAboard.Contact == '') {
             return
         }
-        if($scope.selectedGoAboard.Country==null||$scope.selectedGoAboard.Country==undefined||$scope.selectedGoAboard.Country==''){
+        if ($scope.selectedGoAboard.Country == null || $scope.selectedGoAboard.Country == undefined || $scope.selectedGoAboard.Country == '') {
             return
         }
         var obj = {};
@@ -1394,7 +1375,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         model.To = $scope.selectedGoAboard.To;
         model.Contact = $scope.selectedGoAboard.Contact;
         model.Country = $scope.selectedGoAboard.Country;
-        
+
         model.ProfileCode = $scope.infUser.ResumeNumber;
         model.Id = 0;
         dataservice.insertGoAboard(model, function (rs) {
@@ -1432,7 +1413,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     $scope.submitIntroducer = function () {
         $scope.model = {};
-        if($scope.UserName!=null && $scope.UserName!=undefined) {
+        if ($scope.UserName != null && $scope.UserName != undefined) {
             $scope.model.PersonIntroduced = $scope.Introducer.PersonIntroduced;
             $scope.model.PlaceTimeJoinUnion = $scope.Introducer.PlaceTimeJoinUnion;
             $scope.model.PlaceTimeJoinParty = $scope.Introducer.PlaceTimeJoinParty;
@@ -1441,13 +1422,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.model.Id = $scope.Introducer.Id;
         };
         dataservice.insertIntroducer($scope.model, function (result) {
-            result= result.data;
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.getIntroducerOfPartyByProfileCode()
-                    }
+            result = result.data;
+            if (result.Error) {
+                App.toastrError(result.Title);
+            } else {
+                App.toastrSuccess(result.Title);
+                $scope.getIntroducerOfPartyByProfileCode()
+            }
         })
     }
     //getById
@@ -1669,7 +1650,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //Insert
 
     //Update
-    $scope.selectedFamily={};
+    $scope.selectedFamily = {};
     $scope.selectedPersonHistory = {};
     $scope.selectedWarningDisciplined = {};
     $scope.selectedHistorySpecialist = {};
@@ -1810,246 +1791,247 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
     //Delete
     $scope.deletePartyAdmissionProfile = function () {
-        
-       var isDeleted = confirm("Ban co muon xoa?");
-       if (isDeleted) {
-           $.ajax({
-               type: "DELETE",
-               url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
-               contentType: "application/json; charset=utf-8",
-               dataType: "json",
-               // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-               success: function (result) {
-                   result = result.data;
-                   if (result.Error) {
-                       App.toastrError(result.Title);
-                   } else {
-                       App.toastrSuccess(result.Title);
-                   }
-               },
-               error: function (result) {
-                   App.toastrError(result.Title);
-               }
-           });
-       }
-    }
-      
-                                            
-    $scope.deletePesonalHistory = function (index) {
-       
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.PersonalHistory[index].Id == undefined || $scope.PersonalHistory[index].Id == 0 ) {
-                $scope.PersonalHistory.splice(index,1);
-            }
-            else
             $.ajax({
                 type: "DELETE",
-                url: "/UserProfile/DeletePersonalHistory?id=" +  $scope.PersonalHistory[index].Id ,
-                contentType: "application/json; charset=utf-8", 
+                url: "/UserProfile/DeletePartyAdmissionProfile?id=" + Id,
+                contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    
+                    result = result.data;
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
                         App.toastrSuccess(result.Title);
-                        $scope.PersonalHistory.splice(index, 1);
-                        $scope.$apply()
                     }
                 },
-                error: function (error) {
-                    console.log(error.Title);
+                error: function (result) {
+                    App.toastrError(result.Title);
                 }
             });
+        }
+    }
+
+
+    $scope.deletePesonalHistory = function (index) {
+
+        var isDeleted = confirm("Ban co muon xoa?");
+        if (isDeleted) {
+            if ($scope.PersonalHistory[index].Id == undefined || $scope.PersonalHistory[index].Id == 0) {
+                $scope.PersonalHistory.splice(index, 1);
+            }
+            else
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeletePersonalHistory?id=" + $scope.PersonalHistory[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.PersonalHistory.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
+                    }
+                });
         }
     }
     $scope.deleteHistorySpecialist = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0 ) {
-                $scope.HistoricalFeatures.splice(index,1);
+            if ($scope.HistoricalFeatures[index].Id == undefined || $scope.HistoricalFeatures[index].Id == 0) {
+                $scope.HistoricalFeatures.splice(index, 1);
             }
-            else{
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteHistorySpecialist?id=" + $scope.HistoricalFeatures[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.HistoricalFeatures.splice(index, 1);
-                        $scope.$apply()
+            else {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteHistorySpecialist?id=" + $scope.HistoricalFeatures[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.HistoricalFeatures.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        App.toastrError(error.Title);
                     }
-                },
-                error: function (error) {
-                    App.toastrError(error.Title);
-                }
-            });}
+                });
+            }
         }
     }
     $scope.deleteAward = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.Laudatory[index].Id == undefined || $scope.Laudatory[index].Id == 0 ) {
-                $scope.Laudatory.splice(index,1);
+            if ($scope.Laudatory[index].Id == undefined || $scope.Laudatory[index].Id == 0) {
+                $scope.Laudatory.splice(index, 1);
             }
             else
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteAward?id=" + $scope.Laudatory[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.Laudatory.splice(index, 1);
-                        $scope.$apply()
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteAward?id=" + $scope.Laudatory[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.Laudatory.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
                     }
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
+                });
         }
     }
     $scope.deleteWarningDisciplined = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.Disciplined[index].Id == undefined || $scope.Disciplined[index].Id == 0 ) {
-                $scope.Disciplined.splice(index,1);
+            if ($scope.Disciplined[index].Id == undefined || $scope.Disciplined[index].Id == 0) {
+                $scope.Disciplined.splice(index, 1);
             }
             else
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.Disciplined.splice(index, 1);
-                        $scope.$apply()
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteWarningDisciplined?id=" + $scope.Disciplined[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.Disciplined.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
                     }
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
+                });
         }
     }
     $scope.deleteGoAboard = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.GoAboard[index].Id == undefined || $scope.GoAboard[index].Id == 0 ) {
-                $scope.GoAboard.splice(index,1);
+            if ($scope.GoAboard[index].Id == undefined || $scope.GoAboard[index].Id == 0) {
+                $scope.GoAboard.splice(index, 1);
             }
             else
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteGoAboard?id=" + $scope.GoAboard[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.GoAboard.splice(index, 1);
-                        $scope.$apply()
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteGoAboard?id=" + $scope.GoAboard[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.GoAboard.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
                     }
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
+                });
         }
     }
     $scope.deleteTrainingCertificatedPass = function (index) {
-       
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.PassedTrainingClasses[index].Id == undefined || $scope.PassedTrainingClasses[index].Id == 0 ) {
-                $scope.PassedTrainingClasses.splice(index,1);
+            if ($scope.PassedTrainingClasses[index].Id == undefined || $scope.PassedTrainingClasses[index].Id == 0) {
+                $scope.PassedTrainingClasses.splice(index, 1);
             }
             else
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.PassedTrainingClasses.splice(index, 1);
-                        $scope.$apply()
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteTrainingCertificatedPass?id=" + $scope.PassedTrainingClasses[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.PassedTrainingClasses.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
                     }
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
+                });
         }
     }
     $scope.deleteWorkingTracking = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.BusinessNDuty[index].Id == undefined || $scope.BusinessNDuty[index].Id == 0 ) {
-                $scope.BusinessNDuty.splice(index,1);
+            if ($scope.BusinessNDuty[index].Id == undefined || $scope.BusinessNDuty[index].Id == 0) {
+                $scope.BusinessNDuty.splice(index, 1);
             }
             else
-            $.ajax({
-                type: "DELETE",
-                url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.BusinessNDuty[index].Id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
-                success: function (result) {
-                    
-                    if (result.Error) {
-                        App.toastrError(result.Title);
-                    } else {
-                        App.toastrSuccess(result.Title);
-                        $scope.BusinessNDuty.splice(index, 1);
-                        $scope.$apply()
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserProfile/DeleteWorkingTracking?id=" + $scope.BusinessNDuty[index].Id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
+                    success: function (result) {
+
+                        if (result.Error) {
+                            App.toastrError(result.Title);
+                        } else {
+                            App.toastrSuccess(result.Title);
+                            $scope.BusinessNDuty.splice(index, 1);
+                            $scope.$apply()
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.Title);
                     }
-                },
-                error: function (error) {
-                    console.log(error.Title);
-                }
-            });
+                });
         }
     }
     $scope.deleteIntroducer = function () {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-        
+
             $.ajax({
                 type: "DELETE",
                 url: "/UserProfile/DeleteIntroducerOfParty?profileCode=" + $scope.infUser.ResumeNumber,
@@ -2057,7 +2039,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    
+
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -2072,7 +2054,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
 
     $scope.deletePartyAdmissionProfile = function (e) {
-       
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
             $.ajax({
@@ -2082,7 +2064,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    
+
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -2095,13 +2077,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             });
         }
     }
-    
+
     $scope.deleteFamily = function (index) {
-        
+
         var isDeleted = confirm("Ban co muon xoa?");
         if (isDeleted) {
-            if($scope.Relationship[index].Id == undefined || $scope.Relationship[index].Id == 0 ) {
-                $scope.Relationship.splice(index,1);
+            if ($scope.Relationship[index].Id == undefined || $scope.Relationship[index].Id == 0) {
+                $scope.Relationship.splice(index, 1);
             }
             $.ajax({
                 type: "DELETE",
@@ -2110,7 +2092,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 dataType: "json",
                 // data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
                 success: function (result) {
-                    
+
                     if (result.Error) {
                         App.toastrError(result.Title);
                     } else {
@@ -2171,7 +2153,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     }
     //Add file
     $scope.getListFile = function () {
-        dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
+        dataservice.getListFile($scope.infUser.ResumeNumber, function (rs) {
             rs = rs.data;
             $scope.fileList = rs.JsonProfileLinks;
             $scope.$apply();
@@ -2187,7 +2169,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             var formdata = new FormData();
             formdata.append("file", file);
             formdata.append("ResumeNumber", $scope.infUser.ResumeNumber);
-    
+
             var requestOptions = {
                 method: 'POST',
                 body: formdata,
@@ -2197,15 +2179,15 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             var resultImp = await fetch("/UserProfile/fileUpload", requestOptions);
             var txt = JSON.parse(await resultImp.text());
             console.log(txt);
-                if (txt.Error) {
-                    App.toastrError(txt.Title);
-                } else {
-                    App.toastrSuccess(txt.Title);
-                    $scope.getListFile();
-                }   
+            if (txt.Error) {
+                App.toastrError(txt.Title);
+            } else {
+                App.toastrSuccess(txt.Title);
+                $scope.getListFile();
+            }
         }
     };
-    
+
     $scope.fileList = [];
 
     setTimeout(async function () {
