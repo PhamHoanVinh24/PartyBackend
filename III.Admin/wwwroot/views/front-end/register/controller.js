@@ -1,5 +1,5 @@
 ﻿var ctxfolder = "/views/front-end/register";
-var app = angular.module('App_ESEIM', [ "ngRoute" ])
+var app = angular.module('App_ESEIM', [ "ngRoute", 'ui.select'])
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -19,7 +19,11 @@ app.factory('dataservice', function ($http) {
     return {
         Register:function(data,callback){
             $http.post('/UserProfile/Register2',data).then(callback);
-        }
+        },
+        
+        GetGroupUser: function (callback) {
+            $http.get('/UserProfile/GetGroupUser').then(callback);
+        },
     }
 });
 
@@ -44,6 +48,13 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         Email: '',
         Password:'',
         ConfrimPassword:''
+    }
+    $scope.GroupUsers = []
+    $scope.getGrupUsers = function () {
+        dataservice.GetGroupUser(function (rs) {
+            console.log(rs)
+            $scope.GroupUsers = rs.data;
+        })
     }
     $scope.Gender="Nam"
     $scope.Register=function(){
@@ -72,10 +83,10 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             msg.Error=true;
             $scope.UserNameError=true;
             Title+=`<p style="font-size:13px;">Tên đăng nhập không được để trống</p></br>`
-        }if(model.UserName.length < 4 ||model.UserName.length > 30 ){
+        }if( /^\d{12}$/.test(model.UserName.length)){
             msg.Error=true;
             $scope.PasswordError=true;  
-            Title+=`<p style="font-size:13px;">Tài khoản phải có từ 4 đến 30 ký tự</p></br>`
+            Title+=`<p style="font-size:13px;">CCCD gồm 12 số</p></br>`
         }
         if(model.GivenName==''||model.GivenName==undefined||model.GivenName==null){
             msg.Error=true;

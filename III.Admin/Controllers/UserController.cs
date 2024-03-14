@@ -108,7 +108,8 @@ namespace III.Admin.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Gender = model.Gender,
                     Area = "User",
-                    Active=true
+                    Active=true,
+                    RegisterJoinGroupCode=model.RegisterJoinGroupCode
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -2316,6 +2317,7 @@ namespace III.Admin.Controllers
     public class RegisterDto
     {
         [Required]
+        [RegularExpression(@"^[0-9]{12}$", ErrorMessage = "Số căn cước phải có đúng 12 chữ số.")]
         public string UserName { get; set; }
 
         [Required]
@@ -2336,6 +2338,8 @@ namespace III.Admin.Controllers
 
         [Required]
         public string GivenName { get; set; }
+        [Required]
+        public string RegisterJoinGroupCode { get; set; }
     }
 
 
