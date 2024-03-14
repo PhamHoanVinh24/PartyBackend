@@ -199,7 +199,65 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: 'err'
         })
 });
+app.directive("voiceRecognition", function () {
+    return {
+        restrict: "AE",
+        require: "ngModel",
+        link: function (scope, element, attrs, ngModelCtrl) {
+            console.log(ngModelCtrl);
+            if ("webkitSpeechRecognition" in window) {
+                var spokenText = "";
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
 
+                recognition.onstart = function () { };
+
+                recognition.onend = function () {
+                    console.log("Spoken text:", spokenText);
+                };
+
+                recognition.onresult = function (event) {
+                    var transcript = event.results[0][0].transcript;
+                    spokenText = transcript;
+                    if (spokenText != "") {
+                        ngModelCtrl.$setViewValue(transcript);
+
+                        ngModelCtrl.$render();
+                        // Cập nhật giá trị trong ng-model
+                        console.log(ngModelCtrl);
+                    }
+                };
+
+                element.on("mousedown", function () {
+                    scope.startRecognition(recognition);
+                    element.css("color", "red");
+                });
+
+                element.on("mouseup", function () {
+                    scope.stopRecognition(recognition);
+                    element.css("color", "");
+                });
+                element.on("mouseout", function () {
+                    scope.stopRecognition(recognition);
+                    element.css("color", "");
+                });
+            }
+
+            scope.startRecognition = function (recognition) {
+                if (recognition) {
+                    recognition.start();
+                }
+            };
+
+            scope.stopRecognition = function (recognition) {
+                if (recognition) {
+                    recognition.stop();
+                }
+            };
+        },
+    };
+});
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
     //
