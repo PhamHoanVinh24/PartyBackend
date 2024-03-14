@@ -1,5 +1,5 @@
 ﻿var ctxfolder = "/views/front-end/user";
-var app = angular.module('App_ESEIM', ["ngRoute"])
+var app = angular.module('App_ESEIM', ["ngRoute","ngAnimate", "ngSanitize", "ui.bootstrap"])
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -199,7 +199,72 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: 'err'
         })
 });
+app.directive("voiceRecognition", function () {
 
+    return {
+        restrict: "AE",
+        require: "ngModel",
+        link: function (scope, element, attrs, ngModelCtrl) {
+            console.log(ngModelCtrl);
+            if ("webkitSpeechRecognition" in window) {
+                var spokenText = "";
+                
+                var recognition = new webkitSpeechRecognition();
+                recognition.lang = "vi-VN";
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onstart = function () { };
+
+                recognition.onend = function () {
+                    console.log("Spoken text:", spokenText);
+                };
+
+                recognition.onresult = function (event) {
+                    var transcript = event.results[0][0].transcript;
+                    spokenText = transcript;
+                    if (spokenText != "") {
+                        ngModelCtrl.$setViewValue(transcript);
+
+                        ngModelCtrl.$render();
+                        // Cập nhật giá trị trong ng-model
+                        console.log(ngModelCtrl);
+                    }
+                };
+
+                element.on("mousedown", function () {
+                    scope.startRecognition(recognition);
+                    element.css("color", "red");
+                });
+
+                element.on("mouseup", function () {
+                    scope.stopRecognition(recognition);
+                    element.css("color", "");
+                });
+                element.on("mouseout", function () {
+                    scope.stopRecognition(recognition);
+                    element.css("color", "");
+                });
+                element.on("touchstart", function () {
+                    scope.startRecognition(recognition);
+                    element.css("color", "red");
+                });
+            }
+
+            scope.startRecognition = function (recognition) {
+                if (recognition) {
+                    recognition.start();
+                }
+            };
+
+            scope.stopRecognition = function (recognition) {
+                if (recognition) {
+                    recognition.stop();
+                }
+            };
+        },
+    };
+});
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
 
@@ -209,7 +274,111 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         //nếu có sự thay đổi thì dựa vào $scope.input để thêm 
     });
 
-    $scope.downloadFile = function () {
+    //
+    //
+    //
+    $scope.jsonParse = [
+        {
+            id: "currentName",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu. Ví dụ: Nguyễn Thị Kim Ngân"
+        },
+        {
+            id: "gender",
+            guide: "Bạn cần chọn giới tính của mình, nếu không phải nam hoặc nữ hãy chọn khác. Ví dụ: Nam"
+        },
+        {
+            id: "firstName",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu. Ví dụ: Nguyễn Thị Kim Ngân"
+        },
+        {
+            id: "dateOfBird",
+            guide: "Bạn cần nhập đầy đủ ngày-tháng-năm.Ví dụ: 12-04-1954"
+        },
+        {
+            id: "phone",
+            guide: "Bạn cần nhập đầy đủ số điện thoại.Ví dụ: 0397638979"
+        },
+        {
+            id: "noiSinh",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: thôn Thượng,  xã Châu Hoá, huyện Giồng Trôm, tỉnh Bến Tre"
+        },
+        {
+            id: "queQuan",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: thôn Thượng,  xã Châu Hoá, huyện Giồng Trôm, tỉnh Bến Tre"
+        },
+        {
+            id: "diaChiThuongTru",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: nhà A3, ngõ 130 Đốc Ngữ, phường Vĩnh Phúc, quận Ba Đình, Hà Nội"
+        },
+        {
+            id: "diaChiTamTru",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: nhà A3, ngõ 130 Đốc Ngữ, phường Vĩnh Phúc, quận Ba Đình, Hà Nội"
+        },
+        {
+            id: "job",
+            guide: "Bạn cần nhập đầy đủ công việc và vị trí tại công ty. Ví dụ: Chủ tịch Quốc hội nước CHXHCN Việt Nam"
+        },
+        {
+            id: "nation",
+            guide: "Bạn cần nhập tên đầy đủ của dân tộc.Ví dụ: Kinh"
+        },
+        {
+            id: "religion",
+            guide: "Bạn cần nhập đầy đủ tên của tôn giáo.Ví dụ: Phật giáo"
+        },
+        {
+            id: "selfComment",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu"
+        },
+        
+        {
+            id: "generalEducation",
+            guide: "Bạn cần điền số lớp đã học/số lớp giáo dục phổ thông khi bạn học.Ví dụ: 12/12"
+        },
+        {
+            id: "undergraduate",
+            guide: "Bạn cần nhập đầy đủ tên trường mình giáo dục đại học hoặc sau đại học.Ví dụ: Trường Đại học Văn hoá Sài Gòn, Trường Đại học Tài chính- Kế toán TP.Hồ Chí Minh "
+        },
+        {
+            id: "rankAcademic",
+            guide: "Bạn cần nhập đầy đủ học hàm.Ví dụ: Thạc sĩ"
+        },
+        {
+            id: "vocationalTraining",
+            guide: "Bạn cần nhập đầy đủ loại và nơi bạn học nghề.Ví dụ: Học may tại trường trường nghề Bách khoa Hà nội"
+        },
+        {
+            id: "foreignLanguage",
+            guide: "Bạn cần nhập đầy đủ các ngoại ngữ mà bạn biết.Ví dụ: tiếng Anh(Mĩ), tiếng Trung(Phồn thể)"
+        },
+        {
+            id: "minorityLanguage",
+            guide: "Bạn cần nhập đầy đủ các tiếng dân tộc thiểu số bạn biết.Ví dụ: tiếng Thái, tiếng Ê-đê"
+        },
+        {
+            id: "politicalTheory",
+            guide: "Bạn cần nhập đầy đủ bằng cấp lý luận chính trị.Ví dụ: Cao cấp lý luận chính trị"
+        },
+        {
+            id: "it",
+            guide: "Bạn cần nhập đầy đủ trình độ hoặc chứng chỉ được cấp về tin học. Ví dụ: tin học văn phòng cơ bản"
+        },
+        {
+            id: "place",
+            guide: "Bạn cần nhập tên tỉnh nơi mình khai thông tin.Ví dụ: Bến Tre"
+        },
+    ]
+    $('.fa-info-circle').click(function() {
+        var id = $(this).attr('id');
+        $scope.handleClick(id);
+        $scope.$apply(); // Cần sử dụng $apply() để cập nhật scope
+    });
+    $scope.handleClick = function(id) {
+        $scope.matchedItems = $scope.jsonParse.filter(function(item) {
+            return item.id === id;
+        });
+    };
+    $scope.downloadFile=function() {
         // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
         var link = document.createElement("a");
         link.href = "/files/Mẫu 2- KNĐ năm 2023.docx"; // Đặt đường dẫn đến tệp Word
@@ -1503,7 +1672,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PersonalHistory = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.PersonalHistory);
             },
             error: function (error) {
@@ -1521,7 +1690,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             dataType: "json",
             success: function (response) {
                 $scope.GoAboard = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.GoAboard);
             },
             error: function (error) {
@@ -1540,7 +1709,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Laudatory = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Laudatory);
             },
             error: function (error) {
@@ -1560,7 +1729,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.BusinessNDuty = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.BusinessNDuty);
             },
             error: function (error) {
@@ -1579,7 +1748,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.HistoricalFeatures = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.HistoricalFeatures);
             },
             error: function (error) {
@@ -1599,7 +1768,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PassedTrainingClasses = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.PassedTrainingClasses);
             },
             error: function (error) {
@@ -1619,7 +1788,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Disciplined = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Disciplined);
             },
             error: function (error) {
@@ -1637,7 +1806,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 $scope.Introducer = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Introducer);
             },
             error: function (error) {
@@ -2156,7 +2325,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         dataservice.getListFile($scope.infUser.ResumeNumber, function (rs) {
             rs = rs.data;
             $scope.fileList = rs.JsonProfileLinks;
-            $scope.$apply();
+            //$scope.$apply();
             console.log(rs);
         })
     }
