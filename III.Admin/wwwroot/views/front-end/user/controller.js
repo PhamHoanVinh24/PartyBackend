@@ -200,6 +200,7 @@ app.config(function ($routeProvider, $locationProvider) {
         })
 });
 app.directive("voiceRecognition", function () {
+
     return {
         restrict: "AE",
         require: "ngModel",
@@ -207,7 +208,9 @@ app.directive("voiceRecognition", function () {
             console.log(ngModelCtrl);
             if ("webkitSpeechRecognition" in window) {
                 var spokenText = "";
+                
                 var recognition = new webkitSpeechRecognition();
+                recognition.lang = "vi-VN";
                 recognition.continuous = false;
                 recognition.interimResults = false;
 
@@ -242,6 +245,10 @@ app.directive("voiceRecognition", function () {
                     scope.stopRecognition(recognition);
                     element.css("color", "");
                 });
+                element.on("touchstart", function () {
+                    scope.startRecognition(recognition);
+                    element.css("color", "red");
+                });
             }
 
             scope.startRecognition = function (recognition) {
@@ -263,6 +270,107 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
     //
     //
     //
+    $scope.jsonParse = [
+        {
+            id: "currentName",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu. Ví dụ: Nguyễn Thị Kim Ngân"
+        },
+        {
+            id: "gender",
+            guide: "Bạn cần chọn giới tính của mình, nếu không phải nam hoặc nữ hãy chọn khác. Ví dụ: Nam"
+        },
+        {
+            id: "firstName",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu. Ví dụ: Nguyễn Thị Kim Ngân"
+        },
+        {
+            id: "dateOfBird",
+            guide: "Bạn cần nhập đầy đủ ngày-tháng-năm.Ví dụ: 12-04-1954"
+        },
+        {
+            id: "phone",
+            guide: "Bạn cần nhập đầy đủ số điện thoại.Ví dụ: 0397638979"
+        },
+        {
+            id: "noiSinh",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: thôn Thượng,  xã Châu Hoá, huyện Giồng Trôm, tỉnh Bến Tre"
+        },
+        {
+            id: "queQuan",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: thôn Thượng,  xã Châu Hoá, huyện Giồng Trôm, tỉnh Bến Tre"
+        },
+        {
+            id: "diaChiThuongTru",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: nhà A3, ngõ 130 Đốc Ngữ, phường Vĩnh Phúc, quận Ba Đình, Hà Nội"
+        },
+        {
+            id: "diaChiTamTru",
+            guide: "Bạn cần nhập đầy đủ số nhà, đường,phường( xã), quận( huyện), tỉnh( thành phố).Ví dụ: nhà A3, ngõ 130 Đốc Ngữ, phường Vĩnh Phúc, quận Ba Đình, Hà Nội"
+        },
+        {
+            id: "job",
+            guide: "Bạn cần nhập đầy đủ công việc và vị trí tại công ty. Ví dụ: Chủ tịch Quốc hội nước CHXHCN Việt Nam"
+        },
+        {
+            id: "nation",
+            guide: "Bạn cần nhập tên đầy đủ của dân tộc.Ví dụ: Kinh"
+        },
+        {
+            id: "religion",
+            guide: "Bạn cần nhập đầy đủ tên của tôn giáo.Ví dụ: Phật giáo"
+        },
+        {
+            id: "selfComment",
+            guide: "Bạn cần nhập đầy đủ họ, tên và viết hoa chữ cái đầu"
+        },
+        
+        {
+            id: "generalEducation",
+            guide: "Bạn cần điền số lớp đã học/số lớp giáo dục phổ thông khi bạn học.Ví dụ: 12/12"
+        },
+        {
+            id: "undergraduate",
+            guide: "Bạn cần nhập đầy đủ tên trường mình giáo dục đại học hoặc sau đại học.Ví dụ: Trường Đại học Văn hoá Sài Gòn, Trường Đại học Tài chính- Kế toán TP.Hồ Chí Minh "
+        },
+        {
+            id: "rankAcademic",
+            guide: "Bạn cần nhập đầy đủ học hàm.Ví dụ: Thạc sĩ"
+        },
+        {
+            id: "vocationalTraining",
+            guide: "Bạn cần nhập đầy đủ loại và nơi bạn học nghề.Ví dụ: Học may tại trường trường nghề Bách khoa Hà nội"
+        },
+        {
+            id: "foreignLanguage",
+            guide: "Bạn cần nhập đầy đủ các ngoại ngữ mà bạn biết.Ví dụ: tiếng Anh(Mĩ), tiếng Trung(Phồn thể)"
+        },
+        {
+            id: "minorityLanguage",
+            guide: "Bạn cần nhập đầy đủ các tiếng dân tộc thiểu số bạn biết.Ví dụ: tiếng Thái, tiếng Ê-đê"
+        },
+        {
+            id: "politicalTheory",
+            guide: "Bạn cần nhập đầy đủ bằng cấp lý luận chính trị.Ví dụ: Cao cấp lý luận chính trị"
+        },
+        {
+            id: "it",
+            guide: "Bạn cần nhập đầy đủ trình độ hoặc chứng chỉ được cấp về tin học. Ví dụ: tin học văn phòng cơ bản"
+        },
+        {
+            id: "place",
+            guide: "Bạn cần nhập tên tỉnh nơi mình khai thông tin.Ví dụ: Bến Tre"
+        },
+    ]
+    $('.fa-info-circle').click(function() {
+        var id = $(this).attr('id');
+        $scope.handleClick(id);
+        $scope.$apply(); // Cần sử dụng $apply() để cập nhật scope
+    });
+    $scope.handleClick = function(id) {
+        $scope.matchedItems = $scope.jsonParse.filter(function(item) {
+            return item.id === id;
+        });
+    };
     $scope.downloadFile=function() {
         // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
         var link = document.createElement("a");
