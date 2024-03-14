@@ -51,6 +51,7 @@ namespace III.Admin.Controllers
             _stringLocalizer = stringLocalizer;
             _parameterService = parameterService;
         }
+
         [Authorize]
         public IActionResult Index()
         {
@@ -107,7 +108,8 @@ namespace III.Admin.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Gender = model.Gender,
                     Area = "User",
-                    Active=true
+                    Active=true,
+                    RegisterJoinGroupCode=model.RegisterJoinGroupCode
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -341,6 +343,21 @@ namespace III.Admin.Controllers
             var user = _context.PartyAdmissionProfiles.ToList();
             return user;
         }
+
+        public object GetGroupUser()
+        {
+            var query = (from x in _context.AdGroupUsers
+                         where (x.ParentCode.Equals("NHOM_CHI_BO")
+                                  && x.IsDeleted == false)
+                         select new
+                         {
+                             Code = x.GroupUserCode,
+                             x.Title
+                         });
+
+            return query.ToList();
+        }
+
         public async Task<object> GetPartyAdmissionProfileByResumeNumber(string resumeNumber)
         {
             var user = _context.PartyAdmissionProfiles.FirstOrDefault(x => x.IsDeleted == false && x.ResumeNumber == resumeNumber);
@@ -666,6 +683,8 @@ namespace III.Admin.Controllers
 
             public string Username { get; set; }
             public string Status { get; set; }
+            public string GroupUserCode { get; set; }
+
         }
         [HttpPut]
         public async Task<object> UpdatePartyAdmissionProfile([FromBody] ModelViewPAMP model)
@@ -721,6 +740,7 @@ namespace III.Admin.Controllers
                 obj.CreatedPlace = model.CreatedPlace;
                 obj.UnderPostGraduateEducation = model.UnderPostGraduateEducation;
                 obj.WfInstCode = model.WfInstCode;
+                obj.GroupUserCode = model.GroupUserCode;
                
                 _context.PartyAdmissionProfiles.Update(obj);
                 _context.SaveChanges();
@@ -1215,6 +1235,7 @@ namespace III.Admin.Controllers
                         + _context.PartyAdmissionProfiles.Count(x => x.ResumeNumber.Contains(ResumeCode));
                     obj.JsonStaus = new List<JsonLog>();
                     obj.JsonProfileLinks = new List<JsonFile>();
+                    obj.GroupUserCode = model.GroupUserCode;
 
                     _context.PartyAdmissionProfiles.Add(obj);
 					_context.SaveChanges();
@@ -2296,6 +2317,7 @@ namespace III.Admin.Controllers
     public class RegisterDto
     {
         [Required]
+        [RegularExpression(@"^[0-9]{12}$", ErrorMessage = "Số căn cước phải có đúng 12 chữ số.")]
         public string UserName { get; set; }
 
         [Required]
@@ -2316,6 +2338,8 @@ namespace III.Admin.Controllers
 
         [Required]
         public string GivenName { get; set; }
+        [Required]
+        public string RegisterJoinGroupCode { get; set; }
     }
 
 

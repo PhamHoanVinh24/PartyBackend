@@ -230,7 +230,22 @@
         width: 25%;
         font-size: 12px;
     }
-
+    .ui-select-bootstrap div, .ui-select-bootstrap span, .ui-select-bootstrap input, .ui-select-bootstrap .btn-default-focus,
+    .ui-select-choices{
+        height: 24.5px;
+        border: none;
+        background-color:white;
+        outline:none;
+        box-shadow: none;
+        font-size:15px;
+    }
+    .ui-select-bootstrap .ui-select-choices-row.active > a{
+        background-color:white;
+        color: black
+    }
+    .ui-select-choices{
+        border: 1px solid
+    }
 </style>
 
 <div class="notifi">
@@ -336,7 +351,7 @@
                                                 <i class="fa fa-info-circle" id="currentName"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Họ và tên của bạn là: {{infUser.LastName}}. {{matchedItems[0].guide}}">
                                                 </i>
-                                                <input class="displayInfo"
+                                                <input class="displayInfo speechInput"
                                                        name="CusCode"
                                                        ng-model="infUser.LastName" type="text" placeholder="Họ và tên" ng-required="true">
 
@@ -381,7 +396,7 @@
                                                 <i class="fa fa-info-circle" id="gender"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Giới tính bạn chọn là: {{infUser.Sex}}. {{matchedItems[0].guide}}">
                                                 </i>
-                                                <input class="displayInfo" 
+                                                <input class="displayInfo speechInput" 
                                                        name="CusCode" ng-model="infUser.Sex" type="text"
                                                        placeholder="Giới tính" ng-required="true" >
                                                 <i class="fa fa-microphone" style="font-size: 20px;" voice-recognition ng-model="infUser.Sex"></i>
@@ -404,7 +419,7 @@
                                                 <i class="fa fa-info-circle" id="phone"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Sdt của bạn là: {{infUser.Phone}}. {{matchedItems[0].guide}}"
                                                    ></i>
-                                                <input class="displayInfo"
+                                                <input class="displayInfo speechInput"
                                                        style="border: #FFFF;" name="CusCode"
                                                        ng-model="infUser.Phone" type="text" placeholder="Số điện thoại" ng-required="true">
                                                 <i class="fa fa-microphone" style="font-size: 20px;" voice-recognition ng-model="infUser.Phone"></i>
@@ -426,7 +441,7 @@
                                             <div class="br24 form-control custom-title-code-bold">
                                                 <i class="fa fa-info-circle" id="noiSinh"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Nơi sinh của bạn là: {{infUser.PlaceofBirth}}. {{matchedItems[0].guide}}"></i>
-                                                <input class="displayInfo"
+                                                <input class="displayInfo speechInput"
                                                        style="border: #FFFF;" name="CusCode"
                                                        ng-model="infUser.PlaceofBirth" type="text"
                                                        placeholder="Nơi sinh" ng-required="true">
@@ -448,7 +463,7 @@
                                             <div class="br24 form-control custom-title-code-bold">
                                                 <i class="fa fa-info-circle" id="queQuan"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Quê quán của bạn là: {{infUser.HomeTown}}. {{matchedItems[0].guide}}"></i>
-                                                <input class="displayInfo"
+                                                <input class="displayInfo speechInput"
                                                        style="border: #FFFF;" name="CusCode"
                                                        ng-model="infUser.HomeTown" type="text" placeholder="Nơi sinh" ng-required="true">
                                                        <i class="fa fa-microphone" style="font-size:20px" voice-recognition ng-model="infUser.HomeTown"></i>
@@ -470,7 +485,7 @@
                                             <div class="br24 form-control custom-title-code-bold">
                                                 <i class="fa fa-info-circle" id="diaChiThuongTru"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Địa chỉ thường trú của bạn là: {{infUser.Residence}}. {{matchedItems[0].guide}}"></i>
-                                                <input class="displayInfo"
+                                                <input class="displayInfo speechInput"
                                                        style="border: #FFFF;" name="CusCode"
                                                        ng-model="infUser.Residence" type="text"
                                                        placeholder="Địa chỉ thường trú" ng-required="true">
@@ -574,10 +589,11 @@
                                                 <i class="fa fa-info-circle" id="selfComment"
                                                    title="Popover Header" popover-placement="bottom-left" uib-popover="Tôn giáo của bạn là: {{SelfComment.context}}. {{matchedItems[0].guide}}"></i>
                                                 <input class="displayInfo"
-                                                        name="CusCode"
+                                                       name="CusCode"
                                                        ng-model="SelfComment.context" type="text"
                                                        placeholder="Tự nhận xét" ng-required="true">
-                                                <i class="fa fa-microphone" style="font-size: 20px;" voice-recognition ng-model="infUser.LastName"></i>
+
+                                                <i class="fa fa-microphone"  style="font-size: 20px;" voice-recognition ng-model="SelfComment.context"></i>
                                             </div>
 
                                         </div>
@@ -792,7 +808,29 @@
 
                                         </div>
                                     </div>
-                                    
+                                    <div class="form-group row">
+                                        <div class="col-md-4 pr-0 ">
+                                            <i class="fa fa-users"></i>
+                                            <label class="displayInfo control-label require custom-title-code-bold">
+                                                Nhóm chi bộ
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="br24 form-control custom-title-code-bold" style="display:flex">
+                                                <i class="fa fa-info-circle" data-bs-toggle="popover"
+                                                   title="Popover Header" data-bs-placement="bottom"
+                                                   data-bs-content="Ví dụ: 'Hà Nội'" style="vertical-align: 7px; display: flex; align-items: center;"></i>
+                                                <ui-select ng-model="GroupUser" theme="bootstrap" class="displayInfo" ng-change="onItemSelect($select.selected)"
+                                                       style="border: none; height: 24.5px; display: inline-block;">
+                                                    <ui-select-match placeholder="Chọn nhóm chi bộ" style="height:24.5px">{{$select.selected.Title}}</ui-select-match>
+                                                    <ui-select-choices repeat="x.Code as x in GroupUsers | filter: $select.search">
+                                                        <div>{{x.Title}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
 
                         </div>
@@ -2066,6 +2104,3 @@
         inputCountInput.value = inputCount;
     }
 </script>
-
-
-
