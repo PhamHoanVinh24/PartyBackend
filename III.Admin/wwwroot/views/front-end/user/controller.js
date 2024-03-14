@@ -229,7 +229,8 @@ app.directive("voiceRecognition", function () {
                     }
                 };
 
-                element.on("mousedown", function () {
+                element.on("pointerdown", function (event) {
+                    event.preventDefault();
                     scope.startRecognition(recognition);
                     element.css("color", "red");
                 });
@@ -238,9 +239,13 @@ app.directive("voiceRecognition", function () {
                     scope.stopRecognition(recognition);
                     element.css("color", "");
                 });
-                element.on("mouseout", function () {
+                element.on("pointerout", function (event) {
+                    event.preventDefault();
                     scope.stopRecognition(recognition);
                     element.css("color", "");
+                });
+                element.on("contextmenu", function (event) {
+                    event.preventDefault();
                 });
             }
 
@@ -269,7 +274,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         })
     }
     $scope.onItemSelect = function (item) {
-
+        $scope.GroupUser = item.Code;
     }
     $scope.getGrupUsers();
 
