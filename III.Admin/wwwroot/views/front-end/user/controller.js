@@ -1,5 +1,5 @@
 ﻿var ctxfolder = "/views/front-end/user";
-var app = angular.module('App_ESEIM', ["ngRoute"])
+var app = angular.module('App_ESEIM', ["ngRoute","ngAnimate", "ngSanitize", "ui.bootstrap"])
 app.factory('dataservice', function ($http) {
     var headers = {
         "Content-Type": "application/json;odata=verbose",
@@ -1522,7 +1522,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PersonalHistory = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.PersonalHistory);
             },
             error: function (error) {
@@ -1540,7 +1540,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             dataType: "json",
             success: function (response) {
                 $scope.GoAboard = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.GoAboard);
             },
             error: function (error) {
@@ -1559,7 +1559,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Laudatory = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Laudatory);
             },
             error: function (error) {
@@ -1579,7 +1579,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.BusinessNDuty = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.BusinessNDuty);
             },
             error: function (error) {
@@ -1598,7 +1598,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.HistoricalFeatures = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.HistoricalFeatures);
             },
             error: function (error) {
@@ -1618,7 +1618,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.PassedTrainingClasses = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.PassedTrainingClasses);
             },
             error: function (error) {
@@ -1638,7 +1638,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             data: JSON.stringify(requestData), // Chuyển đổi dữ liệu thành chuỗi JSON
             success: function (response) {
                 $scope.Disciplined = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Disciplined);
             },
             error: function (error) {
@@ -1656,7 +1656,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 $scope.Introducer = response;
-                $scope.$apply();
+                //$scope.$apply();
                 console.log($scope.Introducer);
             },
             error: function (error) {
@@ -2174,7 +2174,7 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
         dataservice.getListFile($scope.infUser.ResumeNumber,function (rs) {
             rs = rs.data;
             $scope.fileList = rs.JsonProfileLinks;
-            $scope.$apply();
+            //$scope.$apply();
             console.log(rs);
         })
     }
