@@ -202,63 +202,9 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('index', function ($scope, $rootScope, $compile, dataservice, $filter, $http) {
     console.log("indeeeeee");
-    if ("webkitSpeechRecognition" in window) {
-        var spokenText = "";
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        recognition.onstart = function () {
-            $scope.Voice = spokenText;
-        };
-
-        recognition.onend = function () {
-            console.log("Voice recognition stopped...");
-            console.log("Spoken text:", spokenText);
-        };
-
-        recognition.onresult = function (event) {
-            var transcript = event.results[0][0].transcript;
-            spokenText = transcript; // Lưu trữ văn bản được nhận dạng vào biến spokenText
-            if (spokenText != "") {
-                $scope.setData(spokenText)
-            }
-        };
-    }
-    $scope.setData = function (spokenText) {
-        var propertyName = $scope.input;
-
-        // Kiểm tra xem thuộc tính này có tồn tại trong đối tượng $scope.infUser không
-        if ($scope.infUser.hasOwnProperty(propertyName)) {
-            // Gán giá trị của spokenText cho thuộc tính tương ứng trong $scope.infUser
-            $scope.infUser[propertyName] = spokenText;
-        }
-        $scope.$apply();
-    }
-    $(document).ready(function () {
-        $('.voice').mousedown(function () {
-            $(this).css('color', 'red'); // Thay đổi màu sắc của biểu tượng khi được nhấn chuột
-        }).mouseup(function () {
-            $(this).css('color', ''); // Trả lại màu sắc ban đầu khi biểu tượng được nhả chuột
-        });
-    });
-    $scope.startRecognition = function (param) {
-        if (recognition) {
-            $scope.input = param;
-            recognition.start();
-        }
-    };
-
-    $scope.stopRecognition = function (param) {
-        if (recognition) {
-            recognition.stop();
-        }
-    };
-    $scope.Voice = "";
-    $scope.$watch("Voice", function (newVal, oldVal) {
-        // Code xử lý khi dữ liệu thay đổi
-        console.log(newVal + ":" + oldVal);
-    });
+    //
+    //
+    //
     $scope.downloadFile=function() {
         // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
         var link = document.createElement("a");
