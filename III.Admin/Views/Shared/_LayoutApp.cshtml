@@ -61,6 +61,7 @@
 <body class="vertical-layout vertical-menu 2-columns  fixed-navbar">
 
     @await Html.PartialAsync("_Partial_Header")
+    <div class="overlay-common" onclick="closeMenu()"></div>
     <div class="">
         
         <div style="position: relative;" class="container-fluid" style="padding-right: 0">
@@ -72,6 +73,40 @@
             </div>
         </div>
     </div>
+    <style>
+        .overlay-common {
+    position: fixed;
+    top: 70px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 98;
+    display: none;
+}
+    .show {
+        display: block !important;
+    }
+    </style>
+    <script>
+function myFunction() {
+  var x = document.getElementById("myHeader");
+  var overlay = document.querySelector('.overlay-common');
+  if (x.className === "header-nav") {
+    x.className += " show";
+    overlay.style.display = (overlay.style.display === "block") ? "none" : "block";
+  } else {
+    x.className = "header-nav";
+    overlay.style.display = "none";
+  }
+}
+function closeMenu() {
+    var x = document.getElementById("myHeader");
+    var overlay = document.querySelector('.overlay-common');
+    x.className = "header-nav";
+    overlay.style.display = "none";
+}
+</script>
     @await Html.PartialAsync("_Partial_Footer")
 </body>
 </html>
