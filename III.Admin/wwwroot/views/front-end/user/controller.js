@@ -883,30 +883,30 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             $scope.infUser.NowEmployee = $scope.listDetail3.trim();
 
-            // $scope.infUser.PlaceinGroup = $scope.listDetail4[0];
-            // $scope.infUser.DateInGroup = $scope.listDetail4[1].match(/\d+/g).join('-');
+            $scope.infUser.PlaceinGroup = $scope.listDetail4[0];
+            $scope.infUser.DateInGroup = $scope.listDetail4[1].match(/\d+/g).join('-');
 
-            // $scope.infUser.PlaceInParty = $scope.listDetail5[0].split(',')[0];
-            // $scope.infUser.DateInParty = $scope.listDetail5[0].split(',')[1].match(/\d+/g).join('-');
-            // $scope.infUser.PlaceRecognize = $scope.listDetail7[0].split(',')[0];
-            // $scope.infUser.DateRecognize = $scope.listDetail7[0].split(',')[1].match(/\d+/g).join('-');
-            // $scope.infUser.Presenter = $scope.listDetail5[2].trim();
+            $scope.infUser.PlaceInParty = $scope.listDetail5[0].split(',')[0];
+            $scope.infUser.DateInParty = $scope.listDetail5[0].split(',')[1].match(/\d+/g).join('-');
+            $scope.infUser.PlaceRecognize = $scope.listDetail7[0].split(',')[0];
+            $scope.infUser.DateRecognize = $scope.listDetail7[0].split(',')[1].match(/\d+/g).join('-');
+            $scope.infUser.Presenter = $scope.listDetail5[2].trim();
 
-            // $scope.infUser.Phone = $scope.listDetail8.trim();
-            // $scope.infUser.PhoneContact = $scope.listDetail9.trim();
+            $scope.infUser.Phone = $scope.listDetail8.trim();
+            $scope.infUser.PhoneContact = $scope.listDetail9.trim();
 
-            // $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0].trim();
-            // $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1].trim();
-            // $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].trim();//.split(',');
-            // $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3].trim();
-            // $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].trim();//.split(',');
+            $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0].trim();
+            $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1].trim();
+            $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].trim();//.split(',');
+            $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3].trim();
+            $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].trim();//.split(',');
 
-            // $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5].trim();
-            // $scope.infUser.LevelEducation.It = $scope.listDetail6[6].trim();//.split(',');
-            // $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].trim();//.split(',');
+            $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5].trim();
+            $scope.infUser.LevelEducation.It = $scope.listDetail6[6].trim();//.split(',');
+            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].trim();//.split(',');
 
-            // $scope.infUser.Phone = $scope.listDetail8.trim();
-            // $scope.infUser.PhoneContact = $scope.listDetail9.trim();
+            $scope.infUser.Phone = $scope.listDetail8.trim();
+            $scope.infUser.PhoneContact = $scope.listDetail9.trim();
 
             //Nguoi gioi thieu
             $scope.Introducer = {
