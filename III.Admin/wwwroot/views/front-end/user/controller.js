@@ -829,20 +829,23 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
                 .map(y => $(y).find('> span').toArray().map(t => $(t).text()));
             //Lấy sdt 
             $scope.listDetail8 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(1) > td > p:nth-child(27) > span:last-child').text();
-
+                .find('table > tbody > tr:nth-child(1) > td > p:nth-child(27)').text();
+                console.log($scope.listDetail8);
             $scope.listDetail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+7):nth-child(-n+15)').toArray()
-                .map(t => $(t).find('> span:last-child').text());
+                .map(t => $(t).text());
+            console.log($scope.listDetail1);
 
             $scope.Detail1 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(2)').text()
             //.map(z => $(z).text());
+            
             console.log($scope.listDetail2)
             $scope.Detail2 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(16) > span:nth-child(4)').text()
+                console.log($scope.Detail1 + $scope.Detail2);
             $scope.listDetail3 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(17) > span:last-child').text()
+                .find('table > tbody > tr:nth-child(2) > td > p:nth-child(17)').text()
 
             $scope.listDetail4 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(27) > span:last-child').text().split(',')
@@ -853,29 +856,29 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
 
             $scope.listDetail6 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(n+19):nth-child(-n+26)').toArray()
-                .map(t => $(t).find('> span:last-child').text());
-
+                .map(t => $(t).text());
+            console.log($scope.listDetail6);
             $scope.listDetail7 = $($scope.listPage[0])
                 .find('table > tbody > tr:nth-child(2) > td > p:nth-child(28) > span:nth-child(5)').toArray()
                 .map(z => $(z).text());
 
             $scope.listDetail9 = $($scope.listPage[0])
-                .find('table > tbody > tr:nth-child(1) > td > p:nth-child(29) > span:last-child').text();
+                .find('table > tbody > tr:nth-child(1) > td > p:nth-child(29)').text();
+            console.log($scope.listDetail9);
 
-
-            $scope.infUser.FirstName = $scope.listDetail1[0].trim();
-            $scope.infUser.Sex = $scope.listDetail1[1].trim();
-            $scope.infUser.LastName = $scope.listDetail1[2].trim();
-            $scope.infUser.Birthday = $scope.listDetail1[3];
-            $scope.infUser.HomeTown = $scope.listDetail1[5].trim();
-            $scope.infUser.PlaceofBirth = $scope.listDetail1[4].trim();
-            $scope.infUser.Residence = $scope.listDetail1[7].trim();
-            $scope.infUser.TemporaryAddress = $scope.listDetail1[8].trim();
+            $scope.infUser.FirstName = $scope.listDetail1[0].split(":")[1] ? $scope.listDetail1[0].split(":")[1].trim() : "";
+            $scope.infUser.Sex = $scope.listDetail1[1].split(":")[1] ? $scope.listDetail1[1].split(":")[1].trim() : "";
+            $scope.infUser.LastName = $scope.listDetail1[2].split(":")[1] ? $scope.listDetail1[2].split(":")[1].trim() : "";
+            $scope.infUser.Birthday = $scope.listDetail1[3].split(":")[1] ? $scope.listDetail1[3].split(":")[1].trim() : "";
+            $scope.infUser.HomeTown = $scope.listDetail1[5].split(":")[1] ? $scope.listDetail1[5].split(":")[1].trim() : "";
+            $scope.infUser.PlaceofBirth = $scope.listDetail1[4].split(":")[1] ? $scope.listDetail1[4].split(":")[1].trim() : "";
+            $scope.infUser.Residence = $scope.listDetail1[7].split(":")[1] ? $scope.listDetail1[7].split(":")[1].trim() : "";
+            $scope.infUser.TemporaryAddress = $scope.listDetail1[8].split(":")[1] ? $scope.listDetail1[8].split(":")[1].trim() : "";
 
             $scope.infUser.Nation = $scope.Detail1.trim();
             $scope.infUser.Religion = $scope.Detail2.trim();
 
-            $scope.infUser.NowEmployee = $scope.listDetail3.trim();
+            $scope.infUser.NowEmployee = $scope.listDetail3.split(":")[1] ? $scope.listDetail3.split(":")[1].trim() : "";
 
             $scope.infUser.PlaceinGroup = $scope.listDetail4[0];
             $scope.infUser.DateInGroup = $scope.listDetail4[1].match(/\d+/g).join('-');
@@ -886,18 +889,18 @@ app.controller('index', function ($scope, $rootScope, $compile, dataservice, $fi
             $scope.infUser.DateRecognize = $scope.listDetail7[0].split(',')[1].match(/\d+/g).join('-');
             $scope.infUser.Presenter = $scope.listDetail5[2].trim();
 
-            $scope.infUser.Phone = $scope.listDetail8.trim();
-            $scope.infUser.PhoneContact = $scope.listDetail9.trim();
+            $scope.infUser.Phone = $scope.listDetail8.split(":")[1] ? $scope.listDetail8.split(":")[1].trim() : "";
+            $scope.infUser.PhoneContact = $scope.listDetail9.split(":")[1] ? $scope.listDetail9.split(":")[1].trim() : "";
 
-            $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0].trim();
-            $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1].trim();
-            $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].trim();//.split(',');
-            $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3].trim();
-            $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].trim();//.split(',');
+            $scope.infUser.LevelEducation.GeneralEducation = $scope.listDetail6[0].split(":")[1] ? $scope.listDetail6[0].split(":")[1].trim() : "";
+            $scope.infUser.LevelEducation.VocationalTraining = $scope.listDetail6[1].split(":")[1] ? $scope.listDetail6[1].split(":")[1].trim() : "";
+            $scope.infUser.LevelEducation.Undergraduate = $scope.listDetail6[2].split(":")[1] ? $scope.listDetail6[2].split(":")[1].trim() : "";//.split(',');
+            $scope.infUser.LevelEducation.RankAcademic = $scope.listDetail6[3].split(":")[1] ? $scope.listDetail6[3].split(":")[1].trim() : "";
+            $scope.infUser.LevelEducation.PoliticalTheory = $scope.listDetail6[4].split(":")[1] ? $scope.listDetail6[4].split(":")[1].trim() : "";//.split(',');
 
-            $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5].trim();
-            $scope.infUser.LevelEducation.It = $scope.listDetail6[6].trim();//.split(',');
-            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].trim();//.split(',');
+            $scope.infUser.LevelEducation.ForeignLanguage = $scope.listDetail6[5].split(":")[1] ? $scope.listDetail6[5].split(":")[1].trim() : "";
+            $scope.infUser.LevelEducation.It = $scope.listDetail6[6].split(":")[1] ? $scope.listDetail6[6].split(":")[1].trim() : "";//.split(',');
+            $scope.infUser.LevelEducation.MinorityLanguage = $scope.listDetail6[7].split(":")[1] ? $scope.listDetail6[7].split(":")[1].trim() : "";//.split(',');
 
             $scope.infUser.Phone = $scope.listDetail8.trim();
             $scope.infUser.PhoneContact = $scope.listDetail9.trim();
