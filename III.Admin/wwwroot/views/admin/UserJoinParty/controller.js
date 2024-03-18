@@ -32,7 +32,9 @@ app.factory('dataserviceJoinParty', function ($http) {
         $http(req).then(callback);
     };
     return {
-
+        Import: function (data, callback) {
+            $http.get('/Admin/WorkflowActivity/Import?ressumeNumber=' + data).then(callback)
+        },
         //WF
         getActivity: function (data, callback) {
             $http.get('/Admin/WorkflowActivity/GetActivityInsGrid?wfCode=' + data).then(callback)
@@ -351,6 +353,28 @@ app.config(function ($routeProvider, $validatorProvider, $translateProvider) {
 app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOptionsBuilder, DTColumnBuilder, DTInstances, dataserviceJoinParty, $location, $translate) {
     var vm = $scope;
     $scope.tabnav = 'Section3'; // Initialize tabnav variable
+
+    $scope.ImportFile = function (data) {
+        dataserviceJoinParty.Import(data, function (rs) {
+            rs = rs.data;
+            if (rs.Error) {
+                App.toastrError(rs.Title);
+                $uibModalInstance.close('cancel');
+            } else {
+                console.log(rs.Object);
+                $scope.downloadFile(rs.Object,data)
+                //window.open('/Admin/Docman#', '_blank');
+            }
+        });
+    }
+    $scope.downloadFile = function (file,ResumeNumber) {
+        // Tạo một phần tử a để tạo ra một liên kết tới tệp Word
+        var link = document.createElement("a");
+        link.href = file; // Đặt đường dẫn đến tệp Word
+        link.download = "Profile_"+ResumeNumber+".docx"; // Đặt tên cho tệp khi được tải xuống
+        // Kích hoạt sự kiện nhấp vào liên kết
+        link.click();
+    }
     $scope.callApi = function () {
         requestData = '12645';
 
@@ -762,6 +786,10 @@ app.controller('index', function ($scope, $rootScope, $compile, $uibModal, DTOpt
             </a>
             <a title="{{&quot;COM_BTN_DELETE&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px"
                 ng-click="delete('${full.Id}')"><i class="fa-solid fa-trash  fs25"></i>
+            </a>
+            
+            <a title="{{&quot;Import File&quot; | translate}}" class="width: 25px; height: 25px; padding: 0px"
+                ng-click="ImportFile('${full.resumeNumber}')"><i class="fa fa-file-word-o  fs25"></i>
             </a>
             ${wfbtn}
             `
@@ -2645,3 +2673,7 @@ app.controller('log-status-wf-full', function ($scope, $rootScope, $compile, $ui
         setModalDraggable(".modal-dialog");
     }, 400);
 });
+
+app.cotroller("testFile",function($scope,dataservice){
+    
+})

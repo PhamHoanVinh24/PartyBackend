@@ -8,10 +8,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using Aspose.Pdf;
 using DocumentFormat.OpenXml.Spreadsheet;
 using ESEIM.Models;
 using ESEIM.Utils;
 using FTU.Utils.HelperNet;
+using III.Admin.Utils;
 using III.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +24,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenXmlPowerTools;
 using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransformations;
 using SmartBreadcrumbs.Attributes;
 using Syncfusion.DocIO.DLS;
@@ -99,6 +102,135 @@ namespace III.Admin.Controllers
             return View();
         }
 
+        public object Import(string ressumeNumber)
+        {
+            var msg = new JMessage { Error = false, Title = "" };
+            try
+            {
+                msg = GenergatePesonnal(ressumeNumber);
+                if (!msg.Error)
+                {
+                    var filePath = msg.Object.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return msg;
+        }
+
+
+        [NonAction]
+        private JMessage GenergatePesonnal(string ressumeNumber)
+        {
+            var msg = new JMessage { Title = _sharedResources["COM_MSG_SUCCES_SAVE"], Error = false };
+
+            string path = "/files/Template/templateKNĐ.docx";
+            string rootPath = _hostingEnvironment.WebRootPath;
+            var filePath = string.Concat(rootPath, path);
+            var fileStream = new FileStream(filePath, FileMode.Open);
+            PartyAdmissionProfile Pap = _context.PartyAdmissionProfiles.FirstOrDefault(y => y.ResumeNumber == ressumeNumber && y.IsDeleted == false);
+            if (Pap == null)
+            {
+                fileStream.Dispose();
+                msg.Error = true;
+                msg.Title = _stringLocalizer["WFAI_MSG_USER_NO_SIGNATURE"];
+                return msg;
+            }
+            IntroducerOfParty Iop = _context.IntroducerOfParties.FirstOrDefault(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false);
+
+            var Wt = _context.WorkingTrackings.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var Ph = _context.PersonalHistories.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var Hs = _context.HistorySpecialists.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var Tcp = _context.TrainingCertificatedPasses.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var GA = _context.GoAboards.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var Aw = _context.Awards.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var Wd = _context.WarningDisciplineds.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+            var F = _context.Families.Where(x => x.ProfileCode == ressumeNumber && x.IsDeleted == false).ToList();
+
+            try
+            {
+                WordDocument document = new WordDocument(fileStream, Syncfusion.DocIO.FormatType.Docx);
+                IWSection section = document.Sections[0];
+
+                WTable table = section.Tables[0] as WTable;
+                BindingFileKNĐ.BinddingPesonal(table, Pap, Iop);
+
+                table = section.Tables[1] as WTable;
+                BindingFileKNĐ.BinđingPersonalHistory(table,Ph);
+
+
+                table = section.Tables[2] as WTable;
+                BindingFileKNĐ.BinddingWorkingTracking(table, Wt);
+
+                table = section.Tables[3] as WTable;
+                BindingFileKNĐ.BinddingHistorySpecialist(table, Hs);
+
+                table = section.Tables[4] as WTable;
+                BindingFileKNĐ.BinddingTrainingCertificatedPass(table, Tcp);
+
+                table = section.Tables[5] as WTable;
+                BindingFileKNĐ.BinddingGoAboard(table, GA);
+
+                table = section.Tables[6] as WTable;
+                BindingFileKNĐ.BinddingAward(table, Aw);
+
+                table = section.Tables[7] as WTable;
+                BindingFileKNĐ.BinddingWarningDisciplined(table, Wd);
+
+                table = section.Tables[8] as WTable;
+                BindingFileKNĐ.BinddingFamily(table, F);
+
+                table = section.Tables[9] as WTable;
+                WTableCell cell = table[0, 0] as WTableCell;
+                IWParagraph p = cell.AddParagraph();
+                p.AppendText(Pap.SelfComment);
+
+
+                #region Saving document
+                MemoryStream memoryStream = new MemoryStream();
+                //Save the document into memory stream
+                document.Save(memoryStream, Syncfusion.DocIO.FormatType.Docx);
+                //Closes the Word document instance
+                document.Close();
+
+                //Lưu 1 file sinh chữ ký
+                var pathVersion = "/uploads/files/fileVersion/";
+                var pathFileVersion = string.Concat(rootPath, pathVersion);
+                if (!Directory.Exists(pathFileVersion)) Directory.CreateDirectory(pathFileVersion);
+                var fileName = "FILE_VERSION_"
+                          + Guid.NewGuid().ToString().Substring(0, 8)
+                          + Path.GetExtension(path);
+                var fileVersionPath = string.Concat(pathFileVersion, fileName);
+                FileStream fileVersion = new FileStream(fileVersionPath, FileMode.Create, FileAccess.Write);
+                memoryStream.WriteTo(fileVersion);
+                fileVersion.Close();
+
+                //FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+                //memoryStream.WriteTo(file);
+                //file.Close();
+
+                //signBytes.Close();
+                memoryStream.Position = 0;
+
+                msg.Object = string.Concat(pathVersion, fileName);
+                msg.Title = fileVersionPath;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                msg.Error = true;
+                msg.Title = _stringLocalizer["WFAI_MSG_SIGN_FAILED"];
+                msg.Object = path;
+                //signBytes.Close();
+            }
+
+            fileStream.Dispose();
+            return msg;
+        }
         #region Combo box
         [HttpGet]
         public JsonResult GetWfGroup()
@@ -7045,7 +7177,7 @@ namespace III.Admin.Controllers
                             cell1Paragraph.AppendText("\n");
                             cell1Paragraph.AppendText(textQrCode);
                             // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
-                            cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                            cell1Paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Center;
                         }
                     }
                     else
@@ -7078,7 +7210,7 @@ namespace III.Admin.Controllers
                                 cell1Paragraph.AppendText("\n");
                                 cell1Paragraph.AppendText(textQrCode);
                                 // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
-                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Center;
                             }
                         }
                         else
@@ -7101,7 +7233,7 @@ namespace III.Admin.Controllers
                                 cell1Paragraph.AppendText("\n");
                                 cell1Paragraph.AppendText(textQrCode);
                                 // Điều chỉnh căn chỉnh của các phần tử trong ô để chúng được căn giữa
-                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                                cell1Paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Center;
                             }
 
                         }
